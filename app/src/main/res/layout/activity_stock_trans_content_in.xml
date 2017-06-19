@@ -1,0 +1,170 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.techscan.dvq.StockTransContentIn" >
+
+    <LinearLayout
+        android:id="@+id/TransInButtonBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="0dp"
+        android:background="#d7d6d6"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/btnTransInScan"
+            style="android:buttonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_weight="1"
+            android:background="@drawable/btn3"
+            android:textColor="@color/navy" 
+            android:text="扫描" />
+
+        <Button
+            android:id="@+id/btnTransInSave"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/btnScan"
+            android:layout_alignBottom="@+id/btnScan"
+            android:layout_alignParentRight="true"
+            android:layout_weight="1"
+            android:background="@drawable/btn3"
+            android:textColor="@color/navy" 
+            android:text="保存  签字" />
+
+        <Button
+            android:id="@+id/btnTransInExit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn3"
+            android:textColor="@color/navy" 
+            android:text="退出" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvOutRdcl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtOutRdcl"
+        android:layout_alignBottom="@+id/txtOutRdcl"
+        android:layout_alignLeft="@+id/tvTOutPDOrder"
+        android:layout_alignRight="@+id/tvTOutPDOrder"
+        android:text="  入库类别" />
+
+    <TextView
+        android:id="@+id/tvOutManualNo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtOutManualNo"
+        android:layout_alignBottom="@+id/txtOutManualNo"
+        android:layout_alignLeft="@+id/tvOutRdcl"
+        android:layout_toLeftOf="@+id/txtOutManualNo"
+        android:text="  手工单号" />
+
+    <TextView
+        android:id="@+id/textView132"
+        android:layout_width="12px"
+        android:layout_height="10px"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="" />
+
+    <ListView
+        android:id="@+id/lvPDOrderIn"
+        android:layout_width="fill_parent"
+        android:layout_height="250dp"
+        android:layout_above="@+id/TransInButtonBar"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/txtOutManualNo" >
+
+    </ListView>
+
+    <TextView
+        android:id="@+id/tvTOutPDOrder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtOutPDOrder"
+        android:layout_alignBottom="@+id/txtOutPDOrder"
+        android:layout_alignParentLeft="true"
+        android:text="  调拨出库" />
+
+    <TextView
+        android:id="@+id/tvTTransInPos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtTTransInPos"
+        android:layout_alignBottom="@+id/txtTTransInPos"
+        android:layout_alignParentLeft="true"
+        android:text="  调入货位" />
+
+    <EditText
+        android:id="@+id/txtOutManualNo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/txtTTransInPos"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/txtTTransInPos"
+        android:ems="10"
+        android:singleLine="true"
+        android:width="200dp" />
+
+    <EditText
+        android:id="@+id/txtOutPDOrder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView132"
+        android:layout_toLeftOf="@+id/btnTOutPDOrder"
+        android:layout_toRightOf="@+id/tvTOutPDOrder"
+        android:ems="10"
+        android:singleLine="true"
+        android:width="200dp" >
+
+        <requestFocus />
+    </EditText>
+
+    <EditText
+        android:id="@+id/txtOutRdcl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/txtOutPDOrder"
+        android:layout_alignRight="@+id/txtOutPDOrder"
+        android:layout_below="@+id/txtOutPDOrder"
+        android:ems="10"
+        android:singleLine="true"
+        android:width="200dp" />
+
+    <EditText
+        android:id="@+id/txtTTransInPos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/txtOutRdcl"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/txtOutRdcl"
+        android:ems="10"
+        android:singleLine="true"
+        android:width="200dp" />
+
+    <ImageButton
+        android:id="@+id/btnOutRdcl1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/txtTTransInPos"
+        android:src="@drawable/browse"
+        android:layout_alignParentRight="true" />
+
+    <ImageButton
+        android:id="@+id/btnTOutPDOrder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/txtOutPDOrder"
+        android:src="@drawable/browse"
+        android:layout_alignParentRight="true" />
+
+</RelativeLayout>

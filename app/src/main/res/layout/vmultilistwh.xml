@@ -1,0 +1,58 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.techscan.dvq.VlistMultipds" >
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+    	
+		<TextView android:id="@+id/vmultilistwhname" 
+		    android:text="NAME"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" 
+			android:textColor="#000000"
+			android:textSize="25sp"
+            android:textStyle="normal" />
+
+</LinearLayout>
+
+		<CheckBox
+		    android:id="@+id/cmulitemselect"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_above="@+id/vmultilistwhcode"
+		    android:layout_alignParentRight="true"
+		    android:layout_alignParentTop="true"
+		    android:clickable="false"
+		    android:focusable="false"
+		    android:focusableInTouchMode="false"
+		    android:visibility="visible" />
+
+		<TextView
+		    android:id="@+id/tvaccidtype"
+		    android:layout_width="40dp"
+		    android:layout_height="wrap_content"
+		    android:layout_alignParentLeft="true"
+		    android:layout_below="@+id/linearLayout1"
+		    android:text="A"
+		    android:textColor="#000000"
+		    android:textSize="16sp"
+            android:textStyle="normal" />
+
+		<TextView
+		    android:id="@+id/vmultilistwhcode"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignBaseline="@+id/tvaccidtype"
+		    android:layout_alignBottom="@+id/tvaccidtype"
+		    android:layout_toRightOf="@+id/tvaccidtype"
+		    android:text="CODE"
+		    android:textColor="#000000"
+		    android:textSize="16sp"
+            android:textStyle="normal" />
+		
+		</RelativeLayout>

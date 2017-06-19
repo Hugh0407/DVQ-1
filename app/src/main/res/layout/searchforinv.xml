@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/losearchforinv"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/tvsearchInvcorpcode"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.00"
+            android:text="编码" />
+
+        <TextView
+            android:id="@+id/tvsearchInvUnitName"
+            android:layout_width="62dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.30"
+            android:text="批次" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/tvSearchInvcsCode"
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.08"
+                    android:text="仓库" />
+
+                <TextView
+                    
+        android:id="@+id/tvsearchunitcode"
+            android:layout_width="62dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.23"
+        android:text="货位" />
+	<TextView
+            android:id="@+id/tvsearchInvCode"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:text="数量"
+            android:textColor="@android:color/holo_blue_dark"
+            android:textSize="@dimen/padding_large"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="135dp"
+        android:layout_height="wrap_content" >
+    </LinearLayout>
+
+</LinearLayout>

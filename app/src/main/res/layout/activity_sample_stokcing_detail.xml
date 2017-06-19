@@ -1,0 +1,144 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.techscan.dvq.Sample_stokcing_detail" >
+
+    <ListView
+        android:id="@+id/gSamplevList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/MPurListButtonBar"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/TextView01" >
+
+    </ListView>
+
+    <Button
+        android:id="@+id/btsearchinvSearch"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_weight="1"
+        android:text="查询" />
+
+    <LinearLayout
+        android:id="@+id/MPurListButtonBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="0dp"
+        android:background="#d7d6d6"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/btnSampDetail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn3"
+            android:textColor="@color/navy" 
+            android:text="    明细    " />
+        <Button
+            android:id="@+id/btnCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn3"
+            android:textColor="@color/navy" 
+            android:text="检查分包" />
+
+        <Button
+            android:id="@+id/btnSampreturn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn3"
+            android:textColor="@color/navy" 
+            android:text="    返回    " />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvCount1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtSampleBatch"
+        android:layout_alignBottom="@+id/txtSampleBatch"
+        android:layout_alignParentLeft="true"
+        android:text="  货        位" />
+
+    <EditText
+        android:id="@+id/txtsampleBarcode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/txtSampleBatch"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/txtSampleBatch"
+        android:ems="10"
+        android:singleLine="true" />
+
+    <TextView
+        android:id="@+id/gvtvItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtsampleBarcode"
+        android:layout_alignBottom="@+id/txtsampleBarcode"
+        android:layout_alignParentLeft="true"
+        android:layout_alignRight="@+id/tvCount1"
+        android:text="  条        码" />
+
+    <EditText
+        android:id="@+id/txtSampleInvenrotyName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/txtsampleBarcode"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/txtsampleBarcode"
+        android:ems="10"
+        android:inputType="textCapCharacters|textAutoCorrect"
+        android:singleLine="true" />
+
+    <TextView
+        android:id="@+id/TextView01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/tvsearchInvcorpcode"
+        android:gravity="right"
+        android:text="     库存   已扫   差异"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tvsearchInvcorpcode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtSampleInvenrotyName"
+        android:layout_alignBottom="@+id/txtSampleInvenrotyName"
+        android:layout_alignParentLeft="true"
+        android:text="  存货信息" />
+
+    <TextView
+        android:id="@+id/TextView02"
+        android:layout_width="wrap_content"
+        android:layout_height="10px"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="  " />
+
+    <EditText
+        android:id="@+id/txtSampleBatch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/TextView02"
+        android:layout_toRightOf="@+id/tvCount1"
+        android:ems="10"
+        android:inputType="textCapCharacters|textAutoCorrect"
+        android:minHeight="@dimen/activity_horizontal_margin"
+        android:singleLine="true" />
+
+</RelativeLayout>

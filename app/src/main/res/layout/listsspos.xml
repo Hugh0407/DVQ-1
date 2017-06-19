@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="horizontal" 
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+	<LinearLayout android:id="@+id/listssdetaillinear5"
+	    	android:orientation="vertical"
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content">
+	</LinearLayout>
+
+	<LinearLayout
+	    android:id="@+id/listssdetaillinear6"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentLeft="true"
+	    android:layout_below="@+id/listssdetaillinear5"
+	    android:layout_marginLeft="14dp"
+	    android:layout_marginTop="40dp"
+	    android:orientation="vertical" >
+	</LinearLayout>
+
+	<TextView
+	    android:id="@+id/listssposPosName"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentLeft="true"
+	    android:layout_alignParentTop="true"
+	    android:text="PosName"
+	    android:textColor="#000000"
+	    android:textSize="20sp" />
+
+	<TextView
+	    android:id="@+id/listssposPosCode"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentLeft="true"
+	    android:layout_below="@+id/listssposPosName"
+	    android:text="PosCode"
+	    android:textColor="#000000"
+	    android:textSize="16sp" />
+
+	<TextView
+	    android:id="@+id/TextView01"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentRight="true"
+	    android:layout_below="@+id/listssposPosName"
+	    android:text="长按此处查询数量  "
+	    android:textColor="@color/blue"
+	    android:textSize="12sp" />
+
+</RelativeLayout>

@@ -1,0 +1,202 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.techscan.dvq.OtherStockInDetail" >
+
+    <LinearLayout
+        android:id="@+id/MOthListButtonBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="0dp"
+        android:background="#d7d6d6"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/btnOthTask"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn3"
+            android:textColor="@color/navy" 
+            android:text="任务" />
+
+        <Button
+            android:id="@+id/btnOthDetail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn3"
+            android:textColor="@color/navy" 
+            android:text="明细" />
+
+        <Button
+            android:id="@+id/btnOthReturn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn3"
+            android:textColor="@color/navy" 
+            android:text="返回" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvOthcount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/MOthListButtonBar"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:text="已扫描0件"
+        android:textColor="@android:color/holo_blue_light"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/txtOthInvName"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:layout_alignLeft="@+id/txtOthInvCode"
+        android:layout_below="@+id/txtOthInvCode"
+        android:editable="false"
+        android:ems="10"
+        android:focusable="false"
+        android:gravity="bottom"
+        android:singleLine="true"
+        android:width="230dp" />
+
+    <TextView
+        android:id="@+id/TextView31"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtOthBarcode"
+        android:layout_alignBottom="@+id/txtOthBarcode"
+        android:layout_toLeftOf="@+id/txtOthBarcode"
+        android:text="  条 　 码" />
+
+    <EditText
+        android:id="@+id/txtOthInvCode"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:layout_alignLeft="@+id/txtOthBarcode"
+        android:layout_below="@+id/txtOthBarcode"
+        android:editable="false"
+        android:ems="10"
+        android:focusable="false"
+        android:gravity="bottom"
+        android:width="230dp" >
+
+        <requestFocus />
+    </EditText>
+
+    <TextView
+        android:id="@+id/TextView36"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtOthInvName"
+        android:layout_alignBottom="@+id/txtOthInvName"
+        android:layout_toLeftOf="@+id/txtOthInvName"
+        android:text="  型  　号" />
+
+    <TextView
+        android:id="@+id/TextView33"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtOthInvCode"
+        android:layout_alignBottom="@+id/txtOthInvCode"
+        android:layout_alignParentLeft="true"
+        android:text="  编  　码" />
+
+    <TextView
+        android:id="@+id/TextView34"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtOthBatch"
+        android:layout_alignBottom="@+id/txtOthBatch"
+        android:layout_toLeftOf="@+id/txtOthBatch"
+        android:text="  批  　次" />
+
+    <EditText
+        android:id="@+id/txtOthBatch"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:layout_alignLeft="@+id/txtOthInvName"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/txtOthInvName"
+        android:editable="false"
+        android:ems="10"
+        android:focusable="false"
+        android:gravity="bottom"
+        android:width="230dp" />
+
+    <EditText
+        android:id="@+id/txtOthSerino"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:layout_alignLeft="@+id/txtOthBatch"
+        android:layout_below="@+id/txtOthBatch"
+        android:editable="false"
+        android:ems="10"
+        android:focusable="false"
+        android:gravity="bottom"
+        android:width="230dp" />
+
+    <TextView
+        android:id="@+id/TextView35"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtOthSerino"
+        android:layout_alignBottom="@+id/txtOthSerino"
+        android:layout_toLeftOf="@+id/txtOthSerino"
+        android:text="  序 列 号" />
+
+    <TextView
+        android:id="@+id/TextView02"
+        android:layout_width="wrap_content"
+        android:layout_height="10px"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="  " />
+
+    <EditText
+        android:id="@+id/txtOthPosition"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/TextView02"
+        android:layout_toRightOf="@+id/TextView01"
+        android:ems="10"
+        android:focusable="true"
+        android:gravity="bottom" />
+
+    <TextView
+        android:id="@+id/TextView01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtOthPosition"
+        android:layout_alignBottom="@+id/txtOthPosition"
+        android:layout_alignParentLeft="true"
+        android:text="  货 　 位" />
+
+    <Switch
+        android:id="@+id/swhOthPos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/txtOthPosition"
+        android:text="记录货位" />
+
+    <EditText
+        android:id="@+id/txtOthBarcode"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:layout_alignLeft="@+id/txtOthPosition"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/swhOthPos"
+        android:ems="10"
+        android:gravity="bottom"
+        android:singleLine="true" />
+
+</RelativeLayout>

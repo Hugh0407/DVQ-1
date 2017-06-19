@@ -1,0 +1,99 @@
+<RelativeLayout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.techscan.dvq.StockTransScan" >
+
+    <LinearLayout
+        android:id="@+id/MListButtonBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="0dp"
+        android:background="#d7d6d6"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/btnTransTask"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn3"
+            android:textColor="@color/navy" 
+            android:text="任务" />
+        
+        <Button
+            android:id="@+id/btnTransScanClear"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn3"
+            android:textColor="@color/navy" 
+            android:text="清空" />
+
+        <Button
+            android:id="@+id/btnTransReturn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn3"
+            android:textColor="@color/navy" 
+            android:text="返回" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvSTScounts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/MListButtonBar"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:text="已扫描0件"
+        android:textColor="@android:color/holo_blue_light"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <ListView
+        android:id="@+id/lstTransScanDetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/tvSTScounts"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/txtTSBarcode" >
+
+    </ListView>
+
+    <TextView
+        android:id="@+id/TextView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtTSBarcode"
+        android:layout_alignBottom="@+id/txtTSBarcode"
+        android:layout_alignParentLeft="true"
+        android:text="  条       码" />
+
+    <TextView
+        android:id="@+id/TextView01"
+        android:layout_width="wrap_content"
+        android:layout_height="10px"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="   " />
+
+    <EditText
+        android:id="@+id/txtTSBarcode"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/TextView01"
+        android:layout_toRightOf="@+id/TextView1"
+        android:ems="10"
+        android:gravity="bottom"
+        android:singleLine="true"
+        android:width="230dp" >
+
+        <requestFocus />
+    </EditText>
+
+</RelativeLayout>

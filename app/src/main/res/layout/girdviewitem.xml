@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content" 
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp">
+    
+    <ImageView
+        android:id="@+id/gvimgItem"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:id="@+id/gvtvItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/gvimgItem"
+        android:layout_centerHorizontal="true"
+        android:text="货位调整"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+</RelativeLayout>

@@ -1,0 +1,125 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.techscan.dvq.SbbinActivity" >
+
+    <LinearLayout
+        android:id="@+id/sbbinButtonBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="0dp"
+        android:background="#d7d6d6"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/btnsbbinReturn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn3"
+            android:text="返回"
+            android:textColor="@color/navy" />
+
+        <Button
+            android:id="@+id/btsbbinSearch"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn3"
+            android:text="查询"
+            android:textColor="@color/navy" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textViewABC"
+        android:layout_width="100px"
+        android:layout_height="10px"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="                  " />
+
+    <TextView
+        android:id="@+id/tvScanCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/etsbbinWhcode"
+        android:layout_alignBottom="@+id/etsbbinWhcode"
+        android:layout_alignLeft="@+id/gvtvItem"
+        android:layout_alignRight="@+id/gvtvItem"
+        android:text="  仓 库 号" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <EditText
+        android:id="@+id/etsbbinWhcode"
+        android:layout_width="300px"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/etsbbinBinCode"
+        android:layout_below="@+id/etsbbinBinCode"
+        android:layout_toLeftOf="@+id/btnWhcode"
+        android:ems="10"
+        android:inputType="textCapCharacters|textAutoCorrect"
+        android:singleLine="true" >
+
+    </EditText>
+
+    <EditText
+        android:id="@+id/etsbbinBinCode"
+        android:layout_width="300px"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/textViewABC"
+        android:layout_toRightOf="@+id/gvtvItem"
+        android:ems="10"
+        android:inputType="textCapCharacters|textAutoCorrect"
+        android:singleLine="true" />
+
+    <requestFocus />
+
+    <TextView
+        android:id="@+id/gvtvItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/etsbbinBinCode"
+        android:layout_alignBottom="@+id/etsbbinBinCode"
+        android:layout_alignParentLeft="true"
+        android:text="  货 位 号" />
+
+    <TextView
+        android:id="@+id/tvCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/sbbinButtonBar"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:text="合计查询件数："
+        android:textColor="@android:color/holo_blue_light"
+        android:textSize="18sp" />
+
+    <ListView
+        android:id="@+id/lvsbbinListView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/tvCount"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/etsbbinWhcode"
+        android:ems="1" >
+    </ListView>
+
+    <ImageButton
+        android:id="@+id/btnWhcode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/etsbbinWhcode"
+        android:src="@drawable/browse"
+        android:layout_alignParentRight="true" />
+
+</RelativeLayout>

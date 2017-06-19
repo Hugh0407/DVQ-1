@@ -1,0 +1,254 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="top"
+    tools:context="com.techscan.dvq.StockInventoryScan" >
+
+    <LinearLayout
+        android:id="@+id/TestButtonBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:background="#d7d6d6"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/btnSIScanCheck"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn3"
+            android:textColor="@color/navy" 
+            android:text="提交" />
+
+        <Button
+            android:id="@+id/btnSIScanDetail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn3"
+            android:textColor="@color/navy" 
+            android:text="明细" />
+
+        <Button
+            android:id="@+id/btnSIScanClear"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn3"
+            android:textColor="@color/navy" 
+            android:text="清空" />
+        
+        <Button
+            android:id="@+id/btnSIScanReturn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn3"
+            android:textColor="@color/navy" 
+            android:text="返回" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvInvCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/TestButtonBar"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:text="已扫描0件"
+        android:textColor="@android:color/holo_blue_light"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvSIBarcode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtSIBarcode"
+        android:layout_alignBottom="@+id/txtSIBarcode"
+        android:layout_alignParentLeft="true"
+        android:text="  条  　码 " />
+
+    <TextView
+        android:id="@+id/tvSIWarehouse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtSIWH"
+        android:layout_alignBottom="@+id/txtSIWH"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/txtSIWH"
+        android:text="  货  　位" />
+
+    <TextView
+        android:id="@+id/tvSIScanSeriNoName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtSIScanSeriNo"
+        android:layout_alignParentLeft="true"
+        android:text="  序 列 号" />
+
+    <TextView
+        android:id="@+id/tvSIBill"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtSIBillNO"
+        android:layout_alignBottom="@+id/txtSIBillNO"
+        android:layout_alignParentLeft="true"
+        android:layout_alignRight="@+id/tvSIScanSeriNoName"
+        android:text="  单 据 号" />
+
+    <TextView
+        android:id="@+id/tvSIScanInvNameView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtSIScanInvName"
+        android:layout_alignBottom="@+id/txtSIScanInvName"
+        android:layout_alignParentLeft="true"
+        android:layout_alignRight="@+id/tvSIBill"
+        android:text="  编  　码" />
+
+    <TextView
+        android:id="@+id/tvSIScanBatchName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtSIScanBatch"
+        android:layout_alignBottom="@+id/txtSIScanBatch"
+        android:layout_alignParentLeft="true"
+        android:layout_alignRight="@+id/tvSIScanSeriNoName"
+        android:text="  批  　次" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="              " />
+
+    <TextView
+        android:id="@+id/TextView01"
+        android:layout_width="wrap_content"
+        android:layout_height="10px"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="              " />
+
+    <TextView
+        android:id="@+id/TextView02"
+        android:layout_width="wrap_content"
+        android:layout_height="10px"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/txtSIWH"
+        android:text="              " />
+
+    <TextView
+        android:id="@+id/TextView03"
+        android:layout_width="wrap_content"
+        android:layout_height="10px"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/txtSIBarcode"
+        android:text="              " />
+
+    <TextView
+        android:id="@+id/TextView04"
+        android:layout_width="wrap_content"
+        android:layout_height="10px"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/txtSIBillNO"
+        android:text="              " />
+
+    <TextView
+        android:id="@+id/TextView05"
+        android:layout_width="wrap_content"
+        android:layout_height="10px"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/tvSIScanInvNameView"
+        android:text="              " />
+
+    <TextView
+        android:id="@+id/TextView06"
+        android:layout_width="wrap_content"
+        android:layout_height="10px"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/txtSIScanBatch"
+        android:text="              " />
+
+    <EditText
+        android:id="@+id/txtSIWH"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/TextView01"
+        android:layout_toRightOf="@+id/tvSIBarcode"
+        android:ems="10"
+        android:gravity="bottom"
+        android:singleLine="true"
+        android:width="230dp" />
+
+    <EditText
+        android:id="@+id/txtSIBarcode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/txtSIWH"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/txtSIWH"
+        android:ems="10"
+        android:gravity="bottom"
+        android:singleLine="true"
+        android:width="230dp" />
+
+    <EditText
+        android:id="@+id/txtSIBillNO"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/txtSIBarcode"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/txtSIBarcode"
+        android:ems="10"
+        android:gravity="bottom"
+        android:singleLine="true"
+        android:width="230dp" />
+
+    <EditText
+        android:id="@+id/txtSIScanInvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/txtSIBillNO"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/txtSIBillNO"
+        android:ems="10"
+        android:gravity="bottom"
+        android:singleLine="true"
+        android:width="230dp" >
+
+        <requestFocus />
+    </EditText>
+
+    <EditText
+        android:id="@+id/txtSIScanSeriNo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/txtSIScanBatch"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/txtSIScanBatch"
+        android:ems="10"
+        android:gravity="bottom"
+        android:singleLine="true"
+        android:width="230dp" />
+
+    <EditText
+        android:id="@+id/txtSIScanBatch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/txtSIScanInvName"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/TextView05"
+        android:ems="10"
+        android:gravity="bottom"
+        android:singleLine="true"
+        android:width="230dp" />
+
+</RelativeLayout>

@@ -1,0 +1,179 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.techscan.dvq.PurStockIn"
+    android:background="@drawable/pagebackgroup">
+
+    <LinearLayout
+        android:id="@+id/PurStockInButtonBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="0dp"
+        android:background="#d7d6d6"
+        android:orientation="horizontal" >
+        
+        <Button
+            android:id="@+id/btnPurInScan"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/button_normal_style"
+            android:textColor="@color/white"
+            android:text="扫描" />
+        
+        
+        <Button
+            android:id="@+id/btnPurinUpdate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/button_normal_style"
+            android:textColor="@color/white"
+            android:text="暂存" />
+        
+        <Button
+            android:id="@+id/btnPurinSave"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/button_normal_style"
+            android:textColor="@color/white"
+            android:text="保存" />
+
+        <Button
+            android:id="@+id/btnPurInExit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/button_normal_style"
+            android:textColor="@color/white"
+            android:text="退出" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/labWHName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tvPurHW"
+        android:layout_alignBottom="@+id/tvPurHW"
+        android:layout_alignLeft="@+id/txtPurPosition"
+        android:layout_alignParentRight="true"
+        android:text="  ----" />
+
+    <TextView
+        android:id="@+id/labPurVendor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/labWHName"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/tvPurVen"
+        android:text="  ----" />
+
+    <TextView
+        android:id="@+id/tvPurVen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tvPurHW"
+        android:layout_below="@+id/tvPurHW"
+        android:layout_marginTop="22dp"
+        android:text="  供　应　商" />
+
+    <TextView
+        android:id="@+id/tvbillstatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tvPurVen"
+        android:layout_below="@+id/tvPurVen"
+        android:layout_marginTop="22dp"
+        android:text="  退　　　货"
+        android:textColor="@color/red" />
+
+    <TextView
+        android:id="@+id/TextView01"
+        android:layout_width="wrap_content"
+        android:layout_height="10px"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text=" " />
+
+    <EditText
+        android:id="@+id/txtPurPosition"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_below="@+id/txtPurOrderNo"
+        android:ems="10"
+        android:singleLine="true"
+        android:textAllCaps="true"
+        android:background="@drawable/edittext_style"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_alignLeft="@+id/txtPurOrderNo"
+        android:layout_alignStart="@+id/txtPurOrderNo"
+
+        android:layout_alignRight="@+id/txtPurOrderNo"
+        android:layout_alignEnd="@+id/txtPurOrderNo"
+        android:cursorVisible="false"/>
+
+    <TextView
+        android:id="@+id/tvPurBin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtPurPosition"
+        android:layout_alignBottom="@+id/txtPurPosition"
+        android:layout_alignLeft="@+id/tvsearchInvUnitName"
+        android:layout_alignRight="@+id/tvsearchInvUnitName"
+        android:text="  货　　　位"
+        android:cursorVisible="false"/>
+
+    <TextView
+        android:id="@+id/tvPurHW"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/tvPurBin"
+        android:layout_below="@+id/txtPurPosition"
+        android:layout_marginTop="17dp"
+        android:text="  仓　　　库" />
+
+    <TextView
+        android:id="@+id/tvsearchInvUnitName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtPurOrderNo"
+        android:layout_alignBottom="@+id/txtPurOrderNo"
+        android:layout_alignParentLeft="true"
+        android:text="  采购入库单" />
+
+    <ImageButton
+        android:id="@+id/btnPurBrower"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_alignBottom="@+id/txtPurOrderNo"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/browse"/>
+
+    <TextView
+        android:id="@+id/TextView02"
+        android:layout_width="wrap_content"
+        android:layout_height="10px"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="  " />
+
+    <EditText
+        android:id="@+id/txtPurOrderNo"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_below="@+id/TextView02"
+        android:layout_toLeftOf="@+id/btnPurBrower"
+        android:ems="10"
+        android:singleLine="true"
+        android:textAllCaps="true"
+        android:background="@drawable/edittext_style"
+        android:layout_margin="5dp"
+        android:layout_toRightOf="@+id/tvsearchInvUnitName"/>
+
+</RelativeLayout>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="horizontal" 
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+	<LinearLayout android:id="@+id/listssdetaillinear5"
+	    	android:orientation="vertical"
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content">
+	</LinearLayout>
+
+	<LinearLayout
+	    android:id="@+id/listssdetaillinear6"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentLeft="true"
+	    android:layout_below="@+id/listssdetaillinear5"
+	    android:layout_marginLeft="14dp"
+	    android:layout_marginTop="40dp"
+	    android:orientation="vertical" >
+	</LinearLayout>
+
+	<TextView
+	    android:id="@+id/listsscanbarcode"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentLeft="true"
+	    android:layout_alignParentTop="true"
+	    android:text="barcode"
+	    android:textColor="#000000"
+	    android:textSize="16sp" />
+
+	<TextView
+	    android:id="@+id/listsscanInvCode"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentLeft="true"
+	    android:layout_below="@+id/listsscanbarcode"
+	    android:text="InvCode"
+	    android:textColor="#000000"
+	    android:textSize="16sp" />
+
+	<TextView
+	    android:id="@+id/listsscanBatch"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentLeft="true"
+	    android:layout_below="@+id/listsscanInvCode"
+	    android:text="Batch"
+	    android:textColor="#000000"
+	    android:textSize="16sp" />
+
+	<TextView
+	    android:id="@+id/listsscanbox"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentRight="true"
+	    android:layout_below="@+id/listsscanSno"
+	    android:text="分包未完"
+	    android:textColor="@color/red"
+	    android:textSize="16sp" />
+
+	<TextView
+	    android:id="@+id/listsscanSno"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_above="@+id/listsscanBatch"
+	    android:layout_alignParentRight="true"
+	    android:text="scanSno"
+	    android:textColor="#000000"
+	    android:textSize="16sp" />
+
+</RelativeLayout>

@@ -1,0 +1,32 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/tvrdName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:text="Name" />
+
+    <TextView
+        android:id="@+id/tvrdaccid"
+        android:layout_width="35dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/tvrdName"
+        android:text="A" />
+
+    <TextView
+        android:id="@+id/tvrdCode"
+        android:layout_width="22px"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/tvrdName"
+        android:layout_toRightOf="@+id/tvrdaccid"
+        android:textSize="16sp"
+        android:text="Code" />
+
+</RelativeLayout>

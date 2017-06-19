@@ -1,0 +1,211 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.techscan.dvq.SettingActivity"
+    android:background="@drawable/pagebackgroup">
+
+    <LinearLayout
+        android:id="@+id/SettingsButtonBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="0dp"
+        android:background="#d7d6d6"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/btSettingCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/button_normal_style"
+            android:textColor="@color/white"
+            android:text="取消" />
+
+        <Button
+            android:id="@+id/btSAOkS"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/button_normal_style"
+            android:textColor="@color/white"
+            android:text="确定"/>
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/WIFIMin"
+        android:layout_width="80px"
+        android:layout_height="30dp"
+        android:layout_above="@+id/SettingsButtonBar"
+        android:layout_toRightOf="@+id/TextView01"
+        android:ems="10"
+        android:singleLine="true"
+        android:visibility="visible"
+        android:layout_margin="5dp"
+        android:background="@drawable/edittext_style"/>
+
+    <TextView
+        android:id="@+id/TextView01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/WIFIMin"
+        android:layout_alignBottom="@+id/WIFIMin"
+        android:layout_alignLeft="@+id/tvsearchInvcorpcode"
+        android:text="信号强度：       ━"
+        android:visibility="visible" />
+
+    <TextView
+        android:id="@+id/TextView02"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/WIFIMin"
+        android:layout_alignBottom="@+id/WIFIMin"
+        android:layout_toRightOf="@+id/WIFIMin"
+        android:text="       to       ━"
+        android:visibility="visible" />
+
+    <TextView
+        android:id="@+id/TextView03"
+        android:layout_width="wrap_content"
+        android:layout_height="10px"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="  " />
+
+    <EditText
+        android:id="@+id/eTAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_below="@+id/TextView03"
+        android:ems="10"
+        android:singleLine="true"
+        android:background="@drawable/edittext_style"
+        android:layout_toRightOf="@+id/txtWebAddress"
+        android:layout_margin="5dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="false" />
+
+    <TextView
+        android:id="@+id/txtWebAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/eTAddress"
+        android:layout_alignBottom="@+id/eTAddress"
+        android:layout_toRightOf="@+id/TextView03"
+        android:text="主Web地址" />
+
+    <TextView
+        android:id="@+id/txtCompanyCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/eTCpy"
+        android:layout_alignBottom="@+id/eTCpy"
+        android:layout_alignLeft="@+id/txtWebAddress"
+        android:layout_alignRight="@+id/txtWebAddress"
+        android:text="公司Code" />
+
+    <EditText
+        android:id="@+id/txtstaccid"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/txtstwhcode"
+        android:ems="10"
+        android:singleLine="true"
+        android:visibility="visible"
+        android:background="@drawable/edittext_style"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_alignLeft="@+id/eTAddress"
+        android:layout_alignStart="@+id/eTAddress" />
+
+    <TextView
+        android:id="@+id/tvsearchInvUnitName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtstorgcode"
+        android:layout_alignBottom="@+id/txtstorgcode"
+        android:layout_alignRight="@+id/txtCompanyCode"
+        android:layout_toRightOf="@+id/TextView03"
+        android:text="库存组织" />
+
+    <TextView
+        android:id="@+id/tvsearchInvcorpcode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtstwhcode"
+        android:layout_alignBottom="@+id/txtstwhcode"
+        android:layout_alignLeft="@+id/tvsearchInvUnitName"
+        android:text="仓库前缀A" />
+
+    <TextView
+        android:id="@+id/tvSearchInvcsCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtstaccid"
+        android:layout_alignBottom="@+id/txtstaccid"
+        android:layout_alignRight="@+id/tvsearchInvcorpcode"
+        android:text="仓库前缀B"
+        android:visibility="visible" />
+
+    <EditText
+        android:id="@+id/eTCpy"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:ems="10"
+        android:singleLine="true"
+        android:background="@drawable/edittext_style"
+        android:layout_below="@+id/eTAddress"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_alignRight="@+id/eTAddress"
+        android:layout_alignEnd="@+id/eTAddress"
+        android:layout_alignLeft="@+id/eTAddress"
+        android:layout_alignStart="@+id/eTAddress" />
+
+    <EditText
+        android:id="@+id/txtstorgcode"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:ems="10"
+        android:singleLine="true"
+        android:layout_below="@+id/eTCpy"
+        android:background="@drawable/edittext_style"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_alignLeft="@+id/txtstwhcode"
+        android:layout_alignStart="@+id/txtstwhcode"
+        android:layout_alignRight="@+id/eTCpy"
+        android:layout_alignEnd="@+id/eTCpy" />
+
+    <EditText
+        android:id="@+id/txtstwhcode"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:ems="10"
+        android:singleLine="true"
+        android:background="@drawable/edittext_style"
+        android:layout_below="@+id/txtstorgcode"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_alignLeft="@+id/txtstaccid"
+        android:layout_alignStart="@+id/txtstaccid"
+        android:layout_alignRight="@+id/txtstaccid"
+        android:layout_alignEnd="@+id/txtstaccid" />
+
+    <EditText
+        android:id="@+id/WIFIMax"
+        android:layout_width="80px"
+        android:layout_height="30dp"
+        android:ems="10"
+        android:singleLine="true"
+        android:visibility="visible"
+        android:background="@drawable/edittext_style"
+        android:layout_margin="5dp"
+        android:layout_above="@+id/SettingsButtonBar"
+        android:layout_toRightOf="@+id/TextView02"/>
+
+</RelativeLayout>

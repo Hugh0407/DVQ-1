@@ -1,0 +1,140 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.techscan.dvq.SbinvActivity" >
+	 
+	 <LinearLayout        
+        android:id="@+id/sbinvButtonBar" 
+        android:background="#d7d6d6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="0dp"
+        android:orientation="horizontal" >
+	    
+	            <Button
+            android:id="@+id/btnsbinvReturn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn3"
+            android:textColor="@color/navy" 
+            android:text="返回" />
+	            <Button
+	        android:id="@+id/btsearchinvSearch"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+            android:background="@drawable/btn3"
+            android:textColor="@color/navy" 
+	        android:text="查询" />
+	 </LinearLayout>
+
+	 <TextView
+	     android:id="@+id/gvtvItem"
+	     android:layout_width="wrap_content"
+	     android:layout_height="wrap_content"
+	     android:layout_alignBaseline="@+id/edtsbinvBarcode"
+	     android:layout_alignBottom="@+id/edtsbinvBarcode"
+	     android:layout_alignParentLeft="true"
+	     android:text="  货品条码" />
+
+	 <TextView
+	     android:id="@+id/TextView01"
+	     android:layout_width="10px"
+	     android:layout_height="10px"
+	     android:layout_alignParentLeft="true"
+	     android:layout_alignParentTop="true"
+	     android:text="     " />
+
+	 <TextView
+	     android:id="@+id/textView1"
+	     android:layout_width="wrap_content"
+	     android:layout_height="wrap_content"
+	     android:layout_alignParentLeft="true"
+	     android:layout_below="@+id/edtsbinvBatch"
+	     android:text=" " />
+
+	 <TextView
+	     android:id="@+id/tvsbinvName"
+	     android:layout_width="wrap_content"
+	     android:layout_height="26dp"
+	     android:layout_alignBottom="@+id/tvSTScounts"
+	     android:layout_alignLeft="@+id/edtsbinvBatch"
+	     android:layout_alignParentRight="true"
+	     android:layout_alignTop="@+id/tvSTScounts"
+	     android:text="存货名" />
+
+	 <TextView
+	     android:id="@+id/tvSTScounts"
+	     android:layout_width="wrap_content"
+	     android:layout_height="40dp"
+	     android:layout_alignLeft="@+id/tvCount1"
+	     android:layout_below="@+id/textView1"
+	     android:layout_toLeftOf="@+id/edtsbinvBatch"
+	     android:text="  存货名称" />
+
+	 <ListView
+	     android:id="@+id/lvsbinvList"
+	     android:layout_width="match_parent"
+	     android:layout_height="wrap_content"
+	     android:layout_above="@+id/sbinvButtonBar"
+	     android:layout_alignParentLeft="true"
+	     android:layout_below="@+id/tvsbinvName" >
+
+	 </ListView>
+
+	 <EditText
+	     android:id="@+id/edtsbinvInv"
+	     android:layout_width="wrap_content"
+	     android:layout_height="wrap_content"
+	     android:layout_alignLeft="@+id/edtsbinvBarcode"
+	     android:layout_alignParentRight="true"
+	     android:layout_below="@+id/edtsbinvBarcode"
+	     android:ems="10"
+	     android:inputType="textCapCharacters|textAutoCorrect"
+	     android:singleLine="true" />
+
+	 <EditText
+	     android:id="@+id/edtsbinvBatch"
+	     android:layout_width="wrap_content"
+	     android:layout_height="wrap_content"
+	     android:layout_alignLeft="@+id/edtsbinvInv"
+	     android:layout_alignParentRight="true"
+	     android:layout_below="@+id/edtsbinvInv"
+	     android:ems="10"
+	     android:inputType="textCapCharacters|textAutoCorrect"
+	     android:minHeight="@dimen/activity_horizontal_margin"
+	     android:singleLine="true" />
+
+	 <TextView
+	     android:id="@+id/tvsearchInvcorpcode"
+	     android:layout_width="wrap_content"
+	     android:layout_height="wrap_content"
+	     android:layout_alignBaseline="@+id/edtsbinvInv"
+	     android:layout_alignBottom="@+id/edtsbinvInv"
+	     android:layout_alignParentLeft="true"
+	     android:text="  存货编码" />
+
+	 <TextView
+	     android:id="@+id/tvCount1"
+	     android:layout_width="wrap_content"
+	     android:layout_height="wrap_content"
+	     android:layout_alignBaseline="@+id/edtsbinvBatch"
+	     android:layout_alignBottom="@+id/edtsbinvBatch"
+	     android:layout_alignLeft="@+id/tvsearchInvcorpcode"
+	     android:text="  批  次  号" />
+
+	 <EditText
+	     android:id="@+id/edtsbinvBarcode"
+	     android:layout_width="wrap_content"
+	     android:layout_height="wrap_content"
+	     android:layout_alignParentRight="true"
+	     android:layout_below="@+id/TextView01"
+	     android:layout_toRightOf="@+id/gvtvItem"
+	     android:ems="10"
+	     android:singleLine="true" />
+
+</RelativeLayout>

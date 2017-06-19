@@ -1,0 +1,181 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.techscan.dvq.Sample_stocking" >
+
+    <LinearLayout
+        android:id="@+id/StockInventorySButtonBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="0dp"
+        android:background="#d7d6d6"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/btnSampleScan"
+            style="android:buttonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_weight="1"
+            android:background="@drawable/btn3"
+            android:textColor="@color/navy"
+            android:text="扫描" />
+
+        <Button
+            android:id="@+id/btnSampleSave"
+            style="android:buttonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_weight="1"
+            android:background="@drawable/btn3"
+            android:textColor="@color/navy"
+            android:text="关闭" />
+
+        <Button
+            android:id="@+id/btnSampleReOpen"
+            style="android:buttonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_weight="1"
+            android:background="@drawable/btn3"
+            android:textColor="@color/navy"
+            android:text="再开" />
+
+        <Button
+            android:id="@+id/btnSampleExit"
+            style="android:buttonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_weight="1"
+            android:background="@drawable/btn3"
+            android:textColor="@color/navy"
+            android:text="退出" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtSampOrderNo"
+        android:layout_alignBottom="@+id/txtSampOrderNo"
+        android:layout_alignParentLeft="true"
+        android:text="  盘点单号" />
+
+    <TextView
+        android:id="@+id/TextView01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtSampleWarehouse"
+        android:layout_alignBottom="@+id/txtSampleWarehouse"
+        android:layout_alignParentLeft="true"
+        android:text="  盘点仓库" />
+
+    <TextView
+        android:id="@+id/TextView04"
+        android:layout_width="wrap_content"
+        android:layout_height="10px"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="  " />
+
+    <TextView
+        android:id="@+id/TextViewCom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtSampleCom"
+        android:layout_alignBottom="@+id/txtSampleCom"
+        android:layout_alignParentLeft="true"
+        android:text="  盘点公司" />
+
+    <TextView
+        android:id="@+id/TextView02"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtSampleLoacation1"
+        android:layout_alignBottom="@+id/txtSampleLoacation1"
+        android:layout_alignParentLeft="true"
+        android:layout_alignRight="@+id/TextViewCom"
+        android:text="  盘点货位" />
+
+    <ListView
+        android:id="@+id/listssposshow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/StockInventorySButtonBar"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/txtSampleLoacation1" >
+
+    </ListView>
+
+    <EditText
+        android:id="@+id/txtSampleWarehouse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/txtSampOrderNo"
+        android:layout_alignRight="@+id/txtSampOrderNo"
+        android:layout_below="@+id/txtSampOrderNo"
+        android:ems="10"
+        android:singleLine="true"
+        android:width="200dp" />
+
+    <EditText
+        android:id="@+id/txtSampleCom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/txtSampleWarehouse"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/txtSampleWarehouse"
+        android:ems="10"
+        android:singleLine="true"
+        android:width="200dp" />
+
+    <EditText
+        android:id="@+id/txtSampleLoacation1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/txtSampleCom"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/txtSampleCom"
+        android:ems="10"
+        android:singleLine="true"
+        android:width="200dp" />
+
+    <ImageButton
+        android:id="@+id/btnSampleWarehouse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/txtSampleWarehouse"
+        android:src="@drawable/browse"
+        android:layout_alignParentRight="true" />
+
+    <EditText
+        android:id="@+id/txtSampOrderNo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/TextView04"
+        android:layout_toLeftOf="@+id/btnSampleOrderNoBrower"
+        android:layout_toRightOf="@+id/textView1"
+        android:ems="10"
+        android:singleLine="true"
+        android:width="200dp" />
+
+    <ImageButton
+        android:id="@+id/btnSampleOrderNoBrower"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/txtSampleWarehouse"
+        android:src="@drawable/browse"
+        android:layout_alignParentRight="true" />
+
+</RelativeLayout>

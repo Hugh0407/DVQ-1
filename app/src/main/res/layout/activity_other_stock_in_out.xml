@@ -1,0 +1,131 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.techscan.dvq.OtherStockInOut" >
+
+    <LinearLayout
+        android:id="@+id/PurStockInButtonBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="0dp"
+        android:background="#d7d6d6"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/btnOtInScan"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn3"
+            android:textColor="@color/navy" 
+            android:text="扫描" />
+
+        <Button
+            android:id="@+id/btnOtinSave"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn3"
+            android:textColor="@color/navy" 
+            android:text="保存  签字" />
+
+        <Button
+            android:id="@+id/btnOtInExit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn3"
+            android:textColor="@color/navy" 
+            android:text="退出" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/TextView01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtOtWarehouse"
+        android:layout_alignBottom="@+id/txtOtWarehouse"
+        android:layout_alignRight="@+id/labOtOrderNo"
+        android:text="  操作仓库" />
+
+    <TextView
+        android:id="@+id/labOtOrderNo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtOtOrderNo"
+        android:layout_alignBottom="@+id/txtOtOrderNo"
+        android:layout_alignRight="@+id/labOTOrderType"
+        android:text="  来源单号" />
+
+    <TextView
+        android:id="@+id/labOTOrderType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtOtOrderType"
+        android:layout_alignBottom="@+id/txtOtOrderType"
+        android:text="  单据类别" />
+
+    <ImageButton
+        android:id="@+id/btnOtType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/txtOtOrderType"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/browse" />
+
+    <TextView
+        android:id="@+id/TextView02"
+        android:layout_width="wrap_content"
+        android:layout_height="10px"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="   " />
+
+    <EditText
+        android:id="@+id/txtOtOrderType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/txtOtWarehouse"
+        android:layout_below="@+id/TextView02"
+        android:layout_toLeftOf="@+id/btnOtType"
+        android:ems="10"
+        android:singleLine="true"
+        android:textAllCaps="true" >
+
+        <requestFocus />
+    </EditText>
+
+    <EditText
+        android:id="@+id/txtOtWarehouse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/txtOtOrderNo"
+        android:layout_toRightOf="@+id/TextView01"
+        android:ems="10"
+        android:singleLine="true"
+        android:textAllCaps="true" />
+
+    <EditText
+        android:id="@+id/txtOtOrderNo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtOtOrderType"
+        android:layout_toLeftOf="@+id/btnOtOrderNo"
+        android:layout_toRightOf="@+id/labOtOrderNo"
+        android:ems="10"
+        android:singleLine="true"
+        android:textAllCaps="true" />
+
+    <ImageButton
+        android:id="@+id/btnOtOrderNo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/txtOtWarehouse"
+        android:layout_toRightOf="@+id/txtOtOrderType"
+        android:src="@drawable/browse" />
+
+</RelativeLayout>

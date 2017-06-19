@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal" >
+
+    <LinearLayout
+        android:id="@+id/listpdlinear1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/listssorder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="PDORDERNOX"
+            android:textColor="#000000"
+            android:textSize="25sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/listpdlinear2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/listpdlinear1"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:id="@+id/LinearLayout01"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <CheckedTextView
+        android:id="@+id/listssDate"
+        android:layout_width="190px"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:text="2015-11-13" />
+
+    <TextView
+        android:id="@+id/listsswhcode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/listssName"
+        android:text="FROM"
+        android:textColor="#000000"
+        android:textSize="16sp" />
+
+    <CheckedTextView
+        android:id="@+id/CheckedTextView01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/listpdlinear2"
+        android:layout_toRightOf="@+id/listpdlinear1"
+        android:text="   " />
+
+    <CheckedTextView
+        android:id="@+id/listssName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/listssDate"
+        android:layout_toRightOf="@+id/CheckedTextView01"
+        android:text="Name" />
+
+</RelativeLayout>

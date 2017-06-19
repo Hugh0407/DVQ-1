@@ -1,0 +1,273 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.techscan.dvq.StockBack" >
+
+    <TextView
+        android:id="@+id/tvStockBackWHFrom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtStockBackWHFrom"
+        android:layout_alignBottom="@+id/txtStockBackWHFrom"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/txtStockBackWHFrom"
+        android:text="  调出仓库" />
+
+    <LinearLayout
+        android:id="@+id/MPurListButtonBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="0dp"
+        android:background="#d7d6d6"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/btnStkBckSave"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn3"
+            android:text="保存"
+            android:textColor="@color/navy" />
+
+        <Button
+            android:id="@+id/btnStkBckDetail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn3"
+            android:text="明细"
+            android:textColor="@color/navy" />
+
+        <Button
+            android:id="@+id/btnStkBckReturn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn3"
+            android:text="退出"
+            android:textColor="@color/navy" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvStockBackWHTo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtStockBackWHTo"
+        android:layout_alignBottom="@+id/txtStockBackWHTo"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/txtStockBackWHTo"
+        android:text="  调入仓库" />
+
+    <EditText
+        android:id="@+id/txtStockBackBatch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/txtStockBackInvName"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/txtStockBackInvName"
+        android:ems="10"
+        android:gravity="bottom"
+        android:singleLine="true"
+        android:width="230dp" />
+
+    <EditText
+        android:id="@+id/txtStockBackSeriNo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/txtStockBackBatch"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/txtStockBackBatch"
+        android:ems="10"
+        android:gravity="bottom"
+        android:singleLine="true"
+        android:width="230dp" />
+
+    <TextView
+        android:id="@+id/tvStockBackInvNameView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtStockBackInvName"
+        android:layout_alignBottom="@+id/txtStockBackInvName"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/txtStockBackInvName"
+        android:text="  存货编码" />
+
+    <TextView
+        android:id="@+id/tvStockBackBatchName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtStockBackBatch"
+        android:layout_alignBottom="@+id/txtStockBackBatch"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/txtStockBackBatch"
+        android:text="  批　　次" />
+
+    <TextView
+        android:id="@+id/tvStockBackSeriNoName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtStockBackSeriNo"
+        android:layout_alignBottom="@+id/txtStockBackSeriNo"
+        android:text="  序  列  号" />
+
+    <TextView
+        android:id="@+id/tvInvCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/MPurListButtonBar"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:text="已扫描0件"
+        android:textColor="@android:color/holo_blue_light"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvStockBackBarCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtStockBackBar"
+        android:layout_alignBottom="@+id/txtStockBackBar"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/txtStockBackBar"
+        android:text="  条　　码" />
+
+    <EditText
+        android:id="@+id/txtStockBackInvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/txtStockBackBar"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/txtStockBackBar"
+        android:ems="10"
+        android:gravity="bottom"
+        android:singleLine="true"
+        android:width="230dp" />
+
+    <TextView
+        android:id="@+id/TextView01"
+        android:layout_width="wrap_content"
+        android:layout_height="10px"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="   " />
+
+    <EditText
+        android:id="@+id/txtStockBackScanCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/txtStockBackSeriNo"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/txtStockBackSeriNo"
+        android:ems="10"
+        android:gravity="bottom"
+        android:singleLine="true"
+        android:width="230dp" >
+
+        <requestFocus />
+    </EditText>
+
+    <TextView
+        android:id="@+id/TextView02"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtStockBackScanCount"
+        android:layout_alignBottom="@+id/txtStockBackScanCount"
+        android:layout_alignParentLeft="true"
+        android:text="  扫描序列" />
+
+    <EditText
+        android:id="@+id/txtStockBackWHTo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/txtStockBackWHFrom"
+        android:layout_below="@+id/txtStockBackWHFrom"
+        android:layout_toLeftOf="@+id/btnStockBackWHTo"
+        android:editable="false"
+        android:ems="10"
+        android:focusable="false"
+        android:singleLine="true"
+        android:width="200dp" />
+
+    <ImageButton
+        android:id="@+id/btnStockBackWHTo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/txtStockBackWHTo"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/browse" />
+
+    <ImageButton
+        android:id="@+id/btnStockBackWHFrom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/txtStockBackWHTo"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/browse" />
+
+    <EditText
+        android:id="@+id/txtStockBackPos"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/txtStockBackWHTo"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/txtStockBackWHTo"
+        android:ems="10"
+        android:gravity="bottom"
+        android:singleLine="true"
+        android:width="230dp" />
+
+    <TextView
+        android:id="@+id/TextView03"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtStockBackPos"
+        android:layout_alignBottom="@+id/txtStockBackPos"
+        android:layout_alignParentLeft="true"
+        android:text="  货　　位" />
+
+    <Switch
+        android:id="@+id/sStockBackS"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:text="抽盘" />
+
+    <EditText
+        android:id="@+id/txtStockBackBar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/txtStockBackPos"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/sStockBackPos"
+        android:ems="10"
+        android:gravity="bottom"
+        android:singleLine="true"
+        android:width="230dp" />
+
+    <Switch
+        android:id="@+id/sStockBackPos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/txtStockBackPos"
+        android:text="记录货位" />
+
+    <EditText
+        android:id="@+id/txtStockBackWHFrom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/sStockBackS"
+        android:layout_toLeftOf="@+id/btnStockBackWHTo"
+        android:editable="false"
+        android:ems="10"
+        android:focusable="false"
+        android:singleLine="true"
+        android:width="200dp" />
+
+</RelativeLayout>

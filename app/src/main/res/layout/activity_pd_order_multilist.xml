@@ -1,0 +1,67 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.techscan.dvq.PdOrderMultilist" >
+
+    <!-- style="@android:style/ButtonBar" -->
+    <LinearLayout        
+        android:id="@+id/MListButtonBar" 
+        android:background="#d7d6d6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="0dp"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/btnMListClear"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn3"
+            android:textColor="@color/navy" 
+            android:text="全消除" />
+
+        <Button
+            android:id="@+id/btnMListOK"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn3"
+            android:textColor="@color/navy" 
+            android:text="确定" />
+        <Button
+            android:id="@+id/btPdOrderMultilistReturn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn3"
+            android:textColor="@color/navy" 
+            android:text="返回" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvMSelCount"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/MListButtonBar"
+        android:layout_alignParentLeft="true"
+        android:text="已选中0项"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@android:color/holo_blue_light"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <ListView
+        android:id="@+id/pdmultilist"
+        android:layout_width="fill_parent"
+        android:layout_height="400dp"
+        android:layout_above="@+id/tvMSelCount"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true" >
+
+    </ListView>
+
+</RelativeLayout>

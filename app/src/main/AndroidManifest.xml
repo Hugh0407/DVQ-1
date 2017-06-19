@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.techscan.dvq"
+    android:versionCode="1"
+    android:versionName="1.0.00" >
+
+    <uses-sdk
+        android:minSdkVersion="14"
+        android:targetSdkVersion="20" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    
+    
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+    
+    <uses-permission android:name="android.hardware.camera" />
+    <uses-permission android:name="android.hardware.camera.autofocus" />
+    
+    
+
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/autoscanlogo"
+        android:theme="@style/AppBaseTheme">
+        <activity
+            android:name=".MainLogin"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Second"
+            android:label="@string/title_activity_second"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".SettingActivity"
+            android:label="@string/title_activity_setting"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+         <!--<activity -->
+         <!--android:name=".MenuForm" -->
+         <!--android:label="@string/title_activity_menu_form" > -->
+         <!--</activity> -->
+         <!--<activity -->
+         <!--android:name=".MoveStock" -->
+         <!--android:label="@string/title_activity_move_stock" > -->
+         <!--</activity> -->
+        <activity
+            android:name=".MainMenu"
+            android:label="@string/title_activity_main_menu"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".StockMove"
+            android:label="@string/title_activity_stock_move"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <!--<activity-->
+            <!--android:name=".ViewGrid"-->
+            <!--android:label="@string/title_activity_view_grid"-->
+            <!--android:windowSoftInputMode="adjustPan" >-->
+        <!--</activity>-->
+        <activity
+            android:name=".PdOrderList"
+            android:label="@string/title_activity_pd_order_list"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".StockMoveScan"
+            android:label="@string/title_activity_stock_move_scan"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".ListWarehouse"
+            android:label="@string/title_activity_list_warehouse"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".ContentItemView"
+            android:label="@string/title_activity_content_item_view"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".SearchmainActivity"
+            android:label="@string/title_activity_searchmain"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".SbinvActivity"
+            android:label="@string/title_activity_sbinv"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".SbbinActivity"
+            android:label="@string/title_activity_sbbin"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".StockTransfer"
+            android:label="@string/title_activity_stock_transfer"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".StockTransContent"
+            android:label="@string/title_activity_stock_trans_content"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <!--<activity-->
+            <!--android:name=".VlistMultipds"-->
+            <!--android:label="@string/title_activity_vlist_multipds"-->
+            <!--android:windowSoftInputMode="adjustPan" >-->
+        <!--</activity>-->
+        <activity
+            android:name=".PdOrderMultilist"
+            android:label="@string/title_activity_pd_order_multilist"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".StockTransScan"
+            android:label="@string/title_activity_stock_trans_scan"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".PurStockInDetail"
+            android:label="@string/title_activity_pur_stock_in_detail"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".PurStockIn"
+            android:label="@string/title_activity_pur_stock_in"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".PurOrderList"
+            android:label="@string/title_activity_pur_order_list"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".StockTransContentIn"
+            android:label="@string/title_activity_stock_trans_content_in"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".StockTransScanIn"
+            android:label="@string/title_activity_stock_trans_scan_in"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".BillInfoOrderList"
+            android:label="@string/title_activity_bill_info_order_list"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".StockInventory"
+            android:label="@string/title_activity_stock_inventory"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".StockInventoryScan"
+            android:label="@string/title_activity_stock_inventory_scan"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".InvOrderList"
+            android:label="@string/title_activity_inv_order_list"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".WarehouseMultilist"
+            android:label="@string/title_activity_warehouse_multilist"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".VlistRdcl"
+            android:label="@string/title_activity_vlist_rdcl"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".SearchBillActivity"
+            android:label="@string/title_activity_search_bill"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".SalesDelivery"
+            android:label="@string/title_activity_sales_delivery"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".SalesDeliveryScan"
+            android:label="@string/title_activity_sales_delivery_scan"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".SaleBillInfoOrderList"
+            android:label="@string/title_activity_sale_bill_info_order_list"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".UpdateInfo"
+            android:label="@string/title_activity_update_info"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".LoadImg"
+            android:label="@string/title_activity_load_img"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".StockBack"
+            android:label="@string/title_activity_stock_back"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <!--<activity-->
+            <!--android:name=".StockBackScan"-->
+            <!--android:label="@string/title_activity_stock_back_scan"-->
+            <!--android:windowSoftInputMode="adjustPan" >-->
+        <!--</activity>-->
+        <activity
+            android:name=".OtherStockInOut"
+            android:label="@string/title_activity_other_stock_in_out"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".OtherStockInDetail"
+            android:label="@string/title_activity_other_stock_in_detail"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".OtherOrderList"
+            android:label="@string/title_activity_other_order_list"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".Sample_stocking"
+            android:label="@string/title_activity_sample_stocking"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".Sample_stokcing_detail"
+            android:label="@string/title_activity_sample_stokcing_detail"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".Sample_stocking_OrderList"
+            android:label="@string/title_activity_sample_stocking__order_list"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".Sample_Stocking_ScanDetail"
+            android:label="@string/title_activity_sample__stocking__scan_detail"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <!--<activity-->
+            <!--android:theme="@android:style/Theme.Holo.NoActionBar"-->
+            <!--android:name=".ScanBarcode"-->
+            <!--android:configChanges="orientation|keyboardHidden"-->
+            <!--android:screenOrientation="portrait"-->
+            <!--android:windowSoftInputMode="stateAlwaysHidden">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN"/>-->
+                <!--<action android:name="android.intent.category.LAUNCHER"/>-->
+            <!--</intent-filter>-->
+            <!---->
+        <!--</activity>-->
+    </application>
+
+</manifest>

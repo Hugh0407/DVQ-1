@@ -1,0 +1,149 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.techscan.dvq.StockInventory" >
+
+    <LinearLayout
+        android:id="@+id/StockInventorySButtonBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="0dp"
+        android:background="#d7d6d6"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/btnStockInventoryScan"
+            style="android:buttonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_weight="1"
+            android:background="@drawable/btn3"
+            android:textColor="@color/navy" 
+            android:text="扫描" />
+        
+		<Button
+            android:id="@+id/btnStockInventoryReScan"
+            style="android:buttonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_weight="1"
+            android:background="@drawable/btn3"
+            android:textColor="@color/navy" 
+            android:text="复核" />
+
+        <Button
+            android:id="@+id/btnStockInventorySave"
+            style="android:buttonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_weight="1"
+            android:background="@drawable/btn3"
+            android:textColor="@color/navy" 
+            android:text="保存" />
+
+        <Button
+            android:id="@+id/btnStockInventoryExit"
+            style="android:buttonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_weight="1"
+            android:background="@drawable/btn3"
+            android:textColor="@color/navy" 
+            android:text="退出" />
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/lvSIOrder"
+        android:layout_width="fill_parent"
+        android:layout_height="250dp"
+        android:layout_above="@+id/StockInventorySButtonBar"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/TextView01" >
+
+    </ListView>
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="10px"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="    " />
+
+    <EditText
+        android:id="@+id/txtInvOrderB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtInvOrderA"
+        android:layout_toLeftOf="@+id/btnInvOrderB"
+        android:layout_toRightOf="@+id/tvInvOrderB"
+        android:ems="10"
+        android:singleLine="true"
+        />
+
+    <TextView
+        android:id="@+id/tvInvOrderA"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtInvOrderA"
+        android:layout_alignBottom="@+id/txtInvOrderA"
+        android:layout_alignParentLeft="true"
+        android:text="  盘点单A" />
+
+    <TextView
+        android:id="@+id/tvInvOrderB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtInvOrderB"
+        android:layout_alignBottom="@+id/txtInvOrderB"
+        android:layout_alignParentLeft="true"
+        android:text="  盘点单B" />
+
+    <TextView
+        android:id="@+id/TextView01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/txtInvOrderA"
+        android:layout_below="@+id/btnInvOrderB"
+        android:layout_marginLeft="23dp"
+        android:text="    " />
+
+    <EditText
+        android:id="@+id/txtInvOrderA"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView1"
+        android:layout_toLeftOf="@+id/btnInvOrderB"
+        android:layout_toRightOf="@+id/tvInvOrderA"
+        android:ems="10"
+        android:singleLine="true"
+         />
+
+    <ImageButton
+        android:id="@+id/btnInvOrderB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/txtInvOrderB"
+        android:src="@drawable/browse"
+        android:layout_alignParentRight="true" />
+
+    <ImageButton
+        android:id="@+id/btnInvOrderA"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/txtInvOrderA"
+        android:src="@drawable/browse"
+        android:layout_alignParentRight="true" />
+
+</RelativeLayout>

@@ -1,0 +1,78 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.techscan.dvq.MainActivity" >
+
+    <TextView
+        android:id="@+id/tvsearchInvcorpcode"
+        android:layout_width="50dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="27dp"
+        android:text="用户名" />
+
+    <TextView
+        android:id="@+id/txtWebAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tvsearchInvcorpcode"
+        android:layout_alignTop="@+id/txtPwd"
+        android:text="密码" />
+
+    <EditText
+        android:id="@+id/etInput"
+        android:layout_width="188dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tvsearchInvcorpcode"
+        android:layout_alignBottom="@+id/tvsearchInvcorpcode"
+        android:layout_centerHorizontal="true"
+        android:ems="10"
+        android:singleLine="true" />
+
+    <EditText
+        android:id="@+id/txtPwd"
+        android:layout_width="173dp"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/etInput"
+        android:layout_below="@+id/tvsearchInvcorpcode"
+        android:layout_marginTop="62dp"
+        android:ems="10"
+        android:inputType="textPassword" >
+
+        <requestFocus />
+    </EditText>
+
+    <Button
+        android:id="@+id/btExit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/txtPwd"
+        android:text="退出" />
+
+    <Button
+        android:id="@+id/btSettingFOk"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="36dp"
+        android:layout_toLeftOf="@+id/etInput"
+        android:text="@string/BtConfirm" />
+
+    <Button
+        android:id="@+id/btSetting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/btSettingFOk"
+        android:layout_alignBottom="@+id/btSettingFOk"
+        android:layout_marginRight="18dp"
+        android:layout_toLeftOf="@+id/btExit"
+        android:text="设置" />
+
+    <Gallery
+        android:id="@+id/gallery1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/btSettingFOk" />
+
+</RelativeLayout>

@@ -1,0 +1,169 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.techscan.dvq.StockTransContent" >
+
+    <LinearLayout
+        android:id="@+id/TransButtonBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="0dp"
+        android:background="#d7d6d6"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/btnTransScan"
+            style="android:buttonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_weight="1"
+            android:background="@drawable/btn3"
+            android:textColor="@color/navy" 
+            android:text="扫描" />
+
+        <Button
+            android:id="@+id/btnTransSave"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/btnScan"
+            android:layout_alignBottom="@+id/btnScan"
+            android:layout_alignParentRight="true"
+            android:layout_weight="1"
+            android:background="@drawable/btn3"
+            android:textColor="@color/navy" 
+            android:text="保存  签字" />
+
+        <Button
+            android:id="@+id/btnTransExit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn3"
+            android:textColor="@color/navy" 
+            android:text="退出" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvTPDOrder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtTPDOrder"
+        android:layout_alignBottom="@+id/txtTPDOrder"
+        android:layout_alignParentLeft="true"
+        android:text="  调拨订单" />
+
+    <TextView
+        android:id="@+id/tvRdcl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtRdcl"
+        android:layout_alignBottom="@+id/txtRdcl"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/txtRdcl"
+        android:text="  出库类别" />
+
+    <TextView
+        android:id="@+id/tvManualNo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtManualNo"
+        android:layout_alignBottom="@+id/txtManualNo"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/txtRdcl"
+        android:text="  手工单号" />
+
+    <ListView
+        android:id="@+id/lvPDOrder"
+        android:layout_width="fill_parent"
+        android:layout_height="250dp"
+        android:layout_above="@+id/TransButtonBar"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/txtManualNo" >
+
+    </ListView>
+
+    <TextView
+        android:id="@+id/textView132"
+        android:layout_width="12px"
+        android:layout_height="10px"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true" />
+
+    <EditText
+        android:id="@+id/txtTTransOutPos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/txtRdcl"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/txtRdcl"
+        android:ems="10"
+        android:singleLine="true"
+        android:width="200dp" />
+
+    <EditText
+        android:id="@+id/txtManualNo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/txtTTransOutPos"
+        android:layout_alignRight="@+id/txtTTransOutPos"
+        android:layout_below="@+id/txtTTransOutPos"
+        android:ems="10"
+        android:singleLine="true"
+        android:width="200dp" >
+
+        <requestFocus />
+    </EditText>
+
+    <TextView
+        android:id="@+id/tvTTransOutPos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtTTransOutPos"
+        android:layout_alignBottom="@+id/txtTTransOutPos"
+        android:layout_toLeftOf="@+id/txtRdcl"
+        android:text="  调出货位" />
+
+    <EditText
+        android:id="@+id/txtTPDOrder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView132"
+        android:layout_toLeftOf="@+id/btnTPDOrder"
+        android:layout_toRightOf="@+id/tvTPDOrder"
+        android:ems="10"
+        android:singleLine="true"
+        android:width="200dp" />
+
+    <EditText
+        android:id="@+id/txtRdcl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/txtTPDOrder"
+        android:layout_alignRight="@+id/txtTPDOrder"
+        android:layout_below="@+id/txtTPDOrder"
+        android:ems="10"
+        android:singleLine="true"
+        android:width="200dp" />
+
+    <ImageButton
+        android:id="@+id/btnRdcl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/txtRdcl"
+        android:src="@drawable/browse"
+        android:layout_alignParentRight="true" />
+
+    <ImageButton
+        android:id="@+id/btnTPDOrder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/txtTPDOrder"
+        android:src="@drawable/browse"
+        android:layout_alignParentRight="true" />
+
+</RelativeLayout>

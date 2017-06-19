@@ -1,0 +1,121 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/LoginImageBar"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#2f3640"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" "
+            android:layout_weight="0.03"/>
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/tclogo_white"
+            android:layout_weight="0.07" />
+
+        <LinearLayout
+            android:id="@+id/LoginEditTextBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="30dp"
+            android:background="#1f262e"
+            android:gravity="center"
+            android:orientation="vertical">
+
+
+            <EditText
+                android:id="@+id/txtUserName"
+                android:layout_width="260dp"
+                android:layout_height="35dp"
+                android:layout_marginTop="30dp"
+                android:ems="10"
+                android:hint="请输入用户名"
+                android:paddingLeft="5dp"
+                android:paddingRight="10dp"
+                android:singleLine="true"
+                android:selectAllOnFocus="true"
+                android:text="a1"
+                android:background="@drawable/edittext_username_style">
+
+                <requestFocus/>
+            </EditText>
+
+            <EditText
+                android:id="@+id/txtPassword"
+                android:layout_width="260dp"
+                android:layout_height="35dp"
+                android:layout_alignLeft="@+id/txtUserName"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="5dp"
+                android:ems="10"
+                android:hint="请输入密码"
+                android:inputType="textPassword"
+                android:paddingLeft="5dp"
+                android:paddingRight="10dp"
+                android:text="123456aS!"
+                android:background="@drawable/edittext_password_style"/>
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" "/>
+
+            <Button
+                android:id="@+id/btnLogin"
+                android:layout_width="260dp"
+                android:layout_height="55dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/button_orange_style"
+                android:text="登录"
+                android:textColor="@color/white"
+                android:fontFamily=""/>
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="10dp"
+                android:text="   "/>
+
+            <Button
+                android:id="@+id/btnExit"
+                android:layout_width="260dp"
+                android:layout_height="35dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="2dp"
+                android:background="@drawable/button_blue_style"
+                android:text="退出"
+                android:textColor="@color/white"/>
+
+
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvVer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_weight="0.04"
+            android:text="Ver : X.X.X"
+            android:textColor="#ffffff"
+            android:textSize="12sp"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

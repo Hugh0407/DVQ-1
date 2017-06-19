@@ -1,0 +1,226 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.techscan.dvq.StockMoveScan" >
+
+    <EditText
+        android:id="@+id/txtSerino"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/txtMovBatch"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/txtMovBatch"
+        android:editable="false"
+        android:ems="10"
+        android:focusable="false"
+        android:focusableInTouchMode="false" />
+
+    <EditText
+        android:id="@+id/txtMovBatch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/txtMovInv"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/txtMovInv"
+        android:ems="10"
+        android:focusable="false"
+        android:focusableInTouchMode="false" />
+
+    <EditText
+        android:id="@+id/txtMovOutPos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/txtSerino"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/txtSerino"
+        android:ems="10"
+        android:singleLine="true" />
+
+    <LinearLayout
+        android:id="@+id/StSCButtonBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="0dp"
+        android:background="#d7d6d6"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/btnMovRW"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn3"
+            android:textColor="@color/navy"             
+            android:text="任务" />
+
+        <Button
+            android:id="@+id/btnMovDetail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn3"
+            android:textColor="@color/navy"  
+            android:text="明细" />
+
+        <Button
+            android:id="@+id/btstmovescanclear"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn3"
+            android:textColor="@color/navy" 
+            android:text="清屏" />
+
+        <Button
+            android:id="@+id/btnMovExit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn3"
+            android:textColor="@color/navy" 
+            android:text="退出" />
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/txtMovInPos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/swhMovPos"
+        android:layout_toRightOf="@+id/tvsearchInvUnitName"
+        android:ems="10"
+        android:singleLine="true" />
+
+    <TextView
+        android:id="@+id/tvmscount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/StSCButtonBar"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:text="已扫描0件"
+        android:textColor="@android:color/holo_blue_light"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/btnstmvscanViewStock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/tvmscount"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/swhMovPosIn"
+        android:background="@drawable/btn3"
+        android:text="库存信息"
+        android:textColor="@color/navy" />
+
+    <EditText
+        android:id="@+id/txtMovInv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/txtMoveBarcode"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/txtMoveBarcode"
+        android:editable="false"
+        android:ems="10"
+        android:focusable="false"
+        android:focusableInTouchMode="false" />
+
+    <TextView
+        android:id="@+id/TextView01"
+        android:layout_width="wrap_content"
+        android:layout_height="10px"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="   " />
+
+    <EditText
+        android:id="@+id/txtMoveBarcode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/txtMovInPos"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/TextView01"
+        android:ems="10"
+        android:singleLine="true" >
+
+        <requestFocus />
+    </EditText>
+
+    <TextView
+        android:id="@+id/tvsearchunitcode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtMovInv"
+        android:layout_alignBottom="@+id/txtMovInv"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/txtMovInPos"
+        android:text="  存        货" />
+
+    <TextView
+        android:id="@+id/TextView02"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtMovBatch"
+        android:layout_alignBottom="@+id/txtMovBatch"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/txtMovInPos"
+        android:text="  批        次" />
+
+    <TextView
+        android:id="@+id/TextView03"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtSerino"
+        android:layout_alignBottom="@+id/txtSerino"
+        android:layout_alignParentLeft="true"
+        android:editable="false"
+        android:text="  序  列  号" />
+
+    <TextView
+        android:id="@+id/TextView04"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtMovOutPos"
+        android:layout_alignBottom="@+id/txtMovOutPos"
+        android:layout_alignParentLeft="true"
+        android:text="  调出货位" />
+
+    <TextView
+        android:id="@+id/TextView05"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtMovInPos"
+        android:layout_alignBottom="@+id/txtMovInPos"
+        android:layout_alignParentLeft="true"
+        android:text="  调入货位" />
+
+    <Switch
+        android:id="@+id/swhMovPos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/txtMovOutPos"
+        android:text="记录调出货位" />
+
+    <Switch
+        android:id="@+id/swhMovPosIn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/txtMovInPos"
+        android:text="记录调入货位" />
+
+    <TextView
+        android:id="@+id/tvsearchInvUnitName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtMoveBarcode"
+        android:layout_alignBottom="@+id/txtMoveBarcode"
+        android:layout_alignParentLeft="true"
+        android:text="  条        码" />
+
+</RelativeLayout>

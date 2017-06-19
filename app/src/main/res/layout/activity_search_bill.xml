@@ -1,0 +1,159 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="top"
+    tools:context="com.techscan.dvq.SearchBillActivity" >
+
+    <TextView
+        android:id="@+id/tvBillDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tvBillDateTXT"
+        android:layout_alignBottom="@+id/tvBillDateTXT"
+        android:layout_alignParentLeft="true"
+        android:text=" 查询日期 : "
+        android:textColor="@android:color/holo_blue_light"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <ImageButton
+        android:id="@+id/btBillType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/btBillDate"
+        android:src="@drawable/browse" />
+
+    <TextView
+        android:id="@+id/tvBillDateTXT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/btBillDate"
+        android:layout_toLeftOf="@+id/btBillDate"
+        android:layout_toRightOf="@+id/tvBillDate"
+        android:text="XXXX-XX-XX"
+        android:textColor="@android:color/holo_blue_light"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/tvBillTypeTXT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/btBillType"
+        android:layout_alignLeft="@+id/tvBillDateTXT"
+        android:layout_alignRight="@+id/tvBillDateTXT"
+        android:text="未选择"
+        android:textColor="@android:color/holo_blue_light"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/tvSearchBillType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tvBillTypeTXT"
+        android:layout_alignBottom="@+id/tvBillTypeTXT"
+        android:layout_alignParentLeft="true"
+        android:text=" 单据类型 : "
+        android:textColor="@android:color/holo_blue_light"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:id="@+id/SearchBillBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="0dp"
+        android:background="#d7d6d6"
+        android:orientation="horizontal" >
+
+        
+                <Button
+            android:id="@+id/SearchBillReturn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn3"
+            android:textColor="@color/navy" 
+            android:text="返回" />
+                <Button
+            android:id="@+id/SearchBillSaved"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn3"
+            android:textColor="@color/navy" 
+            android:text="查询" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/SearchSavedBilltv123"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/tvSearchBillType"
+        android:text="                                   " />
+
+    <TextView
+        android:id="@+id/SearchSavedBilltv223"
+        android:layout_width="10px"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textView1"
+        android:layout_alignBottom="@+id/textView1"
+        android:layout_alignParentLeft="true"
+        android:text="    " />
+
+    <LinearLayout
+        android:id="@+id/SavedBillButtonBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="#d7d6d6"
+        android:orientation="horizontal" >
+    </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/svSavedBill"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/SearchBillBar"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/SearchSavedBilltv123"
+        android:layout_toRightOf="@+id/SearchSavedBilltv223" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/txtSavedInfo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="TextView"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/TextView01"
+        android:layout_width="10px"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text=" "
+/>
+
+    <ImageButton
+        android:id="@+id/btBillDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/SearchSavedBilltv223"
+        android:src="@drawable/browse" />
+
+</RelativeLayout>

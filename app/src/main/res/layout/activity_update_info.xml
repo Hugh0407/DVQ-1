@@ -1,0 +1,55 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.techscan.dvq.UpdateInfo" >
+    
+    
+    <ScrollView
+        android:id="@+id/svSavedBill"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/SearchBillBar"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/SearchSavedBilltv123"
+        android:layout_toRightOf="@+id/SearchSavedBilltv223" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+        </LinearLayout>
+    </ScrollView>
+
+     <LinearLayout
+        android:id="@+id/UpdateInfoBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="0dp"
+        android:background="#d7d6d6"
+        android:orientation="horizontal" >
+
+
+                <Button
+            android:id="@+id/btnUpdateInfoReturn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="返回" />
+    </LinearLayout>
+
+     <ScrollView
+         android:id="@+id/scrollView1"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_above="@+id/UpdateInfoBar"
+         android:layout_alignParentLeft="true"
+         android:layout_marginRight="26dp"
+         android:layout_toLeftOf="@+id/svSavedBill" >
+
+     </ScrollView>
+
+</RelativeLayout>

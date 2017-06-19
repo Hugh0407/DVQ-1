@@ -1,0 +1,91 @@
+ECLIPSE ANDROID PROJECT IMPORT SUMMARY
+======================================
+
+Ignored Files:
+--------------
+The following files were *not* copied into the new Gradle project; you
+should evaluate whether these are still needed in your project and if
+so manually move them:
+
+* dvq\
+* dvq\BillInfoOrderList.java
+* dvq\Common.java
+* dvq\ContentItemView.java
+* dvq\InvOrderList.java
+* dvq\Inventory.java
+* dvq\JTFH.java
+* dvq\ListWarehouse.java
+* dvq\MainActivity.java
+* dvq\MainLogin.java
+* dvq\MainMenu.java
+* dvq\PdOrderList.java
+* dvq\PdOrderMultilist.java
+* dvq\PurOrderList.java
+* dvq\PurStockIn.java
+* dvq\PurStockInDetail.java
+* dvq\SaleBillInfoOrderList.java
+* dvq\SalesDelivery.java
+* dvq\SalesDeliveryScan.java
+* dvq\SbbinActivity.java
+* dvq\SbinvActivity.java
+* dvq\SearchBillActivity.java
+* dvq\SearchmainActivity.java
+* dvq\Second.java
+* dvq\SerializableJSONArray.java
+* dvq\SerializableJSONObject.java
+* dvq\SerializableList.java
+* dvq\SerializableMap.java
+* dvq\SettingActivity.java
+* dvq\SplitBarcode.java
+* dvq\StockInventory.java
+* dvq\StockInventoryScan.java
+* dvq\StockMove.java
+* dvq\StockMoveScan.java
+* dvq\StockTransContent.java
+* dvq\StockTransContentIn.java
+* dvq\StockTransScan.java
+* dvq\StockTransScanIn.java
+* dvq\StockTransfer.java
+* dvq\ViewHolder.java
+* dvq\VlistRdcl.java
+* dvq\WarehouseMultilist.java
+* dvq\writeTxt.java
+* ic_launcher-web.png
+
+Replaced Jars with Dependencies:
+--------------------------------
+The importer recognized the following .jar files as third party
+libraries and replaced them with Gradle dependencies instead. This has
+the advantage that more explicit version information is known, and the
+libraries can be updated automatically. However, it is possible that
+the .jar file in your project was of an older version than the
+dependency we picked, which could render the project not compileable.
+You can disable the jar replacement in the import wizard and try again:
+
+android-support-v4.jar => com.android.support:support-v4:20.0.0
+
+Moved Files:
+------------
+Android Gradle projects use a different directory structure than ADT
+Eclipse projects. Here's how the projects were restructured:
+
+* AndroidManifest.xml => app\src\main\AndroidManifest.xml
+* assets\ => app\src\main\assets
+* lint.xml => app\lint.xml
+* res\ => app\src\main\res\
+* src\ => app\src\main\java\
+
+Next Steps:
+-----------
+You can now build the project. The Gradle project needs network
+connectivity to download dependencies.
+
+Bugs:
+-----
+If for some reason your project does not build, and you determine that
+it is due to a bug or limitation of the Eclipse to Gradle importer,
+please file a bug at http://b.android.com with category
+Component-Tools.
+
+(This import summary is for your information only, and can be deleted
+after import once you are satisfied with the results.)
