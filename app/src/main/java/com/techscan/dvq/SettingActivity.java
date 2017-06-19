@@ -124,7 +124,7 @@ public class SettingActivity extends Activity implements OnClickListener {
 		
 		if(address.getText().toString().equals(""))
 		{
-			address.setText("http://58.211.61.69:8180/service/nihao");
+			address.setText("http://58.211.61.69:80/service/nihao");
 		}
 		
 		//if(address2.getText().toString().equals(""))
@@ -152,16 +152,16 @@ public class SettingActivity extends Activity implements OnClickListener {
 //		}
 //		
 		EditText CompanyCode=(EditText)findViewById(R.id.eTCpy);
-		CompanyCode.setText(mySharedPreferences.getString("CompanyCode", "101"));
+		CompanyCode.setText(mySharedPreferences.getString("CompanyCode", "4100"));
 		
 		EditText OrgCode=(EditText)findViewById(R.id.txtstorgcode);
-		OrgCode.setText(mySharedPreferences.getString("OrgCode", "1"));
+		OrgCode.setText(mySharedPreferences.getString("OrgCode", "4100"));
 		
 		EditText WhCode=(EditText)findViewById(R.id.txtstwhcode);
-		WhCode.setText(mySharedPreferences.getString("WhCode", ""));
+		WhCode.setText(mySharedPreferences.getString("WhCode", "a"));
 		
 		EditText AccId=(EditText)findViewById(R.id.txtstaccid);
-		AccId.setText(mySharedPreferences.getString("AccId", ""));
+		AccId.setText(mySharedPreferences.getString("AccId", "b"));
 		address.requestFocus();
 	}
 

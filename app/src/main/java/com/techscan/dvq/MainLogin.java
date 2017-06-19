@@ -141,7 +141,8 @@ public class MainLogin extends Activity {
             bulider.setPositiveButton(R.string.QueDing, null).create().show();
             return;
         }
-
+        user.setText("a1");
+        pwds.setText("123456aS!");
         String userName = user.getText().toString().replace("\n", "");
         String password = pwds.getText().toString().replace("\n", "");
         if (userName.equals("") || password.equals("")) {
@@ -161,7 +162,8 @@ public class MainLogin extends Activity {
 
 
         if (lsUrl.equals("")) {
-            lsUrl = LoginString;
+            // TODO: 2017/6/19 最后修改回去     lsUrl = LoginString;
+            lsUrl = "http://58.211.61.69:80/service/nihao";
         }
 //��ʱ�ر�
 //		if(UrlErr > 0)
@@ -179,17 +181,13 @@ public class MainLogin extends Activity {
         // ���÷���
         HttpPost httpPost = new HttpPost(lsUrl);
         httpPost.addHeader("Self-Test", "V");
-        httpPost.addHeader("User-Code",
-                user.getText().toString().replace("\n", ""));
-        httpPost.addHeader("User-Pwd",
-                pwds.getText().toString().replace("\n", ""));
+        httpPost.addHeader("User-Code", user.getText().toString().replace("\n", ""));
+        httpPost.addHeader("User-Pwd", pwds.getText().toString().replace("\n", ""));
         httpPost.addHeader("User-Company", CompanyCode);
         httpPost.addHeader("Data-Source", "A");
         httpPost.addHeader("Org-Code", OrgCode);
         httpPost.addHeader("Version-Code", Version);
-
         // WhCodeB
-
         HttpResponse httpResponse = null;
         HttpClient defaults = null;
 
@@ -213,8 +211,6 @@ public class MainLogin extends Activity {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
             sp.play(music, 1, 1, 0, 0, 1);
             return;
-
-
 //			//�����л����õ�ַ
 //			if(UrlErr>2)
 //			{
@@ -252,8 +248,7 @@ public class MainLogin extends Activity {
         if (v == 200) {
             // Toast.makeText(this,"�����֤ͨ����׼������", Toast.LENGTH_SHORT).show();
             String result = EntityUtils.toString(httpResponse.getEntity());
-            String jasstr = EncodingUtils.getString(
-                    EncodingUtils.getBytes(result, "ISO8859-1"), "gb2312");
+            String jasstr = EncodingUtils.getString(EncodingUtils.getBytes(result, "ISO8859-1"), "gb2312");
 
             JSONObject jas = new JSONObject(jasstr);
 
@@ -273,13 +268,13 @@ public class MainLogin extends Activity {
                 objLog.LoginString2 = LoginString2;
                 objLog.LoginUser = user.getText().toString().replace("\n", "");
                 objLog.Password = pwds.getText().toString().replace("\n", "");
-                objLog.CompanyCode = CompanyCode.toString();
+                objLog.CompanyCode = CompanyCode;
 
                 objLog.UserID = jas.getString("userid");
                 objLog.UserName = jas.getString("username");
                 objLog.STOrgCode = OrgCode;
-                objLog.WhCodeA = WhCode.toString();
-                objLog.WhCodeB = WhCodeB.toString();
+                objLog.WhCodeA = WhCode;
+                objLog.WhCodeB = WhCodeB;
 
                 objLog.UserIDB = jas.getString("useridb");
                 objLog.VersionCode = Version;

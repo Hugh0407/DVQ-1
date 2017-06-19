@@ -155,6 +155,7 @@
         android:layout_marginRight="5dp"
         android:background="@drawable/browse"/>
 
+
     <TextView
         android:id="@+id/TextView02"
         android:layout_width="wrap_content"
@@ -162,7 +163,6 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:text="  " />
-
     <EditText
         android:id="@+id/txtPurOrderNo"
         android:layout_width="wrap_content"
