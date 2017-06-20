@@ -556,16 +556,14 @@ public class StockTransContent extends Activity {
                             return;
                         }
 
-                        FindOnlyBillHeadByBillId(ScanedBillBar.get(i)
-                                .toString());
+                        FindOnlyBillHeadByBillId(ScanedBillBar.get(i).toString());
                         String OKflg = "ng";
                         if (lstPDOrder == null || lstPDOrder.size() < 1) {
                             x++;
                             i--;
                         } else {
                             for (int j = 0; j < lstPDOrder.size(); j++) {
-                                Map<String, Object> SelectedItemMap = (Map<String, Object>) lvPDOrder
-                                        .getItemAtPosition(j);
+                                Map<String, Object> SelectedItemMap = (Map<String, Object>) lvPDOrder.getItemAtPosition(j);
 
                                 String AAA = SelectedItemMap.get("AccID")
                                         .toString()
