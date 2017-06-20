@@ -42,8 +42,6 @@
                 android:id="@+id/btnPurBrower"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:layout_alignBottom="@+id/txtPurOrderNo"
-                android:layout_alignParentRight="true"
                 android:layout_marginRight="5dp"
                 android:background="@drawable/browse"/>
 
