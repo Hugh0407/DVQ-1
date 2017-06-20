@@ -162,8 +162,7 @@ public class MainLogin extends Activity {
 
 
         if (lsUrl.equals("")) {
-            // TODO: 2017/6/19 最后修改回去     lsUrl = LoginString;
-            lsUrl = "http://58.211.61.69:80/service/nihao";
+            lsUrl = LoginString;
         }
 //��ʱ�ر�
 //		if(UrlErr > 0)

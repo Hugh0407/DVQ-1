@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/num"
+        android:gravity="center"
+        android:layout_width="85dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="6dp"
+        android:text="行号"
+        android:textSize="@dimen/MaterialOutScanTextSize"/>
+
+    <TextView
+        android:gravity="center"
+        android:layout_width="85dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="6dp"
+        android:text="存货编码"
+        android:textSize="@dimen/MaterialOutScanTextSize"/>
+
+    <TextView
+        android:gravity="center"
+        android:layout_width="85dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="6dp"
+        android:text="存货名称"
+        android:textSize="@dimen/MaterialOutScanTextSize"/>
+
+    <TextView
+        android:gravity="center"
+        android:layout_width="85dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="6dp"
+        android:text="规格"
+        android:textSize="@dimen/MaterialOutScanTextSize"/>
+
+    <TextView
+        android:gravity="center"
+        android:layout_width="85dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="6dp"
+        android:text="型号"
+        android:textSize="@dimen/MaterialOutScanTextSize"/>
+
+    <TextView
+        android:gravity="center"
+        android:layout_width="85dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="6dp"
+        android:text="单位"
+        android:textSize="@dimen/MaterialOutScanTextSize"/>
+
+    <TextView
+        android:gravity="center"
+        android:layout_width="85dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="6dp"
+        android:text="辅单位"
+        android:textSize="@dimen/MaterialOutScanTextSize"/>
+
+    <TextView
+        android:gravity="center"
+        android:layout_width="85dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="6dp"
+        android:text="换算率"
+        android:textSize="@dimen/MaterialOutScanTextSize"/>
+
+    <TextView
+        android:gravity="center"
+        android:layout_width="85dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="6dp"
+        android:text="自由项"
+        android:textSize="@dimen/MaterialOutScanTextSize"/>
+
+    <TextView
+        android:gravity="center"
+        android:layout_width="85dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="6dp"
+        android:text="批次号"
+        android:textSize="@dimen/MaterialOutScanTextSize"/>
+
+    <TextView
+        android:gravity="center"
+        android:layout_width="85dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="6dp"
+        android:text="生产日期"
+        android:textSize="@dimen/MaterialOutScanTextSize"/>
+
+    <TextView
+        android:gravity="center"
+        android:layout_width="85dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="6dp"
+        android:text="失效日期"
+        android:textSize="@dimen/MaterialOutScanTextSize"/>
+
+    <TextView
+        android:gravity="center"
+        android:layout_width="110dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="6dp"
+        android:text="应发辅数量"
+        android:textSize="@dimen/MaterialOutScanTextSize"/>
+
+    <TextView
+        android:gravity="center"
+        android:layout_width="85dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="6dp"
+        android:text="应发数量"
+        android:textSize="@dimen/MaterialOutScanTextSize"/>
+</LinearLayout>

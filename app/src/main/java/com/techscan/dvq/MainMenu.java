@@ -582,11 +582,13 @@ public class MainMenu extends Activity {
         Intent StockTransIn = new Intent(this, StockTransContentIn.class);
         startActivity(StockTransIn);
     }
+
     // 显示材料出库画面
     private void ShowMaterialIn() {
         ShowLoading();
         Intent MaterialOut = new Intent(this, MaterialOutAct.class);
         startActivity(MaterialOut);
+        cancelLoading();
     }
 
     // ADD WUQ START
@@ -611,7 +613,7 @@ public class MainMenu extends Activity {
         startActivity(aaa);
     }
 
-    // 显示调拨画面
+    // 显示采购入库画面
     private void ShowPurIn() {
 
         ShowLoading();
