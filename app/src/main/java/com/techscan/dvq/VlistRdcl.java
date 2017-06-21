@@ -54,8 +54,8 @@ public class VlistRdcl extends Activity {
 
 			String CodeA = tempJsoA.getString("rdcode");
 			String NameA = tempJsoA.getString("rdname");
-			if(CodeA.equals("201")||CodeA.equals("203")||CodeA.equals("101")||CodeA.equals("103"))
-			{
+//			if(CodeA.equals("201")||CodeA.equals("203")||CodeA.equals("101")||CodeA.equals("103"))
+//			{
 				for(int x = 0;x<jsarrayB.length();x++)
 	    		{
 	    			tempJsoB = jsarrayB.getJSONObject(x);
@@ -74,7 +74,7 @@ public class VlistRdcl extends Activity {
 	    				list.add(map);
 	    			}
 	    		}
-			}
+//			}
 		}
 //		for(int x = 0;x<jsarrayB.length();x++)
 //		{
@@ -109,9 +109,6 @@ public class VlistRdcl extends Activity {
 //			}
 //
 //		}
-		
-		
-
 		return list;
 	}
 

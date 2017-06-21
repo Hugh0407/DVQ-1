@@ -1,8 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.techscan.dvq.VlistRdcl" >
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context="com.techscan.dvq.VlistRdcl">
 
     <ListView
         android:id="@+id/lvRdcl"
@@ -11,28 +11,29 @@
         android:layout_above="@+id/TestButtonBar"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true" >
+        android:layout_alignParentTop="true">
 
     </ListView>
-            <LinearLayout
+
+    <LinearLayout
         android:id="@+id/TestButtonBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:background="#d7d6d6"
-        android:orientation="horizontal" >
+        android:orientation="horizontal">
 
-      
 
         <Button
             android:id="@+id/btRdclReturn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/btn3"
-            android:textColor="@color/navy" 
-            android:text="返回" />
+            android:background="@drawable/button_normal_style"
+            android:text="返回"
+            android:textColor="@color/white"/>
+
     </LinearLayout>
 
 </RelativeLayout>

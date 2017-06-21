@@ -1330,6 +1330,7 @@ public class SalesDelivery extends Activity {
             }
             if (dialog.equals(WHSelectButton)) {
 
+                //aaa
                 if (!Common.CheckUserWHRole(tmpAccID, tmpCorpPK, WHIDList[index].toString())) {
                     MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                     Toast.makeText(SalesDelivery.this, R.string.MeiYouShiYongGaiCangKuDeQuanXian, Toast.LENGTH_LONG).show();
@@ -1365,7 +1366,7 @@ public class SalesDelivery extends Activity {
     private void SetCDtype() {
 
         if ((tmpAccID == null) || (tmpAccID.equals(""))) {
-            Toast.makeText(this, "单据信息没有获得不能选择运输方式", 1).show();
+            Toast.makeText(this, "单据信息没有获得不能选择运输方式", Toast.LENGTH_SHORT).show();
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             this.txtSalesDelPDOrder.requestFocus();
 
@@ -1432,9 +1433,7 @@ public class SalesDelivery extends Activity {
         BillTypeNameList[2] = "退回不送   (扫描退货单)";
     }
 
-    class OnClickListener implements
-
-            android.view.View.OnClickListener {
+    class OnClickListener implements android.view.View.OnClickListener {
 
         public void onClick(View v) {
 
