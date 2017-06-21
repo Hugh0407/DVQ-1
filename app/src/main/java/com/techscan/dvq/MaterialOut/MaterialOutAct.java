@@ -56,8 +56,6 @@ public class MaterialOutAct extends Activity {
     EditText mDepartment;
     @InjectView(R.id.remark)
     EditText mRemark;
-    @InjectView(R.id.refer_remark)
-    ImageButton mReferRemark;
     @InjectView(R.id.btnPurInScan)
     Button mBtnPurInScan;
     @InjectView(R.id.btnPurinSave)
@@ -76,6 +74,15 @@ public class MaterialOutAct extends Activity {
         mOrganization.setText("C00");   // TODO: 2017/6/21 暂时默认设置
         ActionBar actionBar = this.getActionBar();
         actionBar.setTitle("材料出库");
+        mBillDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    String time = Utils.formatTime(System.currentTimeMillis());
+                    mBillDate.setText(time);
+                }
+            }
+        });
 
     }
 
@@ -85,7 +92,7 @@ public class MaterialOutAct extends Activity {
      * @param view
      */
     @OnClick({R.id.refer_bill_num, R.id.refer_bill_date, R.id.refer_wh, R.id.refer_organization,
-            R.id.refer_lei_bie, R.id.refer_remark, R.id.btnPurInScan, R.id.btnPurinSave,
+            R.id.refer_lei_bie, R.id.btnPurInScan, R.id.btnPurinSave,
             R.id.btnBack, R.id.refer_department})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -110,8 +117,6 @@ public class MaterialOutAct extends Activity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                break;
-            case R.id.refer_remark:
                 break;
             case R.id.btnPurInScan:
                 Intent in = new Intent(MaterialOutAct.this, MaterialOutScanAct.class);
