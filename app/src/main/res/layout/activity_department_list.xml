@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context="com.techscan.dvq.MaterialOut.DepartmentListAct">
+
+    <ListView
+        android:id="@+id/listwarehouse"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/TestButtonBar"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true">
+
+    </ListView>
+
+    <LinearLayout
+        android:id="@+id/TestButtonBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:background="#d7d6d6"
+        android:orientation="horizontal">
+
+
+        <Button
+            android:id="@+id/btn_back"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/button_normal_style"
+            android:text="返回"
+            android:textColor="@color/white"/>
+    </LinearLayout>
+</RelativeLayout>
+

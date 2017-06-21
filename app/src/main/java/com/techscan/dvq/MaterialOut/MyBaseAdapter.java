@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.techscan.dvq.R;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -18,14 +19,14 @@ import java.util.List;
 public class MyBaseAdapter extends BaseAdapter {
 
     Context mContext;
-    List<String> mList;
+    List<HashMap<String, Object>> mList;
 
-    public MyBaseAdapter(Context context, List<String> list) {
+    public MyBaseAdapter(Context context, List<HashMap<String, Object>> list) {
         mContext = context;
         mList = list;
     }
 
-    public void setList(List<String> list) {
+    public void setList(List<HashMap<String, Object>> list) {
         mList = list;
     }
 
@@ -60,18 +61,29 @@ public class MyBaseAdapter extends BaseAdapter {
         ViewHolder viewHolder;
         if (convertView == null) {
             viewHolder = new ViewHolder();
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.listview_item, null);
-            viewHolder.nameView = (TextView) convertView.findViewById(R.id.num);
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_scan_details, null);
+            viewHolder.name = (TextView) convertView.findViewById(R.id.name);
+            viewHolder.encoding = (TextView) convertView.findViewById(R.id.encoding);
+            viewHolder.type = (TextView) convertView.findViewById(R.id.type);
+            viewHolder.lot = (TextView) convertView.findViewById(R.id.lot);
+            viewHolder.qty = (TextView) convertView.findViewById(R.id.qty);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        viewHolder.nameView.setText(mList.get(position));
+        viewHolder.name.setText(mList.get(position).get("name").toString());
+        viewHolder.encoding.setText(mList.get(position).get("encoding").toString());
+        viewHolder.type.setText(mList.get(position).get("type").toString());
+        viewHolder.lot.setText(mList.get(position).get("lot").toString());
+        viewHolder.qty.setText(mList.get(position).get("qty").toString());
         return convertView;
     }
 
     static class ViewHolder {
-        TextView nameView;
-        TextView signView;
+        TextView name;
+        TextView encoding;
+        TextView type;
+        TextView lot;
+        TextView qty;
     }
 }

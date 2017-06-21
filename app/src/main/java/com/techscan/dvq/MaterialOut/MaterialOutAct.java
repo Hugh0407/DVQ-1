@@ -1,9 +1,9 @@
 package com.techscan.dvq.MaterialOut;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -73,24 +73,17 @@ public class MaterialOutAct extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_material_in);
         ButterKnife.inject(this);
-        mOrganization.setText("C00");
-
-//        JSONObject para = new JSONObject();
-
-//        try {
-//            para.put("FunctionName", "GetInvBaseInfo");
-//            para.put("CompanyCode", "4100");
-//            para.put("InvCode", "a");
-//            para.put("TableName", "table");
-//            JSONObject rev = Common.DoHttpQuery(para, "CommonQuery", "a1");
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        mOrganization.setText("C00");   // TODO: 2017/6/21 暂时默认设置
+        ActionBar actionBar = this.getActionBar();
+        actionBar.setTitle("材料出库");
 
     }
 
+    /**
+     * 所有的点击事件
+     *
+     * @param view
+     */
     @OnClick({R.id.refer_bill_num, R.id.refer_bill_date, R.id.refer_wh, R.id.refer_organization,
             R.id.refer_lei_bie, R.id.refer_remark, R.id.btnPurInScan, R.id.btnPurinSave,
             R.id.btnBack, R.id.refer_department})
@@ -135,28 +128,16 @@ public class MaterialOutAct extends Activity {
         }
     }
 
+    /**
+     * 获取部门列表信息的网络请求
+     */
     private void btnReferDepartment() {
-        try {
-            JSONObject para = new JSONObject();
-            para.put("FunctionName", "GetDeptList");
-            para.put("CompanyCode", MainLogin.objLog.CompanyCode);
-            para.put("TableName", "warehouse");
-            JSONObject rev = Common.DoHttpQuery(para, "CommonQuery", "");
-            if (rev != null) {
-                Log.d(TAG, "btnReferDepartment: " + rev.toString());
-            } else {
-                Log.d(TAG, "rev == null ");
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        MyThread myThread = new MyThread();
+        new Thread(myThread).start();
     }
 
     // 打开收发类别画面
-    private void btnRdclClick(String Code) throws ParseException, IOException,JSONException {
+    private void btnRdclClick(String Code) throws ParseException, IOException, JSONException {
         Intent ViewGrid = new Intent(this, VlistRdcl.class);
         ViewGrid.putExtra("FunctionName", "GetRdcl");
         // ViewGrid.putExtra("AccID", "A");
@@ -168,6 +149,11 @@ public class MaterialOutAct extends Activity {
         startActivityForResult(ViewGrid, 98);
     }
 
+    /**
+     * 点击仓库列表参照
+     *
+     * @throws JSONException
+     */
     private void btnWarehouseClick() throws JSONException {
         String lgUser = MainLogin.objLog.LoginUser;
         String lgPwd = MainLogin.objLog.Password;
@@ -226,12 +212,14 @@ public class MaterialOutAct extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        //部门名称的回传数据 <----ListWarehouse.class
         if (requestCode == 97 && resultCode == 13) {
             String warehousePK1 = data.getStringExtra("result1");
             String warehousecode = data.getStringExtra("result2");
             String warehouseName = data.getStringExtra("result3");
             mWh.setText(warehouseName);
         }
+        // 收发类别的回传数据 <----VlistRdcl.class
         if (requestCode == 98 && resultCode == 2) {
             String code = data.getStringExtra("Code");
             String name = data.getStringExtra("Name");
@@ -240,6 +228,40 @@ public class MaterialOutAct extends Activity {
             String RdIDB = data.getStringExtra("RdIDB");
             mLeiBie.setText(name);
         }
+        //部门信息的回传数据 <----DepartmentListAct.class
+        if (requestCode == 96 && resultCode == 4) {
+            String deptname = data.getStringExtra("deptname");
+            String pk_deptdoc = data.getStringExtra("pk_deptdoc");
+            String deptcode = data.getStringExtra("deptcode");
+            mDepartment.setText(deptname);
+        }
     }
 
+    /**
+     * 获取部门信息的线程
+     */
+    private class MyThread implements Runnable {
+        @Override
+        public void run() {
+            JSONObject para = new JSONObject();
+            try {
+                para.put("FunctionName", "GetDeptList");
+                para.put("CompanyCode", MainLogin.objLog.CompanyCode);
+                para.put("TableName", "department");
+                JSONObject rev = Common.DoHttpQuery(para, "CommonQuery", "");
+                if (rev.getBoolean("Status")) {
+                    JSONArray val = rev.getJSONArray("department");
+                    JSONObject temp = new JSONObject();
+                    temp.put("department", val);
+                    Intent ViewGrid = new Intent(MaterialOutAct.this, DepartmentListAct.class);
+                    ViewGrid.putExtra("myData", temp.toString());
+                    startActivityForResult(ViewGrid, 96);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

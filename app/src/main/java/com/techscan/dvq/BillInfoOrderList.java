@@ -34,7 +34,7 @@ public class BillInfoOrderList extends Activity {
 
 
 	//ADD CAIXY TEST START
-	private SoundPool sp;//声明一个SoundPool
+	private SoundPool sp;//明一个SoundPool
 	private int music;//定义一个int来设置suondID
 	private String WhNameA = "";
 	private String WhNameB = "";
