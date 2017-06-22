@@ -127,7 +127,6 @@ public class MaterialOutScanAct extends Activity {
         } else {
             builder.setMessage("没有扫描内容");
         }
-        builder.setPositiveButton("确定", null);
         builder.setPositiveButton("取消", null);
         builder.show();
     }
