@@ -8,6 +8,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -43,8 +45,8 @@ public class MaterialOutScanAct extends Activity {
     EditText mEdLot;
     @InjectView(R.id.ed_name)
     EditText mEdName;
-    @InjectView(R.id.btn_task)
-    Button mBtnTask;
+    @InjectView(R.id.btn_overview)
+    Button mBtnOverview;
     @InjectView(R.id.btn_detail)
     Button mBtnDetail;
     @InjectView(R.id.btn_back)
@@ -55,8 +57,7 @@ public class MaterialOutScanAct extends Activity {
     EditText mEdQty;
 
     String TAG = "MaterialOutScanAct";
-
-    List<HashMap<String, Object>> mList = new ArrayList<HashMap<String, Object>>();
+    List<HashMap<String, Object>> detailList = new ArrayList<HashMap<String, Object>>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,19 +66,81 @@ public class MaterialOutScanAct extends Activity {
         ButterKnife.inject(this);
         ActionBar actionBar = this.getActionBar();
         actionBar.setTitle("扫描");
-        mEdBarCode.addTextChangedListener(mTextWatcher);
+//        mEdBarCode.addTextChangedListener(mTextWatcher);
+        mEdBarCode.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
+                    String[] barCode = mEdBarCode.getText().toString().split("\\|");
+
+                    if (barCode.length == 2) {          //Y|SKU
+                        String encoding = barCode[1];
+                        mEdEncoding.setText(encoding);
+                        GetInvBaseInfo(encoding);
+                    } else if (barCode.length == 6) {   //C|SKU|LOT|TAX|QTY|SN
+                        String encoding = barCode[1];
+                        mEdEncoding.setText(encoding);
+                        GetInvBaseInfo(encoding);
+
+                        mEdLot.setText(barCode[2]);
+                        mEdQty.setText(barCode[4]);
+                    } else if (barCode.length == 7) {    //TC|SKU|LOT|TAX|QTY|NUM|SN
+                        String encoding = barCode[1];
+                        mEdEncoding.setText(encoding);
+                        GetInvBaseInfo(encoding);
+
+                        mEdLot.setText(barCode[2]);
+                        float qty = Float.valueOf(barCode[4]);
+                        float num = Float.valueOf(barCode[5]);
+                        mEdQty.setText(String.valueOf(qty * num));
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
-    @OnClick({R.id.btn_task, R.id.btn_detail, R.id.btn_back})
+    @OnClick({R.id.btn_overview, R.id.btn_detail, R.id.btn_back})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.btn_task:
+            case R.id.btn_overview:
+                Cargo cargo;
+                List<Cargo> overViewList = new ArrayList<Cargo>();
+                for (int i = 0; i < detailList.size(); i++) {
+//                    hashMap.put("barcode", mEdBarCode.getText());
+//                    hashMap.put("encoding", mEdEncoding.getText());
+//                    hashMap.put("name", mEdName.getText());
+//                    hashMap.put("type", mEdType.getText());
+//                    hashMap.put("unit", mEdUnit.getText());
+//                    hashMap.put("lot", mEdLot.getText());
+//                    hashMap.put("qty", mEdQty.getText());
+                    cargo = new Cargo();
+                    HashMap<String, Object> map = detailList.get(i);
+                    cargo.setName(String.valueOf(map.get("name")));
+                    cargo.setQty(Integer.valueOf(String.valueOf(map.get("qty"))));
+                    if (i == 0) {
+                        overViewList.add(cargo);
+                    } else {
+                        for (int j = 0; j < overViewList.size(); j++) {
+                            Cargo existCargo = overViewList.get(j);
+                            if (cargo.getName().equals(existCargo.getName())) {
+                                existCargo.setQty(existCargo.getQty() + cargo.getQty());
+                            } else {
+                                overViewList.add(cargo);
+                            }
+                        }
+                    }
+                }
+                for (int i = 0; i < overViewList.size(); i++) {
+                    Log.d(TAG, "物料名字: " + overViewList.get(i).getName() + "    物料数量: " + overViewList.get(i).getQty());
+                }
                 break;
             case R.id.btn_detail:
                 AlertDialog.Builder builder = new AlertDialog.Builder(MaterialOutScanAct.this);
                 builder.setTitle("扫描明细");
-                if (mList.size() > 0) {
-                    builder.setView(initDialogView(mList));
+                if (detailList.size() > 0) {
+                    builder.setView(initDialogView(detailList));
                 } else {
                     builder.setMessage("没有扫描内容");
                     builder.setPositiveButton("确定", null);
@@ -219,6 +282,7 @@ public class MaterialOutScanAct extends Activity {
                 mEdName.setText(map.get("invname").toString());
                 mEdUnit.setText(map.get("measname").toString());
                 mEdType.setText("待加");
+
                 if (mEdBarCode.getText() != null && mEdEncoding.getText() != null
                         && mEdName.getText() != null && mEdType.getText() != null
                         && mEdUnit.getText() != null && mEdLot.getText() != null
@@ -231,7 +295,7 @@ public class MaterialOutScanAct extends Activity {
                     hashMap.put("unit", mEdUnit.getText());
                     hashMap.put("lot", mEdLot.getText());
                     hashMap.put("qty", mEdQty.getText());
-                    mList.add(hashMap);
+                    detailList.add(hashMap);
                 }
             }
         }
