@@ -15,6 +15,7 @@ import com.techscan.dvq.ListWarehouse;
 import com.techscan.dvq.MainLogin;
 import com.techscan.dvq.R;
 import com.techscan.dvq.VlistRdcl;
+import com.techscan.dvq.materialOut.scan.Cargo;
 import com.techscan.dvq.materialOut.scan.MaterialOutScanAct;
 
 import org.apache.http.ParseException;
@@ -23,6 +24,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -121,9 +123,10 @@ public class MaterialOutAct extends Activity {
                 break;
             case R.id.btnPurInScan:
                 Intent in = new Intent(MaterialOutAct.this, MaterialOutScanAct.class);
-                startActivity(in);
+                startActivityForResult(in, 95);
                 break;
             case R.id.btnPurinSave:
+
                 break;
             case R.id.btnBack:
                 finish();
@@ -240,6 +243,12 @@ public class MaterialOutAct extends Activity {
             String pk_deptdoc = data.getStringExtra("pk_deptdoc");
             String deptcode = data.getStringExtra("deptcode");
             mDepartment.setText(deptname);
+        }
+
+        //扫描明细的回传数据 <----MaterialOutScanAct.class
+        if (requestCode == 95 && resultCode == 5) {
+            Bundle bundle = data.getExtras();
+            List<Cargo> tempList = bundle.getParcelableArrayList("overViewList");
         }
     }
 

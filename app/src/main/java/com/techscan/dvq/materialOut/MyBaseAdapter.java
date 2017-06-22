@@ -19,18 +19,18 @@ import java.util.List;
 public class MyBaseAdapter extends BaseAdapter {
 
     Context mContext;
-    List<HashMap<String, Object>> mList;
+    List<HashMap<String, String>> mList;
 
-    public MyBaseAdapter(Context context, List<HashMap<String, Object>> list) {
+    public MyBaseAdapter(Context context, List<HashMap<String, String>> list) {
         mContext = context;
         mList = list;
     }
 
-    public void setList(List<HashMap<String, Object>> list) {
+    public void setList(List<HashMap<String, String>> list) {
         mList = list;
     }
 
-    public List<HashMap<String, Object>> getList() {
+    public List<HashMap<String, String>> getList() {
         return mList;
     }
 

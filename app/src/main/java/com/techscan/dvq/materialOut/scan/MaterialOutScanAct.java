@@ -3,9 +3,11 @@ package com.techscan.dvq.materialOut.scan;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -59,7 +61,8 @@ public class MaterialOutScanAct extends Activity {
     Button mBtnBack;
 
     String TAG = "MaterialOutScanAct";
-    List<HashMap<String, Object>> detailList = new ArrayList<HashMap<String, Object>>();
+    List<HashMap<String, String>> detailList = new ArrayList<HashMap<String, String>>();
+    List<Cargo> tempList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,9 +83,10 @@ public class MaterialOutScanAct extends Activity {
             case R.id.btn_overview:
                 Cargo cargo;
                 List<Cargo> overViewList = new ArrayList<Cargo>();
+                tempList = overViewList;
                 for (int i = 0; i < detailList.size(); i++) {
                     cargo = new Cargo();
-                    HashMap<String, Object> map = detailList.get(i);
+                    HashMap<String, String> map = detailList.get(i);
                     cargo.setName(String.valueOf(map.get("name")));
                     cargo.setEncoding(String.valueOf(map.get("encoding")));
                     String qty = String.valueOf(map.get("qty"));
@@ -111,6 +115,13 @@ public class MaterialOutScanAct extends Activity {
                 showDialog(detailList, myBaseAdapter, "É¨ÃèÃ÷Ï¸");
                 break;
             case R.id.btn_back:
+                if (tempList.size()>0){
+                    Intent in = new Intent();
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelableArrayList("overViewList", (ArrayList<? extends Parcelable>) tempList);
+                    in.putExtras(bundle);
+                    MaterialOutScanAct.this.setResult(5, in);
+                }
                 finish();
                 break;
         }
@@ -268,14 +279,14 @@ public class MaterialOutScanAct extends Activity {
                         && mEdName.getText() != null && mEdType.getText() != null
                         && mEdUnit.getText() != null && mEdLot.getText() != null
                         && mEdQty.getText() != null) {
-                    HashMap<String, Object> hashMap = new HashMap<String, Object>();
-                    hashMap.put("barcode", mEdBarCode.getText());
-                    hashMap.put("encoding", mEdEncoding.getText());
-                    hashMap.put("name", mEdName.getText());
-                    hashMap.put("type", mEdType.getText());
-                    hashMap.put("unit", mEdUnit.getText());
-                    hashMap.put("lot", mEdLot.getText());
-                    hashMap.put("qty", mEdQty.getText());
+                    HashMap<String, String> hashMap = new HashMap<String, String>();
+                    hashMap.put("barcode", mEdBarCode.getText().toString());
+                    hashMap.put("encoding", mEdEncoding.getText().toString());
+                    hashMap.put("name", mEdName.getText().toString());
+                    hashMap.put("type", mEdType.getText().toString());
+                    hashMap.put("unit", mEdUnit.getText().toString());
+                    hashMap.put("lot", mEdLot.getText().toString());
+                    hashMap.put("qty", mEdQty.getText().toString());
                     detailList.add(hashMap);
                 }
             }
