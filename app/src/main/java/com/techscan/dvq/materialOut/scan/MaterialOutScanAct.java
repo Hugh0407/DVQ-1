@@ -113,17 +113,28 @@ public class MaterialOutScanAct extends Activity {
                 for (int i = 0; i < overViewList.size(); i++) {
                     Log.d(TAG, "物料名字: " + overViewList.get(i).getName() + "    物料数量: " + overViewList.get(i).getQty());
                 }
+
+                AlertDialog.Builder builderOv = new AlertDialog.Builder(MaterialOutScanAct.this);
+                builderOv.setTitle("扫描总览");
+                if (overViewList.size() > 0) {
+                    builderOv.setView(initDialogOv(overViewList));
+                } else {
+                    builderOv.setMessage("没有扫描内容");
+                }
+                builderOv.setPositiveButton("确定", null);
+                builderOv.setPositiveButton("取消", null);
+                builderOv.show();
                 break;
             case R.id.btn_detail:
                 AlertDialog.Builder builder = new AlertDialog.Builder(MaterialOutScanAct.this);
                 builder.setTitle("扫描明细");
                 if (detailList.size() > 0) {
-                    builder.setView(initDialogView(detailList));
+                    builder.setView(initDialogDetail(detailList));
                 } else {
                     builder.setMessage("没有扫描内容");
-                    builder.setPositiveButton("确定", null);
-                    builder.setPositiveButton("取消", null);
                 }
+                builder.setPositiveButton("确定", null);
+                builder.setPositiveButton("取消", null);
                 builder.show();
                 break;
             case R.id.btn_back:
@@ -138,10 +149,23 @@ public class MaterialOutScanAct extends Activity {
      * @param list dialog中的ListView的数据源
      * @return
      */
-    private View initDialogView(List<HashMap<String, Object>> list) {
+    private View initDialogDetail(List<HashMap<String, Object>> list) {
         View view = LayoutInflater.from(MaterialOutScanAct.this).inflate(R.layout.dialog_scan_details, null);
         ListView lv = (ListView) view.findViewById(R.id.lv);
         MyBaseAdapter adapter = new MyBaseAdapter(MaterialOutScanAct.this, list);
+        lv.setAdapter(adapter);
+        return view;
+    }
+    /**
+     * 点击明细按钮的显示的dialog
+     *
+     * @param list dialog中的ListView的数据源
+     * @return
+     */
+    private View initDialogOv(List<Cargo> list) {
+        View view = LayoutInflater.from(MaterialOutScanAct.this).inflate(R.layout.dialog_scan_details, null);
+        ListView lv = (ListView) view.findViewById(R.id.lv);
+        OvAdapter adapter = new OvAdapter(MaterialOutScanAct.this, list);
         lv.setAdapter(adapter);
         return view;
     }

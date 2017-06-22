@@ -6,6 +6,7 @@ package com.techscan.dvq.materialOut.scan;
  */
 
 public class Cargo {
+
     String name;
     int qty;
     int num;
