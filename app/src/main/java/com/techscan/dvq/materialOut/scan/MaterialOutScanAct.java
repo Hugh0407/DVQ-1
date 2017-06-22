@@ -115,7 +115,7 @@ public class MaterialOutScanAct extends Activity {
                 showDialog(detailList, myBaseAdapter, "É¨ÃèÃ÷Ï¸");
                 break;
             case R.id.btn_back:
-                if (tempList.size()>0){
+                if (tempList != null) {
                     Intent in = new Intent();
                     Bundle bundle = new Bundle();
                     bundle.putParcelableArrayList("overViewList", (ArrayList<? extends Parcelable>) tempList);

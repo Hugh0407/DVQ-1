@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -53,8 +54,6 @@ public class MaterialOutAct extends Activity {
     EditText mLeiBie;
     @InjectView(R.id.refer_lei_bie)
     ImageButton mReferLeiBie;
-
-
     @InjectView(R.id.department)
     EditText mDepartment;
     @InjectView(R.id.remark)
@@ -126,6 +125,34 @@ public class MaterialOutAct extends Activity {
                 startActivityForResult(in, 95);
                 break;
             case R.id.btnPurinSave:
+
+                try {
+                    JSONObject table = new JSONObject();
+                    JSONObject tableHead = new JSONObject();
+                    tableHead.put("billnum",mBillNum.getText().toString());
+                    tableHead.put("mBillDate",mBillDate.getText().toString());
+                    tableHead.put("whname",mWh.getText().toString());
+                    tableHead.put("mOrganization",mOrganization.getText().toString());
+                    tableHead.put("mLeiBie",mLeiBie.getText().toString());
+                    tableHead.put("mDepartment",mDepartment.getText().toString());
+                    tableHead.put("mRemark",mRemark.getText().toString());
+                    table.put("tableHead",tableHead);
+                    JSONArray tableBody = new JSONArray();
+
+                    JSONObject object = new JSONObject();
+                    object.put("body1","body1");
+                    object.put("body2","body1");
+
+                    JSONObject object1 = new JSONObject();
+                    object1.put("body1","body1");
+                    object1.put("body2","body1");
+                    tableBody.put(object);
+                    tableBody.put(object1);
+                    table.put("tableBody",tableBody);
+                    Log.d(TAG, "onViewClicked: "+table.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
                 break;
             case R.id.btnBack:
