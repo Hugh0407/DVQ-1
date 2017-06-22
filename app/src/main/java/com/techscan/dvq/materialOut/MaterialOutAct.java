@@ -1,4 +1,4 @@
-package com.techscan.dvq.MaterialOut;
+package com.techscan.dvq.materialOut;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -15,6 +15,7 @@ import com.techscan.dvq.ListWarehouse;
 import com.techscan.dvq.MainLogin;
 import com.techscan.dvq.R;
 import com.techscan.dvq.VlistRdcl;
+import com.techscan.dvq.materialOut.scan.MaterialOutScanAct;
 
 import org.apache.http.ParseException;
 import org.json.JSONArray;

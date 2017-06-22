@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.techscan.dvq.MaterialOut.MaterialOutAct">
+    tools:context="com.techscan.dvq.materialOut.MaterialOutAct">
 
     <LinearLayout
         android:layout_width="match_parent"

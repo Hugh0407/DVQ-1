@@ -1,4 +1,4 @@
-package com.techscan.dvq.MaterialOut;
+package com.techscan.dvq.materialOut;
 
 import android.app.ActionBar;
 import android.app.Activity;

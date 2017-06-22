@@ -1,4 +1,4 @@
-package com.techscan.dvq.MaterialOut;
+package com.techscan.dvq.materialOut.scan;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -19,6 +20,7 @@ import android.widget.ListView;
 import com.techscan.dvq.Common;
 import com.techscan.dvq.MainLogin;
 import com.techscan.dvq.R;
+import com.techscan.dvq.materialOut.MyBaseAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,16 +47,16 @@ public class MaterialOutScanAct extends Activity {
     EditText mEdLot;
     @InjectView(R.id.ed_name)
     EditText mEdName;
+    @InjectView(R.id.ed_unit)
+    EditText mEdUnit;
+    @InjectView(R.id.ed_qty)
+    EditText mEdQty;
     @InjectView(R.id.btn_overview)
     Button mBtnOverview;
     @InjectView(R.id.btn_detail)
     Button mBtnDetail;
     @InjectView(R.id.btn_back)
     Button mBtnBack;
-    @InjectView(R.id.ed_unit)
-    EditText mEdUnit;
-    @InjectView(R.id.ed_qty)
-    EditText mEdQty;
 
     String TAG = "MaterialOutScanAct";
     List<HashMap<String, Object>> detailList = new ArrayList<HashMap<String, Object>>();
@@ -67,38 +69,9 @@ public class MaterialOutScanAct extends Activity {
         ActionBar actionBar = this.getActionBar();
         actionBar.setTitle("…®√Ë");
 //        mEdBarCode.addTextChangedListener(mTextWatcher);
-        mEdBarCode.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
-                    String[] barCode = mEdBarCode.getText().toString().split("\\|");
+        mEdBarCode.setOnKeyListener(mOnKeyListener);
+        mEdBarCode.addTextChangedListener(mTextWatcher);
 
-                    if (barCode.length == 2) {          //Y|SKU
-                        String encoding = barCode[1];
-                        mEdEncoding.setText(encoding);
-                        GetInvBaseInfo(encoding);
-                    } else if (barCode.length == 6) {   //C|SKU|LOT|TAX|QTY|SN
-                        String encoding = barCode[1];
-                        mEdEncoding.setText(encoding);
-                        GetInvBaseInfo(encoding);
-
-                        mEdLot.setText(barCode[2]);
-                        mEdQty.setText(barCode[4]);
-                    } else if (barCode.length == 7) {    //TC|SKU|LOT|TAX|QTY|NUM|SN
-                        String encoding = barCode[1];
-                        mEdEncoding.setText(encoding);
-                        GetInvBaseInfo(encoding);
-
-                        mEdLot.setText(barCode[2]);
-                        float qty = Float.valueOf(barCode[4]);
-                        float num = Float.valueOf(barCode[5]);
-                        mEdQty.setText(String.valueOf(qty * num));
-                    }
-                    return true;
-                }
-                return false;
-            }
-        });
     }
 
     @OnClick({R.id.btn_overview, R.id.btn_detail, R.id.btn_back})
@@ -118,7 +91,12 @@ public class MaterialOutScanAct extends Activity {
                     cargo = new Cargo();
                     HashMap<String, Object> map = detailList.get(i);
                     cargo.setName(String.valueOf(map.get("name")));
-                    cargo.setQty(Integer.valueOf(String.valueOf(map.get("qty"))));
+                    cargo.setEncoding(String.valueOf(map.get("encoding")));
+                    String qty = String.valueOf(map.get("qty"));
+                    if (TextUtils.isEmpty(qty)) {
+                        qty = "0";
+                    }
+                    cargo.setQty(Integer.valueOf(qty));
                     if (i == 0) {
                         overViewList.add(cargo);
                     } else {
@@ -184,33 +162,52 @@ public class MaterialOutScanAct extends Activity {
 
         @Override
         public void afterTextChanged(Editable s) {
-
-            String[] barCode = s.toString().split("\\|");
-            if (barCode.length < 2) {
-                return;
+            if (TextUtils.isEmpty(mEdBarCode.getText().toString())) {
+                mEdEncoding.setText("");
+                mEdType.setText("");
+                mEdLot.setText("");
+                mEdName.setText("");
+                mEdUnit.setText("");
+                mEdQty.setText("");
             }
+        }
+    };
+    View.OnKeyListener mOnKeyListener = new View.OnKeyListener() {
 
-            if (barCode.length == 2) {          //Y|SKU
-                String encoding = barCode[1];
-                mEdEncoding.setText(encoding);
-                GetInvBaseInfo(encoding);
-            } else if (barCode.length == 6) {   //C|SKU|LOT|TAX|QTY|SN
-                String encoding = barCode[1];
-                mEdEncoding.setText(encoding);
-                GetInvBaseInfo(encoding);
+        @Override
+        public boolean onKey(View v, int keyCode, KeyEvent event) {
+            if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
+                String[] barCode = mEdBarCode.getText().toString().split("\\|");
 
-                mEdLot.setText(barCode[2]);
-                mEdQty.setText(barCode[4]);
-            } else if (barCode.length == 7) {    //TC|SKU|LOT|TAX|QTY|NUM|SN
-                String encoding = barCode[1];
-                mEdEncoding.setText(encoding);
-                GetInvBaseInfo(encoding);
+                if (barCode.length == 2) {          //Y|SKU
+                    String encoding = barCode[1];
+                    mEdEncoding.setText(encoding);
+                    GetInvBaseInfo(encoding);
+                    mEdType.setText("");
+                    mEdLot.setText("");
+                    mEdName.setText("");
+                    mEdUnit.setText("");
+                    mEdQty.setText("");
+                } else if (barCode.length == 6) {   //C|SKU|LOT|TAX|QTY|SN
+                    String encoding = barCode[1];
+                    mEdEncoding.setText(encoding);
+                    GetInvBaseInfo(encoding);
 
-                mEdLot.setText(barCode[2]);
-                float qty = Float.valueOf(barCode[4]);
-                float num = Float.valueOf(barCode[5]);
-                mEdQty.setText(String.valueOf(qty * num));
+                    mEdLot.setText(barCode[2]);
+                    mEdQty.setText(barCode[4]);
+                } else if (barCode.length == 7) {    //TC|SKU|LOT|TAX|QTY|NUM|SN
+                    String encoding = barCode[1];
+                    mEdEncoding.setText(encoding);
+                    GetInvBaseInfo(encoding);
+
+                    mEdLot.setText(barCode[2]);
+                    float qty = Float.valueOf(barCode[4]);
+                    float num = Float.valueOf(barCode[5]);
+                    mEdQty.setText(String.valueOf(qty * num));
+                }
+                return true;
             }
+            return false;
         }
     };
 

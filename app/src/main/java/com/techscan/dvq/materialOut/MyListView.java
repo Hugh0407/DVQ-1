@@ -1,4 +1,4 @@
-package com.techscan.dvq.MaterialOut;
+package com.techscan.dvq.materialOut;
 
 import android.content.Context;
 import android.util.AttributeSet;

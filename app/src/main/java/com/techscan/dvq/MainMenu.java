@@ -19,7 +19,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.techscan.dvq.MaterialOut.MaterialOutAct;
+import com.techscan.dvq.materialOut.MaterialOutAct;
 import com.techscan.dvq.R.id;
 
 import java.io.File;
