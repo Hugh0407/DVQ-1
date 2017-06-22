@@ -9,10 +9,10 @@ import android.os.Message;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -81,13 +81,6 @@ public class MaterialOutScanAct extends Activity {
                 Cargo cargo;
                 List<Cargo> overViewList = new ArrayList<Cargo>();
                 for (int i = 0; i < detailList.size(); i++) {
-//                    hashMap.put("barcode", mEdBarCode.getText());
-//                    hashMap.put("encoding", mEdEncoding.getText());
-//                    hashMap.put("name", mEdName.getText());
-//                    hashMap.put("type", mEdType.getText());
-//                    hashMap.put("unit", mEdUnit.getText());
-//                    hashMap.put("lot", mEdLot.getText());
-//                    hashMap.put("qty", mEdQty.getText());
                     cargo = new Cargo();
                     HashMap<String, Object> map = detailList.get(i);
                     cargo.setName(String.valueOf(map.get("name")));
@@ -110,32 +103,12 @@ public class MaterialOutScanAct extends Activity {
                         }
                     }
                 }
-                for (int i = 0; i < overViewList.size(); i++) {
-                    Log.d(TAG, "物料名字: " + overViewList.get(i).getName() + "    物料数量: " + overViewList.get(i).getQty());
-                }
-
-                AlertDialog.Builder builderOv = new AlertDialog.Builder(MaterialOutScanAct.this);
-                builderOv.setTitle("扫描总览");
-                if (overViewList.size() > 0) {
-                    builderOv.setView(initDialogOv(overViewList));
-                } else {
-                    builderOv.setMessage("没有扫描内容");
-                }
-                builderOv.setPositiveButton("确定", null);
-                builderOv.setPositiveButton("取消", null);
-                builderOv.show();
+                OvAdapter ovAdapter = new OvAdapter(MaterialOutScanAct.this, overViewList);
+                showDialog(overViewList, ovAdapter, "扫描总览");
                 break;
             case R.id.btn_detail:
-                AlertDialog.Builder builder = new AlertDialog.Builder(MaterialOutScanAct.this);
-                builder.setTitle("扫描明细");
-                if (detailList.size() > 0) {
-                    builder.setView(initDialogDetail(detailList));
-                } else {
-                    builder.setMessage("没有扫描内容");
-                }
-                builder.setPositiveButton("确定", null);
-                builder.setPositiveButton("取消", null);
-                builder.show();
+                MyBaseAdapter myBaseAdapter = new MyBaseAdapter(MaterialOutScanAct.this, detailList);
+                showDialog(detailList, myBaseAdapter, "扫描明细");
                 break;
             case R.id.btn_back:
                 finish();
@@ -143,31 +116,20 @@ public class MaterialOutScanAct extends Activity {
         }
     }
 
-    /**
-     * 点击明细按钮的显示的dialog
-     *
-     * @param list dialog中的ListView的数据源
-     * @return
-     */
-    private View initDialogDetail(List<HashMap<String, Object>> list) {
-        View view = LayoutInflater.from(MaterialOutScanAct.this).inflate(R.layout.dialog_scan_details, null);
-        ListView lv = (ListView) view.findViewById(R.id.lv);
-        MyBaseAdapter adapter = new MyBaseAdapter(MaterialOutScanAct.this, list);
-        lv.setAdapter(adapter);
-        return view;
-    }
-    /**
-     * 点击明细按钮的显示的dialog
-     *
-     * @param list dialog中的ListView的数据源
-     * @return
-     */
-    private View initDialogOv(List<Cargo> list) {
-        View view = LayoutInflater.from(MaterialOutScanAct.this).inflate(R.layout.dialog_scan_details, null);
-        ListView lv = (ListView) view.findViewById(R.id.lv);
-        OvAdapter adapter = new OvAdapter(MaterialOutScanAct.this, list);
-        lv.setAdapter(adapter);
-        return view;
+    private void showDialog(List list, BaseAdapter adapter, String title) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MaterialOutScanAct.this);
+        builder.setTitle(title);
+        if (list.size() > 0) {
+            View view = LayoutInflater.from(MaterialOutScanAct.this).inflate(R.layout.dialog_scan_details, null);
+            ListView lv = (ListView) view.findViewById(R.id.lv);
+            lv.setAdapter(adapter);
+            builder.setView(view);
+        } else {
+            builder.setMessage("没有扫描内容");
+        }
+        builder.setPositiveButton("确定", null);
+        builder.setPositiveButton("取消", null);
+        builder.show();
     }
 
     /**
@@ -202,7 +164,6 @@ public class MaterialOutScanAct extends Activity {
         public boolean onKey(View v, int keyCode, KeyEvent event) {
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
                 String[] barCode = mEdBarCode.getText().toString().split("\\|");
-
                 if (barCode.length == 2) {          //Y|SKU
                     String encoding = barCode[1];
                     mEdEncoding.setText(encoding);

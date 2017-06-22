@@ -31,6 +31,10 @@ public class OvAdapter extends BaseAdapter {
         mList = list;
     }
 
+    public List<Cargo> getList() {
+        return mList;
+    }
+
     /**
      * @return 返回子项目的个数，也就是有多少条
      */

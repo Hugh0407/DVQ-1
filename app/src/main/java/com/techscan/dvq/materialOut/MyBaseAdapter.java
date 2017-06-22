@@ -30,6 +30,10 @@ public class MyBaseAdapter extends BaseAdapter {
         mList = list;
     }
 
+    public List<HashMap<String, Object>> getList() {
+        return mList;
+    }
+
     /**
      * @return 返回子项目的个数，也就是有多少条
      */
