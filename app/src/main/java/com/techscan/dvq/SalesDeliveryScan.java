@@ -100,14 +100,14 @@ public class SalesDeliveryScan extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_sales_delivery_scan);
-		
+
 		ActionBar actionBar = this.getActionBar();
 		actionBar.setTitle("销售出库扫描明细");
 //		Drawable TitleBar = this.getResources().getDrawable(R.drawable.bg_barbackgroup);
 //		actionBar.setBackgroundDrawable(TitleBar);
 //		actionBar.show();
-		
-		
+
+
 //		EditText txtSDScanBarcode = null;
 //		ListView lstSDScanDetail = null;
 //		Button btnSDScanTask = null;
@@ -118,103 +118,103 @@ public class SalesDeliveryScan extends Activity {
 		//设置控件
 		txtSDScanBarcode = (EditText)findViewById(R.id.txtSDScanBarcode);
 		txtSDScanBarcode.setOnKeyListener(EditTextOnKeyListener);
-		
+
 		lstSDScanDetail = (ListView)findViewById(R.id.lstSDScanDetail);
 		lstSDScanDetail.setOnItemClickListener(myListItemListener);
 		lstSDScanDetail.setOnItemLongClickListener(myListItemLongListener);
-		
+
 		btnSDScanTask = (Button)findViewById(R.id.btnSDScanTask);
 		btnSDScanTask.setOnClickListener(ButtonOnClickListener);
 		btnSDScanClear = (Button)findViewById(R.id.btnSDScanClear);
 		btnSDScanClear.setOnClickListener(ButtonOnClickListener);
 		btnSDScanReturn = (Button)findViewById(R.id.btnSDScanReturn);
 		btnSDScanReturn.setOnClickListener(ButtonOnClickListener);
-		
+
 		//ADD CAIXY START
 //		sp= new SoundPool(10, AudioManager.STREAM_SYSTEM, 5);//第一个参数为同时播放数据流的最大个数，第二数据流类型，第三为声音质量
 //		MainLogin.music = MainLogin.sp.load(this, R.raw.xxx, 1); //把你的声音素材放到res/raw里，第2个参数即为资源文件，第3个为音乐的优先级
 //		MainLogin.music2 = MainLogin.sp.load(this, R.raw.yyy, 1);
 		//ADD CAIXY END
-				
+
 		//获得父画面传过来的数据
 		Intent myintent =getIntent();
 		tmpAccID = myintent.getStringExtra("AccID");
 		tmpPK_corp = myintent.getStringExtra("tmpCorpPK");
 		Tasknnum = Integer.valueOf(myintent.getStringExtra("TaskCount").toString());
-        ScanedBarcode = myintent.getStringArrayListExtra("ScanedBarcode");
+		ScanedBarcode = myintent.getStringArrayListExtra("ScanedBarcode");
 		tvSDcounts = (TextView)findViewById(R.id.tvSDcounts);
-		
+
 		btnSDScanTask.setFocusable(false);
 		btnSDScanClear.setFocusable(false);
 		btnSDScanReturn.setFocusable(false);
-		
+
 		ScanType = myintent.getStringExtra("ScanType");
-		
+
 		//获得父画面传过来的扫描详细数据
-				listcount = 0;
-				SerializableList lstScanSaveDetial = new SerializableList();
-		        lstScanSaveDetial = (SerializableList)myintent.getSerializableExtra("lstScanSaveDetial");
-		        lstSaveBody = lstScanSaveDetial.getList();
-		        
-		        if(lstSaveBody!=null)
-		        {
-			    	if(lstSaveBody.size() > 0)
-			    	{
-			    		listcount=lstSaveBody.size();
-			    		
-			        	MyListAdapter listItemAdapter = new MyListAdapter(SalesDeliveryScan.this,lstSaveBody,//数据源   
-				                R.layout.vlisttransscanitem,     
-				                new String[] {"InvCode","InvName","Batch","AccID","TotalNum",
-			        			"BarCode","SeriNo","BillCode","ScanedNum","box"},  
-				                new int[] {R.id.txtTransScanInvCode,R.id.txtTransScanInvName,
-											R.id.txtTransScanBatch,R.id.txtTransScanAccId,
-											R.id.txtTransScanTotalNum,R.id.txtTransScanBarCode,
-											R.id.txtTransScanSeriNo,R.id.txtTransScanBillCode,
-											R.id.txtTransScanScanCount,R.id.txtTransBox}
-				            );
-			        	lstSDScanDetail.setAdapter(listItemAdapter);
-			    	}
-		        }
-		        
-		        wareHouseID = myintent.getStringExtra("Warehouse");
-		        
-		        
-		        tvSDcounts.setText("总共"+Tasknnum+"件 | "+"已扫"+listcount+"件 | "+"未扫"+(Tasknnum-listcount)+"件");
-		        
-		        
-		        
-		        
-		        //获得父画面传过来的任务详细数据
-		        String lsTaskJosnBody = myintent.getStringExtra("TaskJonsBody");
-				JSONObject jonsTaskBody=null;
-				try {
-					jonsTaskBody = new JSONObject(lsTaskJosnBody);
-				} catch (JSONException e) {
-					Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
-					//ADD CAIXY TEST START
-					MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-					//ADD CAIXY TEST END
-					return;
-				}
-				if(jonsTaskBody.has("dbBody"))
-				{
-					this.jsonBodyTask=jonsTaskBody;
-				}
-				
-				if(jsonBodyTask.has("ModTaskData"))
-				{
-					try {
-						JsonModTaskData=(JSONObject)jsonBodyTask.get("ModTaskData");
-					} catch (JSONException e) {
-						Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
-						//ADD CAIXY TEST START
-						MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-						//ADD CAIXY TEST END
-						e.printStackTrace();
-					}
-				}
-//				
-//				
+		listcount = 0;
+		SerializableList lstScanSaveDetial = new SerializableList();
+		lstScanSaveDetial = (SerializableList)myintent.getSerializableExtra("lstScanSaveDetial");
+		lstSaveBody = lstScanSaveDetial.getList();
+
+		if(lstSaveBody!=null)
+		{
+			if(lstSaveBody.size() > 0)
+			{
+				listcount=lstSaveBody.size();
+
+				MyListAdapter listItemAdapter = new MyListAdapter(SalesDeliveryScan.this,lstSaveBody,//数据源
+						R.layout.vlisttransscanitem,
+						new String[] {"InvCode","InvName","Batch","AccID","TotalNum",
+								"BarCode","SeriNo","BillCode","ScanedNum","box"},
+						new int[] {R.id.txtTransScanInvCode,R.id.txtTransScanInvName,
+								R.id.txtTransScanBatch,R.id.txtTransScanAccId,
+								R.id.txtTransScanTotalNum,R.id.txtTransScanBarCode,
+								R.id.txtTransScanSeriNo,R.id.txtTransScanBillCode,
+								R.id.txtTransScanScanCount,R.id.txtTransBox}
+				);
+				lstSDScanDetail.setAdapter(listItemAdapter);
+			}
+		}
+
+		wareHouseID = myintent.getStringExtra("Warehouse");
+
+
+		tvSDcounts.setText("总共"+Tasknnum+"件 | "+"已扫"+listcount+"件 | "+"未扫"+(Tasknnum-listcount)+"件");
+
+
+
+
+		//获得父画面传过来的任务详细数据
+		String lsTaskJosnBody = myintent.getStringExtra("TaskJonsBody");
+		JSONObject jonsTaskBody=null;
+		try {
+			jonsTaskBody = new JSONObject(lsTaskJosnBody);
+		} catch (JSONException e) {
+			Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+			//ADD CAIXY TEST START
+			MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+			//ADD CAIXY TEST END
+			return;
+		}
+		if(jonsTaskBody.has("dbBody"))
+		{
+			this.jsonBodyTask=jonsTaskBody;
+		}
+
+		if(jsonBodyTask.has("ModTaskData"))
+		{
+			try {
+				JsonModTaskData=(JSONObject)jsonBodyTask.get("ModTaskData");
+			} catch (JSONException e) {
+				Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+				//ADD CAIXY TEST START
+				MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+				//ADD CAIXY TEST END
+				e.printStackTrace();
+			}
+		}
+//
+//
 //				if(jsonBodyTask.has("RemoveTaskData"))
 //				{
 //					try {
@@ -227,18 +227,18 @@ public class SalesDeliveryScan extends Activity {
 //						e.printStackTrace();
 //					}
 //				}
-				try {
-					getTaskListData(this.jsonBodyTask);
-				} catch (JSONException e) {
-					Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
-					//ADD CAIXY TEST START
-					MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-					//ADD CAIXY TEST END
-					e.printStackTrace();
-				}
-				
-				
-				
+		try {
+			getTaskListData(this.jsonBodyTask);
+		} catch (JSONException e) {
+			Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+			//ADD CAIXY TEST START
+			MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+			//ADD CAIXY TEST END
+			e.printStackTrace();
+		}
+
+
+
 
 	}
 
