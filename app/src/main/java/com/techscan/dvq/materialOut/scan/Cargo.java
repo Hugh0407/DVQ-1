@@ -11,7 +11,7 @@ import android.os.Parcelable;
 public class Cargo implements Parcelable{
 
     String name;
-    int qty;
+    float qty;
     int num;
     String encoding;
 
@@ -20,7 +20,7 @@ public class Cargo implements Parcelable{
 
     protected Cargo(Parcel in) {
         name = in.readString();
-        qty = in.readInt();
+        qty = in.readFloat();
         num = in.readInt();
         encoding = in.readString();
     }
@@ -45,11 +45,11 @@ public class Cargo implements Parcelable{
         this.name = name;
     }
 
-    public int getQty() {
+    public float getQty() {
         return qty;
     }
 
-    public void setQty(int qty) {
+    public void setQty(Float qty) {
         this.qty = qty;
     }
 
@@ -77,7 +77,7 @@ public class Cargo implements Parcelable{
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);
-        dest.writeInt(qty);
+        dest.writeFloat(qty);
         dest.writeInt(num);
         dest.writeString(encoding);
     }

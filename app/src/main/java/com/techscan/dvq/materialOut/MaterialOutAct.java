@@ -68,6 +68,8 @@ public class MaterialOutAct extends Activity {
     ImageButton mReferDepartment;
     private String TAG = this.getClass().getSimpleName();
 
+    List<Cargo> tempList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,35 +127,38 @@ public class MaterialOutAct extends Activity {
                 startActivityForResult(in, 95);
                 break;
             case R.id.btnPurinSave:
+                if (tempList != null && tempList.size() > 0) {
+                    try {
+                        JSONObject table = new JSONObject();
+                        JSONObject tableHead = new JSONObject();
+                        tableHead.put("billnum", mBillNum.getText().toString());
+                        tableHead.put("billDate", mBillDate.getText().toString());
+                        tableHead.put("whname", mWh.getText().toString());
+                        tableHead.put("organization", mOrganization.getText().toString());
+                        tableHead.put("leiBie", mLeiBie.getText().toString());
+                        tableHead.put("department", mDepartment.getText().toString());
+                        tableHead.put("remark", mRemark.getText().toString());
+                        table.put("tableHead", tableHead);
+                        JSONArray tableBody = new JSONArray();
 
-                try {
-                    JSONObject table = new JSONObject();
-                    JSONObject tableHead = new JSONObject();
-                    tableHead.put("billnum",mBillNum.getText().toString());
-                    tableHead.put("mBillDate",mBillDate.getText().toString());
-                    tableHead.put("whname",mWh.getText().toString());
-                    tableHead.put("mOrganization",mOrganization.getText().toString());
-                    tableHead.put("mLeiBie",mLeiBie.getText().toString());
-                    tableHead.put("mDepartment",mDepartment.getText().toString());
-                    tableHead.put("mRemark",mRemark.getText().toString());
-                    table.put("tableHead",tableHead);
-                    JSONArray tableBody = new JSONArray();
-
-                    JSONObject object = new JSONObject();
-                    object.put("body1","body1");
-                    object.put("body2","body1");
-
-                    JSONObject object1 = new JSONObject();
-                    object1.put("body1","body1");
-                    object1.put("body2","body1");
-                    tableBody.put(object);
-                    tableBody.put(object1);
-                    table.put("tableBody",tableBody);
-                    Log.d(TAG, "onViewClicked: "+table.toString());
-                } catch (JSONException e) {
-                    e.printStackTrace();
+//                        String name;
+//                        int qty;
+//                        int num;
+//                        String encoding;
+                        for (Cargo c : tempList) {
+                            JSONObject object = new JSONObject();
+                            object.put("name", c.getName());
+                            object.put("qty", c.getQty());
+//                            object.put("num", c.getNum());
+                            object.put("encoding", c.getEncoding());
+                            tableBody.put(object);
+                        }
+                        table.put("tableBody", tableBody);
+                        Log.d(TAG, "onViewClicked: " + table.toString());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
-
                 break;
             case R.id.btnBack:
                 finish();
@@ -275,7 +280,8 @@ public class MaterialOutAct extends Activity {
         //扫描明细的回传数据 <----MaterialOutScanAct.class
         if (requestCode == 95 && resultCode == 5) {
             Bundle bundle = data.getExtras();
-            List<Cargo> tempList = bundle.getParcelableArrayList("overViewList");
+            tempList = bundle.getParcelableArrayList("overViewList");
+            Log.d(TAG, "onActivityResult: " + tempList.get(0).getQty());
         }
     }
 
