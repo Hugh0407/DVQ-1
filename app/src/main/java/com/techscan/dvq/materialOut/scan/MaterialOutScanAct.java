@@ -11,6 +11,7 @@ import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -71,7 +72,6 @@ public class MaterialOutScanAct extends Activity {
         ButterKnife.inject(this);
         ActionBar actionBar = this.getActionBar();
         actionBar.setTitle("扫描");
-//        mEdBarCode.addTextChangedListener(mTextWatcher);
         mEdBarCode.setOnKeyListener(mOnKeyListener);
         mEdBarCode.addTextChangedListener(mTextWatcher);
 
@@ -81,9 +81,9 @@ public class MaterialOutScanAct extends Activity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_overview:
+                // 将相同货物的数量合并 如 A_01_20 A_02_30 合并为A_50
                 Cargo cargo;
                 List<Cargo> overViewList = new ArrayList<Cargo>();
-                tempList = overViewList;
                 for (int i = 0; i < detailList.size(); i++) {
                     cargo = new Cargo();
                     HashMap<String, String> map = detailList.get(i);
@@ -91,9 +91,9 @@ public class MaterialOutScanAct extends Activity {
                     cargo.setEncoding(String.valueOf(map.get("encoding")));
                     String qty = String.valueOf(map.get("qty"));
                     if (TextUtils.isEmpty(qty)) {
-                        qty = "0";
+                        qty = "0.0";
                     }
-                    cargo.setQty(Integer.valueOf(qty));
+                    cargo.setQty(Float.valueOf(qty));
                     if (i == 0) {
                         overViewList.add(cargo);
                     } else {
@@ -106,6 +106,7 @@ public class MaterialOutScanAct extends Activity {
                             }
                         }
                     }
+                    tempList = overViewList;
                 }
                 OvAdapter ovAdapter = new OvAdapter(MaterialOutScanAct.this, overViewList);
                 showDialog(overViewList, ovAdapter, "扫描总览");
@@ -120,6 +121,7 @@ public class MaterialOutScanAct extends Activity {
                     Bundle bundle = new Bundle();
                     bundle.putParcelableArrayList("overViewList", (ArrayList<? extends Parcelable>) tempList);
                     in.putExtras(bundle);
+                    Log.d(TAG, "tempList: "+tempList.get(0).getQty());
                     MaterialOutScanAct.this.setResult(5, in);
                 }
                 finish();
@@ -213,7 +215,8 @@ public class MaterialOutScanAct extends Activity {
      */
     private void GetInvBaseInfo(String sku) {
         MyThread myThread = new MyThread(sku);
-        new Thread(myThread).start();
+        Thread thread = new Thread(myThread);
+        thread.start();
     }
 
     /**

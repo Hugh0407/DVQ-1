@@ -3,7 +3,8 @@ package com.techscan.dvq.materialOut;
 import java.text.SimpleDateFormat;
 
 /**
- * Created by cloverss on 2017/6/21.
+ * Created by liuya on 2017/6/21.
+ * π§æﬂ¿‡
  */
 
 public class Utils {
