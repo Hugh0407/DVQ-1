@@ -25,20 +25,13 @@ import java.util.List;
 import java.util.Map;
 
 public class DepartmentListAct extends Activity {
-    //ADD CAIXY TEST START
-//	private SoundPool sp;//声明一个SoundPool
-//	private int MainLogin.music;//定义一个int来设置suondID
-    //ADD CAIXY TEST END
+
     Button btnBack = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_department_list);
-        //ADD CAIXY START
-//		sp= new SoundPool(10, AudioManager.STREAM_SYSTEM, 5);//第一个参数为同时播放数据流的最大个数，第二数据流类型，第三为声音质量
-//		MainLogin.music = MainLogin.sp.load(this, R.raw.xxx, 1); //把你的声音素材放到res/raw里，第2个参数即为资源文件，第3个为音乐的优先级
-//		//ADD CAIXY END
         ActionBar actionBar = this.getActionBar();
         actionBar.setTitle("部门列表");
         String jasstr = this.getIntent().getStringExtra("myData");
@@ -61,10 +54,7 @@ public class DepartmentListAct extends Activity {
             list.setAdapter(listItemAdapter);
         } catch (JSONException e) {
             e.printStackTrace();
-            //Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
-            //ADD CAIXY TEST START
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            //ADD CAIXY TEST END
         }
     }
 

@@ -19,11 +19,13 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.techscan.dvq.Common;
 import com.techscan.dvq.MainLogin;
 import com.techscan.dvq.R;
 import com.techscan.dvq.materialOut.MyBaseAdapter;
+import com.techscan.dvq.materialOut.RequestThread;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -63,7 +65,7 @@ public class MaterialOutScanAct extends Activity {
 
     String TAG = "MaterialOutScanAct";
     List<HashMap<String, String>> detailList = new ArrayList<HashMap<String, String>>();
-    List<Cargo> tempList;
+    List<Goods> tempList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +76,6 @@ public class MaterialOutScanAct extends Activity {
         actionBar.setTitle("扫描");
         mEdBarCode.setOnKeyListener(mOnKeyListener);
         mEdBarCode.addTextChangedListener(mTextWatcher);
-
     }
 
     @OnClick({R.id.btn_overview, R.id.btn_detail, R.id.btn_back})
@@ -82,27 +83,27 @@ public class MaterialOutScanAct extends Activity {
         switch (view.getId()) {
             case R.id.btn_overview:
                 // 将相同货物的数量合并 如 A_01_20 A_02_30 合并为A_50
-                Cargo cargo;
-                List<Cargo> overViewList = new ArrayList<Cargo>();
+                Goods goods;
+                List<Goods> overViewList = new ArrayList<Goods>();
                 for (int i = 0; i < detailList.size(); i++) {
-                    cargo = new Cargo();
+                    goods = new Goods();
                     HashMap<String, String> map = detailList.get(i);
-                    cargo.setName(String.valueOf(map.get("name")));
-                    cargo.setEncoding(String.valueOf(map.get("encoding")));
+                    goods.setName(String.valueOf(map.get("name")));
+                    goods.setEncoding(String.valueOf(map.get("encoding")));
                     String qty = String.valueOf(map.get("qty"));
                     if (TextUtils.isEmpty(qty)) {
                         qty = "0.0";
                     }
-                    cargo.setQty(Float.valueOf(qty));
+                    goods.setQty(Float.valueOf(qty));
                     if (i == 0) {
-                        overViewList.add(cargo);
+                        overViewList.add(goods);
                     } else {
                         for (int j = 0; j < overViewList.size(); j++) {
-                            Cargo existCargo = overViewList.get(j);
-                            if (cargo.getName().equals(existCargo.getName())) {
-                                existCargo.setQty(existCargo.getQty() + cargo.getQty());
+                            Goods existGoods = overViewList.get(j);
+                            if (goods.getName().equals(existGoods.getName())) {
+                                existGoods.setQty(existGoods.getQty() + goods.getQty());
                             } else {
-                                overViewList.add(cargo);
+                                overViewList.add(goods);
                             }
                         }
                     }
@@ -170,13 +171,18 @@ public class MaterialOutScanAct extends Activity {
             }
         }
     };
+
+
+    /**
+     * 回车键的点击事件
+     */
     View.OnKeyListener mOnKeyListener = new View.OnKeyListener() {
 
         @Override
         public boolean onKey(View v, int keyCode, KeyEvent event) {
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
                 String[] barCode = mEdBarCode.getText().toString().split("\\|");
-                if (barCode.length == 2) {          //Y|SKU
+                if (barCode.length == 2 && barCode[0].equals("Y")) {          //Y|SKU
                     String encoding = barCode[1];
                     mEdEncoding.setText(encoding);
                     GetInvBaseInfo(encoding);
@@ -185,14 +191,14 @@ public class MaterialOutScanAct extends Activity {
                     mEdName.setText("");
                     mEdUnit.setText("");
                     mEdQty.setText("");
-                } else if (barCode.length == 6) {   //C|SKU|LOT|TAX|QTY|SN
+                } else if (barCode.length == 6 && barCode[0].equals("C")) {   //C|SKU|LOT|TAX|QTY|SN
                     String encoding = barCode[1];
                     mEdEncoding.setText(encoding);
                     GetInvBaseInfo(encoding);
 
                     mEdLot.setText(barCode[2]);
                     mEdQty.setText(barCode[4]);
-                } else if (barCode.length == 7) {    //TC|SKU|LOT|TAX|QTY|NUM|SN
+                } else if (barCode.length == 7 && barCode[0].equals("TC")) {    //TC|SKU|LOT|TAX|QTY|NUM|SN
                     String encoding = barCode[1];
                     mEdEncoding.setText(encoding);
                     GetInvBaseInfo(encoding);
@@ -201,6 +207,8 @@ public class MaterialOutScanAct extends Activity {
                     float qty = Float.valueOf(barCode[4]);
                     float num = Float.valueOf(barCode[5]);
                     mEdQty.setText(String.valueOf(qty * num));
+                }else {
+                    Toast.makeText(MaterialOutScanAct.this, "条码有误重新输入", Toast.LENGTH_SHORT).show();
                 }
                 return true;
             }
@@ -214,6 +222,15 @@ public class MaterialOutScanAct extends Activity {
      * @param sku
      */
     private void GetInvBaseInfo(String sku) {
+        //*********************************************************************
+        HashMap<String,String> parameter = new HashMap<String, String>();
+        parameter.put("FunctionName", "GetInvBaseInfo");
+        parameter.put("CompanyCode", MainLogin.objLog.CompanyCode);
+        parameter.put("InvCode", sku);
+        parameter.put("TableName", "baseInfo");
+        RequestThread requestThread = new RequestThread(parameter,mHandler,2);
+        //*********************************************************************
+
         MyThread myThread = new MyThread(sku);
         Thread thread = new Thread(myThread);
         thread.start();
@@ -272,26 +289,30 @@ public class MaterialOutScanAct extends Activity {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            if (msg.what == 1) {
-                HashMap<String, Object> map = (HashMap<String, Object>) msg.obj;
-                mEdName.setText(map.get("invname").toString());
-                mEdUnit.setText(map.get("measname").toString());
-                mEdType.setText("待加");
+            switch (msg.what){
+                case 1:
+                    HashMap<String, Object> map = (HashMap<String, Object>) msg.obj;
+                    mEdName.setText(map.get("invname").toString());
+                    mEdUnit.setText(map.get("measname").toString());
+                    mEdType.setText("待加");
 
-                if (mEdBarCode.getText() != null && mEdEncoding.getText() != null
-                        && mEdName.getText() != null && mEdType.getText() != null
-                        && mEdUnit.getText() != null && mEdLot.getText() != null
-                        && mEdQty.getText() != null) {
-                    HashMap<String, String> hashMap = new HashMap<String, String>();
-                    hashMap.put("barcode", mEdBarCode.getText().toString());
-                    hashMap.put("encoding", mEdEncoding.getText().toString());
-                    hashMap.put("name", mEdName.getText().toString());
-                    hashMap.put("type", mEdType.getText().toString());
-                    hashMap.put("unit", mEdUnit.getText().toString());
-                    hashMap.put("lot", mEdLot.getText().toString());
-                    hashMap.put("qty", mEdQty.getText().toString());
-                    detailList.add(hashMap);
-                }
+                    if (mEdBarCode.getText() != null && mEdEncoding.getText() != null
+                            && mEdName.getText() != null && mEdType.getText() != null
+                            && mEdUnit.getText() != null && mEdLot.getText() != null
+                            && mEdQty.getText() != null) {
+                        HashMap<String, String> hashMap = new HashMap<String, String>();
+                        hashMap.put("barcode", mEdBarCode.getText().toString());
+                        hashMap.put("encoding", mEdEncoding.getText().toString());
+                        hashMap.put("name", mEdName.getText().toString());
+                        hashMap.put("type", mEdType.getText().toString());
+                        hashMap.put("unit", mEdUnit.getText().toString());
+                        hashMap.put("lot", mEdLot.getText().toString());
+                        hashMap.put("qty", mEdQty.getText().toString());
+                        detailList.add(hashMap);
+                    }
+                    break;
+                default:
+                    break;
             }
         }
     };

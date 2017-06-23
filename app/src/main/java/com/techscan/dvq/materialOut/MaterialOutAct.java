@@ -16,7 +16,7 @@ import com.techscan.dvq.ListWarehouse;
 import com.techscan.dvq.MainLogin;
 import com.techscan.dvq.R;
 import com.techscan.dvq.VlistRdcl;
-import com.techscan.dvq.materialOut.scan.Cargo;
+import com.techscan.dvq.materialOut.scan.Goods;
 import com.techscan.dvq.materialOut.scan.MaterialOutScanAct;
 
 import org.apache.http.ParseException;
@@ -68,7 +68,7 @@ public class MaterialOutAct extends Activity {
     ImageButton mReferDepartment;
     private String TAG = this.getClass().getSimpleName();
 
-    List<Cargo> tempList;
+    List<Goods> tempList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +87,6 @@ public class MaterialOutAct extends Activity {
                 }
             }
         });
-
     }
 
     /**
@@ -141,11 +140,7 @@ public class MaterialOutAct extends Activity {
                         table.put("tableHead", tableHead);
                         JSONArray tableBody = new JSONArray();
 
-//                        String name;
-//                        int qty;
-//                        int num;
-//                        String encoding;
-                        for (Cargo c : tempList) {
+                        for (Goods c : tempList) {
                             JSONObject object = new JSONObject();
                             object.put("name", c.getName());
                             object.put("qty", c.getQty());
