@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
@@ -16,7 +17,7 @@
             android:layout_width="20dp"
             android:layout_height="wrap_content"
             android:text="A"
-            android:textColor="#000000"
+            android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -26,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="BILLCODE"
-            android:textColor="#000000"
+            android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold" />
     </LinearLayout>
@@ -44,7 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="BarCode"
-            android:textColor="#000000"
+            android:textColor="@color/white"
             android:textSize="15sp" />
 
         <TextView
@@ -52,7 +53,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="INVCODE"
-            android:textColor="#000000"
+            android:textColor="@color/white"
             android:textSize="22sp"
             android:textStyle="bold" />
 
@@ -61,7 +62,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="INVNAME"
-            android:textColor="#000000"
+            android:textColor="@color/white"
             android:textSize="15sp" />
     </LinearLayout>
 
@@ -72,7 +73,7 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/linearLayout2"
         android:text="BATCH"
-        android:textColor="#000000"
+        android:textColor="@color/white"
         android:textSize="15sp" />
 
     <TextView
@@ -83,7 +84,7 @@
         android:layout_alignBottom="@+id/txtTransScanBatch"
         android:layout_alignRight="@+id/linearLayout1"
         android:text="未"
-        android:textColor="@color/red"
+        android:textColor="@color/white"
         android:textSize="15sp" />
 
     <LinearLayout
@@ -99,7 +100,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="SeriNo"
-            android:textColor="#000000"
+            android:textColor="@color/white"
             android:textSize="18sp" />
 
         <TextView
@@ -108,7 +109,7 @@
             android:layout_height="wrap_content"
             android:gravity="right"
             android:text="已扫："
-            android:textColor="#000000"
+            android:textColor="@color/white"
             android:textSize="18sp" />
 
         <TextView
@@ -116,7 +117,7 @@
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:text="CON"
-            android:textColor="#000000"
+            android:textColor="@color/white"
             android:textSize="18sp" />
 
         <TextView
@@ -125,7 +126,7 @@
             android:layout_height="wrap_content"
             android:gravity="right"
             android:text="总包："
-            android:textColor="#000000"
+            android:textColor="@color/white"
             android:textSize="18sp" />
 
         <TextView
@@ -133,7 +134,7 @@
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:text="TOT"
-            android:textColor="#000000"
+            android:textColor="@color/white"
             android:textSize="18sp" />
     </LinearLayout>
 

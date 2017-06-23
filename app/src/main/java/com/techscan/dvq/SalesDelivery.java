@@ -149,73 +149,8 @@ public class SalesDelivery extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sales_delivery);
-
         this.setTitle("销售出库");
-
-        txtSalesDelPDOrder = (EditText) findViewById(R.id.txtSalesDelPDOrder);
-        tvSalesDelPDOrder = (TextView) findViewById(R.id.tvSalesDelPDOrder);
-        btnSalesDelPDOrder = (ImageButton) findViewById(R.id.btnSalesDelPDOrder);
-        btnSalesDelPDOrder.setOnClickListener(new OnClickListener());
-
-        tvSaleOutSelect = (EditText) findViewById(R.id.tvSaleOutSelect);
-        btnSaleOutSelect = (ImageButton) findViewById(R.id.btnSaleOutSelect);
-        btnSaleOutSelect.setOnClickListener(new OnClickListener());
-
-        tvSalesDelWH = (TextView) findViewById(R.id.tvSalesDelWH);
-        txtSalesDelWH = (EditText) findViewById(R.id.txtSalesDelWH);
-        btnSalesDelWH = (ImageButton) findViewById(R.id.btnSalesDelWH);
-        btnSalesDelWH.setOnClickListener(new OnClickListener());
-
-
-        btnSalesDelScan = (Button) findViewById(R.id.btnSalesDelScan);
-        btnSalesDelScan.setOnClickListener(new OnClickListener());
-        btnSalesDelSave = (Button) findViewById(R.id.btnSalesDelSave);
-        btnSalesDelSave.setOnClickListener(new OnClickListener());
-        btnSalesDelExit = (Button) findViewById(R.id.btnSalesDelExit);
-        btnSalesDelExit.setOnClickListener(new OnClickListener());
-
-//		btnSalesDelCD = (ImageButton) findViewById(R.id.btnSalesDelCD);
-//		btnSalesDelCD.setOnClickListener(new OnClickListener());
-
-//		tvSalesDelBillCodeName = (TextView)findViewById(tvSalesDelBillCodeName);
-//		tvSalesDelAccIDName = (TextView)findViewById(R.id.tvSalesDelAccIDName);
-//		tvSalesDelCorpName = (TextView)findViewById(tvSalesDelCorpName);
-
-//		tvSalesDelBillCode = (TextView)findViewById(R.id.tvSalesDelBillCode);
-//		tvSalesDelAccID = (TextView)findViewById(R.id.tvSalesDelAccID);
-//		tvSalesDelCorp = (TextView)findViewById(R.id.tvSalesDelCorp);
-
-
-//		tvSalesDelPos = (TextView)findViewById(tvSalesDelPos);
-        tvSalesDelRdcl = (TextView)findViewById(R.id.tvSalesDelRdcl);
-        tvCustomer = (TextView)findViewById(id.tvCustomer);
-
-//		btnSalesDelRdcl = (ImageButton) findViewById(R.id.btnSalesDelRdcl);
-//		btnSalesDelRdcl.setOnClickListener(new OnClickListener());
-
-//		txtSalesDelPos = (EditText) findViewById(txtSalesDelPos);
-        txtSalesDelRdcl = (EditText) findViewById(R.id.txtSalesDelRdcl);
-
-
-        txtSalesDelCD = (EditText) findViewById(R.id.txtSalesDelCD);
-
-//		txtSalesDelPos.setOnKeyListener(EditTextOnKeyListener);
-        txtSalesDelRdcl.setOnKeyListener(EditTextOnKeyListener);
-        txtSalesDelPDOrder.setOnKeyListener(EditTextOnKeyListener);
-
-        txtSalesDelCD.setFocusable(false);
-        txtSalesDelCD.setFocusableInTouchMode(false);
-        txtSalesDelRdcl.setFocusable(false);
-        txtSalesDelRdcl.setFocusableInTouchMode(false);
-
-        tvSaleOutSelect.setFocusableInTouchMode(false);
-
-        btnSalesDelPDOrder.setFocusable(false);
-        btnSalesDelExit.setFocusable(false);
-        btnSalesDelScan.setFocusable(false);
-        btnSalesDelSave.setFocusable(false);
-//		btnSalesDelCD.setFocusable(false);
-
+        initView();
         SharedPreferences sharedPreferences = getSharedPreferences(PREFERENCE_SETTING,
                 Activity.MODE_PRIVATE);
 
@@ -223,7 +158,6 @@ public class SalesDelivery extends Activity {
         WhNameB =sharedPreferences.getString("AccId", "");
 //				sCompanyCode=sharedPreferences.getString("CompanyCode", "");
 //		        sOrgCode=sharedPreferences.getString("OrgCode", "");
-
 
         ClearBillDetailInfoShow();
         SetBillType();
@@ -683,7 +617,6 @@ public class SalesDelivery extends Activity {
             return null;
         }
     }
-
 
     private void SetRDCL()
     {
@@ -1369,6 +1302,7 @@ public class SalesDelivery extends Activity {
 
     }
 
+
     //绑定订单表头信息
     private boolean BindingBillDetailInfo(Map<String,Object> mapBillInfo)
     {
@@ -1428,13 +1362,12 @@ public class SalesDelivery extends Activity {
 
     private class ButtonOnClick implements DialogInterface.OnClickListener
     {
-        public int index;
 
+        public int index;
         public ButtonOnClick(int index)
         {
             this.index = index;
         }
-
 
         public void onClick(DialogInterface dialog, int whichButton)
         {
@@ -1494,7 +1427,10 @@ public class SalesDelivery extends Activity {
 ////				txtSalesDelPos.requestFocus();
 //			}
         }
+
+
     }
+
 
 
 
@@ -1502,7 +1438,7 @@ public class SalesDelivery extends Activity {
     {
 
         if((tmpAccID == null) || (tmpAccID.equals(""))) {
-            Toast.makeText(this, "单据信息没有获得不能选择运输方式", 1).show();
+            Toast.makeText(this, "单据信息没有获得不能选择运输方式", Toast.LENGTH_SHORT).show();
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             this.txtSalesDelPDOrder.requestFocus();
 
@@ -1765,11 +1701,9 @@ public class SalesDelivery extends Activity {
 
 
 
-                    Intent intDeliveryScan = new Intent(SalesDelivery.this,
-                            SalesDeliveryScan.class);
+                    Intent intDeliveryScan = new Intent(SalesDelivery.this,SalesDeliveryScan.class);
                     intDeliveryScan.putExtra("AccID", tmpAccID);
-                    intDeliveryScan.putExtra("TaskJonsBody",
-                            jsonBillBodyTask.toString());
+                    intDeliveryScan.putExtra("TaskJonsBody",jsonBillBodyTask.toString());
 
                     SerializableList lstScanSaveDetial = new SerializableList();
                     lstScanSaveDetial.setList(lstSaveBody);
@@ -1780,8 +1714,6 @@ public class SalesDelivery extends Activity {
                     intDeliveryScan.putExtra("tmpCorpPK",tmpCorpPK);
                     intDeliveryScan.putStringArrayListExtra("ScanedBarcode", ScanedBarcode);
                     intDeliveryScan.putExtra("ScanType",tvSaleOutSelect.getText().toString());
-
-
                     startActivityForResult(intDeliveryScan,86);
 
                     break;
@@ -2905,5 +2837,70 @@ public class SalesDelivery extends Activity {
                 }
             }
         }
+    }
+    private void initView() {
+        txtSalesDelPDOrder = (EditText) findViewById(id.txtSalesDelPDOrder);
+        tvSalesDelPDOrder = (TextView) findViewById(id.tvSalesDelPDOrder);
+        btnSalesDelPDOrder = (ImageButton) findViewById(id.btnSalesDelPDOrder);
+        btnSalesDelPDOrder.setOnClickListener(new OnClickListener());
+
+        tvSaleOutSelect = (EditText) findViewById(id.tvSaleOutSelect);
+        btnSaleOutSelect = (ImageButton) findViewById(id.btnSaleOutSelect);
+        btnSaleOutSelect.setOnClickListener(new OnClickListener());
+
+        tvSalesDelWH = (TextView) findViewById(id.tvSalesDelWH);
+        txtSalesDelWH = (EditText) findViewById(id.txtSalesDelWH);
+        btnSalesDelWH = (ImageButton) findViewById(id.btnSalesDelWH);
+        btnSalesDelWH.setOnClickListener(new OnClickListener());
+
+
+        btnSalesDelScan = (Button) findViewById(id.btnSalesDelScan);
+        btnSalesDelScan.setOnClickListener(new OnClickListener());
+        btnSalesDelSave = (Button) findViewById(id.btnSalesDelSave);
+        btnSalesDelSave.setOnClickListener(new OnClickListener());
+        btnSalesDelExit = (Button) findViewById(id.btnSalesDelExit);
+        btnSalesDelExit.setOnClickListener(new OnClickListener());
+
+//		btnSalesDelCD = (ImageButton) findViewById(R.id.btnSalesDelCD);
+//		btnSalesDelCD.setOnClickListener(new OnClickListener());
+
+//		tvSalesDelBillCodeName = (TextView)findViewById(tvSalesDelBillCodeName);
+//		tvSalesDelAccIDName = (TextView)findViewById(R.id.tvSalesDelAccIDName);
+//		tvSalesDelCorpName = (TextView)findViewById(tvSalesDelCorpName);
+
+//		tvSalesDelBillCode = (TextView)findViewById(R.id.tvSalesDelBillCode);
+//		tvSalesDelAccID = (TextView)findViewById(R.id.tvSalesDelAccID);
+//		tvSalesDelCorp = (TextView)findViewById(R.id.tvSalesDelCorp);
+
+
+//		tvSalesDelPos = (TextView)findViewById(tvSalesDelPos);
+        tvSalesDelRdcl = (TextView)findViewById(id.tvSalesDelRdcl);
+        tvCustomer = (TextView)findViewById(id.tvCustomer);
+
+//		btnSalesDelRdcl = (ImageButton) findViewById(R.id.btnSalesDelRdcl);
+//		btnSalesDelRdcl.setOnClickListener(new OnClickListener());
+
+//		txtSalesDelPos = (EditText) findViewById(txtSalesDelPos);
+        txtSalesDelRdcl = (EditText) findViewById(id.txtSalesDelRdcl);
+
+
+        txtSalesDelCD = (EditText) findViewById(id.txtSalesDelCD);
+
+//		txtSalesDelPos.setOnKeyListener(EditTextOnKeyListener);
+        txtSalesDelRdcl.setOnKeyListener(EditTextOnKeyListener);
+        txtSalesDelPDOrder.setOnKeyListener(EditTextOnKeyListener);
+
+        txtSalesDelCD.setFocusable(false);
+        txtSalesDelCD.setFocusableInTouchMode(false);
+        txtSalesDelRdcl.setFocusable(false);
+        txtSalesDelRdcl.setFocusableInTouchMode(false);
+
+        tvSaleOutSelect.setFocusableInTouchMode(false);
+
+        btnSalesDelPDOrder.setFocusable(false);
+        btnSalesDelExit.setFocusable(false);
+        btnSalesDelScan.setFocusable(false);
+        btnSalesDelSave.setFocusable(false);
+//		btnSalesDelCD.setFocusable(false);
     }
 }
