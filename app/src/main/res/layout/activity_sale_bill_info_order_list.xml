@@ -5,6 +5,7 @@
     tools:context="com.techscan.dvq.SaleBillInfoOrderList" >
 
     <ListView
+        android:background="#ffffff"
         android:id="@+id/SaleBillInfoOrderList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -12,7 +13,7 @@
         android:layout_alignParentTop="true" >
 
     </ListView>
-    
+
     <LinearLayout
         android:id="@+id/SaleBillInfoButtonBar"
         android:layout_width="match_parent"
@@ -23,7 +24,7 @@
         android:background="#d7d6d6"
         android:orientation="horizontal" >
     </LinearLayout>
-            <LinearLayout
+    <LinearLayout
         android:id="@+id/TestButtonBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -32,7 +33,7 @@
         android:background="#d7d6d6"
         android:orientation="horizontal" >
 
-      
+
 
         <Button
             android:id="@+id/btSaleBillInfoOrderListReturn"
@@ -40,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/btn3"
-            android:textColor="@color/navy" 
+            android:textColor="@color/navy"
             android:text="返回" />
     </LinearLayout>
 

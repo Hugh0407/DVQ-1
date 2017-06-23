@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/btn3"
-            android:textColor="@color/navy" 
+            android:textColor="@color/navy"
             android:text="任务" />
 
         <Button
@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/btn3"
-            android:textColor="@color/navy" 
+            android:textColor="@color/navy"
             android:text="清空" />
 
         <Button
@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/btn3"
-            android:textColor="@color/navy" 
+            android:textColor="@color/navy"
             android:text="返回" />
     </LinearLayout>
 
@@ -49,19 +49,9 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:textColor="@android:color/holo_blue_light"
-        android:textSize="18sp"        
-        android:text="已扫描0件" 
+        android:textSize="18sp"
+        android:text="已扫描0件"
         android:textStyle="bold"/>
-
-    <ListView
-        android:id="@+id/lstSDScanDetail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/tvSDcounts"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/txtSDScanBarcode" >
-
-    </ListView>
 
     <TextView
         android:id="@+id/TextView01"
@@ -94,5 +84,15 @@
         android:layout_alignBottom="@+id/txtSDScanBarcode"
         android:layout_alignParentLeft="true"
         android:text="  条       码" />
+
+    <ListView
+        android:id="@+id/lstSDScanDetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtSDScanBarcode"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+    </ListView>
 
 </RelativeLayout>

@@ -23,7 +23,7 @@
             android:layout_alignParentLeft="true"
             android:layout_weight="1"
             android:background="@drawable/btn3"
-            android:textColor="@color/navy" 
+            android:textColor="@color/navy"
             android:text="扫描" />
 
         <Button
@@ -35,7 +35,7 @@
             android:layout_alignParentRight="true"
             android:layout_weight="1"
             android:background="@drawable/btn3"
-            android:textColor="@color/navy" 
+            android:textColor="@color/navy"
             android:text="保存  签字" />
 
         <Button
@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/btn3"
-            android:textColor="@color/navy" 
+            android:textColor="@color/navy"
             android:text="退出" />
     </LinearLayout>
 
@@ -67,81 +67,6 @@
         android:layout_toLeftOf="@+id/txtSalesDelPDOrder"
         android:text="  出库仓库" />
 
-    <LinearLayout
-        android:id="@+id/linearTransIn"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_above="@+id/TransInButtonBar"
-        android:layout_below="@+id/txtSalesDelAAA01"
-        android:layout_toRightOf="@+id/TextView01"
-        android:orientation="vertical" >
-
-        <TextView
-            android:id="@+id/tvSalesDelBillCodeName"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:text="单  据  号："
-            android:textColor="#000000"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/tvSalesDelBillCode"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="1"
-            android:text="BILLCODE"
-            android:textColor="#000000"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/tvSalesDelAccIDName"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:text="账  套  号："
-            android:textColor="#000000"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/tvSalesDelAccID"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="1"
-            android:text="A"
-            android:textColor="#000000"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/tvSalesDelCorpName"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:text="客　    户："
-            android:textColor="#000000"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/tvSalesDelCorp"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="1"
-            android:text="CORP"
-            android:textColor="#000000"
-            android:textSize="16sp" />
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/tvSalesDelPos"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/txtSalesDelPos"
-        android:layout_alignBottom="@+id/txtSalesDelPos"
-        android:layout_alignParentLeft="true"
-        android:text="  出库货位" />
 
     <TextView
         android:id="@+id/tvSalesDelRdcl"
@@ -150,27 +75,10 @@
         android:layout_alignBaseline="@+id/txtSalesDelRdcl"
         android:layout_alignBottom="@+id/txtSalesDelRdcl"
         android:layout_alignParentLeft="true"
-        
-        android:text="  出库类别" />
 
-    <EditText
-        android:id="@+id/txtSalesDelPos"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/txtSalesDelRdcl"
-        android:layout_alignRight="@+id/txtSalesDelRdcl"
-        android:layout_below="@+id/txtSalesDelRdcl"
-        android:ems="10"
-        android:singleLine="true"
-        android:width="200dp" />
+        android:text="  单据日期" />
 
-    <TextView
-        android:id="@+id/txtSalesDelAAA01"
-        android:layout_width="wrap_content"
-        android:layout_height="30px"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/tvSalesDelPos"
-        android:text="           " />
+
 
     <EditText
         android:id="@+id/txtSalesDelRdcl"
@@ -184,13 +92,13 @@
         android:width="200dp" />
 
     <TextView
-        android:id="@+id/tvSalesDelCD"
+        android:id="@+id/tvCustomer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/txtSalesDelCD"
         android:layout_alignBottom="@+id/txtSalesDelCD"
         android:layout_alignParentLeft="true"
-        android:text="  运输方式" />
+        android:text="  客      户" />
 
     <TextView
         android:id="@+id/TextView01"
@@ -215,10 +123,11 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/txtSalesDelWH"
         android:layout_below="@+id/txtSalesDelWH"
-        android:layout_toLeftOf="@+id/btnSalesDelCD"
         android:ems="10"
         android:singleLine="true"
-        android:width="200dp" />
+        android:width="200dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <EditText
         android:id="@+id/txtSalesDelPDOrder"
@@ -282,12 +191,6 @@
         android:src="@drawable/browse"
         android:layout_alignParentRight="true" />
 
-    <ImageButton
-        android:id="@+id/btnSalesDelCD"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/txtSalesDelCD"
-        android:src="@drawable/browse"
-        android:layout_alignParentRight="true" />
+
 
 </RelativeLayout>
