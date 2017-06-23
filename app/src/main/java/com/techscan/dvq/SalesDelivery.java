@@ -40,7 +40,7 @@ import java.util.UUID;
 public class SalesDelivery extends Activity {
 
 
-    String tmpWHStatus = "";//???????????λ
+    String tmpWHStatus = "";//仓库是否启用货位
 
     TextView tvSalesDelPDOrder;
     EditText txtSalesDelPDOrder;
@@ -50,7 +50,7 @@ public class SalesDelivery extends Activity {
 //	EditText txtSalesDelPos;
     TextView tvSalesDelRdcl;
     //	ImageButton btnSalesDelRdcl;
-    EditText txtSalesDelRdcl;//????????
+    EditText txtSalesDelRdcl;//单据日期
     EditText txtSalesDelCD;
     TextView tvCustomer;
     ImageButton btnSalesDelPDOrder;
@@ -69,7 +69,7 @@ public class SalesDelivery extends Activity {
     String SaleFlg = "";
 
 
-//	TextView tvSalesDelBillCodeName;//?????
+//	TextView tvSalesDelBillCodeName;//单据号
 //	TextView tvSalesDelAccIDName;
 
 //	TextView tvSalesDelCorpName;
@@ -128,9 +128,9 @@ public class SalesDelivery extends Activity {
     private String rdflag = "1";
     private String GetBillBFlg = "1";
 
-    //???????????
+    //保存用表头信息
     private JSONObject jsonSaveHead = null;
-    //????????
+    //表体任务
 
 
 
@@ -141,8 +141,8 @@ public class SalesDelivery extends Activity {
     private List<Map<String, Object>> lstSaveBody = null;
 
     // ADD CAIXY TEST START
-// 	private SoundPool sp;// ???????SoundPool
-// 	private int MainLogin.music;// ???????int??????suondID
+// 	private SoundPool sp;// 声明一个SoundPool
+// 	private int MainLogin.music;// 定义一个int来设置suondID
     // ADD CAIXY TEST END
 
     @Override
@@ -150,7 +150,7 @@ public class SalesDelivery extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sales_delivery);
 
-        this.setTitle("???????");
+        this.setTitle("销售出库");
 
         txtSalesDelPDOrder = (EditText) findViewById(R.id.txtSalesDelPDOrder);
         tvSalesDelPDOrder = (TextView) findViewById(R.id.tvSalesDelPDOrder);
@@ -229,8 +229,8 @@ public class SalesDelivery extends Activity {
         SetBillType();
 
         // ADD CAIXY START
-//		sp = new SoundPool(10, AudioManager.STREAM_SYSTEM, 5);// ???????????????????????????????????????????????????????????
-//		MainLogin.music = MainLogin.sp.load(this, R.raw.xxx, 1); // ??????????????res/raw????2???????????????????3?????????????
+//		sp = new SoundPool(10, AudioManager.STREAM_SYSTEM, 5);// 第一个参数为同时播放数据流的最大个数，第二数据流类型，第三为声音质量
+//		MainLogin.music = MainLogin.sp.load(this, R.raw.xxx, 1); // 把你的声音素材放到res/raw里，第2个参数即为资源文件，第3个为音乐的优先级
         // ADD CAIXY END
 
         txtSalesDelPDOrder.requestFocus();
@@ -254,14 +254,14 @@ public class SalesDelivery extends Activity {
             rev = Common.DoHttpQuery(para, "CommonQuery", tmpAccID);
         } catch (ParseException e) {
 
-            Toast.makeText(this,"???????????", Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"获取仓库状态失败", Toast.LENGTH_LONG).show();
             //ADD CAIXY TEST START
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             //ADD CAIXY TEST END
             return;
         } catch (IOException e) {
 
-            Toast.makeText(this,"???????????", Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"获取仓库状态失败", Toast.LENGTH_LONG).show();
             //ADD CAIXY TEST START
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             //ADD CAIXY TEST END
@@ -281,7 +281,7 @@ public class SalesDelivery extends Activity {
             JSONArray val = rev.getJSONArray("position");
             if(val.length() < 1)
             {
-                Toast.makeText(this,"???????????", Toast.LENGTH_LONG).show();
+                Toast.makeText(this,"获取仓库状态失败", Toast.LENGTH_LONG).show();
                 //ADD CAIXY TEST START
                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                 //ADD CAIXY TEST END
@@ -298,7 +298,7 @@ public class SalesDelivery extends Activity {
         }
         else
         {
-            Toast.makeText(this,"???????????", Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"获取仓库状态失败", Toast.LENGTH_LONG).show();
             //ADD CAIXY TEST START
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             //ADD CAIXY TEST END
@@ -316,7 +316,7 @@ public class SalesDelivery extends Activity {
         {
             switch (resultCode)
             {
-                case 1:         // ????????????????б??????
+                case 1:         // 这是调拨出库单单号列表返回的地方
                     if (data != null)
                     {
                         Bundle bundle = data.getExtras();
@@ -325,7 +325,7 @@ public class SalesDelivery extends Activity {
                             SerializableMap ResultMap = new SerializableMap();
                             ResultMap = (SerializableMap)bundle.get("ResultBillInfo");
                             Map<String,Object> mapBillInfo = ResultMap.getMap();
-                            //?????????
+                            //绑定保存用表头
                             jsonSaveHead = new JSONObject();
                             txtSalesDelWH.setText("");
 //							txtSalesDelPos.setText("");
@@ -355,7 +355,7 @@ public class SalesDelivery extends Activity {
                                 e2.printStackTrace();
                             }
 
-                            //????????????
+                            //绑定显示订单信息
 
                             //BindingBillDetailInfo(mapBillInfo);
                             if(!BindingBillDetailInfo(mapBillInfo))
@@ -387,7 +387,7 @@ public class SalesDelivery extends Activity {
                     }
                     //ADD BY WUQIONG 2015/04/27
                     break;
-                case 2:         // ??????????????
+                case 2:         // 这是收发类别返回的地方
                     if (data != null)
                     {
                         Bundle bundle = data.getExtras();
@@ -409,7 +409,7 @@ public class SalesDelivery extends Activity {
                     //ADD BY WUQIONG 2015/04/27
                     break;
                 default:
-                    //???????????????
+                    //其它窗口的回传数据
                     //IniActivyMemor();
                     break;
             }
@@ -452,21 +452,21 @@ public class SalesDelivery extends Activity {
         Map<String,Object> mapBillInfo = new HashMap<String,Object>();
 
         try {
-            if(tvSaleOutSelect.getText().toString().equals("???????"))
+            if(tvSaleOutSelect.getText().toString().equals("销售出库"))
             {
                 para.put("FunctionName", "GetSalereceiveHead");
                 para.put("CorpPK", sCorpPK);
                 para.put("BillCode", sBillCode);
             }
 
-            if(tvSaleOutSelect.getText().toString().equals("???????"))
+            if(tvSaleOutSelect.getText().toString().equals("退回再送"))
             {
                 para.put("FunctionName", "GetSaledH");
                 para.put("CorpPK", sCorpPK);
                 para.put("BillCode", sBillCode);
             }
 
-            if(tvSaleOutSelect.getText().toString().equals("??????"))
+            if(tvSaleOutSelect.getText().toString().equals("退回不送"))
             {
                 if(sSaleFlg.equals("T"))
                 {
@@ -521,7 +521,7 @@ public class SalesDelivery extends Activity {
             return null;
         }
 
-        //???????????????ListView??
+        //把取得的单据信息绑定到ListView上
         try
         {
             if(jas==null)
@@ -551,15 +551,15 @@ public class SalesDelivery extends Activity {
                 return null;
             }
 
-            //???map
+            //绑定到map
             mapBillInfo = new HashMap<String,Object>();
             JSONArray jsarray= jas.getJSONArray("dbHead");
 
             jas = jsarray.getJSONObject(0);
 
-            if(tvSaleOutSelect.getText().toString().equals("???????"))
+            if(tvSaleOutSelect.getText().toString().equals("销售出库"))
             {
-                //mapBillInfo.put("pk_corp", jas.getString("pk_corp"));//???PK
+                //mapBillInfo.put("pk_corp", jas.getString("pk_corp"));//公司PK
                 mapBillInfo.put("pk_corp", jas.getString("pk_corp"));
                 mapBillInfo.put("custname", jas.getString("custname"));
                 mapBillInfo.put("pk_cubasdoc", jas.getString("pk_cubasdoc"));
@@ -572,14 +572,14 @@ public class SalesDelivery extends Activity {
                 mapBillInfo.put("vdef13", jas.getString("vdef13"));
                 mapBillInfo.put("saleflg", "");
                 if(sAccID.equals("A"))
-                    mapBillInfo.put("coperatorid", MainLogin.objLog.UserID);//??????
+                    mapBillInfo.put("coperatorid", MainLogin.objLog.UserID);//操作者
                 else
-                    mapBillInfo.put("coperatorid", MainLogin.objLog.UserIDB);//??????
-                mapBillInfo.put("ctransporttypeid", jas.getString("ctransporttypeid"));//?????ID
+                    mapBillInfo.put("coperatorid", MainLogin.objLog.UserIDB);//操作者
+                mapBillInfo.put("ctransporttypeid", jas.getString("ctransporttypeid"));//运输方式ID
                 mapBillInfo.put("cbiztype", jas.getString("cbiztype"));
             }
 
-            if(tvSaleOutSelect.getText().toString().equals("???????"))
+            if(tvSaleOutSelect.getText().toString().equals("退回再送"))
             {
                 //mapBillInfo.put("pk_corp", jas.getString("pk_corp"));
                 mapBillInfo.put("pk_corp", jas.getString("pk_corp"));
@@ -595,18 +595,18 @@ public class SalesDelivery extends Activity {
                 mapBillInfo.put("saleflg", "");
                 if(sAccID.equals("A"))
                 {
-                    mapBillInfo.put("coperatorid", MainLogin.objLog.UserID);//??????
-                    mapBillInfo.put("ctransporttypeid", "0001AA100000000003U7");//?????ID
+                    mapBillInfo.put("coperatorid", MainLogin.objLog.UserID);//操作者
+                    mapBillInfo.put("ctransporttypeid", "0001AA100000000003U7");//运输方式ID
                 }
                 else
                 {
-                    mapBillInfo.put("coperatorid", MainLogin.objLog.UserIDB);//??????
-                    mapBillInfo.put("ctransporttypeid", "0001DD10000000000XQT");//?????ID
+                    mapBillInfo.put("coperatorid", MainLogin.objLog.UserIDB);//操作者
+                    mapBillInfo.put("ctransporttypeid", "0001DD10000000000XQT");//运输方式ID
                 }
                 mapBillInfo.put("cbiztype", jas.getString("cbiztype"));
             }
 
-            if(tvSaleOutSelect.getText().toString().equals("??????"))
+            if(tvSaleOutSelect.getText().toString().equals("退回不送"))
             {
                 if(sSaleFlg.equals("T"))
                 {
@@ -624,13 +624,13 @@ public class SalesDelivery extends Activity {
 
                     if(sAccID.equals("A"))
                     {
-                        mapBillInfo.put("coperatorid", MainLogin.objLog.UserID);//??????
-                        mapBillInfo.put("ctransporttypeid", "0001AA100000000003U7");//?????ID
+                        mapBillInfo.put("coperatorid", MainLogin.objLog.UserID);//操作者
+                        mapBillInfo.put("ctransporttypeid", "0001AA100000000003U7");//运输方式ID
                     }
                     else
                     {
-                        mapBillInfo.put("coperatorid", MainLogin.objLog.UserIDB);//??????
-                        mapBillInfo.put("ctransporttypeid", "0001DD10000000000XQT");//?????ID
+                        mapBillInfo.put("coperatorid", MainLogin.objLog.UserIDB);//操作者
+                        mapBillInfo.put("ctransporttypeid", "0001DD10000000000XQT");//运输方式ID
                     }
                     mapBillInfo.put("cbiztype", jas.getString("cbiztype"));
                 }
@@ -650,19 +650,19 @@ public class SalesDelivery extends Activity {
 
                     if(sAccID.equals("A"))
                     {
-                        mapBillInfo.put("coperatorid", MainLogin.objLog.UserID);//??????
-                        mapBillInfo.put("ctransporttypeid", "0001AA100000000003U7");//?????ID
+                        mapBillInfo.put("coperatorid", MainLogin.objLog.UserID);//操作者
+                        mapBillInfo.put("ctransporttypeid", "0001AA100000000003U7");//运输方式ID
                     }
                     else
                     {
-                        mapBillInfo.put("coperatorid", MainLogin.objLog.UserIDB);//??????
-                        mapBillInfo.put("ctransporttypeid", "0001DD10000000000XQT");//?????ID
+                        mapBillInfo.put("coperatorid", MainLogin.objLog.UserIDB);//操作者
+                        mapBillInfo.put("ctransporttypeid", "0001DD10000000000XQT");//运输方式ID
                     }
                     mapBillInfo.put("cbiztype", jas.getString("cbiztype"));
                 }
             }
 
-            //????????JSONObject????---????
+            //保存用表头JSONObject设置---结束
             return mapBillInfo;
         }
         catch (JSONException e)
@@ -687,7 +687,7 @@ public class SalesDelivery extends Activity {
 
     private void SetRDCL()
     {
-        if(tvSaleOutSelect.getText().toString().equals("???????"))
+        if(tvSaleOutSelect.getText().toString().equals("销售出库"))
         {
             tmprdCode = "202";
             if (tmpAccID.equals("A")) {
@@ -695,11 +695,11 @@ public class SalesDelivery extends Activity {
             } else if (tmpAccID.equals("B")) {
                 tmprdID = "0001DD10000000000XR8";    //
             }
-//			tmprdName = "???????";
+//			tmprdName = "销售出库";
 //			txtSalesDelRdcl.setText(tmprdName);
         }
 
-        if(tvSaleOutSelect.getText().toString().equals("???????"))
+        if(tvSaleOutSelect.getText().toString().equals("退回再送"))
         {
             tmprdCode = "210";
             if (tmpAccID.equals("A")) {
@@ -707,11 +707,11 @@ public class SalesDelivery extends Activity {
             } else if (tmpAccID.equals("B")) {
                 tmprdID = "0001DD10000000000XRG";    //
             }
-            tmprdName = "???????";
+            tmprdName = "销售退货";
             txtSalesDelRdcl.setText(tmprdName);
         }
 
-        if(tvSaleOutSelect.getText().toString().equals("??????"))
+        if(tvSaleOutSelect.getText().toString().equals("退回不送"))
         {
             tmprdCode = "210";
             if (tmpAccID.equals("A")) {
@@ -719,13 +719,13 @@ public class SalesDelivery extends Activity {
             } else if (tmpAccID.equals("B")) {
                 tmprdID = "0001DD10000000000XRG";    //
             }
-            tmprdName = "???????";
+            tmprdName = "销售退货";
             txtSalesDelRdcl.setText(tmprdName);
         }
     }
 
 
-    //????????????????????
+    //根据订单表头得到表体详细
     private void GetBillBodyDetailInfo2(String sSaleFlg)
     {
         GetBillBFlg = "0";
@@ -736,21 +736,21 @@ public class SalesDelivery extends Activity {
         //Map<String,Object> mapBillBody = new HashMap<String,Object>();
         try {
 
-            if(tvSaleOutSelect.getText().toString().equals("???????"))
+            if(tvSaleOutSelect.getText().toString().equals("销售出库"))
             {
                 para.put("FunctionName", "GetSalereceiveBody");
                 para.put("BillCode", tmpBillCode);
                 para.put("CorpPK", tmpCorpPK);
             }
 
-            if(tvSaleOutSelect.getText().toString().equals("???????"))
+            if(tvSaleOutSelect.getText().toString().equals("退回再送"))
             {
                 para.put("FunctionName", "GetSaledB");
                 para.put("BillCode", tmpBillCode);
                 para.put("CorpPK", tmpCorpPK);
             }
 
-            if(tvSaleOutSelect.getText().toString().equals("??????"))
+            if(tvSaleOutSelect.getText().toString().equals("退回不送"))
             {
                 if(sSaleFlg.equals("T"))
                 {
@@ -842,7 +842,7 @@ public class SalesDelivery extends Activity {
             }
             jsonBillBodyTask2 = new JSONObject();
             //jsonBillBodyTask = jas;
-            //???????????
+            //需要修改数据结构
 
             JSONArray jsarray= jas.getJSONArray("dbBody");
 
@@ -854,7 +854,7 @@ public class SalesDelivery extends Activity {
                 JSONObject tempJso = jsarray.getJSONObject(i);
                 NewBodJSON = new JSONObject();
 
-                if(tvSaleOutSelect.getText().toString().equals("???????"))
+                if(tvSaleOutSelect.getText().toString().equals("销售出库"))
                 {
                     NewBodJSON.put("vfree1", tempJso.getString("vfree1"));
                     NewBodJSON.put("pk_measdoc", tempJso.getString("pk_measdoc"));
@@ -895,7 +895,7 @@ public class SalesDelivery extends Activity {
                     NewBodJSON.put("def6", tempJso.getString("vdef6"));
                 }
 
-                if(tvSaleOutSelect.getText().toString().equals("???????"))
+                if(tvSaleOutSelect.getText().toString().equals("退回再送"))
                 {
                     NewBodJSON.put("vfree1", tempJso.getString("vfree1"));
                     NewBodJSON.put("pk_measdoc", tempJso.getString("pk_measdoc"));
@@ -935,7 +935,7 @@ public class SalesDelivery extends Activity {
                     NewBodJSON.put("def6", tempJso.getString("vuserdef6"));
                 }
 
-                if(tvSaleOutSelect.getText().toString().equals("??????"))
+                if(tvSaleOutSelect.getText().toString().equals("退回不送"))
                 {
                     if(sSaleFlg.equals("D"))
                     {
@@ -1058,21 +1058,21 @@ public class SalesDelivery extends Activity {
         //Map<String,Object> mapBillBody = new HashMap<String,Object>();
         try {
 
-            if(tvSaleOutSelect.getText().toString().equals("???????"))
+            if(tvSaleOutSelect.getText().toString().equals("销售出库"))
             {
                 para.put("FunctionName", "GetSalereceiveBody");
                 para.put("BillCode", tmpBillCode);
                 para.put("CorpPK", tmpCorpPK);
             }
 
-            if(tvSaleOutSelect.getText().toString().equals("???????"))
+            if(tvSaleOutSelect.getText().toString().equals("退回再送"))
             {
                 para.put("FunctionName", "GetSaledB");
                 para.put("BillCode", tmpBillCode);
                 para.put("CorpPK", tmpCorpPK);
             }
 
-            if(tvSaleOutSelect.getText().toString().equals("??????"))
+            if(tvSaleOutSelect.getText().toString().equals("退回不送"))
             {
                 if(sSaleFlg.equals("T"))
                 {
@@ -1164,7 +1164,7 @@ public class SalesDelivery extends Activity {
             }
             jsonBillBodyTask = new JSONObject();
             //jsonBillBodyTask = jas;
-            //???????????
+            //需要修改数据结构
 
             JSONArray jsarray= jas.getJSONArray("dbBody");
 
@@ -1176,7 +1176,7 @@ public class SalesDelivery extends Activity {
                 JSONObject tempJso = jsarray.getJSONObject(i);
                 NewBodJSON = new JSONObject();
 
-                if(tvSaleOutSelect.getText().toString().equals("???????"))
+                if(tvSaleOutSelect.getText().toString().equals("销售出库"))
                 {
                     NewBodJSON.put("vfree1", tempJso.getString("vfree1"));
                     NewBodJSON.put("pk_measdoc", tempJso.getString("pk_measdoc"));
@@ -1217,7 +1217,7 @@ public class SalesDelivery extends Activity {
                     NewBodJSON.put("def6", tempJso.getString("vdef6"));
                 }
 
-                if(tvSaleOutSelect.getText().toString().equals("???????"))
+                if(tvSaleOutSelect.getText().toString().equals("退回再送"))
                 {
                     NewBodJSON.put("vfree1", tempJso.getString("vfree1"));
                     NewBodJSON.put("pk_measdoc", tempJso.getString("pk_measdoc"));
@@ -1257,7 +1257,7 @@ public class SalesDelivery extends Activity {
                     NewBodJSON.put("def6", tempJso.getString("vuserdef6"));
                 }
 
-                if(tvSaleOutSelect.getText().toString().equals("??????"))
+                if(tvSaleOutSelect.getText().toString().equals("退回不送"))
                 {
                     if(sSaleFlg.equals("D"))
                     {
@@ -1369,7 +1369,7 @@ public class SalesDelivery extends Activity {
 
     }
 
-    //???????????
+    //绑定订单表头信息
     private boolean BindingBillDetailInfo(Map<String,Object> mapBillInfo)
     {
 //		String CompanyCode = "";
@@ -1395,10 +1395,10 @@ public class SalesDelivery extends Activity {
 //			return false;
 //		}
 
-//		tvSalesDelBillCodeName.setText("??  ??  ???");
-//		tvSalesDelAccIDName.setText("??  ??  ???");
-        //tvSalesDelWareName.setText("???");
-//		tvSalesDelCorpName.setText("???    ????");
+//		tvSalesDelBillCodeName.setText("单  据  号：");
+//		tvSalesDelAccIDName.setText("账  套  号：");
+        //tvSalesDelWareName.setText("仓库：");
+//		tvSalesDelCorpName.setText("客　    户：");
 
 //		tvSalesDelBillCode.setText(mapBillInfo.get("billCode").toString());
 //		tvSalesDelAccID.setText(mapBillInfo.get("AccID").toString());
@@ -1412,7 +1412,7 @@ public class SalesDelivery extends Activity {
         return true;
     }
 
-    //????????????
+    //清空订单表头信息
     private void ClearBillDetailInfoShow()
     {
 //		tvSalesDelBillCodeName.setText("");
@@ -1486,7 +1486,7 @@ public class SalesDelivery extends Activity {
 
 //				txtSalesDelPos.requestFocus();
             }
-//??????
+//运送方式
 //			if(dialog.equals(CDSelectButton))
 //			{
 //				txtSalesDelCD.setText(CDNameList[index].toString());
@@ -1502,17 +1502,17 @@ public class SalesDelivery extends Activity {
     {
 
         if((tmpAccID == null) || (tmpAccID.equals(""))) {
-            Toast.makeText(this, "?????????л?ò???????????", 1).show();
+            Toast.makeText(this, "单据信息没有获得不能选择运输方式", 1).show();
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             this.txtSalesDelPDOrder.requestFocus();
 
             return;
         }
-        if(tvSaleOutSelect.getText().toString().equals("???????")) {
+        if(tvSaleOutSelect.getText().toString().equals("销售出库")) {
             this.CDNameList = new String[2];
             this.CDIDList = new String[2];
-            this.CDNameList[0] = "????";
-            this.CDNameList[1] = "???";
+            this.CDNameList[0] = "自提";
+            this.CDNameList[1] = "送货";
             if(tmpAccID.equals("A")) {
                 CDIDList[0] = "0001AA100000000003U4";
                 CDIDList[1] = "0001AA100000000003U5";
@@ -1521,20 +1521,20 @@ public class SalesDelivery extends Activity {
                 CDIDList[1] = "0001DD10000000000XQR";
             }
         }
-        if(tvSaleOutSelect.getText().toString().equals("???????")) {
+        if(tvSaleOutSelect.getText().toString().equals("退回再送")) {
             CDNameList = new String[1];
             CDIDList = new String[1];
-            CDNameList[0] = "???";
+            CDNameList[0] = "退货";
             if(tmpAccID.equals("A")) {
                 CDIDList[0] = "0001AA100000000003U7";
             } else if(tmpAccID.equals("B")) {
                 CDIDList[0] = "0001DD10000000000XQT";
             }
         }
-        if(tvSaleOutSelect.getText().toString().equals("??????")) {
+        if(tvSaleOutSelect.getText().toString().equals("退回不送")) {
             CDNameList = new String[1];
             CDIDList = new String[1];
-            CDNameList[0] = "???";
+            CDNameList[0] = "退货";
             if(tmpAccID.equals("A")) {
                 CDIDList[0] = "0001AA100000000003U7";
             } else if(tmpAccID.equals("B")) {
@@ -1546,13 +1546,13 @@ public class SalesDelivery extends Activity {
 
 //	private void showCDChoiceDialog()
 //	{
-//		this.CDSelectButton = new AlertDialog.Builder(this).setTitle("????????").setSingleChoiceItems(this.CDNameList, -1, this.buttonOnClick).setNegativeButton(R.string.QuXiao, this.buttonOnClick).show();
+//		this.CDSelectButton = new AlertDialog.Builder(this).setTitle("选择运输方式").setSingleChoiceItems(this.CDNameList, -1, this.buttonOnClick).setNegativeButton(R.string.QuXiao, this.buttonOnClick).show();
 //	}
 
     private void showSingleChoiceDialog()
     {
 
-        BillTypeSelectButton=new AlertDialog.Builder(this).setTitle("????????").setSingleChoiceItems(
+        BillTypeSelectButton=new AlertDialog.Builder(this).setTitle("选择单据类型").setSingleChoiceItems(
                 BillTypeNameList, -1, buttonOnClick).setNegativeButton(R.string.QuXiao, buttonOnClick).show();
     }
 
@@ -1566,11 +1566,11 @@ public class SalesDelivery extends Activity {
 
     private void SetBillType()
     {
-        BillTypeNameList =new String[1];//???????????????
-        //??????????????????
-        BillTypeNameList[0]="???????   (??????????)";
-//		BillTypeNameList[1]="???????   (????????)";
-//		BillTypeNameList[2]="??????   (????????)";
+        BillTypeNameList =new String[1];//设置单据类型数量
+        //开始设置单据类型名字
+        BillTypeNameList[0]="销售出库   (扫描销售订单)";
+//		BillTypeNameList[1]="退回再送   (扫描送货单)";
+//		BillTypeNameList[2]="退回不送   (扫描退货单)";
     }
 
     class OnClickListener implements
@@ -1607,12 +1607,12 @@ public class SalesDelivery extends Activity {
                 case id.btnSalesDelPDOrder:
                     try {
                         String BillCodeKey = "";
-//						if(tvSaleOutSelect.getText().toString().equals("???????"))
+//						if(tvSaleOutSelect.getText().toString().equals("退回再送"))
 //						{
 //							BillCodeKey= txtSalesDelPDOrder.getText().toString();
 //							if(BillCodeKey.length()<5)
 //							{
-//								Toast.makeText(SalesDelivery.this, "????????5λ?????", Toast.LENGTH_LONG).show();
+//								Toast.makeText(SalesDelivery.this, "必须输入5位关键字", Toast.LENGTH_LONG).show();
 //								//ADD CAIXY TEST START
 //								MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
 //								//ADD CAIXY TEST END
@@ -1696,7 +1696,7 @@ public class SalesDelivery extends Activity {
 
 //					if(jsonSaveHead == null || jsonSaveHead.length() < 1)
 //					{
-//						Toast.makeText(SalesDelivery.this,"????????????", Toast.LENGTH_LONG).show();
+//						Toast.makeText(SalesDelivery.this,"没有取得订单表头", Toast.LENGTH_LONG).show();
 //
 //						//ADD CAIXY TEST START
 //						MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
@@ -1706,7 +1706,7 @@ public class SalesDelivery extends Activity {
 
                     if (jsonBillBodyTask == null || jsonBillBodyTask.length() < 1)
                     {
-                        Toast.makeText(SalesDelivery.this, "?????????????",
+                        Toast.makeText(SalesDelivery.this, "没有取得订单表体",
                                 Toast.LENGTH_LONG).show();
 
                         // ADD CAIXY TEST START
@@ -1719,7 +1719,7 @@ public class SalesDelivery extends Activity {
                     try {
                         GetWHPosStatus();
                     } catch (JSONException e) {
-                        Toast.makeText(SalesDelivery.this,"???????????", Toast.LENGTH_LONG).show();
+                        Toast.makeText(SalesDelivery.this,"获取仓库状态失败", Toast.LENGTH_LONG).show();
                         //ADD CAIXY TEST START
                         MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                         //ADD CAIXY TEST END
@@ -1758,7 +1758,7 @@ public class SalesDelivery extends Activity {
 
 //					if ((tmpCdTypeID == null) || (tmpCdTypeID.equals("")))
 //					{
-//						Toast.makeText(SalesDelivery.this, "???????????", Toast.LENGTH_LONG).show();
+//						Toast.makeText(SalesDelivery.this, "请输入运输方式", Toast.LENGTH_LONG).show();
 //						MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
 //						return;
 //					}
@@ -1861,9 +1861,9 @@ public class SalesDelivery extends Activity {
 //						DoHttpQuery(para, "CommonQuery", "");
 //				if(serList==null)
 //				{
-////					Toast.makeText(this, serList.getString("??????????з????????"),
+////					Toast.makeText(this, serList.getString("获取仓库过程中发生了错误"),
 ////							Toast.LENGTH_LONG).show();
-//					Toast.makeText(this,"???????????????!?????????", Toast.LENGTH_LONG).show();
+//					Toast.makeText(this,"网络操作出现问题!请稍后再试", Toast.LENGTH_LONG).show();
 //
 //
 //					//ADD CAIXY TEST START
@@ -1877,7 +1877,7 @@ public class SalesDelivery extends Activity {
 //
 ////				for(int i=0;i< arys.length();i++)
 ////				{
-////					//storcode  ??????		storname  ???????
+////					//storcode  仓库编码		storname  仓库名称
 ////					if (sWhCode.equals(""))
 ////					{
 ////						sWhCode = sWhCode + "'"+arys.getJSONObject(i).get("storcode").toString()+"'";
@@ -1896,7 +1896,7 @@ public class SalesDelivery extends Activity {
 //
 //	 }
     //GetSalesDelWH
-    //????ACCID ???????????????ò???б?
+    //根据ACCID 设置页面仓库名字取得仓库列表
 
     private void GetSalesDelWH() throws JSONException
     {
@@ -1905,7 +1905,7 @@ public class SalesDelivery extends Activity {
         {
 //			if(tmpAccID==null || tmpAccID.equals(""))
 //			{
-//				Toast.makeText(this, "?????????л?ò????????", Toast.LENGTH_LONG).show();
+//				Toast.makeText(this, "单据信息没有获得不能选择仓库", Toast.LENGTH_LONG).show();
 //				//ADD CAIXY TEST START
 //				MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
 //				//ADD CAIXY TEST END
@@ -1913,7 +1913,7 @@ public class SalesDelivery extends Activity {
 //				return;
 //			}
 
-            if(!tvSaleOutSelect.getText().toString().equals("???????"))
+            if(!tvSaleOutSelect.getText().toString().equals("销售出库"))
             {
                 JSONArray JsonArrays = (JSONArray)this.jsonBillBodyTask.get("dbBody");
                 for (int i = 0; i < JsonArrays.length(); i++)
@@ -1921,7 +1921,7 @@ public class SalesDelivery extends Activity {
                     String Batch = ((JSONObject)JsonArrays.get(i)).getString("batchcode");
                     if(Batch.equals("null"))
                     {
-                        Toast.makeText(this, "????????????????κ??????,?????????????κ?????????????", Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "单据中没有输入批次号的任务,请到系统中输入批次号后再进行相关操作", Toast.LENGTH_LONG).show();
                         //ADD CAIXY TEST START
                         MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                         //ADD CAIXY TEST END
@@ -1932,14 +1932,14 @@ public class SalesDelivery extends Activity {
             }
 
 
-            //??????????????????????????
+            //增加控制，已经扫描货物后无法修改仓库
             if(lstSaveBody == null || lstSaveBody.size() < 1)
             {
 
             }
             else
             {
-                Toast.makeText(SalesDelivery.this, "??????????????,?????????????????????????????", Toast.LENGTH_LONG).show();
+                Toast.makeText(SalesDelivery.this, "该任务已经被扫描,无法修改仓库。若要修改仓库请先清除扫描明细", Toast.LENGTH_LONG).show();
                 //ADD CAIXY TEST START
                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                 //ADD CAIXY TEST END
@@ -1982,7 +1982,7 @@ public class SalesDelivery extends Activity {
                     DoHttpQuery(para, "CommonQuery", tmpAccID);
             if(serList==null)
             {
-//					Toast.makeText(this, serList.getString("??????????з????????"),
+//					Toast.makeText(this, serList.getString("获取仓库过程中发生了错误"),
 //							Toast.LENGTH_LONG).show();
                 Toast.makeText(this,R.string.WangLuoChuXianWenTi, Toast.LENGTH_LONG).show();
                 //ADD CAIXY TEST START
@@ -1995,14 +1995,14 @@ public class SalesDelivery extends Activity {
             {
                 JSONArray arys = serList.getJSONArray("WhCodeByName");
 
-                WHNameList =new String[arys.length()];//???ò??????????????
-                //WHCodeList =new String[arys.length()];//???ò??CODE????
-                WHIDList =new String[arys.length()];//???ò??ID????
+                WHNameList =new String[arys.length()];//设置仓库名字类型数量
+                //WHCodeList =new String[arys.length()];//设置仓库CODE数量
+                WHIDList =new String[arys.length()];//设置仓库ID数量
 
 
                 for(int i=0;i< arys.length();i++)
                 {
-                    //storcode  ??????		storname  ???????      pk_stordoc ???ID
+                    //storcode  仓库编码		storname  仓库名称      pk_stordoc 仓库ID
                     String storname = arys.getJSONObject(i).get("storname").toString();
                     //String storcode = arys.getJSONObject(i).get("storcode").toString();
                     String pk_stordoc = arys.getJSONObject(i).get("pk_stordoc").toString();
@@ -2015,9 +2015,9 @@ public class SalesDelivery extends Activity {
             }
             else
             {
-//					Toast.makeText(this, serList.getString("?????????????"),
+//					Toast.makeText(this, serList.getString("找不到相关仓库信息"),
 //							Toast.LENGTH_LONG).show();
-                Toast.makeText(this,"?????????????", Toast.LENGTH_LONG).show();
+                Toast.makeText(this,"找不到相关仓库信息", Toast.LENGTH_LONG).show();
                 //ADD CAIXY TEST START
                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                 //ADD CAIXY TEST END
@@ -2035,7 +2035,7 @@ public class SalesDelivery extends Activity {
     }
 
 
-    //?????λID?????λ??
+    //找到货位ID按照货位号
     private void FindPositionByCode(String posCode) throws JSONException
     {
         String lsCompanyCode = "";
@@ -2044,7 +2044,7 @@ public class SalesDelivery extends Activity {
         {
             if(tmpWarehousePK==null || tmpWarehousePK.equals(""))
             {
-                Toast.makeText(this, "?????????,??????????λ", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "仓库还没有确认,不能先扫描货位", Toast.LENGTH_LONG).show();
                 //ADD CAIXY TEST START
                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                 //ADD CAIXY TEST END
@@ -2097,7 +2097,7 @@ public class SalesDelivery extends Activity {
                 JSONArray val = rev.getJSONArray("position");
                 if(val.length() < 1)
                 {
-                    Toast.makeText(this, "?????λ???", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "获取货位失败", Toast.LENGTH_LONG).show();
                     //ADD CAIXY TEST START
                     MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
 //					txtSalesDelPos.setText("");
@@ -2123,7 +2123,7 @@ public class SalesDelivery extends Activity {
             }
             else
             {
-                Toast.makeText(this, "?????λ???", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "获取货位失败", Toast.LENGTH_LONG).show();
                 //ADD CAIXY TEST START
                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                 //ADD CAIXY TEST END
@@ -2155,7 +2155,7 @@ public class SalesDelivery extends Activity {
         }
     }
 
-    //??????б???
+    //打开订单列表画面
     private void btnSalesDelPDOrderClick(String BillCodeKey) throws ParseException, IOException, JSONException
     {
 
@@ -2174,38 +2174,38 @@ public class SalesDelivery extends Activity {
         }
 
 
-        if(tvSaleOutSelect.getText().toString().equals("δ???"))
+        if(tvSaleOutSelect.getText().toString().equals("未选择"))
         {
-            Toast.makeText(SalesDelivery.this, "????????δ???,??????????", Toast.LENGTH_LONG).show();
+            Toast.makeText(SalesDelivery.this, "单据类型未选择,请选择单据类型", Toast.LENGTH_LONG).show();
             //ADD CAIXY TEST START
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             //ADD CAIXY TEST END
             txtSalesDelPDOrder.requestFocus();
             return;
         }
-        if(tvSaleOutSelect.getText().toString().equals("???????"))
+        if(tvSaleOutSelect.getText().toString().equals("销售出库"))
         {
             Intent ViewGrid = new Intent(this, SaleBillInfoOrderList.class);
-            ViewGrid.putExtra("FunctionName", "???????");//GetSalereceiveHead
+            ViewGrid.putExtra("FunctionName", "销售出库");//GetSalereceiveHead
             startActivityForResult(ViewGrid,88);
         }
-//		if(tvSaleOutSelect.getText().toString().equals("???????"))
+//		if(tvSaleOutSelect.getText().toString().equals("退回再送"))
 //		{
 //			Intent ViewGrid = new Intent(this, SaleBillInfoOrderList.class);
 //			ViewGrid.putExtra("BillCodeKey", BillCodeKey);
-//			ViewGrid.putExtra("FunctionName", "???????");
+//			ViewGrid.putExtra("FunctionName", "退回再送");
 //			startActivityForResult(ViewGrid,88);
 //		}
-//		if(tvSaleOutSelect.getText().toString().equals("??????"))
+//		if(tvSaleOutSelect.getText().toString().equals("退回不送"))
 //		{
 //			Intent ViewGrid = new Intent(this, SaleBillInfoOrderList.class);
-//			ViewGrid.putExtra("FunctionName", "??????");//GetSaleTakeHead//GetSaleOutHead
+//			ViewGrid.putExtra("FunctionName", "退回不送");//GetSaleTakeHead//GetSaleOutHead
 //			startActivityForResult(ViewGrid,88);
 //		}
 
     }
 
-    //??????????
+    //打开收发类别画面
     private void btnSalesDelRdclClick(String Code) throws ParseException, IOException, JSONException
     {
         Intent ViewGrid = new Intent(this,VlistRdcl.class);
@@ -2216,7 +2216,7 @@ public class SalesDelivery extends Activity {
         startActivityForResult(ViewGrid,88);
     }
 
-    //??????
+    //退出按钮
     private void Exit()
     {
         AlertDialog.Builder bulider =
@@ -2225,7 +2225,7 @@ public class SalesDelivery extends Activity {
         bulider.setPositiveButton(R.string.QueRen, listenExit).create().show();
     }
 
-    //??????????????
+    //退出按钮对话框事件
     private DialogInterface.OnClickListener listenExit = new
             DialogInterface.OnClickListener()
             {
@@ -2240,18 +2240,18 @@ public class SalesDelivery extends Activity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event)
     {		if (keyCode == KeyEvent.KEYCODE_MENU)
-    {//????meu?????			//do something...
+    {//拦截meu键事件			//do something...
         return false;
     }
         if (keyCode == KeyEvent.KEYCODE_BACK)
-        {//????????????			//do something...
+        {//拦截返回按钮事件			//do something...
             return false;
         }
         return true;
     }
 
 
-    //EditText???????????????
+    //EditText输入后回车的监听事件
     private OnKeyListener EditTextOnKeyListener = new OnKeyListener()
     {
         @Override
@@ -2261,9 +2261,9 @@ public class SalesDelivery extends Activity {
                 case id.txtSalesDelPDOrder:
                     if(arg1 == arg2.KEYCODE_ENTER && arg2.getAction() == KeyEvent.ACTION_UP)//&& arg2.getAction() == KeyEvent.ACTION_DOWN
                     {
-                        if(tvSaleOutSelect.getText().toString().equals("δ???"))
+                        if(tvSaleOutSelect.getText().toString().equals("未选择"))
                         {
-                            Toast.makeText(SalesDelivery.this, "????????δ???,??????????", Toast.LENGTH_LONG).show();
+                            Toast.makeText(SalesDelivery.this, "单据类型未选择,请选择单据类型", Toast.LENGTH_LONG).show();
                             //ADD CAIXY TEST START
                             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                             //ADD CAIXY TEST END
@@ -2298,12 +2298,12 @@ public class SalesDelivery extends Activity {
 
                         String SaleFlg = "";
 
-                        if(tvSaleOutSelect.getText().toString().equals("??????"))
+                        if(tvSaleOutSelect.getText().toString().equals("退回不送"))
                         {
                             SaleFlg = lsBillCode.substring(5,6);
                             if(!SaleFlg.equals("D")&&!SaleFlg.equals("T"))
                             {
-                                Toast.makeText(SalesDelivery.this, "???????????", Toast.LENGTH_LONG).show();
+                                Toast.makeText(SalesDelivery.this, "扫描的条码不正确", Toast.LENGTH_LONG).show();
                                 //ADD CAIXY TEST START
                                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                                 //ADD CAIXY TEST END
@@ -2328,14 +2328,14 @@ public class SalesDelivery extends Activity {
                         txtSalesDelPDOrder.setText("");
                         if(mapBillInfo==null)
                         {
-                            Toast.makeText(SalesDelivery.this, "?????????????????????", Toast.LENGTH_LONG).show();
+                            Toast.makeText(SalesDelivery.this, "没有找到相对应的单据详细信息", Toast.LENGTH_LONG).show();
                             //ADD CAIXY TEST START
                             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                             //ADD CAIXY TEST END
                             return false;
                         }
 
-                        //?????????
+                        //绑定保存用表头
                         jsonSaveHead = new JSONObject();
                         try {
                             jsonSaveHead = Common.MapTOJSONOBject(mapBillInfo);
@@ -2347,7 +2347,7 @@ public class SalesDelivery extends Activity {
                             //ADD CAIXY TEST END
                         }
 
-                        //????????????
+                        //绑定显示订单信息
                         //BindingBillDetailInfo(mapBillInfo);
                         if(!BindingBillDetailInfo(mapBillInfo))
                         {
@@ -2385,7 +2385,7 @@ public class SalesDelivery extends Activity {
 //						{
 ////							txtSalesDelPos.setText("");
 //							Toast.makeText(SalesDelivery.this,
-//									"?????????л?ò???????λ", Toast.LENGTH_LONG).show();
+//									"单据信息没有获得不能扫描货位", Toast.LENGTH_LONG).show();
 //							//ADD CAIXY TEST START
 //							MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
 //							//ADD CAIXY TEST END
@@ -2400,7 +2400,7 @@ public class SalesDelivery extends Activity {
 //						else
 //						{
 //							String OldPosName = tmpposCode;
-//							Toast.makeText(SalesDelivery.this, "??????????????,???????λ?????????λ?????????????", Toast.LENGTH_LONG).show();
+//							Toast.makeText(SalesDelivery.this, "该任务已经被扫描,无法修改货位。若要修改货位请先清除扫描明细", Toast.LENGTH_LONG).show();
 //							//ADD CAIXY TEST START
 //							MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
 //							//ADD CAIXY TEST END
@@ -2521,7 +2521,7 @@ public class SalesDelivery extends Activity {
     }
 
 
-    //????????
+    //保存数据
     private void SaveTransData() throws JSONException, ParseException, IOException
     {
         JSONObject sendJsonSave = new JSONObject();
@@ -2589,14 +2589,14 @@ public class SalesDelivery extends Activity {
         String ErrMsg = "";
 
 
-        if(tvSaleOutSelect.getText().toString().startsWith("???"))
+        if(tvSaleOutSelect.getText().toString().startsWith("退回"))
         {
             jsonBillBodyTask2 = null;
             GetBillBodyDetailInfo2(SaleFlg);
 
             if ((this.jsonBillBodyTask2 == null) || (this.jsonBillBodyTask2.equals("")))
             {
-                Toast.makeText(this, "???????????????μ?鵥???????б???", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "超出扫描数量请再次检查单据后再进行保存", Toast.LENGTH_SHORT).show();
                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                 return;
             }
@@ -2639,7 +2639,7 @@ public class SalesDelivery extends Activity {
 
         if(!ErrMsg.equals(""))
         {
-            Toast.makeText(this, ErrMsg+"???????????????μ?鵥???????б???", 1).show();
+            Toast.makeText(this, ErrMsg+"超出扫描数量请再次检查单据后再进行保存", 1).show();
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             return;
         }
@@ -2679,8 +2679,8 @@ public class SalesDelivery extends Activity {
 
         if(!jas.has("Status"))
         {
-            Toast.makeText(SalesDelivery.this, "???????????г?????????," +
-                    "?????????????????????????????????????!", Toast.LENGTH_LONG).show();
+            Toast.makeText(SalesDelivery.this, "单据保存过程中出现了问题," +
+                    "请尝试再次提交或到电脑系统中确认后再决定是否继续保存!", Toast.LENGTH_LONG).show();
             //ADD CAIXY TEST START
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             //ADD CAIXY TEST END
@@ -2701,8 +2701,8 @@ public class SalesDelivery extends Activity {
             }
             else
             {
-                Toast.makeText(this, "???????????г?????????," +
-                        "?????????????????????????????????????!", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "单据保存过程中出现了问题," +
+                        "请尝试再次提交或到电脑系统中确认后再决定是否继续保存!", Toast.LENGTH_LONG).show();
                 //ADD CAIXY TEST START
                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                 //ADD CAIXY TEST END
@@ -2713,7 +2713,7 @@ public class SalesDelivery extends Activity {
             mapResultBillCode.put("BillCode", lsResultBillCode);
             ArrayList<Map<String,Object>> lstResultBillCode = new ArrayList<Map<String,Object>>();
             lstResultBillCode.add(mapResultBillCode);
-            //Toast.makeText(StockTransContent.this, "?????????", Toast.LENGTH_LONG).show();
+            //Toast.makeText(StockTransContent.this, "单据保存成功", Toast.LENGTH_LONG).show();
             //IniActivyMemor();
             //return;
 
@@ -2721,7 +2721,7 @@ public class SalesDelivery extends Activity {
             //ADD BY WUQIONG START
             //tmpmanualNo=null;
             //ADD BY WUQIONG END
-            SimpleAdapter listItemAdapter = new SimpleAdapter(SalesDelivery.this,lstResultBillCode,//?????
+            SimpleAdapter listItemAdapter = new SimpleAdapter(SalesDelivery.this,lstResultBillCode,//数据源
                     android.R.layout.simple_list_item_1,
                     new String[] {"BillCode"},
                     new int[] {android.R.id.text1}
@@ -2730,9 +2730,9 @@ public class SalesDelivery extends Activity {
                     .setAdapter(listItemAdapter, null)
                     .setPositiveButton(R.string.QueRen,null).show();
 
-            //????????????????????????
+            //保存成功后初始化界面和内存数据
 
-            //д??log???
+            //写入log文件
             writeTxt = new writeTxt();
 
             Date day=new Date();
@@ -2748,10 +2748,10 @@ public class SalesDelivery extends Activity {
             String LogMsg = df.format(day) + " " + tmpAccID + " " + BillCode;
 
             writeTxt.writeTxtToFile(LogName,LogMsg);
-            //д??log???
+            //写入log文件
 
             InitActiveMemor();
-            this.tvSaleOutSelect.setText("δ???");
+            this.tvSaleOutSelect.setText("未选择");
             return;
         }
         else

@@ -28,319 +28,319 @@ import java.util.Map;
 
 public class BillInfoOrderList extends Activity {
 
-	private Button btnBillInfoReturn;
-	private ListView lvBillInfoOrderList;
-	private String fsFunctionName = "";
+    private Button btnBillInfoReturn;
+    private ListView lvBillInfoOrderList;
+    private String fsFunctionName = "";
 
 
-	//ADD CAIXY TEST START
-	private SoundPool sp;//æ˜ä¸€ä¸ªSoundPool
-	private int music;//å®šä¹‰ä¸€ä¸ªintæ¥è®¾ç½®suondID
-	private String WhNameA = "";
-	private String WhNameB = "";
-	private String corpincode = "";
-	private String billcodeKey="";
-	//ADD CAIXY TEST END
+    //ADD CAIXY TEST START
+    private SoundPool sp;//Ã÷Ò»¸öSoundPool
+    private int music;//¶¨ÒåÒ»¸öintÀ´ÉèÖÃsuondID
+    private String WhNameA = "";
+    private String WhNameB = "";
+    private String corpincode = "";
+    private String billcodeKey="";
+    //ADD CAIXY TEST END
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_bill_info_order_list);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_bill_info_order_list);
 
-		//è®¾ç½®title
-		ActionBar actionBar = this.getActionBar();
-		actionBar.setTitle(R.string.orderInfo);
+        //ÉèÖÃtitle
+        ActionBar actionBar = this.getActionBar();
+        actionBar.setTitle(R.string.orderInfo);
 //		Drawable TitleBar = this.getResources().getDrawable(R.drawable.bg_barbackgroup);
 //		actionBar.setBackgroundDrawable(TitleBar);
 //		actionBar.show();
 
-		StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites()
-				.detectNetwork()
-				.penaltyLog()
-				.build());
+        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites()
+                .detectNetwork()
+                .penaltyLog()
+                .build());
 
-		StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().detectLeakedSqlLiteObjects().
-				detectLeakedClosableObjects().penaltyLog().penaltyDeath().build());
+        StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().detectLeakedSqlLiteObjects().
+                detectLeakedClosableObjects().penaltyLog().penaltyDeath().build());
 
-		//å–å¾—æŸ¥è¯¢ç”¨å•æ®è¡¨å
-		Intent myIntent = this.getIntent();
-		if(myIntent.hasExtra("FunctionName"))
-			fsFunctionName = myIntent.getStringExtra("FunctionName");
+        //È¡µÃ²éÑ¯ÓÃµ¥¾İ±íÃû
+        Intent myIntent = this.getIntent();
+        if(myIntent.hasExtra("FunctionName"))
+            fsFunctionName = myIntent.getStringExtra("FunctionName");
 
-		//add caixy s
-		if(myIntent.hasExtra("WhNameA"))
-			WhNameA = myIntent.getStringExtra("WhNameA");
-		if(myIntent.hasExtra("WhNameB"))
-			WhNameB = myIntent.getStringExtra("WhNameB");
-		if(myIntent.hasExtra("corpincode"))
-			corpincode = myIntent.getStringExtra("corpincode");
-		if(myIntent.hasExtra("billcodeKey"))
-			billcodeKey = myIntent.getStringExtra("billcodeKey");
-		//add caixy e
+        //add caixy s
+        if(myIntent.hasExtra("WhNameA"))
+            WhNameA = myIntent.getStringExtra("WhNameA");
+        if(myIntent.hasExtra("WhNameB"))
+            WhNameB = myIntent.getStringExtra("WhNameB");
+        if(myIntent.hasExtra("corpincode"))
+            corpincode = myIntent.getStringExtra("corpincode");
+        if(myIntent.hasExtra("billcodeKey"))
+            billcodeKey = myIntent.getStringExtra("billcodeKey");
+        //add caixy e
 
-		//å–å¾—æ§ä»¶
-		btnBillInfoReturn = (Button)findViewById(R.id.btnBillInfoReturn);
-		btnBillInfoReturn.setOnClickListener(ButtonClickListener);
-		lvBillInfoOrderList = (ListView)findViewById(R.id.BillInfoOrderList);
+        //È¡µÃ¿Ø¼ş
+        btnBillInfoReturn = (Button)findViewById(R.id.btnBillInfoReturn);
+        btnBillInfoReturn.setOnClickListener(ButtonClickListener);
+        lvBillInfoOrderList = (ListView)findViewById(R.id.BillInfoOrderList);
 
-		//ADD CAIXY START
-		sp= new SoundPool(10, AudioManager.STREAM_SYSTEM, 5);//ç¬¬ä¸€ä¸ªå‚æ•°ä¸ºåŒæ—¶æ’­æ”¾æ•°æ®æµçš„æœ€å¤§ä¸ªæ•°ï¼Œç¬¬äºŒæ•°æ®æµç±»å‹ï¼Œç¬¬ä¸‰ä¸ºå£°éŸ³è´¨é‡
-		music = sp.load(this, R.raw.xxx, 1); //æŠŠä½ çš„å£°éŸ³ç´ ææ”¾åˆ°res/rawé‡Œï¼Œç¬¬2ä¸ªå‚æ•°å³ä¸ºèµ„æºæ–‡ä»¶ï¼Œç¬¬3ä¸ªä¸ºéŸ³ä¹çš„ä¼˜å…ˆçº§
-		//ADD CAIXY END
+        //ADD CAIXY START
+        sp= new SoundPool(10, AudioManager.STREAM_SYSTEM, 5);//µÚÒ»¸ö²ÎÊıÎªÍ¬Ê±²¥·ÅÊı¾İÁ÷µÄ×î´ó¸öÊı£¬µÚ¶şÊı¾İÁ÷ÀàĞÍ£¬µÚÈıÎªÉùÒôÖÊÁ¿
+        music = sp.load(this, R.raw.xxx, 1); //°ÑÄãµÄÉùÒôËØ²Ä·Åµ½res/rawÀï£¬µÚ2¸ö²ÎÊı¼´Îª×ÊÔ´ÎÄ¼ş£¬µÚ3¸öÎªÒôÀÖµÄÓÅÏÈ¼¶
+        //ADD CAIXY END
 
-		//å–å¾—ä»¥åŠç»‘å®šæ˜¾ç¤ºè®¢å•è¯¦ç»†
-		GetAndBindingBillInfoDetail();
+        //È¡µÃÒÔ¼°°ó¶¨ÏÔÊ¾¶©µ¥ÏêÏ¸
+        GetAndBindingBillInfoDetail();
 
-	}
+    }
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		//getMenuInflater().inflate(R.menu.bill_info_order_list, menu);
-		return true;
-	}
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        //getMenuInflater().inflate(R.menu.bill_info_order_list, menu);
+        return true;
+    }
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
-	//å–å¾—ä»¥åŠç»‘å®šæ˜¾ç¤ºè®¢å•è¯¦ç»†
-	private void GetAndBindingBillInfoDetail()
-	{
-		//å–å¾—æ‰€æœ‰å•æ®ä¿¡æ¯
-		if(fsFunctionName.equals(""))
-		{
-			Toast.makeText(this, R.string.MeiYouChaXunDaoDanJuBiaoMing, Toast.LENGTH_LONG).show();
-			//ADD CAIXY TEST START
-			sp.play(music, 1, 1, 0, 0, 1);
-			//ADD CAIXY TEST END
-			return;
-		}
+    //È¡µÃÒÔ¼°°ó¶¨ÏÔÊ¾¶©µ¥ÏêÏ¸
+    private void GetAndBindingBillInfoDetail()
+    {
+        //È¡µÃËùÓĞµ¥¾İĞÅÏ¢
+        if(fsFunctionName.equals(""))
+        {
+            Toast.makeText(this, R.string.MeiYouChaXunDaoDanJuBiaoMing, Toast.LENGTH_LONG).show();
+            //ADD CAIXY TEST START
+            sp.play(music, 1, 1, 0, 0, 1);
+            //ADD CAIXY TEST END
+            return;
+        }
 
-		JSONObject para = new JSONObject();
-		try {
-			para.put("FunctionName", fsFunctionName);
-			//add caixy s
-			para.put("WhNameA", WhNameA);
-			para.put("WhNameB", WhNameB);
-			para.put("corpincode", corpincode);
-			para.put("billcodeKey", billcodeKey);
-			//add caixy e
-			para.put("CorpPK", "");
-			para.put("BillCode", "");
-			//para.put("Wh-CodeA", MainLogin.objLog.WhCodeA);
-			//para.put("Wh-CodeB", MainLogin.objLog.WhCodeB);
+        JSONObject para = new JSONObject();
+        try {
+            para.put("FunctionName", fsFunctionName);
+            //add caixy s
+            para.put("WhNameA", WhNameA);
+            para.put("WhNameB", WhNameB);
+            para.put("corpincode", corpincode);
+            para.put("billcodeKey", billcodeKey);
+            //add caixy e
+            para.put("CorpPK", "");
+            para.put("BillCode", "");
+            //para.put("Wh-CodeA", MainLogin.objLog.WhCodeA);
+            //para.put("Wh-CodeB", MainLogin.objLog.WhCodeB);
 
 
-		} catch (JSONException e2) {
-			return;
-		}
-		try {
-			para.put("TableName",  "dbHead");
-		} catch (JSONException e2) {
-			return;
-		}
+        } catch (JSONException e2) {
+            return;
+        }
+        try {
+            para.put("TableName",  "dbHead");
+        } catch (JSONException e2) {
+            return;
+        }
 
-		JSONObject jas;
-		try {
-			if(!MainLogin.getwifiinfo()) {
-				Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
-				sp.play(music, 1, 1, 0, 0, 1);
-				return;
-			}
-			jas = Common.DoHttpQuery(para, "CommonQuery", "");
-		} catch (Exception ex)
-		{
-			return;
-		}
+        JSONObject jas;
+        try {
+            if(!MainLogin.getwifiinfo()) {
+                Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
+                sp.play(music, 1, 1, 0, 0, 1);
+                return;
+            }
+            jas = Common.DoHttpQuery(para, "CommonQuery", "");
+        } catch (Exception ex)
+        {
+            return;
+        }
 
-		//æŠŠå–å¾—çš„å•æ®ä¿¡æ¯ç»‘å®šåˆ°ListViewä¸Š
-		try
-		{
-			if(jas==null)
-			{
-				Toast.makeText(this, R.string.WangLuoChuXianWenTi, Toast.LENGTH_LONG).show();
-				//ADD CAIXY TEST START
-				sp.play(music, 1, 1, 0, 0, 1);
-				//ADD CAIXY TEST END
-				return;
-			}
-			if(!jas.has("Status"))
-			{
-				Toast.makeText(this, R.string.WangLuoChuXianWenTi, Toast.LENGTH_LONG).show();
-				//ADD CAIXY TEST START
-				sp.play(music, 1, 1, 0, 0, 1);
-				//ADD CAIXY TEST END
-				return;
-			}
-			if(!jas.getBoolean("Status"))
-			{
-				String errMsg = "";
-				if(jas.has("ErrMsg"))
-				{
-					errMsg = jas.getString("ErrMsg");
-				}
-				else
-				{
-					errMsg = getString(R.string.WangLuoChuXianWenTi);
-				}
-				Toast.makeText(this, errMsg, Toast.LENGTH_LONG).show();
-				//ADD CAIXY TEST START
-				sp.play(music, 1, 1, 0, 0, 1);
-				//ADD CAIXY TEST END
-				return;
-			}
-			//ç»‘å®šåˆ°ListView
-			BindingBillInfoData(jas);
-		}
-		catch (JSONException e)
-		{
-			return;
-		}
-		catch (Exception ex)
-		{
-			return;
-		}
-	}
+        //°ÑÈ¡µÃµÄµ¥¾İĞÅÏ¢°ó¶¨µ½ListViewÉÏ
+        try
+        {
+            if(jas==null)
+            {
+                Toast.makeText(this, R.string.WangLuoChuXianWenTi, Toast.LENGTH_LONG).show();
+                //ADD CAIXY TEST START
+                sp.play(music, 1, 1, 0, 0, 1);
+                //ADD CAIXY TEST END
+                return;
+            }
+            if(!jas.has("Status"))
+            {
+                Toast.makeText(this, R.string.WangLuoChuXianWenTi, Toast.LENGTH_LONG).show();
+                //ADD CAIXY TEST START
+                sp.play(music, 1, 1, 0, 0, 1);
+                //ADD CAIXY TEST END
+                return;
+            }
+            if(!jas.getBoolean("Status"))
+            {
+                String errMsg = "";
+                if(jas.has("ErrMsg"))
+                {
+                    errMsg = jas.getString("ErrMsg");
+                }
+                else
+                {
+                    errMsg = getString(R.string.WangLuoChuXianWenTi);
+                }
+                Toast.makeText(this, errMsg, Toast.LENGTH_LONG).show();
+                //ADD CAIXY TEST START
+                sp.play(music, 1, 1, 0, 0, 1);
+                //ADD CAIXY TEST END
+                return;
+            }
+            //°ó¶¨µ½ListView
+            BindingBillInfoData(jas);
+        }
+        catch (JSONException e)
+        {
+            return;
+        }
+        catch (Exception ex)
+        {
+            return;
+        }
+    }
 
-	//ç»‘å®šåˆ°ListView
-	private void BindingBillInfoData(JSONObject jsonBillInfo) throws JSONException
-	{
-		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		Map<String, Object> map;
+    //°ó¶¨µ½ListView
+    private void BindingBillInfoData(JSONObject jsonBillInfo) throws JSONException
+    {
+        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+        Map<String, Object> map;
 
-		JSONObject tempJso = null;
+        JSONObject tempJso = null;
 
-		if(jsonBillInfo == null)
-			return;
-		if(!jsonBillInfo.has("Status"))
-			return;
-		if(!jsonBillInfo.getBoolean("Status"))
-		{
-			String errMsg = "è·å–æ•°æ®æ—¶å‘ç”Ÿé”™è¯¯,è¯·å†æ¬¡å°è¯•";
-			if(jsonBillInfo.has("Status"))
-			{
-				errMsg = jsonBillInfo.getString("ErrMsg");
-			}
+        if(jsonBillInfo == null)
+            return;
+        if(!jsonBillInfo.has("Status"))
+            return;
+        if(!jsonBillInfo.getBoolean("Status"))
+        {
+            String errMsg = "»ñÈ¡Êı¾İÊ±·¢Éú´íÎó,ÇëÔÙ´Î³¢ÊÔ";
+            if(jsonBillInfo.has("Status"))
+            {
+                errMsg = jsonBillInfo.getString("ErrMsg");
+            }
 
-			Toast.makeText(this, errMsg, Toast.LENGTH_LONG).show();
-			//ADD CAIXY TEST START
-			sp.play(music, 1, 1, 0, 0, 1);
-			//ADD CAIXY TEST END
-			list = null;
-		}
-		if(!jsonBillInfo.has("dbHead"))
-			return;
-		JSONArray jsarray= jsonBillInfo.getJSONArray("dbHead");
+            Toast.makeText(this, errMsg, Toast.LENGTH_LONG).show();
+            //ADD CAIXY TEST START
+            sp.play(music, 1, 1, 0, 0, 1);
+            //ADD CAIXY TEST END
+            list = null;
+        }
+        if(!jsonBillInfo.has("dbHead"))
+            return;
+        JSONArray jsarray= jsonBillInfo.getJSONArray("dbHead");
 
-		for(int i = 0;i<jsarray.length();i++)
-		{
-			tempJso = jsarray.getJSONObject(i);
-			map = new HashMap<String, Object>();
-			if(fsFunctionName.equals("GetAdjustOutBillHead"))//è°ƒæ‹¨å‡ºåº“å•
-			{
-				map.put("BillCode", tempJso.getString("vbillcode"));//å•æ®å·
-				map.put("WHOut", tempJso.getString("cwarehousename") + "     ");//è°ƒå‡ºä»“åº“å
-				map.put("WHIn",tempJso.getString("cotherwhname"));//è°ƒå…¥ä»“åº“å
-				//map.put("BillID",tempJso.getString("vbillcode"));
-				map.put("AccID", tempJso.getString("AccID"));
-				map.put("CorpSOut", tempJso.getString("corpoutshortname") + "     ");//è°ƒå‡ºå…¬å¸ç®€ç§°
-				map.put("CorpSIn", tempJso.getString("corpinshortname"));//è°ƒå…¥å…¬å¸ç®€ç§°
-				map.put("CorpOut", tempJso.getString("corpoutname"));//è°ƒå‡ºå…¬å¸åç§°
-				map.put("CorpIn", tempJso.getString("corpinname"));//è°ƒå…¥å…¬å¸åç§°
+        for(int i = 0;i<jsarray.length();i++)
+        {
+            tempJso = jsarray.getJSONObject(i);
+            map = new HashMap<String, Object>();
+            if(fsFunctionName.equals("GetAdjustOutBillHead"))//µ÷²¦³ö¿âµ¥
+            {
+                map.put("BillCode", tempJso.getString("vbillcode"));//µ¥¾İºÅ
+                map.put("WHOut", tempJso.getString("cwarehousename") + "     ");//µ÷³ö²Ö¿âÃû
+                map.put("WHIn",tempJso.getString("cotherwhname"));//µ÷Èë²Ö¿âÃû
+                //map.put("BillID",tempJso.getString("vbillcode"));
+                map.put("AccID", tempJso.getString("AccID"));
+                map.put("CorpSOut", tempJso.getString("corpoutshortname") + "     ");//µ÷³ö¹«Ë¾¼ò³Æ
+                map.put("CorpSIn", tempJso.getString("corpinshortname"));//µ÷Èë¹«Ë¾¼ò³Æ
+                map.put("CorpOut", tempJso.getString("corpoutname"));//µ÷³ö¹«Ë¾Ãû³Æ
+                map.put("CorpIn", tempJso.getString("corpinname"));//µ÷Èë¹«Ë¾Ãû³Æ
 
-				//ä¿å­˜ç”¨è¡¨å¤´JSONObjectè®¾ç½®---å¼€å§‹
-				map.put("pk_corp", tempJso.getString("cothercorpid"));//å…¬å¸ID//caixy
-				if(tempJso.getString("AccID").equals("A"))
-					map.put("coperatorid", MainLogin.objLog.UserID);//æ“ä½œè€…
-				else
-					map.put("coperatorid", MainLogin.objLog.UserIDB);//æ“ä½œè€…
+                //±£´æÓÃ±íÍ·JSONObjectÉèÖÃ---¿ªÊ¼
+                map.put("pk_corp", tempJso.getString("cothercorpid"));//¹«Ë¾ID//caixy
+                if(tempJso.getString("AccID").equals("A"))
+                    map.put("coperatorid", MainLogin.objLog.UserID);//²Ù×÷Õß
+                else
+                    map.put("coperatorid", MainLogin.objLog.UserIDB);//²Ù×÷Õß
 
-				map.put("pk_calbody", tempJso.getString("cothercalbodyid"));//è°ƒå…¥åº“å­˜ç»„ç»‡
-				map.put("pk_stordoc", tempJso.getString("cotherwhid"));//è°ƒå…¥ä»“åº“
-				map.put("fallocflag", tempJso.getString("fallocflag"));//è°ƒæ‹¨ç±»å‹æ ‡å¿—
-				map.put("cbiztype", tempJso.getString("cbiztype"));//ä¸šåŠ¡ç±»å‹ID
-				map.put("pk_outstordoc", tempJso.getString("cwarehouseid"));//è°ƒå‡ºä»“åº“
-				map.put("pk_outcalbody", tempJso.getString("pk_calbody"));//è°ƒå‡ºåº“å­˜ç»„ç»‡
-				map.put("pk_outcorp", tempJso.getString("pk_corp"));//è°ƒå‡ºå…¬å¸
-				map.put("vcode", tempJso.getString("vbillcode"));//å•æ®å·
-				map.put("cgeneralhid", tempJso.getString("cgeneralhid"));//å•æ®ID
-				//cgeneralhid
-				//ä¿å­˜ç”¨JSONObjectè®¾ç½®---ç»“æŸ
-			}
+                map.put("pk_calbody", tempJso.getString("cothercalbodyid"));//µ÷Èë¿â´æ×éÖ¯
+                map.put("pk_stordoc", tempJso.getString("cotherwhid"));//µ÷Èë²Ö¿â
+                map.put("fallocflag", tempJso.getString("fallocflag"));//µ÷²¦ÀàĞÍ±êÖ¾
+                map.put("cbiztype", tempJso.getString("cbiztype"));//ÒµÎñÀàĞÍID
+                map.put("pk_outstordoc", tempJso.getString("cwarehouseid"));//µ÷³ö²Ö¿â
+                map.put("pk_outcalbody", tempJso.getString("pk_calbody"));//µ÷³ö¿â´æ×éÖ¯
+                map.put("pk_outcorp", tempJso.getString("pk_corp"));//µ÷³ö¹«Ë¾
+                map.put("vcode", tempJso.getString("vbillcode"));//µ¥¾İºÅ
+                map.put("cgeneralhid", tempJso.getString("cgeneralhid"));//µ¥¾İID
+                //cgeneralhid
+                //±£´æÓÃJSONObjectÉèÖÃ---½áÊø
+            }
 
-			list.add(map);
-		}
-		SimpleAdapter listItemAdapter = null;
-		if(fsFunctionName.equals("GetAdjustOutBillHead"))//è°ƒæ‹¨å‡ºåº“å•
-		{
-			listItemAdapter = new SimpleAdapter(this,list,
-					R.layout.vlisttransin,
-					new String[] {"BillCode","WHOut", "WHIn","AccID","CorpSOut","CorpSIn"},
-					new int[] {R.id.listtransinpdorder,
-							R.id.listtransinfromware,
-							R.id.listtransintoware,
-							R.id.listtransinaccid,
-							R.id.listtransincorpoutname,
-							R.id.listtransincorpinname});
-		}
+            list.add(map);
+        }
+        SimpleAdapter listItemAdapter = null;
+        if(fsFunctionName.equals("GetAdjustOutBillHead"))//µ÷²¦³ö¿âµ¥
+        {
+            listItemAdapter = new SimpleAdapter(this,list,
+                    R.layout.vlisttransin,
+                    new String[] {"BillCode","WHOut", "WHIn","AccID","CorpSOut","CorpSIn"},
+                    new int[] {R.id.listtransinpdorder,
+                            R.id.listtransinfromware,
+                            R.id.listtransintoware,
+                            R.id.listtransinaccid,
+                            R.id.listtransincorpoutname,
+                            R.id.listtransincorpinname});
+        }
 
-		if(listItemAdapter == null)
-			return;
-		lvBillInfoOrderList.setAdapter(listItemAdapter);
-		lvBillInfoOrderList.setOnItemClickListener(itemListener);
+        if(listItemAdapter == null)
+            return;
+        lvBillInfoOrderList.setAdapter(listItemAdapter);
+        lvBillInfoOrderList.setOnItemClickListener(itemListener);
 
-	}
+    }
 
-	//ListViewçš„Itemç‚¹å‡»ç›‘å¬äº‹ä»¶
-	private ListView.OnItemClickListener itemListener = new
-			ListView.OnItemClickListener()
-			{
+    //ListViewµÄItemµã»÷¼àÌıÊÂ¼ş
+    private ListView.OnItemClickListener itemListener = new
+            ListView.OnItemClickListener()
+            {
 
-				@Override
-				public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-										long arg3) {
+                @Override
+                public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+                                        long arg3) {
 
-					Adapter adapter=arg0.getAdapter();
-					Map<String,Object> map=(Map<String, Object>) adapter.getItem(arg2);
+                    Adapter adapter=arg0.getAdapter();
+                    Map<String,Object> map=(Map<String, Object>) adapter.getItem(arg2);
 
-					SerializableMap ResultMap = new SerializableMap();
-					ResultMap.setMap(map);
+                    SerializableMap ResultMap = new SerializableMap();
+                    ResultMap.setMap(map);
 
-					Intent intent = new Intent();
-					intent.putExtra("ResultBillInfo", ResultMap);
+                    Intent intent = new Intent();
+                    intent.putExtra("ResultBillInfo", ResultMap);
 
-					BillInfoOrderList.this.setResult(1, intent);
-					BillInfoOrderList.this.finish();
+                    BillInfoOrderList.this.setResult(1, intent);
+                    BillInfoOrderList.this.finish();
 
-				}
+                }
 
-			};
+            };
 
-	//buttonæŒ‰é’®çš„ç›‘å¬äº‹ä»¶
-	private Button.OnClickListener ButtonClickListener = new
-			Button.OnClickListener()
-			{
+    //button°´Å¥µÄ¼àÌıÊÂ¼ş
+    private Button.OnClickListener ButtonClickListener = new
+            Button.OnClickListener()
+            {
 
-				@Override
-				public void onClick(View v) {
-					switch(v.getId())
-					{
-						case R.id.btnBillInfoReturn:
-							BillInfoOrderList.this.finish();
-							break;
-					}
+                @Override
+                public void onClick(View v) {
+                    switch(v.getId())
+                    {
+                        case R.id.btnBillInfoReturn:
+                            BillInfoOrderList.this.finish();
+                            break;
+                    }
 
-				}
+                }
 
-			};
+            };
 
 }
