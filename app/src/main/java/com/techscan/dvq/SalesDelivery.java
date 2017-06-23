@@ -36,6 +36,7 @@ import java.util.UUID;
 
 public class SalesDelivery extends Activity {
 
+    public static final String TAG = "SalesDelivery";
 
     String tmpWHStatus = "";//仓库是否启用货位
 
