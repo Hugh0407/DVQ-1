@@ -35,9 +35,6 @@ public class RequestThread implements Runnable {
             for (Map.Entry<String, String> entry : parameter.entrySet()) {
                 para.put(entry.getKey(),entry.getValue());
             }
-//            para.put("FunctionName", "GetDeptList");
-//            para.put("CompanyCode", MainLogin.objLog.CompanyCode);
-//            para.put("TableName", "department");
             JSONObject resultJson = Common.DoHttpQuery(para, "CommonQuery", "");
             Message msg = Message.obtain();
             msg.what = msgWhat;

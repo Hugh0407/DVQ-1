@@ -21,7 +21,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.techscan.dvq.Common;
 import com.techscan.dvq.MainLogin;
 import com.techscan.dvq.R;
 import com.techscan.dvq.materialOut.MyBaseAdapter;
@@ -31,7 +30,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -222,63 +220,14 @@ public class MaterialOutScanAct extends Activity {
      * @param sku
      */
     private void GetInvBaseInfo(String sku) {
-        //*********************************************************************
         HashMap<String,String> parameter = new HashMap<String, String>();
         parameter.put("FunctionName", "GetInvBaseInfo");
         parameter.put("CompanyCode", MainLogin.objLog.CompanyCode);
         parameter.put("InvCode", sku);
         parameter.put("TableName", "baseInfo");
-        RequestThread requestThread = new RequestThread(parameter,mHandler,2);
-        //*********************************************************************
-
-        MyThread myThread = new MyThread(sku);
-        Thread thread = new Thread(myThread);
-        thread.start();
-    }
-
-    /**
-     * 获取存货信息的线程
-     */
-    private class MyThread implements Runnable {
-        String sku;
-
-        MyThread(String sku) {
-            this.sku = sku;
-        }
-
-        @Override
-        public void run() {
-            JSONObject para = new JSONObject();
-            try {
-                para.put("FunctionName", "GetInvBaseInfo");
-                para.put("CompanyCode", MainLogin.objLog.CompanyCode);
-                para.put("InvCode", sku);
-                para.put("TableName", "baseInfo");
-                JSONObject rev = Common.DoHttpQuery(para, "CommonQuery", "");
-                if (rev != null) {
-                    if (rev.getBoolean("Status")) {
-                        JSONArray val = rev.getJSONArray("baseInfo");
-                        HashMap<String, Object> map = null;
-                        for (int i = 0; i < val.length(); i++) {
-                            JSONObject tempJso = val.getJSONObject(i);
-                            map = new HashMap<String, Object>();
-                            map.put("invname", tempJso.getString("invname"));   //橡胶填充油
-                            map.put("invcode", tempJso.getString("invcode"));   //00179
-                            map.put("measname", tempJso.getString("measname"));   //千克
-                            map.put("oppdimen", tempJso.getString("oppdimen"));   //重量
-                        }
-                        Message msg = Message.obtain();
-                        msg.what = 1;
-                        msg.obj = map;
-                        mHandler.sendMessage(msg);
-                    }
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        RequestThread requestThread = new RequestThread(parameter,mHandler,1);
+        Thread td = new Thread(requestThread);
+        td.start();
     }
 
     /**
@@ -291,24 +240,15 @@ public class MaterialOutScanAct extends Activity {
             super.handleMessage(msg);
             switch (msg.what){
                 case 1:
-                    HashMap<String, Object> map = (HashMap<String, Object>) msg.obj;
-                    mEdName.setText(map.get("invname").toString());
-                    mEdUnit.setText(map.get("measname").toString());
-                    mEdType.setText("待加");
-
-                    if (mEdBarCode.getText() != null && mEdEncoding.getText() != null
-                            && mEdName.getText() != null && mEdType.getText() != null
-                            && mEdUnit.getText() != null && mEdLot.getText() != null
-                            && mEdQty.getText() != null) {
-                        HashMap<String, String> hashMap = new HashMap<String, String>();
-                        hashMap.put("barcode", mEdBarCode.getText().toString());
-                        hashMap.put("encoding", mEdEncoding.getText().toString());
-                        hashMap.put("name", mEdName.getText().toString());
-                        hashMap.put("type", mEdType.getText().toString());
-                        hashMap.put("unit", mEdUnit.getText().toString());
-                        hashMap.put("lot", mEdLot.getText().toString());
-                        hashMap.put("qty", mEdQty.getText().toString());
-                        detailList.add(hashMap);
+                    JSONObject json = (JSONObject) msg.obj;
+                    if (json != null) {
+                        try {
+                            GetInvBaseByJson(json);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }else {
+                        return;
                     }
                     break;
                 default:
@@ -316,4 +256,43 @@ public class MaterialOutScanAct extends Activity {
             }
         }
     };
+
+    /**
+     * 通过获取到的json 解析得到物料信息
+     * @param json
+     * @throws JSONException
+     */
+    private void GetInvBaseByJson(JSONObject json) throws JSONException {
+        if (json.getBoolean("Status")) {
+            JSONArray val = json.getJSONArray("baseInfo");
+            HashMap<String, Object> map = null;
+            for (int i = 0; i < val.length(); i++) {
+                JSONObject tempJso = val.getJSONObject(i);
+                map = new HashMap<String, Object>();
+                map.put("invname", tempJso.getString("invname"));   //橡胶填充油
+                map.put("invcode", tempJso.getString("invcode"));   //00179
+                map.put("measname", tempJso.getString("measname"));   //千克
+                map.put("oppdimen", tempJso.getString("oppdimen"));   //重量
+            }
+            if (map!=null){
+                mEdName.setText(map.get("invname").toString());
+                mEdUnit.setText(map.get("measname").toString());
+                mEdType.setText("待加");
+                if (mEdBarCode.getText() != null && mEdEncoding.getText() != null
+                        && mEdName.getText() != null && mEdType.getText() != null
+                        && mEdUnit.getText() != null && mEdLot.getText() != null
+                        && mEdQty.getText() != null) {
+                    HashMap<String, String> hashMap = new HashMap<String, String>();
+                    hashMap.put("barcode", mEdBarCode.getText().toString());
+                    hashMap.put("encoding", mEdEncoding.getText().toString());
+                    hashMap.put("name", mEdName.getText().toString());
+                    hashMap.put("type", mEdType.getText().toString());
+                    hashMap.put("unit", mEdUnit.getText().toString());
+                    hashMap.put("lot", mEdLot.getText().toString());
+                    hashMap.put("qty", mEdQty.getText().toString());
+                    detailList.add(hashMap);
+                }
+            }
+        }
+    }
 }
