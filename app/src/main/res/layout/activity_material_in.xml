@@ -74,8 +74,7 @@
                 android:singleLine="true"
                 android:textAllCaps="true"/>
 
-            <ImageButton
-                android:id="@+id/refer_bill_date"
+            <Space
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_marginRight="5dp"

@@ -75,11 +75,11 @@ public class MyBaseAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        viewHolder.name.setText(mList.get(position).get("name").toString());
-        viewHolder.encoding.setText(mList.get(position).get("encoding").toString());
-        viewHolder.type.setText(mList.get(position).get("type").toString());
-        viewHolder.lot.setText(mList.get(position).get("lot").toString());
-        viewHolder.qty.setText(mList.get(position).get("qty").toString());
+        viewHolder.name.setText(mList.get(position).get("name"));
+        viewHolder.encoding.setText(mList.get(position).get("encoding"));
+        viewHolder.type.setText(mList.get(position).get("type"));
+        viewHolder.lot.setText(mList.get(position).get("lot"));
+        viewHolder.qty.setText(mList.get(position).get("qty"));
         return convertView;
     }
 

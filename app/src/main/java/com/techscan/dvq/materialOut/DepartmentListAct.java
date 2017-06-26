@@ -27,6 +27,7 @@ import java.util.Map;
 public class DepartmentListAct extends Activity {
 
     Button btnBack = null;
+    public List<Map<String, Object>> mData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,10 +35,10 @@ public class DepartmentListAct extends Activity {
         setContentView(R.layout.activity_department_list);
         ActionBar actionBar = this.getActionBar();
         actionBar.setTitle("部门列表");
-        String jasstr = this.getIntent().getStringExtra("myData");
         btnBack = (Button) findViewById(R.id.btn_back);
         btnBack.setOnClickListener(ButtonOnClickListener);
 
+        String jasstr = this.getIntent().getStringExtra("myData");
         try {
             JSONObject jas = new JSONObject(jasstr);
             mData = getData(jas);
@@ -57,20 +58,6 @@ public class DepartmentListAct extends Activity {
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
         }
     }
-
-    private View.OnClickListener ButtonOnClickListener = new View.OnClickListener() {
-
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.btn_back:
-                    finish();
-                    break;
-            }
-        }
-    };
-
-    public List<Map<String, Object>> mData;
 
     private List<Map<String, Object>> getData(JSONObject jas) throws JSONException {
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
@@ -111,6 +98,18 @@ public class DepartmentListAct extends Activity {
             intent.putExtra("deptcode", deptcode);// 把返回数据存入Intent
             DepartmentListAct.this.setResult(4, intent);// 设置回传数据。resultCode值是1，这个值在主窗口将用来区分回传数据的来源，以做不同的处理
             DepartmentListAct.this.finish();// 关闭子窗口ChildActivity
+        }
+    };
+
+    private View.OnClickListener ButtonOnClickListener = new View.OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.btn_back:
+                    finish();
+                    break;
+            }
         }
     };
 }

@@ -25,7 +25,9 @@ import java.util.List;
 import java.util.Map;
 
 public class StorgListACt extends Activity {
+
     Button btnBack = null;
+    public List<Map<String, Object>> mData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,10 +35,10 @@ public class StorgListACt extends Activity {
         setContentView(R.layout.activity_storg_list_act);
         ActionBar actionBar = this.getActionBar();
         actionBar.setTitle("库存组织列表");
-        String jasstr = this.getIntent().getStringExtra("STOrg");
         btnBack = (Button) findViewById(R.id.btn_back);
         btnBack.setOnClickListener(ButtonOnClickListener);
 
+        String jasstr = this.getIntent().getStringExtra("STOrg");
         try {
             JSONObject jas = new JSONObject(jasstr);
             mData = getData(jas);
@@ -45,7 +47,7 @@ public class StorgListACt extends Activity {
             SimpleAdapter listItemAdapter = new SimpleAdapter(this, mData,//数据源
                     R.layout.vlistwh,//ListItem的XML实现
                     //动态数组与ImageItem对应的子项
-                    new String[]{"deptcode", "deptname"},
+                    new String[]{"bodyname", "pk_calbody"},
                     //ImageItem的XML文件里面的一个ImageView,两个TextView ID
                     new int[]{R.id.vlistwarehousecode, R.id.vlistwarehousename}
             );
@@ -57,26 +59,13 @@ public class StorgListACt extends Activity {
         }
     }
 
-    private View.OnClickListener ButtonOnClickListener = new View.OnClickListener() {
-
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.btn_back:
-                    finish();
-                    break;
-            }
-        }
-    };
-    public List<Map<String, Object>> mData;
-
     private List<Map<String, Object>> getData(JSONObject jas) throws JSONException {
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
         Map<String, Object> map;
 
         JSONObject tempJso;
         if (!jas.has("STOrg")) {
-            Toast.makeText(this, R.string.WangLuoChuXianWenTi, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.WangLuoChuXianWenTi, Toast.LENGTH_SHORT).show();
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             return null;
         }
@@ -107,8 +96,20 @@ public class StorgListACt extends Activity {
             intent.putExtra("pk_areacl", pk_areacl);// 把返回数据存入Intent
             intent.putExtra("bodyname", bodyname);// 把返回数据存入Intent
             intent.putExtra("pk_calbody", pk_calbody);// 把返回数据存入Intent
-            StorgListACt.this.setResult(4, intent);// 设置回传数据。resultCode值是1，这个值在主窗口将用来区分回传数据的来源，以做不同的处理
+            StorgListACt.this.setResult(6, intent);// 设置回传数据。resultCode值是1，这个值在主窗口将用来区分回传数据的来源，以做不同的处理
             StorgListACt.this.finish();// 关闭子窗口ChildActivity
+        }
+    };
+
+    private View.OnClickListener ButtonOnClickListener = new View.OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.btn_back:
+                    finish();
+                    break;
+            }
         }
     };
 }

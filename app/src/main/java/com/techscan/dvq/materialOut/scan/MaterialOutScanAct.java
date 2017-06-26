@@ -72,12 +72,7 @@ public class MaterialOutScanAct extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_material_out_scan);
         ButterKnife.inject(this);
-        ActionBar actionBar = this.getActionBar();
-        actionBar.setTitle("材料出库扫描");
-        mEdBarCode.setOnKeyListener(mOnKeyListener);
-        mEdLot.setOnKeyListener(mOnKeyListener);
-        mEdQty.setOnKeyListener(mOnKeyListener);
-        mEdBarCode.addTextChangedListener(mTextWatcher);
+        initView();
     }
 
     @OnClick({R.id.btn_overview, R.id.btn_detail, R.id.btn_back})
@@ -149,6 +144,42 @@ public class MaterialOutScanAct extends Activity {
         }
     }
 
+    private void initView() {
+        ActionBar actionBar = this.getActionBar();
+        actionBar.setTitle("材料出库扫描");
+        mEdBarCode.setOnKeyListener(mOnKeyListener);
+        mEdLot.setOnKeyListener(mOnKeyListener);
+        mEdQty.setOnKeyListener(mOnKeyListener);
+        mEdBarCode.addTextChangedListener(mTextWatcher);
+    }
+
+    /**
+     * 网络请求后的线程通信
+     * msg.obj 是从子线程传递过来的数据
+     */
+    Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 1:
+                    JSONObject json = (JSONObject) msg.obj;
+                    if (json != null) {
+                        try {
+                            GetInvBaseByJson(json);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        return;
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
+
     private void showDialog(List list, BaseAdapter adapter, String title) {
         AlertDialog.Builder builder = new AlertDialog.Builder(MaterialOutScanAct.this);
         builder.setTitle(title);
@@ -165,82 +196,14 @@ public class MaterialOutScanAct extends Activity {
     }
 
     /**
-     * mEdBarCode（条码）的监听
-     */
-    TextWatcher mTextWatcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            if (TextUtils.isEmpty(mEdBarCode.getText().toString())) {
-                mEdEncoding.setText("");
-                mEdType.setText("");
-                mEdLot.setText("");
-                mEdName.setText("");
-                mEdUnit.setText("");
-                mEdQty.setText("");
-            }
-        }
-    };
-
-
-    /**
-     * 回车键的点击事件
-     */
-    View.OnKeyListener mOnKeyListener = new View.OnKeyListener() {
-
-        @Override
-        public boolean onKey(View v, int keyCode, KeyEvent event) {
-            if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
-                switch (v.getId()) {
-                    case R.id.ed_bar_code:
-                        BarAls();
-                        return true;
-                    case R.id.ed_lot:
-                        if (TextUtils.isEmpty(mEdLot.getText())) {
-                            Toast.makeText(MaterialOutScanAct.this, "请输入批次号", Toast.LENGTH_SHORT).show();
-                        } else {
-                            if (isInfoComplete()) {
-                                if (addInfoToDetailList()) {
-                                    SetAllEcTextIsEmpty();
-                                }
-                            }
-                        }
-                        return true;
-                    case R.id.ed_qty:
-                        if (TextUtils.isEmpty(mEdQty.getText())) {
-                            Toast.makeText(MaterialOutScanAct.this, "请输入数量", Toast.LENGTH_SHORT).show();
-                        } else {
-                            if (isInfoComplete()) {
-                                if (addInfoToDetailList()) {
-                                    SetAllEcTextIsEmpty();
-                                }
-                            }
-                        }
-                        return true;
-                }
-            }
-            return false;
-        }
-    };
-
-    /**
      * 条码解析
      */
-    private boolean BarAls() {
+    private boolean BarAnalysis() {
         String Bar = mEdBarCode.getText().toString();
         if (Bar.contains("\n")) {
             Bar = Bar.replace("\n", "");
+            mEdBarCode.setText(Bar);
         }
-        mEdBarCode.setText(Bar);
         String[] barCode = Bar.split("\\|");
         if (barCode.length == 2 && barCode[0].equals("Y")) {          //Y|SKU
             String encoding = barCode[1];
@@ -251,7 +214,6 @@ public class MaterialOutScanAct extends Activity {
             mEdName.setText("");
             mEdUnit.setText("");
             mEdQty.setText("");
-            Log.d(TAG, "BarAls: " + mEdBarCode);
             return true;
         } else if (barCode.length == 6 && barCode[0].equals("C")) {   //C|SKU|LOT|TAX|QTY|SN
             String encoding = barCode[1];
@@ -276,6 +238,11 @@ public class MaterialOutScanAct extends Activity {
         }
     }
 
+    /**
+     * 添加信息到 集合中
+     *
+     * @return
+     */
     private boolean addInfoToDetailList() {
         HashMap<String, String> hashMap = new HashMap<String, String>();
         hashMap.put("barcode", mEdBarCode.getText().toString());
@@ -288,6 +255,9 @@ public class MaterialOutScanAct extends Activity {
         return detailList.add(hashMap);
     }
 
+    /**
+     * 清空所有的Edtext
+     */
     private void SetAllEcTextIsEmpty() {
         mEdBarCode.setText("");
         mEdEncoding.setText("");
@@ -329,32 +299,6 @@ public class MaterialOutScanAct extends Activity {
         td.start();
     }
 
-    /**
-     * 网络请求后的线程通信
-     * msg.obj 是从子线程传递过来的数据
-     */
-    Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case 1:
-                    JSONObject json = (JSONObject) msg.obj;
-                    if (json != null) {
-                        try {
-                            GetInvBaseByJson(json);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    } else {
-                        return;
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
-    };
 
     /**
      * 通过获取到的json 解析得到物料信息
@@ -387,4 +331,72 @@ public class MaterialOutScanAct extends Activity {
             }
         }
     }
+
+    /**
+     * mEdBarCode（条码）的监听
+     */
+    TextWatcher mTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            if (TextUtils.isEmpty(mEdBarCode.getText().toString())) {
+                mEdEncoding.setText("");
+                mEdType.setText("");
+                mEdLot.setText("");
+                mEdName.setText("");
+                mEdUnit.setText("");
+                mEdQty.setText("");
+            }
+        }
+    };
+
+
+    /**
+     * 回车键的点击事件
+     */
+    View.OnKeyListener mOnKeyListener = new View.OnKeyListener() {
+
+        @Override
+        public boolean onKey(View v, int keyCode, KeyEvent event) {
+            if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
+                switch (v.getId()) {
+                    case R.id.ed_bar_code:
+                        BarAnalysis();
+                        return true;
+                    case R.id.ed_lot:
+                        if (TextUtils.isEmpty(mEdLot.getText())) {
+                            Toast.makeText(MaterialOutScanAct.this, "请输入批次号", Toast.LENGTH_SHORT).show();
+                        } else {
+                            if (isInfoComplete()) {
+                                if (addInfoToDetailList()) {
+                                    SetAllEcTextIsEmpty();
+                                }
+                            }
+                        }
+                        return true;
+                    case R.id.ed_qty:
+                        if (TextUtils.isEmpty(mEdQty.getText())) {
+                            Toast.makeText(MaterialOutScanAct.this, "请输入数量", Toast.LENGTH_SHORT).show();
+                        } else {
+                            if (isInfoComplete()) {
+                                if (addInfoToDetailList()) {
+                                    SetAllEcTextIsEmpty();
+                                }
+                            }
+                        }
+                        return true;
+                }
+            }
+            return false;
+        }
+    };
 }
