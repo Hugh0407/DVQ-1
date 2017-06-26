@@ -17,14 +17,14 @@ import java.util.Map;
 public class SalesDeliveryAdapter extends BaseAdapter {
 
     Context mContext;
-    List<Map<String, String>> mList;
+    List<Map<String, Object>> mList;
 
-    public SalesDeliveryAdapter(Context context, List<Map<String, String>> list) {
+    public SalesDeliveryAdapter(Context context, List<Map<String, Object>> list) {
         mContext = context;
         mList = list;
     }
 
-    public void setList(List<Map<String, String>> list) {
+    public void setList(List<Map<String, Object>> list) {
         mList = list;
     }
 
@@ -57,17 +57,17 @@ public class SalesDeliveryAdapter extends BaseAdapter {
         ViewHolder viewHolder;
         if (convertView == null) {
             viewHolder = new ViewHolder();
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.vlisttransscanitem, null);
-            viewHolder.InvCode = (TextView) convertView.findViewById(R.id.txtTransScanInvCode);
-            viewHolder.InvName = (TextView) convertView.findViewById(R.id.txtTransScanInvName);
-            viewHolder.Batch = (TextView) convertView.findViewById(R.id.txtTransScanBatch);
-            viewHolder.AccID = (TextView) convertView.findViewById(R.id.txtTransScanAccId);
-            viewHolder.TotalNum = (TextView) convertView.findViewById(R.id.txtTransScanTotalNum);
-            viewHolder.BarCode = (TextView) convertView.findViewById(R.id.txtTransScanBarCode);
-            viewHolder.SeriNo = (TextView) convertView.findViewById(R.id.txtTransScanSeriNo);
-            viewHolder.BillCode = (TextView) convertView.findViewById(R.id.txtTransScanBillCode);
-            viewHolder.ScanedNum = (TextView) convertView.findViewById(R.id.txtTransScanScanCount);
-            viewHolder.box = (TextView) convertView.findViewById(R.id.txtTransBox);
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_san, null);
+            viewHolder.InvCode = (TextView) convertView.findViewById(R.id.txtInvCodes);
+            viewHolder.InvName = (TextView) convertView.findViewById(R.id.txtInvCodeName);
+            viewHolder.Batch = (TextView) convertView.findViewById(R.id.txtBatch);
+            viewHolder.QTY = (TextView) convertView.findViewById(R.id.txtQTY);
+            viewHolder.UNIT = (TextView) convertView.findViewById(R.id.txtUnit);
+//            viewHolder.BarCode = (TextView) convertView.findViewById(R.id.txtTransScanBarCode);
+//            viewHolder.SeriNo = (TextView) convertView.findViewById(R.id.txtTransScanSeriNo);
+//            viewHolder.BillCode = (TextView) convertView.findViewById(R.id.txtTransScanBillCode);
+//            viewHolder.ScanedNum = (TextView) convertView.findViewById(R.id.txtTransScanScanCount);
+//            viewHolder.box = (TextView) convertView.findViewById(R.id.txtTransBox);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -75,13 +75,13 @@ public class SalesDeliveryAdapter extends BaseAdapter {
         viewHolder.InvCode.setText(mList.get(position).get("InvCode").toString());
         viewHolder.InvName.setText(mList.get(position).get("InvName").toString());
         viewHolder.Batch.setText(mList.get(position).get("Batch").toString());
-        viewHolder.AccID.setText(mList.get(position).get("AccID").toString());
-        viewHolder.TotalNum.setText(mList.get(position).get("TotalNum").toString());
+        viewHolder.QTY.setText(mList.get(position).get("QTY").toString());
+        viewHolder.UNIT.setText(mList.get(position).get("Measname").toString());
 //        viewHolder.BarCode.setText(mList.get(position).get("BarCode").toString());
-        viewHolder.SeriNo.setText(mList.get(position).get("SeriNo").toString());
-        viewHolder.BillCode.setText(mList.get(position).get("BillCode").toString());
-        viewHolder.ScanedNum.setText(mList.get(position).get("ScanedNum").toString());
-        viewHolder.box.setText(mList.get(position).get("box").toString());
+//        viewHolder.SeriNo.setText(mList.get(position).get("SeriNo").toString());
+//        viewHolder.BillCode.setText(mList.get(position).get("BillCode").toString());
+//        viewHolder.ScanedNum.setText(mList.get(position).get("ScanedNum").toString());
+//        viewHolder.box.setText(mList.get(position).get("box").toString());
         return convertView;
     }
 
@@ -91,12 +91,12 @@ public class SalesDeliveryAdapter extends BaseAdapter {
         TextView InvCode;
         TextView InvName;
         TextView Batch;
-        TextView AccID;
-        TextView TotalNum;
-        TextView BarCode;
-        TextView SeriNo;
-        TextView BillCode;
-        TextView ScanedNum;
-        TextView box;
+        TextView QTY;
+        TextView UNIT;
+//        TextView BarCode;
+//        TextView SeriNo;
+//        TextView BillCode;
+//        TextView ScanedNum;
+//        TextView box;
     }
 }
