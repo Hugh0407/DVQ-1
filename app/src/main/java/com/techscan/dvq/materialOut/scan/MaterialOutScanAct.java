@@ -45,9 +45,11 @@ public class MaterialOutScanAct extends Activity {
     @InjectView(R.id.ed_encoding)
     EditText mEdEncoding;
     @InjectView(R.id.ed_type)
-    EditText mEdType;
+    EditText mEdType;   // 型号
+    @InjectView(R.id.ed_spectype)
+    EditText mEdSpectype;   //规格
     @InjectView(R.id.ed_lot)
-    EditText mEdLot;
+    EditText mEdLot;        //批次
     @InjectView(R.id.ed_name)
     EditText mEdName;
     @InjectView(R.id.ed_unit)
@@ -61,9 +63,9 @@ public class MaterialOutScanAct extends Activity {
     @InjectView(R.id.btn_back)
     Button mBtnBack;
 
+
     String TAG = "MaterialOutScanAct";
     List<HashMap<String, String>> detailList = new ArrayList<HashMap<String, String>>();
-    List<Goods> tempList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,8 +73,10 @@ public class MaterialOutScanAct extends Activity {
         setContentView(R.layout.activity_material_out_scan);
         ButterKnife.inject(this);
         ActionBar actionBar = this.getActionBar();
-        actionBar.setTitle("扫描");
+        actionBar.setTitle("材料出库扫描");
         mEdBarCode.setOnKeyListener(mOnKeyListener);
+        mEdLot.setOnKeyListener(mOnKeyListener);
+        mEdQty.setOnKeyListener(mOnKeyListener);
         mEdBarCode.addTextChangedListener(mTextWatcher);
     }
 
@@ -105,7 +109,6 @@ public class MaterialOutScanAct extends Activity {
                             }
                         }
                     }
-                    tempList = overViewList;
                 }
                 OvAdapter ovAdapter = new OvAdapter(MaterialOutScanAct.this, overViewList);
                 showDialog(overViewList, ovAdapter, "扫描总览");
@@ -115,12 +118,30 @@ public class MaterialOutScanAct extends Activity {
                 showDialog(detailList, myBaseAdapter, "扫描明细");
                 break;
             case R.id.btn_back:
-                if (tempList != null) {
+                int count = detailList.size();
+                List<Goods> goodsList = new ArrayList<Goods>();
+                HashMap<String, String> map;
+                Goods gd;
+                for (int i = 0; i < count; i++) {
+                    map = detailList.get(i);
+                    gd = new Goods();
+                    gd.setBarcode(map.get("barcode"));
+                    gd.setEncoding(map.get("encoding"));
+                    gd.setName(map.get("name"));
+                    gd.setType(map.get("type"));
+                    gd.setUnit(map.get("unit"));
+                    gd.setLot(map.get("lot"));
+                    gd.setQty(Float.valueOf(map.get("qty")));
+                    gd.setPk_invbasdoc(map.get("pk_invbasdoc"));
+                    gd.setPk_invmandoc(map.get("pk_invmandoc"));
+                    goodsList.add(gd);
+                }
+                if (goodsList.size() > 0) {
                     Intent in = new Intent();
                     Bundle bundle = new Bundle();
-                    bundle.putParcelableArrayList("overViewList", (ArrayList<? extends Parcelable>) tempList);
+                    bundle.putParcelableArrayList("overViewList", (ArrayList<? extends Parcelable>) goodsList);
                     in.putExtras(bundle);
-                    Log.d(TAG, "tempList: "+tempList.get(0).getQty());
+                    Log.d(TAG, "tempList: " + goodsList.get(0).getQty());
                     MaterialOutScanAct.this.setResult(5, in);
                 }
                 finish();
@@ -179,40 +200,118 @@ public class MaterialOutScanAct extends Activity {
         @Override
         public boolean onKey(View v, int keyCode, KeyEvent event) {
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
-                String[] barCode = mEdBarCode.getText().toString().split("\\|");
-                if (barCode.length == 2 && barCode[0].equals("Y")) {          //Y|SKU
-                    String encoding = barCode[1];
-                    mEdEncoding.setText(encoding);
-                    GetInvBaseInfo(encoding);
-                    mEdType.setText("");
-                    mEdLot.setText("");
-                    mEdName.setText("");
-                    mEdUnit.setText("");
-                    mEdQty.setText("");
-                } else if (barCode.length == 6 && barCode[0].equals("C")) {   //C|SKU|LOT|TAX|QTY|SN
-                    String encoding = barCode[1];
-                    mEdEncoding.setText(encoding);
-                    GetInvBaseInfo(encoding);
-
-                    mEdLot.setText(barCode[2]);
-                    mEdQty.setText(barCode[4]);
-                } else if (barCode.length == 7 && barCode[0].equals("TC")) {    //TC|SKU|LOT|TAX|QTY|NUM|SN
-                    String encoding = barCode[1];
-                    mEdEncoding.setText(encoding);
-                    GetInvBaseInfo(encoding);
-
-                    mEdLot.setText(barCode[2]);
-                    float qty = Float.valueOf(barCode[4]);
-                    float num = Float.valueOf(barCode[5]);
-                    mEdQty.setText(String.valueOf(qty * num));
-                }else {
-                    Toast.makeText(MaterialOutScanAct.this, "条码有误重新输入", Toast.LENGTH_SHORT).show();
+                switch (v.getId()) {
+                    case R.id.ed_bar_code:
+                        BarAls();
+                        return true;
+                    case R.id.ed_lot:
+                        if (TextUtils.isEmpty(mEdLot.getText())) {
+                            Toast.makeText(MaterialOutScanAct.this, "请输入批次号", Toast.LENGTH_SHORT).show();
+                        } else {
+                            if (isInfoComplete()) {
+                                if (addInfoToDetailList()) {
+                                    SetAllEcTextIsEmpty();
+                                }
+                            }
+                        }
+                        return true;
+                    case R.id.ed_qty:
+                        if (TextUtils.isEmpty(mEdQty.getText())) {
+                            Toast.makeText(MaterialOutScanAct.this, "请输入数量", Toast.LENGTH_SHORT).show();
+                        } else {
+                            if (isInfoComplete()) {
+                                if (addInfoToDetailList()) {
+                                    SetAllEcTextIsEmpty();
+                                }
+                            }
+                        }
+                        return true;
                 }
-                return true;
             }
             return false;
         }
     };
+
+    /**
+     * 条码解析
+     */
+    private boolean BarAls() {
+        String Bar = mEdBarCode.getText().toString();
+        if (Bar.contains("\n")) {
+            Bar = Bar.replace("\n", "");
+        }
+        mEdBarCode.setText(Bar);
+        String[] barCode = Bar.split("\\|");
+        if (barCode.length == 2 && barCode[0].equals("Y")) {          //Y|SKU
+            String encoding = barCode[1];
+            mEdEncoding.setText(encoding);
+            GetInvBaseInfo(encoding);
+            mEdType.setText("");
+            mEdLot.setText("");
+            mEdName.setText("");
+            mEdUnit.setText("");
+            mEdQty.setText("");
+            Log.d(TAG, "BarAls: " + mEdBarCode);
+            return true;
+        } else if (barCode.length == 6 && barCode[0].equals("C")) {   //C|SKU|LOT|TAX|QTY|SN
+            String encoding = barCode[1];
+            mEdEncoding.setText(encoding);
+            GetInvBaseInfo(encoding);
+
+            mEdLot.setText(barCode[2]);
+            mEdQty.setText(barCode[4]);
+            return true;
+        } else if (barCode.length == 7 && barCode[0].equals("TC")) {    //TC|SKU|LOT|TAX|QTY|NUM|SN
+            String encoding = barCode[1];
+            mEdEncoding.setText(encoding);
+            GetInvBaseInfo(encoding);
+            mEdLot.setText(barCode[2]);
+            float qty = Float.valueOf(barCode[4]);
+            float num = Float.valueOf(barCode[5]);
+            mEdQty.setText(String.valueOf(qty * num));
+            return true;
+        } else {
+            Toast.makeText(MaterialOutScanAct.this, "条码有误重新输入", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+    }
+
+    private boolean addInfoToDetailList() {
+        HashMap<String, String> hashMap = new HashMap<String, String>();
+        hashMap.put("barcode", mEdBarCode.getText().toString());
+        hashMap.put("encoding", mEdEncoding.getText().toString());
+        hashMap.put("name", mEdName.getText().toString());
+        hashMap.put("type", mEdType.getText().toString());
+        hashMap.put("unit", mEdUnit.getText().toString());
+        hashMap.put("lot", mEdLot.getText().toString());
+        hashMap.put("qty", mEdQty.getText().toString());
+        return detailList.add(hashMap);
+    }
+
+    private void SetAllEcTextIsEmpty() {
+        mEdBarCode.setText("");
+        mEdEncoding.setText("");
+        mEdName.setText("");
+        mEdType.setText("");
+        mEdUnit.setText("");
+        mEdLot.setText("");
+        mEdQty.setText("");
+    }
+
+    /**
+     * 判断所有的edtext是否为空
+     *
+     * @return
+     */
+    private boolean isInfoComplete() {
+        return (!TextUtils.isEmpty(mEdBarCode.getText())
+                && !TextUtils.isEmpty(mEdEncoding.getText())
+                && !TextUtils.isEmpty(mEdName.getText())
+                && !TextUtils.isEmpty(mEdType.getText())
+                && !TextUtils.isEmpty(mEdUnit.getText())
+                && !TextUtils.isEmpty(mEdLot.getText())
+                && !TextUtils.isEmpty(mEdQty.getText()));
+    }
 
     /**
      * 获取存货基本信息
@@ -220,12 +319,12 @@ public class MaterialOutScanAct extends Activity {
      * @param sku
      */
     private void GetInvBaseInfo(String sku) {
-        HashMap<String,String> parameter = new HashMap<String, String>();
+        HashMap<String, String> parameter = new HashMap<String, String>();
         parameter.put("FunctionName", "GetInvBaseInfo");
         parameter.put("CompanyCode", MainLogin.objLog.CompanyCode);
         parameter.put("InvCode", sku);
         parameter.put("TableName", "baseInfo");
-        RequestThread requestThread = new RequestThread(parameter,mHandler,1);
+        RequestThread requestThread = new RequestThread(parameter, mHandler, 1);
         Thread td = new Thread(requestThread);
         td.start();
     }
@@ -238,7 +337,7 @@ public class MaterialOutScanAct extends Activity {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            switch (msg.what){
+            switch (msg.what) {
                 case 1:
                     JSONObject json = (JSONObject) msg.obj;
                     if (json != null) {
@@ -247,7 +346,7 @@ public class MaterialOutScanAct extends Activity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                    }else {
+                    } else {
                         return;
                     }
                     break;
@@ -259,10 +358,12 @@ public class MaterialOutScanAct extends Activity {
 
     /**
      * 通过获取到的json 解析得到物料信息
+     *
      * @param json
      * @throws JSONException
      */
     private void GetInvBaseByJson(JSONObject json) throws JSONException {
+        Log.d(TAG, "GetInvBaseByJson: " + json);
         if (json.getBoolean("Status")) {
             JSONArray val = json.getJSONArray("baseInfo");
             HashMap<String, Object> map = null;
@@ -272,26 +373,17 @@ public class MaterialOutScanAct extends Activity {
                 map.put("invname", tempJso.getString("invname"));   //橡胶填充油
                 map.put("invcode", tempJso.getString("invcode"));   //00179
                 map.put("measname", tempJso.getString("measname"));   //千克
+                map.put("pk_invbasdoc", tempJso.getString("pk_invbasdoc"));
+                map.put("pk_invmandoc", tempJso.getString("pk_invmandoc"));
+//                map.put("invtype", tempJso.getString("invtype"));   //型号
+//                map.put("invspec", tempJso.getString("invspec"));   //规格
                 map.put("oppdimen", tempJso.getString("oppdimen"));   //重量
             }
-            if (map!=null){
+            if (map != null) {
                 mEdName.setText(map.get("invname").toString());
                 mEdUnit.setText(map.get("measname").toString());
-                mEdType.setText("待加");
-                if (mEdBarCode.getText() != null && mEdEncoding.getText() != null
-                        && mEdName.getText() != null && mEdType.getText() != null
-                        && mEdUnit.getText() != null && mEdLot.getText() != null
-                        && mEdQty.getText() != null) {
-                    HashMap<String, String> hashMap = new HashMap<String, String>();
-                    hashMap.put("barcode", mEdBarCode.getText().toString());
-                    hashMap.put("encoding", mEdEncoding.getText().toString());
-                    hashMap.put("name", mEdName.getText().toString());
-                    hashMap.put("type", mEdType.getText().toString());
-                    hashMap.put("unit", mEdUnit.getText().toString());
-                    hashMap.put("lot", mEdLot.getText().toString());
-                    hashMap.put("qty", mEdQty.getText().toString());
-                    detailList.add(hashMap);
-                }
+//                mEdType.setText(map.get("invtype").toString());
+//                mEdSpectype.setText(map.get("invspec").toString());
             }
         }
     }

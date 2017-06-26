@@ -271,6 +271,7 @@ public class MainLogin extends Activity {
 
                 objLog.UserID = jas.getString("userid");
                 objLog.UserName = jas.getString("username");
+                Log.d("tag", "Login: " + objLog.UserName);
                 objLog.STOrgCode = OrgCode;
                 objLog.WhCodeA = WhCode;
                 objLog.WhCodeB = WhCodeB;

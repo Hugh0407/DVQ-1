@@ -282,6 +282,8 @@
         </activity>
         <activity android:name=".materialOut.DepartmentListAct">
         </activity>
+        <activity android:name=".materialOut.StorgListACt">
+        </activity>
     </application>
 
 </manifest>

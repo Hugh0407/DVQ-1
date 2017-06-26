@@ -70,8 +70,16 @@ public class MaterialOutAct extends Activity {
     @InjectView(R.id.refer_department)
     ImageButton mReferDepartment;
     private String TAG = this.getClass().getSimpleName();
-public static final int a = 10;
+    public static final int a = 10;
     List<Goods> tempList;
+
+    String CDISPATCHERID;//收发类别code
+    String CDPTID;  //部门id
+    String CUSER;   //登录员工id
+    String CWAREHOUSEID;    //库存组织
+    String PK_CALBODY;      //仓库id
+    String PK_CORP;         //公司
+    String VBILLCOD;        //单据号
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +87,8 @@ public static final int a = 10;
         setContentView(R.layout.activity_material_in);
         ButterKnife.inject(this);
         mOrganization.setText("C00");   // TODO: 2017/6/21 暂时默认设置
+        mLeiBie.setText("0105");
+        mDepartment.setText("物流部");
         ActionBar actionBar = this.getActionBar();
         actionBar.setTitle("材料出库");
         mBillDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -114,6 +124,24 @@ public static final int a = 10;
                 }
                 break;
             case R.id.refer_organization:
+
+//                btnReferSTOrgList(MainLogin.objLog.CompanyCode);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        JSONObject object = new JSONObject();
+                        try {
+                            object.put("FunctionName", "GetSTOrgList");
+                            object.put("CompanyCode", MainLogin.objLog.CompanyCode);
+                            object.put("TableName", "STOrg");
+                            JSONObject rev = Common.DoHttpQuery(object, "CommonQuery", "");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
                 break;
             case R.id.refer_lei_bie:
                 try {
@@ -146,28 +174,52 @@ public static final int a = 10;
         }
     }
 
+    /**
+     * 保存单据信息
+     *
+     * @param goodsList
+     * @throws JSONException
+     */
     private void SaveInfo(List<Goods> goodsList) throws JSONException {
-        JSONObject table = new JSONObject();
+        final JSONObject table = new JSONObject();
         JSONObject tableHead = new JSONObject();
-        tableHead.put("billnum", mBillNum.getText().toString());
-        tableHead.put("billDate", mBillDate.getText().toString());
-        tableHead.put("whname", mWh.getText().toString());
-        tableHead.put("organization", mOrganization.getText().toString());
-        tableHead.put("leiBie", mLeiBie.getText().toString());
-        tableHead.put("department", mDepartment.getText().toString());
-        tableHead.put("remark", mRemark.getText().toString());
-        table.put("tableHead", tableHead);
-        JSONArray tableBody = new JSONArray();
-
+        tableHead.put("CDISPATCHERID", CDISPATCHERID);
+        tableHead.put("CDPTID", CDPTID);
+        tableHead.put("CUSER", MainLogin.objLog.UserID);
+        tableHead.put("CWAREHOUSEID", CWAREHOUSEID);
+//        tableHead.put("PK_CALBODY", MainLogin.objLog.STOrgCode);
+        tableHead.put("PK_CORP", MainLogin.objLog.STOrgCode);
+        tableHead.put("VBILLCODE", mBillNum.getText().toString());
+        table.put("Head", tableHead);
+        JSONObject tableBody = new JSONObject();
+        JSONArray bodyArray = new JSONArray();
         for (Goods c : goodsList) {
             JSONObject object = new JSONObject();
-            object.put("name", c.getName());
-            object.put("qty", c.getQty());
-//                            object.put("num", c.getNum());
-            object.put("encoding", c.getEncoding());
-            tableBody.put(object);
+            object.put("CINVBASID", c.getPk_invbasdoc());
+            object.put("CINVENTORYID", c.getPk_invmandoc());
+            object.put("NOUTNUM", c.getQty());
+//            object.put("PK_BODYCALBODY", MainLogin.objLog.STOrgCode);
+            object.put("PK_CORP", MainLogin.objLog.STOrgCode);
+            object.put("VBATCHCODE", c.getLot());
+            bodyArray.put(object);
         }
-        table.put("tableBody", tableBody);
+        tableBody.put("ScanDetails", bodyArray);
+        table.put("Body", tableBody);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    JSONObject jas = MainLogin.objLog.DoHttpQuery(table, "SaveMaterialOut", "A");
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
+
         Log.d(TAG, "onViewClicked: " + table.toString());
     }
 
@@ -248,11 +300,12 @@ public static final int a = 10;
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        //部门名称的回传数据 <----ListWarehouse.class
+        //仓库的回传数据 <----ListWarehouse.class
         if (requestCode == 97 && resultCode == 13) {
             String warehousePK1 = data.getStringExtra("result1");
             String warehousecode = data.getStringExtra("result2");
             String warehouseName = data.getStringExtra("result3");
+            CWAREHOUSEID = warehousePK1;
             mWh.setText(warehouseName);
         }
         // 收发类别的回传数据 <----VlistRdcl.class
@@ -260,8 +313,9 @@ public static final int a = 10;
             String code = data.getStringExtra("Code");
             String name = data.getStringExtra("Name");
             String AccID = data.getStringExtra("AccID");
-            String RdIDA = data.getStringExtra("RdIDA");
+            String RdIDA = data.getStringExtra("RdIDA");    //需要回传的id
             String RdIDB = data.getStringExtra("RdIDB");
+            CDISPATCHERID = RdIDA;
             mLeiBie.setText(name);
         }
         //部门信息的回传数据 <----DepartmentListAct.class
@@ -269,6 +323,7 @@ public static final int a = 10;
             String deptname = data.getStringExtra("deptname");
             String pk_deptdoc = data.getStringExtra("pk_deptdoc");
             String deptcode = data.getStringExtra("deptcode");
+            CDPTID = pk_deptdoc;
             mDepartment.setText(deptname);
         }
 
@@ -276,8 +331,21 @@ public static final int a = 10;
         if (requestCode == 95 && resultCode == 5) {
             Bundle bundle = data.getExtras();
             tempList = bundle.getParcelableArrayList("overViewList");
-            Log.d(TAG, "onActivityResult: " + tempList.get(0).getQty());
         }
+    }
+
+
+    /**
+     * 获取库存组织的网络请求
+     */
+    private void btnReferSTOrgList(String companyCode) {
+        HashMap<String, String> parameter = new HashMap<String, String>();
+        parameter.put("FunctionName", "GetSTOrgList");
+        parameter.put("CompanyCode", companyCode);
+        parameter.put("TableName", "STOrg");
+        RequestThread requestThread = new RequestThread(parameter, mHandler, 2);
+        Thread td = new Thread(requestThread);
+        td.start();
     }
 
     /**
@@ -312,6 +380,21 @@ public static final int a = 10;
                             Intent ViewGrid = new Intent(MaterialOutAct.this, DepartmentListAct.class);
                             ViewGrid.putExtra("myData", temp.toString());
                             startActivityForResult(ViewGrid, 96);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case 2:
+                    JSONObject storg = (JSONObject) msg.obj;
+                    try {
+                        if (storg.getBoolean("Status")) {
+                            JSONArray val = storg.getJSONArray("STOrg");
+                            JSONObject temp = new JSONObject();
+                            temp.put("STOrg", val);
+                            Intent StorgList = new Intent(MaterialOutAct.this, DepartmentListAct.class);
+                            StorgList.putExtra("STOrg", temp.toString());
+                            startActivityForResult(StorgList, 94);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
