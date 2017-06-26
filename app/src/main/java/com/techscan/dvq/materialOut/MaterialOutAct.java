@@ -4,6 +4,8 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -16,7 +18,7 @@ import com.techscan.dvq.ListWarehouse;
 import com.techscan.dvq.MainLogin;
 import com.techscan.dvq.R;
 import com.techscan.dvq.VlistRdcl;
-import com.techscan.dvq.materialOut.scan.Cargo;
+import com.techscan.dvq.materialOut.scan.Goods;
 import com.techscan.dvq.materialOut.scan.MaterialOutScanAct;
 
 import org.apache.http.ParseException;
@@ -25,6 +27,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -67,8 +70,8 @@ public class MaterialOutAct extends Activity {
     @InjectView(R.id.refer_department)
     ImageButton mReferDepartment;
     private String TAG = this.getClass().getSimpleName();
-
-    List<Cargo> tempList;
+public static final int a = 10;
+    List<Goods> tempList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +90,6 @@ public class MaterialOutAct extends Activity {
                 }
             }
         });
-
     }
 
     /**
@@ -129,32 +131,7 @@ public class MaterialOutAct extends Activity {
             case R.id.btnPurinSave:
                 if (tempList != null && tempList.size() > 0) {
                     try {
-                        JSONObject table = new JSONObject();
-                        JSONObject tableHead = new JSONObject();
-                        tableHead.put("billnum", mBillNum.getText().toString());
-                        tableHead.put("billDate", mBillDate.getText().toString());
-                        tableHead.put("whname", mWh.getText().toString());
-                        tableHead.put("organization", mOrganization.getText().toString());
-                        tableHead.put("leiBie", mLeiBie.getText().toString());
-                        tableHead.put("department", mDepartment.getText().toString());
-                        tableHead.put("remark", mRemark.getText().toString());
-                        table.put("tableHead", tableHead);
-                        JSONArray tableBody = new JSONArray();
-
-//                        String name;
-//                        int qty;
-//                        int num;
-//                        String encoding;
-                        for (Cargo c : tempList) {
-                            JSONObject object = new JSONObject();
-                            object.put("name", c.getName());
-                            object.put("qty", c.getQty());
-//                            object.put("num", c.getNum());
-                            object.put("encoding", c.getEncoding());
-                            tableBody.put(object);
-                        }
-                        table.put("tableBody", tableBody);
-                        Log.d(TAG, "onViewClicked: " + table.toString());
+                        SaveInfo(tempList);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -164,18 +141,36 @@ public class MaterialOutAct extends Activity {
                 finish();
                 break;
             case R.id.refer_department:
-                btnReferDepartment();
+                btnReferDepartment(MainLogin.objLog.CompanyCode);
                 break;
         }
     }
 
-    /**
-     * 获取部门列表信息的网络请求
-     */
-    private void btnReferDepartment() {
-        MyThread myThread = new MyThread();
-        new Thread(myThread).start();
+    private void SaveInfo(List<Goods> goodsList) throws JSONException {
+        JSONObject table = new JSONObject();
+        JSONObject tableHead = new JSONObject();
+        tableHead.put("billnum", mBillNum.getText().toString());
+        tableHead.put("billDate", mBillDate.getText().toString());
+        tableHead.put("whname", mWh.getText().toString());
+        tableHead.put("organization", mOrganization.getText().toString());
+        tableHead.put("leiBie", mLeiBie.getText().toString());
+        tableHead.put("department", mDepartment.getText().toString());
+        tableHead.put("remark", mRemark.getText().toString());
+        table.put("tableHead", tableHead);
+        JSONArray tableBody = new JSONArray();
+
+        for (Goods c : goodsList) {
+            JSONObject object = new JSONObject();
+            object.put("name", c.getName());
+            object.put("qty", c.getQty());
+//                            object.put("num", c.getNum());
+            object.put("encoding", c.getEncoding());
+            tableBody.put(object);
+        }
+        table.put("tableBody", tableBody);
+        Log.d(TAG, "onViewClicked: " + table.toString());
     }
+
 
     // 打开收发类别画面
     private void btnRdclClick(String Code) throws ParseException, IOException, JSONException {
@@ -286,30 +281,45 @@ public class MaterialOutAct extends Activity {
     }
 
     /**
-     * 获取部门信息的线程
+     * 获取部门列表信息的网络请求
      */
-    private class MyThread implements Runnable {
+    private void btnReferDepartment(String companyCode) {
+        HashMap<String, String> parameter = new HashMap<String, String>();
+        parameter.put("FunctionName", "GetDeptList");
+        parameter.put("CompanyCode", companyCode);
+        parameter.put("TableName", "department");
+        RequestThread requestThread = new RequestThread(parameter, mHandler, 1);
+        Thread td = new Thread(requestThread);
+        td.start();
+    }
+
+    /**
+     * 网络请求后的线程通信
+     * msg.obj 是从子线程传递过来的数据
+     */
+    Handler mHandler = new Handler() {
         @Override
-        public void run() {
-            JSONObject para = new JSONObject();
-            try {
-                para.put("FunctionName", "GetDeptList");
-                para.put("CompanyCode", MainLogin.objLog.CompanyCode);
-                para.put("TableName", "department");
-                JSONObject rev = Common.DoHttpQuery(para, "CommonQuery", "");
-                if (rev.getBoolean("Status")) {
-                    JSONArray val = rev.getJSONArray("department");
-                    JSONObject temp = new JSONObject();
-                    temp.put("department", val);
-                    Intent ViewGrid = new Intent(MaterialOutAct.this, DepartmentListAct.class);
-                    ViewGrid.putExtra("myData", temp.toString());
-                    startActivityForResult(ViewGrid, 96);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 1:
+                    JSONObject json = (JSONObject) msg.obj;
+                    try {
+                        if (json.getBoolean("Status")) {
+                            JSONArray val = json.getJSONArray("department");
+                            JSONObject temp = new JSONObject();
+                            temp.put("department", val);
+                            Intent ViewGrid = new Intent(MaterialOutAct.this, DepartmentListAct.class);
+                            ViewGrid.putExtra("myData", temp.toString());
+                            startActivityForResult(ViewGrid, 96);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                default:
+                    break;
             }
         }
-    }
+    };
 }

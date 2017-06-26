@@ -20,18 +20,18 @@ import java.util.List;
 public class OvAdapter extends BaseAdapter {
 
     Context mContext;
-    List<Cargo> mList;
+    List<Goods> mList;
 
-    public OvAdapter(Context context, List<Cargo> list) {
+    public OvAdapter(Context context, List<Goods> list) {
         mContext = context;
         mList = list;
     }
 
-    public void setList(List<Cargo> list) {
+    public void setList(List<Goods> list) {
         mList = list;
     }
 
-    public List<Cargo> getList() {
+    public List<Goods> getList() {
         return mList;
     }
 

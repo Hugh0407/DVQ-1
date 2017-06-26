@@ -8,32 +8,32 @@ import android.os.Parcelable;
  * 货物对象
  */
 
-public class Cargo implements Parcelable{
+public class Goods implements Parcelable{
 
     String name;
     float qty;
     int num;
     String encoding;
 
-    public Cargo() {
+    public Goods() {
     }
 
-    protected Cargo(Parcel in) {
+    protected Goods(Parcel in) {
         name = in.readString();
         qty = in.readFloat();
         num = in.readInt();
         encoding = in.readString();
     }
 
-    public static final Creator<Cargo> CREATOR = new Creator<Cargo>() {
+    public static final Creator<Goods> CREATOR = new Creator<Goods>() {
         @Override
-        public Cargo createFromParcel(Parcel in) {
-            return new Cargo(in);
+        public Goods createFromParcel(Parcel in) {
+            return new Goods(in);
         }
 
         @Override
-        public Cargo[] newArray(int size) {
-            return new Cargo[size];
+        public Goods[] newArray(int size) {
+            return new Goods[size];
         }
     };
 
