@@ -64,6 +64,7 @@
                 android:text="单据日期"/>
 
             <EditText
+                android:clickable="true"
                 android:id="@+id/bill_date"
                 android:layout_width="0dp"
                 android:layout_height="30dp"

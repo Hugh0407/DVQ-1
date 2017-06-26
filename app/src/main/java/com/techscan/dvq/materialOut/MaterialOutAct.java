@@ -84,6 +84,7 @@ public class MaterialOutAct extends Activity {
     int year;
     int month;
     int day;
+    Calendar mycalendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +101,7 @@ public class MaterialOutAct extends Activity {
      */
     @OnClick({R.id.refer_bill_num, R.id.refer_wh, R.id.refer_organization,
             R.id.refer_lei_bie, R.id.btnPurInScan, R.id.btnPurinSave,
-            R.id.btnBack, R.id.refer_department})
+            R.id.btnBack, R.id.refer_department, R.id.bill_date})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.refer_bill_num:
@@ -142,6 +143,13 @@ public class MaterialOutAct extends Activity {
                 break;
             case R.id.refer_department:
                 btnReferDepartment();
+                break;
+            case R.id.bill_date:
+                year = mycalendar.get(Calendar.YEAR); //获取Calendar对象中的年
+                month = mycalendar.get(Calendar.MONTH);//获取Calendar对象中的月
+                day = mycalendar.get(Calendar.DAY_OF_MONTH);//获取这个月的第几天
+                DatePickerDialog dpd = new DatePickerDialog(MaterialOutAct.this, Datelistener, year, month, day);
+                dpd.show();//显示DatePickerDialog组件
                 break;
         }
     }
@@ -192,6 +200,23 @@ public class MaterialOutAct extends Activity {
     }
 
     /**
+     * 初始化界面
+     * 初始化原始数据
+     */
+    private void initView() {
+        mOrganization.setText("C00");   // TODO: 2017/6/21 暂时默认设置
+        mLeiBie.setText("0105");
+        mDepartment.setText("物流部");
+        ActionBar actionBar = this.getActionBar();
+        actionBar.setTitle("材料出库");
+        mycalendar = Calendar.getInstance();//初始化Calendar日历对象
+        year = mycalendar.get(Calendar.YEAR); //获取Calendar对象中的年
+        month = mycalendar.get(Calendar.MONTH);//获取Calendar对象中的月
+        day = mycalendar.get(Calendar.DAY_OF_MONTH);//获取这个月的第几天
+        mBillDate.setOnFocusChangeListener(myFocusListener);
+    }
+
+    /**
      * 网络请求后的线程通信
      * msg.obj 是从子线程传递过来的数据
      */
@@ -235,32 +260,6 @@ public class MaterialOutAct extends Activity {
             }
         }
     };
-
-    /**
-     * 初始化界面
-     * 初始化原始数据
-     */
-    private void initView() {
-        mOrganization.setText("C00");   // TODO: 2017/6/21 暂时默认设置
-        mLeiBie.setText("0105");
-        mDepartment.setText("物流部");
-        ActionBar actionBar = this.getActionBar();
-        actionBar.setTitle("材料出库");
-        Calendar mycalendar = Calendar.getInstance();//初始化Calendar日历对象
-        year = mycalendar.get(Calendar.YEAR); //获取Calendar对象中的年
-        month = mycalendar.get(Calendar.MONTH);//获取Calendar对象中的月
-        day = mycalendar.get(Calendar.DAY_OF_MONTH);//获取这个月的第几天
-        mBillDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    DatePickerDialog dpd = new DatePickerDialog(MaterialOutAct.this, Datelistener, year, month, day);
-                    dpd.show();//显示DatePickerDialog组件
-                    mBillDate.setText(year + "-" + month + "-" + day);
-                }
-            }
-        });
-    }
 
 
     /**
@@ -421,6 +420,23 @@ public class MaterialOutAct extends Activity {
             year = myyear;
             month = monthOfYear;
             day = dayOfMonth;
+            updateDate();
+        }
+
+        //当DatePickerDialog关闭时，更新日期显示
+        private void updateDate() {
+            //在TextView上显示日期
+            mBillDate.setText(year + "-" + (month + 1) + "-" + day);
+        }
+
+    };
+    private View.OnFocusChangeListener myFocusListener = new View.OnFocusChangeListener() {
+        @Override
+        public void onFocusChange(View view, boolean hasFocus) {
+            if (hasFocus) {
+                DatePickerDialog dpd = new DatePickerDialog(MaterialOutAct.this, Datelistener, year, month, day);
+                dpd.show();//显示DatePickerDialog组件
+            }
         }
     };
 }
