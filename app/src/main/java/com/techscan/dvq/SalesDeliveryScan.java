@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -42,8 +41,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import static android.content.ContentValues.TAG;
-
 //import com.techscan.dvq.StockTransScan.ButtonOnClickClearconfirm;
 //import com.techscan.dvq.StockTransScanIn.MyListAdapter;
 
@@ -74,15 +71,8 @@ public class SalesDeliveryScan extends Activity {
     private List<Map<String,Object>> lstSaveBody = null;
     private List<Map<String,Object>> lstSaveBody_c = null;
 
-    //ADD CAIXY TEST START
-//	private SoundPool sp;//声明一个SoundPool
-//	private int MainLogin.music;//定义一个int来设置suondID
-//	private int MainLogin.music2;//定义一个int来设置suondID
-    //ADD CAIXY TEST END
-
     //删除的任务内容临时保存住
     private JSONObject JsonRemoveTaskData = new JSONObject();
-
     //ADD BY WUQIONG START
     //删除的任务内容临时保存住
     private JSONObject JsonModTaskData = new JSONObject();
@@ -90,8 +80,6 @@ public class SalesDeliveryScan extends Activity {
 
     //定义是否删除Dialog
     private AlertDialog DeleteAlertDialog =null;
-
-
     String wareHouseID = "";
     private String[] warehouseList = null;
     private String[] warehouseNameList = null;
@@ -164,9 +152,9 @@ public class SalesDeliveryScan extends Activity {
 //                lstSDScanDetail.setAdapter(listItemAdapter);
 //            }
 //        }
-        lstSaveBody_c = new ArrayList<Map<String, Object>>();
-        salesDeliveryAdapter = new SalesDeliveryAdapter(SalesDeliveryScan.this, lstSaveBody_c);
-        lstSDScanDetail.setAdapter(salesDeliveryAdapter);
+//        lstSaveBody_c = new ArrayList<Map<String, Object>>();
+//        salesDeliveryAdapter = new SalesDeliveryAdapter(SalesDeliveryScan.this, lstSaveBody_c);
+//        lstSDScanDetail.setAdapter(salesDeliveryAdapter);
         wareHouseID = myintent.getStringExtra("Warehouse");
 
 
@@ -437,9 +425,7 @@ public class SalesDeliveryScan extends Activity {
         String invFlg = "ng";
         for(int i = 0;i<jsarray.length();i++)
         {
-
             //TaskCount = TaskCount + Integer.valueOf(((JSONObject)(JsonArrays.get(i))).getString("nnum").toString());
-
             String TaskBatch = ((JSONObject)(jsarray.get(i))).getString("batchcode");
             if(!TaskBatch.equals("null"))
             {
@@ -461,8 +447,6 @@ public class SalesDeliveryScan extends Activity {
 
 
                         invFlg = "ok";
-
-
                         //String Taskbatch = ((JSONObject)(jsarray.get(i))).getString("noutnum");
 //                        if(!Tasknnum.equals("0"))
 //                        {
@@ -495,11 +479,7 @@ public class SalesDeliveryScan extends Activity {
                     }
                     int shouldinnum  = Integer.valueOf(nnum) - Integer.valueOf(snnum);
                     String Tasknnum = shouldinnum+"";
-
-
                     invFlg = "ok";
-
-
                     //String Taskbatch = ((JSONObject)(jsarray.get(i))).getString("noutnum");
                     if(!Tasknnum.equals("0"))
                     {
@@ -508,7 +488,6 @@ public class SalesDeliveryScan extends Activity {
                         {
                             Free1 = jsarray.getJSONObject(i).getString("vfree1");
                         }
-
 //	  		  				return true;
                     }
                 }
@@ -688,24 +667,14 @@ public class SalesDeliveryScan extends Activity {
                 jObj.put("def6",JsonReMod.getString("def6").toString());
                 jObj.put("ddeliverdate",JsonReMod.getString("ddeliverdate").toString());
                 jObj.put("pk_defdoc6",JsonReMod.getString("pk_defdoc6").toString());
-
                 //需要修改
-
-
                 //修改数量问题
                 int	iTasknnum = Integer.valueOf(Tasknnum);
-
                 String snnum = (nnum.replaceAll("\\.0", ""));
-
                 int innum = Integer.valueOf(snnum);
-
                 int inewnnum = iTasknnum+innum;
                 String snewnnum = inewnnum+"" ;
-
                 jObj.put("number",snewnnum);//修改数量问题
-
-
-
                 JSONArray JsonArraysRemod = new JSONArray();
                 JSONObject jObjReMod = new JSONObject();
                 for (int i =0; i<JsonArrays.length();i++)
@@ -713,37 +682,27 @@ public class SalesDeliveryScan extends Activity {
                     String csourcebillhidDel = ((JSONObject)(JsonArrays.get(i))).getString("billbid");
                     String InvCodeaDel = ((JSONObject)(JsonArrays.get(i))).getString("invcode");
                     String csourcerownoaDel = ((JSONObject)(JsonArrays.get(i))).getString("crowno");
-
-
                     if(!csourcebillhidDel.equals(csourcebillhid)||!InvCodeaDel.equals(InvCode)||!csourcerownoaDel.equals(csourcerowno))
                     {
                         jObjReMod = (JSONObject)JsonArrays.get(i);
                         JsonArraysRemod.put(jObjReMod);
                     }
                 }
-
                 JsonArrays = JsonArraysRemod;
                 JsonArrays.put(jObj);
             }
-
-
             jsonBodyTask = new JSONObject();
             jsonBodyTask.put("Status", true);
             jsonBodyTask.put("dbBody", JsonArrays);
-
         }
-
         JsonModTaskData= new JSONObject();
-
         getTaskListData(jsonBodyTask);
         while(itModKeys.hasNext())
             JsonModTaskData = new JSONObject();
         ScanedBarcode = new ArrayList<String>();
-
         lstSaveBody = new ArrayList<Map<String, Object>>();
         lstSDScanDetail.setAdapter(null);
         txtSDScanBarcode.setText("");
-
         listcount = lstSaveBody.size();
         tvSDcounts.setText("总共"+Tasknnum+"件 | "+"已扫"+listcount+"件 | "+"未扫"+(Tasknnum-listcount)+"件");
 
@@ -1046,7 +1005,7 @@ public class SalesDeliveryScan extends Activity {
         //ADD BY WUQIONG START
 //        GetModTaskList(bar,jsonCheckGetBillCode);
         //ADD BY WUQIONG END
-//        ReSetTaskListData();
+        ReSetTaskListData();
         ScanedBarcode.add(FinishBarCode);
 //        MainLogin.sp.play(MainLogin.music2, 1, 1, 0, 0, 1);
     }
@@ -1072,7 +1031,7 @@ public class SalesDeliveryScan extends Activity {
             String lsJsonInvCode = ((JSONObject)(JsonArrays.get(i))).getString("invcode");
             String lsJsonInvBatch = ((JSONObject)(JsonArrays.get(i))).getString("batchcode");
             //add caixy 解决扫描任务匹配不正确问题
-            //Double ldJsonInvQty = ((JSONObject)(JsonArrays.get(i))).getDouble("number");
+//            Double ldJsonInvQty = ((JSONObject)(JsonArrays.get(i))).getDouble("number");
             String nnum = ((JSONObject)(JsonArrays.get(i))).getString("number");
             String ntranoutnum = ((JSONObject)(JsonArrays.get(i))).getString("outnumber");
             String snnum = "0";
@@ -1159,15 +1118,15 @@ public class SalesDeliveryScan extends Activity {
         {
             Double inQty = 0.0;
             Map<String,Object> temp = (Map<String,Object>) lstSaveBody.get(i);
-            if(temp.get("invbasdocid").equals(currentObj.Invbasdoc()))
-            {
-                if(temp.get("billbid").equals(sBillBID)&&temp.get("billhid").equals(sBillHID))
-                {
-                    inQty += Double.valueOf(temp.get("spacenum").toString());
-                    ScanedQty = Integer.valueOf(temp.get("spacenum").toString());//add caixy e 解决扫描数量错误
-
-                }
-            }
+//            if(temp.get("invbasdocid").equals(currentObj.Invbasdoc()))
+//            {
+//                if(temp.get("billbid").equals(sBillBID)&&temp.get("billhid").equals(sBillHID))
+//                {
+//                    inQty += Double.valueOf(temp.get("spacenum").toString());
+//                    ScanedQty = Integer.valueOf(temp.get("spacenum").toString());//add caixy e 解决扫描数量错误
+//
+//                }
+//            }
 
             if(inQty.toString().equals(Qty.toString()))
             {
@@ -1214,8 +1173,6 @@ public class SalesDeliveryScan extends Activity {
                 JsonModTaskItem.put("def6", ((JSONObject) JsonTaskArrays.get(iIndex)).get("def6").toString());
                 JsonModTaskItem.put("ddeliverdate", ((JSONObject) JsonTaskArrays.get(iIndex)).get("ddeliverdate").toString());
                 JsonModTaskItem.put("pk_defdoc6", ((JSONObject) JsonTaskArrays.get(iIndex)).get("pk_defdoc6").toString());
-
-
                 //需要修改
                 JsonModTaskItem.put("number", inQty);
 
@@ -1232,28 +1189,85 @@ public class SalesDeliveryScan extends Activity {
 
 
 
-    private void ReSetTaskListData() throws JSONException
+//    private void ReSetTaskListData() throws JSONException
+//    {
+//        JSONArray JsonArrays = (JSONArray)jsonBodyTask.get("dbBody");
+//        JSONArray JsonArrNew = new JSONArray();
+//        for(int i=0;i<JsonArrays.length();i++)
+//        {
+//            if (!iModTaskIndex.equals(""))
+//            {
+//                if(i!=Integer.parseInt(iModTaskIndex))
+//                {
+//                    JsonArrNew.put((JSONObject)JsonArrays.get(i));
+//                }
+//                else
+//                {
+//                    JSONObject jObj = new JSONObject();
+//                    jObj.put("vfree1", ((JSONObject) JsonArrays.get(i)).get("vfree1").toString());
+//                    jObj.put("pk_measdoc", ((JSONObject) JsonArrays.get(i)).get("pk_measdoc").toString());
+//                    jObj.put("measname", ((JSONObject) JsonArrays.get(i)).get("measname").toString());
+//                    jObj.put("invcode", ((JSONObject) JsonArrays.get(i)).get("invcode").toString());
+//                    jObj.put("invname", ((JSONObject) JsonArrays.get(i)).get("invname").toString());
+//                    jObj.put("invspec", ((JSONObject) JsonArrays.get(i)).get("invspec").toString());
+//                    jObj.put("invtype", ((JSONObject) JsonArrays.get(i)).get("invtype").toString());
+//                    jObj.put("billcode", ((JSONObject) JsonArrays.get(i)).get("billcode").toString());
+//                    jObj.put("batchcode", ((JSONObject) JsonArrays.get(i)).get("batchcode").toString());
+//                    jObj.put("invbasdocid", ((JSONObject) JsonArrays.get(i)).get("invbasdocid").toString());
+//                    jObj.put("invmandocid", ((JSONObject) JsonArrays.get(i)).get("invmandocid").toString());
+//                    jObj.put("number", ((JSONObject) JsonArrays.get(i)).get("number").toString());
+//                    jObj.put("outnumber", ((JSONObject) JsonArrays.get(i)).get("outnumber").toString());
+//                    jObj.put("sourcerowno", ((JSONObject) JsonArrays.get(i)).get("sourcerowno").toString());
+//                    jObj.put("sourcehid", ((JSONObject) JsonArrays.get(i)).get("sourcehid").toString());
+//                    jObj.put("sourcebid", ((JSONObject) JsonArrays.get(i)).get("sourcebid").toString());
+//                    jObj.put("sourcehcode", ((JSONObject) JsonArrays.get(i)).get("sourcehcode").toString());
+//                    jObj.put("sourcetype", ((JSONObject) JsonArrays.get(i)).get("sourcetype").toString());
+//                    jObj.put("crowno", ((JSONObject) JsonArrays.get(i)).get("crowno").toString());
+//                    jObj.put("billhid", ((JSONObject) JsonArrays.get(i)).get("billhid").toString());
+//                    jObj.put("billbid", ((JSONObject) JsonArrays.get(i)).get("billbid").toString());
+//                    jObj.put("billhcode", ((JSONObject) JsonArrays.get(i)).get("billhcode").toString());
+//                    jObj.put("billtype", ((JSONObject) JsonArrays.get(i)).get("billtype").toString());
+//                    jObj.put("def6", ((JSONObject) JsonArrays.get(i)).get("def6").toString());
+//                    jObj.put("ddeliverdate", ((JSONObject) JsonArrays.get(i)).get("ddeliverdate").toString());
+//                    jObj.put("pk_defdoc6", ((JSONObject) JsonArrays.get(i)).get("pk_defdoc6").toString());
+//                    String snumber = ((JSONObject) JsonArrays.get(i)).get("number").toString();
+//                    int innum = Integer.valueOf(snumber).intValue() - ScanedQty;
+//
+//                    String snnum = innum +"";
+//                    jObj.put("number", snnum);
+//
+//                    JsonArrNew.put(jObj);
+//
+//                }
+//            }
+//            //ADD BY WUQIONG END
+//        }
+//        //MOD BY WUQIONG S
+//        if(!iModTaskIndex.equals(""))
+//        {
+//            jsonBodyTask = new JSONObject();
+//            jsonBodyTask.put("Status", true);
+//            jsonBodyTask.put("dbBody", JsonArrNew);
+////	    	  		if(!iRemoveTaskIndex.equals(""))
+////	    	  		{
+////	    	  			jonsBody.put("RemoveTaskData", JsonRemoveTaskData);
+////	    	  		}
+//            if(!iModTaskIndex.equals(""))
+//            {
+//                jsonBodyTask.put("ModTaskData", JsonModTaskData);
+//            }
+//
+//            getTaskListData(jsonBodyTask);
+//        }
+//
+//    }
+private void ReSetTaskListData() throws JSONException
     {
         JSONArray JsonArrays = (JSONArray)jsonBodyTask.get("dbBody");
         JSONArray JsonArrNew = new JSONArray();
-//        JSONArray JsonArrMod = new JSONArray();
-        //jsonArrRemove = new ArrayList();
-
         for(int i=0;i<JsonArrays.length();i++)
         {
-
-            if (!iModTaskIndex.equals(""))
-            {
-                if(i!=Integer.parseInt(iModTaskIndex))
-                {
-                    JsonArrNew.put((JSONObject)JsonArrays.get(i));
-                }
-                else
-                {
-
                     JSONObject jObj = new JSONObject();
-
-
                     jObj.put("vfree1", ((JSONObject) JsonArrays.get(i)).get("vfree1").toString());
                     jObj.put("pk_measdoc", ((JSONObject) JsonArrays.get(i)).get("pk_measdoc").toString());
                     jObj.put("measname", ((JSONObject) JsonArrays.get(i)).get("measname").toString());
@@ -1280,41 +1294,23 @@ public class SalesDeliveryScan extends Activity {
                     jObj.put("def6", ((JSONObject) JsonArrays.get(i)).get("def6").toString());
                     jObj.put("ddeliverdate", ((JSONObject) JsonArrays.get(i)).get("ddeliverdate").toString());
                     jObj.put("pk_defdoc6", ((JSONObject) JsonArrays.get(i)).get("pk_defdoc6").toString());
-
-
-
                     String snumber = ((JSONObject) JsonArrays.get(i)).get("number").toString();
-                    int innum = Integer.valueOf(snumber).intValue() - ScanedQty;
+//                    int innum = Integer.valueOf(snumber).intValue() - ScanedQty;
 
-                    String snnum = innum +"";
-                    jObj.put("number", snnum);
+//                    String snnum = innum +"";
+                    jObj.put("number",snumber );
 
                     JsonArrNew.put(jObj);
 
-                }
-            }
-            //ADD BY WUQIONG END
         }
-        //MOD BY WUQIONG S
-        if(!iModTaskIndex.equals(""))
-        {
+
+
             jsonBodyTask = new JSONObject();
             jsonBodyTask.put("Status", true);
             jsonBodyTask.put("dbBody", JsonArrNew);
-//	    	  		if(!iRemoveTaskIndex.equals(""))
-//	    	  		{
-//	    	  			jonsBody.put("RemoveTaskData", JsonRemoveTaskData);
-//	    	  		}
-            if(!iModTaskIndex.equals(""))
-            {
-                jsonBodyTask.put("ModTaskData", JsonModTaskData);
-            }
 
-            getTaskListData(jsonBodyTask);
         }
-        //MOD BY WUQIONG E
 
-    }
 
 
 //	  	//完成扫描后删除任务里的项目
@@ -1365,66 +1361,66 @@ public class SalesDeliveryScan extends Activity {
 //
 //	  	}
 
-    private boolean ConformGetSERINOInfo() throws JSONException, ParseException, IOException
-    {
-
-
-
-        //获得当前单据的流水号
-        JSONObject SERINOList = null;
-        JSONObject para = new JSONObject();
-
-        //,bar.cBatch,,bar.AccID
-        para.put("FunctionName", "GetSERINOCVInfo");
-        para.put("INVCODE",bar.cInvCode);
-        para.put("CLOT",bar.cBatch);
-        para.put("SERINO",bar.cSerino);
-        para.put("WHID",wareHouseID);
-
-        para.put("TableName","SERINO");
-
-        if(!MainLogin.getwifiinfo()) {
-            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            return false;
-        }
-        SERINOList = Common.
-                DoHttpQuery(para, "CommonQuery", tmpAccID);
-
-
-        if(SERINOList==null)
-        {
-            Toast.makeText(this, R.string.WangLuoChuXianWenTi, Toast.LENGTH_LONG).show();
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            return false;
-        }
-
-
-        if(!SERINOList.getBoolean("Status"))
-        {
-            return true;
-        }
-        else
-        {
-            JSONArray jsarraySERINO = null;
-            jsarraySERINO = SERINOList.getJSONArray("SERINO");
-
-            String bsttype = ((JSONObject)jsarraySERINO.getJSONObject(0)).getString("bsttype").toString();
-
-            if(bsttype.equals("0"))
-            {
-                return true;
-            }
-            else
-            {
-                Toast.makeText(this, "扫描的条码流水号在仓库中已经存在,该条码不能被扫入",
-                        Toast.LENGTH_LONG).show();
-                //ADD CAIXY TEST START
-                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                return false;
-            }
-        }
-    }
+//    private boolean ConformGetSERINOInfo() throws JSONException, ParseException, IOException
+//    {
+//
+//
+//
+//        //获得当前单据的流水号
+//        JSONObject SERINOList = null;
+//        JSONObject para = new JSONObject();
+//
+//        //,bar.cBatch,,bar.AccID
+//        para.put("FunctionName", "GetSERINOCVInfo");
+//        para.put("INVCODE",bar.cInvCode);
+//        para.put("CLOT",bar.cBatch);
+//        para.put("SERINO",bar.cSerino);
+//        para.put("WHID",wareHouseID);
+//
+//        para.put("TableName","SERINO");
+//
+//        if(!MainLogin.getwifiinfo()) {
+//            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
+//            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//            return false;
+//        }
+//        SERINOList = Common.
+//                DoHttpQuery(para, "CommonQuery", tmpAccID);
+//
+//
+//        if(SERINOList==null)
+//        {
+//            Toast.makeText(this, R.string.WangLuoChuXianWenTi, Toast.LENGTH_LONG).show();
+//            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//            return false;
+//        }
+//
+//
+//        if(!SERINOList.getBoolean("Status"))
+//        {
+//            return true;
+//        }
+//        else
+//        {
+//            JSONArray jsarraySERINO = null;
+//            jsarraySERINO = SERINOList.getJSONArray("SERINO");
+//
+//            String bsttype = ((JSONObject)jsarraySERINO.getJSONObject(0)).getString("bsttype").toString();
+//
+//            if(bsttype.equals("0"))
+//            {
+//                return true;
+//            }
+//            else
+//            {
+//                Toast.makeText(this, "扫描的条码流水号在仓库中已经存在,该条码不能被扫入",
+//                        Toast.LENGTH_LONG).show();
+//                //ADD CAIXY TEST START
+//                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                return false;
+//            }
+//        }
+//    }
 
     //确认如果有上游单据,那么判断是否超过其数量
     private boolean ConformDetailQty(Double Qty, String sBillBID, String sBillHID) throws JSONException
@@ -1477,18 +1473,12 @@ public class SalesDeliveryScan extends Activity {
         {
             String lsJsonInvCode = ((JSONObject)(JsonArrays.get(i))).getString("invcode");
             String lsJsonInvBatch = ((JSONObject)(JsonArrays.get(i))).getString("batchcode");
-
-
             String Outnum = "0";
-
             String  sOutnum = ((JSONObject)(JsonArrays.get(i))).getString("outnumber");
-
             if(!sOutnum.equals("null"))
             {
                 Outnum = sOutnum;
             }
-
-
             Double ldJsonInvQty = ((JSONObject)(JsonArrays.get(i))).getDouble("number")-Double.valueOf(Outnum);
             if(lsJsonInvBatch==null||lsJsonInvBatch.equals("")||lsJsonInvBatch.equals("null"))
             {
@@ -1508,7 +1498,6 @@ public class SalesDeliveryScan extends Activity {
             }
         }
 
-
         if(ScanType.equals("销售出库"))
         {
             for(int j = 0;j<JsonArrays.length();j++)
@@ -1525,7 +1514,6 @@ public class SalesDeliveryScan extends Activity {
                     Outnum = sOutnum;
                 }
 
-
                 Double ldJsonInvQty = ((JSONObject)(JsonArrays.get(j))).getDouble("number")-Double.valueOf(Outnum);
 
                 if(lsJsonInvBatch==null||lsJsonInvBatch.equals("")||lsJsonInvBatch.equals("null"))
@@ -1539,13 +1527,11 @@ public class SalesDeliveryScan extends Activity {
 //                    {
 //                        return (JSONObject)JsonArrays.get(j);
 //                    }
-
                     obj = (JSONObject)JsonArrays.get(j);
                     return obj;
                 }
             }
         }
-
         return obj;
     }
 
@@ -1565,23 +1551,23 @@ public class SalesDeliveryScan extends Activity {
             BindingScanDetail(jsonCheckGetBillCode,bar,"ADD",null);
             return true;
         }
-        for(int i=0;i<ScanDetailAdapter.getCount();i++)
-        {
-            Map<String,Object> mapScanDetail =
-                    (Map<String,Object>)ScanDetailAdapter.getItem(i);
-            if(mapScanDetail.containsKey(lsKey))
-            {
-
-                ArrayList<Map<String,Object>> lstCurrentDetail = (ArrayList<Map<String,Object>>)mapScanDetail.get(lsKey);
-                for(int j=0;j<lstCurrentDetail.size();j++)
-                {
-                    if(lstCurrentDetail.get(j).get("FinishBarCode").toString().equals(bar.FinishBarCode))
-                        return false;
-                }
-                BindingScanDetail(jsonCheckGetBillCode,bar,"MOD",mapScanDetail);
-                return true;
-            }
-        }
+//        for(int i=0;i<ScanDetailAdapter.getCount();i++)
+//        {
+//            Map<String,Object> mapScanDetail =
+//                    (Map<String,Object>)ScanDetailAdapter.getItem(i);
+//            if(mapScanDetail.containsKey(lsKey))
+//            {
+//
+//                ArrayList<Map<String,Object>> lstCurrentDetail = (ArrayList<Map<String,Object>>)mapScanDetail.get(lsKey);
+//                for(int j=0;j<lstCurrentDetail.size();j++)
+//                {
+//                    if(lstCurrentDetail.get(j).get("FinishBarCode").toString().equals(bar.FinishBarCode))
+//                        return false;
+//                }
+//                BindingScanDetail(jsonCheckGetBillCode,bar,"MOD",mapScanDetail);
+//                return true;
+//            }
+//        }
 
 //        BindingScanDetail(jsonCheckGetBillCode,bar,"ADD",null);
         return true;
@@ -1592,7 +1578,7 @@ public class SalesDeliveryScan extends Activity {
                                    String sType, Map<String,Object> mapGetScanedDetail) throws JSONException
     {
         ArrayList<Map<String,Object>> lstCurrentBox = null;
-        Map<String,Object> mapCurrentBox = new HashMap<String,Object>();
+//        Map<String,Object> mapCurrentBox = new HashMap<String,Object>();
         Map<String,Object> mapScanDetail =  new HashMap<String,Object>();
 
         if(lstSaveBody==null || lstSaveBody.size()<1)
@@ -1608,7 +1594,7 @@ public class SalesDeliveryScan extends Activity {
         if(sType.equals("MOD") && mapGetScanedDetail!=null)
         {
             lstCurrentBox = (ArrayList<Map<String,Object>>)mapGetScanedDetail.get(lsKey);
-            lstCurrentBox.add(mapCurrentBox);
+//            lstCurrentBox.add(mapCurrentBox);
 
             mapScanDetail = mapGetScanedDetail;
             mapScanDetail.remove(lsKey);
@@ -1627,61 +1613,42 @@ public class SalesDeliveryScan extends Activity {
 //            lstCurrentBox = new ArrayList<Map<String,Object>>();
 //            lstCurrentBox.add(mapCurrentBox);
 
-//            mapScanDetail.put(lsKey,lstCurrentBox);
+            mapScanDetail.put(lsKey,lstCurrentBox);
             mapScanDetail.put("InvName", jsonCheckGetBillCode.getString("invname"));
-
             mapScanDetail.put("InvCode", jsonCheckGetBillCode.getString("invcode"));
-
-//            mapScanDetail.put("Batch", currentObj.GetBatch());
-
             mapScanDetail.put("AccID", tmpAccID);
             mapScanDetail.put("QTY",bar.QTY);
             mapScanDetail.put("Measname",jsonCheckGetBillCode.getString("measname"));
             mapScanDetail.put("Batch",bar.cBatch);
             mapScanDetail.put("SeriNo", bar.cSerino);
-
             mapScanDetail.put("BarCode", bar.FinishBarCode);
-
 //            mapScanDetail.put("TotalNum", Integer.parseInt(currentObj.totalID()));
-
 //            mapScanDetail.put("ScanedNum", lstCurrentBox.size());
-
             //开始单据行号
             mapScanDetail.put("sourcerowno", jsonCheckGetBillCode.getString("sourcerowno"));
-
             //源单单据行号(参照单 )
             mapScanDetail.put("crowno", jsonCheckGetBillCode.getString("crowno"));
-
             //开始单表头
             mapScanDetail.put("sourcehid", jsonCheckGetBillCode.getString("sourcehid"));
             //源单表头(参照单 )
             mapScanDetail.put("billhid", jsonCheckGetBillCode.getString("billhid"));
-
             //开始单表体
             mapScanDetail.put("sourcebid", jsonCheckGetBillCode.getString("sourcebid"));
             //源单表体(参照单 )
             mapScanDetail.put("billbid", jsonCheckGetBillCode.getString("billbid"));
-
             //开始单据类型
             mapScanDetail.put("sourcetype", jsonCheckGetBillCode.getString("sourcetype"));
             //源单据类型(参照单 )
-
             mapScanDetail.put("billtype", jsonCheckGetBillCode.getString("billtype"));
-
             //开始单据号
             mapScanDetail.put("sourcehcode", jsonCheckGetBillCode.getString("sourcehcode"));
-
             //单据号(参照单 )
             mapScanDetail.put("billhcode", jsonCheckGetBillCode.getString("billhcode"));
-
             mapScanDetail.put("BillCode", jsonCheckGetBillCode.getString("billhcode"));
-
-
             mapScanDetail.put("pk_defdoc6", jsonCheckGetBillCode.getString("pk_defdoc6"));
             mapScanDetail.put("def6", jsonCheckGetBillCode.getString("def6"));
             mapScanDetail.put("ddeliverdate", jsonCheckGetBillCode.getString("ddeliverdate"));
             mapScanDetail.put("pk_measdoc", jsonCheckGetBillCode.getString("pk_measdoc"));
-
             //存货基本标识
             mapScanDetail.put("invbasdocid", jsonCheckGetBillCode.getString("invbasdocid"));
             //存货管理ID
@@ -1705,17 +1672,13 @@ public class SalesDeliveryScan extends Activity {
 //                mapScanDetail.put("spacenum", "0");
 //                mapScanDetail.put("box", "分包未完");
 //            }
-
-//            lstSaveBody.add(mapScanDetail);
-            lstSaveBody_c.add(mapScanDetail);
-            salesDeliveryAdapter.notifyDataSetChanged();
-
-//            listcount = lstSaveBody.size();
-            listcount = lstSaveBody_c.size();
+            lstSaveBody.add(mapScanDetail);
+            listcount = lstSaveBody.size();
             tvSDcounts.setText("总共"+Tasknnum+"件 | "+"已扫"+listcount+"件 | "+"未扫"+(Tasknnum-listcount)+"件");
-
         }
-
+        salesDeliveryAdapter = new SalesDeliveryAdapter(SalesDeliveryScan.this, lstSaveBody);
+        lstSDScanDetail.setAdapter(salesDeliveryAdapter);
+        salesDeliveryAdapter.notifyDataSetChanged();
 //        MyListAdapter listItemAdapter = new MyListAdapter(SalesDeliveryScan.this,lstSaveBody,//数据源
 //                R.layout.vlisttransscanitem,
 ////					new String[] {"InvCode","InvName","Batch","AccID","TotalNum",
@@ -1903,12 +1866,6 @@ public class SalesDeliveryScan extends Activity {
 
             jObj.put("number",snewnnum);//修改数量问题
 
-
-
-
-
-
-
             JSONArray JsonArraysRemod = new JSONArray();
             JSONObject jObjReMod = new JSONObject();
             for (int i =0; i<JsonArrays.length();i++)
@@ -1940,9 +1897,7 @@ public class SalesDeliveryScan extends Activity {
         {
             jsonBodyTask.put("ModTaskData", JsonModTaskData);
         }
-
         getTaskListData(jsonBodyTask);
-
 
     }
 
@@ -2132,7 +2087,6 @@ public class SalesDeliveryScan extends Activity {
             {
                 for(int i=0;i<keyString.length;i++)
                 {
-                    Log.d(TAG, "MyListAdapter: "+keyString.length);
                     tvItem = (TextView)arg1.findViewById(idValue[i]);
                     tvItem.setText(map.get(keyString[i]).toString());
                 }

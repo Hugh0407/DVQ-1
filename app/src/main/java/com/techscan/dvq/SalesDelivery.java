@@ -167,7 +167,7 @@ public class SalesDelivery extends Activity {
 //		MainLogin.music = MainLogin.sp.load(this, R.raw.xxx, 1); // 把你的声音素材放到res/raw里，第2个参数即为资源文件，第3个为音乐的优先级
         // ADD CAIXY END
 
-        txtSalesDelPDOrder.requestFocus();
+        tvSaleOutSelect.requestFocus();
 
         jsonSaveHead = new JSONObject();
     }
@@ -1534,7 +1534,7 @@ public class SalesDelivery extends Activity {
                         //ADD CAIXY TEST START
                         MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                         //ADD CAIXY TEST END
-                        txtSalesDelPDOrder.setText("");
+                        tvSaleOutSelect.setText("");
                         break;
                     }
 
@@ -1545,7 +1545,7 @@ public class SalesDelivery extends Activity {
                         String BillCodeKey = "";
 //						if(tvSaleOutSelect.getText().toString().equals("退回再送"))
 //						{
-//							BillCodeKey= txtSalesDelPDOrder.getText().toString();
+//							BillCodeKey= tvSaleOutSelecttvSaleOutSelect.getText().toString();
 //							if(BillCodeKey.length()<5)
 //							{
 //								Toast.makeText(SalesDelivery.this, "必须输入5位关键字", Toast.LENGTH_LONG).show();
@@ -1556,7 +1556,16 @@ public class SalesDelivery extends Activity {
 //								break;
 //							}
 //						}
+                        if (tvSaleOutSelect.getText().toString()==null||tvSaleOutSelect.getText().toString().equals(""))
+                        {
+                            Toast.makeText(SalesDelivery.this, "请输入来源单据",
+                                    Toast.LENGTH_LONG).show();
 
+                            // ADD CAIXY TEST START
+                            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+                            // ADD CAIXY TEST END
+                            return;
+                        }
                         btnSalesDelPDOrderClick(BillCodeKey);
                     } catch (ParseException e) {
                         Toast.makeText(SalesDelivery.this, e.getMessage(), Toast.LENGTH_LONG).show();
@@ -1639,6 +1648,27 @@ public class SalesDelivery extends Activity {
 //						//ADD CAIXY TEST END
 //						return;
 //					}
+                    if (tvSaleOutSelect.getText().toString()==null||tvSaleOutSelect.getText().toString().equals(""))
+                    {
+                        Toast.makeText(SalesDelivery.this, "请输入来源单据",
+                                Toast.LENGTH_LONG).show();
+
+                        // ADD CAIXY TEST START
+                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+                        // ADD CAIXY TEST END
+                        return;
+                    }
+
+                    if (txtSalesDelPDOrder.getText().toString()==null||txtSalesDelPDOrder.getText().toString().equals(""))
+                    {
+                        Toast.makeText(SalesDelivery.this, "没有选择单据号",
+                                Toast.LENGTH_LONG).show();
+
+                        // ADD CAIXY TEST START
+                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+                        // ADD CAIXY TEST END
+                        return;
+                    }
 
                     if (jsonBillBodyTask == null || jsonBillBodyTask.length() < 1)
                     {
@@ -1678,28 +1708,6 @@ public class SalesDelivery extends Activity {
 //							return;
 //						}
 //					}
-
-
-                    //ADD BY WUQIONG START
-//					if(tmprdID==null||tmprdID.equals(""))
-//					{
-//						Toast.makeText(SalesDelivery.this,R.string.QingShuChuKuLeiBie, Toast.LENGTH_LONG).show();
-//
-//						//ADD CAIXY TEST START
-//						MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-//						//ADD CAIXY TEST END
-//						return;
-//					}
-
-
-//					if ((tmpCdTypeID == null) || (tmpCdTypeID.equals("")))
-//					{
-//						Toast.makeText(SalesDelivery.this, "请输入运输方式", Toast.LENGTH_LONG).show();
-//						MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-//						return;
-//					}
-
-
 
                     Intent intDeliveryScan = new Intent(SalesDelivery.this,SalesDeliveryScan.class);
                     intDeliveryScan.putExtra("AccID", tmpAccID);
@@ -1749,12 +1757,34 @@ public class SalesDelivery extends Activity {
 
                 case id.btnSalesDelWH:
                     try {
+
+                        if (tvSaleOutSelect.getText().toString()==null||tvSaleOutSelect.getText().toString().equals(""))
+                        {
+                            Toast.makeText(SalesDelivery.this, "请输入来源单据",
+                                    Toast.LENGTH_LONG).show();
+
+                            // ADD CAIXY TEST START
+                            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+                            // ADD CAIXY TEST END
+                            return;
+                        }
+
+                        if (txtSalesDelPDOrder.getText().toString()==null||txtSalesDelPDOrder.getText().toString().equals(""))
+                        {
+                            Toast.makeText(SalesDelivery.this, "没有选择单据号",
+                                    Toast.LENGTH_LONG).show();
+
+                            // ADD CAIXY TEST START
+                            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+                            // ADD CAIXY TEST END
+                            return;
+                        }
                         GetSalesDelWH();
 
                     } catch (JSONException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
-                        //Toast.makeText(SalesDelivery.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(SalesDelivery.this, "请输入单据来源", Toast.LENGTH_SHORT).show();
                         //ADD CAIXY TEST START
                         MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                     }
@@ -1857,7 +1887,7 @@ public class SalesDelivery extends Activity {
                         //ADD CAIXY TEST START
                         MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                         //ADD CAIXY TEST END
-                        txtSalesDelPDOrder.requestFocus();
+                        tvSaleOutSelect.requestFocus();
                         return;
                     }
                 }
@@ -1875,7 +1905,7 @@ public class SalesDelivery extends Activity {
                 //ADD CAIXY TEST START
                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                 //ADD CAIXY TEST END
-                txtSalesDelPDOrder.setText("");
+                tvSaleOutSelect.setText("");
                 return;
             }
 
@@ -2469,7 +2499,7 @@ public class SalesDelivery extends Activity {
         }
         if ((this.lstSaveBody == null) || (this.lstSaveBody.size() < 1))
         {
-            Toast.makeText(this, R.string.WuKeBaoCunShuJu, 1).show();
+            Toast.makeText(this, R.string.WuKeBaoCunShuJu, Toast.LENGTH_SHORT).show();
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             return;
         }
@@ -2479,14 +2509,14 @@ public class SalesDelivery extends Activity {
         {
             sendMapBody = (HashMap<String,Object>)lstSaveBody.get(j);
 
-            if(!sendMapBody.get("spacenum").toString().equals("1"))
-            {
-                Toast.makeText(this, R.string.YouWeiSaoWanDeFenBao, Toast.LENGTH_LONG).show();
-                //ADD CAIXY TEST START
-                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                //ADD CAIXY TEST END
-                return;
-            }
+//            if(!sendMapBody.get("spacenum").toString().equals("1"))
+//            {
+//                Toast.makeText(this, R.string.YouWeiSaoWanDeFenBao, Toast.LENGTH_LONG).show();
+//                //ADD CAIXY TEST START
+//                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                //ADD CAIXY TEST END
+//                return;
+//            }
 
             //String sHBillCode = sendMapHead.get("No").toString();
             String sBBillCode = sendMapBody.get("BillCode").toString();
@@ -2512,7 +2542,7 @@ public class SalesDelivery extends Activity {
         }
 
         if((sendJsonSave == null) || (sendJsonSave.length() < 0x1)) {
-            Toast.makeText(this, R.string.WuKeBaoCunShuJu, 1).show();
+            Toast.makeText(this, R.string.WuKeBaoCunShuJu, Toast.LENGTH_SHORT).show();
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             return;
         }
@@ -2571,7 +2601,7 @@ public class SalesDelivery extends Activity {
 
         if(!ErrMsg.equals(""))
         {
-            Toast.makeText(this, ErrMsg+"超出扫描数量请再次检查单据后再进行保存", 1).show();
+            Toast.makeText(this, ErrMsg+"超出扫描数量请再次检查单据后再进行保存", Toast.LENGTH_SHORT).show();
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             return;
         }
@@ -2840,7 +2870,6 @@ public class SalesDelivery extends Activity {
     }
     private void initView() {
         txtSalesDelPDOrder = (EditText) findViewById(id.txtSalesDelPDOrder);
-        tvSalesDelPDOrder = (TextView) findViewById(id.tvSalesDelPDOrder);
         btnSalesDelPDOrder = (ImageButton) findViewById(id.btnSalesDelPDOrder);
         btnSalesDelPDOrder.setOnClickListener(new OnClickListener());
 
@@ -2861,32 +2890,16 @@ public class SalesDelivery extends Activity {
         btnSalesDelExit = (Button) findViewById(id.btnSalesDelExit);
         btnSalesDelExit.setOnClickListener(new OnClickListener());
 
-//		btnSalesDelCD = (ImageButton) findViewById(R.id.btnSalesDelCD);
-//		btnSalesDelCD.setOnClickListener(new OnClickListener());
 
-//		tvSalesDelBillCodeName = (TextView)findViewById(tvSalesDelBillCodeName);
-//		tvSalesDelAccIDName = (TextView)findViewById(R.id.tvSalesDelAccIDName);
-//		tvSalesDelCorpName = (TextView)findViewById(tvSalesDelCorpName);
-
-//		tvSalesDelBillCode = (TextView)findViewById(R.id.tvSalesDelBillCode);
-//		tvSalesDelAccID = (TextView)findViewById(R.id.tvSalesDelAccID);
-//		tvSalesDelCorp = (TextView)findViewById(R.id.tvSalesDelCorp);
-
-
-//		tvSalesDelPos = (TextView)findViewById(tvSalesDelPos);
         tvSalesDelRdcl = (TextView)findViewById(id.tvSalesDelRdcl);
         tvCustomer = (TextView)findViewById(id.tvCustomer);
 
-//		btnSalesDelRdcl = (ImageButton) findViewById(R.id.btnSalesDelRdcl);
-//		btnSalesDelRdcl.setOnClickListener(new OnClickListener());
-
-//		txtSalesDelPos = (EditText) findViewById(txtSalesDelPos);
         txtSalesDelRdcl = (EditText) findViewById(id.txtSalesDelRdcl);
 
 
         txtSalesDelCD = (EditText) findViewById(id.txtSalesDelCD);
 
-//		txtSalesDelPos.setOnKeyListener(EditTextOnKeyListener);
+
         txtSalesDelRdcl.setOnKeyListener(EditTextOnKeyListener);
         txtSalesDelPDOrder.setOnKeyListener(EditTextOnKeyListener);
 
@@ -2895,7 +2908,7 @@ public class SalesDelivery extends Activity {
         txtSalesDelRdcl.setFocusable(false);
         txtSalesDelRdcl.setFocusableInTouchMode(false);
 
-        tvSaleOutSelect.setFocusableInTouchMode(false);
+        tvSaleOutSelect.setFocusableInTouchMode(true);
 
         btnSalesDelPDOrder.setFocusable(false);
         btnSalesDelExit.setFocusable(false);
