@@ -400,23 +400,23 @@ public class SalesDelivery extends Activity {
                 para.put("BillCode", sBillCode);
             }
 
-            if(tvSaleOutSelect.getText().toString().equals("曜指音僕"))
-            {
-                if(sSaleFlg.equals("T"))
-                {
-                    para.put("FunctionName", "GetSaleTakeHead");
-                    para.put("CorpPK", sCorpPK);
-                    para.put("BillCode", sBillCode);
-                }
-
-                else if(sSaleFlg.equals("D"))
-                {
-                    para.put("FunctionName", "GetSaleOutHead");
-                    para.put("CorpPK", sCorpPK);
-                    para.put("BillCode", sBillCode);
-                }
-
-            }
+//            if(tvSaleOutSelect.getText().toString().equals("曜指音僕"))
+//            {
+//                if(sSaleFlg.equals("T"))
+//                {
+//                    para.put("FunctionName", "GetSaleTakeHead");
+//                    para.put("CorpPK", sCorpPK);
+//                    para.put("BillCode", sBillCode);
+//                }
+//
+//                else if(sSaleFlg.equals("D"))
+//                {
+//                    para.put("FunctionName", "GetSaleOutHead");
+//                    para.put("CorpPK", sCorpPK);
+//                    para.put("BillCode", sBillCode);
+//                }
+//
+//            }
 
         } catch (JSONException e2) {
             // TODO Auto-generated catch block

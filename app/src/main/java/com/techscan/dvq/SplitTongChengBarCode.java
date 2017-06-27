@@ -16,6 +16,7 @@ public class SplitTongChengBarCode {
     public String WW;//委外
     public String TAX;//完税保税
     public String QTY;//重量
+    public String Weights;//总重
     public String CW;
     public String ONLY;
     public String NUM;
@@ -44,6 +45,7 @@ public class SplitTongChengBarCode {
             QTY = val[5];
             if (val.length == 9) {
                 P = val[0];
+                Weights = QTY;
                 CW = val[6];
                 ONLY = val[7];
                 cSerino = val[8];
@@ -54,7 +56,7 @@ public class SplitTongChengBarCode {
                 NUM = val[6];
                float qty =  Float.valueOf(val[5]);
                 float num =  Float.valueOf(val[6]);
-                QTY =String.valueOf(qty*num);
+                Weights =String.valueOf(qty*num);
                 CW = val[7];
                 ONLY = val[8];
                 cSerino = val[9];
