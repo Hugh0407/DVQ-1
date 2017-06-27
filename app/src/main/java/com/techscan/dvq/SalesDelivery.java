@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.techscan.dvq.R.id;
+import com.techscan.dvq.bean.SaleOutGoods;
 
 import org.apache.http.ParseException;
 import org.json.JSONArray;
@@ -26,6 +28,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -34,11 +37,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-
+import static android.content.ContentValues.TAG;
 
 
 public class SalesDelivery extends Activity {
 
+    List<SaleOutGoods> saleOutGoodsLists =null;
 
     String tmpWHStatus = "";//仓库是否启用货位
 
@@ -357,21 +361,22 @@ public class SalesDelivery extends Activity {
                     Bundle bundle = data.getExtras();
                     if(bundle != null)
                     {
-                        SerializableList ResultBodyList = new SerializableList();
-                        ResultBodyList = (SerializableList)bundle.get("SaveBodyList");
-                        lstSaveBody = ResultBodyList.getList();
-                        ScanedBarcode = bundle.getStringArrayList("ScanedBarcode");
+                        saleOutGoodsLists =  bundle.getParcelableArrayList("SaleGoodsLists");
+//                        SerializableList ResultBodyList = new SerializableList();
+//                        ResultBodyList = (SerializableList)bundle.get("SaveBodyList");
+//                        lstSaveBody = ResultBodyList.getList();
+//                        ScanedBarcode = bundle.getStringArrayList("ScanedBarcode");
 
-                        try {
-                            jsonBillBodyTask = new JSONObject(bundle.getString("ScanTaskJson"));
-                        } catch (JSONException e) {
-                            // TODO Auto-generated catch block
-                            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
-                            //ADD CAIXY TEST START
-                            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                            //ADD CAIXY TEST END
-                            e.printStackTrace();
-                        }
+//                        try {
+////                            jsonBillBodyTask = new JSONObject(bundle.getString("ScanTaskJson"));
+//                        } catch (JSONException e) {
+//                            // TODO Auto-generated catch block
+//                            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+//                            //ADD CAIXY TEST START
+//                            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                            //ADD CAIXY TEST END
+//                            e.printStackTrace();
+//                        }
                     }
                 }
             }
@@ -1726,30 +1731,38 @@ public class SalesDelivery extends Activity {
 
                     break;
                 case id.btnSalesDelSave:
-                    try {
-                        SaveTransData();
-                    } catch (JSONException e) {
-                        Toast.makeText(SalesDelivery.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                        e.printStackTrace();
-                        //ADD CAIXY TEST START
-                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                        //ADD CAIXY TEST END
-
-                    } catch (ParseException e) {
-                        Toast.makeText(SalesDelivery.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                        e.printStackTrace();
-                        //ADD CAIXY TEST START
-                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                        //ADD CAIXY TEST END
-
-                    } catch (IOException e) {
-                        Toast.makeText(SalesDelivery.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                        e.printStackTrace();
-                        //ADD CAIXY TEST START
-                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                        //ADD CAIXY TEST END
-
+                    if (saleOutGoodsLists != null && saleOutGoodsLists.size() > 0) {
+                        try {
+                            SaveInfo(saleOutGoodsLists);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
+//                    try {
+//
+////                        SaveTransData();
+//                    } catch (Exception e) {
+//                        Toast.makeText(SalesDelivery.this, e.getMessage(), Toast.LENGTH_LONG).show();
+//                        e.printStackTrace();
+//                        //ADD CAIXY TEST START
+//                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+                        //ADD CAIXY TEST END
+
+//                    } catch (ParseException e) {
+//                        Toast.makeText(SalesDelivery.this, e.getMessage(), Toast.LENGTH_LONG).show();
+//                        e.printStackTrace();
+//                        //ADD CAIXY TEST START
+//                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                        //ADD CAIXY TEST END
+//
+//                    } catch (IOException e) {
+//                        Toast.makeText(SalesDelivery.this, e.getMessage(), Toast.LENGTH_LONG).show();
+//                        e.printStackTrace();
+//                        //ADD CAIXY TEST START
+//                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                        //ADD CAIXY TEST END
+//
+//                    }
                     break;
                 case id.btnSalesDelExit:
                     Exit();
@@ -2915,5 +2928,68 @@ public class SalesDelivery extends Activity {
         btnSalesDelScan.setFocusable(false);
         btnSalesDelSave.setFocusable(false);
 //		btnSalesDelCD.setFocusable(false);
+    }
+    private void SaveInfo(List<SaleOutGoods> saleOutGoodsLists) throws JSONException {
+        final JSONObject table = new JSONObject();
+        JSONObject tableHead = new JSONObject();
+        tableHead.put("SourceBill", "");
+        tableHead.put("BillNum", "");
+        tableHead.put("CUSER", MainLogin.objLog.UserID);
+        tableHead.put("OutWarehouse", "");
+        tableHead.put("PK_CALBODY", "");
+        tableHead.put("PK_CORP", MainLogin.objLog.STOrgCode);
+        tableHead.put("VBILLCODE","");
+        table.put("Head", tableHead);
+        JSONObject tableBody = new JSONObject();
+        JSONArray bodyArray = new JSONArray();
+        for (SaleOutGoods saleOutGoods : saleOutGoodsLists) {
+            JSONObject object = new JSONObject();
+
+
+            float price = saleOutGoods.getQty();
+            DecimalFormat decimalFormat = new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
+            String qty = decimalFormat.format(price);//format 返回的是字符串
+//            String invCode;
+//            String invName;
+//            String unit;
+//            String batch;
+//            float qty;
+//            int num;
+//            String barcode;
+//            String pk_invbasdoc;
+//            String pk_invmandoc;
+            object.put("invCode", saleOutGoods.getInvCode());
+            object.put("invName", saleOutGoods.getInvName());
+            object.put("unit", saleOutGoods.getUnit());
+            object.put("batch", saleOutGoods.getBatch());
+            object.put("barcode", saleOutGoods.getBarcode());
+            object.put("qty", qty);
+            object.put("pk_invbasdoc", saleOutGoods.getPk_invbasdoc());
+            object.put("pk_invmandoc", saleOutGoods.getPk_invmandoc());
+
+            bodyArray.put(object);
+        }
+        tableBody.put("ScanDetails", bodyArray);
+        table.put("Body", tableBody);
+        table.put("GUIDS", UUID.randomUUID().toString());
+        Log.d(TAG, "SaveInfo: " + table.toString());
+
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    JSONObject jas = Common.DoHttpQuery(table, "SaveMaterialOut", "A");
+//                    if (jas != null) {
+//                        Log.d(TAG, "保存" + jas.toString());
+//                    } else {
+//                        Log.d(TAG, "null ");
+//                    }
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }).start();
     }
 }

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -25,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.techscan.dvq.R.id;
+import com.techscan.dvq.bean.SaleOutGoods;
 
 import org.apache.http.ParseException;
 import org.json.JSONArray;
@@ -52,39 +54,39 @@ public class SalesDeliveryScan extends Activity {
     Button btnSDScanReturn = null;
     TextView tvSDScanBarCode = null;
     TextView tvSDcounts = null;
-    private	String OkFkg = "ng";
+    private String OkFkg = "ng";
     int listcount = 0;
     int Tasknnum = 0;
     String ScanInvOK = "0";
     SalesDeliveryAdapter salesDeliveryAdapter;
 
     private ArrayList<String> ScanedBarcode = new ArrayList<String>();
-    private SplitTongChengBarCode bar = null;            //µ±Ç°É¨ÃèÌõÂë½âÎö
-    private Inventory currentObj = null;		//µ±Ç°É¨Ãèµ½µÄ´æ»õĞÅÏ¢
+    private SplitTongChengBarCode bar = null;            //å½“å‰æ‰«ææ¡ç è§£æ
+    private Inventory currentObj = null;        //å½“å‰æ‰«æåˆ°çš„å­˜è´§ä¿¡æ¯
 
     private String tmpAccID = "";
     private String tmpPK_corp = "";
     private JSONObject jsonBodyTask = null;
 
-    private List<Map<String,Object>> lstBodyTask = null;
-    private List<Map<String,Object>> lstSaveBody = null;
-    private List<Map<String,Object>> lstSaveBody_c = null;
+    private List<Map<String, Object>> lstBodyTask = null;
+    private List<Map<String, Object>> lstSaveBody = null;
+    private List<Map<String, Object>> lstSaveBody_c = null;
 
-    //É¾³ıµÄÈÎÎñÄÚÈİÁÙÊ±±£´æ×¡
+    //åˆ é™¤çš„ä»»åŠ¡å†…å®¹ä¸´æ—¶ä¿å­˜ä½
     private JSONObject JsonRemoveTaskData = new JSONObject();
     //ADD BY WUQIONG START
-    //É¾³ıµÄÈÎÎñÄÚÈİÁÙÊ±±£´æ×¡
+    //åˆ é™¤çš„ä»»åŠ¡å†…å®¹ä¸´æ—¶ä¿å­˜ä½
     private JSONObject JsonModTaskData = new JSONObject();
     //ADD BY WUQIONG END
 
-    //¶¨ÒåÊÇ·ñÉ¾³ıDialog
-    private AlertDialog DeleteAlertDialog =null;
+    //å®šä¹‰æ˜¯å¦åˆ é™¤Dialog
+    private AlertDialog DeleteAlertDialog = null;
     String wareHouseID = "";
     private String[] warehouseList = null;
     private String[] warehouseNameList = null;
-    private String[] vFree1List =null;
-    private String[] OrgList =null;
-    private String[] companyIdList =null;
+    private String[] vFree1List = null;
+    private String[] OrgList = null;
+    private String[] companyIdList = null;
     String ScanType = "";
 
 
@@ -94,31 +96,31 @@ public class SalesDeliveryScan extends Activity {
         setContentView(R.layout.activity_sales_delivery_scan);
 
         ActionBar actionBar = this.getActionBar();
-        actionBar.setTitle("ÏúÊÛ³ö¿âÉ¨ÃèÃ÷Ï¸");
+        actionBar.setTitle("é”€å”®å‡ºåº“æ‰«ææ˜ç»†");
 
-        //ÉèÖÃ¿Ø¼ş
-        txtSDScanBarcode = (EditText)findViewById(R.id.txtSDScanBarcode);
+        //è®¾ç½®æ§ä»¶
+        txtSDScanBarcode = (EditText) findViewById(R.id.txtSDScanBarcode);
         txtSDScanBarcode.setOnKeyListener(EditTextOnKeyListener);
 
-        lstSDScanDetail = (ListView)findViewById(R.id.lstSDScanDetail);
+        lstSDScanDetail = (ListView) findViewById(R.id.lstSDScanDetail);
 //        lstSDScanDetail.setOnItemClickListener(myListItemListener);
 //        lstSDScanDetail.setOnItemLongClickListener(myListItemLongListener);
 
-        btnSDScanTask = (Button)findViewById(R.id.btnSDScanTask);
+        btnSDScanTask = (Button) findViewById(R.id.btnSDScanTask);
         btnSDScanTask.setOnClickListener(ButtonOnClickListener);
-        btnSDScanClear = (Button)findViewById(R.id.btnSDScanClear);
+        btnSDScanClear = (Button) findViewById(R.id.btnSDScanClear);
         btnSDScanClear.setOnClickListener(ButtonOnClickListener);
-        btnSDScanReturn = (Button)findViewById(R.id.btnSDScanReturn);
+        btnSDScanReturn = (Button) findViewById(R.id.btnSDScanReturn);
         btnSDScanReturn.setOnClickListener(ButtonOnClickListener);
 
 
-        //»ñµÃ¸¸»­Ãæ´«¹ıÀ´µÄÊı¾İ
-        Intent myintent =getIntent();
+        //è·å¾—çˆ¶ç”»é¢ä¼ è¿‡æ¥çš„æ•°æ®
+        Intent myintent = getIntent();
         tmpAccID = myintent.getStringExtra("AccID");
         tmpPK_corp = myintent.getStringExtra("tmpCorpPK");
         Tasknnum = Integer.valueOf(myintent.getStringExtra("TaskCount").toString());
         ScanedBarcode = myintent.getStringArrayListExtra("ScanedBarcode");
-        tvSDcounts = (TextView)findViewById(R.id.tvSDcounts);
+        tvSDcounts = (TextView) findViewById(R.id.tvSDcounts);
 
         btnSDScanTask.setFocusable(false);
         btnSDScanClear.setFocusable(false);
@@ -126,10 +128,10 @@ public class SalesDeliveryScan extends Activity {
 
         ScanType = myintent.getStringExtra("ScanType");
 
-        //»ñµÃ¸¸»­Ãæ´«¹ıÀ´µÄÉ¨ÃèÏêÏ¸Êı¾İ
+        //è·å¾—çˆ¶ç”»é¢ä¼ è¿‡æ¥çš„æ‰«æè¯¦ç»†æ•°æ®
         listcount = 0;
         SerializableList lstScanSaveDetial = new SerializableList();
-        lstScanSaveDetial = (SerializableList)myintent.getSerializableExtra("lstScanSaveDetial");
+        lstScanSaveDetial = (SerializableList) myintent.getSerializableExtra("lstScanSaveDetial");
         lstSaveBody = lstScanSaveDetial.getList();
 //
 //        if(lstSaveBody!=null)
@@ -138,7 +140,7 @@ public class SalesDeliveryScan extends Activity {
 //            {
 //                listcount=lstSaveBody.size();
 //
-//                MyListAdapter listItemAdapter = new MyListAdapter(SalesDeliveryScan.this,lstSaveBody,//Êı¾İÔ´
+//                MyListAdapter listItemAdapter = new MyListAdapter(SalesDeliveryScan.this,lstSaveBody,//æ•°æ®æº
 //                        R.layout.vlisttransscanitem,
 //                        new String[] {"InvCode","InvName","Batch","AccID","TotalNum",
 //                                "BarCode","SeriNo","BillCode","ScanedNum","box"},
@@ -155,10 +157,10 @@ public class SalesDeliveryScan extends Activity {
 //        salesDeliveryAdapter = new SalesDeliveryAdapter(SalesDeliveryScan.this, lstSaveBody);
 //        lstSDScanDetail.setAdapter(salesDeliveryAdapter);
 //        }else
-       if (lstSaveBody==null|| lstSaveBody.size()<1){
-        lstSaveBody = new ArrayList<Map<String, Object>>();
-        salesDeliveryAdapter = new SalesDeliveryAdapter(SalesDeliveryScan.this, lstSaveBody);
-        lstSDScanDetail.setAdapter(salesDeliveryAdapter);
+        if (lstSaveBody == null || lstSaveBody.size() < 1) {
+            lstSaveBody = new ArrayList<Map<String, Object>>();
+            salesDeliveryAdapter = new SalesDeliveryAdapter(SalesDeliveryScan.this, lstSaveBody);
+            lstSDScanDetail.setAdapter(salesDeliveryAdapter);
         }
 //        lstSaveBody = new ArrayList<Map<String, Object>>();
 //        salesDeliveryAdapter = new SalesDeliveryAdapter(SalesDeliveryScan.this, lstSaveBody);
@@ -166,14 +168,12 @@ public class SalesDeliveryScan extends Activity {
         wareHouseID = myintent.getStringExtra("Warehouse");
 
 
-        tvSDcounts.setText("×Ü¹²"+Tasknnum+"¼ş | "+"ÒÑÉ¨"+listcount+"¼ş | "+"Î´É¨"+(Tasknnum-listcount)+"¼ş");
+        tvSDcounts.setText("æ€»å…±" + Tasknnum + "ä»¶ | " + "å·²æ‰«" + listcount + "ä»¶ | " + "æœªæ‰«" + (Tasknnum - listcount) + "ä»¶");
 
 
-
-
-        //»ñµÃ¸¸»­Ãæ´«¹ıÀ´µÄÈÎÎñÏêÏ¸Êı¾İ
+        //è·å¾—çˆ¶ç”»é¢ä¼ è¿‡æ¥çš„ä»»åŠ¡è¯¦ç»†æ•°æ®
         String lsTaskJosnBody = myintent.getStringExtra("TaskJonsBody");
-        JSONObject jonsTaskBody=null;
+        JSONObject jonsTaskBody = null;
         try {
             jonsTaskBody = new JSONObject(lsTaskJosnBody);
         } catch (JSONException e) {
@@ -183,15 +183,13 @@ public class SalesDeliveryScan extends Activity {
             //ADD CAIXY TEST END
             return;
         }
-        if(jonsTaskBody.has("dbBody"))
-        {
-            this.jsonBodyTask=jonsTaskBody;
+        if (jonsTaskBody.has("dbBody")) {
+            this.jsonBodyTask = jonsTaskBody;
         }
 
-        if(jsonBodyTask.has("ModTaskData"))
-        {
+        if (jsonBodyTask.has("ModTaskData")) {
             try {
-                JsonModTaskData=(JSONObject)jsonBodyTask.get("ModTaskData");
+                JsonModTaskData = (JSONObject) jsonBodyTask.get("ModTaskData");
             } catch (JSONException e) {
                 Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
                 //ADD CAIXY TEST START
@@ -225,8 +223,6 @@ public class SalesDeliveryScan extends Activity {
         }
 
 
-
-
     }
 
     @Override
@@ -237,8 +233,7 @@ public class SalesDeliveryScan extends Activity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
+    public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
@@ -318,34 +313,29 @@ public class SalesDeliveryScan extends Activity {
         }
     }
 
-    public boolean onKeyDown(int keyCode, KeyEvent event)
-    {		if (keyCode == KeyEvent.KEYCODE_MENU)
-    {//À¹½Ømeu¼üÊÂ¼ş			//do something...
-        return false;
-    }
-        if (keyCode == KeyEvent.KEYCODE_BACK)
-        {//À¹½Ø·µ»Ø°´Å¥ÊÂ¼ş			//do something...
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_MENU) {//æ‹¦æˆªmeué”®äº‹ä»¶			//do something...
+            return false;
+        }
+        if (keyCode == KeyEvent.KEYCODE_BACK) {//æ‹¦æˆªè¿”å›æŒ‰é’®äº‹ä»¶			//do something...
             return false;
         }
         return true;
     }
 
-    //È¡µÃÈÎÎñLIST
-    private void getTaskListData(JSONObject jas) throws JSONException
-    {
+    //å–å¾—ä»»åŠ¡LIST
+    private void getTaskListData(JSONObject jas) throws JSONException {
         lstBodyTask = new ArrayList<Map<String, Object>>();
         Map<String, Object> map;
         JSONObject tempJso = null;
-        if(jas==null)
-        {
+        if (jas == null) {
             Toast.makeText(this, R.string.WangLuoChuXianWenTi, Toast.LENGTH_LONG).show();
             //ADD CAIXY TEST START
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             //ADD CAIXY TEST END
             return;
         }
-        if(!jas.has("Status"))
-        {
+        if (!jas.has("Status")) {
             Toast.makeText(this, R.string.WangLuoChuXianWenTi, Toast.LENGTH_LONG).show();
             //ADD CAIXY TEST START
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
@@ -353,8 +343,7 @@ public class SalesDeliveryScan extends Activity {
             return;
         }
 
-        if(!jas.has("dbBody"))
-        {
+        if (!jas.has("dbBody")) {
             Toast.makeText(this, R.string.MeiYouDeDaoBiaoTiShuJu, Toast.LENGTH_LONG).show();
             //ADD CAIXY TEST START
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
@@ -362,21 +351,16 @@ public class SalesDeliveryScan extends Activity {
             return;
         }
 
-        if(!jas.has("Status"))
-        {
+        if (!jas.has("Status")) {
             Toast.makeText(this, R.string.WangLuoChuXianWenTi, Toast.LENGTH_LONG).show();
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             return;
         }
-        if(!jas.getBoolean("Status"))
-        {
+        if (!jas.getBoolean("Status")) {
             String errMsg = "";
-            if(jas.has("ErrMsg"))
-            {
+            if (jas.has("ErrMsg")) {
                 errMsg = jas.getString("ErrMsg");
-            }
-            else
-            {
+            } else {
                 errMsg = getString(R.string.WangLuoChuXianWenTi);
             }
             Toast.makeText(this, errMsg, Toast.LENGTH_LONG).show();
@@ -385,85 +369,75 @@ public class SalesDeliveryScan extends Activity {
             //ADD CAIXY TEST END
             return;
         }
-        JSONArray arrays=(JSONArray)jas.get("dbBody");
+        JSONArray arrays = (JSONArray) jas.get("dbBody");
 
-        for(int i = 0;i<arrays.length();i++)
-        {
+        for (int i = 0; i < arrays.length(); i++) {
             map = new HashMap<String, Object>();
-            map.put("InvName", ((JSONObject)(arrays.get(i))).getString("invname"));
-            map.put("InvCode", ((JSONObject)(arrays.get(i))).getString("invcode"));
-            String batchs=((JSONObject)(arrays.get(i))).getString("batchcode");
-            if(batchs==null||batchs.equals("")||batchs.equals("null"))
-            {
-                batchs="Åú´ÎÎ´Ö¸¶¨";
+            map.put("InvName", ((JSONObject) (arrays.get(i))).getString("invname"));
+            map.put("InvCode", ((JSONObject) (arrays.get(i))).getString("invcode"));
+            String batchs = ((JSONObject) (arrays.get(i))).getString("batchcode");
+            if (batchs == null || batchs.equals("") || batchs.equals("null")) {
+                batchs = "æ‰¹æ¬¡æœªæŒ‡å®š";
             }
             //String TaskNum = ((JSONObject)(arrays.get(i))).getString("outnumber")+"/"+((JSONObject)(arrays.get(i))).getString("number");
             map.put("Batch", batchs);
             map.put("AccID", tmpAccID);
-            String snumber = ((JSONObject)arrays.get(i)).getString("number");
-            String soutnumber = ((JSONObject)arrays.get(i)).getString("outnumber");
+            String snumber = ((JSONObject) arrays.get(i)).getString("number");
+            String soutnumber = ((JSONObject) arrays.get(i)).getString("outnumber");
 
             String sTasknumber = "0";
-            if(!soutnumber.endsWith("null"))
-            {
+            if (!soutnumber.endsWith("null")) {
                 sTasknumber = soutnumber.replaceAll("\\.0", "");
             }
 
             map.put("InvNum", Integer.valueOf(snumber).intValue() - Integer.valueOf(sTasknumber).intValue());
-            map.put("BillCode", ((JSONObject)(arrays.get(i))).getString("billcode"));
+            map.put("BillCode", ((JSONObject) (arrays.get(i))).getString("billcode"));
             lstBodyTask.add(map);
         }
     }
 
 
-    //È·ÈÏ´æ»õÔÚÉÏÓÎµ¥¾İÄÚÓĞ
-    private boolean ConformDetail(String barcode,SplitTongChengBarCode bar) throws JSONException, ParseException, IOException
-    {
-        if(jsonBodyTask == null || jsonBodyTask.length() < 1)
-        {
+    //ç¡®è®¤å­˜è´§åœ¨ä¸Šæ¸¸å•æ®å†…æœ‰
+    private boolean ConformDetail(String barcode, SplitTongChengBarCode bar) throws JSONException, ParseException, IOException {
+        if (jsonBodyTask == null || jsonBodyTask.length() < 1) {
             Toast.makeText(this, R.string.MeiYouZhaoDaoCanZhao, Toast.LENGTH_LONG).show();
             // ADD CAIXY TEST START
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             // ADD CAIXY TEST END
             return false;
         }
-        JSONArray jsarray= jsonBodyTask.getJSONArray("dbBody");
+        JSONArray jsarray = jsonBodyTask.getJSONArray("dbBody");
         OkFkg = "ng";
         String Free1 = "";
         String invFlg = "ng";
-        for(int i = 0;i<jsarray.length();i++)
-        {
+        for (int i = 0; i < jsarray.length(); i++) {
             //TaskCount = TaskCount + Integer.valueOf(((JSONObject)(JsonArrays.get(i))).getString("nnum").toString());
-            String TaskBatch = ((JSONObject)(jsarray.get(i))).getString("batchcode");
-            if(!TaskBatch.equals("null"))
-            {
-                if(TaskBatch.equals(bar.cBatch))
-                {
-                    //È·ÈÏÁË´æ»õ
-                    if(jsarray.getJSONObject(i).getString("invcode").equals(bar.cInvCode))
-                    {
-                        String nnum = ((JSONObject)(jsarray.get(i))).getString("number");
-                        String ntranoutnum = ((JSONObject)(jsarray.get(i))).getString("outnumber");
+            String TaskBatch = ((JSONObject) (jsarray.get(i))).getString("batchcode");
+            if (!TaskBatch.equals("null")) {
+                if (TaskBatch.equals(bar.cBatch)) {
+                    //ç¡®è®¤äº†å­˜è´§
+                    if (jsarray.getJSONObject(i).getString("invcode").equals(bar.cInvCode)) {
+                        String nnum = ((JSONObject) (jsarray.get(i))).getString("number");
+                        String ntranoutnum = ((JSONObject) (jsarray.get(i))).getString("outnumber");
 
                         String snnum = "0";
-                        if (!ntranoutnum.equals("null"))
-                        {
+                        if (!ntranoutnum.equals("null")) {
                             snnum = (ntranoutnum.replaceAll("\\.0", ""));
                         }
-                        int shouldinnum  = Integer.valueOf(nnum) - Integer.valueOf(snnum);
-                        String Tasknnum = shouldinnum+"";
+                        int shouldinnum = Integer.valueOf(nnum) - Integer.valueOf(snnum);
+                        String Tasknnum = shouldinnum + "";
 
 
                         invFlg = "ok";
                         //String Taskbatch = ((JSONObject)(jsarray.get(i))).getString("noutnum");
 //                        if(!Tasknnum.equals("0"))
 //                        {
-////		  		  				if(!ScanType.equals("ÏúÊÛ³ö¿â"))
+////		  		  				if(!ScanType.equals("é”€å”®å‡ºåº“"))
 ////		  		  				{
-////		  		  					currentObj.SetvFree1(jsarray.getJSONObject(i).getString("vfree1"));//²úµØĞèÒªĞŞ¸Ä
+////		  		  					currentObj.SetvFree1(jsarray.getJSONObject(i).getString("vfree1"));//äº§åœ°éœ€è¦ä¿®æ”¹
 ////		  		  				}
 //                            OkFkg = "ok";
-//                            if(!ScanType.equals("ÏúÊÛ³ö¿â"))
+//                            if(!ScanType.equals("é”€å”®å‡ºåº“"))
 //                            {
 //                                Free1 = jsarray.getJSONObject(i).getString("vfree1");
 //                            }
@@ -472,28 +446,22 @@ public class SalesDeliveryScan extends Activity {
 //                        }
                     }
                 }
-            }
-            else
-            {
-                if(jsarray.getJSONObject(i).getString("invcode").equals(bar.cInvCode))
-                {
-                    String nnum = ((JSONObject)(jsarray.get(i))).getString("number");
-                    String ntranoutnum = ((JSONObject)(jsarray.get(i))).getString("outnumber");
+            } else {
+                if (jsarray.getJSONObject(i).getString("invcode").equals(bar.cInvCode)) {
+                    String nnum = ((JSONObject) (jsarray.get(i))).getString("number");
+                    String ntranoutnum = ((JSONObject) (jsarray.get(i))).getString("outnumber");
 
                     String snnum = "0";
-                    if (!ntranoutnum.equals("null"))
-                    {
+                    if (!ntranoutnum.equals("null")) {
                         snnum = (ntranoutnum.replaceAll("\\.0", ""));
                     }
-                    int shouldinnum  = Integer.valueOf(nnum) - Integer.valueOf(snnum);
-                    String Tasknnum = shouldinnum+"";
+                    int shouldinnum = Integer.valueOf(nnum) - Integer.valueOf(snnum);
+                    String Tasknnum = shouldinnum + "";
                     invFlg = "ok";
                     //String Taskbatch = ((JSONObject)(jsarray.get(i))).getString("noutnum");
-                    if(!Tasknnum.equals("0"))
-                    {
+                    if (!Tasknnum.equals("0")) {
                         OkFkg = "ok";
-                        if(!ScanType.equals("ÏúÊÛ³ö¿â"))
-                        {
+                        if (!ScanType.equals("é”€å”®å‡ºåº“")) {
                             Free1 = jsarray.getJSONObject(i).getString("vfree1");
                         }
 //	  		  				return true;
@@ -502,10 +470,9 @@ public class SalesDeliveryScan extends Activity {
             }
         }
 
-        if(OkFkg.equals("ok"))
-        {
-            currentObj = new Inventory(bar.cInvCode,tmpPK_corp,bar.AccID);
-            if(currentObj.getErrMsg() != null&& !currentObj.getErrMsg().equals(""))
+        if (OkFkg.equals("ok")) {
+            currentObj = new Inventory(bar.cInvCode, tmpPK_corp, bar.AccID);
+            if (currentObj.getErrMsg() != null && !currentObj.getErrMsg().equals(""))
 
             {
                 Toast.makeText(this, currentObj.getErrMsg(),
@@ -523,15 +490,12 @@ public class SalesDeliveryScan extends Activity {
             currentObj.SetvFree1(Free1);
 
             return true;
-        }
-        else
-        {
+        } else {
             //String invFlg = "ng";
             //invFlg = "ok";
-            if(invFlg.equals("ok"))
-            {
-                //´æ»õÔÚÉÏÓÎµ¥¾İÈÎÎñÖĞÒÑ¾­É¨ÃèÍê±Ï
-                Toast.makeText(this, "³¬³öÉÏÓÎµ¥¾İÈÎÎñÊıÁ¿,¸ÃÌõÂë²»ÄÜ±»É¨Èë",
+            if (invFlg.equals("ok")) {
+                //å­˜è´§åœ¨ä¸Šæ¸¸å•æ®ä»»åŠ¡ä¸­å·²ç»æ‰«æå®Œæ¯•
+                Toast.makeText(this, "è¶…å‡ºä¸Šæ¸¸å•æ®ä»»åŠ¡æ•°é‡,è¯¥æ¡ç ä¸èƒ½è¢«æ‰«å…¥",
                         Toast.LENGTH_LONG).show();
                 // ADD CAIXY TEST START
                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
@@ -540,7 +504,7 @@ public class SalesDeliveryScan extends Activity {
             }
         }
 
-//        Toast.makeText(this, "´æ»õÔÚÉÏÓÎµ¥¾İÈÎÎñÖĞ²»´æÔÚ",
+//        Toast.makeText(this, "å­˜è´§åœ¨ä¸Šæ¸¸å•æ®ä»»åŠ¡ä¸­ä¸å­˜åœ¨",
 //                Toast.LENGTH_LONG).show();
 //        // ADD CAIXY TEST START
 //        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
@@ -551,7 +515,7 @@ public class SalesDeliveryScan extends Activity {
 //	  		OkFkg = "ng";
 //	  		for(int i = 0;i<jsarray.length();i++)
 //	  		{
-//	  			//È·ÈÏÁË´æ»õ
+//	  			//ç¡®è®¤äº†å­˜è´§
 //	  			if(jsarray.getJSONObject(i).getString("invcode").equals(bar.cInvCode))
 //	  			{
 //	  				currentObj = new Inventory(bar.cInvCode,"",bar.AccID);
@@ -569,16 +533,16 @@ public class SalesDeliveryScan extends Activity {
 //	  				currentObj.SetcurrentID(bar.currentBox);
 //	  				currentObj.SettotalID(bar.TotalBox);
 //	  				currentObj.SetAccID(bar.AccID);
-//	  				if(!ScanType.equals("ÏúÊÛ³ö¿â"))
+//	  				if(!ScanType.equals("é”€å”®å‡ºåº“"))
 //	  				{
-//	  					currentObj.SetvFree1(jsarray.getJSONObject(i).getString("vfree1"));//²úµØĞèÒªĞŞ¸Ä
+//	  					currentObj.SetvFree1(jsarray.getJSONObject(i).getString("vfree1"));//äº§åœ°éœ€è¦ä¿®æ”¹
 //	  				}
 //
 //
 //	  				return true;
 //	  			}
 //	  		}
-//	  		Toast.makeText(this, "´æ»õÔÚÉÏÓÎµ¥¾İÈÎÎñÖĞ²»´æÔÚ£¬ÇëĞ£Ñé",
+//	  		Toast.makeText(this, "å­˜è´§åœ¨ä¸Šæ¸¸å•æ®ä»»åŠ¡ä¸­ä¸å­˜åœ¨ï¼Œè¯·æ ¡éªŒ",
 //	  				Toast.LENGTH_LONG).show();
 //			// ADD CAIXY TEST START
 //			MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
@@ -587,13 +551,10 @@ public class SalesDeliveryScan extends Activity {
     }
 
 
-    private class ButtonOnClickClearconfirm implements DialogInterface.OnClickListener
-    {
+    private class ButtonOnClickClearconfirm implements DialogInterface.OnClickListener {
         @Override
-        public void onClick(DialogInterface dialog, int whichButton)
-        {
-            if(whichButton==DialogInterface.BUTTON_POSITIVE)
-            {
+        public void onClick(DialogInterface dialog, int whichButton) {
+            if (whichButton == DialogInterface.BUTTON_POSITIVE) {
                 try {
                     ClearAllScanDetail();
                 } catch (JSONException e) {
@@ -603,29 +564,26 @@ public class SalesDeliveryScan extends Activity {
                     //ADD CAIXY TEST END
                     e.printStackTrace();
                 }
-            }
-            else
+            } else
                 return;
         }
 
     }
 
 
-    private void ClearAllScanDetail() throws JSONException    {
+    private void ClearAllScanDetail() throws JSONException {
 
 
         Iterator itModKeys = JsonModTaskData.keys();
         JSONArray JsonArrays = new JSONArray();
-        JsonArrays=(JSONArray)jsonBodyTask.get("dbBody");
+        JsonArrays = (JSONArray) jsonBodyTask.get("dbBody");
 
 
-        while(itModKeys.hasNext())
-        {
+        while (itModKeys.hasNext()) {
             String lsKey = itModKeys.next().toString();
-            if(JsonModTaskData.has(lsKey))
-            {
+            if (JsonModTaskData.has(lsKey)) {
 
-                JSONObject JsonReMod = (JSONObject)JsonModTaskData.get(lsKey);
+                JSONObject JsonReMod = (JSONObject) JsonModTaskData.get(lsKey);
                 JSONObject jObj = new JSONObject();
 
                 String csourcebillhid = JsonReMod.getString("billbid").toString();
@@ -634,65 +592,61 @@ public class SalesDeliveryScan extends Activity {
                 String nnum = JsonReMod.getString("number").toString();
                 String Tasknnum = "0";
 
-                for (int i =0; i<JsonArrays.length();i++)
-                {
-                    String csourcebillhidDel = ((JSONObject)(JsonArrays.get(i))).getString("billbid");
-                    String InvCodeaDel = ((JSONObject)(JsonArrays.get(i))).getString("invcode");
-                    String csourcerownoaDel = ((JSONObject)(JsonArrays.get(i))).getString("crowno");
+                for (int i = 0; i < JsonArrays.length(); i++) {
+                    String csourcebillhidDel = ((JSONObject) (JsonArrays.get(i))).getString("billbid");
+                    String InvCodeaDel = ((JSONObject) (JsonArrays.get(i))).getString("invcode");
+                    String csourcerownoaDel = ((JSONObject) (JsonArrays.get(i))).getString("crowno");
 
 
-                    if(csourcebillhidDel.equals(csourcebillhid)&&InvCodeaDel.equals(InvCode)&&csourcerownoaDel.equals(csourcerowno))
-                    {
-                        Tasknnum = ((JSONObject)(JsonArrays.get(i))).getString("number");
+                    if (csourcebillhidDel.equals(csourcebillhid) && InvCodeaDel.equals(InvCode) && csourcerownoaDel.equals(csourcerowno)) {
+                        Tasknnum = ((JSONObject) (JsonArrays.get(i))).getString("number");
                     }
                 }
 
                 //jObj.put("vbdef1",JsonReMod.getString("vbdef1").toString());
 
-                jObj.put("vfree1",JsonReMod.getString("vfree1").toString());
-                jObj.put("pk_measdoc",JsonReMod.getString("pk_measdoc").toString());
-                jObj.put("measname",JsonReMod.getString("measname").toString());
-                jObj.put("invcode",JsonReMod.getString("invcode").toString());
-                jObj.put("invname",JsonReMod.getString("invname").toString());
-                jObj.put("invspec",JsonReMod.getString("invspec").toString());
-                jObj.put("invtype",JsonReMod.getString("invtype").toString());
-                jObj.put("billcode",JsonReMod.getString("billcode").toString());
-                jObj.put("batchcode",JsonReMod.getString("batchcode").toString());
-                jObj.put("invbasdocid",JsonReMod.getString("invbasdocid").toString());
-                jObj.put("invmandocid",JsonReMod.getString("invmandocid").toString());
-                jObj.put("number",JsonReMod.getString("number").toString());
-                jObj.put("outnumber",JsonReMod.getString("outnumber").toString());
-                jObj.put("sourcerowno",JsonReMod.getString("sourcerowno").toString());
-                jObj.put("sourcehid",JsonReMod.getString("sourcehid").toString());
-                jObj.put("sourcebid",JsonReMod.getString("sourcebid").toString());
-                jObj.put("sourcehcode",JsonReMod.getString("sourcehcode").toString());
-                jObj.put("sourcetype",JsonReMod.getString("sourcetype").toString());
-                jObj.put("crowno",JsonReMod.getString("crowno").toString());
-                jObj.put("billhid",JsonReMod.getString("billhid").toString());
-                jObj.put("billbid",JsonReMod.getString("billbid").toString());
-                jObj.put("billhcode",JsonReMod.getString("billhcode").toString());
-                jObj.put("billtype",JsonReMod.getString("billtype").toString());
-                jObj.put("def6",JsonReMod.getString("def6").toString());
-                jObj.put("ddeliverdate",JsonReMod.getString("ddeliverdate").toString());
-                jObj.put("pk_defdoc6",JsonReMod.getString("pk_defdoc6").toString());
-                //ĞèÒªĞŞ¸Ä
-                //ĞŞ¸ÄÊıÁ¿ÎÊÌâ
-                int	iTasknnum = Integer.valueOf(Tasknnum);
+                jObj.put("vfree1", JsonReMod.getString("vfree1").toString());
+                jObj.put("pk_measdoc", JsonReMod.getString("pk_measdoc").toString());
+                jObj.put("measname", JsonReMod.getString("measname").toString());
+                jObj.put("invcode", JsonReMod.getString("invcode").toString());
+                jObj.put("invname", JsonReMod.getString("invname").toString());
+                jObj.put("invspec", JsonReMod.getString("invspec").toString());
+                jObj.put("invtype", JsonReMod.getString("invtype").toString());
+                jObj.put("billcode", JsonReMod.getString("billcode").toString());
+                jObj.put("batchcode", JsonReMod.getString("batchcode").toString());
+                jObj.put("invbasdocid", JsonReMod.getString("invbasdocid").toString());
+                jObj.put("invmandocid", JsonReMod.getString("invmandocid").toString());
+                jObj.put("number", JsonReMod.getString("number").toString());
+                jObj.put("outnumber", JsonReMod.getString("outnumber").toString());
+                jObj.put("sourcerowno", JsonReMod.getString("sourcerowno").toString());
+                jObj.put("sourcehid", JsonReMod.getString("sourcehid").toString());
+                jObj.put("sourcebid", JsonReMod.getString("sourcebid").toString());
+                jObj.put("sourcehcode", JsonReMod.getString("sourcehcode").toString());
+                jObj.put("sourcetype", JsonReMod.getString("sourcetype").toString());
+                jObj.put("crowno", JsonReMod.getString("crowno").toString());
+                jObj.put("billhid", JsonReMod.getString("billhid").toString());
+                jObj.put("billbid", JsonReMod.getString("billbid").toString());
+                jObj.put("billhcode", JsonReMod.getString("billhcode").toString());
+                jObj.put("billtype", JsonReMod.getString("billtype").toString());
+                jObj.put("def6", JsonReMod.getString("def6").toString());
+                jObj.put("ddeliverdate", JsonReMod.getString("ddeliverdate").toString());
+                jObj.put("pk_defdoc6", JsonReMod.getString("pk_defdoc6").toString());
+                //éœ€è¦ä¿®æ”¹
+                //ä¿®æ”¹æ•°é‡é—®é¢˜
+                int iTasknnum = Integer.valueOf(Tasknnum);
                 String snnum = (nnum.replaceAll("\\.0", ""));
                 int innum = Integer.valueOf(snnum);
-                int inewnnum = iTasknnum+innum;
-                String snewnnum = inewnnum+"" ;
-                jObj.put("number",snewnnum);//ĞŞ¸ÄÊıÁ¿ÎÊÌâ
+                int inewnnum = iTasknnum + innum;
+                String snewnnum = inewnnum + "";
+                jObj.put("number", snewnnum);//ä¿®æ”¹æ•°é‡é—®é¢˜
                 JSONArray JsonArraysRemod = new JSONArray();
                 JSONObject jObjReMod = new JSONObject();
-                for (int i =0; i<JsonArrays.length();i++)
-                {
-                    String csourcebillhidDel = ((JSONObject)(JsonArrays.get(i))).getString("billbid");
-                    String InvCodeaDel = ((JSONObject)(JsonArrays.get(i))).getString("invcode");
-                    String csourcerownoaDel = ((JSONObject)(JsonArrays.get(i))).getString("crowno");
-                    if(!csourcebillhidDel.equals(csourcebillhid)||!InvCodeaDel.equals(InvCode)||!csourcerownoaDel.equals(csourcerowno))
-                    {
-                        jObjReMod = (JSONObject)JsonArrays.get(i);
+                for (int i = 0; i < JsonArrays.length(); i++) {
+                    String csourcebillhidDel = ((JSONObject) (JsonArrays.get(i))).getString("billbid");
+                    String InvCodeaDel = ((JSONObject) (JsonArrays.get(i))).getString("invcode");
+                    String csourcerownoaDel = ((JSONObject) (JsonArrays.get(i))).getString("crowno");
+                    if (!csourcebillhidDel.equals(csourcebillhid) || !InvCodeaDel.equals(InvCode) || !csourcerownoaDel.equals(csourcerowno)) {
+                        jObjReMod = (JSONObject) JsonArrays.get(i);
                         JsonArraysRemod.put(jObjReMod);
                     }
                 }
@@ -703,27 +657,26 @@ public class SalesDeliveryScan extends Activity {
             jsonBodyTask.put("Status", true);
             jsonBodyTask.put("dbBody", JsonArrays);
         }
-        JsonModTaskData= new JSONObject();
+        JsonModTaskData = new JSONObject();
         getTaskListData(jsonBodyTask);
-        while(itModKeys.hasNext())
+        while (itModKeys.hasNext())
             JsonModTaskData = new JSONObject();
         ScanedBarcode = new ArrayList<String>();
         lstSaveBody = new ArrayList<Map<String, Object>>();
 //        lstSDScanDetail.setAdapter(null);
         txtSDScanBarcode.setText("");
         listcount = lstSaveBody.size();
-        tvSDcounts.setText("×Ü¹²"+Tasknnum+"¼ş | "+"ÒÑÉ¨"+listcount+"¼ş | "+"Î´É¨"+(Tasknnum-listcount)+"¼ş");
+        tvSDcounts.setText("æ€»å…±" + Tasknnum + "ä»¶ | " + "å·²æ‰«" + listcount + "ä»¶ | " + "æœªæ‰«" + (Tasknnum - listcount) + "ä»¶");
 
     }
 
 
-    private boolean ConformBatch(String invcode,String batch,String AccID)
-            throws JSONException, ParseException, IOException
-    {
-        //»ñµÃµ±Ç°´æ»õµÄ¿â´æ Jonson
+    private boolean ConformBatch(String invcode, String batch, String AccID)
+            throws JSONException, ParseException, IOException {
+        //è·å¾—å½“å‰å­˜è´§çš„åº“å­˜ Jonson
         JSONObject batchList = null;
         JSONObject para = new JSONObject();
-        String CompanyCode="";
+        String CompanyCode = "";
         //
 //			if(AccID.equals("A"))
 //			{
@@ -733,17 +686,17 @@ public class SalesDeliveryScan extends Activity {
 //			{
 //				CompanyCode="1";
 //			}
-        CompanyCode=tmpPK_corp;
+        CompanyCode = tmpPK_corp;
 
         para.put("FunctionName", "GetCurrentStock");
         para.put("CompanyCode", CompanyCode);
         para.put("STOrgCode", MainLogin.objLog.STOrgCode);
-        //ÕâÀïµÄWareHouseĞèÒªÈÃ²Ù×÷Ô±Ñ¡Ôñ.
-        para.put("InvCode",invcode);
-        para.put("TableName","batch");
+        //è¿™é‡Œçš„WareHouseéœ€è¦è®©æ“ä½œå‘˜é€‰æ‹©.
+        para.put("InvCode", invcode);
+        para.put("TableName", "batch");
 
-        if(!MainLogin.getwifiinfo()) {
-            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
+        if (!MainLogin.getwifiinfo()) {
+            Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             return false;
         }
@@ -751,26 +704,23 @@ public class SalesDeliveryScan extends Activity {
                 DoHttpQuery(para, "CommonQuery", AccID);
 
 
-        if(batchList==null)
-        {
+        if (batchList == null) {
             Toast.makeText(this, R.string.WangLuoChuXianWenTi, Toast.LENGTH_LONG).show();
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             return false;
         }
 
-        if(!batchList.has("Status"))
-        {
+        if (!batchList.has("Status")) {
             Toast.makeText(this, R.string.WangLuoChuXianWenTi, Toast.LENGTH_LONG).show();
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             return false;
         }
 
 
-        if(!batchList.getBoolean("Status"))
-        {
-//				Toast.makeText(this, batchList.getString("ÕÒ²»µ½¶ÔÓ¦µÄ¿â´æĞÅÏ¢"),
+        if (!batchList.getBoolean("Status")) {
+//				Toast.makeText(this, batchList.getString("æ‰¾ä¸åˆ°å¯¹åº”çš„åº“å­˜ä¿¡æ¯"),
 //						Toast.LENGTH_LONG).show();
-            Toast.makeText(this,"ÕÒ²»µ½¶ÔÓ¦µÄ¿â´æĞÅÏ¢", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "æ‰¾ä¸åˆ°å¯¹åº”çš„åº“å­˜ä¿¡æ¯", Toast.LENGTH_LONG).show();
             //ADD CAIXY TEST START
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             //ADD CAIXY TEST END
@@ -778,18 +728,15 @@ public class SalesDeliveryScan extends Activity {
         }
 
 
-        JSONArray jsarray= batchList.getJSONArray("batch");
-        ArrayList array =new ArrayList();
-        ArrayList arrayName=new ArrayList();
-        ArrayList arrayFree1=new ArrayList();
-        ArrayList arrayOrg=new ArrayList();
-        ArrayList arrayCompanyId=new ArrayList();
-        for(int i = 0;i<jsarray.length();i++)
-        {
-            if(batch.equals(jsarray.getJSONObject(i).getString("vlot")))
-            {
-                if(wareHouseID.equals(jsarray.getJSONObject(i).getString("cwarehouseid")))
-                {
+        JSONArray jsarray = batchList.getJSONArray("batch");
+        ArrayList array = new ArrayList();
+        ArrayList arrayName = new ArrayList();
+        ArrayList arrayFree1 = new ArrayList();
+        ArrayList arrayOrg = new ArrayList();
+        ArrayList arrayCompanyId = new ArrayList();
+        for (int i = 0; i < jsarray.length(); i++) {
+            if (batch.equals(jsarray.getJSONObject(i).getString("vlot"))) {
+                if (wareHouseID.equals(jsarray.getJSONObject(i).getString("cwarehouseid"))) {
                     currentObj.SetvFree1(jsarray.getJSONObject(i).getString("vfree1"));
 
                     return true;
@@ -798,52 +745,45 @@ public class SalesDeliveryScan extends Activity {
             }
         }
 
-        if(wareHouseID!=null && !wareHouseID.equals(""))
-        {
-//				Toast.makeText(this, batchList.getString("¸Ã»õÆ·ÔÚÄãÑ¡ÔñµÄ²Ö¿âÖĞ²»´æÔÚ,Çë²»ÒªÉ¨Ãè¸Ã»õÆ·!"),
+        if (wareHouseID != null && !wareHouseID.equals("")) {
+//				Toast.makeText(this, batchList.getString("è¯¥è´§å“åœ¨ä½ é€‰æ‹©çš„ä»“åº“ä¸­ä¸å­˜åœ¨,è¯·ä¸è¦æ‰«æè¯¥è´§å“!"),
 //						Toast.LENGTH_LONG).show();
-            Toast.makeText(this,"¸Ã»õÆ·ÔÚÄãÑ¡ÔñµÄ²Ö¿âÖĞ²»´æÔÚ,Çë²»ÒªÉ¨Ãè¸Ã»õÆ·", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "è¯¥è´§å“åœ¨ä½ é€‰æ‹©çš„ä»“åº“ä¸­ä¸å­˜åœ¨,è¯·ä¸è¦æ‰«æè¯¥è´§å“", Toast.LENGTH_LONG).show();
             //ADD CAIXY TEST START
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             //ADD CAIXY TEST END
             return false;
         }
-        //ĞèÒªÒì³£´¦ÀíÒ»ÏÂ¡£
-        if(array.size()!=0)
-        {
-            Object[] objs=array.toArray();
-            Object[] objsname=arrayName.toArray();
-            Object[] objvFree1List =arrayFree1.toArray();
-            Object[] objvOrg =arrayOrg.toArray();
-            Object[] objvcompanyId =arrayCompanyId.toArray();
+        //éœ€è¦å¼‚å¸¸å¤„ç†ä¸€ä¸‹ã€‚
+        if (array.size() != 0) {
+            Object[] objs = array.toArray();
+            Object[] objsname = arrayName.toArray();
+            Object[] objvFree1List = arrayFree1.toArray();
+            Object[] objvOrg = arrayOrg.toArray();
+            Object[] objvcompanyId = arrayCompanyId.toArray();
 
             warehouseList = new String[objs.length];
-            warehouseNameList =new String[objs.length];
-            vFree1List =new String[objs.length];
-            OrgList=new String[objs.length];
-            companyIdList=new String[objs.length];
+            warehouseNameList = new String[objs.length];
+            vFree1List = new String[objs.length];
+            OrgList = new String[objs.length];
+            companyIdList = new String[objs.length];
 
-            for(int i=0;i< objsname.length;i++)
-            {
-                warehouseList[i]=objsname[i].toString();
-            }
-
-            for(int i=0;i< objs.length;i++)
-            {
-                warehouseNameList[i]=objs[i].toString();
-            }
-            for(int i=0;i< objvFree1List.length;i++)
-            {
-                vFree1List[i]=objvFree1List[i].toString();
-            }
-            for(int i=0;i< objvOrg.length;i++)
-            {
-                OrgList[i]=objvOrg[i].toString();
+            for (int i = 0; i < objsname.length; i++) {
+                warehouseList[i] = objsname[i].toString();
             }
 
-            for(int i=0;i< objvcompanyId.length;i++)
-            {
-                companyIdList[i]=objvcompanyId[i].toString();
+            for (int i = 0; i < objs.length; i++) {
+                warehouseNameList[i] = objs[i].toString();
+            }
+            for (int i = 0; i < objvFree1List.length; i++) {
+                vFree1List[i] = objvFree1List[i].toString();
+            }
+            for (int i = 0; i < objvOrg.length; i++) {
+                OrgList[i] = objvOrg[i].toString();
+            }
+
+            for (int i = 0; i < objvcompanyId.length; i++) {
+                companyIdList[i] = objvcompanyId[i].toString();
             }
 
             return true;
@@ -852,12 +792,10 @@ public class SalesDeliveryScan extends Activity {
         return false;
     }
 
-    //É¨Ãè¶şÎ¬Âë½âÎö¹¦ÄÜº¯Êı
-    private void ScanBarcode(String barcode) throws JSONException, ParseException, IOException
-    {
-        if(barcode.equals(""))
-        {
-            Toast.makeText(this, "ÇëÉ¨ÃèÌõÂë", Toast.LENGTH_LONG).show();
+    //æ‰«æäºŒç»´ç è§£æåŠŸèƒ½å‡½æ•°
+    private void ScanBarcode(String barcode) throws JSONException, ParseException, IOException {
+        if (barcode.equals("")) {
+            Toast.makeText(this, "è¯·æ‰«ææ¡ç ", Toast.LENGTH_LONG).show();
             // ADD CAIXY TEST START
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             // ADD CAIXY TEST END
@@ -867,18 +805,17 @@ public class SalesDeliveryScan extends Activity {
         txtSDScanBarcode.setText("");
         txtSDScanBarcode.requestFocus();
         //IniScan();
-        //ÌõÂë·ÖÎö
+        //æ¡ç åˆ†æ
 
-        if(!MainLogin.getwifiinfo()) {
-            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
+        if (!MainLogin.getwifiinfo()) {
+            Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             return;
         }
 
         bar = new SplitTongChengBarCode(barcode);
-        if(bar.creatorOk==false)
-        {
-            Toast.makeText(this, "É¨ÃèµÄ²»ÊÇÕıÈ·»õÆ·ÌõÂë", Toast.LENGTH_LONG).show();
+        if (bar.creatorOk == false) {
+            Toast.makeText(this, "æ‰«æçš„ä¸æ˜¯æ­£ç¡®è´§å“æ¡ç ", Toast.LENGTH_LONG).show();
             // ADD CAIXY TEST START
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             // ADD CAIXY TEST END
@@ -886,8 +823,8 @@ public class SalesDeliveryScan extends Activity {
             txtSDScanBarcode.requestFocus();
             return;
         }
-        //ÏÈ×¢Ïú
-        //ÅĞ¶ÏÊÇ·ñÒÑ¾­ÓĞAccID,Èç¹ûÓĞµ«ÊÇºÍÉ¨Ãè³öÀ´µÄAccID²»Ò»Ñù,ÌáÊ¾´íÎó.
+        //å…ˆæ³¨é”€
+        //åˆ¤æ–­æ˜¯å¦å·²ç»æœ‰AccID,å¦‚æœæœ‰ä½†æ˜¯å’Œæ‰«æå‡ºæ¥çš„AccIDä¸ä¸€æ ·,æç¤ºé”™è¯¯.
 //        if(tmpAccID!=null && !tmpAccID.equals(""))
 //        {
 //            if(!tmpAccID.equals(bar.AccID))
@@ -895,7 +832,7 @@ public class SalesDeliveryScan extends Activity {
 //
 //                txtSDScanBarcode.setText("");
 //                txtSDScanBarcode.requestFocus();
-//                Toast.makeText(this, "É¨ÃèµÄÌõÂë²»ÊôÓÚ¸ÃÈÎÎñÕÊÌ×,¸Ã»õÆ·²»ÄÜ¹»É¨Èë", Toast.LENGTH_LONG).show();
+//                Toast.makeText(this, "æ‰«æçš„æ¡ç ä¸å±äºè¯¥ä»»åŠ¡å¸å¥—,è¯¥è´§å“ä¸èƒ½å¤Ÿæ‰«å…¥", Toast.LENGTH_LONG).show();
 //                // ADD CAIXY TEST START
 //                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
 //                // ADD CAIXY TEST END
@@ -905,17 +842,14 @@ public class SalesDeliveryScan extends Activity {
 
         String FinishBarCode = bar.FinishBarCode;
 
-        if(ScanedBarcode!=null||ScanedBarcode.size()>0)
-        {
-            for (int si = 0 ; si <ScanedBarcode.size();si++ )
-            {
+        if (ScanedBarcode != null || ScanedBarcode.size() > 0) {
+            for (int si = 0; si < ScanedBarcode.size(); si++) {
                 String BarCode = ScanedBarcode.get(si).toString();
 
-                if(BarCode.equals(FinishBarCode))
-                {
+                if (BarCode.equals(FinishBarCode)) {
                     txtSDScanBarcode.setText("");
                     txtSDScanBarcode.requestFocus();
-                    Toast.makeText(this, "¸ÃÌõÂëÒÑ¾­±»É¨Ãè¹ıÁË,²»ÄÜÔÙ´ÎÉ¨Ãè", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "è¯¥æ¡ç å·²ç»è¢«æ‰«æè¿‡äº†,ä¸èƒ½å†æ¬¡æ‰«æ", Toast.LENGTH_LONG).show();
                     //ADD CAIXY TEST START
                     MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                     //ADD CAIXY TEST END
@@ -924,7 +858,7 @@ public class SalesDeliveryScan extends Activity {
             }
         }
 
-//	  		//Ğ£ÑéÁ÷Ë®ºÅ
+//	  		//æ ¡éªŒæµæ°´å·
 //	  		if(!ConformGetSERINO(barcode,bar))
 //	  		{
 //	  			txtSDScanBarcode.setText("");
@@ -933,29 +867,29 @@ public class SalesDeliveryScan extends Activity {
 //	  		}
 
 
-        //ÏÈ×¢Ïú
+        //å…ˆæ³¨é”€
 //        if(!ConformDetail(barcode,bar))
 //        {
 //            txtSDScanBarcode.setText("");
 //            txtSDScanBarcode.requestFocus();
 //            return;
 //        }
-//ÏÈ×¢Ïú
-//        if(ScanType.equals("ÏúÊÛ³ö¿â"))
+//å…ˆæ³¨é”€
+//        if(ScanType.equals("é”€å”®å‡ºåº“"))
 //        {
 //            if(!ConformBatch(bar.cInvCode,bar.cBatch,bar.AccID))
 //            {
-//                //±íÊ¾Õâ¸öÅú´ÎÕâÀïÃ»ÓĞ£¬ĞèÒªÖØĞÂ´òÓ¡
+//                //è¡¨ç¤ºè¿™ä¸ªæ‰¹æ¬¡è¿™é‡Œæ²¡æœ‰ï¼Œéœ€è¦é‡æ–°æ‰“å°
 //                txtSDScanBarcode.setText("");
 //                txtSDScanBarcode.requestFocus();
 //                return;
 //            }
 //        }
-//ÏÈ×¢Ïú
+//å…ˆæ³¨é”€
 
 //        if(OkFkg.equals("ng"))
 //        {
-//            Toast.makeText(this, "³¬³öÉÏÓÎµ¥¾İÈÎÎñÊıÁ¿,¸ÃÌõÂë²»ÄÜ±»É¨Èë",
+//            Toast.makeText(this, "è¶…å‡ºä¸Šæ¸¸å•æ®ä»»åŠ¡æ•°é‡,è¯¥æ¡ç ä¸èƒ½è¢«æ‰«å…¥",
 //                    Toast.LENGTH_LONG).show();
 //            //ADD CAIXY TEST START
 //            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
@@ -964,8 +898,8 @@ public class SalesDeliveryScan extends Activity {
 //            txtSDScanBarcode.requestFocus();
 //            return;
 //        }
-//ÏÈ×¢Ïú
-//        if(!ScanType.equals("ÏúÊÛ³ö¿â"))
+//å…ˆæ³¨é”€
+//        if(!ScanType.equals("é”€å”®å‡ºåº“"))
 //        {
 //            if(!ConformGetSERINOInfo())
 //            {
@@ -976,34 +910,30 @@ public class SalesDeliveryScan extends Activity {
 //        }
 
 
-
         ScanInvOK = "0";
         JSONObject jsonCheckGetBillCode = CheckGetBillCode(bar);
-        if(jsonCheckGetBillCode==null || jsonCheckGetBillCode.length() < 1)
-        {
+        if (jsonCheckGetBillCode == null || jsonCheckGetBillCode.length() < 1) {
             txtSDScanBarcode.setText("");
             txtSDScanBarcode.requestFocus();
-            if(ScanInvOK.equals("1"))
-            {
-                //´æ»õÔÚÉÏÓÎµ¥¾İÈÎÎñÖĞÒÑ¾­É¨ÃèÍê±Ï,µ«ÊÇ»¹ÓĞÎ´É¨ÍêµÄ·Ö°ü
-                Toast.makeText(this, "³¬³öÉÏÓÎµ¥¾İÈÎÎñÊıÁ¿,¸ÃÌõÂë²»ÄÜ±»É¨Èë", Toast.LENGTH_LONG).show();
+            if (ScanInvOK.equals("1")) {
+                //å­˜è´§åœ¨ä¸Šæ¸¸å•æ®ä»»åŠ¡ä¸­å·²ç»æ‰«æå®Œæ¯•,ä½†æ˜¯è¿˜æœ‰æœªæ‰«å®Œçš„åˆ†åŒ…
+                Toast.makeText(this, "è¶…å‡ºä¸Šæ¸¸å•æ®ä»»åŠ¡æ•°é‡,è¯¥æ¡ç ä¸èƒ½è¢«æ‰«å…¥", Toast.LENGTH_LONG).show();
                 //ADD CAIXY TEST START
                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                 //ADD CAIXY TEST END
                 return;
             }
-            Toast.makeText(this, "¸ÃÌõÂë²»·ûºÏÈÎÎñÏîÄ¿", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "è¯¥æ¡ç ä¸ç¬¦åˆä»»åŠ¡é¡¹ç›®", Toast.LENGTH_LONG).show();
             // ADD CAIXY TEST START
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             // ADD CAIXY TEST END
             return;
         }
 
-        if(!CheckHasScaned(jsonCheckGetBillCode,bar))
-        {
+        if (!CheckHasScaned(jsonCheckGetBillCode, bar)) {
             txtSDScanBarcode.setText("");
             txtSDScanBarcode.requestFocus();
-            Toast.makeText(this, "¸ÃÌõÂëÒÑ¾­±»É¨Ãè¹ıÁË,²»ÄÜÔÙ´ÎÉ¨Ãè", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "è¯¥æ¡ç å·²ç»è¢«æ‰«æè¿‡äº†,ä¸èƒ½å†æ¬¡æ‰«æ", Toast.LENGTH_LONG).show();
             // ADD CAIXY TEST START
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             // ADD CAIXY TEST END
@@ -1019,54 +949,48 @@ public class SalesDeliveryScan extends Activity {
     }
 
     //ADD BY WUQIONG START
-    //Íê³ÉÉ¨ÃèºóĞŞ¸ÄÈÎÎñÀïµÄÏîÄ¿
-    private void GetModTaskList(SplitTongChengBarCode bar,JSONObject jsonCheckGetBillCode) throws JSONException
-    {
+    //å®Œæˆæ‰«æåä¿®æ”¹ä»»åŠ¡é‡Œçš„é¡¹ç›®
+    private void GetModTaskList(SplitTongChengBarCode bar, JSONObject jsonCheckGetBillCode) throws JSONException {
         String lsBarInvCode = bar.cInvCode;
         String lsBarBacth = bar.cBatch;
         String lsBillCode = "";
         String lsSerino = bar.cSerino;
 
-        JSONArray JsonArrays=(JSONArray)jsonBodyTask.get("dbBody");
+        JSONArray JsonArrays = (JSONArray) jsonBodyTask.get("dbBody");
         //jsonArrRemove = new ArrayList();
 
 
         String Taskhid = jsonCheckGetBillCode.getString("billhid");
         String Taskbid = jsonCheckGetBillCode.getString("billbid");
 
-        for(int i = 0;i<JsonArrays.length();i++)
-        {
-            String lsJsonInvCode = ((JSONObject)(JsonArrays.get(i))).getString("invcode");
-            String lsJsonInvBatch = ((JSONObject)(JsonArrays.get(i))).getString("batchcode");
-            //add caixy ½â¾öÉ¨ÃèÈÎÎñÆ¥Åä²»ÕıÈ·ÎÊÌâ
+        for (int i = 0; i < JsonArrays.length(); i++) {
+            String lsJsonInvCode = ((JSONObject) (JsonArrays.get(i))).getString("invcode");
+            String lsJsonInvBatch = ((JSONObject) (JsonArrays.get(i))).getString("batchcode");
+            //add caixy è§£å†³æ‰«æä»»åŠ¡åŒ¹é…ä¸æ­£ç¡®é—®é¢˜
 //            Double ldJsonInvQty = ((JSONObject)(JsonArrays.get(i))).getDouble("number");
-            String nnum = ((JSONObject)(JsonArrays.get(i))).getString("number");
-            String ntranoutnum = ((JSONObject)(JsonArrays.get(i))).getString("outnumber");
+            String nnum = ((JSONObject) (JsonArrays.get(i))).getString("number");
+            String ntranoutnum = ((JSONObject) (JsonArrays.get(i))).getString("outnumber");
             String snnum = "0";
 
-            if (!ntranoutnum.equals("null"))
-            {
+            if (!ntranoutnum.equals("null")) {
                 snnum = (ntranoutnum.replaceAll("\\.0", ""));
             }
 
-            int shouldinnum  = Integer.valueOf(nnum) - Integer.valueOf(snnum);
+            int shouldinnum = Integer.valueOf(nnum) - Integer.valueOf(snnum);
 
-            String Tasknnum = shouldinnum+"";
+            String Tasknnum = shouldinnum + "";
 
 
-            //add caixy ½â¾öÉ¨ÃèÈÎÎñÆ¥Åä²»ÕıÈ·ÎÊÌâ
-            if(lsJsonInvBatch==null||lsJsonInvBatch.equals("")||lsJsonInvBatch.equals("null"))
-            {
-                lsJsonInvBatch="Åú´ÎÎ´Ö¸¶¨";
+            //add caixy è§£å†³æ‰«æä»»åŠ¡åŒ¹é…ä¸æ­£ç¡®é—®é¢˜
+            if (lsJsonInvBatch == null || lsJsonInvBatch.equals("") || lsJsonInvBatch.equals("null")) {
+                lsJsonInvBatch = "æ‰¹æ¬¡æœªæŒ‡å®š";
             }
-            if(lsBarInvCode.equals(lsJsonInvCode)&&!Tasknnum.equals("0"))//caixy
+            if (lsBarInvCode.equals(lsJsonInvCode) && !Tasknnum.equals("0"))//caixy
             {
-                if(lsBarBacth.equals(lsJsonInvBatch))
-                {
-                    if(((JSONObject)(JsonArrays.get(i))).getString("billbid").equals(Taskbid)&&((JSONObject)(JsonArrays.get(i))).getString("billhid").equals(Taskhid))
-                    {
+                if (lsBarBacth.equals(lsJsonInvBatch)) {
+                    if (((JSONObject) (JsonArrays.get(i))).getString("billbid").equals(Taskbid) && ((JSONObject) (JsonArrays.get(i))).getString("billhid").equals(Taskhid)) {
                         GetModTaskQty(Double.valueOf(Tasknnum),
-                                ((JSONObject)(JsonArrays.get(i))).getString("billbid"),((JSONObject)(JsonArrays.get(i))).getString("billhid"),i,lsSerino);
+                                ((JSONObject) (JsonArrays.get(i))).getString("billbid"), ((JSONObject) (JsonArrays.get(i))).getString("billhid"), i, lsSerino);
                         return;
                     }
 
@@ -1075,33 +999,28 @@ public class SalesDeliveryScan extends Activity {
             }
         }
 
-        for(int j = 0;j<JsonArrays.length();j++)
-        {
-            String lsJsonInvCode = ((JSONObject)(JsonArrays.get(j))).getString("invcode");
-            String lsJsonInvBatch = ((JSONObject)(JsonArrays.get(j))).getString("batchcode");
+        for (int j = 0; j < JsonArrays.length(); j++) {
+            String lsJsonInvCode = ((JSONObject) (JsonArrays.get(j))).getString("invcode");
+            String lsJsonInvBatch = ((JSONObject) (JsonArrays.get(j))).getString("batchcode");
 
-            String nnum = ((JSONObject)(JsonArrays.get(j))).getString("number");
-            String ntranoutnum = ((JSONObject)(JsonArrays.get(j))).getString("outnumber");
+            String nnum = ((JSONObject) (JsonArrays.get(j))).getString("number");
+            String ntranoutnum = ((JSONObject) (JsonArrays.get(j))).getString("outnumber");
             String snnum = "0";
 
-            if (!ntranoutnum.equals("null"))
-            {
+            if (!ntranoutnum.equals("null")) {
                 snnum = (ntranoutnum.replaceAll("\\.0", ""));
             }
 
-            int shouldinnum  = Integer.valueOf(nnum) - Integer.valueOf(snnum);
+            int shouldinnum = Integer.valueOf(nnum) - Integer.valueOf(snnum);
 
-            String Tasknnum = shouldinnum+"";
+            String Tasknnum = shouldinnum + "";
 
-            if(lsJsonInvBatch==null||lsJsonInvBatch.equals("")||lsJsonInvBatch.equals("null"))
-            {
-                lsJsonInvBatch="Åú´ÎÎ´Ö¸¶¨";
-                if(lsBarInvCode.equals(lsJsonInvCode)&&!Tasknnum.equals("0"))
-                {
-                    if(((JSONObject)(JsonArrays.get(j))).getString("billbid").equals(Taskbid)&&((JSONObject)(JsonArrays.get(j))).getString("billhid").equals(Taskhid))
-                    {
+            if (lsJsonInvBatch == null || lsJsonInvBatch.equals("") || lsJsonInvBatch.equals("null")) {
+                lsJsonInvBatch = "æ‰¹æ¬¡æœªæŒ‡å®š";
+                if (lsBarInvCode.equals(lsJsonInvCode) && !Tasknnum.equals("0")) {
+                    if (((JSONObject) (JsonArrays.get(j))).getString("billbid").equals(Taskbid) && ((JSONObject) (JsonArrays.get(j))).getString("billhid").equals(Taskhid)) {
                         GetModTaskQty(Double.valueOf(Tasknnum),
-                                ((JSONObject)(JsonArrays.get(j))).getString("billbid"),((JSONObject)(JsonArrays.get(j))).getString("billhid"),j,lsSerino);
+                                ((JSONObject) (JsonArrays.get(j))).getString("billbid"), ((JSONObject) (JsonArrays.get(j))).getString("billhid"), j, lsSerino);
                         return;
                     }
 
@@ -1112,47 +1031,42 @@ public class SalesDeliveryScan extends Activity {
 
     //ADD BY WUQIONG START
     private String iModTaskIndex = "";
-    private void GetModTaskQty(Double Qty, String sBillBID, String sBillHID, int iIndex,String lsSerino) throws JSONException
-    {
+
+    private void GetModTaskQty(Double Qty, String sBillBID, String sBillHID, int iIndex, String lsSerino) throws JSONException {
         //iModTaskIndex="";
         JSONObject JsonModTaskItem = new JSONObject();
-        if(lstSaveBody==null || lstSaveBody.size() < 1)
-        {
+        if (lstSaveBody == null || lstSaveBody.size() < 1) {
             return;
         }
 
 
-        for(int i = 0;i<lstSaveBody.size();i++)
-        {
+        for (int i = 0; i < lstSaveBody.size(); i++) {
             Double inQty = 0.0;
-            Map<String,Object> temp = (Map<String,Object>) lstSaveBody.get(i);
+            Map<String, Object> temp = (Map<String, Object>) lstSaveBody.get(i);
 //            if(temp.get("invbasdocid").equals(currentObj.Invbasdoc()))
 //            {
 //                if(temp.get("billbid").equals(sBillBID)&&temp.get("billhid").equals(sBillHID))
 //                {
 //                    inQty += Double.valueOf(temp.get("spacenum").toString());
-//                    ScanedQty = Integer.valueOf(temp.get("spacenum").toString());//add caixy e ½â¾öÉ¨ÃèÊıÁ¿´íÎó
+//                    ScanedQty = Integer.valueOf(temp.get("spacenum").toString());//add caixy e è§£å†³æ‰«ææ•°é‡é”™è¯¯
 //
 //                }
 //            }
 
-            if(inQty.toString().equals(Qty.toString()))
-            {
+            if (inQty.toString().equals(Qty.toString())) {
                 iModTaskIndex = String.valueOf(iIndex);
-                JSONArray JsonTaskArrays=(JSONArray)jsonBodyTask.get("dbBody");
-                JsonModTaskItem = (JSONObject)JsonTaskArrays.get(iIndex);
+                JSONArray JsonTaskArrays = (JSONArray) jsonBodyTask.get("dbBody");
+                JsonModTaskItem = (JSONObject) JsonTaskArrays.get(iIndex);
                 String lsKey = JsonModTaskItem.getString("billbid") +
                         JsonModTaskItem.getString("invcode") +
                         //JsonRemoveTaskItem.getString("vbatch") +
-                        JsonModTaskItem.getString("crowno")+lsSerino;
+                        JsonModTaskItem.getString("crowno") + lsSerino;
                 JsonModTaskData.put(lsKey, JsonModTaskItem);
 
-            }
-            else if(inQty!=0.0)
-            {
+            } else if (inQty != 0.0) {
 
                 iModTaskIndex = String.valueOf(iIndex);
-                JSONArray JsonTaskArrays = (JSONArray)jsonBodyTask.get("dbBody");
+                JSONArray JsonTaskArrays = (JSONArray) jsonBodyTask.get("dbBody");
                 JsonModTaskItem = new JSONObject();
 
                 JsonModTaskItem.put("vfree1", ((JSONObject) JsonTaskArrays.get(iIndex)).get("vfree1").toString());
@@ -1181,13 +1095,13 @@ public class SalesDeliveryScan extends Activity {
                 JsonModTaskItem.put("def6", ((JSONObject) JsonTaskArrays.get(iIndex)).get("def6").toString());
                 JsonModTaskItem.put("ddeliverdate", ((JSONObject) JsonTaskArrays.get(iIndex)).get("ddeliverdate").toString());
                 JsonModTaskItem.put("pk_defdoc6", ((JSONObject) JsonTaskArrays.get(iIndex)).get("pk_defdoc6").toString());
-                //ĞèÒªĞŞ¸Ä
+                //éœ€è¦ä¿®æ”¹
                 JsonModTaskItem.put("number", inQty);
 
                 String lsKey = JsonModTaskItem.getString("billbid") +
                         JsonModTaskItem.getString("invcode") +
                         //JsonRemoveTaskItem.getString("vbatch") +
-                        JsonModTaskItem.getString("crowno")+lsSerino;
+                        JsonModTaskItem.getString("crowno") + lsSerino;
                 JsonModTaskData.put(lsKey, JsonModTaskItem);
             }
 
@@ -1196,8 +1110,7 @@ public class SalesDeliveryScan extends Activity {
     }
 
 
-
-//    private void ReSetTaskListData() throws JSONException
+    //    private void ReSetTaskListData() throws JSONException
 //    {
 //        JSONArray JsonArrays = (JSONArray)jsonBodyTask.get("dbBody");
 //        JSONArray JsonArrNew = new JSONArray();
@@ -1269,59 +1182,56 @@ public class SalesDeliveryScan extends Activity {
 //        }
 //
 //    }
-private void ReSetTaskListData() throws JSONException
-    {
-        JSONArray JsonArrays = (JSONArray)jsonBodyTask.get("dbBody");
+    private void ReSetTaskListData() throws JSONException {
+        JSONArray JsonArrays = (JSONArray) jsonBodyTask.get("dbBody");
         JSONArray JsonArrNew = new JSONArray();
-        for(int i=0;i<JsonArrays.length();i++)
-        {
-                    JSONObject jObj = new JSONObject();
-                    jObj.put("vfree1", ((JSONObject) JsonArrays.get(i)).get("vfree1").toString());
-                    jObj.put("pk_measdoc", ((JSONObject) JsonArrays.get(i)).get("pk_measdoc").toString());
-                    jObj.put("measname", ((JSONObject) JsonArrays.get(i)).get("measname").toString());
-                    jObj.put("invcode", ((JSONObject) JsonArrays.get(i)).get("invcode").toString());
-                    jObj.put("invname", ((JSONObject) JsonArrays.get(i)).get("invname").toString());
-                    jObj.put("invspec", ((JSONObject) JsonArrays.get(i)).get("invspec").toString());
-                    jObj.put("invtype", ((JSONObject) JsonArrays.get(i)).get("invtype").toString());
-                    jObj.put("billcode", ((JSONObject) JsonArrays.get(i)).get("billcode").toString());
-                    jObj.put("batchcode", ((JSONObject) JsonArrays.get(i)).get("batchcode").toString());
-                    jObj.put("invbasdocid", ((JSONObject) JsonArrays.get(i)).get("invbasdocid").toString());
-                    jObj.put("invmandocid", ((JSONObject) JsonArrays.get(i)).get("invmandocid").toString());
-                    jObj.put("number", ((JSONObject) JsonArrays.get(i)).get("number").toString());
-                    jObj.put("outnumber", ((JSONObject) JsonArrays.get(i)).get("outnumber").toString());
-                    jObj.put("sourcerowno", ((JSONObject) JsonArrays.get(i)).get("sourcerowno").toString());
-                    jObj.put("sourcehid", ((JSONObject) JsonArrays.get(i)).get("sourcehid").toString());
-                    jObj.put("sourcebid", ((JSONObject) JsonArrays.get(i)).get("sourcebid").toString());
-                    jObj.put("sourcehcode", ((JSONObject) JsonArrays.get(i)).get("sourcehcode").toString());
-                    jObj.put("sourcetype", ((JSONObject) JsonArrays.get(i)).get("sourcetype").toString());
-                    jObj.put("crowno", ((JSONObject) JsonArrays.get(i)).get("crowno").toString());
-                    jObj.put("billhid", ((JSONObject) JsonArrays.get(i)).get("billhid").toString());
-                    jObj.put("billbid", ((JSONObject) JsonArrays.get(i)).get("billbid").toString());
-                    jObj.put("billhcode", ((JSONObject) JsonArrays.get(i)).get("billhcode").toString());
-                    jObj.put("billtype", ((JSONObject) JsonArrays.get(i)).get("billtype").toString());
-                    jObj.put("def6", ((JSONObject) JsonArrays.get(i)).get("def6").toString());
-                    jObj.put("ddeliverdate", ((JSONObject) JsonArrays.get(i)).get("ddeliverdate").toString());
-                    jObj.put("pk_defdoc6", ((JSONObject) JsonArrays.get(i)).get("pk_defdoc6").toString());
-                    String snumber = ((JSONObject) JsonArrays.get(i)).get("number").toString();
+        for (int i = 0; i < JsonArrays.length(); i++) {
+            JSONObject jObj = new JSONObject();
+            jObj.put("vfree1", ((JSONObject) JsonArrays.get(i)).get("vfree1").toString());
+            jObj.put("pk_measdoc", ((JSONObject) JsonArrays.get(i)).get("pk_measdoc").toString());
+            jObj.put("measname", ((JSONObject) JsonArrays.get(i)).get("measname").toString());
+            jObj.put("invcode", ((JSONObject) JsonArrays.get(i)).get("invcode").toString());
+            jObj.put("invname", ((JSONObject) JsonArrays.get(i)).get("invname").toString());
+            jObj.put("invspec", ((JSONObject) JsonArrays.get(i)).get("invspec").toString());
+            jObj.put("invtype", ((JSONObject) JsonArrays.get(i)).get("invtype").toString());
+            jObj.put("billcode", ((JSONObject) JsonArrays.get(i)).get("billcode").toString());
+            jObj.put("batchcode", ((JSONObject) JsonArrays.get(i)).get("batchcode").toString());
+            jObj.put("invbasdocid", ((JSONObject) JsonArrays.get(i)).get("invbasdocid").toString());
+            jObj.put("invmandocid", ((JSONObject) JsonArrays.get(i)).get("invmandocid").toString());
+            jObj.put("number", ((JSONObject) JsonArrays.get(i)).get("number").toString());
+            jObj.put("outnumber", ((JSONObject) JsonArrays.get(i)).get("outnumber").toString());
+            jObj.put("sourcerowno", ((JSONObject) JsonArrays.get(i)).get("sourcerowno").toString());
+            jObj.put("sourcehid", ((JSONObject) JsonArrays.get(i)).get("sourcehid").toString());
+            jObj.put("sourcebid", ((JSONObject) JsonArrays.get(i)).get("sourcebid").toString());
+            jObj.put("sourcehcode", ((JSONObject) JsonArrays.get(i)).get("sourcehcode").toString());
+            jObj.put("sourcetype", ((JSONObject) JsonArrays.get(i)).get("sourcetype").toString());
+            jObj.put("crowno", ((JSONObject) JsonArrays.get(i)).get("crowno").toString());
+            jObj.put("billhid", ((JSONObject) JsonArrays.get(i)).get("billhid").toString());
+            jObj.put("billbid", ((JSONObject) JsonArrays.get(i)).get("billbid").toString());
+            jObj.put("billhcode", ((JSONObject) JsonArrays.get(i)).get("billhcode").toString());
+            jObj.put("billtype", ((JSONObject) JsonArrays.get(i)).get("billtype").toString());
+            jObj.put("def6", ((JSONObject) JsonArrays.get(i)).get("def6").toString());
+            jObj.put("ddeliverdate", ((JSONObject) JsonArrays.get(i)).get("ddeliverdate").toString());
+            jObj.put("pk_defdoc6", ((JSONObject) JsonArrays.get(i)).get("pk_defdoc6").toString());
+            String snumber = ((JSONObject) JsonArrays.get(i)).get("number").toString();
 //                    int innum = Integer.valueOf(snumber).intValue() - ScanedQty;
 
 //                    String snnum = innum +"";
-                    jObj.put("number",snumber );
+            jObj.put("number", snumber);
 
-                    JsonArrNew.put(jObj);
-
-        }
-
-
-            jsonBodyTask = new JSONObject();
-            jsonBodyTask.put("Status", true);
-            jsonBodyTask.put("dbBody", JsonArrNew);
+            JsonArrNew.put(jObj);
 
         }
 
 
+        jsonBodyTask = new JSONObject();
+        jsonBodyTask.put("Status", true);
+        jsonBodyTask.put("dbBody", JsonArrNew);
 
-//	  	//Íê³ÉÉ¨ÃèºóÉ¾³ıÈÎÎñÀïµÄÏîÄ¿
+    }
+
+
+//	  	//å®Œæˆæ‰«æååˆ é™¤ä»»åŠ¡é‡Œçš„é¡¹ç›®
 //	  	private void GetRemovedTaskList(SplitBarcode bar) throws JSONException
 //	  	{
 //	  		String lsBarInvCode = bar.cInvCode;
@@ -1338,7 +1248,7 @@ private void ReSetTaskListData() throws JSONException
 //				Double ldJsonInvQty = ((JSONObject)(JsonArrays.get(i))).getDouble("shouldoutnum");
 //				if(lsJsonInvBatch==null||lsJsonInvBatch.equals("")||lsJsonInvBatch.equals("null"))
 //				{
-//					lsJsonInvBatch="Åú´ÎÎ´Ö¸¶¨";
+//					lsJsonInvBatch="æ‰¹æ¬¡æœªæŒ‡å®š";
 //				}
 //				if(lsBarInvCode.equals(lsJsonInvCode))
 //				{
@@ -1358,7 +1268,7 @@ private void ReSetTaskListData() throws JSONException
 //				Double ldJsonInvQty = ((JSONObject)(JsonArrays.get(j))).getDouble("shouldoutnum");
 //				if(lsJsonInvBatch==null||lsJsonInvBatch.equals("")||lsJsonInvBatch.equals("null"))
 //				{
-//					lsJsonInvBatch="Åú´ÎÎ´Ö¸¶¨";
+//					lsJsonInvBatch="æ‰¹æ¬¡æœªæŒ‡å®š";
 //				}
 //				if(lsBarInvCode.equals(lsJsonInvCode))
 //				{
@@ -1374,7 +1284,7 @@ private void ReSetTaskListData() throws JSONException
 //
 //
 //
-//        //»ñµÃµ±Ç°µ¥¾İµÄÁ÷Ë®ºÅ
+//        //è·å¾—å½“å‰å•æ®çš„æµæ°´å·
 //        JSONObject SERINOList = null;
 //        JSONObject para = new JSONObject();
 //
@@ -1421,7 +1331,7 @@ private void ReSetTaskListData() throws JSONException
 //            }
 //            else
 //            {
-//                Toast.makeText(this, "É¨ÃèµÄÌõÂëÁ÷Ë®ºÅÔÚ²Ö¿âÖĞÒÑ¾­´æÔÚ,¸ÃÌõÂë²»ÄÜ±»É¨Èë",
+//                Toast.makeText(this, "æ‰«æçš„æ¡ç æµæ°´å·åœ¨ä»“åº“ä¸­å·²ç»å­˜åœ¨,è¯¥æ¡ç ä¸èƒ½è¢«æ‰«å…¥",
 //                        Toast.LENGTH_LONG).show();
 //                //ADD CAIXY TEST START
 //                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
@@ -1430,38 +1340,31 @@ private void ReSetTaskListData() throws JSONException
 //        }
 //    }
 
-    //È·ÈÏÈç¹ûÓĞÉÏÓÎµ¥¾İ,ÄÇÃ´ÅĞ¶ÏÊÇ·ñ³¬¹ıÆäÊıÁ¿
-    private boolean ConformDetailQty(Double Qty, String sBillBID, String sBillHID) throws JSONException
-    {
+    //ç¡®è®¤å¦‚æœæœ‰ä¸Šæ¸¸å•æ®,é‚£ä¹ˆåˆ¤æ–­æ˜¯å¦è¶…è¿‡å…¶æ•°é‡
+    private boolean ConformDetailQty(Double Qty, String sBillBID, String sBillHID) throws JSONException {
         ScanInvOK = "1";
-        if(lstSaveBody==null || lstSaveBody.size() < 1)
-        {
+        if (lstSaveBody == null || lstSaveBody.size() < 1) {
             return true;
         }
 
-        for(int j = 0;j<lstSaveBody.size();j++)
-        {
-            Map<String,Object> temp1 = (Map<String,Object>) lstSaveBody.get(j);
-            if(temp1.get("SeriNo").equals(currentObj.GetSerino())&&temp1.get("InvCode").equals(currentObj.getInvCode())
-                    &&temp1.get("Batch").equals(currentObj.GetBatch())&& temp1.get("spacenum").equals("0")
-                    &&temp1.get("billbid").equals(sBillBID)&&temp1.get("billhid").equals(sBillHID))
-            {
+        for (int j = 0; j < lstSaveBody.size(); j++) {
+            Map<String, Object> temp1 = (Map<String, Object>) lstSaveBody.get(j);
+            if (temp1.get("SeriNo").equals(currentObj.GetSerino()) && temp1.get("InvCode").equals(currentObj.getInvCode())
+                    && temp1.get("Batch").equals(currentObj.GetBatch()) && temp1.get("spacenum").equals("0")
+                    && temp1.get("billbid").equals(sBillBID) && temp1.get("billhid").equals(sBillHID)) {
                 return true;
             }
         }
         Double inQty = 1.0;
-        for(int i = 0;i<lstSaveBody.size();i++)
-        {
-            Map<String,Object> temp = (Map<String,Object>) lstSaveBody.get(i);
-            if(temp.get("invbasdocid").equals(currentObj.Invbasdoc()))
-            {
-                if(temp.get("billbid").equals(sBillBID)&&temp.get("billhid").equals(sBillHID)&& temp.get("spacenum").equals("0"))
+        for (int i = 0; i < lstSaveBody.size(); i++) {
+            Map<String, Object> temp = (Map<String, Object>) lstSaveBody.get(i);
+            if (temp.get("invbasdocid").equals(currentObj.Invbasdoc())) {
+                if (temp.get("billbid").equals(sBillBID) && temp.get("billhid").equals(sBillHID) && temp.get("spacenum").equals("0"))
                     inQty += 1;
             }
         }
 
-        if(inQty > Qty)
-        {
+        if (inQty > Qty) {
 
             return false;
         }
@@ -1469,31 +1372,26 @@ private void ReSetTaskListData() throws JSONException
         return true;
     }
 
-    //ÅĞ¶Ï¸ÃÉ¨ÃèÌõÂëÊôÓÚÄÄÌõµ¥¾İĞĞ
-    private JSONObject CheckGetBillCode(SplitTongChengBarCode bar) throws JSONException
-    {
+    //åˆ¤æ–­è¯¥æ‰«ææ¡ç å±äºå“ªæ¡å•æ®è¡Œ
+    private JSONObject CheckGetBillCode(SplitTongChengBarCode bar) throws JSONException {
         String lsBarInvCode = bar.cInvCode;
         String lsBarBacth = bar.cBatch;
 
-        JSONArray JsonArrays= (JSONArray)jsonBodyTask.getJSONArray("dbBody");
+        JSONArray JsonArrays = (JSONArray) jsonBodyTask.getJSONArray("dbBody");
         JSONObject obj = null;
-        for(int i = 0;i<JsonArrays.length();i++)
-        {
-            String lsJsonInvCode = ((JSONObject)(JsonArrays.get(i))).getString("invcode");
-            String lsJsonInvBatch = ((JSONObject)(JsonArrays.get(i))).getString("batchcode");
+        for (int i = 0; i < JsonArrays.length(); i++) {
+            String lsJsonInvCode = ((JSONObject) (JsonArrays.get(i))).getString("invcode");
+            String lsJsonInvBatch = ((JSONObject) (JsonArrays.get(i))).getString("batchcode");
             String Outnum = "0";
-            String  sOutnum = ((JSONObject)(JsonArrays.get(i))).getString("outnumber");
-            if(!sOutnum.equals("null"))
-            {
+            String sOutnum = ((JSONObject) (JsonArrays.get(i))).getString("outnumber");
+            if (!sOutnum.equals("null")) {
                 Outnum = sOutnum;
             }
-            Double ldJsonInvQty = ((JSONObject)(JsonArrays.get(i))).getDouble("number")-Double.valueOf(Outnum);
-            if(lsJsonInvBatch==null||lsJsonInvBatch.equals("")||lsJsonInvBatch.equals("null"))
-            {
-                lsJsonInvBatch="Åú´ÎÎ´Ö¸¶¨";
+            Double ldJsonInvQty = ((JSONObject) (JsonArrays.get(i))).getDouble("number") - Double.valueOf(Outnum);
+            if (lsJsonInvBatch == null || lsJsonInvBatch.equals("") || lsJsonInvBatch.equals("null")) {
+                lsJsonInvBatch = "æ‰¹æ¬¡æœªæŒ‡å®š";
             }
-            if(lsBarInvCode.equals(lsJsonInvCode)&&ldJsonInvQty>0)
-            {
+            if (lsBarInvCode.equals(lsJsonInvCode) && ldJsonInvQty > 0) {
 //                if(lsBarBacth.equals(lsJsonInvBatch))
 //                {
 //                    if(ConformDetailQty(ldJsonInvQty,((JSONObject)(JsonArrays.get(i))).getString("billbid"),((JSONObject)(JsonArrays.get(i))).getString("billhid")))
@@ -1501,41 +1399,36 @@ private void ReSetTaskListData() throws JSONException
 //
 //                    }
 //                }
-                obj = (JSONObject)JsonArrays.get(i);
+                obj = (JSONObject) JsonArrays.get(i);
                 return obj;
             }
         }
 
-        if(ScanType.equals("ÏúÊÛ³ö¿â"))
-        {
-            for(int j = 0;j<JsonArrays.length();j++)
-            {
-                String lsJsonInvCode = ((JSONObject)(JsonArrays.get(j))).getString("invcode");
-                String lsJsonInvBatch = ((JSONObject)(JsonArrays.get(j))).getString("batchcode");
+        if (ScanType.equals("é”€å”®å‡ºåº“")) {
+            for (int j = 0; j < JsonArrays.length(); j++) {
+                String lsJsonInvCode = ((JSONObject) (JsonArrays.get(j))).getString("invcode");
+                String lsJsonInvBatch = ((JSONObject) (JsonArrays.get(j))).getString("batchcode");
 
                 String Outnum = "0";
 
-                String  sOutnum = ((JSONObject)(JsonArrays.get(j))).getString("outnumber");
+                String sOutnum = ((JSONObject) (JsonArrays.get(j))).getString("outnumber");
 
-                if(!sOutnum.equals("null"))
-                {
+                if (!sOutnum.equals("null")) {
                     Outnum = sOutnum;
                 }
 
-                Double ldJsonInvQty = ((JSONObject)(JsonArrays.get(j))).getDouble("number")-Double.valueOf(Outnum);
+                Double ldJsonInvQty = ((JSONObject) (JsonArrays.get(j))).getDouble("number") - Double.valueOf(Outnum);
 
-                if(lsJsonInvBatch==null||lsJsonInvBatch.equals("")||lsJsonInvBatch.equals("null"))
-                {
-                    lsJsonInvBatch="Åú´ÎÎ´Ö¸¶¨";
+                if (lsJsonInvBatch == null || lsJsonInvBatch.equals("") || lsJsonInvBatch.equals("null")) {
+                    lsJsonInvBatch = "æ‰¹æ¬¡æœªæŒ‡å®š";
                 }
-                if(lsBarInvCode.equals(lsJsonInvCode)&&ldJsonInvQty>0&&lsJsonInvBatch.equals("Åú´ÎÎ´Ö¸¶¨"))
-                {
+                if (lsBarInvCode.equals(lsJsonInvCode) && ldJsonInvQty > 0 && lsJsonInvBatch.equals("æ‰¹æ¬¡æœªæŒ‡å®š")) {
 //                    if(ConformDetailQty(ldJsonInvQty,
 //                            ((JSONObject)(JsonArrays.get(j))).getString("billbid"),((JSONObject)(JsonArrays.get(j))).getString("billhid")))
 //                    {
 //                        return (JSONObject)JsonArrays.get(j);
 //                    }
-                    obj = (JSONObject)JsonArrays.get(j);
+                    obj = (JSONObject) JsonArrays.get(j);
                     return obj;
                 }
             }
@@ -1544,12 +1437,12 @@ private void ReSetTaskListData() throws JSONException
     }
 
     /**
-     * ÅĞ¶Ï¸ÃÌõÂëÊÇ·ñÒÑ¾­±»É¨Ãè¹ıÁË
-     * @return Èç¹ûÎªtrue ´ú±íÃ»ÓĞ±»É¨Ãè¹ı,Èç¹ûfalse ´ú±íÒÑ¾­±»É¨Ãè¹ıÁË
+     * åˆ¤æ–­è¯¥æ¡ç æ˜¯å¦å·²ç»è¢«æ‰«æè¿‡äº†
+     *
+     * @return å¦‚æœä¸ºtrue ä»£è¡¨æ²¡æœ‰è¢«æ‰«æè¿‡,å¦‚æœfalse ä»£è¡¨å·²ç»è¢«æ‰«æè¿‡äº†
      * @throws JSONException
      */
-    private Boolean CheckHasScaned(JSONObject jsonCheckGetBillCode, SplitTongChengBarCode bar) throws JSONException
-    {
+    private Boolean CheckHasScaned(JSONObject jsonCheckGetBillCode, SplitTongChengBarCode bar) throws JSONException {
 
 //        ListAdapter ScanDetailAdapter = lstSDScanDetail.getAdapter();
 
@@ -1578,17 +1471,16 @@ private void ReSetTaskListData() throws JSONException
 //            }
 //        }
 
-        BindingScanDetail(jsonCheckGetBillCode,bar,"ADD",null);
+        BindingScanDetail(jsonCheckGetBillCode, bar, "ADD", null);
         return true;
     }
 
 
     private void BindingScanDetail(JSONObject jsonCheckGetBillCode, SplitTongChengBarCode bar,
-                                   String sType, Map<String,Object> mapGetScanedDetail) throws JSONException
-    {
-        ArrayList<Map<String,Object>> lstCurrentBox = null;
+                                   String sType, Map<String, Object> mapGetScanedDetail) throws JSONException {
+        ArrayList<Map<String, Object>> lstCurrentBox = null;
 //        Map<String,Object> mapCurrentBox = new HashMap<String,Object>();
-        Map<String,Object> mapScanDetail =  new HashMap<String,Object>();
+        Map<String, Object> mapScanDetail = new HashMap<String, Object>();
 
 //        if(lstSaveBody==null || lstSaveBody.size()<1)
 //        {
@@ -1607,56 +1499,55 @@ private void ReSetTaskListData() throws JSONException
 //            lstCurrentBox.add(mapCurrentBox);
 
 //            mapScanDetail.put(lsKey,lstCurrentBox);
-            mapScanDetail.put("InvName", jsonCheckGetBillCode.getString("invname"));
-            mapScanDetail.put("InvCode", jsonCheckGetBillCode.getString("invcode"));
-            mapScanDetail.put("AccID", tmpAccID);
-            mapScanDetail.put("QTY",bar.QTY);
-            mapScanDetail.put("P",bar.P);
-            mapScanDetail.put("TP",bar.TP);
-            mapScanDetail.put("Weights",bar.Weights);
-            mapScanDetail.put("Measname",jsonCheckGetBillCode.getString("measname"));
-            mapScanDetail.put("Batch",bar.cBatch);
-            mapScanDetail.put("SeriNo", bar.cSerino);
-            mapScanDetail.put("BarCode", bar.FinishBarCode);
+        mapScanDetail.put("InvName", jsonCheckGetBillCode.getString("invname"));
+        mapScanDetail.put("InvCode", jsonCheckGetBillCode.getString("invcode"));
+        mapScanDetail.put("AccID", tmpAccID);
+        mapScanDetail.put("QTY", bar.QTY);
+        mapScanDetail.put("NUM", bar.NUM);
+        mapScanDetail.put("Weights", bar.Weights);
+        mapScanDetail.put("Measname", jsonCheckGetBillCode.getString("measname"));
+        mapScanDetail.put("Batch", bar.cBatch);
+        mapScanDetail.put("SeriNo", bar.cSerino);
+        mapScanDetail.put("BarCode", bar.FinishBarCode);
 //            mapScanDetail.put("TotalNum", Integer.parseInt(currentObj.totalID()));
 //            mapScanDetail.put("ScanedNum", lstCurrentBox.size());
-            //¿ªÊ¼µ¥¾İĞĞºÅ
-            mapScanDetail.put("sourcerowno", jsonCheckGetBillCode.getString("sourcerowno"));
-            //Ô´µ¥µ¥¾İĞĞºÅ(²ÎÕÕµ¥ )
-            mapScanDetail.put("crowno", jsonCheckGetBillCode.getString("crowno"));
-            //¿ªÊ¼µ¥±íÍ·
-            mapScanDetail.put("sourcehid", jsonCheckGetBillCode.getString("sourcehid"));
-            //Ô´µ¥±íÍ·(²ÎÕÕµ¥ )
-            mapScanDetail.put("billhid", jsonCheckGetBillCode.getString("billhid"));
-            //¿ªÊ¼µ¥±íÌå
-            mapScanDetail.put("sourcebid", jsonCheckGetBillCode.getString("sourcebid"));
-            //Ô´µ¥±íÌå(²ÎÕÕµ¥ )
-            mapScanDetail.put("billbid", jsonCheckGetBillCode.getString("billbid"));
-            //¿ªÊ¼µ¥¾İÀàĞÍ
-            mapScanDetail.put("sourcetype", jsonCheckGetBillCode.getString("sourcetype"));
-            //Ô´µ¥¾İÀàĞÍ(²ÎÕÕµ¥ )
-            mapScanDetail.put("billtype", jsonCheckGetBillCode.getString("billtype"));
-            //¿ªÊ¼µ¥¾İºÅ
-            mapScanDetail.put("sourcehcode", jsonCheckGetBillCode.getString("sourcehcode"));
-            //µ¥¾İºÅ(²ÎÕÕµ¥ )
-            mapScanDetail.put("billhcode", jsonCheckGetBillCode.getString("billhcode"));
-            mapScanDetail.put("BillCode", jsonCheckGetBillCode.getString("billhcode"));
-            mapScanDetail.put("pk_defdoc6", jsonCheckGetBillCode.getString("pk_defdoc6"));
-            mapScanDetail.put("def6", jsonCheckGetBillCode.getString("def6"));
-            mapScanDetail.put("ddeliverdate", jsonCheckGetBillCode.getString("ddeliverdate"));
-            mapScanDetail.put("pk_measdoc", jsonCheckGetBillCode.getString("pk_measdoc"));
-            //´æ»õ»ù±¾±êÊ¶
-            mapScanDetail.put("invbasdocid", jsonCheckGetBillCode.getString("invbasdocid"));
-            //´æ»õ¹ÜÀíID
+        //å¼€å§‹å•æ®è¡Œå·
+        mapScanDetail.put("sourcerowno", jsonCheckGetBillCode.getString("sourcerowno"));
+        //æºå•å•æ®è¡Œå·(å‚ç…§å• )
+        mapScanDetail.put("crowno", jsonCheckGetBillCode.getString("crowno"));
+        //å¼€å§‹å•è¡¨å¤´
+        mapScanDetail.put("sourcehid", jsonCheckGetBillCode.getString("sourcehid"));
+        //æºå•è¡¨å¤´(å‚ç…§å• )
+        mapScanDetail.put("billhid", jsonCheckGetBillCode.getString("billhid"));
+        //å¼€å§‹å•è¡¨ä½“
+        mapScanDetail.put("sourcebid", jsonCheckGetBillCode.getString("sourcebid"));
+        //æºå•è¡¨ä½“(å‚ç…§å• )
+        mapScanDetail.put("billbid", jsonCheckGetBillCode.getString("billbid"));
+        //å¼€å§‹å•æ®ç±»å‹
+        mapScanDetail.put("sourcetype", jsonCheckGetBillCode.getString("sourcetype"));
+        //æºå•æ®ç±»å‹(å‚ç…§å• )
+        mapScanDetail.put("billtype", jsonCheckGetBillCode.getString("billtype"));
+        //å¼€å§‹å•æ®å·
+        mapScanDetail.put("sourcehcode", jsonCheckGetBillCode.getString("sourcehcode"));
+        //å•æ®å·(å‚ç…§å• )
+        mapScanDetail.put("billhcode", jsonCheckGetBillCode.getString("billhcode"));
+        mapScanDetail.put("BillCode", jsonCheckGetBillCode.getString("billhcode"));
+        mapScanDetail.put("pk_defdoc6", jsonCheckGetBillCode.getString("pk_defdoc6"));
+        mapScanDetail.put("def6", jsonCheckGetBillCode.getString("def6"));
+        mapScanDetail.put("ddeliverdate", jsonCheckGetBillCode.getString("ddeliverdate"));
+        mapScanDetail.put("pk_measdoc", jsonCheckGetBillCode.getString("pk_measdoc"));
+        //å­˜è´§åŸºæœ¬æ ‡è¯†
+        mapScanDetail.put("invbasdocid", jsonCheckGetBillCode.getString("invbasdocid"));
+        //å­˜è´§ç®¡ç†ID
 //            mapScanDetail.put("invmandocid", currentObj.Invmandoc());
-            //×ÔÓÉÏîÒ»
+        //è‡ªç”±é¡¹ä¸€
 //            mapScanDetail.put("free1", currentObj.vFree1());
-            //µ¥¾İÅú´Î
-            mapScanDetail.put("billbatchcode", jsonCheckGetBillCode.getString("batchcode"));
-            //Åú´Î
-            mapScanDetail.put("batchcode", bar.cBatch);
+        //å•æ®æ‰¹æ¬¡
+        mapScanDetail.put("billbatchcode", jsonCheckGetBillCode.getString("batchcode"));
+        //æ‰¹æ¬¡
+        mapScanDetail.put("batchcode", bar.cBatch);
 
-            //¸Ã»õÎ»¸Ã´æ»õ±àÂëÅú´ÎÓĞ¼¸¼ş»õ?
+        //è¯¥è´§ä½è¯¥å­˜è´§ç¼–ç æ‰¹æ¬¡æœ‰å‡ ä»¶è´§?
 //            if(Integer.parseInt(currentObj.totalID())==lstCurrentBox.size())
 //            {
 //                mapScanDetail.put("spacenum", "1");
@@ -1666,16 +1557,16 @@ private void ReSetTaskListData() throws JSONException
 //            else
 //            {
 //                mapScanDetail.put("spacenum", "0");
-//                mapScanDetail.put("box", "·Ö°üÎ´Íê");
+//                mapScanDetail.put("box", "åˆ†åŒ…æœªå®Œ");
 //            }
         lstSaveBody.add(mapScanDetail);
-        Log.d(TAG, "BindingScanDetail: "+lstSaveBody.size());
+        Log.d(TAG, "BindingScanDetail: " + lstSaveBody.size());
 //        salesDeliveryAdapter = new SalesDeliveryAdapter(SalesDeliveryScan.this, lstSaveBody);
 //        lstSDScanDetail.setAdapter(salesDeliveryAdapter);
         salesDeliveryAdapter.notifyDataSetInvalidated();
         listcount = lstSaveBody.size();
-        tvSDcounts.setText("×Ü¹²"+Tasknnum+"¼ş | "+"ÒÑÉ¨"+listcount+"¼ş | "+"Î´É¨"+(Tasknnum-listcount)+"¼ş");
-//        MyListAdapter listItemAdapter = new MyListAdapter(SalesDeliveryScan.this,lstSaveBody,//Êı¾İÔ´
+        tvSDcounts.setText("æ€»å…±" + Tasknnum + "ä»¶ | " + "å·²æ‰«" + listcount + "ä»¶ | " + "æœªæ‰«" + (Tasknnum - listcount) + "ä»¶");
+//        MyListAdapter listItemAdapter = new MyListAdapter(SalesDeliveryScan.this,lstSaveBody,//æ•°æ®æº
 //                R.layout.vlisttransscanitem,
 ////					new String[] {"InvCode","InvName","Batch","AccID","TotalNum",
 ////							"BarCode","SeriNo","BillCode","ScanedNum"},
@@ -1714,19 +1605,19 @@ private void ReSetTaskListData() throws JSONException
 //                            mapCurrent.get("SeriNo").toString();
 //                    ArrayList<Map<String,Object>> lstCurrent =
 //                            (ArrayList<Map<String,Object>>)mapCurrent.get(lsKey);
-//                    SimpleAdapter listItemAdapter = new SimpleAdapter(SalesDeliveryScan.this,lstCurrent,//Êı¾İÔ´
+//                    SimpleAdapter listItemAdapter = new SimpleAdapter(SalesDeliveryScan.this,lstCurrent,//æ•°æ®æº
 //                            android.R.layout.simple_list_item_2,
 //                            new String[] {"BoxNum","FinishBarCode"},
 //                            new int[] {android.R.id.text1,android.R.id.text2}
 //                    );
-//                    new AlertDialog.Builder(SalesDeliveryScan.this).setTitle("·Ö°üÏêÏ¸ĞÅÏ¢")
+//                    new AlertDialog.Builder(SalesDeliveryScan.this).setTitle("åˆ†åŒ…è¯¦ç»†ä¿¡æ¯")
 //                            .setAdapter(listItemAdapter, null)
 //                            .setPositiveButton(R.string.QueRen,null).show();
 //                }
 //
 //            };
 //
-//    //³¤°´É¨ÃèÏêÏ¸£¬É¾³ı¸ÃÌõ¼ÇÂ¼
+//    //é•¿æŒ‰æ‰«æè¯¦ç»†ï¼Œåˆ é™¤è¯¥æ¡è®°å½•
 //    private OnItemLongClickListener myListItemLongListener =
 //            new OnItemLongClickListener()
 //            {
@@ -1755,24 +1646,19 @@ private void ReSetTaskListData() throws JSONException
 //            };
 
 
-
-    //É¾³ıÒÑÉ¨ÃèµÄÄÚÈİ
+    //åˆ é™¤å·²æ‰«æçš„å†…å®¹
     //int iIndex,String sKey
-    private void ConfirmDelItem(int iIndex,String sKey,String BarCode) throws JSONException
-    {
-        //É¾³ı±£´æÔÚÄÚ´æµÄÉ¨ÃèÏêÏ¸
+    private void ConfirmDelItem(int iIndex, String sKey, String BarCode) throws JSONException {
+        //åˆ é™¤ä¿å­˜åœ¨å†…å­˜çš„æ‰«æè¯¦ç»†
         lstSaveBody.remove(iIndex);
 
-        if(ScanedBarcode!=null||ScanedBarcode.size()>0)
-        {
-            for (int si = 0 ; si <ScanedBarcode.size();si++ )
-            {
+        if (ScanedBarcode != null || ScanedBarcode.size() > 0) {
+            for (int si = 0; si < ScanedBarcode.size(); si++) {
                 String RemoveBarCode = ScanedBarcode.get(si).toString();
-                int iBarlenth =  RemoveBarCode.length()-6;
-                String RemoveBarCodeF = RemoveBarCode.substring(0,iBarlenth);
+                int iBarlenth = RemoveBarCode.length() - 6;
+                String RemoveBarCodeF = RemoveBarCode.substring(0, iBarlenth);
 
-                if(RemoveBarCodeF.equals(BarCode))
-                {
+                if (RemoveBarCodeF.equals(BarCode)) {
                     ScanedBarcode.remove(si);
                     si--;
                 }
@@ -1781,29 +1667,26 @@ private void ReSetTaskListData() throws JSONException
 
 
         listcount = lstSaveBody.size();
-        tvSDcounts.setText("×Ü¹²"+Tasknnum+"¼ş | "+"ÒÑÉ¨"+listcount+"¼ş | "+"Î´É¨"+(Tasknnum-listcount)+"¼ş");
+        tvSDcounts.setText("æ€»å…±" + Tasknnum + "ä»¶ | " + "å·²æ‰«" + listcount + "ä»¶ | " + "æœªæ‰«" + (Tasknnum - listcount) + "ä»¶");
 
 
-        MyListAdapter listItemAdapter = (MyListAdapter)lstSDScanDetail.getAdapter();
+        MyListAdapter listItemAdapter = (MyListAdapter) lstSDScanDetail.getAdapter();
         listItemAdapter.notifyDataSetChanged();
         lstSDScanDetail.setAdapter(listItemAdapter);
 
 
-
-        if(JsonModTaskData == null || JsonModTaskData.length() < 1)
+        if (JsonModTaskData == null || JsonModTaskData.length() < 1)
             return;
 
-        if(!JsonModTaskData.has(sKey))
+        if (!JsonModTaskData.has(sKey))
             return;
 
 
+        //æ¢å¤ä¹‹å‰åˆ é™¤çš„ä»»åŠ¡æ•°æ®
+        JSONArray JsonArrays = (JSONArray) jsonBodyTask.getJSONArray("dbBody");
 
-        //»Ö¸´Ö®Ç°É¾³ıµÄÈÎÎñÊı¾İ
-        JSONArray JsonArrays=(JSONArray)jsonBodyTask.getJSONArray("dbBody");
-
-        if(JsonModTaskData.has(sKey))
-        {
-            JSONObject JsonReMod = (JSONObject)JsonModTaskData.get(sKey);
+        if (JsonModTaskData.has(sKey)) {
+            JSONObject JsonReMod = (JSONObject) JsonModTaskData.get(sKey);
             JSONObject jObj = new JSONObject();
 
             String csourcebillhid = JsonReMod.getString("billbid").toString();
@@ -1812,72 +1695,68 @@ private void ReSetTaskListData() throws JSONException
             String nnum = JsonReMod.getString("number").toString();
             String Tasknnum = "0";
 
-            for (int i =0; i<JsonArrays.length();i++)
-            {
-                String csourcebillhidDel = ((JSONObject)(JsonArrays.get(i))).getString("billbid");
-                String InvCodeaDel = ((JSONObject)(JsonArrays.get(i))).getString("invcode");
-                String csourcerownoaDel = ((JSONObject)(JsonArrays.get(i))).getString("crowno");
+            for (int i = 0; i < JsonArrays.length(); i++) {
+                String csourcebillhidDel = ((JSONObject) (JsonArrays.get(i))).getString("billbid");
+                String InvCodeaDel = ((JSONObject) (JsonArrays.get(i))).getString("invcode");
+                String csourcerownoaDel = ((JSONObject) (JsonArrays.get(i))).getString("crowno");
 
 
-                if(csourcebillhidDel.equals(csourcebillhid)&&InvCodeaDel.equals(InvCode)&&csourcerownoaDel.equals(csourcerowno))
-                {
-                    Tasknnum = ((JSONObject)(JsonArrays.get(i))).getString("number");
+                if (csourcebillhidDel.equals(csourcebillhid) && InvCodeaDel.equals(InvCode) && csourcerownoaDel.equals(csourcerowno)) {
+                    Tasknnum = ((JSONObject) (JsonArrays.get(i))).getString("number");
                 }
             }
-            //ĞŞ¸Ä
-            jObj.put("vfree1",JsonReMod.getString("vfree1").toString());
-            jObj.put("pk_measdoc",JsonReMod.getString("pk_measdoc").toString());
-            jObj.put("measname",JsonReMod.getString("measname").toString());
-            jObj.put("invcode",JsonReMod.getString("invcode").toString());
-            jObj.put("invname",JsonReMod.getString("invname").toString());
-            jObj.put("invspec",JsonReMod.getString("invspec").toString());
-            jObj.put("invtype",JsonReMod.getString("invtype").toString());
-            jObj.put("billcode",JsonReMod.getString("billcode").toString());
-            jObj.put("batchcode",JsonReMod.getString("batchcode").toString());
-            jObj.put("invbasdocid",JsonReMod.getString("invbasdocid").toString());
-            jObj.put("invmandocid",JsonReMod.getString("invmandocid").toString());
-            jObj.put("number",JsonReMod.getString("number").toString());
-            jObj.put("outnumber",JsonReMod.getString("outnumber").toString());
-            jObj.put("sourcerowno",JsonReMod.getString("sourcerowno").toString());
-            jObj.put("sourcehid",JsonReMod.getString("sourcehid").toString());
-            jObj.put("sourcebid",JsonReMod.getString("sourcebid").toString());
-            jObj.put("sourcehcode",JsonReMod.getString("sourcehcode").toString());
-            jObj.put("sourcetype",JsonReMod.getString("sourcetype").toString());
-            jObj.put("crowno",JsonReMod.getString("crowno").toString());
-            jObj.put("billhid",JsonReMod.getString("billhid").toString());
-            jObj.put("billbid",JsonReMod.getString("billbid").toString());
-            jObj.put("billhcode",JsonReMod.getString("billhcode").toString());
-            jObj.put("billtype",JsonReMod.getString("billtype").toString());
-            jObj.put("def6",JsonReMod.getString("def6").toString());
-            jObj.put("ddeliverdate",JsonReMod.getString("ddeliverdate").toString());
-            jObj.put("pk_defdoc6",JsonReMod.getString("pk_defdoc6").toString());
+            //ä¿®æ”¹
+            jObj.put("vfree1", JsonReMod.getString("vfree1").toString());
+            jObj.put("pk_measdoc", JsonReMod.getString("pk_measdoc").toString());
+            jObj.put("measname", JsonReMod.getString("measname").toString());
+            jObj.put("invcode", JsonReMod.getString("invcode").toString());
+            jObj.put("invname", JsonReMod.getString("invname").toString());
+            jObj.put("invspec", JsonReMod.getString("invspec").toString());
+            jObj.put("invtype", JsonReMod.getString("invtype").toString());
+            jObj.put("billcode", JsonReMod.getString("billcode").toString());
+            jObj.put("batchcode", JsonReMod.getString("batchcode").toString());
+            jObj.put("invbasdocid", JsonReMod.getString("invbasdocid").toString());
+            jObj.put("invmandocid", JsonReMod.getString("invmandocid").toString());
+            jObj.put("number", JsonReMod.getString("number").toString());
+            jObj.put("outnumber", JsonReMod.getString("outnumber").toString());
+            jObj.put("sourcerowno", JsonReMod.getString("sourcerowno").toString());
+            jObj.put("sourcehid", JsonReMod.getString("sourcehid").toString());
+            jObj.put("sourcebid", JsonReMod.getString("sourcebid").toString());
+            jObj.put("sourcehcode", JsonReMod.getString("sourcehcode").toString());
+            jObj.put("sourcetype", JsonReMod.getString("sourcetype").toString());
+            jObj.put("crowno", JsonReMod.getString("crowno").toString());
+            jObj.put("billhid", JsonReMod.getString("billhid").toString());
+            jObj.put("billbid", JsonReMod.getString("billbid").toString());
+            jObj.put("billhcode", JsonReMod.getString("billhcode").toString());
+            jObj.put("billtype", JsonReMod.getString("billtype").toString());
+            jObj.put("def6", JsonReMod.getString("def6").toString());
+            jObj.put("ddeliverdate", JsonReMod.getString("ddeliverdate").toString());
+            jObj.put("pk_defdoc6", JsonReMod.getString("pk_defdoc6").toString());
 
-            //ĞèÒªĞŞ¸Ä
+            //éœ€è¦ä¿®æ”¹
 
-            //ĞŞ¸ÄÊıÁ¿ÎÊÌâ
-            int	iTasknnum = Integer.valueOf(Tasknnum);
+            //ä¿®æ”¹æ•°é‡é—®é¢˜
+            int iTasknnum = Integer.valueOf(Tasknnum);
 
             String snnum = (nnum.replaceAll("\\.0", ""));
 
             int innum = Integer.valueOf(snnum);
 
-            int inewnnum = iTasknnum+innum;
-            String snewnnum = inewnnum+"" ;
+            int inewnnum = iTasknnum + innum;
+            String snewnnum = inewnnum + "";
 
-            jObj.put("number",snewnnum);//ĞŞ¸ÄÊıÁ¿ÎÊÌâ
+            jObj.put("number", snewnnum);//ä¿®æ”¹æ•°é‡é—®é¢˜
 
             JSONArray JsonArraysRemod = new JSONArray();
             JSONObject jObjReMod = new JSONObject();
-            for (int i =0; i<JsonArrays.length();i++)
-            {
-                String csourcebillhidDel = ((JSONObject)(JsonArrays.get(i))).getString("billbid");
-                String InvCodeaDel = ((JSONObject)(JsonArrays.get(i))).getString("invcode");
-                String csourcerownoaDel = ((JSONObject)(JsonArrays.get(i))).getString("crowno");
+            for (int i = 0; i < JsonArrays.length(); i++) {
+                String csourcebillhidDel = ((JSONObject) (JsonArrays.get(i))).getString("billbid");
+                String InvCodeaDel = ((JSONObject) (JsonArrays.get(i))).getString("invcode");
+                String csourcerownoaDel = ((JSONObject) (JsonArrays.get(i))).getString("crowno");
 
 
-                if(!csourcebillhidDel.equals(csourcebillhid)||!InvCodeaDel.equals(InvCode)||!csourcerownoaDel.equals(csourcerowno))
-                {
-                    jObjReMod = (JSONObject)JsonArrays.get(i);
+                if (!csourcebillhidDel.equals(csourcebillhid) || !InvCodeaDel.equals(InvCode) || !csourcerownoaDel.equals(csourcerowno)) {
+                    jObjReMod = (JSONObject) JsonArrays.get(i);
                     JsonArraysRemod.put(jObjReMod);
                 }
             }
@@ -1893,35 +1772,31 @@ private void ReSetTaskListData() throws JSONException
         jsonBodyTask.put("dbBody", JsonArrays);
 
 
-        if(JsonModTaskData.has(sKey))
-        {
+        if (JsonModTaskData.has(sKey)) {
             jsonBodyTask.put("ModTaskData", JsonModTaskData);
         }
         getTaskListData(jsonBodyTask);
 
     }
 
-    //É¾³ıÒÑÉ¨ÃèÏêÏ¸µÄ¼àÌıÊÂ¼ş
-    private class ButtonOnClickDelconfirm implements DialogInterface.OnClickListener
-    {
+    //åˆ é™¤å·²æ‰«æè¯¦ç»†çš„ç›‘å¬äº‹ä»¶
+    private class ButtonOnClickDelconfirm implements DialogInterface.OnClickListener {
 
         public int index;
         public String key;
         public String BarCode;
-        public ButtonOnClickDelconfirm(int iIndex,String sKey, String BarCode)
-        {
+
+        public ButtonOnClickDelconfirm(int iIndex, String sKey, String BarCode) {
             this.index = iIndex;
             this.key = sKey;
             this.BarCode = BarCode;
         }
 
         @Override
-        public void onClick(DialogInterface dialog, int whichButton)
-        {
-            if(whichButton==DialogInterface.BUTTON_POSITIVE)
-            {
+        public void onClick(DialogInterface dialog, int whichButton) {
+            if (whichButton == DialogInterface.BUTTON_POSITIVE) {
                 try {
-                    ConfirmDelItem(index,key,BarCode);
+                    ConfirmDelItem(index, key, BarCode);
                 } catch (JSONException e) {
                     Toast.makeText(SalesDeliveryScan.this, e.getMessage(), Toast.LENGTH_LONG).show();
                     e.printStackTrace();
@@ -1929,25 +1804,20 @@ private void ReSetTaskListData() throws JSONException
                     MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                     //ADD CAIXY TEST END
                 }
-            }
-            else
+            } else
                 return;
         }
 
     }
 
-    //EditTextÊäÈëºó»Ø³µµÄ¼àÌıÊÂ¼ş
-    private OnKeyListener EditTextOnKeyListener = new OnKeyListener()
-    {
+    //EditTextè¾“å…¥åå›è½¦çš„ç›‘å¬äº‹ä»¶
+    private OnKeyListener EditTextOnKeyListener = new OnKeyListener() {
         @Override
         public boolean onKey(View v, int arg1, KeyEvent arg2) {
-            switch(v.getId())
-            {
+            switch (v.getId()) {
                 case id.txtSDScanBarcode:
-                    if(arg1 == arg2.KEYCODE_ENTER && arg2.getAction() == KeyEvent.ACTION_UP)
-                    {
-                        try
-                        {
+                    if (arg1 == arg2.KEYCODE_ENTER && arg2.getAction() == KeyEvent.ACTION_UP) {
+                        try {
 
                             String Bar = txtSDScanBarcode.getText().toString().replace("\n", "");
                             //txtSDScanBarcode.setText(txtSDScanBarcode.getText().toString().replace("\n", ""));
@@ -1985,52 +1855,73 @@ private void ReSetTaskListData() throws JSONException
         }
     };
 
-    //Button°´ÏÂºóµÄ¼àÌıÊÂ¼ş
-    private OnClickListener ButtonOnClickListener = new OnClickListener()
-    {
+    //ButtonæŒ‰ä¸‹åçš„ç›‘å¬äº‹ä»¶
+    private OnClickListener ButtonOnClickListener = new OnClickListener() {
 
         @Override
-        public void onClick(View v)
-        {
-            switch(v.getId())
-            {			//btnSDScanReturn
+        public void onClick(View v) {
+            switch (v.getId()) {            //btnSDScanReturn
                 case id.btnSDScanTask:
 
-                    if(lstBodyTask==null || lstBodyTask.size()<1)
+                    if (lstBodyTask == null || lstBodyTask.size() < 1)
                         return;
 
-                    SimpleAdapter listItemAdapter = new SimpleAdapter(SalesDeliveryScan.this,lstBodyTask,
+                    SimpleAdapter listItemAdapter = new SimpleAdapter(SalesDeliveryScan.this, lstBodyTask,
                             R.layout.vlisttranstask,
-                            new String[] {"InvCode","InvName","Batch","AccID","InvNum","BillCode"},
-                            new int[] {R.id.txtTranstaskInvCode,R.id.txtTranstaskInvName,
-                                    R.id.txtTranstaskBatch,R.id.txtTranstaskAccId,
-                                    R.id.txtTranstaskInvNum,R.id.txtTranstaskBillCode}
+                            new String[]{"InvCode", "InvName", "Batch", "AccID", "InvNum", "BillCode"},
+                            new int[]{R.id.txtTranstaskInvCode, R.id.txtTranstaskInvName,
+                                    R.id.txtTranstaskBatch, R.id.txtTranstaskAccId,
+                                    R.id.txtTranstaskInvNum, R.id.txtTranstaskBillCode}
                     );
-                    new AlertDialog.Builder(SalesDeliveryScan.this).setTitle("Ô´µ¥ĞÅÏ¢")
+                    new AlertDialog.Builder(SalesDeliveryScan.this).setTitle("æºå•ä¿¡æ¯")
                             .setAdapter(listItemAdapter, null)
-                            .setPositiveButton(R.string.QueRen,null).show();
+                            .setPositiveButton(R.string.QueRen, null).show();
                     break;
                 case id.btnSDScanClear:
 
-                    if(lstSDScanDetail.getCount()<1)
+                    if (lstSDScanDetail.getCount() < 1)
                         //MOD BY WUQIONG END
                         return;
 
-                    ButtonOnClickClearconfirm btnScanItemClearOnClick =new ButtonOnClickClearconfirm();
-                    DeleteAlertDialog=new AlertDialog.Builder(SalesDeliveryScan.this).setTitle("È·ÈÏÇå¿Õ")
-                            .setMessage("ÄãÈ·ÈÏÒªÇå¿Õ¼ÇÂ¼Âğ?")
-                            .setPositiveButton(R.string.QueRen, btnScanItemClearOnClick).setNegativeButton(R.string.QuXiao,null).show();
+                    ButtonOnClickClearconfirm btnScanItemClearOnClick = new ButtonOnClickClearconfirm();
+                    DeleteAlertDialog = new AlertDialog.Builder(SalesDeliveryScan.this).setTitle("ç¡®è®¤æ¸…ç©º")
+                            .setMessage("ä½ ç¡®è®¤è¦æ¸…ç©ºè®°å½•å—?")
+                            .setPositiveButton(R.string.QueRen, btnScanItemClearOnClick).setNegativeButton(R.string.QuXiao, null).show();
 
                     break;
                 case id.btnSDScanReturn:
-                    Intent intent = new Intent();
 
-                    SerializableList ResultBodyList = new SerializableList();
-                    ResultBodyList.setList(lstSaveBody);
-                    intent.putExtra("SaveBodyList", ResultBodyList);
-                    intent.putExtra("ScanTaskJson", jsonBodyTask.toString());
-                    intent.putStringArrayListExtra("ScanedBarcode", ScanedBarcode);
-                    SalesDeliveryScan.this.setResult(6, intent);
+
+                    int count = lstSaveBody.size();
+                    List<SaleOutGoods> saleGoodsLists = new ArrayList<SaleOutGoods>();
+                    HashMap<String, Object> map;
+                    SaleOutGoods saleOutGoods = null;
+                    for (int i = 0; i < count; i++) {
+                        map = (HashMap<String, Object>) lstSaveBody.get(i);
+                        saleOutGoods = new SaleOutGoods();
+                        saleOutGoods.setBarcode((String) map.get("BarCode"));
+                        saleOutGoods.setInvCode((String) map.get("InvCode"));
+                        saleOutGoods.setInvName((String) map.get("InvName"));
+                        saleOutGoods.setBatch((String) map.get("Batch"));
+                        saleOutGoods.setPk_invbasdoc((String) map.get("BarCode"));
+                        saleOutGoods.setPk_invmandoc((String) map.get("BarCode"));
+                        saleOutGoods.setUnit((String) map.get("Measname"));
+                        saleOutGoods.setQty(Float.valueOf((String) map.get("Weights")));
+                        saleGoodsLists.add(saleOutGoods);
+                    }
+                    if (saleGoodsLists.size() > 0 || saleGoodsLists != null) {
+                        Intent intent = new Intent();
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelableArrayList("SaleGoodsLists", (ArrayList<? extends Parcelable>) saleGoodsLists);
+                        intent.putExtras(bundle);
+//                        SerializableList ResultBodyList = new SerializableList();
+//                        ResultBodyList.setList(lstSaveBody);
+//                        intent.putExtra("SaveBodyList", ResultBodyList);
+//                        intent.putExtra("ScanTaskJson", jsonBodyTask.toString());
+//                        intent.putStringArrayListExtra("ScanedBarcode", ScanedBarcode);
+                        SalesDeliveryScan.this.setResult(6, intent);
+
+                    }
                     finish();
                     break;
             }
@@ -2042,10 +1933,10 @@ private void ReSetTaskListData() throws JSONException
         private LayoutInflater inflater = null;
         private List<Map<String, Object>> list = null;
         private String keyString[] = new String[]{};
-        private String itemString0 = null; // ¼ÇÂ¼Ã¿¸öitemÖĞtextviewµÄÖµ
+        private String itemString0 = null; // è®°å½•æ¯ä¸ªitemä¸­textviewçš„å€¼
         private String itemString1 = null;
         private String itemString2 = null;
-        private int idValue[] = null;// idÖµ
+        private int idValue[] = null;// idå€¼
 
         public MyListAdapter(Context context, List<Map<String, Object>> list,
                              int resource, String[] from, int[] to) {
@@ -2083,11 +1974,9 @@ private void ReSetTaskListData() throws JSONException
             }
             Map<String, Object> map = list.get(arg0);
             TextView tvItem = null;
-            if (map != null)
-            {
-                for(int i=0;i<keyString.length;i++)
-                {
-                    tvItem = (TextView)arg1.findViewById(idValue[i]);
+            if (map != null) {
+                for (int i = 0; i < keyString.length; i++) {
+                    tvItem = (TextView) arg1.findViewById(idValue[i]);
                     tvItem.setText(map.get(keyString[i]).toString());
                 }
 //	                if(!map.get("ScanedNum").toString().equals(map.get("TotalNum").toString()))
