@@ -63,8 +63,8 @@ public class SalesDeliveryAdapter extends BaseAdapter {
             viewHolder.Batch = (TextView) convertView.findViewById(R.id.txtBatch);
             viewHolder.QTY = (TextView) convertView.findViewById(R.id.txtQTY);
             viewHolder.UNIT = (TextView) convertView.findViewById(R.id.txtUnit);
-//            viewHolder.BarCode = (TextView) convertView.findViewById(R.id.txtTransScanBarCode);
-//            viewHolder.SeriNo = (TextView) convertView.findViewById(R.id.txtTransScanSeriNo);
+            viewHolder.Spec = (TextView) convertView.findViewById(R.id.txtSpec);
+            viewHolder.Model = (TextView) convertView.findViewById(R.id.txtModel);
 //            viewHolder.BillCode = (TextView) convertView.findViewById(R.id.txtTransScanBillCode);
 //            viewHolder.ScanedNum = (TextView) convertView.findViewById(R.id.txtTransScanScanCount);
 //            viewHolder.box = (TextView) convertView.findViewById(R.id.txtTransBox);
@@ -75,28 +75,19 @@ public class SalesDeliveryAdapter extends BaseAdapter {
         viewHolder.InvCode.setText(mList.get(position).get("InvCode").toString());
         viewHolder.InvName.setText(mList.get(position).get("InvName").toString());
         viewHolder.Batch.setText(mList.get(position).get("Batch").toString());
-        viewHolder.QTY.setText(mList.get(position).get("QTY").toString());
+        viewHolder.QTY.setText(mList.get(position).get("Weights").toString());
         viewHolder.UNIT.setText(mList.get(position).get("Measname").toString());
-//        viewHolder.BarCode.setText(mList.get(position).get("BarCode").toString());
-//        viewHolder.SeriNo.setText(mList.get(position).get("SeriNo").toString());
-//        viewHolder.BillCode.setText(mList.get(position).get("BillCode").toString());
-//        viewHolder.ScanedNum.setText(mList.get(position).get("ScanedNum").toString());
-//        viewHolder.box.setText(mList.get(position).get("box").toString());
         return convertView;
     }
 
     static class ViewHolder {
-//                new String[]{"InvCode", "InvName", "Batch", "AccID", "TotalNum",
-//                "BarCode", "SeriNo", "BillCode", "ScanedNum", "box"},
         TextView InvCode;
         TextView InvName;
         TextView Batch;
+        TextView Spec;
+        TextView Model;
         TextView QTY;
         TextView UNIT;
-//        TextView BarCode;
-//        TextView SeriNo;
-//        TextView BillCode;
-//        TextView ScanedNum;
-//        TextView box;
+
     }
 }

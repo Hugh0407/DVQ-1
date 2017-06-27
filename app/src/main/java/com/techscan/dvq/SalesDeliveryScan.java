@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,13 +16,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -40,6 +37,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import static android.content.ContentValues.TAG;
 
 //import com.techscan.dvq.StockTransScan.ButtonOnClickClearconfirm;
 //import com.techscan.dvq.StockTransScanIn.MyListAdapter;
@@ -102,8 +101,8 @@ public class SalesDeliveryScan extends Activity {
         txtSDScanBarcode.setOnKeyListener(EditTextOnKeyListener);
 
         lstSDScanDetail = (ListView)findViewById(R.id.lstSDScanDetail);
-        lstSDScanDetail.setOnItemClickListener(myListItemListener);
-        lstSDScanDetail.setOnItemLongClickListener(myListItemLongListener);
+//        lstSDScanDetail.setOnItemClickListener(myListItemListener);
+//        lstSDScanDetail.setOnItemLongClickListener(myListItemLongListener);
 
         btnSDScanTask = (Button)findViewById(R.id.btnSDScanTask);
         btnSDScanTask.setOnClickListener(ButtonOnClickListener);
@@ -152,8 +151,17 @@ public class SalesDeliveryScan extends Activity {
 //                lstSDScanDetail.setAdapter(listItemAdapter);
 //            }
 //        }
-//        lstSaveBody_c = new ArrayList<Map<String, Object>>();
-//        salesDeliveryAdapter = new SalesDeliveryAdapter(SalesDeliveryScan.this, lstSaveBody_c);
+//        if (lstSaveBody!=null|| lstSaveBody.size()>1){
+//        salesDeliveryAdapter = new SalesDeliveryAdapter(SalesDeliveryScan.this, lstSaveBody);
+//        lstSDScanDetail.setAdapter(salesDeliveryAdapter);
+//        }else
+       if (lstSaveBody==null|| lstSaveBody.size()<1){
+        lstSaveBody = new ArrayList<Map<String, Object>>();
+        salesDeliveryAdapter = new SalesDeliveryAdapter(SalesDeliveryScan.this, lstSaveBody);
+        lstSDScanDetail.setAdapter(salesDeliveryAdapter);
+        }
+//        lstSaveBody = new ArrayList<Map<String, Object>>();
+//        salesDeliveryAdapter = new SalesDeliveryAdapter(SalesDeliveryScan.this, lstSaveBody);
 //        lstSDScanDetail.setAdapter(salesDeliveryAdapter);
         wareHouseID = myintent.getStringExtra("Warehouse");
 
@@ -701,7 +709,7 @@ public class SalesDeliveryScan extends Activity {
             JsonModTaskData = new JSONObject();
         ScanedBarcode = new ArrayList<String>();
         lstSaveBody = new ArrayList<Map<String, Object>>();
-        lstSDScanDetail.setAdapter(null);
+//        lstSDScanDetail.setAdapter(null);
         txtSDScanBarcode.setText("");
         listcount = lstSaveBody.size();
         tvSDcounts.setText("总共"+Tasknnum+"件 | "+"已扫"+listcount+"件 | "+"未扫"+(Tasknnum-listcount)+"件");
@@ -1543,14 +1551,15 @@ private void ReSetTaskListData() throws JSONException
     private Boolean CheckHasScaned(JSONObject jsonCheckGetBillCode, SplitTongChengBarCode bar) throws JSONException
     {
 
-        ListAdapter ScanDetailAdapter = lstSDScanDetail.getAdapter();
-        String lsKey = jsonCheckGetBillCode.getString("billcode")
-                + bar.AccID + bar.cInvCode + bar.cBatch + bar.cSerino;
-        if(ScanDetailAdapter==null || ScanDetailAdapter.getCount() < 1)
-        {
-            BindingScanDetail(jsonCheckGetBillCode,bar,"ADD",null);
-            return true;
-        }
+//        ListAdapter ScanDetailAdapter = lstSDScanDetail.getAdapter();
+
+//        String lsKey = jsonCheckGetBillCode.getString("billcode")
+//                + bar.AccID + bar.cInvCode + bar.cBatch + bar.cSerino;
+//        if(ScanDetailAdapter==null || ScanDetailAdapter.getCount() < 1)
+//        {
+//            BindingScanDetail(jsonCheckGetBillCode,bar,"ADD",null);
+//            return true;
+//        }
 //        for(int i=0;i<ScanDetailAdapter.getCount();i++)
 //        {
 //            Map<String,Object> mapScanDetail =
@@ -1569,7 +1578,7 @@ private void ReSetTaskListData() throws JSONException
 //            }
 //        }
 
-//        BindingScanDetail(jsonCheckGetBillCode,bar,"ADD",null);
+        BindingScanDetail(jsonCheckGetBillCode,bar,"ADD",null);
         return true;
     }
 
@@ -1581,8 +1590,10 @@ private void ReSetTaskListData() throws JSONException
 //        Map<String,Object> mapCurrentBox = new HashMap<String,Object>();
         Map<String,Object> mapScanDetail =  new HashMap<String,Object>();
 
-        if(lstSaveBody==null || lstSaveBody.size()<1)
-            lstSaveBody = new ArrayList<Map<String,Object>>();
+//        if(lstSaveBody==null || lstSaveBody.size()<1)
+//        {
+//            lstSaveBody = new ArrayList<Map<String, Object>>();
+//        }
 //
 //        mapCurrentBox.put("CurrentBox", bar.currentBox);
 //        mapCurrentBox.put("TotalBox", bar.TotalBox);
@@ -1591,33 +1602,18 @@ private void ReSetTaskListData() throws JSONException
 
         String lsKey = jsonCheckGetBillCode.getString("billcode")
                 + bar.AccID + bar.cInvCode + bar.cBatch + bar.cSerino;
-        if(sType.equals("MOD") && mapGetScanedDetail!=null)
-        {
-            lstCurrentBox = (ArrayList<Map<String,Object>>)mapGetScanedDetail.get(lsKey);
-//            lstCurrentBox.add(mapCurrentBox);
 
-            mapScanDetail = mapGetScanedDetail;
-            mapScanDetail.remove(lsKey);
-            mapScanDetail.put(lsKey,lstCurrentBox);
-            mapScanDetail.remove("ScanedNum");
-            mapScanDetail.put("ScanedNum", lstCurrentBox.size());
-            if(Integer.parseInt(currentObj.totalID())==lstCurrentBox.size())
-            {
-                mapScanDetail.remove("spacenum");
-                mapScanDetail.put("spacenum", "1");
-                mapScanDetail.put("box", "");
-            }
-        }
-        else
-        {
 //            lstCurrentBox = new ArrayList<Map<String,Object>>();
 //            lstCurrentBox.add(mapCurrentBox);
 
-            mapScanDetail.put(lsKey,lstCurrentBox);
+//            mapScanDetail.put(lsKey,lstCurrentBox);
             mapScanDetail.put("InvName", jsonCheckGetBillCode.getString("invname"));
             mapScanDetail.put("InvCode", jsonCheckGetBillCode.getString("invcode"));
             mapScanDetail.put("AccID", tmpAccID);
             mapScanDetail.put("QTY",bar.QTY);
+            mapScanDetail.put("P",bar.P);
+            mapScanDetail.put("TP",bar.TP);
+            mapScanDetail.put("Weights",bar.Weights);
             mapScanDetail.put("Measname",jsonCheckGetBillCode.getString("measname"));
             mapScanDetail.put("Batch",bar.cBatch);
             mapScanDetail.put("SeriNo", bar.cSerino);
@@ -1672,13 +1668,13 @@ private void ReSetTaskListData() throws JSONException
 //                mapScanDetail.put("spacenum", "0");
 //                mapScanDetail.put("box", "分包未完");
 //            }
-            lstSaveBody.add(mapScanDetail);
-            listcount = lstSaveBody.size();
-            tvSDcounts.setText("总共"+Tasknnum+"件 | "+"已扫"+listcount+"件 | "+"未扫"+(Tasknnum-listcount)+"件");
-        }
-        salesDeliveryAdapter = new SalesDeliveryAdapter(SalesDeliveryScan.this, lstSaveBody);
-        lstSDScanDetail.setAdapter(salesDeliveryAdapter);
-        salesDeliveryAdapter.notifyDataSetChanged();
+        lstSaveBody.add(mapScanDetail);
+        Log.d(TAG, "BindingScanDetail: "+lstSaveBody.size());
+//        salesDeliveryAdapter = new SalesDeliveryAdapter(SalesDeliveryScan.this, lstSaveBody);
+//        lstSDScanDetail.setAdapter(salesDeliveryAdapter);
+        salesDeliveryAdapter.notifyDataSetInvalidated();
+        listcount = lstSaveBody.size();
+        tvSDcounts.setText("总共"+Tasknnum+"件 | "+"已扫"+listcount+"件 | "+"未扫"+(Tasknnum-listcount)+"件");
 //        MyListAdapter listItemAdapter = new MyListAdapter(SalesDeliveryScan.this,lstSaveBody,//数据源
 //                R.layout.vlisttransscanitem,
 ////					new String[] {"InvCode","InvName","Batch","AccID","TotalNum",
@@ -1700,59 +1696,63 @@ private void ReSetTaskListData() throws JSONException
 //        lstSDScanDetail.setAdapter(listItemAdapter);
     }
 
-    private OnItemClickListener myListItemListener =
-            new OnItemClickListener()
-            {
-
-                @Override
-                public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-                                        long arg3) {
-                    Map<String,Object> mapCurrent = (Map<String,Object>)lstSDScanDetail.getAdapter().getItem(arg2);
-                    String lsKey = mapCurrent.get("BillCode").toString() +
-                            mapCurrent.get("AccID").toString() +
-                            mapCurrent.get("InvCode").toString() +
-                            mapCurrent.get("Batch").toString() +
-                            mapCurrent.get("SeriNo").toString();
-                    ArrayList<Map<String,Object>> lstCurrent =
-                            (ArrayList<Map<String,Object>>)mapCurrent.get(lsKey);
-                    SimpleAdapter listItemAdapter = new SimpleAdapter(SalesDeliveryScan.this,lstCurrent,//数据源
-                            android.R.layout.simple_list_item_2,
-                            new String[] {"BoxNum","FinishBarCode"},
-                            new int[] {android.R.id.text1,android.R.id.text2}
-                    );
-                    new AlertDialog.Builder(SalesDeliveryScan.this).setTitle("分包详细信息")
-                            .setAdapter(listItemAdapter, null)
-                            .setPositiveButton(R.string.QueRen,null).show();
-                }
-
-            };
-
-    //长按扫描详细，删除该条记录
-    private OnItemLongClickListener myListItemLongListener =
-            new OnItemLongClickListener()
-            {
-
-                @Override
-                public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
-                                               int arg2, long arg3) {
-                    Map<String,Object> mapCurrent = (Map<String,Object>)lstSDScanDetail.getAdapter().getItem(arg2);
-                    String lsKey = mapCurrent.get("billbid").toString() +
-                            mapCurrent.get("InvCode").toString() +
-                            mapCurrent.get("crowno").toString()+
-                            mapCurrent.get("SeriNo").toString();
-
-
-                    String Barcode = mapCurrent.get("BarCode").toString();
-
-                    ButtonOnClickDelconfirm btnScanItemDelOnClick =new ButtonOnClickDelconfirm(arg2,lsKey,Barcode);
-                    DeleteAlertDialog=new AlertDialog.Builder(SalesDeliveryScan.this).setTitle(R.string.QueRenShanChu)
-                            .setMessage(R.string.NiQueRenShanChuGaiXingWeiJiLuMa)
-                            .setPositiveButton(R.string.QueRen, btnScanItemDelOnClick).setNegativeButton(R.string.QuXiao,null).show();
-
-                    return true;
-                }
-
-            };
+//    private OnItemClickListener myListItemListener =
+//            new OnItemClickListener()
+//            {
+//
+//                @Override
+//                public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+//                                        long arg3) {
+//                    Adapter adapter = arg0.getAdapter();
+//                    Map<String,Object> mapCurrent = (Map<String, Object>) adapter.getItem(arg2);
+//                    Log.d(TAG, "onItemClick: "+ mapCurrent.toString());
+////                    Map<String,Object> mapCurrent = (Map<String,Object>)lstSDScanDetail.getAdapter().getItem(arg2);
+//                    String lsKey = mapCurrent.get("BillCode").toString() +
+//                            mapCurrent.get("AccID").toString() +
+//                            mapCurrent.get("InvCode").toString() +
+//                            mapCurrent.get("Batch").toString() +
+//                            mapCurrent.get("SeriNo").toString();
+//                    ArrayList<Map<String,Object>> lstCurrent =
+//                            (ArrayList<Map<String,Object>>)mapCurrent.get(lsKey);
+//                    SimpleAdapter listItemAdapter = new SimpleAdapter(SalesDeliveryScan.this,lstCurrent,//数据源
+//                            android.R.layout.simple_list_item_2,
+//                            new String[] {"BoxNum","FinishBarCode"},
+//                            new int[] {android.R.id.text1,android.R.id.text2}
+//                    );
+//                    new AlertDialog.Builder(SalesDeliveryScan.this).setTitle("分包详细信息")
+//                            .setAdapter(listItemAdapter, null)
+//                            .setPositiveButton(R.string.QueRen,null).show();
+//                }
+//
+//            };
+//
+//    //长按扫描详细，删除该条记录
+//    private OnItemLongClickListener myListItemLongListener =
+//            new OnItemLongClickListener()
+//            {
+//
+//                @Override
+//                public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+//                                               int arg2, long arg3) {
+//
+//                    Map<String,Object> mapCurrent = (Map<String,Object>)lstSDScanDetail.getAdapter().getItem(arg2);
+//                    String lsKey = mapCurrent.get("billbid").toString() +
+//                            mapCurrent.get("InvCode").toString() +
+//                            mapCurrent.get("crowno").toString()+
+//                            mapCurrent.get("SeriNo").toString();
+//
+//
+//                    String Barcode = mapCurrent.get("BarCode").toString();
+//
+//                    ButtonOnClickDelconfirm btnScanItemDelOnClick =new ButtonOnClickDelconfirm(arg2,lsKey,Barcode);
+//                    DeleteAlertDialog=new AlertDialog.Builder(SalesDeliveryScan.this).setTitle(R.string.QueRenShanChu)
+//                            .setMessage(R.string.NiQueRenShanChuGaiXingWeiJiLuMa)
+//                            .setPositiveButton(R.string.QueRen, btnScanItemDelOnClick).setNegativeButton(R.string.QuXiao,null).show();
+//
+//                    return true;
+//                }
+//
+//            };
 
 
 
