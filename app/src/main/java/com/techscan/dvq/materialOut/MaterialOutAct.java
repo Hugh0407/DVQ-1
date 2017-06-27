@@ -81,11 +81,11 @@ public class MaterialOutAct extends Activity {
 
     List<Goods> tempList;
 
-    String CDISPATCHERID;//收发类别code
-    String CDPTID;  //部门id
+    String CDISPATCHERID = "";//收发类别code
+    String CDPTID = "";  //部门id
     String CUSER;   //登录员工id
-    String CWAREHOUSEID;    //库存组织
-    String PK_CALBODY;      //仓库id
+    String CWAREHOUSEID = "";    //库存组织
+    String PK_CALBODY = "";      //仓库id
     String PK_CORP;         //公司
     String VBILLCOD;        //单据号
 

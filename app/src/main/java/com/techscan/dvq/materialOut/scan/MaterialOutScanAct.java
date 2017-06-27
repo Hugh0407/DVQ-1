@@ -68,7 +68,8 @@ public class MaterialOutScanAct extends Activity {
 
 
     String TAG = "MaterialOutScanAct";
-    List<HashMap<String, String>> detailList = new ArrayList<HashMap<String, String>>();
+    List<HashMap<String, String>> detailList;
+    List<Goods> ovList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,64 +83,22 @@ public class MaterialOutScanAct extends Activity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_overview:
-                // 将相同货物的数量合并 如 A_01_20 A_02_30 合并为A_50
-                Goods goods;
-                List<Goods> overViewList = new ArrayList<Goods>();
-                for (int i = 0; i < detailList.size(); i++) {
-                    goods = new Goods();
-                    HashMap<String, String> map = detailList.get(i);
-                    goods.setName(String.valueOf(map.get("name")));
-                    goods.setEncoding(String.valueOf(map.get("encoding")));
-                    String qty = String.valueOf(map.get("qty"));
-                    if (TextUtils.isEmpty(qty)) {
-                        qty = "0.0";
-                    }
-                    goods.setQty(Float.valueOf(qty));
-                    if (i == 0) {
-                        overViewList.add(goods);
-                    } else {
-                        for (int j = 0; j < overViewList.size(); j++) {
-                            Goods existGoods = overViewList.get(j);
-                            if (goods.getName().equals(existGoods.getName())) {
-                                existGoods.setQty(existGoods.getQty() + goods.getQty());
-                            } else {
-                                overViewList.add(goods);
-                            }
-                        }
-                    }
-                }
-                OvAdapter ovAdapter = new OvAdapter(MaterialOutScanAct.this, overViewList);
-                showDialog(overViewList, ovAdapter, "扫描总览");
+                OvAdapter ovAdapter = new OvAdapter(MaterialOutScanAct.this, ovList);
+                showDialog(ovList, ovAdapter, "扫描总览");
                 break;
             case R.id.btn_detail:
                 MyBaseAdapter myBaseAdapter = new MyBaseAdapter(MaterialOutScanAct.this, detailList);
                 showDialog(detailList, myBaseAdapter, "扫描明细");
                 break;
             case R.id.btn_back:
-                int count = detailList.size();
-                List<Goods> goodsList = new ArrayList<Goods>();
-                HashMap<String, String> map;
-                Goods c;
-                for (int i = 0; i < count; i++) {
-                    map = detailList.get(i);
-                    c = new Goods();
-                    c.setBarcode(map.get("barcode"));
-                    c.setEncoding(map.get("encoding"));
-                    c.setName(map.get("name"));
-                    c.setType(map.get("type"));
-                    c.setUnit(map.get("unit"));
-                    c.setLot(map.get("lot"));
-                    c.setQty(Float.valueOf(map.get("qty")));
-                    c.setPk_invbasdoc(pk_invbasdoc);
-                    c.setPk_invmandoc(pk_invmandoc);
-                    goodsList.add(c);
-                }
-                if (goodsList.size() > 0) {
+                if (ovList.size() > 0) {
                     Intent in = new Intent();
                     Bundle bundle = new Bundle();
-                    bundle.putParcelableArrayList("overViewList", (ArrayList<? extends Parcelable>) goodsList);
+                    bundle.putParcelableArrayList("overViewList", (ArrayList<? extends Parcelable>) ovList);
                     in.putExtras(bundle);
                     MaterialOutScanAct.this.setResult(5, in);
+                } else {
+                    Toast.makeText(this, "没有扫描单据", Toast.LENGTH_SHORT).show();
                 }
                 finish();
                 break;
@@ -153,6 +112,8 @@ public class MaterialOutScanAct extends Activity {
         mEdLot.setOnKeyListener(mOnKeyListener);
         mEdQty.setOnKeyListener(mOnKeyListener);
         mEdBarCode.addTextChangedListener(mTextWatcher);
+        detailList = new ArrayList<HashMap<String, String>>();
+        ovList = new ArrayList<Goods>();
     }
 
     /**
@@ -168,13 +129,14 @@ public class MaterialOutScanAct extends Activity {
                     JSONObject json = (JSONObject) msg.obj;
                     if (json != null) {
                         try {
-                            GetInvBaseByJson(json);
+                            SetInvBaseToUI(json);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     } else {
                         return;
                     }
+
                     break;
                 default:
                     break;
@@ -208,16 +170,17 @@ public class MaterialOutScanAct extends Activity {
         mEdBarCode.setText(Bar);
         String[] barCode = Bar.split("\\|");
         if (barCode.length == 2 && barCode[0].equals("Y")) {          //Y|SKU
-            mEdQty.setFocusable(true);
-            mEdQty.setEnabled(true);
+            //如果是液体的话需要输入液体数量
             String encoding = barCode[1];
             mEdEncoding.setText(encoding);
             GetInvBaseInfo(encoding);
+
+            mEdQty.setText("");
+            mEdLot.requestFocus();
             mEdType.setText("");
             mEdLot.setText("");
             mEdName.setText("");
             mEdUnit.setText("");
-            mEdQty.setText("");
             return true;
         } else if (barCode.length == 6 && barCode[0].equals("C")) {   //C|SKU|LOT|TAX|QTY|SN
             String encoding = barCode[1];
@@ -247,7 +210,7 @@ public class MaterialOutScanAct extends Activity {
      *
      * @return
      */
-    private boolean addInfoToDetailList() {
+    private boolean addDataToList() {
         HashMap<String, String> hashMap = new HashMap<String, String>();
         hashMap.put("barcode", mEdBarCode.getText().toString());
         hashMap.put("encoding", mEdEncoding.getText().toString());
@@ -258,13 +221,61 @@ public class MaterialOutScanAct extends Activity {
         hashMap.put("qty", mEdQty.getText().toString());
         hashMap.put("pk_invbasdoc", pk_invbasdoc);
         hashMap.put("pk_invmandoc", pk_invmandoc);
-        return detailList.add(hashMap);
+        detailList.add(hashMap);
+        // 合并批次到ovlist
+        // 将相同货物的数量合并 如 A_01_20 A_02_30 合并为A_50
+
+        if (ovList.size() == 0) {
+            Goods goods = new Goods();
+            String qty = String.valueOf(hashMap.get("qty"));
+            goods.setBarcode(hashMap.get("barcode"));
+            goods.setEncoding(hashMap.get("encoding"));
+            goods.setName(hashMap.get("name"));
+            goods.setType(hashMap.get("type"));
+            goods.setUnit(hashMap.get("unit"));
+            goods.setLot(hashMap.get("lot"));
+            goods.setPk_invbasdoc(hashMap.get("pk_invbasdoc"));
+            goods.setPk_invmandoc(hashMap.get("pk_invmandoc"));
+            if (TextUtils.isEmpty(qty)) {
+                qty = "0.0";
+            }
+            goods.setQty(Float.valueOf(qty));
+            ovList.add(goods);
+            return true;
+        } else {
+            for (int j = 0; j < ovList.size(); j++) {
+                Goods existGoods = ovList.get(j);
+                //相同物料不同批次的要合并，通过名字比较
+                if (hashMap.get("name").equals(existGoods.getName())) {
+                    existGoods.setQty(existGoods.getQty() + Float.valueOf(hashMap.get("qty")));
+                    return true;
+                } else {
+                    Goods goods1 = new Goods();
+                    String qty = String.valueOf(hashMap.get("qty"));
+                    goods1.setBarcode(hashMap.get("barcode"));
+                    goods1.setEncoding(hashMap.get("encoding"));
+                    goods1.setName(hashMap.get("name"));
+                    goods1.setType(hashMap.get("type"));
+                    goods1.setUnit(hashMap.get("unit"));
+                    goods1.setLot(hashMap.get("lot"));
+                    goods1.setPk_invbasdoc(hashMap.get("pk_invbasdoc"));
+                    goods1.setPk_invmandoc(hashMap.get("pk_invmandoc"));
+                    if (TextUtils.isEmpty(qty)) {
+                        qty = "0.0";
+                    }
+                    goods1.setQty(Float.valueOf(qty));
+                    ovList.add(goods1);
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
      * 清空所有的Edtext
      */
-    private void SetAllEcTextIsEmpty() {
+    private void ChangeAllEdTextToEmpty() {
         mEdBarCode.setText("");
         mEdEncoding.setText("");
         mEdName.setText("");
@@ -277,9 +288,9 @@ public class MaterialOutScanAct extends Activity {
     /**
      * 判断所有的edtext是否为空
      *
-     * @return
+     * @return true---->所有的ed都不为空,false---->所有的ed都为空
      */
-    private boolean isInfoComplete() {
+    private boolean isAllEdNotNull() {
         return (!TextUtils.isEmpty(mEdBarCode.getText())
                 && !TextUtils.isEmpty(mEdEncoding.getText())
                 && !TextUtils.isEmpty(mEdName.getText())
@@ -307,7 +318,7 @@ public class MaterialOutScanAct extends Activity {
 
 
     /**
-     * 通过获取到的json 解析得到物料信息
+     * 通过获取到的json 解析得到物料信息,并设置到UI上
      *
      * @param json
      * @throws JSONException
@@ -315,8 +326,8 @@ public class MaterialOutScanAct extends Activity {
     String pk_invbasdoc = "";
     String pk_invmandoc = "";
 
-    private void GetInvBaseByJson(JSONObject json) throws JSONException {
-        Log.d(TAG, "GetInvBaseByJson: " + json);
+    private void SetInvBaseToUI(JSONObject json) throws JSONException {
+        Log.d(TAG, "SetInvBaseToUI: " + json);
         if (json.getBoolean("Status")) {
             JSONArray val = json.getJSONArray("baseInfo");
             HashMap<String, Object> map = null;
@@ -330,16 +341,17 @@ public class MaterialOutScanAct extends Activity {
                 pk_invbasdoc = tempJso.getString("pk_invbasdoc");
                 map.put("pk_invmandoc", tempJso.getString("pk_invmandoc"));
                 pk_invmandoc = tempJso.getString("pk_invmandoc");
-                map.put("invtype", tempJso.getString("invtype"));   //型号
-                map.put("invspec", tempJso.getString("invspec"));   //规格
+//                map.put("invtype", tempJso.getString("invtype"));   //型号
+//                map.put("invspec", tempJso.getString("invspec"));   //规格
                 map.put("oppdimen", tempJso.getString("oppdimen"));   //重量
             }
             if (map != null) {
                 mEdName.setText(map.get("invname").toString());
                 mEdUnit.setText(map.get("measname").toString());
-                mEdType.setText(map.get("invtype").toString());
-                mEdSpectype.setText(map.get("invspec").toString());
+//                mEdType.setText(map.get("invtype").toString());
+//                mEdSpectype.setText(map.get("invspec").toString());
             }
+
         }
     }
 
@@ -382,27 +394,28 @@ public class MaterialOutScanAct extends Activity {
                 switch (v.getId()) {
                     case R.id.ed_bar_code:
                         BarAnalysis();
+                        if (isAllEdNotNull() && addDataToList()) {
+                            ChangeAllEdTextToEmpty();
+                        }
                         return true;
                     case R.id.ed_lot:
                         if (TextUtils.isEmpty(mEdLot.getText())) {
                             Toast.makeText(MaterialOutScanAct.this, "请输入批次号", Toast.LENGTH_SHORT).show();
                         } else {
-                            if (isInfoComplete()) {
-                                if (addInfoToDetailList()) {
-                                    SetAllEcTextIsEmpty();
-                                }
-                            }
+                            mEdQty.requestFocus();
                         }
                         return true;
                     case R.id.ed_qty:
                         if (TextUtils.isEmpty(mEdQty.getText())) {
                             Toast.makeText(MaterialOutScanAct.this, "请输入数量", Toast.LENGTH_SHORT).show();
                         } else {
-                            if (isInfoComplete()) {
-                                if (addInfoToDetailList()) {
-                                    SetAllEcTextIsEmpty();
-                                }
+//                            if (isAllEdNotNull() && ) {
+                            if (addDataToList()){
+                                mEdBarCode.requestFocus();
+                                ChangeAllEdTextToEmpty();
                             }
+//                            }
+
                         }
                         return true;
                 }

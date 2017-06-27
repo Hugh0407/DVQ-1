@@ -170,13 +170,11 @@
                 android:text="批次"/>
 
             <EditText
-                android:focusable="false"
                 android:id="@+id/ed_lot"
                 android:layout_width="0dp"
                 android:layout_height="30dp"
                 android:layout_weight="1"
                 android:background="@drawable/edittext_style"
-                android:editable="false"
                 android:ems="10"
                 android:maxLines="1"
                 android:singleLine="true"
@@ -268,13 +266,11 @@
                     android:text="总量"/>
 
                 <EditText
-                    android:focusable="false"
                     android:id="@+id/ed_qty"
                     android:layout_width="0dp"
                     android:layout_height="30dp"
                     android:layout_weight="1"
                     android:background="@drawable/edittext_style"
-                    android:editable="false"
                     android:ems="10"
                     android:maxLines="1"
                     android:singleLine="true"
