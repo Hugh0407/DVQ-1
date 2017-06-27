@@ -15,36 +15,31 @@
         android:orientation="horizontal" >
 
         <Button
+            android:background="@drawable/button_normal_style"
             android:id="@+id/btnSalesDelScan"
             style="android:buttonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
             android:layout_weight="1"
-            android:background="@drawable/btn3"
-            android:textColor="@color/navy"
+            android:textColor="@color/white"
             android:text="扫描" />
 
         <Button
+            android:background="@drawable/button_normal_style"
             android:id="@+id/btnSalesDelSave"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/btnScan"
-            android:layout_alignBottom="@+id/btnScan"
-            android:layout_alignParentRight="true"
             android:layout_weight="1"
-            android:background="@drawable/btn3"
-            android:textColor="@color/navy"
+            android:textColor="@color/white"
             android:text="保存  签字" />
 
         <Button
+            android:background="@drawable/button_normal_style"
             android:id="@+id/btnSalesDelExit"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/btn3"
-            android:textColor="@color/navy"
+            android:textColor="@color/white"
             android:text="退出" />
     </LinearLayout>
 

@@ -11,14 +11,14 @@ import android.os.Parcelable;
 public class Goods implements Parcelable{
 
 
-    String barcode;
-    String encoding;
-    String name;
-    String type;
-    String unit;
-    String lot;
-    float qty;
-    int num;
+    String barcode;     // 条码
+    String encoding;    //编码（sku）
+    String name;        //名称
+    String type;        //类型
+    String unit;        //单位
+    String lot;         //批次
+    float qty;          //总量
+    int num;            //数目
     String pk_invbasdoc;
     String pk_invmandoc;
 

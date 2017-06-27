@@ -456,6 +456,7 @@ public class ProductOutAct extends Activity {
         }
 
     };
+
     private View.OnFocusChangeListener myFocusListener = new View.OnFocusChangeListener() {
         @Override
         public void onFocusChange(View view, boolean hasFocus) {
