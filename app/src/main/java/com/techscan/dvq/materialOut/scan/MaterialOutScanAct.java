@@ -390,6 +390,7 @@ public class MaterialOutScanAct extends Activity {
                     case R.id.ed_bar_code:
                         BarAnalysis();
                         if (isAllEdNotNull() && addDataToList()) {
+                            mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
                             ChangeAllEdTextToEmpty();
                         }
                         return true;
