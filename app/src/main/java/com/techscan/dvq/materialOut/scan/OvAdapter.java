@@ -14,7 +14,7 @@ import com.techscan.dvq.bean.Goods;
 import java.util.List;
 
 /**
- * Created by cloverss on 2017/6/20.
+ * Created by liuya on 2017/6/20.
  * “总览” 按钮中的dialog视图的 Adapter
  */
 

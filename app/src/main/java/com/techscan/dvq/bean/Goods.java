@@ -4,8 +4,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * Created by cloverss on 2017/6/22.
- * 货物对象
+ * Created by liuya on 2017/6/22.
+ * 材料出库 用到的对象
  */
 
 public class Goods implements Parcelable{

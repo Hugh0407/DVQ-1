@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by cloverss on 2017/6/23.
+ * Created by liuya on 2017/6/23.
  */
 
 public class RequestThread implements Runnable {

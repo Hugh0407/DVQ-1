@@ -256,10 +256,8 @@ public class MaterialOutScanAct extends Activity {
         hashMap.put("unit", mEdUnit.getText().toString());
         hashMap.put("lot", mEdLot.getText().toString());
         hashMap.put("qty", mEdQty.getText().toString());
-
         hashMap.put("pk_invbasdoc", pk_invbasdoc);
         hashMap.put("pk_invmandoc", pk_invmandoc);
-
         return detailList.add(hashMap);
     }
 

@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Created by cloverss on 2017/6/20.
+ * Created by liuya on 2017/6/20.
  */
 
 public class MyBaseAdapter extends BaseAdapter {
