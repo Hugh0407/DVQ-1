@@ -1,4 +1,4 @@
-package com.techscan.dvq.materialOut;
+package com.techscan.dvq.common;
 
 import android.os.Handler;
 import android.os.Message;

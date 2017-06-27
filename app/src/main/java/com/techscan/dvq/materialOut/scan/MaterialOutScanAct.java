@@ -23,8 +23,9 @@ import android.widget.Toast;
 
 import com.techscan.dvq.MainLogin;
 import com.techscan.dvq.R;
+import com.techscan.dvq.bean.Goods;
 import com.techscan.dvq.materialOut.MyBaseAdapter;
-import com.techscan.dvq.materialOut.RequestThread;
+import com.techscan.dvq.common.RequestThread;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -116,27 +117,26 @@ public class MaterialOutScanAct extends Activity {
                 int count = detailList.size();
                 List<Goods> goodsList = new ArrayList<Goods>();
                 HashMap<String, String> map;
-                Goods gd;
+                Goods c;
                 for (int i = 0; i < count; i++) {
                     map = detailList.get(i);
-                    gd = new Goods();
-                    gd.setBarcode(map.get("barcode"));
-                    gd.setEncoding(map.get("encoding"));
-                    gd.setName(map.get("name"));
-                    gd.setType(map.get("type"));
-                    gd.setUnit(map.get("unit"));
-                    gd.setLot(map.get("lot"));
-                    gd.setQty(Float.valueOf(map.get("qty")));
-                    gd.setPk_invbasdoc(map.get("pk_invbasdoc"));
-                    gd.setPk_invmandoc(map.get("pk_invmandoc"));
-                    goodsList.add(gd);
+                    c = new Goods();
+                    c.setBarcode(map.get("barcode"));
+                    c.setEncoding(map.get("encoding"));
+                    c.setName(map.get("name"));
+                    c.setType(map.get("type"));
+                    c.setUnit(map.get("unit"));
+                    c.setLot(map.get("lot"));
+                    c.setQty(Float.valueOf(map.get("qty")));
+                    c.setPk_invbasdoc(pk_invbasdoc);
+                    c.setPk_invmandoc(pk_invmandoc);
+                    goodsList.add(c);
                 }
                 if (goodsList.size() > 0) {
                     Intent in = new Intent();
                     Bundle bundle = new Bundle();
                     bundle.putParcelableArrayList("overViewList", (ArrayList<? extends Parcelable>) goodsList);
                     in.putExtras(bundle);
-                    Log.d(TAG, "tempList: " + goodsList.get(0).getQty());
                     MaterialOutScanAct.this.setResult(5, in);
                 }
                 finish();
@@ -146,7 +146,7 @@ public class MaterialOutScanAct extends Activity {
 
     private void initView() {
         ActionBar actionBar = this.getActionBar();
-        actionBar.setTitle("材料出库扫描");
+        actionBar.setTitle("物品扫描");
         mEdBarCode.setOnKeyListener(mOnKeyListener);
         mEdLot.setOnKeyListener(mOnKeyListener);
         mEdQty.setOnKeyListener(mOnKeyListener);
@@ -199,11 +199,11 @@ public class MaterialOutScanAct extends Activity {
      * 条码解析
      */
     private boolean BarAnalysis() {
-        String Bar = mEdBarCode.getText().toString();
+        String Bar = mEdBarCode.getText().toString().trim();
         if (Bar.contains("\n")) {
             Bar = Bar.replace("\n", "");
-            mEdBarCode.setText(Bar);
         }
+        mEdBarCode.setText(Bar);
         String[] barCode = Bar.split("\\|");
         if (barCode.length == 2 && barCode[0].equals("Y")) {          //Y|SKU
             String encoding = barCode[1];
@@ -252,6 +252,10 @@ public class MaterialOutScanAct extends Activity {
         hashMap.put("unit", mEdUnit.getText().toString());
         hashMap.put("lot", mEdLot.getText().toString());
         hashMap.put("qty", mEdQty.getText().toString());
+
+        hashMap.put("pk_invbasdoc", pk_invbasdoc);
+        hashMap.put("pk_invmandoc", pk_invmandoc);
+
         return detailList.add(hashMap);
     }
 
@@ -306,6 +310,9 @@ public class MaterialOutScanAct extends Activity {
      * @param json
      * @throws JSONException
      */
+    String pk_invbasdoc = "";
+    String pk_invmandoc = "";
+
     private void GetInvBaseByJson(JSONObject json) throws JSONException {
         Log.d(TAG, "GetInvBaseByJson: " + json);
         if (json.getBoolean("Status")) {
@@ -318,16 +325,18 @@ public class MaterialOutScanAct extends Activity {
                 map.put("invcode", tempJso.getString("invcode"));   //00179
                 map.put("measname", tempJso.getString("measname"));   //千克
                 map.put("pk_invbasdoc", tempJso.getString("pk_invbasdoc"));
+                pk_invbasdoc = tempJso.getString("pk_invbasdoc");
                 map.put("pk_invmandoc", tempJso.getString("pk_invmandoc"));
-//                map.put("invtype", tempJso.getString("invtype"));   //型号
-//                map.put("invspec", tempJso.getString("invspec"));   //规格
+                pk_invmandoc = tempJso.getString("pk_invmandoc");
+                map.put("invtype", tempJso.getString("invtype"));   //型号
+                map.put("invspec", tempJso.getString("invspec"));   //规格
                 map.put("oppdimen", tempJso.getString("oppdimen"));   //重量
             }
             if (map != null) {
                 mEdName.setText(map.get("invname").toString());
                 mEdUnit.setText(map.get("measname").toString());
-//                mEdType.setText(map.get("invtype").toString());
-//                mEdSpectype.setText(map.get("invspec").toString());
+                mEdType.setText(map.get("invtype").toString());
+                mEdSpectype.setText(map.get("invspec").toString());
             }
         }
     }

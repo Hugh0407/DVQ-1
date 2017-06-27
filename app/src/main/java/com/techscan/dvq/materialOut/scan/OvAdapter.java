@@ -9,6 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.techscan.dvq.R;
+import com.techscan.dvq.bean.Goods;
 
 import java.util.List;
 

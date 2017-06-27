@@ -1,4 +1,4 @@
-package com.techscan.dvq.materialOut;
+package com.techscan.dvq.productOut;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -22,6 +22,8 @@ import com.techscan.dvq.R;
 import com.techscan.dvq.VlistRdcl;
 import com.techscan.dvq.bean.Goods;
 import com.techscan.dvq.common.RequestThread;
+import com.techscan.dvq.materialOut.DepartmentListAct;
+import com.techscan.dvq.materialOut.StorgListACt;
 import com.techscan.dvq.materialOut.scan.MaterialOutScanAct;
 
 import org.apache.http.ParseException;
@@ -43,7 +45,7 @@ import butterknife.OnClick;
 import static com.techscan.dvq.common.Utils.HANDER_DEPARTMENT;
 import static com.techscan.dvq.common.Utils.HANDER_STORG;
 
-public class MaterialOutAct extends Activity {
+public class ProductOutAct extends Activity {
 
 
     @InjectView(R.id.bill_num)
@@ -76,9 +78,11 @@ public class MaterialOutAct extends Activity {
     Button mBtnBack;
     @InjectView(R.id.refer_department)
     ImageButton mReferDepartment;
+    @InjectView(R.id.whmanager)
+    EditText mWhmanager;
+    @InjectView(R.id.refer_whmanager)
+    ImageButton mReferWhmanager;
     private String TAG = this.getClass().getSimpleName();
-
-
     List<Goods> tempList;
 
     String CDISPATCHERID;//收发类别code
@@ -97,7 +101,7 @@ public class MaterialOutAct extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_material_in);
+        setContentView(R.layout.activity_product_out);
         ButterKnife.inject(this);
         initView();
     }
@@ -134,7 +138,7 @@ public class MaterialOutAct extends Activity {
                 }
                 break;
             case R.id.btnPurInScan:
-                Intent in = new Intent(MaterialOutAct.this, MaterialOutScanAct.class);
+                Intent in = new Intent(ProductOutAct.this, MaterialOutScanAct.class);
                 startActivityForResult(in, 95);
                 break;
             case R.id.btnPurinSave:
@@ -156,7 +160,7 @@ public class MaterialOutAct extends Activity {
                 year = mycalendar.get(Calendar.YEAR); //获取Calendar对象中的年
                 month = mycalendar.get(Calendar.MONTH);//获取Calendar对象中的月
                 day = mycalendar.get(Calendar.DAY_OF_MONTH);//获取这个月的第几天
-                DatePickerDialog dpd = new DatePickerDialog(MaterialOutAct.this, Datelistener, year, month, day);
+                DatePickerDialog dpd = new DatePickerDialog(ProductOutAct.this, Datelistener, year, month, day);
                 dpd.show();//显示DatePickerDialog组件
                 break;
         }
@@ -217,7 +221,7 @@ public class MaterialOutAct extends Activity {
 //        mLeiBie.setText("0105");
 //        mDepartment.setText("物流部");
         ActionBar actionBar = this.getActionBar();
-        actionBar.setTitle("材料出库");
+        actionBar.setTitle("成品入库");
         mycalendar = Calendar.getInstance();//初始化Calendar日历对象
         year = mycalendar.get(Calendar.YEAR); //获取Calendar对象中的年
         month = mycalendar.get(Calendar.MONTH);//获取Calendar对象中的月
@@ -241,7 +245,7 @@ public class MaterialOutAct extends Activity {
                             JSONArray val = json.getJSONArray("department");
                             JSONObject temp = new JSONObject();
                             temp.put("department", val);
-                            Intent ViewGrid = new Intent(MaterialOutAct.this, DepartmentListAct.class);
+                            Intent ViewGrid = new Intent(ProductOutAct.this, DepartmentListAct.class);
                             ViewGrid.putExtra("myData", temp.toString());
                             startActivityForResult(ViewGrid, 96);
                         }
@@ -256,7 +260,7 @@ public class MaterialOutAct extends Activity {
                             JSONArray val = storg.getJSONArray("STOrg");
                             JSONObject temp = new JSONObject();
                             temp.put("STOrg", val);
-                            Intent StorgList = new Intent(MaterialOutAct.this, StorgListACt.class);
+                            Intent StorgList = new Intent(ProductOutAct.this, StorgListACt.class);
                             StorgList.putExtra("STOrg", temp.toString());
                             startActivityForResult(StorgList, 94);
                         }
@@ -456,9 +460,10 @@ public class MaterialOutAct extends Activity {
         @Override
         public void onFocusChange(View view, boolean hasFocus) {
             if (hasFocus) {
-                DatePickerDialog dpd = new DatePickerDialog(MaterialOutAct.this, Datelistener, year, month, day);
+                DatePickerDialog dpd = new DatePickerDialog(ProductOutAct.this, Datelistener, year, month, day);
                 dpd.show();//显示DatePickerDialog组件
             }
         }
     };
 }
+

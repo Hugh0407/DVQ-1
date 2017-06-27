@@ -270,19 +270,14 @@
         <!--  -->
         <!-- </activity> -->
         <activity android:name=".materialOut.MaterialOutAct">
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN"/> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER"/> -->
-            <!-- </intent-filter> -->
         </activity>
         <activity android:name=".materialOut.scan.MaterialOutScanAct">
         </activity>
         <activity android:name=".materialOut.DepartmentListAct">
         </activity>
         <activity android:name=".materialOut.StorgListACt">
+        </activity>
+        <activity android:name=".productOut.ProductOutAct">
         </activity>
     </application>
 

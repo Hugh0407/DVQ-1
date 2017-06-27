@@ -1,4 +1,4 @@
-package com.techscan.dvq.materialOut.scan;
+package com.techscan.dvq.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;

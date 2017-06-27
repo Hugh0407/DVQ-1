@@ -47,9 +47,9 @@ public class DepartmentListAct extends Activity {
             SimpleAdapter listItemAdapter = new SimpleAdapter(this, mData,//数据源
                     R.layout.vlistwh,//ListItem的XML实现
                     //动态数组与ImageItem对应的子项
-                    new String[]{"deptcode", "deptname"},
+                    new String[]{"deptname", "deptcode"},
                     //ImageItem的XML文件里面的一个ImageView,两个TextView ID
-                    new int[]{R.id.vlistwarehousecode, R.id.vlistwarehousename}
+                    new int[]{R.id.vlistwarehousename, R.id.vlistwarehousecode}
             );
             list.setOnItemClickListener(itemListener);
             list.setAdapter(listItemAdapter);

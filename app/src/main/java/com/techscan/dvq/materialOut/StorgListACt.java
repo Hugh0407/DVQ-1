@@ -49,7 +49,7 @@ public class StorgListACt extends Activity {
                     //动态数组与ImageItem对应的子项
                     new String[]{"bodyname", "pk_calbody"},
                     //ImageItem的XML文件里面的一个ImageView,两个TextView ID
-                    new int[]{R.id.vlistwarehousecode, R.id.vlistwarehousename}
+                    new int[]{R.id.vlistwarehousename, R.id.vlistwarehousecode}
             );
             list.setOnItemClickListener(itemListener);
             list.setAdapter(listItemAdapter);

@@ -1,4 +1,4 @@
-package com.techscan.dvq.materialOut;
+package com.techscan.dvq.common;
 
 import java.text.SimpleDateFormat;
 
@@ -8,6 +8,9 @@ import java.text.SimpleDateFormat;
  */
 
 public class Utils {
+    public static final int HANDER_DEPARTMENT = 1;
+    public static final int HANDER_STORG = 2;
+
     public static String formatTime(long time) {
         java.util.Date date = new java.util.Date(time);
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
