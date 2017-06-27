@@ -24,8 +24,8 @@ import android.widget.Toast;
 import com.techscan.dvq.MainLogin;
 import com.techscan.dvq.R;
 import com.techscan.dvq.bean.Goods;
-import com.techscan.dvq.materialOut.MyBaseAdapter;
 import com.techscan.dvq.common.RequestThread;
+import com.techscan.dvq.materialOut.MyBaseAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -63,6 +63,8 @@ public class MaterialOutScanAct extends Activity {
     Button mBtnDetail;
     @InjectView(R.id.btn_back)
     Button mBtnBack;
+    @InjectView(R.id.ed_num)
+    EditText mEdNum;
 
 
     String TAG = "MaterialOutScanAct";
@@ -206,6 +208,8 @@ public class MaterialOutScanAct extends Activity {
         mEdBarCode.setText(Bar);
         String[] barCode = Bar.split("\\|");
         if (barCode.length == 2 && barCode[0].equals("Y")) {          //Y|SKU
+            mEdQty.setFocusable(true);
+            mEdQty.setEnabled(true);
             String encoding = barCode[1];
             mEdEncoding.setText(encoding);
             GetInvBaseInfo(encoding);
