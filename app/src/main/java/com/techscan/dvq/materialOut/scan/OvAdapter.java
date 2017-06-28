@@ -70,24 +70,27 @@ public class OvAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.item_scan_ov, null);
             viewHolder.name = (TextView) convertView.findViewById(R.id.name);
             viewHolder.encoding = (TextView) convertView.findViewById(R.id.encoding);
-            viewHolder.num = (TextView) convertView.findViewById(R.id.num);
+            viewHolder.qty = (TextView) convertView.findViewById(R.id.qty);
+            viewHolder.lot = (TextView) convertView.findViewById(R.id.lot);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         viewHolder.name.setText(mList.get(position).getName());
         viewHolder.encoding.setText(mList.get(position).getEncoding());
+        viewHolder.lot.setText(mList.get(position).getLot());
         if (TextUtils.isEmpty(String.valueOf(mList.get(position).getQty()))) {
-            viewHolder.num.setText("");
+            viewHolder.qty.setText("0.00");
         } else {
-            viewHolder.num.setText(String.valueOf(mList.get(position).getQty()));
+            viewHolder.qty.setText(String.valueOf(mList.get(position).getQty()));
         }
         return convertView;
     }
 
-    static class ViewHolder {
+    private static class ViewHolder {
         TextView name;
         TextView encoding;
-        TextView num;
+        TextView qty;
+        TextView lot;
     }
 }

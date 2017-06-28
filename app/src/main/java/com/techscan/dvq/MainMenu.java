@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.techscan.dvq.materialOut.MaterialOutAct;
 import com.techscan.dvq.R.id;
 import com.techscan.dvq.productOut.ProductOutAct;
+import com.techscan.dvq.statusChange.StatusChangeAct;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -143,6 +144,14 @@ public class MainMenu extends Activity {
         map = new HashMap<String, Object>();
         map.put("ItemImage", R.drawable.icon_rk_cp);
         map.put("ItemText", "成品入库");
+        lstImageItem.add(map);
+//*********************************************************************
+
+        //*********************************************************************
+// by liuya 时间06.27
+        map = new HashMap<String, Object>();
+        map.put("ItemImage", R.drawable.ic_launcher);
+        map.put("ItemText", "形态转换");
         lstImageItem.add(map);
 //*********************************************************************
 //		map = new HashMap<String, Object>();
@@ -325,6 +334,11 @@ public class MainMenu extends Activity {
                     ShowProductOut();
                     break;
 //*********************************************************************
+                //形态转换模块  时间06.28  by liuya
+                case 4:
+                    ShowStatusChange();
+                    break;
+//*********************************************************************
                 case 11:
                     if (!Common.CheckUserRole("", "", "40080820")) {
                         MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
@@ -334,7 +348,7 @@ public class MainMenu extends Activity {
                     }
                     ShowStockTransOut();
                     break;
-                case 4:
+                case 12:
                     if (!Common.CheckUserRole("", "", "40080618")) {
                         MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                         Toast.makeText(MainMenu.this, "没有使用该模块的权限",
@@ -609,6 +623,13 @@ public class MainMenu extends Activity {
     private void ShowProductOut() {
         ShowLoading();
         Intent ProductOut = new Intent(this, ProductOutAct.class);
+        startActivity(ProductOut);
+        cancelLoading();
+    }
+    // 显示成品入库画面
+    private void ShowStatusChange() {
+        ShowLoading();
+        Intent ProductOut = new Intent(this, StatusChangeAct.class);
         startActivity(ProductOut);
         cancelLoading();
     }

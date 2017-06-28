@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -83,11 +84,11 @@ public class ProductOutAct extends Activity {
     private String TAG = this.getClass().getSimpleName();
     List<Goods> tempList;
 
-    String CDISPATCHERID;//收发类别code
-    String CDPTID;  //部门id
+    String CDISPATCHERID = "";//收发类别code
+    String CDPTID = "";  //部门id
     String CUSER;   //登录员工id
-    String CWAREHOUSEID;    //库存组织
-    String PK_CALBODY;      //仓库id
+    String CWAREHOUSEID = "";    //库存组织
+    String PK_CALBODY = "";      //仓库id
     String PK_CORP;         //公司
     String VBILLCOD;        //单据号
 
@@ -225,6 +226,11 @@ public class ProductOutAct extends Activity {
         month = mycalendar.get(Calendar.MONTH);//获取Calendar对象中的月
         day = mycalendar.get(Calendar.DAY_OF_MONTH);//获取这个月的第几天
         mBillDate.setOnFocusChangeListener(myFocusListener);
+        mBillDate.setOnKeyListener(mOnKeyListener);
+        mWh.setOnKeyListener(mOnKeyListener);
+        mOrganization.setOnKeyListener(mOnKeyListener);
+        mLeiBie.setOnKeyListener(mOnKeyListener);
+        mDepartment.setOnKeyListener(mOnKeyListener);
     }
 
     /**
@@ -268,9 +274,9 @@ public class ProductOutAct extends Activity {
                     break;
                 case HANDER_SAVE_RESULT:
                     JSONObject saveResult = (JSONObject) msg.obj;
-                    if (saveResult!=null){
-                        Log.d(TAG, "保存结果:"+saveResult.toString());
-                    }else {
+                    if (saveResult != null) {
+                        Log.d(TAG, "保存结果:" + saveResult.toString());
+                    } else {
                         Log.d(TAG, "null");
                     }
                     break;
@@ -304,10 +310,10 @@ public class ProductOutAct extends Activity {
             JSONObject object = new JSONObject();
             object.put("CINVBASID", c.getPk_invbasdoc());
             object.put("CINVENTORYID", c.getPk_invmandoc());
-            object.put("WGDATE",mBillDate.getText().toString());
-            float price = c.getQty();
-            DecimalFormat decimalFormat = new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
-            String qty = decimalFormat.format(price);//format 返回的是字符串
+            object.put("WGDATE", mBillDate.getText().toString());    //LEO要求，将时间添加到表体上
+            float c_2 = c.getQty();
+            DecimalFormat decimalFormat = new DecimalFormat(".00"); //构造方法的字符格式这里如果小数不足2位,会以0补足.
+            String qty = decimalFormat.format(c_2);                 //format 返回的是字符串
 
             object.put("NOUTNUM", qty);
             object.put("PK_BODYCALBODY", PK_CALBODY);
@@ -320,7 +326,7 @@ public class ProductOutAct extends Activity {
         table.put("GUIDS", UUID.randomUUID().toString());
         Log.d(TAG, "SaveInfo: " + table.toString());
 
-        SaveThread saveThread = new SaveThread(table,"SaveMaterialOut",mHandler, HANDER_SAVE_RESULT);
+        SaveThread saveThread = new SaveThread(table, "SaveMaterialOut", mHandler, HANDER_SAVE_RESULT);
         Thread thread = new Thread(saveThread);
         thread.start();
     }
@@ -439,6 +445,7 @@ public class ProductOutAct extends Activity {
             month = monthOfYear;
             day = dayOfMonth;
             updateDate();
+            mWh.requestFocus(); //选择日期后将焦点跳到“仓库的EdText”
         }
 
         //当DatePickerDialog关闭时，更新日期显示
@@ -456,6 +463,32 @@ public class ProductOutAct extends Activity {
                 DatePickerDialog dpd = new DatePickerDialog(ProductOutAct.this, Datelistener, year, month, day);
                 dpd.show();//显示DatePickerDialog组件
             }
+        }
+    };
+    /**
+     * 回车键的点击事件
+     */
+    View.OnKeyListener mOnKeyListener = new View.OnKeyListener() {
+
+        @Override
+        public boolean onKey(View v, int keyCode, KeyEvent event) {
+            if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
+                switch (v.getId()) {
+                    case R.id.bill_num:
+                        mBillDate.requestFocus();
+                        return true;
+                    case R.id.wh:
+                        mOrganization.requestFocus();
+                        return true;
+                    case R.id.organization:
+                        mLeiBie.requestFocus();
+                        return true;
+                    case R.id.lei_bie:
+                        mDepartment.requestFocus();
+                        return true;
+                }
+            }
+            return false;
         }
     };
 }

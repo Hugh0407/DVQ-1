@@ -338,22 +338,22 @@ public class OtherOrderList extends Activity {
 			if (m_OrderType.equals("4N")) {
 				lsBilltype = "40081008";
 			}
+//
+//			if (!Common.CheckUserRole(accid, map.get("pk_corp").toString(),
+//					lsBilltype)) {
+//				MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//				Toast.makeText(OtherOrderList.this, R.string.MeiYouShiYongGaiDanJuDeQuanXian,
+//						Toast.LENGTH_LONG).show();
+//				return;
+//			}
 
-			if (!Common.CheckUserRole(accid, map.get("pk_corp").toString(),
-					lsBilltype)) {
-				MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-				Toast.makeText(OtherOrderList.this, R.string.MeiYouShiYongGaiDanJuDeQuanXian,
-						Toast.LENGTH_LONG).show();
-				return;
-			}
-
-			if (!Common.CheckUserWHRole(accid, map.get("pk_corp").toString(),
-					warehouseID)) {
-				MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-				Toast.makeText(OtherOrderList.this, R.string.MeiYouShiYongGaiCangKuDeQuanXian,
-						Toast.LENGTH_LONG).show();
-				return;
-			}
+//			if (!Common.CheckUserWHRole(accid, map.get("pk_corp").toString(),
+//					warehouseID)) {
+//				MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//				Toast.makeText(OtherOrderList.this, R.string.MeiYouShiYongGaiCangKuDeQuanXian,
+//						Toast.LENGTH_LONG).show();
+//				return;
+//			}
 
 			Intent intent = new Intent();
 			intent.putExtra("result", "1");// 把返回数据存入Intent
