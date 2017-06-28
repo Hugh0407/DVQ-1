@@ -66,7 +66,7 @@ public class PurStockIn extends Activity
 	TextView labWarehouse;
 	TextView labWHName;
 	TextView tvbillstatus;
-	EditText txtPosition;
+	//EditText txtPosition;
 	EditText txtPurOrderNo;
 	Intent scanDetail = null;
 	JSONObject jsDBBody;
@@ -1061,7 +1061,7 @@ public class PurStockIn extends Activity
 					//ADD CAIXY TEST START
 					MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
 					//ADD CAIXY TEST END
-					this.txtPosition.setText("");
+					//this.txtPosition.setText("");
 					return;
 				}
 				if(m_AccID==null||m_AccID.equals(""))
@@ -1071,7 +1071,7 @@ public class PurStockIn extends Activity
 					//ADD CAIXY TEST START
 					MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
 					//ADD CAIXY TEST END
-					this.txtPosition.setText("");
+					//this.txtPosition.setText("");
 					return;
 				}
 				posCode = posCode.toUpperCase();
@@ -1112,7 +1112,7 @@ public class PurStockIn extends Activity
 					JSONArray val = rev.getJSONArray("position");				
 					if(val.length() < 1)
 					{
-						txtPosition.setText("");
+						//txtPosition.setText("");
 						Toast.makeText(this, "获取货位失败", Toast.LENGTH_LONG).show();
 						//ADD CAIXY TEST START
 						MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
@@ -1127,22 +1127,22 @@ public class PurStockIn extends Activity
 					jposID = temp.getString("pk_cargdoc");
 					
 					
-					this.txtPosition.setText(jposCode);
+					//this.txtPosition.setText(jposCode);
 					this.m_PosName = jposName;
 					this.m_PosCode = jposCode;
 					this.m_PosID = jposID;
 					SaveScanedHead();
 					
-					if(this.txtPosition.getText().toString().equals(""))
-					{
-						txtPosition.requestFocus();
-						return;
-					}
+//					if(this.txtPosition.getText().toString().equals(""))
+//					{
+//						txtPosition.requestFocus();
+//						return;
+//					}
 					return;				
 				}
 				else
 				{
-					txtPosition.setText("");
+					//txtPosition.setText("");
 					Toast.makeText(this, "获取货位失败", Toast.LENGTH_LONG).show();
 					//ADD CAIXY TEST START
 					MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
@@ -1500,8 +1500,8 @@ public class PurStockIn extends Activity
 		
 		labVendor = (TextView)findViewById(R.id.labPurVendor);
 		txtPurOrderNo = (EditText)findViewById(R.id.txtPurOrderNo);
-		txtPosition = (EditText)findViewById(R.id.txtPurPosition);
-		
+//		txtPosition = (EditText)findViewById(R.id.txtPurPosition);
+
 		labWHName = (TextView)findViewById(R.id.labWHName);
 		tvbillstatus = (TextView)findViewById(R.id.tvbillstatus);
 		this.tvbillstatus.setText("  ");
@@ -1520,7 +1520,7 @@ public class PurStockIn extends Activity
     	//m_companyCode = MainLogin.objLog.CompanyCode;
     	
     	txtPurOrderNo.setAllCaps(true);
-    	txtPosition.setAllCaps(true); 	
+    	//txtPosition.setAllCaps(true);
     	
     	btnSave.setFocusable(false);
     	btnUpdate.setFocusable(false);
@@ -1532,7 +1532,7 @@ public class PurStockIn extends Activity
 		
 		txtPurOrderNo.requestFocus();
 		//this.txtPosition.addTextChangedListener(watcher);
-		this.txtPosition.setOnKeyListener(myTxtListener);		
+		//this.txtPosition.setOnKeyListener(myTxtListener);
 		this.txtPurOrderNo.setOnKeyListener(myTxtListener);	
 		
     	UserID = MainLogin.objLog.UserID;
@@ -1660,7 +1660,7 @@ public class PurStockIn extends Activity
    		tmpBillStatus = "";
    		tmpWHStatus = "";
    		ScanedBarcode = new ArrayList<String>();
-   		txtPosition.setText("");
+   		//txtPosition.setText("");
    		txtPurOrderNo.setText("");
    		labVendor.setText(" ----");
    		labWHName.setText(" ----");
@@ -1814,7 +1814,7 @@ public class PurStockIn extends Activity
 	        			{
 	        				this.tvbillstatus.setText("采 购  退 货");
 	        			}
-	            		txtPosition.requestFocus();
+	            		//txtPosition.requestFocus();
 	            	}
 	            	
 	            	if(!lsPosCode.equals("null"))
@@ -1822,7 +1822,7 @@ public class PurStockIn extends Activity
 	            		m_PosCode = lsPosCode;
 		    	    	m_PosName = lsm_PosName;
 		    	    	m_PosID = lsm_PosID;
-		    	    	this.txtPosition.setText(lsPosCode);
+		    	    	//this.txtPosition.setText(lsPosCode);
 	            	}
 	            	
 	            	int x=0;
@@ -1886,36 +1886,36 @@ public class PurStockIn extends Activity
 				{
 					switch(v.getId())
 					{				
-						case id.txtPurPosition:
-							String val = txtPosition.getText().toString();
-							val = val.toUpperCase();
-							val = val.replace("\n", "");
-							
-							if(jsDBBody == null || jsDBBody.length() < 1)
-					    	{
-					    		
-					    	}
-					    	else
-					    	{
-					    		String oldposname = m_PosCode;
-			    				Toast.makeText(PurStockIn.this, "该任务已经被扫描,无法修改货位。若要修改订单请先清除扫描货位", Toast.LENGTH_LONG).show();
-								//ADD CAIXY TEST START
-								MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-								//ADD CAIXY TEST END
-								txtPosition.setText(oldposname);
-			    				break;
-					    	}
-							try {
-								FindPositionByCode(val);
-							} catch (JSONException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-								Toast.makeText(PurStockIn.this, R.string.WangLuoChuXianWenTi, Toast.LENGTH_LONG).show();
-								//ADD CAIXY TEST START
-								MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-								//ADD CAIXY TEST END
-							}
-							break;
+//						case id.txtPurPosition:
+//							String val = txtPosition.getText().toString();
+//							val = val.toUpperCase();
+//							val = val.replace("\n", "");
+//
+//							if(jsDBBody == null || jsDBBody.length() < 1)
+//					    	{
+//
+//					    	}
+//					    	else
+//					    	{
+//					    		String oldposname = m_PosCode;
+//			    				Toast.makeText(PurStockIn.this, "该任务已经被扫描,无法修改货位。若要修改订单请先清除扫描货位", Toast.LENGTH_LONG).show();
+//								//ADD CAIXY TEST START
+//								MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//								//ADD CAIXY TEST END
+//								txtPosition.setText(oldposname);
+//			    				break;
+//					    	}
+//							try {
+//								FindPositionByCode(val);
+//							} catch (JSONException e) {
+//								// TODO Auto-generated catch block
+//								e.printStackTrace();
+//								Toast.makeText(PurStockIn.this, R.string.WangLuoChuXianWenTi, Toast.LENGTH_LONG).show();
+//								//ADD CAIXY TEST START
+//								MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//								//ADD CAIXY TEST END
+//							}
+//							break;
 						case id.txtPurOrderNo:
 							if(jsDBBody == null || jsDBBody.length() < 1)
 					    	{
@@ -2104,7 +2104,7 @@ public class PurStockIn extends Activity
 			m_PosCode = "";
 			m_PosName = "";
 			m_PosID = "";
-			txtPosition.setText("");
+			//txtPosition.setText("");
 			this.txtPurOrderNo.setText(orderNo);
 			this.labVendor.setText("  "+vendor);
 			this.labWHName.setText("  "+warehouse);
@@ -2117,7 +2117,7 @@ public class PurStockIn extends Activity
 			{
 				this.tvbillstatus.setText("采 购  退 货");
 			}
-			this.txtPosition.requestFocus();
+			//this.txtPosition.requestFocus();
 			SaveScanedHead();
 		}
 		if(requestCode == 35)
