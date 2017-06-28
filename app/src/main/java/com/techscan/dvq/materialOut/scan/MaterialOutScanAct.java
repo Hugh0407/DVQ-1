@@ -65,6 +65,8 @@ public class MaterialOutScanAct extends Activity {
     Button mBtnBack;
     @InjectView(R.id.ed_num)
     EditText mEdNum;
+    @InjectView(R.id.ed_weight)
+    EditText mEdWeight;
 
 
     String TAG = "MaterialOutScanAct";
@@ -184,6 +186,7 @@ public class MaterialOutScanAct extends Activity {
             GetInvBaseInfo(encoding);
 
             mEdLot.setText(barCode[2]);
+            mEdWeight.setText(barCode[4]);
             mEdQty.setText(barCode[4]);
             return true;
         } else if (barCode.length == 7 && barCode[0].equals("TC")) {    //TC|SKU|LOT|TAX|QTY|NUM|SN
@@ -191,6 +194,8 @@ public class MaterialOutScanAct extends Activity {
             mEdEncoding.setText(encoding);
             GetInvBaseInfo(encoding);
             mEdLot.setText(barCode[2]);
+            mEdWeight.setText(barCode[4]);
+            mEdNum.setText(barCode[5]);
             float qty = Float.valueOf(barCode[4]);
             float num = Float.valueOf(barCode[5]);
             mEdQty.setText(String.valueOf(qty * num));
