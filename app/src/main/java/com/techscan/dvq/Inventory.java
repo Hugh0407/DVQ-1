@@ -12,7 +12,7 @@ public class Inventory {
     private String m_InvName;
     private String m_Batch;
     private String m_Serino;
-    private String m_Invbasdoc;
+    private String m_Invbasdoc;//
     private String m_Invmandoc;
     private String m_vFree1;
 
