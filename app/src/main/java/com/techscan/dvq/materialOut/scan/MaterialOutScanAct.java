@@ -172,7 +172,7 @@ public class MaterialOutScanAct extends Activity {
             mEdEncoding.setText(encoding);
             GetInvBaseInfo(encoding);
             mEdQty.setText("");
-            mEdLot.requestFocus();  //r如果是液体需要手动输入“批次”和“数量”,这里将光标跳到“批次（lot）”
+            mEdLot.requestFocus();  //如果是液体需要手动输入“批次”和“数量”,这里将光标跳到“批次（lot）”
             mEdType.setText("");
             mEdLot.setText("");
             mEdName.setText("");
@@ -241,7 +241,8 @@ public class MaterialOutScanAct extends Activity {
             for (int j = 0; j < ovList.size(); j++) {
                 Goods existGoods = ovList.get(j);
                 //相同物料不同批次的要合并，通过名字比较
-                if (hashMap.get("name").equals(existGoods.getName())) {
+                if (hashMap.get("name").equals(existGoods.getName())
+                        && hashMap.get("lot").equals(existGoods.getLot())) {
                     existGoods.setQty(existGoods.getQty() + Float.valueOf(hashMap.get("qty")));
                     return true;
                 } else {
@@ -406,7 +407,7 @@ public class MaterialOutScanAct extends Activity {
                             Toast.makeText(MaterialOutScanAct.this, "请输入数量", Toast.LENGTH_SHORT).show();
                         } else {
 //                            if (isAllEdNotNull() && ) {
-                            if (addDataToList()){
+                            if (addDataToList()) {
                                 mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
                                 ChangeAllEdTextToEmpty();
                             }
