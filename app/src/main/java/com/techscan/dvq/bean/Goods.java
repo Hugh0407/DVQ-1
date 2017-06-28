@@ -17,14 +17,13 @@ public class Goods implements Parcelable{
     String type;        //类型
     String unit;        //单位
     String lot;         //批次
+    String spec;         //规格
     float qty;          //总量
     int num;            //数目
     String pk_invbasdoc;
     String pk_invmandoc;
 
-
     public Goods() {
-
     }
 
     protected Goods(Parcel in) {
@@ -34,29 +33,11 @@ public class Goods implements Parcelable{
         type = in.readString();
         unit = in.readString();
         lot = in.readString();
+        spec = in.readString();
         qty = in.readFloat();
         num = in.readInt();
         pk_invbasdoc = in.readString();
         pk_invmandoc = in.readString();
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(barcode);
-        dest.writeString(encoding);
-        dest.writeString(name);
-        dest.writeString(type);
-        dest.writeString(unit);
-        dest.writeString(lot);
-        dest.writeFloat(qty);
-        dest.writeInt(num);
-        dest.writeString(pk_invbasdoc);
-        dest.writeString(pk_invmandoc);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
     }
 
     public static final Creator<Goods> CREATOR = new Creator<Goods>() {
@@ -119,6 +100,14 @@ public class Goods implements Parcelable{
         this.lot = lot;
     }
 
+    public String getSpec() {
+        return spec;
+    }
+
+    public void setSpec(String spec) {
+        this.spec = spec;
+    }
+
     public float getQty() {
         return qty;
     }
@@ -149,5 +138,25 @@ public class Goods implements Parcelable{
 
     public void setPk_invmandoc(String pk_invmandoc) {
         this.pk_invmandoc = pk_invmandoc;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(barcode);
+        dest.writeString(encoding);
+        dest.writeString(name);
+        dest.writeString(type);
+        dest.writeString(unit);
+        dest.writeString(lot);
+        dest.writeString(spec);
+        dest.writeFloat(qty);
+        dest.writeInt(num);
+        dest.writeString(pk_invbasdoc);
+        dest.writeString(pk_invmandoc);
     }
 }

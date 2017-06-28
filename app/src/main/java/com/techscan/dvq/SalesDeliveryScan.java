@@ -414,12 +414,12 @@ public class SalesDeliveryScan extends Activity {
             //TaskCount = TaskCount + Integer.valueOf(((JSONObject)(JsonArrays.get(i))).getString("nnum").toString());
             String TaskBatch = ((JSONObject) (jsarray.get(i))).getString("batchcode");
             if (!TaskBatch.equals("null")) {
-                if (TaskBatch.equals(bar.cBatch)) {
+                if (TaskBatch.equals(bar.cBatch.trim())) {
                     //确认了存货
+//                    Log.d(TAG, "ConformDetail: "+"进来了");
                     if (jsarray.getJSONObject(i).getString("invcode").equals(bar.cInvCode)) {
                         String nnum = ((JSONObject) (jsarray.get(i))).getString("number");
                         String ntranoutnum = ((JSONObject) (jsarray.get(i))).getString("outnumber");
-
                         String snnum = "0";
                         if (!ntranoutnum.equals("null")) {
                             snnum = (ntranoutnum.replaceAll("\\.0", ""));
@@ -464,14 +464,14 @@ public class SalesDeliveryScan extends Activity {
                         if (!ScanType.equals("销售出库")) {
                             Free1 = jsarray.getJSONObject(i).getString("vfree1");
                         }
-//	  		  				return true;
+	  		  				return true;
                     }
                 }
             }
         }
 
-        if (OkFkg.equals("ok")) {
-            currentObj = new Inventory(bar.cInvCode, tmpPK_corp, bar.AccID);
+        if (invFlg.equals("ok")) {
+            currentObj = new Inventory(bar.cInvCode, tmpPK_corp,tmpAccID);
             if (currentObj.getErrMsg() != null && !currentObj.getErrMsg().equals(""))
 
             {
@@ -482,11 +482,11 @@ public class SalesDeliveryScan extends Activity {
                 // ADD CAIXY TEST END
                 return false;
             }
-            currentObj.SetSerino(bar.cSerino);
-            currentObj.SetBatch(bar.cBatch);
+            currentObj.SetSerino(bar.cSerino.trim());
+            currentObj.SetBatch(bar.cBatch.trim());
 //            currentObj.SetcurrentID(bar.currentBox);
 //            currentObj.SettotalID(bar.TotalBox);
-            currentObj.SetAccID(bar.AccID);
+            currentObj.SetAccID(tmpAccID);
             currentObj.SetvFree1(Free1);
 
             return true;
@@ -868,23 +868,23 @@ public class SalesDeliveryScan extends Activity {
 
 
         //先注销
-//        if(!ConformDetail(barcode,bar))
-//        {
-//            txtSDScanBarcode.setText("");
-//            txtSDScanBarcode.requestFocus();
-//            return;
-//        }
+        if(!ConformDetail(barcode,bar))
+        {
+            txtSDScanBarcode.setText("");
+            txtSDScanBarcode.requestFocus();
+            return;
+        }
 //先注销
-//        if(ScanType.equals("销售出库"))
-//        {
-//            if(!ConformBatch(bar.cInvCode,bar.cBatch,bar.AccID))
-//            {
-//                //表示这个批次这里没有，需要重新打印
-//                txtSDScanBarcode.setText("");
-//                txtSDScanBarcode.requestFocus();
-//                return;
-//            }
-//        }
+        if(ScanType.equals("销售出库"))
+        {
+            if(!ConformBatch(bar.cInvCode,bar.cBatch,tmpAccID))
+            {
+                //表示这个批次这里没有，需要重新打印
+                txtSDScanBarcode.setText("");
+                txtSDScanBarcode.requestFocus();
+                return;
+            }
+        }
 //先注销
 
 //        if(OkFkg.equals("ng"))

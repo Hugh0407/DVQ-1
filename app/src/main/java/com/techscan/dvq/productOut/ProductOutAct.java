@@ -2,7 +2,9 @@ package com.techscan.dvq.productOut;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -150,7 +152,20 @@ public class ProductOutAct extends Activity {
                 }
                 break;
             case R.id.btnBack:
-                finish();
+                if (tempList != null && tempList.size() > 0) {
+                    AlertDialog.Builder bulider =
+                            new AlertDialog.Builder(this).setTitle(R.string.XunWen).setMessage("数据未保存是否退出");
+                    bulider.setNegativeButton(R.string.QuXiao, null);
+                    bulider.setPositiveButton(R.string.QueRen, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            finish();
+                        }
+                    }).create().show();
+                } else {
+                    finish();
+                }
                 break;
             case R.id.refer_department:
                 btnReferDepartment();

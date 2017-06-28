@@ -150,7 +150,7 @@ public class MainMenu extends Activity {
         //*********************************************************************
 // by liuya 时间06.27
         map = new HashMap<String, Object>();
-        map.put("ItemImage", R.drawable.ic_launcher);
+        map.put("ItemImage", R.drawable.icon_xt_zh);
         map.put("ItemText", "形态转换");
         lstImageItem.add(map);
 //*********************************************************************
