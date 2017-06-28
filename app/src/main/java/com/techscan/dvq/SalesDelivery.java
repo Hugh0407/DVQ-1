@@ -398,12 +398,12 @@ public class SalesDelivery extends Activity {
                 para.put("BillCode", sBillCode);
             }
 
-            if(tvSaleOutSelect.getText().toString().equals("退回再送"))
-            {
-                para.put("FunctionName", "GetSaledH");
-                para.put("CorpPK", sCorpPK);
-                para.put("BillCode", sBillCode);
-            }
+//            if(tvSaleOutSelect.getText().toString().equals("退回再送"))
+//            {
+//                para.put("FunctionName", "GetSaledH");
+//                para.put("CorpPK", sCorpPK);
+//                para.put("BillCode", sBillCode);
+//            }
 
 //            if(tvSaleOutSelect.getText().toString().equals("退回不送"))
 //            {
@@ -518,88 +518,88 @@ public class SalesDelivery extends Activity {
                 mapBillInfo.put("cbiztype", jas.getString("cbiztype"));
             }
 
-            if(tvSaleOutSelect.getText().toString().equals("退回再送"))
-            {
-                //mapBillInfo.put("pk_corp", jas.getString("pk_corp"));
-                mapBillInfo.put("pk_corp", jas.getString("pk_corp"));
-                mapBillInfo.put("custname", jas.getString("custname"));
-                mapBillInfo.put("pk_cubasdoc", jas.getString("pk_cubasdocc"));
-                mapBillInfo.put("pk_cumandoc", jas.getString("ccustomerid"));
-                mapBillInfo.put("billID", jas.getString("cgeneralhid"));
-                mapBillInfo.put("billCode", jas.getString("vbillcode"));
-                mapBillInfo.put("AccID", sAccID);
-                mapBillInfo.put("vdef11", jas.getString("vuserdef11"));
-                mapBillInfo.put("vdef12", jas.getString("vuserdef12"));
-                mapBillInfo.put("vdef13", jas.getString("vuserdef13"));
-                mapBillInfo.put("saleflg", "");
-                if(sAccID.equals("A"))
-                {
-                    mapBillInfo.put("coperatorid", MainLogin.objLog.UserID);//操作者
-                    mapBillInfo.put("ctransporttypeid", "0001AA100000000003U7");//运输方式ID
-                }
-                else
-                {
-                    mapBillInfo.put("coperatorid", MainLogin.objLog.UserIDB);//操作者
-                    mapBillInfo.put("ctransporttypeid", "0001DD10000000000XQT");//运输方式ID
-                }
-                mapBillInfo.put("cbiztype", jas.getString("cbiztype"));
-            }
+//            if(tvSaleOutSelect.getText().toString().equals("退回再送"))
+//            {
+//                //mapBillInfo.put("pk_corp", jas.getString("pk_corp"));
+//                mapBillInfo.put("pk_corp", jas.getString("pk_corp"));
+//                mapBillInfo.put("custname", jas.getString("custname"));
+//                mapBillInfo.put("pk_cubasdoc", jas.getString("pk_cubasdocc"));
+//                mapBillInfo.put("pk_cumandoc", jas.getString("ccustomerid"));
+//                mapBillInfo.put("billID", jas.getString("cgeneralhid"));
+//                mapBillInfo.put("billCode", jas.getString("vbillcode"));
+//                mapBillInfo.put("AccID", sAccID);
+//                mapBillInfo.put("vdef11", jas.getString("vuserdef11"));
+//                mapBillInfo.put("vdef12", jas.getString("vuserdef12"));
+//                mapBillInfo.put("vdef13", jas.getString("vuserdef13"));
+//                mapBillInfo.put("saleflg", "");
+//                if(sAccID.equals("A"))
+//                {
+//                    mapBillInfo.put("coperatorid", MainLogin.objLog.UserID);//操作者
+//                    mapBillInfo.put("ctransporttypeid", "0001AA100000000003U7");//运输方式ID
+//                }
+//                else
+//                {
+//                    mapBillInfo.put("coperatorid", MainLogin.objLog.UserIDB);//操作者
+//                    mapBillInfo.put("ctransporttypeid", "0001DD10000000000XQT");//运输方式ID
+//                }
+//                mapBillInfo.put("cbiztype", jas.getString("cbiztype"));
+//            }
 
-            if(tvSaleOutSelect.getText().toString().equals("退回不送"))
-            {
-                if(sSaleFlg.equals("T"))
-                {
-                    mapBillInfo.put("pk_corp", jas.getString("pk_corp"));
-                    mapBillInfo.put("custname", jas.getString("custname"));
-                    mapBillInfo.put("pk_cubasdoc", jas.getString("pk_cubasdoc"));
-                    mapBillInfo.put("pk_cumandoc", jas.getString("pk_cumandoc"));
-                    mapBillInfo.put("billID", jas.getString("pk_take"));
-                    mapBillInfo.put("billCode", jas.getString("vreceiptcode"));
-                    mapBillInfo.put("AccID", sAccID);
-                    mapBillInfo.put("vdef11", jas.getString("vdef11"));
-                    mapBillInfo.put("vdef12", jas.getString("vdef12"));
-                    mapBillInfo.put("vdef13", jas.getString("vdef13"));
-                    mapBillInfo.put("saleflg", "T");
-
-                    if(sAccID.equals("A"))
-                    {
-                        mapBillInfo.put("coperatorid", MainLogin.objLog.UserID);//操作者
-                        mapBillInfo.put("ctransporttypeid", "0001AA100000000003U7");//运输方式ID
-                    }
-                    else
-                    {
-                        mapBillInfo.put("coperatorid", MainLogin.objLog.UserIDB);//操作者
-                        mapBillInfo.put("ctransporttypeid", "0001DD10000000000XQT");//运输方式ID
-                    }
-                    mapBillInfo.put("cbiztype", jas.getString("cbiztype"));
-                }
-                else if (sSaleFlg.equals("D"))
-                {
-                    mapBillInfo.put("pk_corp", jas.getString("pk_corp"));
-                    mapBillInfo.put("custname", jas.getString("custname"));
-                    mapBillInfo.put("pk_cubasdoc", jas.getString("pk_cubasdoc"));
-                    mapBillInfo.put("pk_cumandoc", jas.getString("ccustomerid"));
-                    mapBillInfo.put("billID", jas.getString("csaleid"));
-                    mapBillInfo.put("billCode", jas.getString("vreceiptcode"));
-                    mapBillInfo.put("AccID", sAccID);
-                    mapBillInfo.put("vdef11", jas.getString("vdef11"));
-                    mapBillInfo.put("vdef12", jas.getString("vdef12"));
-                    mapBillInfo.put("vdef13", jas.getString("vdef13"));
-                    mapBillInfo.put("saleflg", "D");
-
-                    if(sAccID.equals("A"))
-                    {
-                        mapBillInfo.put("coperatorid", MainLogin.objLog.UserID);//操作者
-                        mapBillInfo.put("ctransporttypeid", "0001AA100000000003U7");//运输方式ID
-                    }
-                    else
-                    {
-                        mapBillInfo.put("coperatorid", MainLogin.objLog.UserIDB);//操作者
-                        mapBillInfo.put("ctransporttypeid", "0001DD10000000000XQT");//运输方式ID
-                    }
-                    mapBillInfo.put("cbiztype", jas.getString("cbiztype"));
-                }
-            }
+//            if(tvSaleOutSelect.getText().toString().equals("退回不送"))
+//            {
+//                if(sSaleFlg.equals("T"))
+//                {
+//                    mapBillInfo.put("pk_corp", jas.getString("pk_corp"));
+//                    mapBillInfo.put("custname", jas.getString("custname"));
+//                    mapBillInfo.put("pk_cubasdoc", jas.getString("pk_cubasdoc"));
+//                    mapBillInfo.put("pk_cumandoc", jas.getString("pk_cumandoc"));
+//                    mapBillInfo.put("billID", jas.getString("pk_take"));
+//                    mapBillInfo.put("billCode", jas.getString("vreceiptcode"));
+//                    mapBillInfo.put("AccID", sAccID);
+//                    mapBillInfo.put("vdef11", jas.getString("vdef11"));
+//                    mapBillInfo.put("vdef12", jas.getString("vdef12"));
+//                    mapBillInfo.put("vdef13", jas.getString("vdef13"));
+//                    mapBillInfo.put("saleflg", "T");
+//
+//                    if(sAccID.equals("A"))
+//                    {
+//                        mapBillInfo.put("coperatorid", MainLogin.objLog.UserID);//操作者
+//                        mapBillInfo.put("ctransporttypeid", "0001AA100000000003U7");//运输方式ID
+//                    }
+//                    else
+//                    {
+//                        mapBillInfo.put("coperatorid", MainLogin.objLog.UserIDB);//操作者
+//                        mapBillInfo.put("ctransporttypeid", "0001DD10000000000XQT");//运输方式ID
+//                    }
+//                    mapBillInfo.put("cbiztype", jas.getString("cbiztype"));
+//                }
+//                else if (sSaleFlg.equals("D"))
+//                {
+//                    mapBillInfo.put("pk_corp", jas.getString("pk_corp"));
+//                    mapBillInfo.put("custname", jas.getString("custname"));
+//                    mapBillInfo.put("pk_cubasdoc", jas.getString("pk_cubasdoc"));
+//                    mapBillInfo.put("pk_cumandoc", jas.getString("ccustomerid"));
+//                    mapBillInfo.put("billID", jas.getString("csaleid"));
+//                    mapBillInfo.put("billCode", jas.getString("vreceiptcode"));
+//                    mapBillInfo.put("AccID", sAccID);
+//                    mapBillInfo.put("vdef11", jas.getString("vdef11"));
+//                    mapBillInfo.put("vdef12", jas.getString("vdef12"));
+//                    mapBillInfo.put("vdef13", jas.getString("vdef13"));
+//                    mapBillInfo.put("saleflg", "D");
+//
+//                    if(sAccID.equals("A"))
+//                    {
+//                        mapBillInfo.put("coperatorid", MainLogin.objLog.UserID);//操作者
+//                        mapBillInfo.put("ctransporttypeid", "0001AA100000000003U7");//运输方式ID
+//                    }
+//                    else
+//                    {
+//                        mapBillInfo.put("coperatorid", MainLogin.objLog.UserIDB);//操作者
+//                        mapBillInfo.put("ctransporttypeid", "0001DD10000000000XQT");//运输方式ID
+//                    }
+//                    mapBillInfo.put("cbiztype", jas.getString("cbiztype"));
+//                }
+//            }
 
             //保存用表头JSONObject设置---结束
             return mapBillInfo;
@@ -637,29 +637,29 @@ public class SalesDelivery extends Activity {
 //			txtSalesDelRdcl.setText(tmprdName);
         }
 
-        if(tvSaleOutSelect.getText().toString().equals("退回再送"))
-        {
-            tmprdCode = "210";
-            if (tmpAccID.equals("A")) {
-                tmprdID = "0001AA100000000003VL";        //
-            } else if (tmpAccID.equals("B")) {
-                tmprdID = "0001DD10000000000XRG";    //
-            }
-            tmprdName = "销售退货";
-            txtSalesDelRdcl.setText(tmprdName);
-        }
+//        if(tvSaleOutSelect.getText().toString().equals("退回再送"))
+//        {
+//            tmprdCode = "210";
+//            if (tmpAccID.equals("A")) {
+//                tmprdID = "0001AA100000000003VL";        //
+//            } else if (tmpAccID.equals("B")) {
+//                tmprdID = "0001DD10000000000XRG";    //
+//            }
+//            tmprdName = "销售退货";
+//            txtSalesDelRdcl.setText(tmprdName);
+//        }
 
-        if(tvSaleOutSelect.getText().toString().equals("退回不送"))
-        {
-            tmprdCode = "210";
-            if (tmpAccID.equals("A")) {
-                tmprdID = "0001AA100000000003VL";        //
-            } else if (tmpAccID.equals("B")) {
-                tmprdID = "0001DD10000000000XRG";    //
-            }
-            tmprdName = "销售退货";
-            txtSalesDelRdcl.setText(tmprdName);
-        }
+//        if(tvSaleOutSelect.getText().toString().equals("退回不送"))
+//        {
+//            tmprdCode = "210";
+//            if (tmpAccID.equals("A")) {
+//                tmprdID = "0001AA100000000003VL";        //
+//            } else if (tmpAccID.equals("B")) {
+//                tmprdID = "0001DD10000000000XRG";    //
+//            }
+//            tmprdName = "销售退货";
+//            txtSalesDelRdcl.setText(tmprdName);
+//        }
     }
 
 
@@ -833,128 +833,126 @@ public class SalesDelivery extends Activity {
                     NewBodJSON.put("def6", tempJso.getString("vdef6"));
                 }
 
-                if(tvSaleOutSelect.getText().toString().equals("退回再送"))
-                {
-                    NewBodJSON.put("vfree1", tempJso.getString("vfree1"));
-                    NewBodJSON.put("pk_measdoc", tempJso.getString("pk_measdoc"));
-                    NewBodJSON.put("measname", tempJso.getString("measname"));
-                    NewBodJSON.put("invcode", tempJso.getString("invcode"));
-                    NewBodJSON.put("invname", tempJso.getString("invname"));
-                    NewBodJSON.put("invspec", tempJso.getString("invspec"));
-                    NewBodJSON.put("invtype", tempJso.getString("invtype"));
-                    NewBodJSON.put("billcode", tmpBillCode);
-                    NewBodJSON.put("batchcode", tempJso.getString("vbatchcode"));
-                    NewBodJSON.put("invbasdocid", tempJso.getString("cinvbasid"));
-                    NewBodJSON.put("invmandocid", tempJso.getString("cinventoryid"));
-                    String number = tempJso.getString("noutnum");
-                    String outnumber = tempJso.getString("outnum");
-                    if(!outnumber.equals("null")) {
-                        outnumber = outnumber.replaceAll("\\.0", "");
-                    } else {
-                    }
-                    if(!number.equals("null")) {
-                        number = number.replaceAll("\\.0", "");
-                    } else {
-                    }
-                    NewBodJSON.put("number", number);
-                    NewBodJSON.put("outnumber", outnumber);
-                    NewBodJSON.put("sourcerowno",  tempJso.getString("vfirstrowno"));
-                    NewBodJSON.put("sourcehid", tempJso.getString("cfirstbillhid"));
-                    NewBodJSON.put("sourcebid", tempJso.getString("cfirstbillbid"));
-                    NewBodJSON.put("sourcehcode", tempJso.getString("vfirstbillcode"));
-                    NewBodJSON.put("sourcetype", tempJso.getString("cfirsttype"));
-                    NewBodJSON.put("crowno", tempJso.getString("crowno"));
-                    NewBodJSON.put("billhid", tempJso.getString("cgeneralhid"));
-                    NewBodJSON.put("billbid", tempJso.getString("cgeneralbid"));
-                    NewBodJSON.put("billhcode", tmpBillCode);
-                    NewBodJSON.put("billtype", "4C");
-                    NewBodJSON.put("ddeliverdate", tempJso.getString("ddeliverdate"));
-                    NewBodJSON.put("pk_defdoc6", tempJso.getString("pk_defdoc6"));
-                    NewBodJSON.put("def6", tempJso.getString("vuserdef6"));
-                }
+//                if(tvSaleOutSelect.getText().toString().equals("退回再送"))  {
+//                    NewBodJSON.put("vfree1", tempJso.getString("vfree1"));
+//                    NewBodJSON.put("pk_measdoc", tempJso.getString("pk_measdoc"));
+//                    NewBodJSON.put("measname", tempJso.getString("measname"));
+//                    NewBodJSON.put("invcode", tempJso.getString("invcode"));
+//                    NewBodJSON.put("invname", tempJso.getString("invname"));
+//                    NewBodJSON.put("invspec", tempJso.getString("invspec"));
+//                    NewBodJSON.put("invtype", tempJso.getString("invtype"));
+//                    NewBodJSON.put("billcode", tmpBillCode);
+//                    NewBodJSON.put("batchcode", tempJso.getString("vbatchcode"));
+//                    NewBodJSON.put("invbasdocid", tempJso.getString("cinvbasid"));
+//                    NewBodJSON.put("invmandocid", tempJso.getString("cinventoryid"));
+//                    String number = tempJso.getString("noutnum");
+//                    String outnumber = tempJso.getString("outnum");
+//                    if(!outnumber.equals("null")) {
+//                        outnumber = outnumber.replaceAll("\\.0", "");
+//                    } else {
+//                    }
+//                    if(!number.equals("null")) {
+//                        number = number.replaceAll("\\.0", "");
+//                    } else {
+//                    }
+//                    NewBodJSON.put("number", number);
+//                    NewBodJSON.put("outnumber", outnumber);
+//                    NewBodJSON.put("sourcerowno",  tempJso.getString("vfirstrowno"));
+//                    NewBodJSON.put("sourcehid", tempJso.getString("cfirstbillhid"));
+//                    NewBodJSON.put("sourcebid", tempJso.getString("cfirstbillbid"));
+//                    NewBodJSON.put("sourcehcode", tempJso.getString("vfirstbillcode"));
+//                    NewBodJSON.put("sourcetype", tempJso.getString("cfirsttype"));
+//                    NewBodJSON.put("crowno", tempJso.getString("crowno"));
+//                    NewBodJSON.put("billhid", tempJso.getString("cgeneralhid"));
+//                    NewBodJSON.put("billbid", tempJso.getString("cgeneralbid"));
+//                    NewBodJSON.put("billhcode", tmpBillCode);
+//                    NewBodJSON.put("billtype", "4C");
+//                    NewBodJSON.put("ddeliverdate", tempJso.getString("ddeliverdate"));
+//                    NewBodJSON.put("pk_defdoc6", tempJso.getString("pk_defdoc6"));
+//                    NewBodJSON.put("def6", tempJso.getString("vuserdef6"));
+//                }
 
-                if(tvSaleOutSelect.getText().toString().equals("退回不送"))
-                {
-                    if(sSaleFlg.equals("D"))
-                    {
-                        NewBodJSON.put("vfree1", tempJso.getString("vfree1"));
-                        NewBodJSON.put("pk_measdoc", tempJso.getString("pk_measdoc"));
-                        NewBodJSON.put("measname", tempJso.getString("measname"));
-                        NewBodJSON.put("invcode", tempJso.getString("invcode"));
-                        NewBodJSON.put("invname", tempJso.getString("invname"));
-                        NewBodJSON.put("invspec", tempJso.getString("invspec"));
-                        NewBodJSON.put("invtype", tempJso.getString("invtype"));
-                        NewBodJSON.put("billcode", tmpBillCode);
-                        NewBodJSON.put("batchcode", tempJso.getString("cbatchid"));
-                        NewBodJSON.put("invbasdocid", tempJso.getString("cinvbasdocid"));
-                        NewBodJSON.put("invmandocid", tempJso.getString("cinventoryid"));
-                        String number = tempJso.getString("nnnumber");
-                        String outnumber = tempJso.getString("noutnumber");
-                        if(!outnumber.equals("null")) {
-                            outnumber = outnumber.replaceAll("\\.0", "");
-                        } else {
-                        }
-                        if(!number.equals("null")) {
-                            number = number.replaceAll("\\.0", "");
-                        } else {
-                        }
-                        NewBodJSON.put("number", number);
-                        NewBodJSON.put("outnumber", outnumber);
-                        NewBodJSON.put("sourcerowno", "");
-                        NewBodJSON.put("sourcehid", "");
-                        NewBodJSON.put("sourcebid", "");
-                        NewBodJSON.put("sourcehcode", "");
-                        NewBodJSON.put("sourcetype", "");
-                        NewBodJSON.put("crowno", tempJso.getString("crowno"));
-                        NewBodJSON.put("billhid", tempJso.getString("csaleid"));
-                        NewBodJSON.put("billbid", tempJso.getString("corder_bid"));
-                        NewBodJSON.put("billhcode", tmpBillCode);
-                        NewBodJSON.put("billtype", "30");
-                        NewBodJSON.put("ddeliverdate", tempJso.getString("dconsigndate"));
-                        NewBodJSON.put("pk_defdoc6", tempJso.getString("pk_defdoc6"));
-                        NewBodJSON.put("def6", tempJso.getString("vdef6"));
-                    }
-                    else if (sSaleFlg.equals("T"))
-                    {
-                        NewBodJSON.put("vfree1", tempJso.getString("vfree1"));
-                        NewBodJSON.put("pk_measdoc", tempJso.getString("pk_measdoc"));
-                        NewBodJSON.put("measname", tempJso.getString("measname"));
-                        NewBodJSON.put("invcode", tempJso.getString("invcode"));
-                        NewBodJSON.put("invname", tempJso.getString("invname"));
-                        NewBodJSON.put("invspec", tempJso.getString("invspec"));
-                        NewBodJSON.put("invtype", tempJso.getString("invtype"));
-                        NewBodJSON.put("billcode", tmpBillCode);
-                        NewBodJSON.put("batchcode", tempJso.getString("cbatchid"));
-                        NewBodJSON.put("invbasdocid", tempJso.getString("cinvbasdocid"));
-                        NewBodJSON.put("invmandocid", tempJso.getString("cinventoryid"));
-                        String number = tempJso.getString("ntakenumber");
-                        String outnumber = tempJso.getString("ninnumber");
-                        if(!outnumber.equals("null")) {
-                            outnumber = outnumber.replaceAll("\\.0", "");
-                        } else {
-                        }
-                        if(!number.equals("null")) {
-                            number = number.replaceAll("\\.0", "");
-                        } else {
-                        }
-                        NewBodJSON.put("number", number);
-                        NewBodJSON.put("outnumber", outnumber);
-                        NewBodJSON.put("sourcerowno", "");
-                        NewBodJSON.put("sourcehid", tempJso.getString("csourcebillid"));
-                        NewBodJSON.put("sourcebid", tempJso.getString("csourcebillbodyid"));
-                        NewBodJSON.put("sourcehcode", tempJso.getString("vsourcecode"));
-                        NewBodJSON.put("sourcetype", tempJso.getString("csourcebilltype"));
-                        NewBodJSON.put("crowno", tempJso.getString("crowno"));
-                        NewBodJSON.put("billhid", tempJso.getString("pk_take"));
-                        NewBodJSON.put("billbid", tempJso.getString("pk_take_b"));
-                        NewBodJSON.put("billhcode", tmpBillCode);
-                        NewBodJSON.put("billtype", "3V");
-                        NewBodJSON.put("ddeliverdate", "");
-                        NewBodJSON.put("pk_defdoc6", tempJso.getString("pk_defdoc6"));
-                        NewBodJSON.put("def6", tempJso.getString("vdef6"));
-                    }
-
-                }
+//                if(tvSaleOutSelect.getText().toString().equals("退回不送")) {
+//                    if(sSaleFlg.equals("D"))
+//                    {
+//                        NewBodJSON.put("vfree1", tempJso.getString("vfree1"));
+//                        NewBodJSON.put("pk_measdoc", tempJso.getString("pk_measdoc"));
+//                        NewBodJSON.put("measname", tempJso.getString("measname"));
+//                        NewBodJSON.put("invcode", tempJso.getString("invcode"));
+//                        NewBodJSON.put("invname", tempJso.getString("invname"));
+//                        NewBodJSON.put("invspec", tempJso.getString("invspec"));
+//                        NewBodJSON.put("invtype", tempJso.getString("invtype"));
+//                        NewBodJSON.put("billcode", tmpBillCode);
+//                        NewBodJSON.put("batchcode", tempJso.getString("cbatchid"));
+//                        NewBodJSON.put("invbasdocid", tempJso.getString("cinvbasdocid"));
+//                        NewBodJSON.put("invmandocid", tempJso.getString("cinventoryid"));
+//                        String number = tempJso.getString("nnnumber");
+//                        String outnumber = tempJso.getString("noutnumber");
+//                        if(!outnumber.equals("null")) {
+//                            outnumber = outnumber.replaceAll("\\.0", "");
+//                        } else {
+//                        }
+//                        if(!number.equals("null")) {
+//                            number = number.replaceAll("\\.0", "");
+//                        } else {
+//                        }
+//                        NewBodJSON.put("number", number);
+//                        NewBodJSON.put("outnumber", outnumber);
+//                        NewBodJSON.put("sourcerowno", "");
+//                        NewBodJSON.put("sourcehid", "");
+//                        NewBodJSON.put("sourcebid", "");
+//                        NewBodJSON.put("sourcehcode", "");
+//                        NewBodJSON.put("sourcetype", "");
+//                        NewBodJSON.put("crowno", tempJso.getString("crowno"));
+//                        NewBodJSON.put("billhid", tempJso.getString("csaleid"));
+//                        NewBodJSON.put("billbid", tempJso.getString("corder_bid"));
+//                        NewBodJSON.put("billhcode", tmpBillCode);
+//                        NewBodJSON.put("billtype", "30");
+//                        NewBodJSON.put("ddeliverdate", tempJso.getString("dconsigndate"));
+//                        NewBodJSON.put("pk_defdoc6", tempJso.getString("pk_defdoc6"));
+//                        NewBodJSON.put("def6", tempJso.getString("vdef6"));
+//                    }
+//                    else if (sSaleFlg.equals("T"))
+//                    {
+//                        NewBodJSON.put("vfree1", tempJso.getString("vfree1"));
+//                        NewBodJSON.put("pk_measdoc", tempJso.getString("pk_measdoc"));
+//                        NewBodJSON.put("measname", tempJso.getString("measname"));
+//                        NewBodJSON.put("invcode", tempJso.getString("invcode"));
+//                        NewBodJSON.put("invname", tempJso.getString("invname"));
+//                        NewBodJSON.put("invspec", tempJso.getString("invspec"));
+//                        NewBodJSON.put("invtype", tempJso.getString("invtype"));
+//                        NewBodJSON.put("billcode", tmpBillCode);
+//                        NewBodJSON.put("batchcode", tempJso.getString("cbatchid"));
+//                        NewBodJSON.put("invbasdocid", tempJso.getString("cinvbasdocid"));
+//                        NewBodJSON.put("invmandocid", tempJso.getString("cinventoryid"));
+//                        String number = tempJso.getString("ntakenumber");
+//                        String outnumber = tempJso.getString("ninnumber");
+//                        if(!outnumber.equals("null")) {
+//                            outnumber = outnumber.replaceAll("\\.0", "");
+//                        } else {
+//                        }
+//                        if(!number.equals("null")) {
+//                            number = number.replaceAll("\\.0", "");
+//                        } else {
+//                        }
+//                        NewBodJSON.put("number", number);
+//                        NewBodJSON.put("outnumber", outnumber);
+//                        NewBodJSON.put("sourcerowno", "");
+//                        NewBodJSON.put("sourcehid", tempJso.getString("csourcebillid"));
+//                        NewBodJSON.put("sourcebid", tempJso.getString("csourcebillbodyid"));
+//                        NewBodJSON.put("sourcehcode", tempJso.getString("vsourcecode"));
+//                        NewBodJSON.put("sourcetype", tempJso.getString("csourcebilltype"));
+//                        NewBodJSON.put("crowno", tempJso.getString("crowno"));
+//                        NewBodJSON.put("billhid", tempJso.getString("pk_take"));
+//                        NewBodJSON.put("billbid", tempJso.getString("pk_take_b"));
+//                        NewBodJSON.put("billhcode", tmpBillCode);
+//                        NewBodJSON.put("billtype", "3V");
+//                        NewBodJSON.put("ddeliverdate", "");
+//                        NewBodJSON.put("pk_defdoc6", tempJso.getString("pk_defdoc6"));
+//                        NewBodJSON.put("def6", tempJso.getString("vdef6"));
+//                    }
+//
+//                }
                 NewBodyarray.put(NewBodJSON);
             }
 

@@ -8,7 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -40,8 +40,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import static android.content.ContentValues.TAG;
-
 //import com.techscan.dvq.StockTransScan.ButtonOnClickClearconfirm;
 //import com.techscan.dvq.StockTransScanIn.MyListAdapter;
 
@@ -61,8 +59,8 @@ public class SalesDeliveryScan extends Activity {
     SalesDeliveryAdapter salesDeliveryAdapter;
 
     private ArrayList<String> ScanedBarcode = new ArrayList<String>();
-    private SplitTongChengBarCode bar = null;            //å½“å‰æ‰«ææ¡ç è§£æ
-    private Inventory currentObj = null;        //å½“å‰æ‰«æåˆ°çš„å­˜è´§ä¿¡æ¯
+    private SplitTongChengBarCode bar = null;            //µ±Ç°É¨ÃèÌõÂë½âÎö
+    private Inventory currentObj = null;        //µ±Ç°É¨Ãèµ½µÄ´æ»õĞÅÏ¢
 
     private String tmpAccID = "";
     private String tmpPK_corp = "";
@@ -70,16 +68,18 @@ public class SalesDeliveryScan extends Activity {
 
     private List<Map<String, Object>> lstBodyTask = null;
     private List<Map<String, Object>> lstSaveBody = null;
-    private List<Map<String, Object>> lstSaveBody_c = null;
+    private Map<String, Object> mapScanDetail = null;
+    private List<SaleOutGoods> saleGoodsLists = null;
 
-    //åˆ é™¤çš„ä»»åŠ¡å†…å®¹ä¸´æ—¶ä¿å­˜ä½
+
+    //É¾³ıµÄÈÎÎñÄÚÈİÁÙÊ±±£´æ×¡
     private JSONObject JsonRemoveTaskData = new JSONObject();
     //ADD BY WUQIONG START
-    //åˆ é™¤çš„ä»»åŠ¡å†…å®¹ä¸´æ—¶ä¿å­˜ä½
+    //É¾³ıµÄÈÎÎñÄÚÈİÁÙÊ±±£´æ×¡
     private JSONObject JsonModTaskData = new JSONObject();
     //ADD BY WUQIONG END
 
-    //å®šä¹‰æ˜¯å¦åˆ é™¤Dialog
+    //¶¨ÒåÊÇ·ñÉ¾³ıDialog
     private AlertDialog DeleteAlertDialog = null;
     String wareHouseID = "";
     private String[] warehouseList = null;
@@ -96,9 +96,9 @@ public class SalesDeliveryScan extends Activity {
         setContentView(R.layout.activity_sales_delivery_scan);
 
         ActionBar actionBar = this.getActionBar();
-        actionBar.setTitle("é”€å”®å‡ºåº“æ‰«ææ˜ç»†");
+        actionBar.setTitle("ÏúÊÛ³ö¿âÉ¨ÃèÃ÷Ï¸");
 
-        //è®¾ç½®æ§ä»¶
+        //ÉèÖÃ¿Ø¼ş
         txtSDScanBarcode = (EditText) findViewById(R.id.txtSDScanBarcode);
         txtSDScanBarcode.setOnKeyListener(EditTextOnKeyListener);
 
@@ -114,7 +114,7 @@ public class SalesDeliveryScan extends Activity {
         btnSDScanReturn.setOnClickListener(ButtonOnClickListener);
 
 
-        //è·å¾—çˆ¶ç”»é¢ä¼ è¿‡æ¥çš„æ•°æ®
+        //»ñµÃ¸¸»­Ãæ´«¹ıÀ´µÄÊı¾İ
         Intent myintent = getIntent();
         tmpAccID = myintent.getStringExtra("AccID");
         tmpPK_corp = myintent.getStringExtra("tmpCorpPK");
@@ -128,7 +128,7 @@ public class SalesDeliveryScan extends Activity {
 
         ScanType = myintent.getStringExtra("ScanType");
 
-        //è·å¾—çˆ¶ç”»é¢ä¼ è¿‡æ¥çš„æ‰«æè¯¦ç»†æ•°æ®
+        //»ñµÃ¸¸»­Ãæ´«¹ıÀ´µÄÉ¨ÃèÏêÏ¸Êı¾İ
         listcount = 0;
         SerializableList lstScanSaveDetial = new SerializableList();
         lstScanSaveDetial = (SerializableList) myintent.getSerializableExtra("lstScanSaveDetial");
@@ -140,7 +140,7 @@ public class SalesDeliveryScan extends Activity {
 //            {
 //                listcount=lstSaveBody.size();
 //
-//                MyListAdapter listItemAdapter = new MyListAdapter(SalesDeliveryScan.this,lstSaveBody,//æ•°æ®æº
+//                MyListAdapter listItemAdapter = new MyListAdapter(SalesDeliveryScan.this,lstSaveBody,//Êı¾İÔ´
 //                        R.layout.vlisttransscanitem,
 //                        new String[] {"InvCode","InvName","Batch","AccID","TotalNum",
 //                                "BarCode","SeriNo","BillCode","ScanedNum","box"},
@@ -168,10 +168,10 @@ public class SalesDeliveryScan extends Activity {
         wareHouseID = myintent.getStringExtra("Warehouse");
 
 
-        tvSDcounts.setText("æ€»å…±" + Tasknnum + "ä»¶ | " + "å·²æ‰«" + listcount + "ä»¶ | " + "æœªæ‰«" + (Tasknnum - listcount) + "ä»¶");
+        tvSDcounts.setText("×Ü¹²" + Tasknnum + "¼ş | " + "ÒÑÉ¨" + listcount + "¼ş | " + "Î´É¨" + (Tasknnum - listcount) + "¼ş");
 
 
-        //è·å¾—çˆ¶ç”»é¢ä¼ è¿‡æ¥çš„ä»»åŠ¡è¯¦ç»†æ•°æ®
+        //»ñµÃ¸¸»­Ãæ´«¹ıÀ´µÄÈÎÎñÏêÏ¸Êı¾İ
         String lsTaskJosnBody = myintent.getStringExtra("TaskJonsBody");
         JSONObject jonsTaskBody = null;
         try {
@@ -314,16 +314,16 @@ public class SalesDeliveryScan extends Activity {
     }
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_MENU) {//æ‹¦æˆªmeué”®äº‹ä»¶			//do something...
+        if (keyCode == KeyEvent.KEYCODE_MENU) {//À¹½Ømeu¼üÊÂ¼ş			//do something...
             return false;
         }
-        if (keyCode == KeyEvent.KEYCODE_BACK) {//æ‹¦æˆªè¿”å›æŒ‰é’®äº‹ä»¶			//do something...
+        if (keyCode == KeyEvent.KEYCODE_BACK) {//À¹½Ø·µ»Ø°´Å¥ÊÂ¼ş			//do something...
             return false;
         }
         return true;
     }
 
-    //å–å¾—ä»»åŠ¡LIST
+    //È¡µÃÈÎÎñLIST
     private void getTaskListData(JSONObject jas) throws JSONException {
         lstBodyTask = new ArrayList<Map<String, Object>>();
         Map<String, Object> map;
@@ -377,7 +377,7 @@ public class SalesDeliveryScan extends Activity {
             map.put("InvCode", ((JSONObject) (arrays.get(i))).getString("invcode"));
             String batchs = ((JSONObject) (arrays.get(i))).getString("batchcode");
             if (batchs == null || batchs.equals("") || batchs.equals("null")) {
-                batchs = "æ‰¹æ¬¡æœªæŒ‡å®š";
+                batchs = "Åú´ÎÎ´Ö¸¶¨";
             }
             //String TaskNum = ((JSONObject)(arrays.get(i))).getString("outnumber")+"/"+((JSONObject)(arrays.get(i))).getString("number");
             map.put("Batch", batchs);
@@ -397,7 +397,7 @@ public class SalesDeliveryScan extends Activity {
     }
 
 
-    //ç¡®è®¤å­˜è´§åœ¨ä¸Šæ¸¸å•æ®å†…æœ‰
+    //È·ÈÏ´æ»õÔÚÉÏÓÎµ¥¾İÄÚÓĞ
     private boolean ConformDetail(String barcode, SplitTongChengBarCode bar) throws JSONException, ParseException, IOException {
         if (jsonBodyTask == null || jsonBodyTask.length() < 1) {
             Toast.makeText(this, R.string.MeiYouZhaoDaoCanZhao, Toast.LENGTH_LONG).show();
@@ -415,7 +415,7 @@ public class SalesDeliveryScan extends Activity {
             String TaskBatch = ((JSONObject) (jsarray.get(i))).getString("batchcode");
             if (!TaskBatch.equals("null")) {
                 if (TaskBatch.equals(bar.cBatch)) {
-                    //ç¡®è®¤äº†å­˜è´§
+                    //È·ÈÏÁË´æ»õ
                     if (jsarray.getJSONObject(i).getString("invcode").equals(bar.cInvCode)) {
                         String nnum = ((JSONObject) (jsarray.get(i))).getString("number");
                         String ntranoutnum = ((JSONObject) (jsarray.get(i))).getString("outnumber");
@@ -432,12 +432,12 @@ public class SalesDeliveryScan extends Activity {
                         //String Taskbatch = ((JSONObject)(jsarray.get(i))).getString("noutnum");
 //                        if(!Tasknnum.equals("0"))
 //                        {
-////		  		  				if(!ScanType.equals("é”€å”®å‡ºåº“"))
+////		  		  				if(!ScanType.equals("ÏúÊÛ³ö¿â"))
 ////		  		  				{
-////		  		  					currentObj.SetvFree1(jsarray.getJSONObject(i).getString("vfree1"));//äº§åœ°éœ€è¦ä¿®æ”¹
+////		  		  					currentObj.SetvFree1(jsarray.getJSONObject(i).getString("vfree1"));//²úµØĞèÒªĞŞ¸Ä
 ////		  		  				}
 //                            OkFkg = "ok";
-//                            if(!ScanType.equals("é”€å”®å‡ºåº“"))
+//                            if(!ScanType.equals("ÏúÊÛ³ö¿â"))
 //                            {
 //                                Free1 = jsarray.getJSONObject(i).getString("vfree1");
 //                            }
@@ -461,7 +461,7 @@ public class SalesDeliveryScan extends Activity {
                     //String Taskbatch = ((JSONObject)(jsarray.get(i))).getString("noutnum");
                     if (!Tasknnum.equals("0")) {
                         OkFkg = "ok";
-                        if (!ScanType.equals("é”€å”®å‡ºåº“")) {
+                        if (!ScanType.equals("ÏúÊÛ³ö¿â")) {
                             Free1 = jsarray.getJSONObject(i).getString("vfree1");
                         }
 //	  		  				return true;
@@ -494,8 +494,8 @@ public class SalesDeliveryScan extends Activity {
             //String invFlg = "ng";
             //invFlg = "ok";
             if (invFlg.equals("ok")) {
-                //å­˜è´§åœ¨ä¸Šæ¸¸å•æ®ä»»åŠ¡ä¸­å·²ç»æ‰«æå®Œæ¯•
-                Toast.makeText(this, "è¶…å‡ºä¸Šæ¸¸å•æ®ä»»åŠ¡æ•°é‡,è¯¥æ¡ç ä¸èƒ½è¢«æ‰«å…¥",
+                //´æ»õÔÚÉÏÓÎµ¥¾İÈÎÎñÖĞÒÑ¾­É¨ÃèÍê±Ï
+                Toast.makeText(this, "³¬³öÉÏÓÎµ¥¾İÈÎÎñÊıÁ¿,¸ÃÌõÂë²»ÄÜ±»É¨Èë",
                         Toast.LENGTH_LONG).show();
                 // ADD CAIXY TEST START
                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
@@ -504,7 +504,7 @@ public class SalesDeliveryScan extends Activity {
             }
         }
 
-//        Toast.makeText(this, "å­˜è´§åœ¨ä¸Šæ¸¸å•æ®ä»»åŠ¡ä¸­ä¸å­˜åœ¨",
+//        Toast.makeText(this, "´æ»õÔÚÉÏÓÎµ¥¾İÈÎÎñÖĞ²»´æÔÚ",
 //                Toast.LENGTH_LONG).show();
 //        // ADD CAIXY TEST START
 //        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
@@ -515,7 +515,7 @@ public class SalesDeliveryScan extends Activity {
 //	  		OkFkg = "ng";
 //	  		for(int i = 0;i<jsarray.length();i++)
 //	  		{
-//	  			//ç¡®è®¤äº†å­˜è´§
+//	  			//È·ÈÏÁË´æ»õ
 //	  			if(jsarray.getJSONObject(i).getString("invcode").equals(bar.cInvCode))
 //	  			{
 //	  				currentObj = new Inventory(bar.cInvCode,"",bar.AccID);
@@ -533,16 +533,16 @@ public class SalesDeliveryScan extends Activity {
 //	  				currentObj.SetcurrentID(bar.currentBox);
 //	  				currentObj.SettotalID(bar.TotalBox);
 //	  				currentObj.SetAccID(bar.AccID);
-//	  				if(!ScanType.equals("é”€å”®å‡ºåº“"))
+//	  				if(!ScanType.equals("ÏúÊÛ³ö¿â"))
 //	  				{
-//	  					currentObj.SetvFree1(jsarray.getJSONObject(i).getString("vfree1"));//äº§åœ°éœ€è¦ä¿®æ”¹
+//	  					currentObj.SetvFree1(jsarray.getJSONObject(i).getString("vfree1"));//²úµØĞèÒªĞŞ¸Ä
 //	  				}
 //
 //
 //	  				return true;
 //	  			}
 //	  		}
-//	  		Toast.makeText(this, "å­˜è´§åœ¨ä¸Šæ¸¸å•æ®ä»»åŠ¡ä¸­ä¸å­˜åœ¨ï¼Œè¯·æ ¡éªŒ",
+//	  		Toast.makeText(this, "´æ»õÔÚÉÏÓÎµ¥¾İÈÎÎñÖĞ²»´æÔÚ£¬ÇëĞ£Ñé",
 //	  				Toast.LENGTH_LONG).show();
 //			// ADD CAIXY TEST START
 //			MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
@@ -631,14 +631,14 @@ public class SalesDeliveryScan extends Activity {
                 jObj.put("def6", JsonReMod.getString("def6").toString());
                 jObj.put("ddeliverdate", JsonReMod.getString("ddeliverdate").toString());
                 jObj.put("pk_defdoc6", JsonReMod.getString("pk_defdoc6").toString());
-                //éœ€è¦ä¿®æ”¹
-                //ä¿®æ”¹æ•°é‡é—®é¢˜
+                //ĞèÒªĞŞ¸Ä
+                //ĞŞ¸ÄÊıÁ¿ÎÊÌâ
                 int iTasknnum = Integer.valueOf(Tasknnum);
                 String snnum = (nnum.replaceAll("\\.0", ""));
                 int innum = Integer.valueOf(snnum);
                 int inewnnum = iTasknnum + innum;
                 String snewnnum = inewnnum + "";
-                jObj.put("number", snewnnum);//ä¿®æ”¹æ•°é‡é—®é¢˜
+                jObj.put("number", snewnnum);//ĞŞ¸ÄÊıÁ¿ÎÊÌâ
                 JSONArray JsonArraysRemod = new JSONArray();
                 JSONObject jObjReMod = new JSONObject();
                 for (int i = 0; i < JsonArrays.length(); i++) {
@@ -666,14 +666,14 @@ public class SalesDeliveryScan extends Activity {
 //        lstSDScanDetail.setAdapter(null);
         txtSDScanBarcode.setText("");
         listcount = lstSaveBody.size();
-        tvSDcounts.setText("æ€»å…±" + Tasknnum + "ä»¶ | " + "å·²æ‰«" + listcount + "ä»¶ | " + "æœªæ‰«" + (Tasknnum - listcount) + "ä»¶");
+        tvSDcounts.setText("×Ü¹²" + Tasknnum + "¼ş | " + "ÒÑÉ¨" + listcount + "¼ş | " + "Î´É¨" + (Tasknnum - listcount) + "¼ş");
 
     }
 
 
     private boolean ConformBatch(String invcode, String batch, String AccID)
             throws JSONException, ParseException, IOException {
-        //è·å¾—å½“å‰å­˜è´§çš„åº“å­˜ Jonson
+        //»ñµÃµ±Ç°´æ»õµÄ¿â´æ Jonson
         JSONObject batchList = null;
         JSONObject para = new JSONObject();
         String CompanyCode = "";
@@ -691,7 +691,7 @@ public class SalesDeliveryScan extends Activity {
         para.put("FunctionName", "GetCurrentStock");
         para.put("CompanyCode", CompanyCode);
         para.put("STOrgCode", MainLogin.objLog.STOrgCode);
-        //è¿™é‡Œçš„WareHouseéœ€è¦è®©æ“ä½œå‘˜é€‰æ‹©.
+        //ÕâÀïµÄWareHouseĞèÒªÈÃ²Ù×÷Ô±Ñ¡Ôñ.
         para.put("InvCode", invcode);
         para.put("TableName", "batch");
 
@@ -718,9 +718,9 @@ public class SalesDeliveryScan extends Activity {
 
 
         if (!batchList.getBoolean("Status")) {
-//				Toast.makeText(this, batchList.getString("æ‰¾ä¸åˆ°å¯¹åº”çš„åº“å­˜ä¿¡æ¯"),
+//				Toast.makeText(this, batchList.getString("ÕÒ²»µ½¶ÔÓ¦µÄ¿â´æĞÅÏ¢"),
 //						Toast.LENGTH_LONG).show();
-            Toast.makeText(this, "æ‰¾ä¸åˆ°å¯¹åº”çš„åº“å­˜ä¿¡æ¯", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "ÕÒ²»µ½¶ÔÓ¦µÄ¿â´æĞÅÏ¢", Toast.LENGTH_LONG).show();
             //ADD CAIXY TEST START
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             //ADD CAIXY TEST END
@@ -746,15 +746,15 @@ public class SalesDeliveryScan extends Activity {
         }
 
         if (wareHouseID != null && !wareHouseID.equals("")) {
-//				Toast.makeText(this, batchList.getString("è¯¥è´§å“åœ¨ä½ é€‰æ‹©çš„ä»“åº“ä¸­ä¸å­˜åœ¨,è¯·ä¸è¦æ‰«æè¯¥è´§å“!"),
+//				Toast.makeText(this, batchList.getString("¸Ã»õÆ·ÔÚÄãÑ¡ÔñµÄ²Ö¿âÖĞ²»´æÔÚ,Çë²»ÒªÉ¨Ãè¸Ã»õÆ·!"),
 //						Toast.LENGTH_LONG).show();
-            Toast.makeText(this, "è¯¥è´§å“åœ¨ä½ é€‰æ‹©çš„ä»“åº“ä¸­ä¸å­˜åœ¨,è¯·ä¸è¦æ‰«æè¯¥è´§å“", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "¸Ã»õÆ·ÔÚÄãÑ¡ÔñµÄ²Ö¿âÖĞ²»´æÔÚ,Çë²»ÒªÉ¨Ãè¸Ã»õÆ·", Toast.LENGTH_LONG).show();
             //ADD CAIXY TEST START
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             //ADD CAIXY TEST END
             return false;
         }
-        //éœ€è¦å¼‚å¸¸å¤„ç†ä¸€ä¸‹ã€‚
+        //ĞèÒªÒì³£´¦ÀíÒ»ÏÂ¡£
         if (array.size() != 0) {
             Object[] objs = array.toArray();
             Object[] objsname = arrayName.toArray();
@@ -792,10 +792,10 @@ public class SalesDeliveryScan extends Activity {
         return false;
     }
 
-    //æ‰«æäºŒç»´ç è§£æåŠŸèƒ½å‡½æ•°
+    //É¨Ãè¶şÎ¬Âë½âÎö¹¦ÄÜº¯Êı
     private void ScanBarcode(String barcode) throws JSONException, ParseException, IOException {
         if (barcode.equals("")) {
-            Toast.makeText(this, "è¯·æ‰«ææ¡ç ", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "ÇëÉ¨ÃèÌõÂë", Toast.LENGTH_LONG).show();
             // ADD CAIXY TEST START
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             // ADD CAIXY TEST END
@@ -805,7 +805,7 @@ public class SalesDeliveryScan extends Activity {
         txtSDScanBarcode.setText("");
         txtSDScanBarcode.requestFocus();
         //IniScan();
-        //æ¡ç åˆ†æ
+        //ÌõÂë·ÖÎö
 
         if (!MainLogin.getwifiinfo()) {
             Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
@@ -815,7 +815,7 @@ public class SalesDeliveryScan extends Activity {
 
         bar = new SplitTongChengBarCode(barcode);
         if (bar.creatorOk == false) {
-            Toast.makeText(this, "æ‰«æçš„ä¸æ˜¯æ­£ç¡®è´§å“æ¡ç ", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "É¨ÃèµÄ²»ÊÇÕıÈ·»õÆ·ÌõÂë", Toast.LENGTH_LONG).show();
             // ADD CAIXY TEST START
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             // ADD CAIXY TEST END
@@ -823,8 +823,8 @@ public class SalesDeliveryScan extends Activity {
             txtSDScanBarcode.requestFocus();
             return;
         }
-        //å…ˆæ³¨é”€
-        //åˆ¤æ–­æ˜¯å¦å·²ç»æœ‰AccID,å¦‚æœæœ‰ä½†æ˜¯å’Œæ‰«æå‡ºæ¥çš„AccIDä¸ä¸€æ ·,æç¤ºé”™è¯¯.
+        //ÏÈ×¢Ïú
+        //ÅĞ¶ÏÊÇ·ñÒÑ¾­ÓĞAccID,Èç¹ûÓĞµ«ÊÇºÍÉ¨Ãè³öÀ´µÄAccID²»Ò»Ñù,ÌáÊ¾´íÎó.
 //        if(tmpAccID!=null && !tmpAccID.equals(""))
 //        {
 //            if(!tmpAccID.equals(bar.AccID))
@@ -832,7 +832,7 @@ public class SalesDeliveryScan extends Activity {
 //
 //                txtSDScanBarcode.setText("");
 //                txtSDScanBarcode.requestFocus();
-//                Toast.makeText(this, "æ‰«æçš„æ¡ç ä¸å±äºè¯¥ä»»åŠ¡å¸å¥—,è¯¥è´§å“ä¸èƒ½å¤Ÿæ‰«å…¥", Toast.LENGTH_LONG).show();
+//                Toast.makeText(this, "É¨ÃèµÄÌõÂë²»ÊôÓÚ¸ÃÈÎÎñÕÊÌ×,¸Ã»õÆ·²»ÄÜ¹»É¨Èë", Toast.LENGTH_LONG).show();
 //                // ADD CAIXY TEST START
 //                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
 //                // ADD CAIXY TEST END
@@ -849,7 +849,7 @@ public class SalesDeliveryScan extends Activity {
                 if (BarCode.equals(FinishBarCode)) {
                     txtSDScanBarcode.setText("");
                     txtSDScanBarcode.requestFocus();
-                    Toast.makeText(this, "è¯¥æ¡ç å·²ç»è¢«æ‰«æè¿‡äº†,ä¸èƒ½å†æ¬¡æ‰«æ", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "¸ÃÌõÂëÒÑ¾­±»É¨Ãè¹ıÁË,²»ÄÜÔÙ´ÎÉ¨Ãè", Toast.LENGTH_LONG).show();
                     //ADD CAIXY TEST START
                     MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                     //ADD CAIXY TEST END
@@ -858,7 +858,7 @@ public class SalesDeliveryScan extends Activity {
             }
         }
 
-//	  		//æ ¡éªŒæµæ°´å·
+//	  		//Ğ£ÑéÁ÷Ë®ºÅ
 //	  		if(!ConformGetSERINO(barcode,bar))
 //	  		{
 //	  			txtSDScanBarcode.setText("");
@@ -867,29 +867,29 @@ public class SalesDeliveryScan extends Activity {
 //	  		}
 
 
-        //å…ˆæ³¨é”€
+        //ÏÈ×¢Ïú
 //        if(!ConformDetail(barcode,bar))
 //        {
 //            txtSDScanBarcode.setText("");
 //            txtSDScanBarcode.requestFocus();
 //            return;
 //        }
-//å…ˆæ³¨é”€
-//        if(ScanType.equals("é”€å”®å‡ºåº“"))
+//ÏÈ×¢Ïú
+//        if(ScanType.equals("ÏúÊÛ³ö¿â"))
 //        {
 //            if(!ConformBatch(bar.cInvCode,bar.cBatch,bar.AccID))
 //            {
-//                //è¡¨ç¤ºè¿™ä¸ªæ‰¹æ¬¡è¿™é‡Œæ²¡æœ‰ï¼Œéœ€è¦é‡æ–°æ‰“å°
+//                //±íÊ¾Õâ¸öÅú´ÎÕâÀïÃ»ÓĞ£¬ĞèÒªÖØĞÂ´òÓ¡
 //                txtSDScanBarcode.setText("");
 //                txtSDScanBarcode.requestFocus();
 //                return;
 //            }
 //        }
-//å…ˆæ³¨é”€
+//ÏÈ×¢Ïú
 
 //        if(OkFkg.equals("ng"))
 //        {
-//            Toast.makeText(this, "è¶…å‡ºä¸Šæ¸¸å•æ®ä»»åŠ¡æ•°é‡,è¯¥æ¡ç ä¸èƒ½è¢«æ‰«å…¥",
+//            Toast.makeText(this, "³¬³öÉÏÓÎµ¥¾İÈÎÎñÊıÁ¿,¸ÃÌõÂë²»ÄÜ±»É¨Èë",
 //                    Toast.LENGTH_LONG).show();
 //            //ADD CAIXY TEST START
 //            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
@@ -898,8 +898,8 @@ public class SalesDeliveryScan extends Activity {
 //            txtSDScanBarcode.requestFocus();
 //            return;
 //        }
-//å…ˆæ³¨é”€
-//        if(!ScanType.equals("é”€å”®å‡ºåº“"))
+//ÏÈ×¢Ïú
+//        if(!ScanType.equals("ÏúÊÛ³ö¿â"))
 //        {
 //            if(!ConformGetSERINOInfo())
 //            {
@@ -916,14 +916,14 @@ public class SalesDeliveryScan extends Activity {
             txtSDScanBarcode.setText("");
             txtSDScanBarcode.requestFocus();
             if (ScanInvOK.equals("1")) {
-                //å­˜è´§åœ¨ä¸Šæ¸¸å•æ®ä»»åŠ¡ä¸­å·²ç»æ‰«æå®Œæ¯•,ä½†æ˜¯è¿˜æœ‰æœªæ‰«å®Œçš„åˆ†åŒ…
-                Toast.makeText(this, "è¶…å‡ºä¸Šæ¸¸å•æ®ä»»åŠ¡æ•°é‡,è¯¥æ¡ç ä¸èƒ½è¢«æ‰«å…¥", Toast.LENGTH_LONG).show();
+                //´æ»õÔÚÉÏÓÎµ¥¾İÈÎÎñÖĞÒÑ¾­É¨ÃèÍê±Ï,µ«ÊÇ»¹ÓĞÎ´É¨ÍêµÄ·Ö°ü
+                Toast.makeText(this, "³¬³öÉÏÓÎµ¥¾İÈÎÎñÊıÁ¿,¸ÃÌõÂë²»ÄÜ±»É¨Èë", Toast.LENGTH_LONG).show();
                 //ADD CAIXY TEST START
                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                 //ADD CAIXY TEST END
                 return;
             }
-            Toast.makeText(this, "è¯¥æ¡ç ä¸ç¬¦åˆä»»åŠ¡é¡¹ç›®", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "¸ÃÌõÂë²»·ûºÏÈÎÎñÏîÄ¿", Toast.LENGTH_LONG).show();
             // ADD CAIXY TEST START
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             // ADD CAIXY TEST END
@@ -933,7 +933,7 @@ public class SalesDeliveryScan extends Activity {
         if (!CheckHasScaned(jsonCheckGetBillCode, bar)) {
             txtSDScanBarcode.setText("");
             txtSDScanBarcode.requestFocus();
-            Toast.makeText(this, "è¯¥æ¡ç å·²ç»è¢«æ‰«æè¿‡äº†,ä¸èƒ½å†æ¬¡æ‰«æ", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "¸ÃÌõÂëÒÑ¾­±»É¨Ãè¹ıÁË,²»ÄÜÔÙ´ÎÉ¨Ãè", Toast.LENGTH_LONG).show();
             // ADD CAIXY TEST START
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             // ADD CAIXY TEST END
@@ -943,13 +943,13 @@ public class SalesDeliveryScan extends Activity {
         //ADD BY WUQIONG START
 //        GetModTaskList(bar,jsonCheckGetBillCode);
         //ADD BY WUQIONG END
-        ReSetTaskListData();
+//        ReSetTaskListData();
         ScanedBarcode.add(FinishBarCode);
 //        MainLogin.sp.play(MainLogin.music2, 1, 1, 0, 0, 1);
     }
 
     //ADD BY WUQIONG START
-    //å®Œæˆæ‰«æåä¿®æ”¹ä»»åŠ¡é‡Œçš„é¡¹ç›®
+    //Íê³ÉÉ¨ÃèºóĞŞ¸ÄÈÎÎñÀïµÄÏîÄ¿
     private void GetModTaskList(SplitTongChengBarCode bar, JSONObject jsonCheckGetBillCode) throws JSONException {
         String lsBarInvCode = bar.cInvCode;
         String lsBarBacth = bar.cBatch;
@@ -966,7 +966,7 @@ public class SalesDeliveryScan extends Activity {
         for (int i = 0; i < JsonArrays.length(); i++) {
             String lsJsonInvCode = ((JSONObject) (JsonArrays.get(i))).getString("invcode");
             String lsJsonInvBatch = ((JSONObject) (JsonArrays.get(i))).getString("batchcode");
-            //add caixy è§£å†³æ‰«æä»»åŠ¡åŒ¹é…ä¸æ­£ç¡®é—®é¢˜
+            //add caixy ½â¾öÉ¨ÃèÈÎÎñÆ¥Åä²»ÕıÈ·ÎÊÌâ
 //            Double ldJsonInvQty = ((JSONObject)(JsonArrays.get(i))).getDouble("number");
             String nnum = ((JSONObject) (JsonArrays.get(i))).getString("number");
             String ntranoutnum = ((JSONObject) (JsonArrays.get(i))).getString("outnumber");
@@ -981,9 +981,9 @@ public class SalesDeliveryScan extends Activity {
             String Tasknnum = shouldinnum + "";
 
 
-            //add caixy è§£å†³æ‰«æä»»åŠ¡åŒ¹é…ä¸æ­£ç¡®é—®é¢˜
+            //add caixy ½â¾öÉ¨ÃèÈÎÎñÆ¥Åä²»ÕıÈ·ÎÊÌâ
             if (lsJsonInvBatch == null || lsJsonInvBatch.equals("") || lsJsonInvBatch.equals("null")) {
-                lsJsonInvBatch = "æ‰¹æ¬¡æœªæŒ‡å®š";
+                lsJsonInvBatch = "Åú´ÎÎ´Ö¸¶¨";
             }
             if (lsBarInvCode.equals(lsJsonInvCode) && !Tasknnum.equals("0"))//caixy
             {
@@ -1016,7 +1016,7 @@ public class SalesDeliveryScan extends Activity {
             String Tasknnum = shouldinnum + "";
 
             if (lsJsonInvBatch == null || lsJsonInvBatch.equals("") || lsJsonInvBatch.equals("null")) {
-                lsJsonInvBatch = "æ‰¹æ¬¡æœªæŒ‡å®š";
+                lsJsonInvBatch = "Åú´ÎÎ´Ö¸¶¨";
                 if (lsBarInvCode.equals(lsJsonInvCode) && !Tasknnum.equals("0")) {
                     if (((JSONObject) (JsonArrays.get(j))).getString("billbid").equals(Taskbid) && ((JSONObject) (JsonArrays.get(j))).getString("billhid").equals(Taskhid)) {
                         GetModTaskQty(Double.valueOf(Tasknnum),
@@ -1048,7 +1048,7 @@ public class SalesDeliveryScan extends Activity {
 //                if(temp.get("billbid").equals(sBillBID)&&temp.get("billhid").equals(sBillHID))
 //                {
 //                    inQty += Double.valueOf(temp.get("spacenum").toString());
-//                    ScanedQty = Integer.valueOf(temp.get("spacenum").toString());//add caixy e è§£å†³æ‰«ææ•°é‡é”™è¯¯
+//                    ScanedQty = Integer.valueOf(temp.get("spacenum").toString());//add caixy e ½â¾öÉ¨ÃèÊıÁ¿´íÎó
 //
 //                }
 //            }
@@ -1095,7 +1095,7 @@ public class SalesDeliveryScan extends Activity {
                 JsonModTaskItem.put("def6", ((JSONObject) JsonTaskArrays.get(iIndex)).get("def6").toString());
                 JsonModTaskItem.put("ddeliverdate", ((JSONObject) JsonTaskArrays.get(iIndex)).get("ddeliverdate").toString());
                 JsonModTaskItem.put("pk_defdoc6", ((JSONObject) JsonTaskArrays.get(iIndex)).get("pk_defdoc6").toString());
-                //éœ€è¦ä¿®æ”¹
+                //ĞèÒªĞŞ¸Ä
                 JsonModTaskItem.put("number", inQty);
 
                 String lsKey = JsonModTaskItem.getString("billbid") +
@@ -1182,56 +1182,9 @@ public class SalesDeliveryScan extends Activity {
 //        }
 //
 //    }
-    private void ReSetTaskListData() throws JSONException {
-        JSONArray JsonArrays = (JSONArray) jsonBodyTask.get("dbBody");
-        JSONArray JsonArrNew = new JSONArray();
-        for (int i = 0; i < JsonArrays.length(); i++) {
-            JSONObject jObj = new JSONObject();
-            jObj.put("vfree1", ((JSONObject) JsonArrays.get(i)).get("vfree1").toString());
-            jObj.put("pk_measdoc", ((JSONObject) JsonArrays.get(i)).get("pk_measdoc").toString());
-            jObj.put("measname", ((JSONObject) JsonArrays.get(i)).get("measname").toString());
-            jObj.put("invcode", ((JSONObject) JsonArrays.get(i)).get("invcode").toString());
-            jObj.put("invname", ((JSONObject) JsonArrays.get(i)).get("invname").toString());
-            jObj.put("invspec", ((JSONObject) JsonArrays.get(i)).get("invspec").toString());
-            jObj.put("invtype", ((JSONObject) JsonArrays.get(i)).get("invtype").toString());
-            jObj.put("billcode", ((JSONObject) JsonArrays.get(i)).get("billcode").toString());
-            jObj.put("batchcode", ((JSONObject) JsonArrays.get(i)).get("batchcode").toString());
-            jObj.put("invbasdocid", ((JSONObject) JsonArrays.get(i)).get("invbasdocid").toString());
-            jObj.put("invmandocid", ((JSONObject) JsonArrays.get(i)).get("invmandocid").toString());
-            jObj.put("number", ((JSONObject) JsonArrays.get(i)).get("number").toString());
-            jObj.put("outnumber", ((JSONObject) JsonArrays.get(i)).get("outnumber").toString());
-            jObj.put("sourcerowno", ((JSONObject) JsonArrays.get(i)).get("sourcerowno").toString());
-            jObj.put("sourcehid", ((JSONObject) JsonArrays.get(i)).get("sourcehid").toString());
-            jObj.put("sourcebid", ((JSONObject) JsonArrays.get(i)).get("sourcebid").toString());
-            jObj.put("sourcehcode", ((JSONObject) JsonArrays.get(i)).get("sourcehcode").toString());
-            jObj.put("sourcetype", ((JSONObject) JsonArrays.get(i)).get("sourcetype").toString());
-            jObj.put("crowno", ((JSONObject) JsonArrays.get(i)).get("crowno").toString());
-            jObj.put("billhid", ((JSONObject) JsonArrays.get(i)).get("billhid").toString());
-            jObj.put("billbid", ((JSONObject) JsonArrays.get(i)).get("billbid").toString());
-            jObj.put("billhcode", ((JSONObject) JsonArrays.get(i)).get("billhcode").toString());
-            jObj.put("billtype", ((JSONObject) JsonArrays.get(i)).get("billtype").toString());
-            jObj.put("def6", ((JSONObject) JsonArrays.get(i)).get("def6").toString());
-            jObj.put("ddeliverdate", ((JSONObject) JsonArrays.get(i)).get("ddeliverdate").toString());
-            jObj.put("pk_defdoc6", ((JSONObject) JsonArrays.get(i)).get("pk_defdoc6").toString());
-            String snumber = ((JSONObject) JsonArrays.get(i)).get("number").toString();
-//                    int innum = Integer.valueOf(snumber).intValue() - ScanedQty;
-
-//                    String snnum = innum +"";
-            jObj.put("number", snumber);
-
-            JsonArrNew.put(jObj);
-
-        }
 
 
-        jsonBodyTask = new JSONObject();
-        jsonBodyTask.put("Status", true);
-        jsonBodyTask.put("dbBody", JsonArrNew);
-
-    }
-
-
-//	  	//å®Œæˆæ‰«æååˆ é™¤ä»»åŠ¡é‡Œçš„é¡¹ç›®
+//	  	//Íê³ÉÉ¨ÃèºóÉ¾³ıÈÎÎñÀïµÄÏîÄ¿
 //	  	private void GetRemovedTaskList(SplitBarcode bar) throws JSONException
 //	  	{
 //	  		String lsBarInvCode = bar.cInvCode;
@@ -1248,7 +1201,7 @@ public class SalesDeliveryScan extends Activity {
 //				Double ldJsonInvQty = ((JSONObject)(JsonArrays.get(i))).getDouble("shouldoutnum");
 //				if(lsJsonInvBatch==null||lsJsonInvBatch.equals("")||lsJsonInvBatch.equals("null"))
 //				{
-//					lsJsonInvBatch="æ‰¹æ¬¡æœªæŒ‡å®š";
+//					lsJsonInvBatch="Åú´ÎÎ´Ö¸¶¨";
 //				}
 //				if(lsBarInvCode.equals(lsJsonInvCode))
 //				{
@@ -1268,7 +1221,7 @@ public class SalesDeliveryScan extends Activity {
 //				Double ldJsonInvQty = ((JSONObject)(JsonArrays.get(j))).getDouble("shouldoutnum");
 //				if(lsJsonInvBatch==null||lsJsonInvBatch.equals("")||lsJsonInvBatch.equals("null"))
 //				{
-//					lsJsonInvBatch="æ‰¹æ¬¡æœªæŒ‡å®š";
+//					lsJsonInvBatch="Åú´ÎÎ´Ö¸¶¨";
 //				}
 //				if(lsBarInvCode.equals(lsJsonInvCode))
 //				{
@@ -1284,7 +1237,7 @@ public class SalesDeliveryScan extends Activity {
 //
 //
 //
-//        //è·å¾—å½“å‰å•æ®çš„æµæ°´å·
+//        //»ñµÃµ±Ç°µ¥¾İµÄÁ÷Ë®ºÅ
 //        JSONObject SERINOList = null;
 //        JSONObject para = new JSONObject();
 //
@@ -1331,7 +1284,7 @@ public class SalesDeliveryScan extends Activity {
 //            }
 //            else
 //            {
-//                Toast.makeText(this, "æ‰«æçš„æ¡ç æµæ°´å·åœ¨ä»“åº“ä¸­å·²ç»å­˜åœ¨,è¯¥æ¡ç ä¸èƒ½è¢«æ‰«å…¥",
+//                Toast.makeText(this, "É¨ÃèµÄÌõÂëÁ÷Ë®ºÅÔÚ²Ö¿âÖĞÒÑ¾­´æÔÚ,¸ÃÌõÂë²»ÄÜ±»É¨Èë",
 //                        Toast.LENGTH_LONG).show();
 //                //ADD CAIXY TEST START
 //                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
@@ -1340,7 +1293,7 @@ public class SalesDeliveryScan extends Activity {
 //        }
 //    }
 
-    //ç¡®è®¤å¦‚æœæœ‰ä¸Šæ¸¸å•æ®,é‚£ä¹ˆåˆ¤æ–­æ˜¯å¦è¶…è¿‡å…¶æ•°é‡
+    //È·ÈÏÈç¹ûÓĞÉÏÓÎµ¥¾İ,ÄÇÃ´ÅĞ¶ÏÊÇ·ñ³¬¹ıÆäÊıÁ¿
     private boolean ConformDetailQty(Double Qty, String sBillBID, String sBillHID) throws JSONException {
         ScanInvOK = "1";
         if (lstSaveBody == null || lstSaveBody.size() < 1) {
@@ -1372,7 +1325,7 @@ public class SalesDeliveryScan extends Activity {
         return true;
     }
 
-    //åˆ¤æ–­è¯¥æ‰«ææ¡ç å±äºå“ªæ¡å•æ®è¡Œ
+    //ÅĞ¶Ï¸ÃÉ¨ÃèÌõÂëÊôÓÚÄÄÌõµ¥¾İĞĞ
     private JSONObject CheckGetBillCode(SplitTongChengBarCode bar) throws JSONException {
         String lsBarInvCode = bar.cInvCode;
         String lsBarBacth = bar.cBatch;
@@ -1389,7 +1342,7 @@ public class SalesDeliveryScan extends Activity {
             }
             Double ldJsonInvQty = ((JSONObject) (JsonArrays.get(i))).getDouble("number") - Double.valueOf(Outnum);
             if (lsJsonInvBatch == null || lsJsonInvBatch.equals("") || lsJsonInvBatch.equals("null")) {
-                lsJsonInvBatch = "æ‰¹æ¬¡æœªæŒ‡å®š";
+                lsJsonInvBatch = "Åú´ÎÎ´Ö¸¶¨";
             }
             if (lsBarInvCode.equals(lsJsonInvCode) && ldJsonInvQty > 0) {
 //                if(lsBarBacth.equals(lsJsonInvBatch))
@@ -1404,7 +1357,7 @@ public class SalesDeliveryScan extends Activity {
             }
         }
 
-        if (ScanType.equals("é”€å”®å‡ºåº“")) {
+        if (ScanType.equals("ÏúÊÛ³ö¿â")) {
             for (int j = 0; j < JsonArrays.length(); j++) {
                 String lsJsonInvCode = ((JSONObject) (JsonArrays.get(j))).getString("invcode");
                 String lsJsonInvBatch = ((JSONObject) (JsonArrays.get(j))).getString("batchcode");
@@ -1420,9 +1373,9 @@ public class SalesDeliveryScan extends Activity {
                 Double ldJsonInvQty = ((JSONObject) (JsonArrays.get(j))).getDouble("number") - Double.valueOf(Outnum);
 
                 if (lsJsonInvBatch == null || lsJsonInvBatch.equals("") || lsJsonInvBatch.equals("null")) {
-                    lsJsonInvBatch = "æ‰¹æ¬¡æœªæŒ‡å®š";
+                    lsJsonInvBatch = "Åú´ÎÎ´Ö¸¶¨";
                 }
-                if (lsBarInvCode.equals(lsJsonInvCode) && ldJsonInvQty > 0 && lsJsonInvBatch.equals("æ‰¹æ¬¡æœªæŒ‡å®š")) {
+                if (lsBarInvCode.equals(lsJsonInvCode) && ldJsonInvQty > 0 && lsJsonInvBatch.equals("Åú´ÎÎ´Ö¸¶¨")) {
 //                    if(ConformDetailQty(ldJsonInvQty,
 //                            ((JSONObject)(JsonArrays.get(j))).getString("billbid"),((JSONObject)(JsonArrays.get(j))).getString("billhid")))
 //                    {
@@ -1437,9 +1390,9 @@ public class SalesDeliveryScan extends Activity {
     }
 
     /**
-     * åˆ¤æ–­è¯¥æ¡ç æ˜¯å¦å·²ç»è¢«æ‰«æè¿‡äº†
+     * ÅĞ¶Ï¸ÃÌõÂëÊÇ·ñÒÑ¾­±»É¨Ãè¹ıÁË
      *
-     * @return å¦‚æœä¸ºtrue ä»£è¡¨æ²¡æœ‰è¢«æ‰«æè¿‡,å¦‚æœfalse ä»£è¡¨å·²ç»è¢«æ‰«æè¿‡äº†
+     * @return Èç¹ûÎªtrue ´ú±íÃ»ÓĞ±»É¨Ãè¹ı,Èç¹ûfalse ´ú±íÒÑ¾­±»É¨Ãè¹ıÁË
      * @throws JSONException
      */
     private Boolean CheckHasScaned(JSONObject jsonCheckGetBillCode, SplitTongChengBarCode bar) throws JSONException {
@@ -1478,9 +1431,9 @@ public class SalesDeliveryScan extends Activity {
 
     private void BindingScanDetail(JSONObject jsonCheckGetBillCode, SplitTongChengBarCode bar,
                                    String sType, Map<String, Object> mapGetScanedDetail) throws JSONException {
-        ArrayList<Map<String, Object>> lstCurrentBox = null;
+//        ArrayList<Map<String, Object>> lstCurrentBox = null;
 //        Map<String,Object> mapCurrentBox = new HashMap<String,Object>();
-        Map<String, Object> mapScanDetail = new HashMap<String, Object>();
+        mapScanDetail = new HashMap<String, Object>();
 
 //        if(lstSaveBody==null || lstSaveBody.size()<1)
 //        {
@@ -1491,16 +1444,16 @@ public class SalesDeliveryScan extends Activity {
 //        mapCurrentBox.put("TotalBox", bar.TotalBox);
 //        mapCurrentBox.put("FinishBarCode", bar.FinishBarCode);
 //        mapCurrentBox.put("BoxNum", Integer.parseInt(bar.currentBox) + "/" + Integer.parseInt(bar.TotalBox));
-
-        String lsKey = jsonCheckGetBillCode.getString("billcode")
-                + bar.AccID + bar.cInvCode + bar.cBatch + bar.cSerino;
+//
+//        String lsKey = jsonCheckGetBillCode.getString("billcode")
+//                + bar.AccID + bar.cInvCode + bar.cBatch + bar.cSerino;
 
 //            lstCurrentBox = new ArrayList<Map<String,Object>>();
 //            lstCurrentBox.add(mapCurrentBox);
 
 //            mapScanDetail.put(lsKey,lstCurrentBox);
         mapScanDetail.put("InvName", jsonCheckGetBillCode.getString("invname"));
-        mapScanDetail.put("InvCode", jsonCheckGetBillCode.getString("invcode"));
+        mapScanDetail.put("InvCode", bar.cInvCode);
         mapScanDetail.put("AccID", tmpAccID);
         mapScanDetail.put("QTY", bar.QTY);
         mapScanDetail.put("NUM", bar.NUM);
@@ -1511,43 +1464,42 @@ public class SalesDeliveryScan extends Activity {
         mapScanDetail.put("BarCode", bar.FinishBarCode);
 //            mapScanDetail.put("TotalNum", Integer.parseInt(currentObj.totalID()));
 //            mapScanDetail.put("ScanedNum", lstCurrentBox.size());
-        //å¼€å§‹å•æ®è¡Œå·
+        //¿ªÊ¼µ¥¾İĞĞºÅ
         mapScanDetail.put("sourcerowno", jsonCheckGetBillCode.getString("sourcerowno"));
-        //æºå•å•æ®è¡Œå·(å‚ç…§å• )
+        //Ô´µ¥µ¥¾İĞĞºÅ(²ÎÕÕµ¥ )
         mapScanDetail.put("crowno", jsonCheckGetBillCode.getString("crowno"));
-        //å¼€å§‹å•è¡¨å¤´
+        //¿ªÊ¼µ¥±íÍ·
         mapScanDetail.put("sourcehid", jsonCheckGetBillCode.getString("sourcehid"));
-        //æºå•è¡¨å¤´(å‚ç…§å• )
+        //Ô´µ¥±íÍ·(²ÎÕÕµ¥ )
         mapScanDetail.put("billhid", jsonCheckGetBillCode.getString("billhid"));
-        //å¼€å§‹å•è¡¨ä½“
+        //¿ªÊ¼µ¥±íÌå
         mapScanDetail.put("sourcebid", jsonCheckGetBillCode.getString("sourcebid"));
-        //æºå•è¡¨ä½“(å‚ç…§å• )
+        //Ô´µ¥±íÌå(²ÎÕÕµ¥ )
         mapScanDetail.put("billbid", jsonCheckGetBillCode.getString("billbid"));
-        //å¼€å§‹å•æ®ç±»å‹
+        //¿ªÊ¼µ¥¾İÀàĞÍ
         mapScanDetail.put("sourcetype", jsonCheckGetBillCode.getString("sourcetype"));
-        //æºå•æ®ç±»å‹(å‚ç…§å• )
+        //Ô´µ¥¾İÀàĞÍ(²ÎÕÕµ¥ )
         mapScanDetail.put("billtype", jsonCheckGetBillCode.getString("billtype"));
-        //å¼€å§‹å•æ®å·
+        //¿ªÊ¼µ¥¾İºÅ
         mapScanDetail.put("sourcehcode", jsonCheckGetBillCode.getString("sourcehcode"));
-        //å•æ®å·(å‚ç…§å• )
+        //µ¥¾İºÅ(²ÎÕÕµ¥ )
         mapScanDetail.put("billhcode", jsonCheckGetBillCode.getString("billhcode"));
         mapScanDetail.put("BillCode", jsonCheckGetBillCode.getString("billhcode"));
         mapScanDetail.put("pk_defdoc6", jsonCheckGetBillCode.getString("pk_defdoc6"));
         mapScanDetail.put("def6", jsonCheckGetBillCode.getString("def6"));
         mapScanDetail.put("ddeliverdate", jsonCheckGetBillCode.getString("ddeliverdate"));
         mapScanDetail.put("pk_measdoc", jsonCheckGetBillCode.getString("pk_measdoc"));
-        //å­˜è´§åŸºæœ¬æ ‡è¯†
+        //´æ»õ»ù±¾±êÊ¶
         mapScanDetail.put("invbasdocid", jsonCheckGetBillCode.getString("invbasdocid"));
-        //å­˜è´§ç®¡ç†ID
+        //´æ»õ¹ÜÀíID
 //            mapScanDetail.put("invmandocid", currentObj.Invmandoc());
-        //è‡ªç”±é¡¹ä¸€
+        //×ÔÓÉÏîÒ»
 //            mapScanDetail.put("free1", currentObj.vFree1());
-        //å•æ®æ‰¹æ¬¡
+        //µ¥¾İÅú´Î
         mapScanDetail.put("billbatchcode", jsonCheckGetBillCode.getString("batchcode"));
-        //æ‰¹æ¬¡
-        mapScanDetail.put("batchcode", bar.cBatch);
+        //Åú´Î
 
-        //è¯¥è´§ä½è¯¥å­˜è´§ç¼–ç æ‰¹æ¬¡æœ‰å‡ ä»¶è´§?
+        //¸Ã»õÎ»¸Ã´æ»õ±àÂëÅú´ÎÓĞ¼¸¼ş»õ?
 //            if(Integer.parseInt(currentObj.totalID())==lstCurrentBox.size())
 //            {
 //                mapScanDetail.put("spacenum", "1");
@@ -1557,16 +1509,79 @@ public class SalesDeliveryScan extends Activity {
 //            else
 //            {
 //                mapScanDetail.put("spacenum", "0");
-//                mapScanDetail.put("box", "åˆ†åŒ…æœªå®Œ");
+//                mapScanDetail.put("box", "·Ö°üÎ´Íê");
 //            }
         lstSaveBody.add(mapScanDetail);
-        Log.d(TAG, "BindingScanDetail: " + lstSaveBody.size());
+//        Log.d(TAG, "BindingScanDetail: " + lstSaveBody.size());
+
+        int count = lstSaveBody.size();
+        Map<String, Object> mapScanDetails;
+        saleGoodsLists = new ArrayList<SaleOutGoods>();
+        for (int i = 0;i<count; i++){
+            mapScanDetails = lstSaveBody.get(i);
+        if (saleGoodsLists.size()==0){
+            SaleOutGoods saleOutGoods = new SaleOutGoods();
+            saleOutGoods.setBarcode((String) mapScanDetails.get("BarCode"));
+            saleOutGoods.setInvCode((String) mapScanDetails.get("InvCode"));
+            saleOutGoods.setInvName((String) mapScanDetails.get("InvName"));
+            saleOutGoods.setPk_invbasdoc((String) mapScanDetails.get("InvCode"));
+            saleOutGoods.setPk_invmandoc((String) mapScanDetails.get("InvCode"));
+            saleOutGoods.setBatch((String) mapScanDetails.get("Batch"));
+            saleOutGoods.setUnit((String) mapScanDetails.get("Measname"));
+            String qty = String.valueOf(mapScanDetails.get("Weights"));
+            if (TextUtils.isEmpty(qty)) {
+                qty = "0.0";
+            }
+            saleOutGoods.setQty(Float.valueOf(qty));
+            saleGoodsLists.add(saleOutGoods);
+        }else {
+            for (int j = 0; j< saleGoodsLists.size(); j++) {
+                SaleOutGoods existGoods = saleGoodsLists.get(j);
+                //ÏàÍ¬ÎïÁÏÏàÍ¬Åú´ÎµÄÒªºÏ²¢£¬Í¨¹ıÃû×ÖºÍÅú´Î±È½Ï
+                if (mapScanDetails.get("InvName").equals(existGoods.getInvName())&&mapScanDetails.get("Batch").equals(existGoods.getBatch())) {
+                    existGoods.setQty(existGoods.getQty() + Float.valueOf((String )mapScanDetails.get("Weights")));
+                } else {
+                    SaleOutGoods saleOutGoods_c = new SaleOutGoods();
+                    saleOutGoods_c.setBarcode((String) mapScanDetails.get("BarCode"));
+                    saleOutGoods_c.setInvCode((String) mapScanDetails.get("InvCode"));
+                    saleOutGoods_c.setInvName((String) mapScanDetails.get("InvName"));
+                    saleOutGoods_c.setPk_invbasdoc((String) mapScanDetails.get("InvCode"));
+                    saleOutGoods_c.setPk_invmandoc((String) mapScanDetails.get("InvCode"));
+                    saleOutGoods_c.setBatch((String) mapScanDetails.get("Batch"));
+                    saleOutGoods_c.setUnit((String) mapScanDetails.get("Measname"));
+                    String qty = String.valueOf(mapScanDetails.get("Weights"));
+                    if (TextUtils.isEmpty(qty)) {
+                        qty = "0.0";
+                    }
+                    saleOutGoods_c.setQty(Float.valueOf(qty));
+                    saleGoodsLists.add(saleOutGoods_c);
+                }
+            }
+        }
+        }
+//        for (int i = 0; i < count; i++) {
+//            map = (HashMap<String, Object>) lstSaveBody.get(i);
+//            saleOutGoods = new SaleOutGoods();
+//            saleOutGoods.setBarcode((String) map.get("BarCode"));
+//            saleOutGoods.setInvCode((String) map.get("InvCode"));
+//            saleOutGoods.setInvName((String) map.get("InvName"));
+//            saleOutGoods.setBatch((String) map.get("Batch"));
+//            saleOutGoods.setPk_invbasdoc((String) map.get("BarCode"));
+//            saleOutGoods.setPk_invmandoc((String) map.get("BarCode"));
+//            saleOutGoods.setUnit((String) map.get("Measname"));
+//            String qty = String.valueOf(map.get("qty"));
+//            if (TextUtils.isEmpty(qty)) {
+//                qty = "0.0";
+//            }
+//            saleOutGoods.setQty(Float.valueOf((String) map.get("Weights")));
+//            saleGoodsLists.add(saleOutGoods);
+//        }
 //        salesDeliveryAdapter = new SalesDeliveryAdapter(SalesDeliveryScan.this, lstSaveBody);
 //        lstSDScanDetail.setAdapter(salesDeliveryAdapter);
         salesDeliveryAdapter.notifyDataSetInvalidated();
         listcount = lstSaveBody.size();
-        tvSDcounts.setText("æ€»å…±" + Tasknnum + "ä»¶ | " + "å·²æ‰«" + listcount + "ä»¶ | " + "æœªæ‰«" + (Tasknnum - listcount) + "ä»¶");
-//        MyListAdapter listItemAdapter = new MyListAdapter(SalesDeliveryScan.this,lstSaveBody,//æ•°æ®æº
+        tvSDcounts.setText("×ÜÖØ" + Tasknnum + "¼ş | " + "ÒÑÉ¨" + listcount + "¼ş | " + "Î´É¨" + (Tasknnum - listcount) + "¼ş");
+//        MyListAdapter listItemAdapter = new MyListAdapter(SalesDeliveryScan.this,lstSaveBody,//Êı¾İÔ´
 //                R.layout.vlisttransscanitem,
 ////					new String[] {"InvCode","InvName","Batch","AccID","TotalNum",
 ////							"BarCode","SeriNo","BillCode","ScanedNum"},
@@ -1605,19 +1620,19 @@ public class SalesDeliveryScan extends Activity {
 //                            mapCurrent.get("SeriNo").toString();
 //                    ArrayList<Map<String,Object>> lstCurrent =
 //                            (ArrayList<Map<String,Object>>)mapCurrent.get(lsKey);
-//                    SimpleAdapter listItemAdapter = new SimpleAdapter(SalesDeliveryScan.this,lstCurrent,//æ•°æ®æº
+//                    SimpleAdapter listItemAdapter = new SimpleAdapter(SalesDeliveryScan.this,lstCurrent,//Êı¾İÔ´
 //                            android.R.layout.simple_list_item_2,
 //                            new String[] {"BoxNum","FinishBarCode"},
 //                            new int[] {android.R.id.text1,android.R.id.text2}
 //                    );
-//                    new AlertDialog.Builder(SalesDeliveryScan.this).setTitle("åˆ†åŒ…è¯¦ç»†ä¿¡æ¯")
+//                    new AlertDialog.Builder(SalesDeliveryScan.this).setTitle("·Ö°üÏêÏ¸ĞÅÏ¢")
 //                            .setAdapter(listItemAdapter, null)
 //                            .setPositiveButton(R.string.QueRen,null).show();
 //                }
 //
 //            };
 //
-//    //é•¿æŒ‰æ‰«æè¯¦ç»†ï¼Œåˆ é™¤è¯¥æ¡è®°å½•
+//    //³¤°´É¨ÃèÏêÏ¸£¬É¾³ı¸ÃÌõ¼ÇÂ¼
 //    private OnItemLongClickListener myListItemLongListener =
 //            new OnItemLongClickListener()
 //            {
@@ -1646,10 +1661,10 @@ public class SalesDeliveryScan extends Activity {
 //            };
 
 
-    //åˆ é™¤å·²æ‰«æçš„å†…å®¹
+    //É¾³ıÒÑÉ¨ÃèµÄÄÚÈİ
     //int iIndex,String sKey
     private void ConfirmDelItem(int iIndex, String sKey, String BarCode) throws JSONException {
-        //åˆ é™¤ä¿å­˜åœ¨å†…å­˜çš„æ‰«æè¯¦ç»†
+        //É¾³ı±£´æÔÚÄÚ´æµÄÉ¨ÃèÏêÏ¸
         lstSaveBody.remove(iIndex);
 
         if (ScanedBarcode != null || ScanedBarcode.size() > 0) {
@@ -1667,7 +1682,7 @@ public class SalesDeliveryScan extends Activity {
 
 
         listcount = lstSaveBody.size();
-        tvSDcounts.setText("æ€»å…±" + Tasknnum + "ä»¶ | " + "å·²æ‰«" + listcount + "ä»¶ | " + "æœªæ‰«" + (Tasknnum - listcount) + "ä»¶");
+        tvSDcounts.setText("×Ü¹²" + Tasknnum + "¼ş | " + "ÒÑÉ¨" + listcount + "¼ş | " + "Î´É¨" + (Tasknnum - listcount) + "¼ş");
 
 
         MyListAdapter listItemAdapter = (MyListAdapter) lstSDScanDetail.getAdapter();
@@ -1682,7 +1697,7 @@ public class SalesDeliveryScan extends Activity {
             return;
 
 
-        //æ¢å¤ä¹‹å‰åˆ é™¤çš„ä»»åŠ¡æ•°æ®
+        //»Ö¸´Ö®Ç°É¾³ıµÄÈÎÎñÊı¾İ
         JSONArray JsonArrays = (JSONArray) jsonBodyTask.getJSONArray("dbBody");
 
         if (JsonModTaskData.has(sKey)) {
@@ -1705,7 +1720,7 @@ public class SalesDeliveryScan extends Activity {
                     Tasknnum = ((JSONObject) (JsonArrays.get(i))).getString("number");
                 }
             }
-            //ä¿®æ”¹
+            //ĞŞ¸Ä
             jObj.put("vfree1", JsonReMod.getString("vfree1").toString());
             jObj.put("pk_measdoc", JsonReMod.getString("pk_measdoc").toString());
             jObj.put("measname", JsonReMod.getString("measname").toString());
@@ -1733,9 +1748,9 @@ public class SalesDeliveryScan extends Activity {
             jObj.put("ddeliverdate", JsonReMod.getString("ddeliverdate").toString());
             jObj.put("pk_defdoc6", JsonReMod.getString("pk_defdoc6").toString());
 
-            //éœ€è¦ä¿®æ”¹
+            //ĞèÒªĞŞ¸Ä
 
-            //ä¿®æ”¹æ•°é‡é—®é¢˜
+            //ĞŞ¸ÄÊıÁ¿ÎÊÌâ
             int iTasknnum = Integer.valueOf(Tasknnum);
 
             String snnum = (nnum.replaceAll("\\.0", ""));
@@ -1745,7 +1760,7 @@ public class SalesDeliveryScan extends Activity {
             int inewnnum = iTasknnum + innum;
             String snewnnum = inewnnum + "";
 
-            jObj.put("number", snewnnum);//ä¿®æ”¹æ•°é‡é—®é¢˜
+            jObj.put("number", snewnnum);//ĞŞ¸ÄÊıÁ¿ÎÊÌâ
 
             JSONArray JsonArraysRemod = new JSONArray();
             JSONObject jObjReMod = new JSONObject();
@@ -1779,7 +1794,7 @@ public class SalesDeliveryScan extends Activity {
 
     }
 
-    //åˆ é™¤å·²æ‰«æè¯¦ç»†çš„ç›‘å¬äº‹ä»¶
+    //É¾³ıÒÑÉ¨ÃèÏêÏ¸µÄ¼àÌıÊÂ¼ş
     private class ButtonOnClickDelconfirm implements DialogInterface.OnClickListener {
 
         public int index;
@@ -1810,7 +1825,7 @@ public class SalesDeliveryScan extends Activity {
 
     }
 
-    //EditTextè¾“å…¥åå›è½¦çš„ç›‘å¬äº‹ä»¶
+    //EditTextÊäÈëºó»Ø³µµÄ¼àÌıÊÂ¼ş
     private OnKeyListener EditTextOnKeyListener = new OnKeyListener() {
         @Override
         public boolean onKey(View v, int arg1, KeyEvent arg2) {
@@ -1855,12 +1870,12 @@ public class SalesDeliveryScan extends Activity {
         }
     };
 
-    //ButtonæŒ‰ä¸‹åçš„ç›‘å¬äº‹ä»¶
+    //Button°´ÏÂºóµÄ¼àÌıÊÂ¼ş
     private OnClickListener ButtonOnClickListener = new OnClickListener() {
 
         @Override
         public void onClick(View v) {
-            switch (v.getId()) {            //btnSDScanReturn
+            switch (v.getId()) {
                 case id.btnSDScanTask:
 
                     if (lstBodyTask == null || lstBodyTask.size() < 1)
@@ -1873,7 +1888,7 @@ public class SalesDeliveryScan extends Activity {
                                     R.id.txtTranstaskBatch, R.id.txtTranstaskAccId,
                                     R.id.txtTranstaskInvNum, R.id.txtTranstaskBillCode}
                     );
-                    new AlertDialog.Builder(SalesDeliveryScan.this).setTitle("æºå•ä¿¡æ¯")
+                    new AlertDialog.Builder(SalesDeliveryScan.this).setTitle("Ô´µ¥ĞÅÏ¢")
                             .setAdapter(listItemAdapter, null)
                             .setPositiveButton(R.string.QueRen, null).show();
                     break;
@@ -1884,31 +1899,31 @@ public class SalesDeliveryScan extends Activity {
                         return;
 
                     ButtonOnClickClearconfirm btnScanItemClearOnClick = new ButtonOnClickClearconfirm();
-                    DeleteAlertDialog = new AlertDialog.Builder(SalesDeliveryScan.this).setTitle("ç¡®è®¤æ¸…ç©º")
-                            .setMessage("ä½ ç¡®è®¤è¦æ¸…ç©ºè®°å½•å—?")
+                    DeleteAlertDialog = new AlertDialog.Builder(SalesDeliveryScan.this).setTitle("È·ÈÏÇå¿Õ")
+                            .setMessage("ÄãÈ·ÈÏÒªÇå¿Õ¼ÇÂ¼Âğ?")
                             .setPositiveButton(R.string.QueRen, btnScanItemClearOnClick).setNegativeButton(R.string.QuXiao, null).show();
 
                     break;
                 case id.btnSDScanReturn:
 
 
-                    int count = lstSaveBody.size();
-                    List<SaleOutGoods> saleGoodsLists = new ArrayList<SaleOutGoods>();
-                    HashMap<String, Object> map;
-                    SaleOutGoods saleOutGoods = null;
-                    for (int i = 0; i < count; i++) {
-                        map = (HashMap<String, Object>) lstSaveBody.get(i);
-                        saleOutGoods = new SaleOutGoods();
-                        saleOutGoods.setBarcode((String) map.get("BarCode"));
-                        saleOutGoods.setInvCode((String) map.get("InvCode"));
-                        saleOutGoods.setInvName((String) map.get("InvName"));
-                        saleOutGoods.setBatch((String) map.get("Batch"));
-                        saleOutGoods.setPk_invbasdoc((String) map.get("BarCode"));
-                        saleOutGoods.setPk_invmandoc((String) map.get("BarCode"));
-                        saleOutGoods.setUnit((String) map.get("Measname"));
-                        saleOutGoods.setQty(Float.valueOf((String) map.get("Weights")));
-                        saleGoodsLists.add(saleOutGoods);
-                    }
+//                    int count = lstSaveBody.size();
+//                    List<SaleOutGoods> saleGoodsLists = new ArrayList<SaleOutGoods>();
+//                    HashMap<String, Object> map;
+//                    SaleOutGoods saleOutGoods = null;
+//                    for (int i = 0; i < count; i++) {
+//                        map = (HashMap<String, Object>) lstSaveBody.get(i);
+//                        saleOutGoods = new SaleOutGoods();
+//                        saleOutGoods.setBarcode((String) map.get("BarCode"));
+//                        saleOutGoods.setInvCode((String) map.get("InvCode"));
+//                        saleOutGoods.setInvName((String) map.get("InvName"));
+//                        saleOutGoods.setBatch((String) map.get("Batch"));
+//                        saleOutGoods.setPk_invbasdoc((String) map.get("BarCode"));
+//                        saleOutGoods.setPk_invmandoc((String) map.get("BarCode"));
+//                        saleOutGoods.setUnit((String) map.get("Measname"));
+//                        saleOutGoods.setQty(Float.valueOf((String) map.get("Weights")));
+//                        saleGoodsLists.add(saleOutGoods);
+//                    }
                     if (saleGoodsLists.size() > 0 || saleGoodsLists != null) {
                         Intent intent = new Intent();
                         Bundle bundle = new Bundle();
@@ -1933,10 +1948,10 @@ public class SalesDeliveryScan extends Activity {
         private LayoutInflater inflater = null;
         private List<Map<String, Object>> list = null;
         private String keyString[] = new String[]{};
-        private String itemString0 = null; // è®°å½•æ¯ä¸ªitemä¸­textviewçš„å€¼
+        private String itemString0 = null; // ¼ÇÂ¼Ã¿¸öitemÖĞtextviewµÄÖµ
         private String itemString1 = null;
         private String itemString2 = null;
-        private int idValue[] = null;// idå€¼
+        private int idValue[] = null;// idÖµ
 
         public MyListAdapter(Context context, List<Map<String, Object>> list,
                              int resource, String[] from, int[] to) {
