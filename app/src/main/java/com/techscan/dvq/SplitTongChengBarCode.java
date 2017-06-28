@@ -55,7 +55,7 @@ public class SplitTongChengBarCode {
             } else if (val.length == 10) {
                 TP=val[0];
                 NUM = val[6];
-               float qty =  Float.valueOf(val[5]);
+                float qty =  Float.valueOf(val[5]);
                 float num =  Float.valueOf(val[6]);
                 Weights =String.valueOf(qty*num);
                 CW = val[7];
