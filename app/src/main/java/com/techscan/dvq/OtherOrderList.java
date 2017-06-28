@@ -38,6 +38,7 @@ public class OtherOrderList extends Activity {
 	public String m_AccID;
 	public String m_PkCorp;
 	public String m_BillCode;
+	//test
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
