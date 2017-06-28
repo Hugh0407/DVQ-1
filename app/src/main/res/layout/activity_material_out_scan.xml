@@ -265,6 +265,7 @@
                     android:text="总量"/>
 
                 <EditText
+                    android:inputType="numberDecimal"
                     android:id="@+id/ed_qty"
                     android:layout_width="0dp"
                     android:layout_height="30dp"
