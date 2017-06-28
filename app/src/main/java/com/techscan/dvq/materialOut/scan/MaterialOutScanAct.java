@@ -42,9 +42,9 @@ import butterknife.OnClick;
 public class MaterialOutScanAct extends Activity {
 
     @InjectView(R.id.ed_bar_code)
-    EditText mEdBarCode;
+    EditText mEdBarCode;    //条码
     @InjectView(R.id.ed_encoding)
-    EditText mEdEncoding;
+    EditText mEdEncoding;   //编码（Sku）
     @InjectView(R.id.ed_type)
     EditText mEdType;   // 型号
     @InjectView(R.id.ed_spectype)
@@ -52,7 +52,7 @@ public class MaterialOutScanAct extends Activity {
     @InjectView(R.id.ed_lot)
     EditText mEdLot;        //批次
     @InjectView(R.id.ed_name)
-    EditText mEdName;
+    EditText mEdName;       //物料名
     @InjectView(R.id.ed_unit)
     EditText mEdUnit;
     @InjectView(R.id.ed_qty)
@@ -152,7 +152,7 @@ public class MaterialOutScanAct extends Activity {
         } else {
             builder.setMessage("没有扫描内容");
         }
-        builder.setPositiveButton("取消", null);
+        builder.setPositiveButton("确定", null);
         builder.show();
     }
 
@@ -218,8 +218,8 @@ public class MaterialOutScanAct extends Activity {
         hashMap.put("pk_invbasdoc", pk_invbasdoc);
         hashMap.put("pk_invmandoc", pk_invmandoc);
         detailList.add(hashMap);
-        // 合并批次到ovlist
-        // 将相同货物的数量合并 如 A_01_20 A_02_30 合并为A_50
+        // 合并相同批次
+        // 将相同货物的数量合并
         if (ovList.size() == 0) {
             Goods goods = new Goods();
             String qty = String.valueOf(hashMap.get("qty"));
@@ -240,7 +240,7 @@ public class MaterialOutScanAct extends Activity {
         } else {
             for (int j = 0; j < ovList.size(); j++) {
                 Goods existGoods = ovList.get(j);
-                //相同物料不同批次的要合并，通过名字比较
+                //相同物料相同批次的要合并，通过名字和批次合并
                 if (hashMap.get("name").equals(existGoods.getName())
                         && hashMap.get("lot").equals(existGoods.getLot())) {
                     existGoods.setQty(existGoods.getQty() + Float.valueOf(hashMap.get("qty")));
@@ -299,7 +299,7 @@ public class MaterialOutScanAct extends Activity {
     /**
      * 获取存货基本信息
      *
-     * @param sku
+     * @param sku 物料编码
      */
     private void GetInvBaseInfo(String sku) {
         HashMap<String, String> parameter = new HashMap<String, String>();

@@ -83,7 +83,7 @@ public class MyBaseAdapter extends BaseAdapter {
         return convertView;
     }
 
-    static class ViewHolder {
+    private static class ViewHolder {
         TextView name;
         TextView encoding;
         TextView type;
