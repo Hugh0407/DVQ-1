@@ -95,40 +95,6 @@
                 android:layout_marginRight="4dp"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:text="库管员"/>
-
-            <EditText
-                android:id="@+id/whmanager"
-                android:layout_width="0dp"
-                android:layout_height="30dp"
-                android:layout_weight="5"
-                android:background="@drawable/edittext_style"
-                android:ems="10"
-                android:maxLines="1"
-                android:singleLine="true"
-                android:textAllCaps="true"/>
-
-            <ImageButton
-                android:id="@+id/refer_whmanager"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_marginRight="5dp"
-                android:background="@drawable/browse"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginRight="4dp"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
                 android:text="仓库"/>
 
             <EditText

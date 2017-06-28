@@ -22,6 +22,7 @@ import com.techscan.dvq.R;
 import com.techscan.dvq.VlistRdcl;
 import com.techscan.dvq.bean.Goods;
 import com.techscan.dvq.common.RequestThread;
+import com.techscan.dvq.common.SaveThread;
 import com.techscan.dvq.materialOut.DepartmentListAct;
 import com.techscan.dvq.materialOut.StorgListACt;
 import com.techscan.dvq.materialOut.scan.MaterialOutScanAct;
@@ -43,6 +44,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 
 import static com.techscan.dvq.common.Utils.HANDER_DEPARTMENT;
+import static com.techscan.dvq.common.Utils.HANDER_SAVE_RESULT;
 import static com.techscan.dvq.common.Utils.HANDER_STORG;
 
 public class ProductOutAct extends Activity {
@@ -78,10 +80,6 @@ public class ProductOutAct extends Activity {
     Button mBtnBack;
     @InjectView(R.id.refer_department)
     ImageButton mReferDepartment;
-    @InjectView(R.id.whmanager)
-    EditText mWhmanager;
-    @InjectView(R.id.refer_whmanager)
-    ImageButton mReferWhmanager;
     private String TAG = this.getClass().getSimpleName();
     List<Goods> tempList;
 
@@ -268,6 +266,14 @@ public class ProductOutAct extends Activity {
                         e.printStackTrace();
                     }
                     break;
+                case HANDER_SAVE_RESULT:
+                    JSONObject saveResult = (JSONObject) msg.obj;
+                    if (saveResult!=null){
+                        Log.d(TAG, "保存结果:"+saveResult.toString());
+                    }else {
+                        Log.d(TAG, "null");
+                    }
+                    break;
                 default:
                     break;
             }
@@ -298,7 +304,7 @@ public class ProductOutAct extends Activity {
             JSONObject object = new JSONObject();
             object.put("CINVBASID", c.getPk_invbasdoc());
             object.put("CINVENTORYID", c.getPk_invmandoc());
-
+            object.put("WGDATE",mBillDate.getText().toString());
             float price = c.getQty();
             DecimalFormat decimalFormat = new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
             String qty = decimalFormat.format(price);//format 返回的是字符串
@@ -314,23 +320,9 @@ public class ProductOutAct extends Activity {
         table.put("GUIDS", UUID.randomUUID().toString());
         Log.d(TAG, "SaveInfo: " + table.toString());
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    JSONObject jas = Common.DoHttpQuery(table, "SaveMaterialOut", "A");
-                    if (jas != null) {
-                        Log.d(TAG, "保存" + jas.toString());
-                    } else {
-                        Log.d(TAG, "null ");
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
+        SaveThread saveThread = new SaveThread(table,"SaveMaterialOut",mHandler, HANDER_SAVE_RESULT);
+        Thread thread = new Thread(saveThread);
+        thread.start();
     }
 
     // 打开收发类别画面
