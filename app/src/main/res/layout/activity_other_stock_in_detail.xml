@@ -19,8 +19,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/btn3"
-            android:textColor="@color/navy" 
+            android:background="@drawable/button_normal_style"
+            android:textColor="@color/white"
             android:text="任务" />
 
         <Button
@@ -28,8 +28,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/btn3"
-            android:textColor="@color/navy" 
+            android:background="@drawable/button_normal_style"
+            android:textColor="@color/white"
             android:text="明细" />
 
         <Button
@@ -37,8 +37,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/btn3"
-            android:textColor="@color/navy" 
+            android:background="@drawable/button_normal_style"
+            android:textColor="@color/white"
             android:text="返回" />
     </LinearLayout>
 

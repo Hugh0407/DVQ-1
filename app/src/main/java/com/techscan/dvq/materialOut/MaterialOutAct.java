@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -223,6 +224,11 @@ public class MaterialOutAct extends Activity {
         month = mycalendar.get(Calendar.MONTH);//获取Calendar对象中的月
         day = mycalendar.get(Calendar.DAY_OF_MONTH);//获取这个月的第几天
         mBillDate.setOnFocusChangeListener(myFocusListener);
+        mBillDate.setOnKeyListener(mOnKeyListener);
+        mWh.setOnKeyListener(mOnKeyListener);
+        mOrganization.setOnKeyListener(mOnKeyListener);
+        mLeiBie.setOnKeyListener(mOnKeyListener);
+        mDepartment.setOnKeyListener(mOnKeyListener);
     }
 
     /**
@@ -443,6 +449,7 @@ public class MaterialOutAct extends Activity {
             month = monthOfYear;
             day = dayOfMonth;
             updateDate();
+            mWh.requestFocus();//选择日期后将焦点跳到“仓库的EdText”
         }
 
         //当DatePickerDialog关闭时，更新日期显示
@@ -459,6 +466,33 @@ public class MaterialOutAct extends Activity {
                 DatePickerDialog dpd = new DatePickerDialog(MaterialOutAct.this, Datelistener, year, month, day);
                 dpd.show();//显示DatePickerDialog组件
             }
+        }
+    };
+
+    /**
+     * 回车键的点击事件
+     */
+    View.OnKeyListener mOnKeyListener = new View.OnKeyListener() {
+
+        @Override
+        public boolean onKey(View v, int keyCode, KeyEvent event) {
+            if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
+                switch (v.getId()) {
+                    case R.id.bill_num:
+                        mBillDate.requestFocus();
+                        return true;
+                    case R.id.wh:
+                        mOrganization.requestFocus();
+                        return true;
+                    case R.id.organization:
+                        mLeiBie.requestFocus();
+                        return true;
+                    case R.id.lei_bie:
+                        mDepartment.requestFocus();
+                        return true;
+                }
+            }
+            return false;
         }
     };
 }
