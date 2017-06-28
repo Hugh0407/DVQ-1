@@ -15,11 +15,11 @@
         android:orientation="horizontal">
 
         <Button
-            android:background="@drawable/button_normal_style"
             android:id="@+id/btnOtInScan"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@drawable/button_normal_style"
             android:text="扫描"
             android:textColor="@color/white"/>
 
@@ -85,7 +85,6 @@
         android:text="   "/>
 
     <EditText
-        android:text="形态转换"
         android:id="@+id/txtOtOrderType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -94,6 +93,7 @@
         android:layout_toLeftOf="@+id/btnOtType"
         android:ems="10"
         android:singleLine="true"
+        android:text="形态转换"
         android:textAllCaps="true">
 
         <requestFocus/>
@@ -125,9 +125,9 @@
         android:id="@+id/btnOtOrderNo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/browse"
         android:layout_above="@+id/txtOtWarehouse"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"/>
+        android:src="@drawable/browse"/>
 
 </RelativeLayout>

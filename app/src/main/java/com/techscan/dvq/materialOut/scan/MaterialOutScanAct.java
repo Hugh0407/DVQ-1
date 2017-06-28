@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -38,6 +39,9 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+
+import static com.techscan.dvq.R.id.ed_num;
+
 
 public class MaterialOutScanAct extends Activity {
 
@@ -113,7 +117,9 @@ public class MaterialOutScanAct extends Activity {
         mEdBarCode.setOnKeyListener(mOnKeyListener);
         mEdLot.setOnKeyListener(mOnKeyListener);
         mEdQty.setOnKeyListener(mOnKeyListener);
-        mEdBarCode.addTextChangedListener(mTextWatcher);
+        mEdNum.setOnKeyListener(mOnKeyListener);
+        mEdNum.addTextChangedListener(new CustomTextWatcher(mEdNum));
+        mEdBarCode.addTextChangedListener(new CustomTextWatcher(mEdBarCode));
         detailList = new ArrayList<HashMap<String, String>>();
         ovList = new ArrayList<Goods>();
     }
@@ -169,27 +175,41 @@ public class MaterialOutScanAct extends Activity {
         mEdBarCode.setText(Bar);
         String[] barCode = Bar.split("\\|");
         if (barCode.length == 2 && barCode[0].equals("Y")) {          //Y|SKU
-            //如果是液体的话需要输入液体数量
+            //如果是液体的话需要输入液体总量，将数量设置不可编辑
+            mEdNum.setEnabled(false);
+            mEdLot.setEnabled(true);
+            mEdQty.setEnabled(true);
+            mEdLot.requestFocus();  //如果是液体需要手动输入“批次”和“总量”,这里将光标跳到“批次（lot）”
             String encoding = barCode[1];
             mEdEncoding.setText(encoding);
             GetInvBaseInfo(encoding);
-            mEdQty.setText("");
-            mEdLot.requestFocus();  //如果是液体需要手动输入“批次”和“数量”,这里将光标跳到“批次（lot）”
-            mEdType.setText("");
             mEdLot.setText("");
-            mEdName.setText("");
-            mEdUnit.setText("");
+            mEdQty.setText("");
             return true;
         } else if (barCode.length == 6 && barCode[0].equals("C")) {   //C|SKU|LOT|TAX|QTY|SN
+            //如果是包码，批次和总重都改变为不可编辑，数量由员工输入，焦点跳到“数量”
+            mEdLot.setEnabled(false);
+            mEdQty.setEnabled(false);
+            mEdLot.setTextColor(Color.WHITE);
+            mEdQty.setTextColor(Color.WHITE);
+            mEdNum.setEnabled(true);
+            mEdNum.requestFocus();  //包码扫描后光标跳到“数量”,输入数量,添加到列表
             String encoding = barCode[1];
             mEdEncoding.setText(encoding);
             GetInvBaseInfo(encoding);
-
             mEdLot.setText(barCode[2]);
             mEdWeight.setText(barCode[4]);
-            mEdQty.setText(barCode[4]);
+            mEdQty.setText("");
+            mEdNum.setText("1");
             return true;
         } else if (barCode.length == 7 && barCode[0].equals("TC")) {    //TC|SKU|LOT|TAX|QTY|NUM|SN
+            //如果是盘码，全都设置为不可编辑
+            mEdLot.setEnabled(false);
+            mEdQty.setEnabled(false);
+            mEdNum.setEnabled(false);
+            mEdLot.setTextColor(Color.WHITE);
+            mEdQty.setTextColor(Color.WHITE);
+            mEdNum.setTextColor(Color.WHITE);
             String encoding = barCode[1];
             mEdEncoding.setText(encoding);
             GetInvBaseInfo(encoding);
@@ -217,6 +237,7 @@ public class MaterialOutScanAct extends Activity {
         hashMap.put("encoding", mEdEncoding.getText().toString());
         hashMap.put("name", mEdName.getText().toString());
         hashMap.put("type", mEdType.getText().toString());
+        hashMap.put("spec", mEdType.getText().toString());
         hashMap.put("unit", mEdUnit.getText().toString());
         hashMap.put("lot", mEdLot.getText().toString());
         hashMap.put("qty", mEdQty.getText().toString());
@@ -232,6 +253,7 @@ public class MaterialOutScanAct extends Activity {
             goods.setEncoding(hashMap.get("encoding"));
             goods.setName(hashMap.get("name"));
             goods.setType(hashMap.get("type"));
+            goods.setSpec(hashMap.get("spec"));
             goods.setUnit(hashMap.get("unit"));
             goods.setLot(hashMap.get("lot"));
             goods.setPk_invbasdoc(hashMap.get("pk_invbasdoc"));
@@ -258,6 +280,7 @@ public class MaterialOutScanAct extends Activity {
                     goods1.setName(hashMap.get("name"));
                     goods1.setType(hashMap.get("type"));
                     goods1.setUnit(hashMap.get("unit"));
+                    goods1.setSpec(hashMap.get("spec"));
                     goods1.setLot(hashMap.get("lot"));
                     goods1.setPk_invbasdoc(hashMap.get("pk_invbasdoc"));
                     goods1.setPk_invmandoc(hashMap.get("pk_invmandoc"));
@@ -277,6 +300,7 @@ public class MaterialOutScanAct extends Activity {
      * 清空所有的Edtext
      */
     private void ChangeAllEdTextToEmpty() {
+        mEdNum.setText("");
         mEdBarCode.setText("");
         mEdEncoding.setText("");
         mEdName.setText("");
@@ -284,6 +308,8 @@ public class MaterialOutScanAct extends Activity {
         mEdUnit.setText("");
         mEdLot.setText("");
         mEdQty.setText("");
+        mEdWeight.setText("");
+        mEdSpectype.setText("");
     }
 
     /**
@@ -296,6 +322,7 @@ public class MaterialOutScanAct extends Activity {
                 && !TextUtils.isEmpty(mEdEncoding.getText())
                 && !TextUtils.isEmpty(mEdName.getText())
                 && !TextUtils.isEmpty(mEdType.getText())
+                && !TextUtils.isEmpty(mEdSpectype.getText())
                 && !TextUtils.isEmpty(mEdUnit.getText())
                 && !TextUtils.isEmpty(mEdLot.getText())
                 && !TextUtils.isEmpty(mEdQty.getText()));
@@ -359,7 +386,13 @@ public class MaterialOutScanAct extends Activity {
     /**
      * mEdBarCode（条码）的监听
      */
-    TextWatcher mTextWatcher = new TextWatcher() {
+    private class CustomTextWatcher implements TextWatcher {
+        EditText ed;
+
+        public CustomTextWatcher(EditText ed) {
+            this.ed = ed;
+        }
+
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -372,16 +405,38 @@ public class MaterialOutScanAct extends Activity {
 
         @Override
         public void afterTextChanged(Editable s) {
-            if (TextUtils.isEmpty(mEdBarCode.getText().toString())) {
-                mEdEncoding.setText("");
-                mEdType.setText("");
-                mEdLot.setText("");
-                mEdName.setText("");
-                mEdUnit.setText("");
-                mEdQty.setText("");
+            switch (ed.getId()) {
+                case R.id.ed_bar_code:
+                    if (TextUtils.isEmpty(mEdBarCode.getText().toString())) {
+                        mEdEncoding.setText("");
+                        mEdType.setText("");
+                        mEdLot.setText("");
+                        mEdName.setText("");
+                        mEdUnit.setText("");
+                        mEdQty.setText("");
+                        mEdSpectype.setText("");
+                        mEdNum.setText("");
+                        mEdWeight.setText("");
+                    }
+                    break;
+                case R.id.ed_num:
+                    if (!TextUtils.isEmpty(mEdNum.getText())) {
+                        if (Float.valueOf(mEdNum.getText().toString()) < 0) {
+                            Toast.makeText(MaterialOutScanAct.this, "数量不能为0", Toast.LENGTH_SHORT).show();
+                            return;
+                        } else {
+                            float num = Float.valueOf(mEdNum.getText().toString());
+                            float weight = Float.valueOf(mEdWeight.getText().toString());
+                            mEdQty.setText(String.valueOf(num * weight));
+                        }
+                    } else {
+                        mEdQty.setText("0.00");
+                    }
+                    break;
+
             }
         }
-    };
+    }
 
 
     /**
@@ -394,29 +449,58 @@ public class MaterialOutScanAct extends Activity {
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
                 switch (v.getId()) {
                     case R.id.ed_bar_code:
-                        BarAnalysis();
-                        if (isAllEdNotNull() && addDataToList()) {
-                            mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
-                            ChangeAllEdTextToEmpty();
+                        if (!TextUtils.isEmpty(mEdBarCode.getText())) {
+                            if (isAllEdNotNull() && addDataToList()) {
+                                mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
+                                ChangeAllEdTextToEmpty();
+                            } else {
+                                BarAnalysis();
+                            }
+                        } else {
+                            Toast.makeText(MaterialOutScanAct.this, "请输入条码", Toast.LENGTH_SHORT).show();
                         }
+
                         return true;
                     case R.id.ed_lot:
                         if (TextUtils.isEmpty(mEdLot.getText())) {
                             Toast.makeText(MaterialOutScanAct.this, "请输入批次号", Toast.LENGTH_SHORT).show();
                         } else {
-                            mEdQty.requestFocus();  //输入玩批次后讲光标跳到“总量（mEdQty）”
+                            mEdQty.requestFocus();  //输入完批次后讲焦点跳到“总量（mEdQty）”
                         }
                         return true;
                     case R.id.ed_qty:
                         if (TextUtils.isEmpty(mEdQty.getText())) {
                             Toast.makeText(MaterialOutScanAct.this, "请输入数量", Toast.LENGTH_SHORT).show();
                         } else {
+                            //只有是液体的时候需要输入总量，输入完成将数据添加到list
 //                            if (isAllEdNotNull() && ) {
                             if (addDataToList()) {
                                 mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
                                 ChangeAllEdTextToEmpty();
                             }
 //                            }
+
+                        }
+                        return true;
+                    case ed_num:
+                        if (TextUtils.isEmpty(mEdNum.getText())) {
+                            Toast.makeText(MaterialOutScanAct.this, "请输入数量", Toast.LENGTH_SHORT).show();
+                        } else {
+                            //包码需要输入 有多少包，并计算出总数量
+                            float num = Float.valueOf(mEdNum.getText().toString());
+                            if (num > 0) {
+                                float weight = Float.valueOf(mEdWeight.getText().toString());
+                                mEdQty.setText(String.valueOf(num * weight));
+//                            if (isAllEdNotNull() && ) {
+                                if (addDataToList()) {
+                                    mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
+                                    ChangeAllEdTextToEmpty();
+                                }
+//                            }
+                            } else {
+                                Toast.makeText(MaterialOutScanAct.this, "数量不正确", Toast.LENGTH_SHORT).show();
+                            }
+
 
                         }
                         return true;
