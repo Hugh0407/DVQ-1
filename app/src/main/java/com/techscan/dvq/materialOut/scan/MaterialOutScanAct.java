@@ -42,6 +42,7 @@ import butterknife.OnClick;
 
 import static com.techscan.dvq.R.id.ed_num;
 
+
 public class MaterialOutScanAct extends Activity {
 
     @InjectView(R.id.ed_bar_code)
@@ -66,7 +67,7 @@ public class MaterialOutScanAct extends Activity {
     Button mBtnDetail;
     @InjectView(R.id.btn_back)
     Button mBtnBack;
-    @InjectView(ed_num)
+    @InjectView(R.id.ed_num)
     EditText mEdNum;
     @InjectView(R.id.ed_weight)
     EditText mEdWeight;
@@ -117,34 +118,8 @@ public class MaterialOutScanAct extends Activity {
         mEdLot.setOnKeyListener(mOnKeyListener);
         mEdQty.setOnKeyListener(mOnKeyListener);
         mEdNum.setOnKeyListener(mOnKeyListener);
-        mEdNum.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (!TextUtils.isEmpty(mEdNum.getText())) {
-                    if (Float.valueOf(mEdNum.getText().toString()) < 0) {
-                        Toast.makeText(MaterialOutScanAct.this, "数量不能为0", Toast.LENGTH_SHORT).show();
-                        return;
-                    } else {
-                        float num = Float.valueOf(mEdNum.getText().toString());
-                        float weight = Float.valueOf(mEdWeight.getText().toString());
-                        mEdQty.setText(String.valueOf(num * weight));
-                    }
-                } else {
-                    mEdQty.setText("0.00");
-                }
-            }
-        });
-        mEdBarCode.addTextChangedListener(mTextWatcher);
+        mEdNum.addTextChangedListener(new CustomTextWatcher(mEdNum));
+        mEdBarCode.addTextChangedListener(new CustomTextWatcher(mEdBarCode));
         detailList = new ArrayList<HashMap<String, String>>();
         ovList = new ArrayList<Goods>();
     }
@@ -411,7 +386,13 @@ public class MaterialOutScanAct extends Activity {
     /**
      * mEdBarCode（条码）的监听
      */
-    TextWatcher mTextWatcher = new TextWatcher() {
+    private class CustomTextWatcher implements TextWatcher {
+        EditText ed;
+
+        public CustomTextWatcher(EditText ed) {
+            this.ed = ed;
+        }
+
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -424,19 +405,38 @@ public class MaterialOutScanAct extends Activity {
 
         @Override
         public void afterTextChanged(Editable s) {
-            if (TextUtils.isEmpty(mEdBarCode.getText().toString())) {
-                mEdEncoding.setText("");
-                mEdType.setText("");
-                mEdLot.setText("");
-                mEdName.setText("");
-                mEdUnit.setText("");
-                mEdQty.setText("");
-                mEdSpectype.setText("");
-                mEdNum.setText("");
-                mEdWeight.setText("");
+            switch (ed.getId()) {
+                case R.id.ed_bar_code:
+                    if (TextUtils.isEmpty(mEdBarCode.getText().toString())) {
+                        mEdEncoding.setText("");
+                        mEdType.setText("");
+                        mEdLot.setText("");
+                        mEdName.setText("");
+                        mEdUnit.setText("");
+                        mEdQty.setText("");
+                        mEdSpectype.setText("");
+                        mEdNum.setText("");
+                        mEdWeight.setText("");
+                    }
+                    break;
+                case R.id.ed_num:
+                    if (!TextUtils.isEmpty(mEdNum.getText())) {
+                        if (Float.valueOf(mEdNum.getText().toString()) < 0) {
+                            Toast.makeText(MaterialOutScanAct.this, "数量不能为0", Toast.LENGTH_SHORT).show();
+                            return;
+                        } else {
+                            float num = Float.valueOf(mEdNum.getText().toString());
+                            float weight = Float.valueOf(mEdWeight.getText().toString());
+                            mEdQty.setText(String.valueOf(num * weight));
+                        }
+                    } else {
+                        mEdQty.setText("0.00");
+                    }
+                    break;
+
             }
         }
-    };
+    }
 
 
     /**
