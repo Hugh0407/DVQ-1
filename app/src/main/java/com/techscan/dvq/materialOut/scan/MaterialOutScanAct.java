@@ -342,15 +342,15 @@ public class MaterialOutScanAct extends Activity {
                 pk_invbasdoc = tempJso.getString("pk_invbasdoc");
                 map.put("pk_invmandoc", tempJso.getString("pk_invmandoc"));
                 pk_invmandoc = tempJso.getString("pk_invmandoc");
-//                map.put("invtype", tempJso.getString("invtype"));   //型号
-//                map.put("invspec", tempJso.getString("invspec"));   //规格
+                map.put("invtype", tempJso.getString("invtype"));   //型号
+                map.put("invspec", tempJso.getString("invspec"));   //规格
                 map.put("oppdimen", tempJso.getString("oppdimen"));   //重量
             }
             if (map != null) {
                 mEdName.setText(map.get("invname").toString());
                 mEdUnit.setText(map.get("measname").toString());
-//                mEdType.setText(map.get("invtype").toString());
-//                mEdSpectype.setText(map.get("invspec").toString());
+                mEdType.setText(map.get("invtype").toString());
+                mEdSpectype.setText(map.get("invspec").toString());
             }
 
         }
