@@ -77,6 +77,8 @@ public class SalesDeliveryAdapter extends BaseAdapter {
         viewHolder.Batch.setText(mList.get(position).get("Batch").toString());
         viewHolder.QTY.setText(mList.get(position).get("Weights").toString());
         viewHolder.UNIT.setText(mList.get(position).get("Measname").toString());
+        viewHolder.Spec.setText(mList.get(position).get("invspec").toString());
+        viewHolder.Model.setText(mList.get(position).get("invtype").toString());
         return convertView;
     }
 

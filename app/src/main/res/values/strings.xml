@@ -159,7 +159,7 @@
     <string name="DanJuXinXiMeiYouBuNengXuanZeShouFaLeiBie">单据信息没有获得不能选择收发类别</string>
     <string name="DanJuBaoCunChengGong">单据保存成功</string>
     <string name="GaiRenWuYiJingBeiSaoMiaoWuFaShanChu">该任务已经被扫描无法删除,请先删除该任务的明细记录</string>
-    <string name="NiQueDingYaoTuiChuMa">你确认要退出吗?</string>
+    <string name="NiQueDingYaoTuiChuMa">数据未保存，确认退出吗?</string>
     <string name="XuanZeCangKu">选择仓库</string>
     <string name="DanJuBaoCunChuXianWenTi_QingZaiCiTiJiao">单据保存过程中出现了问题,请尝试再次提交!</string>
     <string name="HaiMeiYouPeiZhiJIChuLianJIe">还没有配置基础链接</string>

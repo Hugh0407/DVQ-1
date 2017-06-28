@@ -162,7 +162,7 @@ public class SalesDelivery extends Activity {
         WhNameB =sharedPreferences.getString("AccId", "");
 //				sCompanyCode=sharedPreferences.getString("CompanyCode", "");
 //		        sOrgCode=sharedPreferences.getString("OrgCode", "");
-
+        saleOutGoodsLists  = new ArrayList<SaleOutGoods>();
         ClearBillDetailInfoShow();
         SetBillType();
 
@@ -1762,6 +1762,7 @@ public class SalesDelivery extends Activity {
 //
 //                    }
                     break;
+                //返回按钮
                 case id.btnSalesDelExit:
                     Exit();
                     break;
@@ -2192,10 +2193,13 @@ public class SalesDelivery extends Activity {
     //退出按钮
     private void Exit()
     {
-        AlertDialog.Builder bulider =
-                new AlertDialog.Builder(this).setTitle(R.string.XunWen).setMessage(R.string.NiQueDingYaoTuiChuMa);
-        bulider.setNegativeButton(R.string.QuXiao, null);
-        bulider.setPositiveButton(R.string.QueRen, listenExit).create().show();
+        if (saleOutGoodsLists.size()>0||saleOutGoodsLists!=null) {
+            AlertDialog.Builder bulider =
+                    new AlertDialog.Builder(this).setTitle(R.string.XunWen).setMessage(R.string.NiQueDingYaoTuiChuMa);
+            bulider.setNegativeButton(R.string.QuXiao, null);
+            bulider.setPositiveButton(R.string.QueRen, listenExit).create().show();
+        }
+
     }
 
     //退出按钮对话框事件
