@@ -117,6 +117,33 @@ public class MaterialOutScanAct extends Activity {
         mEdLot.setOnKeyListener(mOnKeyListener);
         mEdQty.setOnKeyListener(mOnKeyListener);
         mEdNum.setOnKeyListener(mOnKeyListener);
+        mEdNum.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!TextUtils.isEmpty(mEdNum.getText())) {
+                    if (Float.valueOf(mEdNum.getText().toString()) < 0) {
+                        Toast.makeText(MaterialOutScanAct.this, "数量不能为0", Toast.LENGTH_SHORT).show();
+                        return;
+                    } else {
+                        float num = Float.valueOf(mEdNum.getText().toString());
+                        float weight = Float.valueOf(mEdWeight.getText().toString());
+                        mEdQty.setText(String.valueOf(num * weight));
+                    }
+                } else {
+                    mEdQty.setText("0.00");
+                }
+            }
+        });
         mEdBarCode.addTextChangedListener(mTextWatcher);
         detailList = new ArrayList<HashMap<String, String>>();
         ovList = new ArrayList<Goods>();
@@ -198,7 +225,7 @@ public class MaterialOutScanAct extends Activity {
             mEdLot.setText(barCode[2]);
             mEdWeight.setText(barCode[4]);
             mEdQty.setText("");
-            mEdNum.setText("");
+            mEdNum.setText("1");
             return true;
         } else if (barCode.length == 7 && barCode[0].equals("TC")) {    //TC|SKU|LOT|TAX|QTY|NUM|SN
             //如果是盘码，全都设置为不可编辑
@@ -404,6 +431,9 @@ public class MaterialOutScanAct extends Activity {
                 mEdName.setText("");
                 mEdUnit.setText("");
                 mEdQty.setText("");
+                mEdSpectype.setText("");
+                mEdNum.setText("");
+                mEdWeight.setText("");
             }
         }
     };
@@ -458,14 +488,19 @@ public class MaterialOutScanAct extends Activity {
                         } else {
                             //包码需要输入 有多少包，并计算出总数量
                             float num = Float.valueOf(mEdNum.getText().toString());
-                            float weight = Float.valueOf(mEdWeight.getText().toString());
-                            mEdQty.setText(String.valueOf(num * weight));
+                            if (num > 0) {
+                                float weight = Float.valueOf(mEdWeight.getText().toString());
+                                mEdQty.setText(String.valueOf(num * weight));
 //                            if (isAllEdNotNull() && ) {
-                            if (addDataToList()) {
-                                mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
-                                ChangeAllEdTextToEmpty();
-                            }
+                                if (addDataToList()) {
+                                    mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
+                                    ChangeAllEdTextToEmpty();
+                                }
 //                            }
+                            } else {
+                                Toast.makeText(MaterialOutScanAct.this, "数量不正确", Toast.LENGTH_SHORT).show();
+                            }
+
 
                         }
                         return true;
