@@ -72,6 +72,8 @@ public class OvAdapter extends BaseAdapter {
             viewHolder.encoding = (TextView) convertView.findViewById(R.id.encoding);
             viewHolder.qty = (TextView) convertView.findViewById(R.id.qty);
             viewHolder.lot = (TextView) convertView.findViewById(R.id.lot);
+            viewHolder.spec = (TextView) convertView.findViewById(R.id.spec);
+            viewHolder.type = (TextView) convertView.findViewById(R.id.type);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -79,6 +81,8 @@ public class OvAdapter extends BaseAdapter {
         viewHolder.name.setText(mList.get(position).getName());
         viewHolder.encoding.setText(mList.get(position).getEncoding());
         viewHolder.lot.setText(mList.get(position).getLot());
+        viewHolder.spec.setText(mList.get(position).getSpec());
+        viewHolder.type.setText(mList.get(position).getType());
         if (TextUtils.isEmpty(String.valueOf(mList.get(position).getQty()))) {
             viewHolder.qty.setText("0.00");
         } else {
@@ -92,5 +96,7 @@ public class OvAdapter extends BaseAdapter {
         TextView encoding;
         TextView qty;
         TextView lot;
+        TextView spec;
+        TextView type;
     }
 }

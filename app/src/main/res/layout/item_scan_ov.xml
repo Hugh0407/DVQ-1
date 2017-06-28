@@ -65,7 +65,7 @@
                 android:id="@+id/spec"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="3"
                 android:text="等接口"
                 android:textColor="@color/black"
                 android:textSize="16sp"/>
@@ -88,7 +88,7 @@
                 android:id="@+id/type"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="3"
                 android:text="等接口"
                 android:textColor="@color/black"
                 android:textSize="16sp"/>
@@ -118,7 +118,7 @@
                 android:id="@+id/lot"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="3"
                 android:text="批次"
                 android:textColor="@color/black"
                 android:textSize="16sp"/>
@@ -141,7 +141,7 @@
                 android:id="@+id/qty"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="3"
                 android:text="数量"
                 android:textColor="@color/black"
                 android:textSize="16sp"/>

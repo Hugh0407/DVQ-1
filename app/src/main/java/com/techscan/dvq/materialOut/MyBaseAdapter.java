@@ -71,6 +71,7 @@ public class MyBaseAdapter extends BaseAdapter {
             viewHolder.type = (TextView) convertView.findViewById(R.id.type);
             viewHolder.lot = (TextView) convertView.findViewById(R.id.lot);
             viewHolder.qty = (TextView) convertView.findViewById(R.id.qty);
+            viewHolder.spec = (TextView) convertView.findViewById(R.id.spec);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -80,6 +81,7 @@ public class MyBaseAdapter extends BaseAdapter {
         viewHolder.type.setText(mList.get(position).get("type"));
         viewHolder.lot.setText(mList.get(position).get("lot"));
         viewHolder.qty.setText(mList.get(position).get("qty"));
+        viewHolder.spec.setText(mList.get(position).get("spec"));
         return convertView;
     }
 
@@ -89,5 +91,6 @@ public class MyBaseAdapter extends BaseAdapter {
         TextView type;
         TextView lot;
         TextView qty;
+        TextView spec;
     }
 }
