@@ -71,6 +71,8 @@ public class MaterialOutScanAct extends Activity {
     EditText mEdNum;
     @InjectView(R.id.ed_weight)
     EditText mEdWeight;
+    @InjectView(R.id.ed_cost_object)
+    EditText mEdCostObject;
 
 
     String TAG = "MaterialOutScanAct";
@@ -243,6 +245,7 @@ public class MaterialOutScanAct extends Activity {
         hashMap.put("unit", mEdUnit.getText().toString());
         hashMap.put("lot", mEdLot.getText().toString());
         hashMap.put("qty", mEdQty.getText().toString());
+        hashMap.put("cost_object", mEdCostObject.getText().toString());
         hashMap.put("pk_invbasdoc", pk_invbasdoc);
         hashMap.put("pk_invmandoc", pk_invmandoc);
         detailList.add(hashMap);
@@ -258,6 +261,7 @@ public class MaterialOutScanAct extends Activity {
             goods.setSpec(hashMap.get("spec"));
             goods.setUnit(hashMap.get("unit"));
             goods.setLot(hashMap.get("lot"));
+            goods.setCostObject(hashMap.get("cost_object"));
             goods.setPk_invbasdoc(hashMap.get("pk_invbasdoc"));
             goods.setPk_invmandoc(hashMap.get("pk_invmandoc"));
             if (TextUtils.isEmpty(qty)) {
@@ -284,6 +288,7 @@ public class MaterialOutScanAct extends Activity {
                     goods1.setUnit(hashMap.get("unit"));
                     goods1.setSpec(hashMap.get("spec"));
                     goods1.setLot(hashMap.get("lot"));
+                    goods1.setCostObject(hashMap.get("cost_object"));
                     goods1.setPk_invbasdoc(hashMap.get("pk_invbasdoc"));
                     goods1.setPk_invmandoc(hashMap.get("pk_invmandoc"));
                     if (TextUtils.isEmpty(qty)) {
@@ -380,6 +385,7 @@ public class MaterialOutScanAct extends Activity {
                 mEdUnit.setText(map.get("measname").toString());
                 mEdType.setText(map.get("invtype").toString());
                 mEdSpectype.setText(map.get("invspec").toString());
+                mEdCostObject.setText(map.get("invname").toString());
             }
 
         }

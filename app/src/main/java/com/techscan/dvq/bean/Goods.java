@@ -22,6 +22,7 @@ public class Goods implements Parcelable{
     int num;            //ÊýÄ¿
     String pk_invbasdoc;
     String pk_invmandoc;
+    String costObject;
 
     public Goods() {
     }
@@ -38,6 +39,7 @@ public class Goods implements Parcelable{
         num = in.readInt();
         pk_invbasdoc = in.readString();
         pk_invmandoc = in.readString();
+        costObject = in.readString();
     }
 
     public static final Creator<Goods> CREATOR = new Creator<Goods>() {
@@ -140,6 +142,14 @@ public class Goods implements Parcelable{
         this.pk_invmandoc = pk_invmandoc;
     }
 
+    public String getCostObject() {
+        return costObject;
+    }
+
+    public void setCostObject(String costObject) {
+        this.costObject = costObject;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -158,5 +168,6 @@ public class Goods implements Parcelable{
         dest.writeInt(num);
         dest.writeString(pk_invbasdoc);
         dest.writeString(pk_invmandoc);
+        dest.writeString(costObject);
     }
 }

@@ -56,7 +56,6 @@
                 android:text="编码"/>
 
             <EditText
-                android:focusable="false"
                 android:id="@+id/ed_encoding"
                 android:layout_width="0dp"
                 android:layout_height="30dp"
@@ -64,6 +63,7 @@
                 android:background="@drawable/edittext_style"
                 android:editable="false"
                 android:ems="10"
+                android:focusable="false"
                 android:maxLines="1"
                 android:singleLine="true"
                 android:textAllCaps="true">
@@ -86,7 +86,6 @@
                 android:text="名称"/>
 
             <EditText
-                android:focusable="false"
                 android:id="@+id/ed_name"
                 android:layout_width="0dp"
                 android:layout_height="30dp"
@@ -94,6 +93,7 @@
                 android:background="@drawable/edittext_style"
                 android:editable="false"
                 android:ems="10"
+                android:focusable="false"
                 android:maxLines="1"
                 android:singleLine="true"
                 android:textAllCaps="true"/>
@@ -114,7 +114,6 @@
                 android:text="型号"/>
 
             <EditText
-                android:focusable="false"
                 android:id="@+id/ed_type"
                 android:layout_width="0dp"
                 android:layout_height="30dp"
@@ -122,6 +121,7 @@
                 android:background="@drawable/edittext_style"
                 android:editable="false"
                 android:ems="10"
+                android:focusable="false"
                 android:maxLines="1"
                 android:singleLine="true"
                 android:textAllCaps="true"/>
@@ -142,7 +142,6 @@
                 android:text="规格"/>
 
             <EditText
-                android:focusable="false"
                 android:id="@+id/ed_spectype"
                 android:layout_width="0dp"
                 android:layout_height="30dp"
@@ -150,6 +149,7 @@
                 android:background="@drawable/edittext_style"
                 android:editable="false"
                 android:ems="10"
+                android:focusable="false"
                 android:maxLines="1"
                 android:singleLine="true"
                 android:textAllCaps="true"/>
@@ -185,6 +185,32 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="6dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="4dp"
+                android:gravity="center_vertical"
+                android:text="成本对象"/>
+
+            <EditText
+                android:id="@+id/ed_cost_object"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:background="@drawable/edittext_style"
+                android:ems="10"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textAllCaps="true"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -202,13 +228,13 @@
                     android:text="数量"/>
 
                 <EditText
-                    android:inputType="number"
                     android:id="@+id/ed_num"
                     android:layout_width="0dp"
                     android:layout_height="30dp"
                     android:layout_weight="1"
                     android:background="@drawable/edittext_style"
                     android:ems="10"
+                    android:inputType="number"
                     android:maxLines="1"
                     android:singleLine="true"
                     android:textAllCaps="true"/>
@@ -230,7 +256,6 @@
                     android:text="重量"/>
 
                 <EditText
-                    android:focusable="false"
                     android:id="@+id/ed_weight"
                     android:layout_width="0dp"
                     android:layout_height="30dp"
@@ -238,6 +263,7 @@
                     android:background="@drawable/edittext_style"
                     android:editable="false"
                     android:ems="10"
+                    android:focusable="false"
                     android:maxLines="1"
                     android:singleLine="true"
                     android:textAllCaps="true"/>
@@ -265,13 +291,13 @@
                     android:text="总量"/>
 
                 <EditText
-                    android:inputType="numberDecimal"
                     android:id="@+id/ed_qty"
                     android:layout_width="0dp"
                     android:layout_height="30dp"
                     android:layout_weight="1"
                     android:background="@drawable/edittext_style"
                     android:ems="10"
+                    android:inputType="numberDecimal"
                     android:maxLines="1"
                     android:singleLine="true"
                     android:textAllCaps="true"/>
@@ -293,7 +319,6 @@
                     android:text="单位"/>
 
                 <EditText
-                    android:focusable="false"
                     android:id="@+id/ed_unit"
                     android:layout_width="0dp"
                     android:layout_height="30dp"
@@ -301,6 +326,7 @@
                     android:background="@drawable/edittext_style"
                     android:editable="false"
                     android:ems="10"
+                    android:focusable="false"
                     android:maxLines="1"
                     android:singleLine="true"
                     android:textAllCaps="true"/>

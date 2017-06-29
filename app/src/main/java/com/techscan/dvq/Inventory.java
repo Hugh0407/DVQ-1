@@ -1,5 +1,7 @@
 package com.techscan.dvq;
 
+import android.util.Log;
+
 import org.apache.http.ParseException;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -172,7 +174,7 @@ public class Inventory {
             }
 
         } catch (Exception e) {
-            //m_Errmsg = "网络操作出现问题!请稍后再试";
+//            m_Errmsg = "网络操作出现问题!请稍后再试";
         }
 
     }
