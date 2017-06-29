@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -40,6 +41,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import static android.content.ContentValues.TAG;
+
 //import com.techscan.dvq.StockTransScan.ButtonOnClickClearconfirm;
 //import com.techscan.dvq.StockTransScanIn.MyListAdapter;
 
@@ -69,7 +72,7 @@ public class SalesDeliveryScan extends Activity {
     private List<Map<String, Object>> lstBodyTask = null;
     private List<Map<String, Object>> lstSaveBody = null;
     private Map<String, Object> mapScanDetail = null;
-    private List<SaleOutGoods> saleGoodsLists = null;
+     List<SaleOutGoods> saleGoodsLists ;
 
 
     //删除的任务内容临时保存住
@@ -94,7 +97,7 @@ public class SalesDeliveryScan extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sales_delivery_scan);
-
+        saleGoodsLists =  new ArrayList<SaleOutGoods>();
         ActionBar actionBar = this.getActionBar();
         actionBar.setTitle("销售出库扫描明细");
 
@@ -417,7 +420,7 @@ public class SalesDeliveryScan extends Activity {
                 if (TaskBatch.equals(bar.cBatch.trim())) {
                     //确认了存货
 //                    Log.d(TAG, "ConformDetail: "+"进来了");
-                    if (jsarray.getJSONObject(i).getString("invcode").equals(bar.cInvCode)) {
+                    if (jsarray.getJSONObject(i).getString("invcode").equals(bar.cInvCode.trim())) {
                         String nnum = ((JSONObject) (jsarray.get(i))).getString("number");
                         String ntranoutnum = ((JSONObject) (jsarray.get(i))).getString("outnumber");
                         String snnum = "0";
@@ -700,8 +703,8 @@ public class SalesDeliveryScan extends Activity {
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             return false;
         }
-        batchList = Common.
-                DoHttpQuery(para, "CommonQuery", AccID);
+        batchList = Common. DoHttpQuery(para, "CommonQuery", AccID);
+        Log.d(TAG, "ConformBatch: "+batchList.toString());
 
 
         if (batchList == null) {
@@ -868,6 +871,7 @@ public class SalesDeliveryScan extends Activity {
 
 
         //先注销
+        //判断上游数据是否存在
         if(!ConformDetail(barcode,bar))
         {
             txtSDScanBarcode.setText("");
@@ -875,16 +879,16 @@ public class SalesDeliveryScan extends Activity {
             return;
         }
 //先注销
-        if(ScanType.equals("销售出库"))
-        {
-            if(!ConformBatch(bar.cInvCode,bar.cBatch,tmpAccID))
-            {
-                //表示这个批次这里没有，需要重新打印
-                txtSDScanBarcode.setText("");
-                txtSDScanBarcode.requestFocus();
-                return;
-            }
-        }
+//        if(ScanType.equals("销售出库"))
+//        {
+//            if(!ConformBatch(bar.cInvCode,bar.cBatch,tmpAccID))
+//            {
+//                //表示这个批次这里没有，需要重新打印
+//                txtSDScanBarcode.setText("");
+//                txtSDScanBarcode.requestFocus();
+//                return;
+//            }
+//        }
 //先注销
 
 //        if(OkFkg.equals("ng"))
@@ -1452,16 +1456,20 @@ public class SalesDeliveryScan extends Activity {
 //            lstCurrentBox.add(mapCurrentBox);
 
 //            mapScanDetail.put(lsKey,lstCurrentBox);
-        mapScanDetail.put("InvName", jsonCheckGetBillCode.getString("invname"));
-        mapScanDetail.put("InvCode", bar.cInvCode);
+        mapScanDetail.put("InvName",currentObj.getInvName() );
+        mapScanDetail.put("InvCode", currentObj.getInvCode());
         mapScanDetail.put("AccID", tmpAccID);
-        mapScanDetail.put("QTY", bar.QTY);
-        mapScanDetail.put("NUM", bar.NUM);
-        mapScanDetail.put("Weights", bar.Weights);
+//        mapScanDetail.put("QTY", bar.QTY);
+//        mapScanDetail.put("NUM", bar.NUM);
+        mapScanDetail.put("Weights", bar.Weights.trim());
         mapScanDetail.put("Measname", jsonCheckGetBillCode.getString("measname"));
-        mapScanDetail.put("Batch", bar.cBatch);
-        mapScanDetail.put("SeriNo", bar.cSerino);
-        mapScanDetail.put("BarCode", bar.FinishBarCode);
+        mapScanDetail.put("Batch", currentObj.GetBatch());
+        mapScanDetail.put("SeriNo", currentObj.GetSerino());
+        mapScanDetail.put("BarCode", bar.FinishBarCode.trim());
+        mapScanDetail.put("pk_invbasdoc",currentObj.Invbasdoc());
+        mapScanDetail.put("pk_invmandoc",currentObj.Invmandoc());
+        mapScanDetail.put("invspec",currentObj.Invspec());
+        mapScanDetail.put("invtype",currentObj.Invtype());
 //            mapScanDetail.put("TotalNum", Integer.parseInt(currentObj.totalID()));
 //            mapScanDetail.put("ScanedNum", lstCurrentBox.size());
         //开始单据行号
@@ -1516,7 +1524,7 @@ public class SalesDeliveryScan extends Activity {
 
         int count = lstSaveBody.size();
         Map<String, Object> mapScanDetails;
-        saleGoodsLists = new ArrayList<SaleOutGoods>();
+
         for (int i = 0;i<count; i++){
             mapScanDetails = lstSaveBody.get(i);
         if (saleGoodsLists.size()==0){
@@ -1524,8 +1532,8 @@ public class SalesDeliveryScan extends Activity {
             saleOutGoods.setBarcode((String) mapScanDetails.get("BarCode"));
             saleOutGoods.setInvCode((String) mapScanDetails.get("InvCode"));
             saleOutGoods.setInvName((String) mapScanDetails.get("InvName"));
-            saleOutGoods.setPk_invbasdoc((String) mapScanDetails.get("InvCode"));
-            saleOutGoods.setPk_invmandoc((String) mapScanDetails.get("InvCode"));
+            saleOutGoods.setPk_invbasdoc((String) mapScanDetails.get("pk_invbasdoc"));
+            saleOutGoods.setPk_invmandoc((String) mapScanDetails.get("pk_invmandoc"));
             saleOutGoods.setBatch((String) mapScanDetails.get("Batch"));
             saleOutGoods.setUnit((String) mapScanDetails.get("Measname"));
             String qty = String.valueOf(mapScanDetails.get("Weights"));
@@ -1545,8 +1553,8 @@ public class SalesDeliveryScan extends Activity {
                     saleOutGoods_c.setBarcode((String) mapScanDetails.get("BarCode"));
                     saleOutGoods_c.setInvCode((String) mapScanDetails.get("InvCode"));
                     saleOutGoods_c.setInvName((String) mapScanDetails.get("InvName"));
-                    saleOutGoods_c.setPk_invbasdoc((String) mapScanDetails.get("InvCode"));
-                    saleOutGoods_c.setPk_invmandoc((String) mapScanDetails.get("InvCode"));
+                    saleOutGoods_c.setPk_invbasdoc((String) mapScanDetails.get("pk_invbasdoc"));
+                    saleOutGoods_c.setPk_invmandoc((String) mapScanDetails.get("pk_invmandoc"));
                     saleOutGoods_c.setBatch((String) mapScanDetails.get("Batch"));
                     saleOutGoods_c.setUnit((String) mapScanDetails.get("Measname"));
                     String qty = String.valueOf(mapScanDetails.get("Weights"));
@@ -1904,6 +1912,7 @@ public class SalesDeliveryScan extends Activity {
                             .setPositiveButton(R.string.QueRen, btnScanItemClearOnClick).setNegativeButton(R.string.QuXiao, null).show();
 
                     break;
+                //返回按钮
                 case id.btnSDScanReturn:
 
 
@@ -1924,7 +1933,7 @@ public class SalesDeliveryScan extends Activity {
 //                        saleOutGoods.setQty(Float.valueOf((String) map.get("Weights")));
 //                        saleGoodsLists.add(saleOutGoods);
 //                    }
-                    if (saleGoodsLists.size() > 0 || saleGoodsLists != null) {
+                    if (saleGoodsLists.size() > 0) {
                         Intent intent = new Intent();
                         Bundle bundle = new Bundle();
                         bundle.putParcelableArrayList("SaleGoodsLists", (ArrayList<? extends Parcelable>) saleGoodsLists);
@@ -1936,6 +1945,8 @@ public class SalesDeliveryScan extends Activity {
 //                        intent.putStringArrayListExtra("ScanedBarcode", ScanedBarcode);
                         SalesDeliveryScan.this.setResult(6, intent);
 
+                    }else {
+                        Toast.makeText(SalesDeliveryScan.this, "没有扫描单据", Toast.LENGTH_SHORT).show();
                     }
                     finish();
                     break;

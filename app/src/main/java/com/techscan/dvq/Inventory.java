@@ -14,6 +14,8 @@ public class Inventory {
     private String m_Serino;
     private String m_Invbasdoc;//
     private String m_Invmandoc;
+    private String invspec;
+    private String invtype;
     private String m_vFree1;
 
     private String m_currentID;
@@ -40,6 +42,9 @@ public class Inventory {
     public String Invbasdoc() {
         return m_Invbasdoc;
     }
+
+    public String Invtype(){return invtype;}
+    public String Invspec(){return invspec;}
 
     public String vFree1() {
         //m_vFree1 = "“‚¥Û¿˚";
@@ -120,17 +125,17 @@ public class Inventory {
 
         JSONObject para = new JSONObject();
         String CompanyCode = BizType;
-        if (BizType.equals("BADV")) {
-            if (AccID.equals("A")) {
-                CompanyCode = "101";
-            } else if (AccID.equals("B")) {
-                CompanyCode = "1";
-            }
-        }
-
-        if (AccID.equals("B")) {
-            CompanyCode = "1";
-        }
+//        if (BizType.equals("BADV")) {
+//            if (AccID.equals("A")) {
+//                CompanyCode = "101";
+//            } else if (AccID.equals("B")) {
+//                CompanyCode = "1";
+//            }
+//        }
+//
+//        if (AccID.equals("B")) {
+//            CompanyCode = "1";
+//        }
 
         para.put("FunctionName", "GetInvBaseInfo");
         para.put("CompanyCode", CompanyCode);
@@ -151,10 +156,15 @@ public class Inventory {
                 if (!rev.has("inventory"))
                     return;
                 JSONArray val = rev.getJSONArray("inventory");
-                m_InvCode = val.getJSONObject(0).getString("invcode");
-                m_InvName = val.getJSONObject(0).getString("invname");
-                m_Invbasdoc = val.getJSONObject(0).getString("pk_invbasdoc");
-                m_Invmandoc = val.getJSONObject(0).getString("pk_invmandoc");
+                for (int i = 0;i<val.length();i++){
+                    m_InvCode = val.getJSONObject(i).getString("invcode");
+                    m_InvName = val.getJSONObject(i).getString("invname");
+                    m_Invbasdoc = val.getJSONObject(i).getString("pk_invbasdoc");
+                    m_Invmandoc = val.getJSONObject(i).getString("pk_invmandoc");
+                    invspec = val.getJSONObject(i).getString("invspec");
+                    invtype = val.getJSONObject(i).getString("invtype");
+                }
+
             } else {
                 if (!rev.has("ErrMsg"))
                     return;

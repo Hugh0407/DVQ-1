@@ -524,30 +524,30 @@ public class OtherStockInDetail extends Activity {
         if (barcode == null || barcode.equals(""))
             return false;
 
-        if (this.m_PosID == null ||
-                this.m_PosID.equals("")) {
-            Toast.makeText(this, "请先扫描货位",
-                    Toast.LENGTH_LONG).show();
-            //ADD CAIXY TEST START
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            this.txtBarcode.setText("");
-            this.txtPosition.setText("");
-            this.txtPosition.requestFocus();
-            return false;
-        }
+//        if (this.m_PosID == null ||
+//                this.m_PosID.equals("")) {
+//            Toast.makeText(this, "请先扫描货位",
+//                    Toast.LENGTH_LONG).show();
+//            //ADD CAIXY TEST START
+//            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//            this.txtBarcode.setText("");
+//            this.txtPosition.setText("");
+//            this.txtPosition.requestFocus();
+//            return false;
+//        }
 
         //SplitBarcode bar = new SplitBarcode(barcode);
 
         bar = new SplitBarcode(barcode);
-        if (bar.creatorOk == false) {
-            Toast.makeText(this, "扫描的不是正确货品条码", Toast.LENGTH_LONG).show();
-            // ADD CAIXY TEST START
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            // ADD CAIXY TEST END
-            txtBarcode.setText("");
-            txtBarcode.requestFocus();
-            return false;
-        }
+//        if (bar.creatorOk == false) {
+//            Toast.makeText(this, "扫描的不是正确货品条码", Toast.LENGTH_LONG).show();
+//            // ADD CAIXY TEST START
+//            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//            // ADD CAIXY TEST END
+//            txtBarcode.setText("");
+//            txtBarcode.requestFocus();
+//            return false;
+//        }
 
 
         txtBarcode.setText("");
@@ -569,14 +569,14 @@ public class OtherStockInDetail extends Activity {
             currentObj.SettotalID(bar.TotalBox);
             currentObj.SetAccID(bar.AccID);
 
-            if (!bar.AccID.equals(m_AccID)) {
-                Toast.makeText(this, "该存货的帐套不符合",
-                        Toast.LENGTH_LONG).show();
-                //ADD CAIXY TEST START
-                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                //ADD CAIXY TEST END
-                return false;
-            }
+//            if (!bar.AccID.equals(m_AccID)) {
+//                Toast.makeText(this, "该存货的帐套不符合",
+//                        Toast.LENGTH_LONG).show();
+//                //ADD CAIXY TEST START
+//                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                //ADD CAIXY TEST END
+//                return false;
+//            }
 
             if (currentObj.getErrMsg() != null
                     && !currentObj.getErrMsg().equals("")) {
