@@ -24,16 +24,16 @@
                 android:id="@+id/tvsearchInvUnitName"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginRight="4dp"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:text="单据号"/>
 
             <EditText
+                android:layout_margin="1dp"
                 android:id="@+id/bill_num"
                 android:layout_width="0dp"
-                android:layout_height="30dp"
-                android:layout_weight="5"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
                 android:background="@drawable/edittext_style"
                 android:ems="10"
                 android:maxLines="1"
@@ -58,16 +58,16 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginRight="4dp"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:text="入库日期"/>
 
             <EditText
+                android:layout_margin="1dp"
                 android:id="@+id/bill_date"
                 android:layout_width="0dp"
-                android:layout_height="30dp"
-                android:layout_weight="5"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
                 android:background="@drawable/edittext_style"
                 android:clickable="true"
                 android:ems="10"
@@ -92,16 +92,16 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginRight="4dp"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:text="仓库"/>
 
             <EditText
+                android:layout_margin="1dp"
                 android:id="@+id/wh"
                 android:layout_width="0dp"
-                android:layout_height="30dp"
-                android:layout_weight="5"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
                 android:background="@drawable/edittext_style"
                 android:ems="10"
                 android:maxLines="1"
@@ -124,17 +124,18 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="match_parent"
-                android:layout_marginRight="4dp"
                 android:gravity="center_vertical"
                 android:text="库存组织"/>
 
             <EditText
+                android:layout_margin="1dp"
                 android:id="@+id/organization"
                 android:layout_width="0dp"
-                android:layout_height="30dp"
-                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
                 android:background="@drawable/edittext_style"
                 android:ems="10"
                 android:maxLines="1"
@@ -157,17 +158,18 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="match_parent"
-                android:layout_marginRight="4dp"
                 android:gravity="center_vertical"
                 android:text="收发类别"/>
 
             <EditText
+                android:layout_margin="1dp"
                 android:id="@+id/lei_bie"
                 android:layout_width="0dp"
-                android:layout_height="30dp"
-                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
                 android:background="@drawable/edittext_style"
                 android:ems="10"
                 android:maxLines="1"
@@ -193,16 +195,16 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginRight="4dp"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:text="部门"/>
 
             <EditText
+                android:layout_margin="1dp"
                 android:id="@+id/department"
                 android:layout_width="0dp"
-                android:layout_height="30dp"
-                android:layout_weight="5"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
                 android:background="@drawable/edittext_style"
                 android:ems="10"
                 android:maxLines="1"
@@ -228,10 +230,11 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="4dp"
-                android:gravity="center"
+                android:gravity="center_vertical"
                 android:text="备注"/>
 
             <EditText

@@ -321,6 +321,7 @@ public class MaterialOutAct extends Activity {
             String qty = decimalFormat.format(qty_f);//format ·µ»ØµÄÊÇ×Ö·û´®
 
             object.put("NOUTNUM", qty);
+            object.put("COSTOBJECT", c.getPk_invmandoc());
             object.put("PK_BODYCALBODY", PK_CALBODY);
             object.put("PK_CORP", MainLogin.objLog.STOrgCode);
             object.put("VBATCHCODE", c.getLot());

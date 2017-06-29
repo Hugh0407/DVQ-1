@@ -524,30 +524,30 @@ public class OtherStockInDetail extends Activity {
         if (barcode == null || barcode.equals(""))
             return false;
 
-//        if (this.m_PosID == null ||
-//                this.m_PosID.equals("")) {
-//            Toast.makeText(this, "请先扫描货位",
-//                    Toast.LENGTH_LONG).show();
-//            //ADD CAIXY TEST START
-//            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-//            this.txtBarcode.setText("");
-//            this.txtPosition.setText("");
-//            this.txtPosition.requestFocus();
-//            return false;
-//        }
+        if (this.m_PosID == null ||
+                this.m_PosID.equals("")) {
+            Toast.makeText(this, "请先扫描货位",
+                    Toast.LENGTH_LONG).show();
+            //ADD CAIXY TEST START
+            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+            this.txtBarcode.setText("");
+            this.txtPosition.setText("");
+            this.txtPosition.requestFocus();
+            return false;
+        }
 
         //SplitBarcode bar = new SplitBarcode(barcode);
 
         bar = new SplitBarcode(barcode);
-//        if (bar.creatorOk == false) {
-//            Toast.makeText(this, "扫描的不是正确货品条码", Toast.LENGTH_LONG).show();
-//            // ADD CAIXY TEST START
-//            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-//            // ADD CAIXY TEST END
-//            txtBarcode.setText("");
-//            txtBarcode.requestFocus();
-//            return false;
-//        }
+        if (bar.creatorOk == false) {
+            Toast.makeText(this, "扫描的不是正确货品条码", Toast.LENGTH_LONG).show();
+            // ADD CAIXY TEST START
+            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+            // ADD CAIXY TEST END
+            txtBarcode.setText("");
+            txtBarcode.requestFocus();
+            return false;
+        }
 
 
         txtBarcode.setText(bar.Barcode);
@@ -569,14 +569,14 @@ public class OtherStockInDetail extends Activity {
             currentObj.SettotalID(bar.TotalBox);
             currentObj.SetAccID(bar.AccID);
 
-//            if (!bar.AccID.equals(m_AccID)) {
-//                Toast.makeText(this, "该存货的帐套不符合",
-//                        Toast.LENGTH_LONG).show();
-//                //ADD CAIXY TEST START
-//                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-//                //ADD CAIXY TEST END
-//                return false;
-//            }
+            if (!bar.AccID.equals(m_AccID)) {
+                Toast.makeText(this, "该存货的帐套不符合",
+                        Toast.LENGTH_LONG).show();
+                //ADD CAIXY TEST START
+                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+                //ADD CAIXY TEST END
+                return false;
+            }
 
             if (currentObj.getErrMsg() != null
                     && !currentObj.getErrMsg().equals("")) {
@@ -663,8 +663,7 @@ public class OtherStockInDetail extends Activity {
             }
 
             if (isOver == true) {
-                Toast.makeText(this, "这个存货已经超过任务数量了,不允扫入!", Toast.LENGTH_LONG)
-                        .show();
+                Toast.makeText(this, "这个存货已经超过任务数量了,不允扫入!", Toast.LENGTH_LONG).show();
                 // ADD CAIXY TEST START
                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                 // ADD CAIXY TEST END
@@ -913,7 +912,6 @@ public class OtherStockInDetail extends Activity {
     private void Return() {
         if (jsBoxTotal != null && jsSerino != null) {
             Intent intent = new Intent();
-
             intent.putExtra("box", jsBoxTotal.toString());
             intent.putExtra("head", jsHead.toString());
             intent.putExtra("body", jsBody.toString());
@@ -1252,8 +1250,7 @@ public class OtherStockInDetail extends Activity {
                 public boolean onKey(View v, int arg1, KeyEvent arg2) {
                     switch (v.getId()) {
                         case id.txtOthBarcode:
-                            if (arg1 == 66 && arg2.getAction()
-                                    == KeyEvent.ACTION_UP) {
+                            if (arg1 == KeyEvent.KEYCODE_ENTER && arg2.getAction()== KeyEvent.ACTION_UP) {
                                 ScanDetail(txtBarcode.getText().toString());
                                 return true;
                             }
