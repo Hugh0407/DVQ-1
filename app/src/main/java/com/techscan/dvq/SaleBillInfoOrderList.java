@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,6 +27,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static android.content.ContentValues.TAG;
 
 public class SaleBillInfoOrderList extends Activity {
 
@@ -75,7 +78,7 @@ public class SaleBillInfoOrderList extends Activity {
 		if(myIntent.hasExtra("BillCodeKey"))
 			fsBillCode = myIntent.getStringExtra("BillCodeKey");
 		if (myIntent.hasExtra("sBeginDate"))
-			sDate = myIntent.getStringExtra("sBeginDdate");
+			sDate = myIntent.getStringExtra("sBeginDate");
 		if (myIntent.hasExtra("sEndDate"))
 			sEndDate = myIntent.getStringExtra("sEndDate");
 		if (myIntent.hasExtra("sBillCodes"))
@@ -150,7 +153,8 @@ public class SaleBillInfoOrderList extends Activity {
 
 		if(fsFunctionName.equals("销售出库"))
 		{
-			fsFunctionName = "GetSaleOrderList";
+//			fsFunctionName = "GetSalereceiveHead";
+				fsFunctionName = "GetSaleOrderList";
 		}
 //
 
@@ -172,11 +176,13 @@ public class SaleBillInfoOrderList extends Activity {
 			JSONObject para = new JSONObject();
 			try {
 				para.put("FunctionName", fsFunctionName);
-//				para.put("CorpPK", MainLogin.objLog.CompanyID);
+				para.put("CorpPK", "4100");
 				para.put("STOrgCode", MainLogin.objLog.STOrgCode);
 				para.put("BillCode", sBillCodes);
 				para.put("sDate",sDate);
 				para.put("sEndDate",sEndDate);
+//				Log.d(TAG, "onCreate: "+fsFunctionName+" ;"+sBillCodes+" ;"+sDate+" ;"+sEndDate+";"+ MainLogin.objLog.STOrgCode);
+
 				//para.put("Wh-CodeA", MainLogin.objLog.WhCodeA);
 				//para.put("Wh-CodeB", MainLogin.objLog.WhCodeB);
 
@@ -209,6 +215,7 @@ public class SaleBillInfoOrderList extends Activity {
 					return ;
 				}
 				jas = Common.DoHttpQuery(para, "CommonQuery", "");
+				Log.d(TAG, "GetAndBindingBillInfoDetail: "+jas.toString());
 			} catch (Exception ex)
 			{
 				Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
@@ -318,27 +325,32 @@ public class SaleBillInfoOrderList extends Activity {
 		{
 			tempJso = jsarray.getJSONObject(i);
 			map = new HashMap<String, Object>();
-			if(fsFunctionName.equals("GetSalereceiveHead"))//销售出库单
+			if(fsFunctionName.equals("GetSaleOrderList"))//销售出库单
 			{
-				map.put("pk_corp", tempJso.getString("pk_corp"));
-				map.put("custname", tempJso.getString("custname"));
-				map.put("pk_cubasdoc", tempJso.getString("pk_cubasdoc"));
-				map.put("pk_cumandoc", tempJso.getString("pk_cumandoc"));
-				map.put("billID", tempJso.getString("csalereceiveid"));
-				map.put("billCode", tempJso.getString("vreceivecode"));
-				map.put("dmakedate",tempJso.getString("dmakedate"));
-				map.put("AccID", tempJso.getString("AccID"));
-				map.put("vdef11", tempJso.getString("vdef11"));
-				map.put("vdef12", tempJso.getString("vdef12"));
-				map.put("vdef13", tempJso.getString("vdef13"));
+				map.put("BillDate",tempJso.getString("dbilldate"));
+				map.put("BillCode",tempJso.getString("vreceiptcode"));
+				map.put("CustName",tempJso.getString("custname"));
 				map.put("saleflg", "");
-				if(tempJso.getString("AccID").equals("A"))
-					map.put("coperatorid", MainLogin.objLog.UserID);//操作者
-				else
-					map.put("coperatorid", MainLogin.objLog.UserIDB);//操作者
-				map.put("ctransporttypeid", tempJso.getString("ctransporttypeid"));//运输方式ID
 
-				map.put("cbiztype", tempJso.getString("cbiztype"));
+//				map.put("pk_corp", tempJso.getString("pk_corp"));
+//				map.put("custname", tempJso.getString("custname"));
+//				map.put("pk_cubasdoc", tempJso.getString("pk_cubasdoc"));
+//				map.put("pk_cumandoc", tempJso.getString("pk_cumandoc"));
+//				map.put("billID", tempJso.getString("csalereceiveid"));
+//				map.put("billCode", tempJso.getString("vreceivecode"));
+//				map.put("dmakedate",tempJso.getString("dmakedate"));
+//				map.put("AccID", tempJso.getString("AccID"));
+//				map.put("vdef11", tempJso.getString("vdef11"));
+//				map.put("vdef12", tempJso.getString("vdef12"));
+//				map.put("vdef13", tempJso.getString("vdef13"));
+//				map.put("saleflg", "");
+//				if(tempJso.getString("AccID").equals("A"))
+//					map.put("coperatorid", MainLogin.objLog.UserID);//操作者
+//				else
+//					map.put("coperatorid", MainLogin.objLog.UserIDB);//操作者
+//				map.put("ctransporttypeid", tempJso.getString("ctransporttypeid"));//运输方式ID
+//
+//				map.put("cbiztype", tempJso.getString("cbiztype"));
 
 			}
 
@@ -431,10 +443,10 @@ public class SaleBillInfoOrderList extends Activity {
 
 		listItemAdapter = new SimpleAdapter(this,list,
 				R.layout.vlistsaledel,
-				new String[] {"billCode","AccID","custname"},
-				new int[] {R.id.listsaledelorder,
-						R.id.listsaledelaccid,
-						R.id.listsaledelname});
+				new String[] {"BillCode","CustName","BillDate"},
+				new int[] {id.tvBillCode,
+						id.tvCustomer,
+						id.tvBillDate});
 
 		if(listItemAdapter == null)
 			return;
@@ -468,8 +480,6 @@ public class SaleBillInfoOrderList extends Activity {
 //						Toast.makeText(SaleBillInfoOrderList.this, "没有使用该单据的权限", Toast.LENGTH_LONG).show();
 //						return;
 //					}
-
-
 					Intent intent = new Intent();
 					intent.putExtra("ResultBillInfo", ResultMap);
 

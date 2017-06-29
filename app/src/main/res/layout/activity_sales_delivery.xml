@@ -16,8 +16,8 @@
 
         <Button
             android:background="@drawable/button_normal_style"
-            android:id="@+id/btnSalesDelScan"
             style="android:buttonStyle"
+            android:id="@+id/btnSalesDelScan"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -77,12 +77,15 @@
 
     <EditText
         android:id="@+id/txtSalesDelRdcl"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_weight="5"
+        android:layout_marginTop="5dp"
         android:layout_alignLeft="@+id/txtSalesDelCD"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/txtSalesDelCD"
         android:ems="10"
+        android:background="@drawable/edittext_style"
         android:singleLine="true"
         android:width="200dp" />
 
@@ -95,13 +98,7 @@
         android:layout_alignParentLeft="true"
         android:text="  客      户" />
 
-    <TextView
-        android:id="@+id/TextView01"
-        android:layout_width="12px"
-        android:layout_height="10px"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:text="     " />
+
 
     <TextView
         android:id="@+id/tvSales01"
@@ -113,37 +110,31 @@
         android:text="  来源单据 " />
 
     <EditText
-        android:id="@+id/txtSalesDelCD"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/txtSalesDelWH"
-        android:layout_below="@+id/txtSalesDelWH"
-        android:ems="10"
-        android:singleLine="true"
-        android:width="200dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-    <EditText
         android:id="@+id/txtSalesDelPDOrder"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_weight="5"
+        android:layout_marginTop="5dp"
         android:layout_alignRight="@+id/txtSalesDelWH"
         android:layout_below="@+id/tvSaleOutSelect"
         android:layout_toRightOf="@+id/tvSales01"
         android:ems="10"
+        android:background="@drawable/edittext_style"
         android:singleLine="true"
         android:width="200dp" />
 
     <EditText
         android:id="@+id/txtSalesDelWH"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_weight="5"
+        android:layout_marginTop="5dp"
         android:layout_below="@+id/txtSalesDelPDOrder"
         android:layout_toLeftOf="@+id/btnSalesDelWH"
         android:layout_toRightOf="@+id/tvSales01"
         android:editable="false"
         android:ems="10"
+        android:background="@drawable/edittext_style"
         android:focusable="false"
         android:singleLine="true"
         android:width="200dp" >
@@ -153,39 +144,62 @@
 
     <EditText
         android:id="@+id/tvSaleOutSelect"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_weight="5"
+        android:layout_marginTop="5dp"
         android:layout_alignLeft="@+id/txtSalesDelPDOrder"
         android:layout_below="@+id/TextView01"
-        android:layout_toLeftOf="@+id/btnSaleOutSelect"
+        android:ems="10"
+        android:background="@drawable/edittext_style"
+        android:text="销售出库"
+        android:singleLine="true"
+        android:width="200dp"
+        android:layout_toStartOf="@+id/btnSaleOutSelect"
+        android:layout_toLeftOf="@+id/btnSaleOutSelect" />
+
+    <EditText
+        android:id="@+id/txtSalesDelCD"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_weight="5"
+        android:layout_marginTop="5dp"
         android:ems="10"
         android:singleLine="true"
-        android:width="200dp" />
-
-    <ImageButton
-        android:id="@+id/btnSaleOutSelect"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/txtSalesDelPDOrder"
-        android:src="@drawable/browse"
-        android:layout_alignParentRight="true" />
-
-    <ImageButton
-        android:id="@+id/btnSalesDelPDOrder"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/txtSalesDelPDOrder"
-        android:src="@drawable/browse"
-        android:layout_alignParentRight="true" />
+        android:width="200dp"
+        android:background="@drawable/edittext_style"
+        android:layout_below="@+id/txtSalesDelWH"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignLeft="@+id/txtSalesDelWH"
+        android:layout_alignStart="@+id/txtSalesDelWH" />
 
     <ImageButton
         android:id="@+id/btnSalesDelWH"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/txtSalesDelCD"
-        android:src="@drawable/browse"
-        android:layout_alignParentRight="true" />
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:background="@drawable/browse"
+        android:layout_below="@+id/btnSalesDelPDOrder"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
+    <ImageButton
+        android:id="@+id/btnSaleOutSelect"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:background="@drawable/browse"
+        android:layout_alignTop="@+id/tvSaleOutSelect"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <ImageButton
+        android:id="@+id/btnSalesDelPDOrder"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:background="@drawable/browse"
+        android:layout_below="@+id/btnSaleOutSelect"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
 
 </RelativeLayout>

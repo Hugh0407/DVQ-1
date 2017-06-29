@@ -42,9 +42,11 @@ import static android.content.ContentValues.TAG;
 
 public class SalesDelivery extends Activity {
 
-    String sBillCodes ;
-    String sBeginDate ;
-    String sEndDate ;
+    String CWAREHOUSEID = "";    //库存组织
+
+    String sBillCodes ;//单据号查询
+    String sBeginDate ;//制单日期开始查询
+    String sEndDate ;//制单日期结束查询
 
     List<SaleOutGoods> saleOutGoodsLists =null;
 
@@ -269,9 +271,6 @@ public class SalesDelivery extends Activity {
                             Map<String,Object> mapBillInfo = ResultMap.getMap();
                             //绑定保存用表头
                             jsonSaveHead = new JSONObject();
-                            txtSalesDelWH.setText("");
-//							txtSalesDelPos.setText("");
-//							txtSalesDelPos.setText("");
                             tmpposCode = "";
                             tmpposName = "";
                             tmpposID = "";
@@ -381,7 +380,7 @@ public class SalesDelivery extends Activity {
                 }
             }
         }
-        //单据查询
+        //单据日期查询by XuHu
         else if(requestCode==44){
             if (resultCode==4){
 
@@ -403,6 +402,18 @@ public class SalesDelivery extends Activity {
                     }
                 }
             }
+
+        }
+
+        //仓库列表信息
+        else if(requestCode==97){
+           if (resultCode==13){
+               String warehousePK1 = data.getStringExtra("result1");
+               String warehousecode = data.getStringExtra("result2");
+               String warehouseName = data.getStringExtra("result3");
+               CWAREHOUSEID = warehousePK1;
+               txtSalesDelWH.setText(warehouseName);
+           }
 
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -702,7 +713,7 @@ public class SalesDelivery extends Activity {
             {
                 para.put("FunctionName", "GetSalereceiveBody");
                 para.put("BillCode", tmpBillCode);
-                para.put("CorpPK", tmpCorpPK);
+                para.put("CorpPK", "4100");
             }
 
             if(tvSaleOutSelect.getText().toString().equals("退回再送"))
@@ -1011,8 +1022,8 @@ public class SalesDelivery extends Activity {
     private void GetBillBodyDetailInfo(String sSaleFlg)
     {
         GetBillBFlg = "0";
-        if(tmpAccID==null || tmpAccID.equals(""))
-            return;
+//        if(tmpAccID==null || tmpAccID.equals(""))
+//            return;
 
         JSONObject para = new JSONObject();
         //Map<String,Object> mapBillBody = new HashMap<String,Object>();
@@ -1024,31 +1035,6 @@ public class SalesDelivery extends Activity {
                 para.put("BillCode", tmpBillCode);
                 para.put("CorpPK", tmpCorpPK);
             }
-
-            if(tvSaleOutSelect.getText().toString().equals("退回再送"))
-            {
-                para.put("FunctionName", "GetSaledB");
-                para.put("BillCode", tmpBillCode);
-                para.put("CorpPK", tmpCorpPK);
-            }
-
-            if(tvSaleOutSelect.getText().toString().equals("退回不送"))
-            {
-                if(sSaleFlg.equals("T"))
-                {
-                    para.put("FunctionName", "GetSaleTakeBody");
-                    para.put("BillCode", tmpBillCode);
-                    para.put("CorpPK", tmpCorpPK);
-                }
-                else if(sSaleFlg.equals("D"))
-
-                {
-                    para.put("FunctionName", "GetSaleOutBody");
-                    para.put("BillCode", tmpBillCode);
-                    para.put("CorpPK", tmpCorpPK);
-                }
-            }
-
 
         } catch (JSONException e2) {
             Toast.makeText(this, e2.getMessage(), Toast.LENGTH_LONG).show();
@@ -1075,7 +1061,8 @@ public class SalesDelivery extends Activity {
                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                 return ;
             }
-            jas = Common.DoHttpQuery(para, "CommonQuery", tmpAccID);
+            jas = Common.DoHttpQuery(para, "CommonQuery", "");
+            Log.d(TAG, "GetBillBodyDetailInfo: "+jas.toString());
             //txtSalesDelManualNo.setEnabled(true);
 //			txtSalesDelPos.setEnabled(true);
             txtSalesDelRdcl.setEnabled(true);
@@ -1339,15 +1326,13 @@ public class SalesDelivery extends Activity {
 //		} else if (tmpAccID.equals("B")) {
 //			CompanyCode = "1";
 //		}
-        tmpAccID = mapBillInfo.get("AccID").toString();
-        //tmpWarehousePK = mapBillInfo.get("pk_stordoc").toString();
-        tmpCorpPK = mapBillInfo.get("pk_corp").toString();
-        tmpBillCode = mapBillInfo.get("billCode").toString();
-
+//        tmpAccID = mapBillInfo.get("AccID").toString();
+//        //tmpWarehousePK = mapBillInfo.get("pk_stordoc").toString();
+//        tmpCorpPK = mapBillInfo.get("pk_corp").toString();
+        tmpBillCode = mapBillInfo.get("BillCode").toString();
         txtSalesDelPDOrder.setText(tmpBillCode);
-
-        txtSalesDelCD.setText(mapBillInfo.get("custname").toString());
-        txtSalesDelRdcl.setText(mapBillInfo.get("dmakedate").toString());
+        txtSalesDelCD.setText(mapBillInfo.get("CustName").toString());
+        txtSalesDelRdcl.setText(mapBillInfo.get("BillDate").toString());
 
 //		if(!Common.CheckUserRole(tmpAccID, tmpCorpPK, "40080802"))
 //		{
@@ -1356,20 +1341,6 @@ public class SalesDelivery extends Activity {
 //			return false;
 //		}
 
-//		tvSalesDelBillCodeName.setText("单  据  号：");
-//		tvSalesDelAccIDName.setText("账  套  号：");
-        //tvSalesDelWareName.setText("仓库：");
-//		tvSalesDelCorpName.setText("客　    户：");
-
-//		tvSalesDelBillCode.setText(mapBillInfo.get("billCode").toString());
-//		tvSalesDelAccID.setText(mapBillInfo.get("AccID").toString());
-        //tvSalesDelWare.setText(mapBillInfo.get("WHOut").toString());
-//		tvSalesDelCorp.setText(mapBillInfo.get("custname").toString());
-//
-        tmpAccID = mapBillInfo.get("AccID").toString();
-        //tmpWarehousePK = mapBillInfo.get("pk_stordoc").toString();
-        tmpCorpPK = mapBillInfo.get("pk_corp").toString();
-        tmpBillCode = mapBillInfo.get("billCode").toString();
         return true;
     }
 
@@ -1536,9 +1507,7 @@ public class SalesDelivery extends Activity {
 //		BillTypeNameList[2]="退回不送   (扫描退货单)";
     }
 
-    class OnClickListener implements
-
-            android.view.View.OnClickListener {
+    public class OnClickListener implements android.view.View.OnClickListener {
 
         public void onClick(View v) {
 
@@ -1578,6 +1547,7 @@ public class SalesDelivery extends Activity {
 //                        intent.putExtra("sBeginDate",sEndDate);
 //                        intent.putExtra("sBillCode",sBillCode);
                         startActivityForResult(intent,44);
+                        txtSalesDelWH.requestFocus();
 
 //						if(tvSaleOutSelect.getText().toString().equals("退回再送"))
 //						{
@@ -1816,8 +1786,9 @@ public class SalesDelivery extends Activity {
                             // ADD CAIXY TEST END
                             return;
                         }
-                        GetSalesDelWH();
-
+                        //获取仓库
+//                        GetSalesDelWH();
+                        btnWarehouseClick();
                     } catch (JSONException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
@@ -1836,6 +1807,70 @@ public class SalesDelivery extends Activity {
         }
     }
 
+    /**
+     * 获取仓库信息
+     * by Xuhu
+     *
+     */
+    /**
+     * 点击仓库列表参照
+     *
+     * @throws JSONException
+     */
+    private void btnWarehouseClick() throws JSONException {
+        String lgUser = MainLogin.objLog.LoginUser;
+        String lgPwd = MainLogin.objLog.Password;
+        String LoginString = MainLogin.objLog.LoginString;
+
+        JSONObject para = new JSONObject();
+
+        para.put("FunctionName", "GetWareHouseList");
+        para.put("CompanyCode", MainLogin.objLog.CompanyCode);
+        para.put("STOrgCode", MainLogin.objLog.STOrgCode);
+        para.put("TableName", "warehouse");
+
+        try {
+            if (!MainLogin.getwifiinfo()) {
+                Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
+                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+                return;
+            }
+
+            JSONObject rev = Common.DoHttpQuery(para, "CommonQuery", "");
+            if (rev == null) {
+                // 网络通讯错误
+                Toast.makeText(this, "错误！网络通讯错误", Toast.LENGTH_LONG).show();
+                // ADD CAIXY TEST START
+                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+                // ADD CAIXY TEST END
+                return;
+            }
+            if (rev.getBoolean("Status")) {
+                JSONArray val = rev.getJSONArray("warehouse");
+
+                JSONObject temp = new JSONObject();
+                temp.put("warehouse", val);
+
+                Intent ViewGrid = new Intent(this, ListWarehouse.class);
+                ViewGrid.putExtra("myData", temp.toString());
+
+                startActivityForResult(ViewGrid, 97);
+            } else {
+                String Errmsg = rev.getString("ErrMsg");
+                Toast.makeText(this, Errmsg, Toast.LENGTH_LONG).show();
+                // ADD CAIXY TEST START
+                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+                // ADD CAIXY TEST END
+            }
+
+        } catch (Exception e) {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+            // ADD CAIXY TEST START
+            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+            // ADD CAIXY TEST END
+        }
+
+    }
 
 //	 private boolean GetBaseWhCdByNameAndAccID(String WhName) throws JSONException, ParseException, IOException
 //	 {
@@ -2208,15 +2243,15 @@ public class SalesDelivery extends Activity {
     }
 
     //打开收发类别画面
-    private void btnSalesDelRdclClick(String Code) throws ParseException, IOException, JSONException
-    {
-        Intent ViewGrid = new Intent(this,VlistRdcl.class);
-        ViewGrid.putExtra("FunctionName", "GetRdcl");
-        ViewGrid.putExtra("AccID", tmpAccID);
-        ViewGrid.putExtra("rdflag", rdflag);
-        ViewGrid.putExtra("rdcode", Code);
-        startActivityForResult(ViewGrid,88);
-    }
+//    private void btnSalesDelRdclClick(String Code) throws ParseException, IOException, JSONException
+//    {
+//        Intent ViewGrid = new Intent(this,VlistRdcl.class);
+//        ViewGrid.putExtra("FunctionName", "GetRdcl");
+//        ViewGrid.putExtra("AccID", tmpAccID);
+//        ViewGrid.putExtra("rdflag", rdflag);
+//        ViewGrid.putExtra("rdcode", Code);
+//        startActivityForResult(ViewGrid,88);
+//    }
 
     //退出按钮
     private void Exit()
@@ -2264,232 +2299,15 @@ public class SalesDelivery extends Activity {
     {
         @Override
         public boolean onKey(View v, int arg1, KeyEvent arg2) {
-            switch(v.getId())
+            if (arg1 == arg2.KEYCODE_ENTER && arg2.getAction() == KeyEvent.ACTION_UP)//&& arg2.getAction() == KeyEvent.ACTION_DOWN
             {
-                case id.txtSalesDelPDOrder:
-                    if(arg1 == arg2.KEYCODE_ENTER && arg2.getAction() == KeyEvent.ACTION_UP)//&& arg2.getAction() == KeyEvent.ACTION_DOWN
-                    {
-                        if(tvSaleOutSelect.getText().toString().equals("未选择"))
-                        {
-                            Toast.makeText(SalesDelivery.this, "单据类型未选择,请选择单据类型", Toast.LENGTH_LONG).show();
-                            //ADD CAIXY TEST START
-                            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                            //ADD CAIXY TEST END
-                            txtSalesDelPDOrder.setText("");
-                            txtSalesDelPDOrder.requestFocus();
-                            return false;
-                        }
-
-                        if(lstSaveBody == null || lstSaveBody.size() < 1)
-                        {
-
-                        }
-                        else
-                        {
-                            Toast.makeText(SalesDelivery.this, R.string.GaiRenWuYiJingBeiSaoMiao_WuFaXiuGaiDingDan, Toast.LENGTH_LONG).show();
-                            //ADD CAIXY TEST START
-                            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                            //ADD CAIXY TEST END
-                            txtSalesDelPDOrder.setText("");
-                            break;
-                        }
-
-                        GetBillBFlg="0";
-                        String lsBillCode = txtSalesDelPDOrder.getText().toString();
-                        txtSalesDelPDOrder.setText("");
-                        lsBillCode = lsBillCode.toUpperCase();
-                        lsBillCode = lsBillCode.replace("\n", "");
-                        if(lsBillCode.equals(""))
-                            return false;
-                        String lsBillAccID = lsBillCode.substring(0,1);
-                        String lsBillCorpPK = lsBillCode.substring(1,5);
-
-                        String SaleFlg = "";
-
-                        if(tvSaleOutSelect.getText().toString().equals("退回不送"))
-                        {
-                            SaleFlg = lsBillCode.substring(5,6);
-                            if(!SaleFlg.equals("D")&&!SaleFlg.equals("T"))
-                            {
-                                Toast.makeText(SalesDelivery.this, "扫描的条码不正确", Toast.LENGTH_LONG).show();
-                                //ADD CAIXY TEST START
-                                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                                //ADD CAIXY TEST END
-                                return false;
-                            }
-                            lsBillCode = lsBillCode.substring(6);
-                        }
-                        else
-                        {
-                            lsBillCode = lsBillCode.substring(5);
-                        }
-
-
-                        Map<String,Object> mapBillInfo =
-                                GetBillDetailInfoByBillCode(lsBillAccID,lsBillCorpPK,lsBillCode,SaleFlg);
-
-                        sBillAccID = lsBillCode.substring(0,1);
-                        sBillCorpPK = lsBillCode.substring(1,5);
-
-                        sBillCode = lsBillCode;
-
-                        txtSalesDelPDOrder.setText("");
-                        if(mapBillInfo==null)
-                        {
-                            Toast.makeText(SalesDelivery.this, "没有找到相对应的单据详细信息", Toast.LENGTH_LONG).show();
-                            //ADD CAIXY TEST START
-                            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                            //ADD CAIXY TEST END
-                            return false;
-                        }
-
-                        //绑定保存用表头
-                        jsonSaveHead = new JSONObject();
-                        try {
-                            jsonSaveHead = Common.MapTOJSONOBject(mapBillInfo);
-                        } catch (JSONException e) {
-                            Toast.makeText(SalesDelivery.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                            e.printStackTrace();
-                            //ADD CAIXY TEST START
-                            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                            //ADD CAIXY TEST END
-                        }
-
-                        //绑定显示订单信息
-                        //BindingBillDetailInfo(mapBillInfo);
-                        if(!BindingBillDetailInfo(mapBillInfo))
-                        {
-                            return true;
-                        }
-
-                        GetBillBodyDetailInfo(SaleFlg);
-
-                        try {
-                            GetTaskCount();
-                        } catch (JSONException e1) {
-                            // TODO Auto-generated catch block
-                            e1.printStackTrace();
-                        }
-                        if(GetBillBFlg.equals("1"))
-                        {
-                            SetRDCL();
-                            tmpCdTypeID = "";
-                            try {
-                                GetSalesDelWH();
-                            } catch (JSONException e) {
-                                // TODO Auto-generated catch block
-                                e.printStackTrace();
-                            }
-                        }
+                switch (v.getId()) {
+                    case id.txtSalesDelPDOrder:
+                        txtSalesDelWH.requestFocus();
                         return true;
-                    }
-                    break;
-//				case txtSalesDelPos:
-//					if(arg1 == arg2.KEYCODE_ENTER && arg2.getAction() == KeyEvent.ACTION_UP)
-//					{
-//						//txtSalesDelPos.requestFocus();
-//
-//						if(jsonSaveHead == null || jsonSaveHead.length() < 1)
-//						{
-////							txtSalesDelPos.setText("");
-//							Toast.makeText(SalesDelivery.this,
-//									"单据信息没有获得不能扫描货位", Toast.LENGTH_LONG).show();
-//							//ADD CAIXY TEST START
-//							MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-//							//ADD CAIXY TEST END
-//							txtSalesDelPDOrder.requestFocus();
-//							break;
-//						}
-//
-//						if(lstSaveBody == null || lstSaveBody.size() < 1)
-//						{
-//
-//						}
-//						else
-//						{
-//							String OldPosName = tmpposCode;
-//							Toast.makeText(SalesDelivery.this, "该任务已经被扫描,无法修改货位。若要修改货位请先清除扫描明细", Toast.LENGTH_LONG).show();
-//							//ADD CAIXY TEST START
-//							MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-//							//ADD CAIXY TEST END
-////							txtSalesDelPos.setText(OldPosName);
-//							txtSalesDelPDOrder.requestFocus();
-//							break;
-//						}
-//
-//
-//						try
-//						{
-//							//txtSalesDelRdcl.requestFocus();
-////							FindPositionByCode(txtSalesDelPos.getText().toString());
-//							return true;
-//						} catch (ParseException e) {
-////							txtSalesDelPos.setText("");
-//							tmpposCode = "";
-//							tmpposName = "";
-//							tmpposID = "";
-////							txtSalesDelPos.requestFocus();
-//							Toast.makeText(SalesDelivery.this,
-//									e.getMessage(), Toast.LENGTH_LONG).show();
-//							e.printStackTrace();
-//
-//							//ADD CAIXY TEST START
-//							MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-//							//ADD CAIXY TEST END
-//						} catch (Exception e) {
-//							// TODO Auto-generated catch block
-//							e.printStackTrace();
-//						}
-//					}
-//					break;
-                //wuqiong
-                case id.txtSalesDelRdcl:
-                    if(arg1 == arg2.KEYCODE_ENTER && arg2.getAction() == KeyEvent.ACTION_UP)//&& arg2.getAction() == KeyEvent.ACTION_DOWN
-                    {
 
-                        String ScanCode = txtSalesDelRdcl.getText().toString();
-                        txtSalesDelRdcl.setText("");
-                        if(jsonSaveHead == null || jsonSaveHead.length() < 1)
-                        {
-                            txtSalesDelRdcl.setText("");
-                            Toast.makeText(SalesDelivery.this,
-                                    R.string.DanJuXinXiMeiYouBuNengXuanZeShouFaLeiBie, Toast.LENGTH_LONG).show();
-                            //ADD CAIXY TEST START
-                            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                            //ADD CAIXY TEST END
-                            txtSalesDelPDOrder.requestFocus();
-                            return false;
-                        }
+                }
 
-                        try {
-                            btnSalesDelRdclClick(ScanCode);
-                        } catch (ParseException e) {
-                            // TODO Auto-generated catch block
-                            Toast.makeText(SalesDelivery.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                            //ADD CAIXY TEST START
-                            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                            //ADD CAIXY TEST END
-                            e.printStackTrace();
-                        } catch (IOException e) {
-                            // TODO Auto-generated catch block
-                            Toast.makeText(SalesDelivery.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                            //ADD CAIXY TEST START
-                            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                            //ADD CAIXY TEST END
-                            e.printStackTrace();
-                        } catch (JSONException e) {
-                            // TODO Auto-generated catch block
-                            Toast.makeText(SalesDelivery.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                            //ADD CAIXY TEST START
-                            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                            //ADD CAIXY TEST END
-                            e.printStackTrace();
-                        }
-
-                        return true;
-                    }
-                    break;
-                //wuqiong
             }
             return false;
         }
@@ -2923,7 +2741,6 @@ public class SalesDelivery extends Activity {
         btnSaleOutSelect = (ImageButton) findViewById(id.btnSaleOutSelect);
         btnSaleOutSelect.setOnClickListener(new OnClickListener());
 
-        tvSalesDelWH = (TextView) findViewById(id.tvSalesDelWH);
         txtSalesDelWH = (EditText) findViewById(id.txtSalesDelWH);
         btnSalesDelWH = (ImageButton) findViewById(id.btnSalesDelWH);
         btnSalesDelWH.setOnClickListener(new OnClickListener());
@@ -2954,9 +2771,10 @@ public class SalesDelivery extends Activity {
         txtSalesDelRdcl.setFocusable(false);
         txtSalesDelRdcl.setFocusableInTouchMode(false);
 
-        tvSaleOutSelect.setFocusableInTouchMode(true);
+        tvSaleOutSelect.setFocusableInTouchMode(false);
 
-        btnSalesDelPDOrder.setFocusable(false);
+//        btnSalesDelPDOrder.setFocusable(true);
+//        txtSalesDelWH.setFocusable(true);
         btnSalesDelExit.setFocusable(false);
         btnSalesDelScan.setFocusable(false);
         btnSalesDelSave.setFocusable(false);
