@@ -72,7 +72,7 @@ public class SalesDeliveryScan extends Activity {
     private List<Map<String, Object>> lstBodyTask = null;
     private List<Map<String, Object>> lstSaveBody = null;
     private Map<String, Object> mapScanDetail = null;
-     List<SaleOutGoods> saleGoodsLists ;
+    List<SaleOutGoods> saleGoodsLists ;
 
 
     //删除的任务内容临时保存住
@@ -467,7 +467,7 @@ public class SalesDeliveryScan extends Activity {
                         if (!ScanType.equals("销售出库")) {
                             Free1 = jsarray.getJSONObject(i).getString("vfree1");
                         }
-	  		  				return true;
+                        return true;
                     }
                 }
             }
@@ -1527,45 +1527,45 @@ public class SalesDeliveryScan extends Activity {
 
         for (int i = 0;i<count; i++){
             mapScanDetails = lstSaveBody.get(i);
-        if (saleGoodsLists.size()==0){
-            SaleOutGoods saleOutGoods = new SaleOutGoods();
-            saleOutGoods.setBarcode((String) mapScanDetails.get("BarCode"));
-            saleOutGoods.setInvCode((String) mapScanDetails.get("InvCode"));
-            saleOutGoods.setInvName((String) mapScanDetails.get("InvName"));
-            saleOutGoods.setPk_invbasdoc((String) mapScanDetails.get("pk_invbasdoc"));
-            saleOutGoods.setPk_invmandoc((String) mapScanDetails.get("pk_invmandoc"));
-            saleOutGoods.setBatch((String) mapScanDetails.get("Batch"));
-            saleOutGoods.setUnit((String) mapScanDetails.get("Measname"));
-            String qty = String.valueOf(mapScanDetails.get("Weights"));
-            if (TextUtils.isEmpty(qty)) {
-                qty = "0.0";
-            }
-            saleOutGoods.setQty(Float.valueOf(qty));
-            saleGoodsLists.add(saleOutGoods);
-        }else {
-            for (int j = 0; j< saleGoodsLists.size(); j++) {
-                SaleOutGoods existGoods = saleGoodsLists.get(j);
-                //相同物料相同批次的要合并，通过名字和批次比较
-                if (mapScanDetails.get("InvName").equals(existGoods.getInvName())&&mapScanDetails.get("Batch").equals(existGoods.getBatch())) {
-                    existGoods.setQty(existGoods.getQty() + Float.valueOf((String )mapScanDetails.get("Weights")));
-                } else {
-                    SaleOutGoods saleOutGoods_c = new SaleOutGoods();
-                    saleOutGoods_c.setBarcode((String) mapScanDetails.get("BarCode"));
-                    saleOutGoods_c.setInvCode((String) mapScanDetails.get("InvCode"));
-                    saleOutGoods_c.setInvName((String) mapScanDetails.get("InvName"));
-                    saleOutGoods_c.setPk_invbasdoc((String) mapScanDetails.get("pk_invbasdoc"));
-                    saleOutGoods_c.setPk_invmandoc((String) mapScanDetails.get("pk_invmandoc"));
-                    saleOutGoods_c.setBatch((String) mapScanDetails.get("Batch"));
-                    saleOutGoods_c.setUnit((String) mapScanDetails.get("Measname"));
-                    String qty = String.valueOf(mapScanDetails.get("Weights"));
-                    if (TextUtils.isEmpty(qty)) {
-                        qty = "0.0";
+            if (saleGoodsLists.size()==0){
+                SaleOutGoods saleOutGoods = new SaleOutGoods();
+                saleOutGoods.setBarcode((String) mapScanDetails.get("BarCode"));
+                saleOutGoods.setInvCode((String) mapScanDetails.get("InvCode"));
+                saleOutGoods.setInvName((String) mapScanDetails.get("InvName"));
+                saleOutGoods.setPk_invbasdoc((String) mapScanDetails.get("pk_invbasdoc"));
+                saleOutGoods.setPk_invmandoc((String) mapScanDetails.get("pk_invmandoc"));
+                saleOutGoods.setBatch((String) mapScanDetails.get("Batch"));
+                saleOutGoods.setUnit((String) mapScanDetails.get("Measname"));
+                String qty = String.valueOf(mapScanDetails.get("Weights"));
+                if (TextUtils.isEmpty(qty)) {
+                    qty = "0.0";
+                }
+                saleOutGoods.setQty(Float.valueOf(qty));
+                saleGoodsLists.add(saleOutGoods);
+            }else {
+                for (int j = 0; j< saleGoodsLists.size(); j++) {
+                    SaleOutGoods existGoods = saleGoodsLists.get(j);
+                    //相同物料相同批次的要合并，通过名字和批次比较
+                    if (mapScanDetails.get("InvName").equals(existGoods.getInvName())&&mapScanDetails.get("Batch").equals(existGoods.getBatch())) {
+                        existGoods.setQty(existGoods.getQty() + Float.valueOf((String )mapScanDetails.get("Weights")));
+                    } else {
+                        SaleOutGoods saleOutGoods_c = new SaleOutGoods();
+                        saleOutGoods_c.setBarcode((String) mapScanDetails.get("BarCode"));
+                        saleOutGoods_c.setInvCode((String) mapScanDetails.get("InvCode"));
+                        saleOutGoods_c.setInvName((String) mapScanDetails.get("InvName"));
+                        saleOutGoods_c.setPk_invbasdoc((String) mapScanDetails.get("pk_invbasdoc"));
+                        saleOutGoods_c.setPk_invmandoc((String) mapScanDetails.get("pk_invmandoc"));
+                        saleOutGoods_c.setBatch((String) mapScanDetails.get("Batch"));
+                        saleOutGoods_c.setUnit((String) mapScanDetails.get("Measname"));
+                        String qty = String.valueOf(mapScanDetails.get("Weights"));
+                        if (TextUtils.isEmpty(qty)) {
+                            qty = "0.0";
+                        }
+                        saleOutGoods_c.setQty(Float.valueOf(qty));
+                        saleGoodsLists.add(saleOutGoods_c);
                     }
-                    saleOutGoods_c.setQty(Float.valueOf(qty));
-                    saleGoodsLists.add(saleOutGoods_c);
                 }
             }
-        }
         }
 //        for (int i = 0; i < count; i++) {
 //            map = (HashMap<String, Object>) lstSaveBody.get(i);

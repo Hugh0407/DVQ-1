@@ -42,11 +42,15 @@ import static android.content.ContentValues.TAG;
 
 public class SalesDelivery extends Activity {
 
+    String sBillCodes ;
+    String sBeginDate ;
+    String sEndDate ;
+
     List<SaleOutGoods> saleOutGoodsLists =null;
 
     String tmpWHStatus = "";//仓库是否启用货位
 
-    TextView tvSalesDelPDOrder;
+//    TextView tvSalesDelPDOrder;
     EditText txtSalesDelPDOrder;
 
     private writeTxt writeTxt ;
@@ -283,9 +287,7 @@ public class SalesDelivery extends Activity {
                                 //ADD CAIXY TEST START
                                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                                 //ADD CAIXY TEST END
-
                             }
-
                             try {
                                 SaleFlg = jsonSaveHead.getString("saleflg");
                             } catch (JSONException e2) {
@@ -294,8 +296,6 @@ public class SalesDelivery extends Activity {
                             }
 
                             //绑定显示订单信息
-
-                            //BindingBillDetailInfo(mapBillInfo);
                             if(!BindingBillDetailInfo(mapBillInfo))
                             {
                                 return;
@@ -381,18 +381,19 @@ public class SalesDelivery extends Activity {
                 }
             }
         }
+        //单据查询
         else if(requestCode==44){
             if (resultCode==4){
 
                 if(data != null)
                 {
                     try {
-                    String sBillCode  = data.getStringExtra("sBillCode");
-                    String sBeginDate = data.getStringExtra("sBeginDate");
-                    String sEndDate = data.getStringExtra("sEndDate");
-                        Log.d(TAG, "R: "+sBillCode);
-                        Log.d(TAG, "R: "+sBeginDate);
-                        Log.d(TAG, "R: "+sEndDate);
+                     sBillCodes  = data.getStringExtra("sBillCodes");
+                     sBeginDate = data.getStringExtra("sBeginDate");
+                     sEndDate   = data.getStringExtra("sEndDate");
+//                        Log.d(TAG, "RRRR: "+sBillCodes);
+//                        Log.d(TAG, "RRRR: "+sBeginDate);
+//                        Log.d(TAG, "RRRR: "+sEndDate);
                     String BillCodeKey = "";
                     btnSalesDelPDOrderClick(BillCodeKey);
                     } catch (IOException e) {
@@ -2185,6 +2186,9 @@ public class SalesDelivery extends Activity {
         {
             Intent ViewGrid = new Intent(this, SaleBillInfoOrderList.class);
             ViewGrid.putExtra("FunctionName", "销售出库");//GetSalereceiveHead
+            ViewGrid.putExtra("sBeginDate",sBeginDate);
+            ViewGrid.putExtra("sBillCodes",sBillCodes);
+            ViewGrid.putExtra("sEndDate",sEndDate);
             startActivityForResult(ViewGrid,88);
         }
 //		if(tvSaleOutSelect.getText().toString().equals("退回再送"))
@@ -2219,7 +2223,7 @@ public class SalesDelivery extends Activity {
     {
         if (saleOutGoodsLists.size()>0) {
             AlertDialog.Builder bulider =
-                    new AlertDialog.Builder(this).setTitle(R.string.XunWen).setMessage(R.string.NiQueDingYaoTuiChuMa);
+                    new AlertDialog.Builder(this).setTitle(R.string.XunWen).setMessage("扫描单据未保存，确认退出吗?");
             bulider.setNegativeButton(R.string.QuXiao, null);
             bulider.setPositiveButton(R.string.QueRen, listenExit).create().show();
         }else{

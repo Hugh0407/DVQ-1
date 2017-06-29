@@ -39,7 +39,7 @@ public class SaleChooseTime extends Activity {
     int day;
     Calendar mycalendar;
     String sEndDate = "";
-    String sBillCode = "";
+    String sBillCodes = "";
     String sBeginDate = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,16 +68,17 @@ public class SaleChooseTime extends Activity {
                 break;
             case R.id.bt_Search:
                 Intent in = this.getIntent();
-                sBillCode  = txtBillCode.getText().toString();
+                sBillCodes  = txtBillCode.getText().toString();
                 sBeginDate =  txtBeginDate.getText().toString();
                 sEndDate = txtEndDate.getText().toString();
-                Log.d(TAG, "onActivityResult: "+sBillCode);
+                Log.d(TAG, "onActivityResult: "+sBillCodes);
                 Log.d(TAG, "onActivityResult: "+sBeginDate);
                 Log.d(TAG, "onActivityResult: "+sEndDate);
-                in.putExtra("sBillCode",sBillCode);
+                in.putExtra("sBillCodes",sBillCodes);
                 in.putExtra("sBeginDate",sBeginDate);
                 in.putExtra("sEndDate",sEndDate);
                 SaleChooseTime.this.setResult(4,in);
+                finish();
                 break;
             default:
                 break;
@@ -90,6 +91,7 @@ public class SaleChooseTime extends Activity {
      */
 
     private  DatePickerDialog.OnDateSetListener Datelister_s = new DatePickerDialog.OnDateSetListener() {
+        String mo="";
         /**params：view：该事件关联的组件
          * params：myyear：当前选择的年
          * params：monthOfYear：当前选择的月
@@ -100,6 +102,12 @@ public class SaleChooseTime extends Activity {
             //修改year、month、day的变量值，以便以后单击按钮时，DatePickerDialog上显示上一次修改后的值
             year = myear;
             month = monthOfYear;
+
+            if (month<10){
+                mo = "0"+(month+1);
+            }else{
+                mo = (month+1)+"";
+            }
             day = dayOfMonth;
             updateDates();
             txtEndDate.requestFocus();
@@ -109,7 +117,7 @@ public class SaleChooseTime extends Activity {
         //当DatePickerDialog关闭时，更新日期显示
         private void updateDates() {
             //在TextView上显示日期
-            txtBeginDate.setText(year + "-" + (month + 1) + "-" + day);
+            txtBeginDate.setText(year + "-" + mo+ "-" + day);
         }
     };
 
@@ -118,6 +126,7 @@ public class SaleChooseTime extends Activity {
      */
 
     private DatePickerDialog.OnDateSetListener Datelistener = new DatePickerDialog.OnDateSetListener() {
+        String mo;
         /**params：view：该事件关联的组件
          * params：myyear：当前选择的年
          * params：monthOfYear：当前选择的月
@@ -126,6 +135,11 @@ public class SaleChooseTime extends Activity {
         @Override
         public void onDateSet(DatePicker view, int myyear, int monthOfYear, int dayOfMonth) {
             //修改year、month、day的变量值，以便以后单击按钮时，DatePickerDialog上显示上一次修改后的值
+            if (month<10){
+                mo = "0"+(month+1);
+            }else{
+                mo = (month+1)+"";
+            }
             year = myyear;
             month = monthOfYear;
             day = dayOfMonth;
@@ -136,7 +150,7 @@ public class SaleChooseTime extends Activity {
         //当DatePickerDialog关闭时，更新日期显示
         private void updateDate() {
             //在TextView上显示日期
-            txtEndDate.setText(year + "-" + (month + 1) + "-" + day);
+            txtEndDate.setText(year + "-" + mo + "-" + day);
         }
 
     };
