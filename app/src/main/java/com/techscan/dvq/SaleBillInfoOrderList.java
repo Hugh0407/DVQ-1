@@ -34,6 +34,9 @@ public class SaleBillInfoOrderList extends Activity {
 
 	private String fsFunctionName = "";
 	private String fsBillCode = "";
+	private String sDate;
+	private String sEndDate;
+	private String sBillCodes;
 	List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 	Button btSaleBillInfoOrderListReturn =null;
 
@@ -71,6 +74,13 @@ public class SaleBillInfoOrderList extends Activity {
 			fsFunctionName = myIntent.getStringExtra("FunctionName");
 		if(myIntent.hasExtra("BillCodeKey"))
 			fsBillCode = myIntent.getStringExtra("BillCodeKey");
+		if (myIntent.hasExtra("sBeginDate"))
+			sDate = myIntent.getStringExtra("sBeginDdate");
+		if (myIntent.hasExtra("sEndDate"))
+			sEndDate = myIntent.getStringExtra("sEndDate");
+		if (myIntent.hasExtra("sBillCodes"))
+			sBillCodes = myIntent.getStringExtra("sBillCodes");
+
 
 
 
@@ -140,7 +150,7 @@ public class SaleBillInfoOrderList extends Activity {
 
 		if(fsFunctionName.equals("ÏúÊÛ³ö¿â"))
 		{
-			fsFunctionName = "GetSalereceiveHead";
+			fsFunctionName = "GetSaleOrderList";
 		}
 //
 
@@ -162,8 +172,11 @@ public class SaleBillInfoOrderList extends Activity {
 			JSONObject para = new JSONObject();
 			try {
 				para.put("FunctionName", fsFunctionName);
-				para.put("CorpPK", MainLogin.objLog.CompanyID);
-				para.put("BillCode", fsBillCode);
+//				para.put("CorpPK", MainLogin.objLog.CompanyID);
+				para.put("STOrgCode", MainLogin.objLog.STOrgCode);
+				para.put("BillCode", sBillCodes);
+				para.put("sDate",sDate);
+				para.put("sEndDate",sEndDate);
 				//para.put("Wh-CodeA", MainLogin.objLog.WhCodeA);
 				//para.put("Wh-CodeB", MainLogin.objLog.WhCodeB);
 

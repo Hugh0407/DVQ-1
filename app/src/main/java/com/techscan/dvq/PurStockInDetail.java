@@ -6,8 +6,11 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.techscan.dvq.R.id;
+import com.techscan.dvq.common.RequestThread;
 
 import org.apache.http.ParseException;
 import org.apache.http.util.EncodingUtils;
@@ -39,9 +43,12 @@ import java.util.Map;
 //import com.techscan.dvq.StockMoveScan.ButtonOnClickDelconfirm;
 //import com.techscan.dvq.StockMoveScan.ButtonOnClick;
 
+import butterknife.InjectView;
+
 public class PurStockInDetail extends Activity {
-	
-	
+
+	private GetInvBaseInfo objInvBaseInfo = null;
+	private HashMap<String,Object> m_mapInvBaseInfo = null;
 	String fileNameScan  = null;
 	String ScanedFileName  = null;
 	String UserID = null;
@@ -82,6 +89,19 @@ public class PurStockInDetail extends Activity {
 	Button btnTask;
 	Button btnDetail;
 	Button btnExit;
+
+	@InjectView(id.txtPurType)
+	EditText txtPurType;
+	@InjectView(id.txtPurSpec)
+	EditText txtPurSpec;
+	@InjectView(id.txtPurNumber)
+	EditText txtPurNumber;
+	@InjectView(id.txtPurWeight)
+	EditText txtPurWeight;
+	@InjectView(id.txtPurTotal)
+	EditText txtPurTotal;
+	@InjectView(id.txtPurUnit)
+	EditText txtPurUnit;
 
 	int ishouldinnum = 0;
 	int iinnum = 0;
@@ -383,7 +403,9 @@ public class PurStockInDetail extends Activity {
 		IniDetail();
 		try {
 			try {
-				currentObj = new Inventory(bar.cInvCode, "BADV", bar.AccID);
+				//currentObj = new Inventory(bar.cInvCode, "BADV", bar.AccID);
+				objInvBaseInfo = new GetInvBaseInfo(bar,mHandler);
+				m_mapInvBaseInfo = objInvBaseInfo.mapInvBaseInfo;
 			} catch (Exception ex) {
 				Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
 				// ADD CAIXY TEST START
@@ -391,21 +413,26 @@ public class PurStockInDetail extends Activity {
 				// ADD CAIXY TEST END
 				return false;
 			}
-			currentObj.SetSerino(bar.cSerino);
-			currentObj.SetBatch(bar.cBatch);
-			currentObj.SetcurrentID(bar.currentBox);
-			currentObj.SettotalID(bar.TotalBox);
-			currentObj.SetAccID(bar.AccID);
 
-			if (currentObj.getErrMsg() != null
-					&& !currentObj.getErrMsg().equals("")) {
-				Toast.makeText(this, currentObj.getErrMsg(), Toast.LENGTH_LONG)
-						.show();
-				// ADD CAIXY TEST START
-				MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-				// ADD CAIXY TEST END
-				return false;
-			}
+			//加载到页面各个控件上
+			SetInvBaseToUI();
+			//return true;
+
+//			currentObj.SetSerino(bar.cSerino);
+//			currentObj.SetBatch(bar.cBatch);
+//			currentObj.SetcurrentID(bar.currentBox);
+//			currentObj.SettotalID(bar.TotalBox);
+//			currentObj.SetAccID(bar.AccID);
+
+//			if (currentObj.getErrMsg() != null
+//					&& !currentObj.getErrMsg().equals("")) {
+//				Toast.makeText(this, currentObj.getErrMsg(), Toast.LENGTH_LONG)
+//						.show();
+//				// ADD CAIXY TEST START
+//				MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//				// ADD CAIXY TEST END
+//				return false;
+//			}
 
 			// 校验流水号
 			if (!ConformGetSERINO(bar.CheckBarCode, bar)) {
@@ -464,11 +491,11 @@ public class PurStockInDetail extends Activity {
 					SaveScanedBody();
 
 					// 判断判断箱子是否装满。
-					if (ScanBoxTotal(bar.cSerino, bar.TotalBox, bar.currentBox) == false) {
-						txtBarcode.setText("");
-						txtBarcode.requestFocus();
-						return false;
-					}
+//					if (ScanBoxTotal(bar.cSerino, bar.TotalBox, bar.currentBox) == false) {
+//						txtBarcode.setText("");
+//						txtBarcode.requestFocus();
+//						return false;
+//					}
 
 					int doneqty = temp.getInt("doneqty");
 					temp.put("doneqty", doneqty + 1);
@@ -781,6 +808,45 @@ public class PurStockInDetail extends Activity {
 
 		return true;
 
+	}
+
+	/**
+	 * 网络请求后的线程通信
+	 * msg.obj 是从子线程传递过来的数据
+	 */
+	Handler mHandler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			super.handleMessage(msg);
+			switch (msg.what) {
+				case 1:
+					JSONObject json = (JSONObject) msg.obj;
+					if (json != null) {
+						try {
+							Log.d("TAG", "handleMessage: TEST");
+							objInvBaseInfo.SetInvBaseToParam(json);
+						} catch (JSONException e) {
+							e.printStackTrace();
+						}
+					} else {
+						Log.d("TAG", "handleMessage: NULL");
+						return;
+					}
+					break;
+			}
+		}
+	};
+
+	//把取得的数据加载到页面控件上
+	private void SetInvBaseToUI()
+	{
+		txtInvCode.setText(m_mapInvBaseInfo.get("invcode").toString());
+		txtInvName.setText(m_mapInvBaseInfo.get("invname").toString());
+		txtPurType.setText(m_mapInvBaseInfo.get("invtype").toString());
+		txtPurSpec.setText(m_mapInvBaseInfo.get("invspec").toString());
+		txtBatch.setText(m_mapInvBaseInfo.get("batch").toString());
+		txtInvSerino.setText(m_mapInvBaseInfo.get("serino").toString());
+		txtPurUnit.setText(m_mapInvBaseInfo.get("measname").toString());
 	}
 
 	private class ButtonOnClick implements DialogInterface.OnClickListener {
@@ -1680,4 +1746,9 @@ public class PurStockInDetail extends Activity {
 			}
 		}
 	}
+
+
+
+
+
 }

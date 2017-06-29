@@ -14,7 +14,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="30dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:layout_margin="5dp">
@@ -34,9 +34,10 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="30dp"
             android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_margin="5dp">
             <TextView
                 android:id="@+id/TextView33"
                 android:layout_width="wrap_content"
@@ -48,14 +49,15 @@
                 android:layout_height="30dp"
                 android:layout_weight="1"
                 android:background="@drawable/edittext_style"
-                android:layout_margin="5dp"/>
+                android:layout_marginLeft="5dp"/>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="30dp"
             android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_margin="5dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -69,107 +71,220 @@
                 android:layout_height="30dp"
                 android:layout_weight="1"
                 android:background="@drawable/edittext_style"
-                android:layout_margin="5dp"/>
+                android:layout_marginLeft="5dp"
+                android:editable="false"/>
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="30dp"
             android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_margin="5dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="型 　 号"/>
+
+            <EditText
+                android:focusable="false"
+                android:id="@+id/txtPurType"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:background="@drawable/edittext_style"
+                android:singleLine="true"
+                android:layout_marginLeft="5dp"
+                android:editable="false"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_margin="5dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="规 　 格"/>
+            <EditText
+                android:focusable="false"
+                android:id="@+id/txtPurSpec"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:background="@drawable/edittext_style"
+                android:singleLine="true"
+                android:layout_marginLeft="5dp"
+                android:editable="false"/>
 
         </LinearLayout>
 
-        <EditText
-            android:id="@+id/txtPurSpec"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/txtPurInvCode"
-            android:editable="false"
-            android:focusable="false"
-            android:ems="10"
-            android:gravity="bottom"
-            android:background="@drawable/edittext_style"
-            android:layout_marginRight="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:layout_alignLeft="@+id/txtPurInvCode"
-            android:layout_alignStart="@+id/txtPurInvCode" />
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_margin="5dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="批  　次"/>
+            <EditText
+                android:focusable="false"
+                android:id="@+id/txtPurBatch"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:background="@drawable/edittext_style"
+                android:singleLine="true"
+                android:layout_marginLeft="5dp"/>
 
-        <EditText
-            android:id="@+id/txtPurSerino"
-            android:layout_width="wrap_content"
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/txtPurBatch"
-            android:editable="false"
-            android:focusable="false"
-            android:ems="10"
-            android:gravity="bottom"
-            android:background="@drawable/edittext_style"
-            android:layout_marginRight="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:layout_alignLeft="@+id/txtPurBatch"
-            android:layout_alignStart="@+id/txtPurBatch" />
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_margin="5dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="流 水 号"/>
+            <EditText
+                android:focusable="false"
+                android:id="@+id/txtPurSerino"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:background="@drawable/edittext_style"
+                android:singleLine="true"
+                android:layout_marginLeft="5dp"/>
 
-        <EditText
-            android:id="@+id/txtPurBatch"
-            android:layout_width="wrap_content"
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/txtPurInvName"
-            android:editable="false"
-            android:focusable="false"
-            android:ems="10"
-            android:gravity="bottom"
-            android:background="@drawable/edittext_style"
-            android:layout_marginRight="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:layout_alignLeft="@+id/txtPurInvName"
-            android:layout_alignStart="@+id/txtPurInvName" />
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_margin="5dp">
 
-        <TextView
-            android:id="@+id/TextView01"
-            android:layout_width="wrap_content"
-            android:layout_height="10px"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:text="  " />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="4dp"
+                    android:gravity="center_vertical"
+                    android:text="数  　量"/>
 
+                <EditText
+                    android:inputType="number"
+                    android:id="@+id/txtPurNumber"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/edittext_style"
+                    android:singleLine="true"/>
 
-        <TextView
-            android:id="@+id/TextView36"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="  型  　号"
-            android:layout_alignBottom="@+id/txtPurInvName"
-            android:layout_alignLeft="@+id/TextView33"
-            android:layout_alignStart="@+id/TextView33" />
+            </LinearLayout>
 
-        <TextView
-            android:id="@+id/TextView34"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="  批  　次"
-            android:layout_alignBaseline="@+id/txtPurBatch"
-            android:layout_alignBottom="@+id/txtPurBatch"
-            android:layout_alignLeft="@+id/TextView36"
-            android:layout_alignStart="@+id/TextView36" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:layout_marginLeft="5dp">
 
-        <TextView
-            android:id="@+id/TextView35"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="  流 水 号"
-            android:layout_alignBaseline="@+id/txtPurSerino"
-            android:layout_alignBottom="@+id/txtPurSerino"
-            android:layout_alignLeft="@+id/TextView34"
-            android:layout_alignStart="@+id/TextView34" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="重  　量"/>
+
+                <EditText
+                    android:focusable="false"
+                    android:id="@+id/txtPurWeight"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/edittext_style"
+                    android:singleLine="true"
+                    android:layout_marginLeft="5dp"/>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_margin="5dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="4dp"
+                    android:gravity="center_vertical"
+                    android:text="总  　量"/>
+
+                <EditText
+                    android:inputType="number"
+                    android:id="@+id/txtPurTotal"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/edittext_style"
+                    android:singleLine="true"
+                    android:editable="false"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:layout_marginLeft="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="单  　位"/>
+
+                <EditText
+                    android:focusable="false"
+                    android:id="@+id/txtPurUnit"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/edittext_style"
+                    android:singleLine="true"
+                    android:layout_marginLeft="5dp"
+                    android:editable="false"/>
+
+            </LinearLayout>
+        </LinearLayout>
 
     </LinearLayout>
 

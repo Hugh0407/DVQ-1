@@ -19,8 +19,8 @@ public class SplitBarcode {
     //private String m_sInventoryCode;//物料号
     //private String m_sLotCode;//批次
     public String TaxFlag;//完税、保税标志
-    public Float fQuantity;//重量
-    public Integer iNumber;//件数
+    public Double dQuantity = 0.00;//重量
+    public Integer iNumber = 0;//件数
     public String Outsourcing;//委外
     //public String SeriNo;//序列号
     public String CWFlag;//成品财务标志
@@ -38,12 +38,14 @@ public class SplitBarcode {
             creatorOk = false;
             return;
         }
-        Barcode = sBarcode.replace("\n", "");
+        Barcode = sBarcode.replace("\r", "").replace("\n", "");
         String[] lsSplitArray = Barcode.split("\\|");
         if (lsSplitArray.length < 2) {
             creatorOk = false;
             return;
         }
+        FinishBarCode = Barcode;
+        CheckBarCode = Barcode;
 
         BarcodeType = lsSplitArray[0];
         cInvCode = lsSplitArray[1];
@@ -62,7 +64,7 @@ public class SplitBarcode {
                 }
                 cBatch = lsSplitArray[2];
                 TaxFlag = lsSplitArray[3];
-                fQuantity = Float.parseFloat(lsSplitArray[4]);
+                dQuantity = Double.parseDouble(lsSplitArray[4]);
                 cSerino = lsSplitArray[5];
                 break;
             case TC:
@@ -72,7 +74,7 @@ public class SplitBarcode {
                 }
                 cBatch = lsSplitArray[2];
                 TaxFlag = lsSplitArray[3];
-                fQuantity = Float.parseFloat(lsSplitArray[4]);
+                dQuantity = Double.parseDouble(lsSplitArray[4]);
                 iNumber = Integer.parseInt(lsSplitArray[5]);
                 cSerino = lsSplitArray[6];
                 break;
@@ -84,7 +86,7 @@ public class SplitBarcode {
                 cBatch = lsSplitArray[2];
                 Outsourcing = lsSplitArray[3];
                 TaxFlag = lsSplitArray[4];
-                fQuantity = Float.parseFloat(lsSplitArray[5]);
+                dQuantity = Double.parseDouble(lsSplitArray[5]);
                 CWFlag = lsSplitArray[6];
                 OnlyFlag = lsSplitArray[7];
                 cSerino = lsSplitArray[8];
@@ -97,7 +99,7 @@ public class SplitBarcode {
                 cBatch = lsSplitArray[2];
                 Outsourcing = lsSplitArray[3];
                 TaxFlag = lsSplitArray[4];
-                fQuantity = Float.parseFloat(lsSplitArray[5]);
+                dQuantity = Double.parseDouble(lsSplitArray[5]);
                 iNumber = Integer.parseInt(lsSplitArray[6]);
                 CWFlag = lsSplitArray[7];
                 OnlyFlag = lsSplitArray[8];

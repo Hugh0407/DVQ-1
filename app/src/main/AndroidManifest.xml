@@ -269,6 +269,8 @@
         <!-- </intent-filter> -->
         <!--  -->
         <!-- </activity> -->
+        <activity android:name=".SaleChooseTime">
+        </activity>
         <activity android:name=".materialOut.MaterialOutAct">
         </activity>
         <activity android:name=".materialOut.scan.MaterialOutScanAct">
