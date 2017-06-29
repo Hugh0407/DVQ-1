@@ -350,7 +350,7 @@ public class PurStockInDetail extends Activity {
 		}
 
 		SplitBarcode bar = new SplitBarcode(Scanbarcode);
-		
+
   		if(bar.creatorOk==false)
   		{
   			Toast.makeText(this, "扫描的不是正确货品条码", Toast.LENGTH_LONG).show();

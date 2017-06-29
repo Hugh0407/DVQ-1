@@ -173,6 +173,7 @@ public class MaterialOutScanAct extends Activity {
             Bar = Bar.replace("\n", "");
         }
         mEdBarCode.setText(Bar);
+        mEdBarCode.setSelection(mEdBarCode.length());   //将光标移动到最后的位置
         String[] barCode = Bar.split("\\|");
         if (barCode.length == 2 && barCode[0].equals("Y")) {          //Y|SKU
             //如果是液体的话需要输入液体总量，将数量设置不可编辑
@@ -201,6 +202,7 @@ public class MaterialOutScanAct extends Activity {
             mEdWeight.setText(barCode[4]);
             mEdQty.setText("");
             mEdNum.setText("1");
+            mEdNum.setSelection(mEdNum.length());   //将光标移动到最后的位置
             return true;
         } else if (barCode.length == 7 && barCode[0].equals("TC")) {    //TC|SKU|LOT|TAX|QTY|NUM|SN
             //如果是盘码，全都设置为不可编辑

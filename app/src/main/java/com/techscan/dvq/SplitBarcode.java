@@ -14,7 +14,7 @@ public class SplitBarcode {
     public String CheckBarCode = "";
 
     public boolean creatorOk = false;
-
+    public String Barcode = ""; //去掉 \n的 条码
     public String BarcodeType;//条码类型（Y：液态原材料；C：固态单包原材料；TC：固态托盘原材料；P：单包成品；TP托盘成品）
     //private String m_sInventoryCode;//物料号
     //private String m_sLotCode;//批次
@@ -38,8 +38,8 @@ public class SplitBarcode {
             creatorOk = false;
             return;
         }
-
-        String[] lsSplitArray = sBarcode.replace("\n", "").split("|");
+        Barcode = sBarcode.replace("\n", "");
+        String[] lsSplitArray = Barcode.split("\\|");
         if (lsSplitArray.length < 2) {
             creatorOk = false;
             return;
