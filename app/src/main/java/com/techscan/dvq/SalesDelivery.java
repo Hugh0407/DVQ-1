@@ -381,6 +381,29 @@ public class SalesDelivery extends Activity {
                 }
             }
         }
+        else if(requestCode==44){
+            if (resultCode==4){
+
+                if(data != null)
+                {
+                    try {
+                    String sBillCode  = data.getStringExtra("sBillCode");
+                    String sBeginDate = data.getStringExtra("sBeginDate");
+                    String sEndDate = data.getStringExtra("sEndDate");
+                        Log.d(TAG, "R: "+sBillCode);
+                        Log.d(TAG, "R: "+sBeginDate);
+                        Log.d(TAG, "R: "+sEndDate);
+                    String BillCodeKey = "";
+                    btnSalesDelPDOrderClick(BillCodeKey);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+        }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
@@ -1543,9 +1566,18 @@ public class SalesDelivery extends Activity {
 
                     showSingleChoiceDialog();
                     break;
+                //单据图标
                 case id.btnSalesDelPDOrder:
                     try {
-                        String BillCodeKey = "";
+                        Intent intent = new Intent(SalesDelivery.this,SaleChooseTime.class);
+//                        String sBeginDate ="";
+//                        String sEndDate ="";
+//                        String sBillCode = "";
+//                        intent.putExtra("sBeginDate",sBeginDate);
+//                        intent.putExtra("sBeginDate",sEndDate);
+//                        intent.putExtra("sBillCode",sBillCode);
+                        startActivityForResult(intent,44);
+
 //						if(tvSaleOutSelect.getText().toString().equals("退回再送"))
 //						{
 //							BillCodeKey= tvSaleOutSelecttvSaleOutSelect.getText().toString();
@@ -1559,43 +1591,35 @@ public class SalesDelivery extends Activity {
 //								break;
 //							}
 //						}
-                        if (tvSaleOutSelect.getText().toString()==null||tvSaleOutSelect.getText().toString().equals(""))
-                        {
-                            Toast.makeText(SalesDelivery.this, "请输入来源单据",
-                                    Toast.LENGTH_LONG).show();
 
-                            // ADD CAIXY TEST START
-                            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                            // ADD CAIXY TEST END
-                            return;
-                        }
-                        btnSalesDelPDOrderClick(BillCodeKey);
+
                     } catch (ParseException e) {
                         Toast.makeText(SalesDelivery.this, e.getMessage(), Toast.LENGTH_LONG).show();
                         e.printStackTrace();
                         //ADD CAIXY TEST START
                         MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                         //ADD CAIXY TEST END
-                    } catch (IOException e) {
-                        Toast.makeText(SalesDelivery.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                        e.printStackTrace();
-                        //ADD CAIXY TEST START
-                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                        //ADD CAIXY TEST END
-                    } catch (JSONException e) {
-                        Toast.makeText(SalesDelivery.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                        e.printStackTrace();
-                        //ADD CAIXY TEST START
-                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                        //ADD CAIXY TEST END
                     }
-                    catch(Exception  e){
-                        Toast.makeText(SalesDelivery.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                        e.printStackTrace();
-                        //ADD CAIXY TEST START
-                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                        //ADD CAIXY TEST END
-                    }
+// catch (IOException e) {
+//                        Toast.makeText(SalesDelivery.this, e.getMessage(), Toast.LENGTH_LONG).show();
+//                        e.printStackTrace();
+//                        //ADD CAIXY TEST START
+//                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                        //ADD CAIXY TEST END
+//                    } catch (JSONException e) {
+//                        Toast.makeText(SalesDelivery.this, e.getMessage(), Toast.LENGTH_LONG).show();
+//                        e.printStackTrace();
+//                        //ADD CAIXY TEST START
+//                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                        //ADD CAIXY TEST END
+//                    }
+//                    catch(Exception  e){
+//                        Toast.makeText(SalesDelivery.this, e.getMessage(), Toast.LENGTH_LONG).show();
+//                        e.printStackTrace();
+//                        //ADD CAIXY TEST START
+//                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                        //ADD CAIXY TEST END
+//                    }
                     break;
 
 //			case id.btnSalesDelRdcl:
@@ -2193,11 +2217,13 @@ public class SalesDelivery extends Activity {
     //退出按钮
     private void Exit()
     {
-        if (saleOutGoodsLists.size()>0||saleOutGoodsLists!=null) {
+        if (saleOutGoodsLists.size()>0) {
             AlertDialog.Builder bulider =
                     new AlertDialog.Builder(this).setTitle(R.string.XunWen).setMessage(R.string.NiQueDingYaoTuiChuMa);
             bulider.setNegativeButton(R.string.QuXiao, null);
             bulider.setPositiveButton(R.string.QueRen, listenExit).create().show();
+        }else{
+            finish();
         }
 
     }
@@ -2209,8 +2235,9 @@ public class SalesDelivery extends Activity {
                 public void onClick(DialogInterface dialog,
                                     int whichButton)
                 {
+                    dialog.dismiss();
                     finish();
-                    System.gc();
+//                    System.gc();
                 }
             };
 
