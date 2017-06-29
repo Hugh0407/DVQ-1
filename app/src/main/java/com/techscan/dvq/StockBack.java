@@ -702,7 +702,7 @@ public class StockBack extends Activity {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						
+
 					}
 //					txtStockBackBar.setFocusable(true);
 //					txtStockBackBar.requestFocus();

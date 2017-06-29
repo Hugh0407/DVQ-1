@@ -316,9 +316,9 @@ public class MaterialOutAct extends Activity {
             object.put("CINVBASID", c.getPk_invbasdoc());
             object.put("CINVENTORYID", c.getPk_invmandoc());
 
-            float price = c.getQty();
+            float qty_f = c.getQty();
             DecimalFormat decimalFormat = new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
-            String qty = decimalFormat.format(price);//format 返回的是字符串
+            String qty = decimalFormat.format(qty_f);//format 返回的是字符串
 
             object.put("NOUTNUM", qty);
             object.put("PK_BODYCALBODY", PK_CALBODY);

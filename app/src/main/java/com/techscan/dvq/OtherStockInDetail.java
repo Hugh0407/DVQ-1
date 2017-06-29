@@ -550,7 +550,7 @@ public class OtherStockInDetail extends Activity {
 //        }
 
 
-        txtBarcode.setText("");
+        txtBarcode.setText(bar.Barcode);
         IniDetail();
         try {
             try {
