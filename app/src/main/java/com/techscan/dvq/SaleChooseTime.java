@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.util.Calendar;
 
@@ -68,18 +69,36 @@ public class SaleChooseTime extends Activity {
                 dpds.show();//显示DatePickerDialog组件
                 break;
             case R.id.bt_Search:
-                Intent in = this.getIntent();
-                sBillCodes  = txtBillCode.getText().toString();
-                sBeginDate =  txtBeginDate.getText().toString();
-                sEndDate = txtEndDate.getText().toString();
-                Log.d(TAG, "onActivityResult: "+sBillCodes);
-                Log.d(TAG, "onActivityResult: "+sBeginDate);
-                Log.d(TAG, "onActivityResult: "+sEndDate);
-                in.putExtra("sBillCodes",sBillCodes);
-                in.putExtra("sBeginDate",sBeginDate);
-                in.putExtra("sEndDate",sEndDate);
-                SaleChooseTime.this.setResult(4,in);
-                finish();
+                String beginDate = txtBeginDate.getText().toString();
+                String endDate  = txtEndDate.getText().toString();
+                DateCompare dateCompare = new DateCompare();
+                if ((beginDate.equals("")||beginDate==null)&&(endDate.equals("")||endDate==null)){
+                    Intent in = this.getIntent();
+                    sBillCodes  = txtBillCode.getText().toString();
+                    sBeginDate =  txtBeginDate.getText().toString();
+                    sEndDate = txtEndDate.getText().toString();
+                    in.putExtra("sBillCodes",sBillCodes);
+                    in.putExtra("sBeginDate",sBeginDate);
+                    in.putExtra("sEndDate",sEndDate);
+                    SaleChooseTime.this.setResult(4,in);
+                    finish();
+                }
+                else
+                {
+                if(dateCompare.timeCompare(beginDate,endDate)){
+                    Intent in = this.getIntent();
+                    sBillCodes  = txtBillCode.getText().toString();
+                    sBeginDate =  txtBeginDate.getText().toString();
+                    sEndDate = txtEndDate.getText().toString();
+                    in.putExtra("sBillCodes",sBillCodes);
+                    in.putExtra("sBeginDate",sBeginDate);
+                    in.putExtra("sEndDate",sEndDate);
+                    SaleChooseTime.this.setResult(4,in);
+                    finish();
+                }else{
+                    Toast.makeText(this, R.string.dateCompare,Toast.LENGTH_SHORT).show();
+                }
+                }
                 break;
             default:
                 break;
@@ -93,6 +112,7 @@ public class SaleChooseTime extends Activity {
 
     private  DatePickerDialog.OnDateSetListener Datelister_s = new DatePickerDialog.OnDateSetListener() {
         String mo="";
+        String days="";
         /**params：view：该事件关联的组件
          * params：myyear：当前选择的年
          * params：monthOfYear：当前选择的月
@@ -103,22 +123,26 @@ public class SaleChooseTime extends Activity {
             //修改year、month、day的变量值，以便以后单击按钮时，DatePickerDialog上显示上一次修改后的值
             year = myear;
             month = monthOfYear;
-
             if (month<10){
                 mo = "0"+(month+1);
             }else{
                 mo = (month+1)+"";
             }
             day = dayOfMonth;
+            if (day<10){
+                days = "0"+(day);
+            }else{
+                days = day+"";
+            }
+
             updateDates();
-            txtEndDate.requestFocus();
 
         }
 
         //当DatePickerDialog关闭时，更新日期显示
         private void updateDates() {
             //在TextView上显示日期
-            txtBeginDate.setText(year + "-" + mo+ "-" + day);
+            txtBeginDate.setText(year + "-" + mo+ "-" + days);
         }
     };
 
@@ -127,7 +151,8 @@ public class SaleChooseTime extends Activity {
      */
 
     private DatePickerDialog.OnDateSetListener Datelistener = new DatePickerDialog.OnDateSetListener() {
-        String mo;
+        String mo="";
+        String days="";
         /**params：view：该事件关联的组件
          * params：myyear：当前选择的年
          * params：monthOfYear：当前选择的月
@@ -144,6 +169,12 @@ public class SaleChooseTime extends Activity {
             year = myyear;
             month = monthOfYear;
             day = dayOfMonth;
+            if (day<10){
+                days = "0"+(day);
+            }else{
+                days = day+"";
+            }
+            day = dayOfMonth;
             updateDate();
 
         }
@@ -151,7 +182,7 @@ public class SaleChooseTime extends Activity {
         //当DatePickerDialog关闭时，更新日期显示
         private void updateDate() {
             //在TextView上显示日期
-            txtEndDate.setText(year + "-" + mo + "-" + day);
+            txtEndDate.setText(year + "-" + mo + "-" + days);
         }
 
     };
@@ -210,6 +241,7 @@ public class SaleChooseTime extends Activity {
           month = mycalendar.get(Calendar.MONTH);//获取Calendar对象中的月
           day = mycalendar.get(Calendar.DAY_OF_MONTH);//获取这个月的第几天
           txtBeginDate.setOnFocusChangeListener(myFocusListeners);
+          txtBillCode.setOnKeyListener(mOnKeyListener);
           txtBeginDate.setOnKeyListener(mOnKeyListener);
           txtEndDate.setOnFocusChangeListener(myFocusListener);
           txtEndDate.setOnKeyListener(mOnKeyListener);

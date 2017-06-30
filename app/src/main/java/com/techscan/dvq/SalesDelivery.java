@@ -2303,9 +2303,9 @@ public class SalesDelivery extends Activity {
             if (arg1 == arg2.KEYCODE_ENTER && arg2.getAction() == KeyEvent.ACTION_UP)//&& arg2.getAction() == KeyEvent.ACTION_DOWN
             {
                 switch (v.getId()) {
-                    case id.txtSalesDelPDOrder:
-                        txtSalesDelWH.requestFocus();
-                        return true;
+//                    case id.txtSalesDelPDOrder:
+//                        txtSalesDelWH.requestFocus();
+//                        return true;
 
                 }
 

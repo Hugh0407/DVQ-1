@@ -64,11 +64,14 @@
     <EditText
         android:id="@+id/txtSDScanBarcode"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/TextView01"
         android:layout_toRightOf="@+id/tvSDScanBarCode"
         android:ems="10"
+        android:background="@drawable/edittext_style"
         android:gravity="bottom"
         android:singleLine="true"
         android:width="230dp" >
@@ -83,6 +86,7 @@
         android:layout_alignBaseline="@+id/txtSDScanBarcode"
         android:layout_alignBottom="@+id/txtSDScanBarcode"
         android:layout_alignParentLeft="true"
+        android:textSize="18dp"
         android:text="  条       码" />
 
     <ListView
