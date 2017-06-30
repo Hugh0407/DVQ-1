@@ -90,17 +90,11 @@ public class PurStockInDetail extends Activity {
     Button btnDetail;
     Button btnExit;
 
-    @InjectView(R.id.txtPurType)
     EditText txtPurType;
-    @InjectView(R.id.txtPurSpec)
     EditText txtPurSpec;
-    @InjectView(R.id.txtPurNumber)
     EditText txtPurNumber;
-    @InjectView(R.id.txtPurWeight)
     EditText txtPurWeight;
-    @InjectView(R.id.txtPurTotal)
     EditText txtPurTotal;
-    @InjectView(R.id.txtPurUnit)
     EditText txtPurUnit;
 
     int ishouldinnum = 0;
@@ -401,7 +395,6 @@ public class PurStockInDetail extends Activity {
             try {
                 //currentObj = new Inventory(bar.cInvCode, "BADV", bar.AccID);
                 objInvBaseInfo = new GetInvBaseInfo(bar, mHandler);
-                m_mapInvBaseInfo = objInvBaseInfo.mapInvBaseInfo;
             } catch (Exception ex) {
                 Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
                 // ADD CAIXY TEST START
@@ -411,7 +404,7 @@ public class PurStockInDetail extends Activity {
             }
 
             //加载到页面各个控件上
-            SetInvBaseToUI();
+            //SetInvBaseToUI();
             //return true;
 
 //			currentObj.SetSerino(bar.cSerino);
@@ -823,6 +816,8 @@ public class PurStockInDetail extends Activity {
                             Log.d("TAG", "handleMessage: TEST");
                             Log.d("TAG", "json: " + json);
                             objInvBaseInfo.SetInvBaseToParam(json);
+                            m_mapInvBaseInfo = objInvBaseInfo.mapInvBaseInfo;
+                            SetInvBaseToUI();
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -845,6 +840,9 @@ public class PurStockInDetail extends Activity {
         txtBatch.setText(m_mapInvBaseInfo.get("batch").toString());
         txtInvSerino.setText(m_mapInvBaseInfo.get("serino").toString());
         txtPurUnit.setText(m_mapInvBaseInfo.get("measname").toString());
+        txtBarcode.setText(m_mapInvBaseInfo.get("barcode").toString());
+        txtPurWeight.setText(m_mapInvBaseInfo.get("quantity").toString());
+        txtPurNumber.setText(m_mapInvBaseInfo.get("number").toString());
     }
 
     private class ButtonOnClick implements DialogInterface.OnClickListener {
@@ -1116,7 +1114,7 @@ public class PurStockInDetail extends Activity {
                                 if (icurrent + 1 == itotal) {
                                     it = 1;
                                 }
-//								if (icurrent != 0) 
+//								if (icurrent != 0)
 //								{
 //									tempBox.put("serial", sno);
 //									tempBox.put("total", itotal);
@@ -1363,6 +1361,13 @@ public class PurStockInDetail extends Activity {
 
         }
 
+        txtPurType = (EditText)findViewById(R.id.txtPurType);
+        txtPurSpec = (EditText)findViewById(R.id.txtPurSpec);
+        txtPurNumber = (EditText)findViewById(R.id.txtPurNumber);
+        txtPurWeight = (EditText)findViewById(R.id.txtPurWeight);
+        txtPurTotal = (EditText)findViewById(R.id.txtPurTotal);
+        txtPurUnit = (EditText)findViewById(R.id.txtPurUnit);
+
         tvPurcount = (TextView) findViewById(R.id.tvPurcount);
         txtBarcode = (EditText) findViewById(R.id.txtPurBarcode);
         txtInvName = (EditText) findViewById(R.id.txtPurInvName);
@@ -1571,10 +1576,10 @@ public class PurStockInDetail extends Activity {
 
                 if (x > 10) {
 //        			AlertDialog alertDialog = null;
-//        			alertDialog = new AlertDialog.Builder(this).create(); 
-//        	        alertDialog.setTitle("数据加载出现错误");  
-//        	        alertDialog.setMessage("请在保持网络畅通的情况下尝试再次加载缓存数据");  
-//        	        alertDialog.show();  
+//        			alertDialog = new AlertDialog.Builder(this).create();
+//        	        alertDialog.setTitle("数据加载出现错误");
+//        	        alertDialog.setMessage("请在保持网络畅通的情况下尝试再次加载缓存数据");
+//        	        alertDialog.show();
                     MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                     Common.ReScanErr = true;
                     ReScanErr();
