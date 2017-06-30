@@ -40,8 +40,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.InjectView;
-
 //import com.techscan.dvq.StockMoveScan.ButtonOnClickDelconfirm;
 //import com.techscan.dvq.StockMoveScan.ButtonOnClick;
 
@@ -133,7 +131,7 @@ public class PurStockInDetail extends Activity {
             para.put("BillHead", this.m_BillNo);
             para.put("accId", "A");
             para.put("FunctionName", "GetInBoundBillHeadNoCompanyCode");
-            para.put("TableName", "PurHead");
+            para.put("TableName", "PurGood");
         } catch (JSONException e2) {
             e2.printStackTrace();
 

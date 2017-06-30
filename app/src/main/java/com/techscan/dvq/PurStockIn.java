@@ -115,7 +115,7 @@ public class PurStockIn extends Activity
 //		JSONObject temp = new JSONObject();		
 //		JSONArray bodys = jsBody.getJSONArray("PurBody");
 //		JSONArray head = new JSONArray();
-//		head = jsHead.getJSONArray("PurHead");
+//		head = jsHead.getJSONArray("PurGood");
 		
 		//填写调拨订单表头		
 		jsDBHead.put("cbiztypeid", "0001ZZ1000000000UFQ0");				//调拨类型标识 
@@ -326,7 +326,7 @@ public class PurStockIn extends Activity
 		saveHeadJons.put("pk_purcorp", pk_purcorp);
 		
 		JSONArray head = new JSONArray();
-		head = jsHead.getJSONArray("PurHead");
+		head = jsHead.getJSONArray("PurGood");
 		saveHeadJons.put("pk_corp", head.getJSONObject(0).getString("pk_corp"));			
 		
 		JSONArray arrays =jsSerino.getJSONArray("Serino");
@@ -535,7 +535,7 @@ public class PurStockIn extends Activity
 		if(NoScanSave==false)
 		{
 			
-			head = jsHead.getJSONArray("PurHead");
+			head = jsHead.getJSONArray("PurGood");
 			
 			
 			JSONArray arrays =jsSerino.getJSONArray("Serino");

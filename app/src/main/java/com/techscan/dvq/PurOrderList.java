@@ -73,7 +73,7 @@ public class PurOrderList extends Activity {
 			//ADD CAIXY TEST END
 			return null;
 		}
-		JSONArray jsarray= jas.getJSONArray("PurHead");
+		JSONArray jsarray= jas.getJSONArray("PurGood");
 		
 		for(int i = 0;i<jsarray.length();i++)
 		{
@@ -165,7 +165,7 @@ public class PurOrderList extends Activity {
 			para.put("BillHead", BillHead);
 			para.put("accId", "A");
 			para.put("FunctionName","GetInBoundBillHeadNoCompanyCode");
-			para.put("TableName", "PurHead");
+			para.put("TableName", "PurGood");
 			
 		} 
 		catch (JSONException e2) 
