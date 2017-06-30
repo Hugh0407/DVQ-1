@@ -114,6 +114,7 @@
         android:layout_width="0dp"
         android:layout_height="30dp"
         android:layout_weight="5"
+        android:editable="false"
         android:layout_marginTop="5dp"
         android:layout_alignRight="@+id/txtSalesDelWH"
         android:layout_below="@+id/tvSaleOutSelect"
@@ -135,11 +136,9 @@
         android:editable="false"
         android:ems="10"
         android:background="@drawable/edittext_style"
-        android:focusable="false"
         android:singleLine="true"
         android:width="200dp" >
 
-        <requestFocus />
     </EditText>
 
     <EditText
