@@ -74,7 +74,7 @@
     <string name="ShuJuJiaZaiCuoWu">数据加载出现错误</string>
     <string name="TuiChuGaiMoKuai">退出该模块并且再次尝试加载</string>
     <string name="WiFiXinHaoCha">WIFI信号差!请保持网络畅通</string>
-    <string name="WangLuoChuXianWenTi">网络操作出现问题!请稍后再试AAA</string>
+    <string name="WangLuoChuXianWenTi">网络操作出现问题!请稍后再试</string>
     <string name="HuoQuHuoWeiKuCunShuJu">获取货位库存数据信息失败,货位上没有该货品,不能调出</string>
     <string name="GaiHuoWeiZaiDeFaChuKuCunYiJingBuZule">该货品在该货位的发出库存已经不足了,不能发出</string>
     <string name="GaiHuoPinZaiGaiCangHuZhongMeiYouKuCunXinXi">该货品在该仓库中没有库存信息,不能发出</string>

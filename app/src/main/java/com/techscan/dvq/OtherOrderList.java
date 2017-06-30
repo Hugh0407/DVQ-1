@@ -210,7 +210,7 @@ public class OtherOrderList extends Activity {
 				para.put("pk_corp", m_PkCorp);
 				para.put("BillType", m_OrderType);
 				para.put("FunctionName", "GetOtherInOutHead");
-				para.put("TableName", "PurHead");
+				para.put("TableName", "PurGood");
 
 			} catch (JSONException e2) {
 				e2.printStackTrace();
@@ -284,9 +284,9 @@ public class OtherOrderList extends Activity {
 
 		JSONObject tempJso = null;
 
-		if (!jas.has("PurHead"))
+		if (!jas.has("PurGood"))
 			return null;
-		JSONArray jsarray = jas.getJSONArray("PurHead");
+		JSONArray jsarray = jas.getJSONArray("PurGood");
 
 		for (int i = 0; i < jsarray.length(); i++) {
 			tempJso = jsarray.getJSONObject(i);

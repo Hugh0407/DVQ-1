@@ -123,7 +123,7 @@ public class OtherStockInDetail extends Activity {
             para.put("BillType", this.m_BillType);
             para.put("accId", m_AccID);
             para.put("BillCode", this.m_BillNo);
-            para.put("TableName", "PurHead");
+            para.put("TableName", "PurGood");
             para.put("pk_corp", m_pk_Corp);
             para.put("FunctionName", "GetOtherInOutHead");
 

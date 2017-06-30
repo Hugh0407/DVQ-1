@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -115,7 +116,7 @@ public class PurStockIn extends Activity
 //		JSONObject temp = new JSONObject();		
 //		JSONArray bodys = jsBody.getJSONArray("PurBody");
 //		JSONArray head = new JSONArray();
-//		head = jsHead.getJSONArray("PurHead");
+//		head = jsHead.getJSONArray("PurGood");
 		
 		//填写调拨订单表头		
 		jsDBHead.put("cbiztypeid", "0001ZZ1000000000UFQ0");				//调拨类型标识 
@@ -326,7 +327,7 @@ public class PurStockIn extends Activity
 		saveHeadJons.put("pk_purcorp", pk_purcorp);
 		
 		JSONArray head = new JSONArray();
-		head = jsHead.getJSONArray("PurHead");
+		head = jsHead.getJSONArray("PurGood");
 		saveHeadJons.put("pk_corp", head.getJSONObject(0).getString("pk_corp"));			
 		
 		JSONArray arrays =jsSerino.getJSONArray("Serino");
@@ -535,7 +536,7 @@ public class PurStockIn extends Activity
 		if(NoScanSave==false)
 		{
 			
-			head = jsHead.getJSONArray("PurHead");
+			head = jsHead.getJSONArray("PurGood");
 			
 			
 			JSONArray arrays =jsSerino.getJSONArray("Serino");
@@ -884,20 +885,20 @@ public class PurStockIn extends Activity
   	
 	private void Save1() throws JSONException, ParseException, IOException
 	{
-		GetWHPosStatus();
-		if(tmpWHStatus.equals("Y"))
-		{
-			if(m_PosID.equals(""))
-			{
-				Toast.makeText(PurStockIn.this,R.string.QingShuRuHuoWeiHao, Toast.LENGTH_LONG).show();
-				
-				//ADD CAIXY TEST START
-				MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-				//ADD CAIXY TEST END
-				return;
-			}
-		}
-		
+//		GetWHPosStatus();
+//		if(tmpWHStatus.equals("Y"))
+//		{
+//			if(m_PosID.equals(""))
+//			{
+//				Toast.makeText(PurStockIn.this,R.string.QingShuRuHuoWeiHao, Toast.LENGTH_LONG).show();
+//
+//				//ADD CAIXY TEST START
+//				MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//				//ADD CAIXY TEST END
+//				return;
+//			}
+//		}
+		Log.d("TAG", "SaveBoxTotal: " + jsBoxTotal);
 		if(jsBoxTotal == null||jsBoxTotal.length() == 0)
 		{
 			 AlertDialog.Builder bulider = 
@@ -1615,32 +1616,43 @@ public class PurStockIn extends Activity
 			file.delete();
 		}
 
-		writeTxt.writeTxtToFile(ScanedFileName,
-				lsBillBarCode +"|"
-		    	+lsm_WarehouseID +"|"
-		    	+lspk_purcorp +"|"
-		    	+lsm_BillID  +"|"
-		    	+lsm_BillNo +"|"
-		    	+lstmpBillStatus +"|"
-		    	+lsm_PosName +"|"
-		    	+lsm_PosID +"|"
-				+lsPosCode +"|"
-				+lspk_calbody);
+		//del walter 20170630 暂时不写入本地文本
+//		writeTxt.writeTxtToFile(ScanedFileName,
+//				lsBillBarCode +"|"
+//		    	+lsm_WarehouseID +"|"
+//		    	+lspk_purcorp +"|"
+//		    	+lsm_BillID  +"|"
+//		    	+lsm_BillNo +"|"
+//		    	+lstmpBillStatus +"|"
+//		    	+lsm_PosName +"|"
+//		    	+lsm_PosID +"|"
+//				+lsPosCode +"|"
+//				+lspk_calbody);
 		
     }
     
     private void Exit()
-	{   
-
-		
-		ExitNameList =new String[2];
-		ExitNameList[0]="退出并保留缓存数据";
-		ExitNameList[1]="退出并删除缓存数据";
-		
-		SelectButton=new AlertDialog.Builder(this).setTitle(R.string.QueRenTuiChu).setSingleChoiceItems(
-				ExitNameList, -1, buttonOnClick).setPositiveButton(R.string.QueRen,
-				buttonOnClick).setNegativeButton(R.string.QuXiao, buttonOnClick).show();
+	{
+//		ExitNameList =new String[2];
+//		ExitNameList[0]="退出并保留缓存数据";
+//		ExitNameList[1]="退出并删除缓存数据";
+//
+//		SelectButton=new AlertDialog.Builder(this).setTitle(R.string.QueRenTuiChu).setSingleChoiceItems(
+//				ExitNameList, -1, buttonOnClick).setPositiveButton(R.string.QueRen,
+//				buttonOnClick).setNegativeButton(R.string.QuXiao, buttonOnClick).show();
+			AlertDialog.Builder bulider =
+					new AlertDialog.Builder(this).setTitle(R.string.XunWen).setMessage("数据未保存是否退出");
+			bulider.setNegativeButton(R.string.QuXiao, null);
+			bulider.setPositiveButton(R.string.QueRen, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.dismiss();
+					IniActivyMemor();
+					finish();
+				}
+			}).create().show();
 	}
+
     
     private void IniActivyMemor()
 	{
