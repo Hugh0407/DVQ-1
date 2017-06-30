@@ -508,8 +508,6 @@ public class MaterialOutScanAct extends Activity {
                             } else {
                                 Toast.makeText(MaterialOutScanAct.this, "数量不正确", Toast.LENGTH_SHORT).show();
                             }
-
-
                         }
                         return true;
                 }
