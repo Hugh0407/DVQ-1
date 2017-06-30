@@ -25,7 +25,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginRight="4dp"
                 android:gravity="center_vertical"
-                android:text="单     据      号 "/>
+                android:text="单   据   号 "/>
 
             <EditText
                 android:id="@+id/et_BillCode"
@@ -52,7 +52,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginRight="4dp"
                 android:gravity="center_vertical"
-                android:text="制单日期开始"/>
+                android:text="起 始 日 期"/>
 
             <EditText
                 android:id="@+id/et_BeginDate"
@@ -80,16 +80,15 @@
                 android:layout_height="match_parent"
                 android:layout_marginRight="4dp"
                 android:gravity="center_vertical"
-                android:text="制单日期结束"/>
+                android:text="截 止 日 期"/>
 
             <EditText
-                android:focusable="false"
+
                 android:id="@+id/et_EndDate"
                 android:layout_width="0dp"
                 android:layout_height="30dp"
                 android:layout_weight="1"
                 android:background="@drawable/edittext_style"
-                android:editable="false"
                 android:ems="10"
                 android:maxLines="1"
                 android:singleLine="true"

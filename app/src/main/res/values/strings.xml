@@ -163,4 +163,5 @@
     <string name="XuanZeCangKu">选择仓库</string>
     <string name="DanJuBaoCunChuXianWenTi_QingZaiCiTiJiao">单据保存过程中出现了问题,请尝试再次提交!</string>
     <string name="HaiMeiYouPeiZhiJIChuLianJIe">还没有配置基础链接</string>
+    <string name="dateCompare">请输入正确的日期</string>
 </resources>
