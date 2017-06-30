@@ -197,7 +197,8 @@
                     android:layout_height="30dp"
                     android:layout_weight="1"
                     android:background="@drawable/edittext_style"
-                    android:singleLine="true"/>
+                    android:singleLine="true"
+                    android:editable="false"/>
 
             </LinearLayout>
 

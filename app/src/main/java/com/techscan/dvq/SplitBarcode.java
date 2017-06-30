@@ -1,7 +1,7 @@
 package com.techscan.dvq;
 
 public class SplitBarcode {
-    public String AccID = "";
+    public String AccID = "A";
     public String cInvCode = "";//物料号
     public String cBatch = "";//批次
     public String cInvName = "";
@@ -66,6 +66,7 @@ public class SplitBarcode {
                 TaxFlag = lsSplitArray[3];
                 dQuantity = Double.parseDouble(lsSplitArray[4]);
                 cSerino = lsSplitArray[5];
+                iNumber = 1;
                 break;
             case TC:
                 if (lsSplitArray.length != 7) {
@@ -90,6 +91,7 @@ public class SplitBarcode {
                 CWFlag = lsSplitArray[6];
                 OnlyFlag = lsSplitArray[7];
                 cSerino = lsSplitArray[8];
+                iNumber = 1;
                 break;
             case TP:
                 if (lsSplitArray.length != 10) {
