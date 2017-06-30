@@ -909,9 +909,13 @@ public class PurStockInDetail extends Activity {
         txtPurTotal.setText(ldTotal.toString());
         m_mapInvBaseInfo.put("total",ldTotal);
         if(m_mapInvBaseInfo.get("barcodetype").toString().equals("TC")) {
+            txtBatch.setFocusableInTouchMode(false);
+            txtBatch.setFocusable(false);
             ScanedToGet();
         }
         else if(m_mapInvBaseInfo.get("barcodetype").toString().equals("C") ) {
+            txtBatch.setFocusableInTouchMode(false);
+            txtBatch.setFocusable(false);
             txtPurNumber.requestFocus();
             txtPurNumber.selectAll();
         }
@@ -920,6 +924,7 @@ public class PurStockInDetail extends Activity {
             txtBatch.setFocusable(true);
             txtBatch.requestFocus();
             txtBatch.selectAll();
+            //txtPurNumber.setVisibility();
         }
     }
 
