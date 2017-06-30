@@ -11,8 +11,8 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.techscan.dvq.OtherOrderList;
-import com.techscan.dvq.OtherStockInDetail;
 import com.techscan.dvq.R;
+import com.techscan.dvq.statusChange.scan.SCScanAct;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -120,7 +120,7 @@ public class StatusChangeAct extends Activity {
         if (OrderID == null || OrderID.equals("")) {
             Toast.makeText(this, "请选择来源的单据号", Toast.LENGTH_LONG).show();
         } else {
-            Intent otherOrderDetail = new Intent(this, OtherStockInDetail.class);
+            Intent otherOrderDetail = new Intent(this, SCScanAct.class);
             otherOrderDetail.putExtra("OrderID", OrderID);
             otherOrderDetail.putExtra("BillNo", OrderNo);
             otherOrderDetail.putExtra("OrderType", "4N");
