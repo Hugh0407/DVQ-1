@@ -67,10 +67,6 @@ public class SplitTongChengBarCode {
             }
 
             creatorOk = true;
-//            FinishBarCode = AccID + "|" + cInvCode + "|" +
-//                    cBatch + "|" + QTY + "|" + "|" + cSerino;
-//            CheckBarCode = AccID + "|" + cInvCode + "|" +
-//                    cBatch + "|" + cSerino;
 
 
         }

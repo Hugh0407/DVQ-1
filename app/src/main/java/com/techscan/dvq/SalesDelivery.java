@@ -8,8 +8,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnKeyListener;
 import android.widget.Button;
@@ -43,23 +41,14 @@ import static android.content.ContentValues.TAG;
 public class SalesDelivery extends Activity {
 
     String CWAREHOUSEID = "";    //库存组织
-
     String sBillCodes ;//单据号查询
     String sBeginDate ;//制单日期开始查询
     String sEndDate ;//制单日期结束查询
 
     List<SaleOutGoods> saleOutGoodsLists =null;
-
     String tmpWHStatus = "";//仓库是否启用货位
-
-//    TextView tvSalesDelPDOrder;
     EditText txtSalesDelPDOrder;
-
     private writeTxt writeTxt ;
-    //	TextView tvSalesDelPos;
-//	EditText txtSalesDelPos;
-    TextView tvSalesDelRdcl;
-    //	ImageButton btnSalesDelRdcl;
     EditText txtSalesDelRdcl;//单据日期
     EditText txtSalesDelCD;
     TextView tvCustomer;
@@ -67,10 +56,6 @@ public class SalesDelivery extends Activity {
     Button btnSalesDelExit;
     Button btnSalesDelScan;
     Button btnSalesDelSave;
-//	ImageButton btnSalesDelCD;
-//	TextView tvSalesDelManualNo;
-//	EditText txtSalesDelManualNo;
-
     private ArrayList<String> ScanedBarcode = new ArrayList<String>();
 
     String sBillAccID = "";
@@ -78,21 +63,10 @@ public class SalesDelivery extends Activity {
     String sBillCode = "";
     String SaleFlg = "";
 
-
-//	TextView tvSalesDelBillCodeName;//单据号
-//	TextView tvSalesDelAccIDName;
-
-//	TextView tvSalesDelCorpName;
-
-    //	TextView tvSalesDelBillCode;
-//	TextView tvSalesDelAccID;
     TextView tvSalesDelWare;
-//	TextView tvSalesDelCorp;
-
     TextView tvSalesDelWH;
     EditText txtSalesDelWH;
     ImageButton	btnSalesDelWH;
-
 
     int TaskCount = 0;
     String tmprdCode = "";
@@ -101,14 +75,8 @@ public class SalesDelivery extends Activity {
     String tmpposCode = "";
     String tmpposName = "";
     String tmpposID = "";
-
     public final static String PREFERENCE_SETTING = "Setting";
-
-
     String tmpCdTypeID;
-
-
-
     String WhNameA = "";
     String WhNameB = "";
 //	String sCompanyCode="";
@@ -122,38 +90,28 @@ public class SalesDelivery extends Activity {
     private String[] WHNameList = null;
     //	private String[] WHCodeList = null;
     private String[] WHIDList = null;
-
-
     private String[] CDIDList= null;
     private String[] CDNameList= null;
     private AlertDialog CDSelectButton= null;
-
-
     private AlertDialog BillTypeSelectButton=null;
     private AlertDialog WHSelectButton=null;
     private ButtonOnClick buttonOnClick = new ButtonOnClick(0);
     private String tmpWarehousePK = "";
     private String tmpCorpPK = "";
     private String tmpBillCode = "";
+    private String tmpCustName = "";
+    private String tmpBillDate = "";
     private String rdflag = "1";
     private String GetBillBFlg = "1";
-
     //保存用表头信息
     private JSONObject jsonSaveHead = null;
+    private JSONObject jsonBillHead = null;
     //表体任务
-
-
-
-
     private JSONObject jsonBillBodyTask = null;
     private JSONObject jsonBillBodyTask2 = null;
     private String tmpAccID = "";
     private List<Map<String, Object>> lstSaveBody = null;
 
-    // ADD CAIXY TEST START
-// 	private SoundPool sp;// 声明一个SoundPool
-// 	private int MainLogin.music;// 定义一个int来设置suondID
-    // ADD CAIXY TEST END
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -168,14 +126,9 @@ public class SalesDelivery extends Activity {
         WhNameB =sharedPreferences.getString("AccId", "");
 //				sCompanyCode=sharedPreferences.getString("CompanyCode", "");
 //		        sOrgCode=sharedPreferences.getString("OrgCode", "");
-        saleOutGoodsLists  = new ArrayList<SaleOutGoods>();
         ClearBillDetailInfoShow();
         SetBillType();
 
-        // ADD CAIXY START
-//		sp = new SoundPool(10, AudioManager.STREAM_SYSTEM, 5);// 第一个参数为同时播放数据流的最大个数，第二数据流类型，第三为声音质量
-//		MainLogin.music = MainLogin.sp.load(this, R.raw.xxx, 1); // 把你的声音素材放到res/raw里，第2个参数即为资源文件，第3个为音乐的优先级
-        // ADD CAIXY END
 
         tvSaleOutSelect.requestFocus();
 
@@ -280,6 +233,7 @@ public class SalesDelivery extends Activity {
                             //wuqiong
                             try {
                                 jsonSaveHead = Common.MapTOJSONOBject(mapBillInfo);
+//                                Log.d(TAG, "onActivityResult: "+jsonSaveHead.toString());
                             } catch (JSONException e) {
                                 Toast.makeText(SalesDelivery.this, e.getMessage(), Toast.LENGTH_LONG).show();
                                 e.printStackTrace();
@@ -299,55 +253,56 @@ public class SalesDelivery extends Activity {
                             {
                                 return;
                             }
-
-                            GetBillBodyDetailInfo(SaleFlg);
-
+                            try{
+                                GetBillHeadDetailInfo(SaleFlg);
+//                                GetBillBodyDetailInfo(SaleFlg);
+                            }catch (Exception e1) {
+                                e1.printStackTrace();
+                            }
 
                             try {
                                 GetTaskCount();
                             } catch (JSONException e1) {
                                 e1.printStackTrace();
                             }
-                            if(GetBillBFlg.equals("1"))
-                            {
-
-                                SetRDCL();
-                                tmpCdTypeID = "";
-                                try {
-                                    GetSalesDelWH();
-                                } catch (JSONException e) {
-                                    // TODO Auto-generated catch block
-                                    e.printStackTrace();
-                                }
-                            }
+//                            if(GetBillBFlg.equals("1"))
+//                            {
+//
+//                                SetRDCL();
+//                                tmpCdTypeID = "";
+//                                try {
+//                                    GetSalesDelWH();
+//                                } catch (JSONException e) {
+//                                    // TODO Auto-generated catch block
+//                                    e.printStackTrace();
+//                                }
+//                            }
                         }
                     }
                     //ADD BY WUQIONG 2015/04/27
                     break;
-                case 2:         // 这是收发类别返回的地方
-                    if (data != null)
-                    {
-                        Bundle bundle = data.getExtras();
-                        if (bundle != null)
-                        {
-
-                            tmprdCode = data.getStringExtra("Code");
-                            tmprdID = data.getStringExtra("RdID");
-                            tmprdName = data.getStringExtra("Name");
-                            txtSalesDelRdcl.setText(tmprdName);
-
-                        }
-                        else
-                        {
-                            txtSalesDelRdcl.setText("");
-                        }
-
-                    }
+//                case 2:         // 这是收发类别返回的地方
+//                    if (data != null)
+//                    {
+//                        Bundle bundle = data.getExtras();
+//                        if (bundle != null)
+//                        {
+//
+//                            tmprdCode = data.getStringExtra("Code");
+//                            tmprdID = data.getStringExtra("RdID");
+//                            tmprdName = data.getStringExtra("Name");
+//                            txtSalesDelRdcl.setText(tmprdName);
+//
+//                        }
+//                        else
+//                        {
+//                            txtSalesDelRdcl.setText("");
+//                        }
+//
+//                    }
                     //ADD BY WUQIONG 2015/04/27
-                    break;
+//                    break;
                 default:
-                    //其它窗口的回传数据
-                    //IniActivyMemor();
                     break;
             }
         }
@@ -390,11 +345,8 @@ public class SalesDelivery extends Activity {
                      sBillCodes  = data.getStringExtra("sBillCodes");
                      sBeginDate = data.getStringExtra("sBeginDate");
                      sEndDate   = data.getStringExtra("sEndDate");
-//                        Log.d(TAG, "RRRR: "+sBillCodes);
-//                        Log.d(TAG, "RRRR: "+sBeginDate);
-//                        Log.d(TAG, "RRRR: "+sEndDate);
-                    String BillCodeKey = "";
-                    btnSalesDelPDOrderClick(BillCodeKey);
+                     String BillCodeKey = "";
+                     btnSalesDelPDOrderClick(BillCodeKey);
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (JSONException e) {
@@ -990,10 +942,8 @@ public class SalesDelivery extends Activity {
 //                }
                 NewBodyarray.put(NewBodJSON);
             }
-
             jsonBillBodyTask2.put("Status", true);
             jsonBillBodyTask2.put("dbBody", NewBodyarray);
-
             GetBillBFlg = "1";
 
 
@@ -1018,7 +968,7 @@ public class SalesDelivery extends Activity {
 
     }
 
-
+    //获得表体信息
     private void GetBillBodyDetailInfo(String sSaleFlg)
     {
         GetBillBFlg = "0";
@@ -1031,9 +981,10 @@ public class SalesDelivery extends Activity {
 
             if(tvSaleOutSelect.getText().toString().equals("销售出库"))
             {
-                para.put("FunctionName", "GetSalereceiveBody");
+                para.put("FunctionName", "GetSaleOutBody");
                 para.put("BillCode", tmpBillCode);
-                para.put("CorpPK", tmpCorpPK);
+                para.put("CorpPK", "4100");
+                Log.d(TAG, "GetBillBodyDetailInfo: "+tmpBillCode);
             }
 
         } catch (JSONException e2) {
@@ -1063,9 +1014,6 @@ public class SalesDelivery extends Activity {
             }
             jas = Common.DoHttpQuery(para, "CommonQuery", "");
             Log.d(TAG, "GetBillBodyDetailInfo: "+jas.toString());
-            //txtSalesDelManualNo.setEnabled(true);
-//			txtSalesDelPos.setEnabled(true);
-            txtSalesDelRdcl.setEnabled(true);
 
         } catch (Exception ex)
         {
@@ -1163,8 +1111,140 @@ public class SalesDelivery extends Activity {
                     NewBodJSON.put("pk_defdoc6", tempJso.getString("pk_defdoc6"));
                     NewBodJSON.put("def6", tempJso.getString("vdef6"));
                 }
+                NewBodyarray.put(NewBodJSON);
+            }
 
-                if(tvSaleOutSelect.getText().toString().equals("退回再送"))
+            jsonBillBodyTask.put("Status", true);
+            jsonBillBodyTask.put("dbBody", NewBodyarray);
+
+            GetBillBFlg = "1";
+
+
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+            //ADD CAIXY TEST START
+            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+            //ADD CAIXY TEST END
+            return;
+        }
+        catch (Exception ex)
+        {
+            Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
+            //ADD CAIXY TEST START
+            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+            //ADD CAIXY TEST END
+            return;
+        }
+
+    }
+
+//获取订单表头信息
+    private void GetBillHeadDetailInfo(String sSaleFlg)
+    {
+        GetBillBFlg = "0";
+//        if(tmpAccID==null || tmpAccID.equals(""))
+//            return;
+
+        JSONObject para = new JSONObject();
+        //Map<String,Object> mapBillBody = new HashMap<String,Object>();
+        try {
+
+            if(tvSaleOutSelect.getText().toString().equals("销售出库"))
+            {
+                para.put("FunctionName", "GetSaleOutHead");
+                para.put("BillCode", tmpBillCode);
+                para.put("CorpPK", "4100");
+                Log.d(TAG, "GetBillHeadDetailInfo: "+tmpBillCode);
+            }
+
+        } catch (JSONException e2) {
+            Toast.makeText(this, e2.getMessage(), Toast.LENGTH_LONG).show();
+            //ADD CAIXY TEST START
+            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+            //ADD CAIXY TEST END
+            e2.printStackTrace();
+            return;
+        }
+        try {
+            para.put("TableName",  "dbHead");
+        } catch (JSONException e2) {
+            Toast.makeText(this, e2.getMessage(), Toast.LENGTH_LONG).show();
+            //ADD CAIXY TEST START
+            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+            //ADD CAIXY TEST END
+            return;
+        }
+
+        JSONObject jas;
+        try {
+            if(!MainLogin.getwifiinfo()) {
+                Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
+                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+                return ;
+            }
+            jas = Common.DoHttpQuery(para, "CommonQuery", "");
+            Log.d(TAG, "GetBillBodyDetailInfo: "+jas.toString());
+
+        } catch (Exception ex)
+        {
+            Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
+            //ADD CAIXY TEST START
+            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+            //ADD CAIXY TEST END
+            return;
+        }
+        try
+        {
+            if(jas==null)
+            {
+                Toast.makeText(this, R.string.WangLuoChuXianWenTi, Toast.LENGTH_LONG).show();
+                //ADD CAIXY TEST START
+                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+                //ADD CAIXY TEST END
+                return;
+            }
+
+            if(!jas.has("Status"))
+            {
+                Toast.makeText(this, R.string.WangLuoChuXianWenTi, Toast.LENGTH_LONG).show();
+                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+                return;
+            }
+            if(!jas.getBoolean("Status"))
+            {
+                String errMsg = "";
+                if(jas.has("ErrMsg"))
+                {
+                    errMsg = jas.getString("ErrMsg");
+                }
+                else
+                {
+                    errMsg = getString(R.string.WangLuoChuXianWenTi);
+                }
+                Toast.makeText(this, errMsg, Toast.LENGTH_LONG).show();
+                //ADD CAIXY TEST START
+                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+                //ADD CAIXY TEST END
+                return;
+            }
+            jsonBillHead = new JSONObject();
+            //jsonBillBodyTask = jas;
+            //需要修改数据结构
+
+            JSONArray jsarray= jas.getJSONArray("dbHead");
+
+            JSONArray NewBodyarray = new JSONArray();
+            JSONObject NewBodJSON = null;
+
+            for(int i = 0;i<jsarray.length();i++)
+            {
+                JSONObject tempJso = jsarray.getJSONObject(i);
+                NewBodJSON = new JSONObject();
+
+                if(tvSaleOutSelect.getText().toString().equals("销售出库"))
                 {
                     NewBodJSON.put("vfree1", tempJso.getString("vfree1"));
                     NewBodJSON.put("pk_measdoc", tempJso.getString("pk_measdoc"));
@@ -1175,10 +1255,10 @@ public class SalesDelivery extends Activity {
                     NewBodJSON.put("invtype", tempJso.getString("invtype"));
                     NewBodJSON.put("billcode", tmpBillCode);
                     NewBodJSON.put("batchcode", tempJso.getString("vbatchcode"));
-                    NewBodJSON.put("invbasdocid", tempJso.getString("cinvbasid"));
-                    NewBodJSON.put("invmandocid", tempJso.getString("cinventoryid"));
-                    String number = tempJso.getString("noutnum");
-                    String outnumber = tempJso.getString("outnum");
+                    NewBodJSON.put("invbasdocid", tempJso.getString("cinvbasdocid"));
+                    NewBodJSON.put("invmandocid", tempJso.getString("cinvmandocid"));
+                    String number = tempJso.getString("nnumber");
+                    String outnumber = tempJso.getString("ntotaloutinvnum");
                     if(!outnumber.equals("null")) {
                         outnumber = outnumber.replaceAll("\\.0", "");
                     } else {
@@ -1187,110 +1267,30 @@ public class SalesDelivery extends Activity {
                         number = number.replaceAll("\\.0", "");
                     } else {
                     }
+                    //int shouldoutnum = Integer.valueOf(number).intValue() - Integer.valueOf(outnumber).intValue();
                     NewBodJSON.put("number", number);
                     NewBodJSON.put("outnumber", outnumber);
-                    NewBodJSON.put("sourcerowno",  tempJso.getString("vfirstrowno"));
-                    NewBodJSON.put("sourcehid", tempJso.getString("cfirstbillhid"));
-                    NewBodJSON.put("sourcebid", tempJso.getString("cfirstbillbid"));
-                    NewBodJSON.put("sourcehcode", tempJso.getString("vfirstbillcode"));
-                    NewBodJSON.put("sourcetype", tempJso.getString("cfirsttype"));
+                    NewBodJSON.put("sourcerowno", tempJso.getString("vsourcerowno"));
+                    NewBodJSON.put("sourcehid", tempJso.getString("csourcebillid"));
+                    NewBodJSON.put("sourcebid", tempJso.getString("csourcebillbodyid"));
+                    NewBodJSON.put("sourcehcode", tempJso.getString("vsourcereceivecode"));
+                    NewBodJSON.put("sourcetype", tempJso.getString("vsourcetype"));
                     NewBodJSON.put("crowno", tempJso.getString("crowno"));
-                    NewBodJSON.put("billhid", tempJso.getString("cgeneralhid"));
-                    NewBodJSON.put("billbid", tempJso.getString("cgeneralbid"));
+                    NewBodJSON.put("billhid", tempJso.getString("csalereceiveid"));
+                    NewBodJSON.put("billbid", tempJso.getString("csalereceiveid_bid"));
                     NewBodJSON.put("billhcode", tmpBillCode);
-                    NewBodJSON.put("billtype", "4C");
+                    NewBodJSON.put("billtype", "4331");
                     NewBodJSON.put("ddeliverdate", tempJso.getString("ddeliverdate"));
                     NewBodJSON.put("pk_defdoc6", tempJso.getString("pk_defdoc6"));
-                    NewBodJSON.put("def6", tempJso.getString("vuserdef6"));
+                    NewBodJSON.put("def6", tempJso.getString("vdef6"));
                 }
 
-                if(tvSaleOutSelect.getText().toString().equals("退回不送"))
-                {
-                    if(sSaleFlg.equals("D"))
-                    {
-                        NewBodJSON.put("vfree1", tempJso.getString("vfree1"));
-                        NewBodJSON.put("pk_measdoc", tempJso.getString("pk_measdoc"));
-                        NewBodJSON.put("measname", tempJso.getString("measname"));
-                        NewBodJSON.put("invcode", tempJso.getString("invcode"));
-                        NewBodJSON.put("invname", tempJso.getString("invname"));
-                        NewBodJSON.put("invspec", tempJso.getString("invspec"));
-                        NewBodJSON.put("invtype", tempJso.getString("invtype"));
-                        NewBodJSON.put("billcode", tmpBillCode);
-                        NewBodJSON.put("batchcode", tempJso.getString("cbatchid"));
-                        NewBodJSON.put("invbasdocid", tempJso.getString("cinvbasdocid"));
-                        NewBodJSON.put("invmandocid", tempJso.getString("cinventoryid"));
-                        String number = tempJso.getString("nnnumber");
-                        String outnumber = tempJso.getString("noutnumber");
-                        if(!outnumber.equals("null")) {
-                            outnumber = outnumber.replaceAll("\\.0", "");
-                        } else {
-                        }
-                        if(!number.equals("null")) {
-                            number = number.replaceAll("\\.0", "");
-                        } else {
-                        }
-                        NewBodJSON.put("number", number);
-                        NewBodJSON.put("outnumber", outnumber);
-                        NewBodJSON.put("sourcerowno", "");
-                        NewBodJSON.put("sourcehid", "");
-                        NewBodJSON.put("sourcebid", "");
-                        NewBodJSON.put("sourcehcode", "");
-                        NewBodJSON.put("sourcetype", "");
-                        NewBodJSON.put("crowno", tempJso.getString("crowno"));
-                        NewBodJSON.put("billhid", tempJso.getString("csaleid"));
-                        NewBodJSON.put("billbid", tempJso.getString("corder_bid"));
-                        NewBodJSON.put("billhcode", tmpBillCode);
-                        NewBodJSON.put("billtype", "30");
-                        NewBodJSON.put("ddeliverdate", tempJso.getString("dconsigndate"));
-                        NewBodJSON.put("pk_defdoc6", tempJso.getString("pk_defdoc6"));
-                        NewBodJSON.put("def6", tempJso.getString("vdef6"));
-                    }
-                    else if (sSaleFlg.equals("T"))
-                    {
-                        NewBodJSON.put("vfree1", tempJso.getString("vfree1"));
-                        NewBodJSON.put("pk_measdoc", tempJso.getString("pk_measdoc"));
-                        NewBodJSON.put("measname", tempJso.getString("measname"));
-                        NewBodJSON.put("invcode", tempJso.getString("invcode"));
-                        NewBodJSON.put("invname", tempJso.getString("invname"));
-                        NewBodJSON.put("invspec", tempJso.getString("invspec"));
-                        NewBodJSON.put("invtype", tempJso.getString("invtype"));
-                        NewBodJSON.put("billcode", tmpBillCode);
-                        NewBodJSON.put("batchcode", tempJso.getString("cbatchid"));
-                        NewBodJSON.put("invbasdocid", tempJso.getString("cinvbasdocid"));
-                        NewBodJSON.put("invmandocid", tempJso.getString("cinventoryid"));
-                        String number = tempJso.getString("ntakenumber");
-                        String outnumber = tempJso.getString("ninnumber");
-                        if(!outnumber.equals("null")) {
-                            outnumber = outnumber.replaceAll("\\.0", "");
-                        } else {
-                        }
-                        if(!number.equals("null")) {
-                            number = number.replaceAll("\\.0", "");
-                        } else {
-                        }
-                        NewBodJSON.put("number", number);
-                        NewBodJSON.put("outnumber", outnumber);
-                        NewBodJSON.put("sourcerowno", "");
-                        NewBodJSON.put("sourcehid", tempJso.getString("csourcebillid"));
-                        NewBodJSON.put("sourcebid", tempJso.getString("csourcebillbodyid"));
-                        NewBodJSON.put("sourcehcode", tempJso.getString("vsourcecode"));
-                        NewBodJSON.put("sourcetype", tempJso.getString("csourcebilltype"));
-                        NewBodJSON.put("crowno", tempJso.getString("crowno"));
-                        NewBodJSON.put("billhid", tempJso.getString("pk_take"));
-                        NewBodJSON.put("billbid", tempJso.getString("pk_take_b"));
-                        NewBodJSON.put("billhcode", tmpBillCode);
-                        NewBodJSON.put("billtype", "3V");
-                        NewBodJSON.put("ddeliverdate", "");
-                        NewBodJSON.put("pk_defdoc6", tempJso.getString("pk_defdoc6"));
-                        NewBodJSON.put("def6", tempJso.getString("vdef6"));
-                    }
 
-                }
                 NewBodyarray.put(NewBodJSON);
             }
 
-            jsonBillBodyTask.put("Status", true);
-            jsonBillBodyTask.put("dbBody", NewBodyarray);
+            jsonBillHead.put("Status", true);
+            jsonBillHead.put("dbBody", NewBodyarray);
 
             GetBillBFlg = "1";
 
@@ -1330,9 +1330,11 @@ public class SalesDelivery extends Activity {
 //        //tmpWarehousePK = mapBillInfo.get("pk_stordoc").toString();
 //        tmpCorpPK = mapBillInfo.get("pk_corp").toString();
         tmpBillCode = mapBillInfo.get("BillCode").toString();
+        tmpCustName = mapBillInfo.get("CustName").toString();
+        tmpBillDate = mapBillInfo.get("BillDate").toString();
         txtSalesDelPDOrder.setText(tmpBillCode);
-        txtSalesDelCD.setText(mapBillInfo.get("CustName").toString());
-        txtSalesDelRdcl.setText(mapBillInfo.get("BillDate").toString());
+        txtSalesDelCD.setText(tmpCustName);
+        txtSalesDelRdcl.setText(tmpBillDate);
 
 //		if(!Common.CheckUserRole(tmpAccID, tmpCorpPK, "40080802"))
 //		{
@@ -1387,7 +1389,6 @@ public class SalesDelivery extends Activity {
 
                 tvSaleOutSelect.setText(BillTypeName);
 
-                txtSalesDelPDOrder.requestFocus();
                 InitActiveMemor();
             }
             if(dialog.equals(WHSelectButton))
@@ -2644,95 +2645,18 @@ public class SalesDelivery extends Activity {
         this.txtSalesDelPDOrder.requestFocus();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.sales_delivery, menu);
-        return true;
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.sales_delivery, menu);
+//        return true;
+//    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            Changeline();
-            return true;
-        }
 
-        return super.onOptionsItemSelected(item);
-    }
 
-    private static AlertDialog SelectLine = null;
-    private buttonOnClickC buttonOnClickC = new buttonOnClickC(0);
-    static String[] LNameList = new String[2];
-
-    private void Changeline() {
-
-        int lsindex = 0;
-        if (Common.lsUrl.equals(MainLogin.objLog.LoginString2)) {
-            lsindex = 1;
-        }
-
-        LNameList[0] = getString(R.string.ZhuWebDiZhi);
-        LNameList[1] = getString(R.string.FuWebDiZhi);
-
-        SelectLine = new AlertDialog.Builder(this).setTitle(R.string.QieHuanDiZhi)
-                .setSingleChoiceItems(LNameList, lsindex, buttonOnClickC)
-                .setPositiveButton(R.string.QueRen, buttonOnClickC)
-                .setNegativeButton(R.string.QuXiao, buttonOnClickC).show();
-    }
-
-    private void ShowLineChange(String WebName) {
-
-        String CommonUrl = Common.lsUrl;
-        CommonUrl = CommonUrl.replace("/service/nihao", "");
-
-        AlertDialog.Builder bulider = new AlertDialog.Builder(this).setTitle(
-                R.string.QieHuanChengGong).setMessage(R.string.YiJingQieHuanZhi + WebName + "\r\n" + CommonUrl);
-
-        bulider.setPositiveButton(R.string.QueRen, null).setCancelable(false).create()
-                .show();
-        return;
-    }
-
-    private class buttonOnClickC implements DialogInterface.OnClickListener {
-        public int index;
-
-        public buttonOnClickC(int index) {
-            this.index = index;
-        }
-
-        @Override
-        public void onClick(DialogInterface dialog, int whichButton) {
-            if (whichButton >= 0) {
-                index = whichButton;
-            } else {
-
-                if (dialog.equals(SelectLine)) {
-                    if (whichButton == DialogInterface.BUTTON_POSITIVE) {
-                        if (index == 0) {
-
-                            Common.lsUrl = MainLogin.objLog.LoginString;
-                            ShowLineChange(LNameList[0]);
-                            System.gc();
-                        } else if (index == 1) {
-                            Common.lsUrl = MainLogin.objLog.LoginString2;
-                            ShowLineChange(LNameList[1]);
-                            System.gc();
-                        }
-                        return;
-                    } else if (whichButton == DialogInterface.BUTTON_NEGATIVE) {
-                        return;
-                    }
-                }
-            }
-        }
-    }
     private void initView() {
+
+        saleOutGoodsLists  = new ArrayList<SaleOutGoods>();
         txtSalesDelPDOrder = (EditText) findViewById(id.txtSalesDelPDOrder);
         btnSalesDelPDOrder = (ImageButton) findViewById(id.btnSalesDelPDOrder);
         btnSalesDelPDOrder.setOnClickListener(new OnClickListener());
@@ -2753,8 +2677,6 @@ public class SalesDelivery extends Activity {
         btnSalesDelExit = (Button) findViewById(id.btnSalesDelExit);
         btnSalesDelExit.setOnClickListener(new OnClickListener());
 
-
-        tvSalesDelRdcl = (TextView)findViewById(id.tvSalesDelRdcl);
         tvCustomer = (TextView)findViewById(id.tvCustomer);
 
         txtSalesDelRdcl = (EditText) findViewById(id.txtSalesDelRdcl);
