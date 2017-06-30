@@ -366,6 +366,9 @@ public class PurStockInDetail extends Activity {
         SplitBarcode bar = new SplitBarcode(Scanbarcode);
         m_cSplitBarcode = bar;
 
+        if(bar.BarcodeType.equals("C") && bar.BarcodeType.equals("TC"))
+            bar.creatorOk = false;
+
         if (bar.creatorOk == false) {
             Toast.makeText(this, "扫描的不是正确货品条码", Toast.LENGTH_LONG).show();
             //ADD CAIXY TEST START
@@ -905,8 +908,19 @@ public class PurStockInDetail extends Activity {
         Double ldTotal = (Double) m_mapInvBaseInfo.get("quantity") * (Integer)m_mapInvBaseInfo.get("number");
         txtPurTotal.setText(ldTotal.toString());
         m_mapInvBaseInfo.put("total",ldTotal);
-
-        ScanedToGet();
+        if(m_mapInvBaseInfo.get("barcodetype").toString().equals("TC")) {
+            ScanedToGet();
+        }
+        else if(m_mapInvBaseInfo.get("barcodetype").toString().equals("C") ) {
+            txtPurNumber.requestFocus();
+            txtPurNumber.selectAll();
+        }
+        else if(m_mapInvBaseInfo.get("barcodetype").toString().equals("Y")){
+            txtBatch.setFocusableInTouchMode(true);
+            txtBatch.setFocusable(true);
+            txtBatch.requestFocus();
+            txtBatch.selectAll();
+        }
     }
 
     private class ButtonOnClick implements DialogInterface.OnClickListener {
@@ -1369,6 +1383,12 @@ public class PurStockInDetail extends Activity {
                         txtBarcode.setText("");
                         return true;
                     }
+                case id.txtPurNumber:
+                    if (arg1 == 66 && arg2.getAction() == KeyEvent.ACTION_UP) {
+                        ScanedToGet();
+                        return true;
+                    }
+
             }
             return false;
         }
@@ -1462,6 +1482,7 @@ public class PurStockInDetail extends Activity {
 
         this.txtBarcode.addTextChangedListener(watchers);
         txtBarcode.setOnKeyListener(myTxtListener);
+        txtPurNumber.setOnKeyListener(myTxtListener);
 
         ActionBar actionBar = this.getActionBar();
         actionBar.setTitle("采购入库扫描明细");
