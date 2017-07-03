@@ -288,6 +288,8 @@
         </activity>
         <activity android:name=".statusChange.scan.SCScanAct">
         </activity>
+        <activity android:name=".productOut.scan.ProductOutScanAct">
+        </activity>
     </application>
 
 </manifest>

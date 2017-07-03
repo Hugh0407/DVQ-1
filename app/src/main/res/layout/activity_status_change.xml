@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/pagebackgroup"
     android:orientation="vertical"
     tools:context="com.techscan.dvq.statusChange.StatusChangeAct">
 
@@ -18,15 +19,18 @@
             android:orientation="horizontal">
 
             <TextView
+                android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="单据类型"/>
 
             <EditText
-                android:layout_weight="1"
+                android:layout_margin="1dp"
                 android:id="@+id/ed_bill_type"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/edittext_style"
                 android:ems="10"
                 android:singleLine="true"
                 android:text="形态转换"
@@ -34,9 +38,9 @@
 
             <ImageButton
                 android:id="@+id/btn_bill_type"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/browse"/>
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="@drawable/browse"/>
         </LinearLayout>
 
         <LinearLayout
@@ -45,24 +49,28 @@
             android:orientation="horizontal">
 
             <TextView
+                android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="来源单号"/>
 
             <EditText
-                android:layout_weight="1"
+                android:layout_margin="1dp"
                 android:id="@+id/ed_source_bill"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/edittext_style"
                 android:ems="10"
                 android:singleLine="true"
                 android:textAllCaps="true"/>
 
             <ImageButton
                 android:id="@+id/btn_source_bill"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/browse"/>
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="@drawable/browse"/>
+
         </LinearLayout>
 
         <LinearLayout
@@ -71,24 +79,27 @@
             android:orientation="horizontal">
 
             <TextView
+                android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="操作仓库"/>
 
             <EditText
-                android:layout_weight="1"
+                android:layout_margin="1dp"
                 android:id="@+id/ed_select_wh"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/edittext_style"
                 android:ems="10"
                 android:singleLine="true"
                 android:textAllCaps="true"/>
 
             <ImageButton
                 android:id="@+id/btn_select_wh"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/browse"/>
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="@drawable/browse"/>
         </LinearLayout>
 
     </LinearLayout>

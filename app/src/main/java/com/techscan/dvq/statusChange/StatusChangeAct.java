@@ -8,10 +8,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.techscan.dvq.OtherOrderList;
 import com.techscan.dvq.R;
+import com.techscan.dvq.common.Utils;
 import com.techscan.dvq.statusChange.scan.SCScanAct;
 
 import butterknife.ButterKnife;
@@ -77,6 +77,7 @@ public class StatusChangeAct extends Activity {
             case R.id.save:
                 break;
             case R.id.back:
+                finish();
                 break;
         }
     }
@@ -102,9 +103,14 @@ public class StatusChangeAct extends Activity {
         }
     }
 
+    /**
+     * 选择需要转换的order
+     *
+     * @param lsBillCode
+     */
     private void ShowOrderList(String lsBillCode) {
         if (this.mEdBillType.getText().toString().equals("")) {
-            Toast.makeText(this, "请选择单据类型", Toast.LENGTH_LONG).show();
+            Utils.showToast(StatusChangeAct.this, "请选择单据类型");
             return;
         }
         Intent otherOrder = new Intent(this, OtherOrderList.class);
@@ -118,7 +124,7 @@ public class StatusChangeAct extends Activity {
     private void ShowScanDetail() {
 
         if (OrderID == null || OrderID.equals("")) {
-            Toast.makeText(this, "请选择来源的单据号", Toast.LENGTH_LONG).show();
+            Utils.showToast(StatusChangeAct.this, "请选择来源的单据号");
         } else {
             Intent otherOrderDetail = new Intent(this, SCScanAct.class);
             otherOrderDetail.putExtra("OrderID", OrderID);
@@ -130,5 +136,7 @@ public class StatusChangeAct extends Activity {
             startActivityForResult(otherOrderDetail, 93);
         }
     }
+
+
 }
 

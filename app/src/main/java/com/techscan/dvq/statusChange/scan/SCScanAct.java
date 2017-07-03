@@ -3,6 +3,7 @@ package com.techscan.dvq.statusChange.scan;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -75,6 +76,7 @@ public class SCScanAct extends Activity {
     String m_WarehouseID;
     String m_pk_Corp;
     List<PurGood> dataList;
+    ProgressDialog progressDialog;
 
     @Override
 
@@ -90,6 +92,7 @@ public class SCScanAct extends Activity {
     }
 
     private void initTaskData() {
+        showProgressDialog();
         m_BillNo = this.getIntent().getStringExtra("BillNo");
         m_BillID = this.getIntent().getStringExtra("OrderID");
         m_BillType = this.getIntent().getStringExtra("OrderType");
@@ -129,8 +132,11 @@ public class SCScanAct extends Activity {
                 case 1:
                     JSONObject jsonHead = (JSONObject) msg.obj;
                     try {
-                        if (jsonHead != null && jsonHead.getBoolean("Status")) {
-                            Log.d("TAG", "jsonHead: ");
+                        if (jsonHead != null) {
+                            Log.d("TAG", "jsonHead: " + jsonHead.toString());
+                            if (jsonHead.getBoolean("Status")) {
+                                Log.d("TAG", "jsonHead: ");
+                            }
                         } else {
 
                         }
@@ -154,6 +160,7 @@ public class SCScanAct extends Activity {
                                 purGood.setVbatchcode(object.getString("vbatchcode"));
                                 dataList.add(purGood);
                             }
+                            progressDialogDismiss();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -200,6 +207,104 @@ public class SCScanAct extends Activity {
         RequestThread requestThread = new RequestThread(parameter, mHandler, 2);
         Thread td = new Thread(requestThread);
         td.start();
+    }
+
+    /**
+     * 保存单据的dialog
+     */
+    private void showProgressDialog() {
+        progressDialog = new ProgressDialog(SCScanAct.this);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);// 设置进度条的形式为圆形转动的进度条
+        progressDialog.setCancelable(false);// 设置是否可以通过点击Back键取消
+        progressDialog.setCanceledOnTouchOutside(false);// 设置在点击Dialog外是否取消Dialog进度条
+        // progressDialog.setIcon(R.drawable.ic_launcher);
+        // 设置提示的title的图标，默认是没有的，如果没有设置title的话只设置Icon是不会显示图标的
+        progressDialog.setTitle("保存单据");
+        // dismiss监听
+//        progressDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+//
+//            @Override
+//            public void onDismiss(DialogInterface progressDialog) {
+//                // TODO Auto-generated method stub
+//
+//            }
+//        });
+        // 监听Key事件被传递给dialog
+//        progressDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+//
+//            @Override
+//            public boolean onKey(DialogInterface progressDialog, int keyCode,
+//                                 KeyEvent event) {
+//                // TODO Auto-generated method stub
+//                return false;
+//            }
+//        });
+        // 监听cancel事件
+//        progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+//
+//            @Override
+//            public void onCancel(DialogInterface progressDialog) {
+//                // TODO Auto-generated method stub
+//
+//            }
+//        });
+        //设置可点击的按钮，最多有三个(默认情况下)
+//        progressDialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定",
+//                new DialogInterface.OnClickListener() {
+//
+//                    @Override
+//                    public void onClick(DialogInterface progressDialog, int which) {
+//                        // TODO Auto-generated method stub
+//
+//                    }
+//                });
+//        progressDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "取消",
+//                new DialogInterface.OnClickListener() {
+//
+//                    @Override
+//                    public void onClick(DialogInterface progressDialog, int which) {
+//                        // TODO Auto-generated method stub
+//
+//                    }
+//                });
+//        progressDialog.setButton(DialogInterface.BUTTON_NEUTRAL, "中立",
+//                new DialogInterface.OnClickListener() {
+//
+//                    @Override
+//                    public void onClick(DialogInterface progressDialog, int which) {
+//                        // TODO Auto-generated method stub
+//
+//                    }
+//                });
+        progressDialog.setMessage("正在保存，请等待...");
+        progressDialog.show();
+        new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                    if (progressDialog.isShowing()) {
+                        Thread.sleep(30 * 1000);
+                        // cancel和dismiss方法本质都是一样的，都是从屏幕中删除Dialog,唯一的区别是
+                        // 调用cancel方法会回调DialogInterface.OnCancelListener如果注册的话,dismiss方法不会回掉
+                        progressDialog.cancel();
+                        // progressDialog.dismiss();
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }).start();
+    }
+
+    /**
+     * progressDialog 消失
+     */
+    private void progressDialogDismiss() {
+        if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
     }
 
     /**
