@@ -338,13 +338,6 @@
 
     </LinearLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="总共20件|已扫描0件"
-        android:textColor="@color/white"
-        android:textSize="20sp"/>
 
     <LinearLayout
         android:id="@+id/PurStockInButtonBar"
