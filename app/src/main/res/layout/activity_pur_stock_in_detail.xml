@@ -44,6 +44,7 @@
                 android:layout_height="wrap_content"
                 android:text="编 　 码"/>
             <EditText
+                android:focusable="false"
                 android:id="@+id/txtPurInvCode"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
@@ -249,6 +250,7 @@
                     android:text="总  　量"/>
 
                 <EditText
+                    android:focusable="false"
                     android:inputType="number"
                     android:id="@+id/txtPurTotal"
                     android:layout_width="0dp"
