@@ -95,7 +95,7 @@ public class MaterialOutScanAct extends Activity {
         switch (view.getId()) {
             case R.id.btn_overview:
                 addDataToOvList();
-                OvAdapter ovAdapter = new OvAdapter(MaterialOutScanAct.this, ovList);
+                MyBaseAdapter ovAdapter = new MyBaseAdapter(MaterialOutScanAct.this, ovList);
                 showDialog(ovList, ovAdapter, "…®√Ë◊‹¿¿");
                 break;
             case R.id.btn_detail:

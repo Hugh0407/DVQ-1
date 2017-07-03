@@ -27,7 +27,6 @@ import com.techscan.dvq.bean.Goods;
 import com.techscan.dvq.common.RequestThread;
 import com.techscan.dvq.common.Utils;
 import com.techscan.dvq.materialOut.MyBaseAdapter;
-import com.techscan.dvq.materialOut.scan.OvAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -90,7 +89,7 @@ public class ProductOutScanAct extends Activity {
         switch (view.getId()) {
             case R.id.btn_overview:
                 addDataToOvList();
-                OvAdapter ovAdapter = new OvAdapter(ProductOutScanAct.this, ovList);
+                MyBaseAdapter ovAdapter = new MyBaseAdapter(ProductOutScanAct.this, ovList);
                 showDialog(ovList, ovAdapter, "…®√Ë◊‹¿¿");
                 break;
             case R.id.btn_detail:

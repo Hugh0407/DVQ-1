@@ -1,6 +1,7 @@
 package com.techscan.dvq.materialOut;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,8 +81,12 @@ public class MyBaseAdapter extends BaseAdapter {
         viewHolder.encoding.setText(mList.get(position).getEncoding());
         viewHolder.type.setText(mList.get(position).getType());
         viewHolder.lot.setText(mList.get(position).getLot());
-        viewHolder.qty.setText(String.valueOf(mList.get(position).getQty()));
         viewHolder.spec.setText(mList.get(position).getSpec());
+        if (TextUtils.isEmpty(String.valueOf(mList.get(position).getQty()))) {
+            viewHolder.qty.setText("0.00");
+        } else {
+            viewHolder.qty.setText(String.valueOf(mList.get(position).getQty()));
+        }
         return convertView;
     }
 
