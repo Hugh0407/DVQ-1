@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,8 +37,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import static android.content.ContentValues.TAG;
 
 //import com.techscan.dvq.StockTransScan.ButtonOnClickClearconfirm;
 //import com.techscan.dvq.StockTransScanIn.MyListAdapter;
@@ -584,127 +581,6 @@ public class SalesDeliveryScan extends Activity {
     }
 
 
-    private boolean ConformBatch(String invcode, String batch, String AccID)
-            throws JSONException, ParseException, IOException {
-        //获得当前存货的库存 Jonson
-        JSONObject batchList = null;
-        JSONObject para = new JSONObject();
-        String CompanyCode = "";
-        //
-//			if(AccID.equals("A"))
-//			{
-//				CompanyCode=tmpPK_corp;
-//			}
-//			else if(AccID.equals("B"))
-//			{
-//				CompanyCode="1";
-//			}
-        CompanyCode = tmpPK_corp;
-
-        para.put("FunctionName", "GetCurrentStock");
-        para.put("CompanyCode", CompanyCode);
-        para.put("STOrgCode", MainLogin.objLog.STOrgCode);
-        //这里的WareHouse需要让操作员选择.
-        para.put("InvCode", invcode);
-        para.put("TableName", "batch");
-
-        if (!MainLogin.getwifiinfo()) {
-            Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            return false;
-        }
-        batchList = Common. DoHttpQuery(para, "CommonQuery", AccID);
-        Log.d(TAG, "ConformBatch: "+batchList.toString());
-
-
-        if (batchList == null) {
-            Toast.makeText(this, R.string.WangLuoChuXianWenTi, Toast.LENGTH_LONG).show();
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            return false;
-        }
-
-        if (!batchList.has("Status")) {
-            Toast.makeText(this, R.string.WangLuoChuXianWenTi, Toast.LENGTH_LONG).show();
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            return false;
-        }
-
-
-        if (!batchList.getBoolean("Status")) {
-//				Toast.makeText(this, batchList.getString("找不到对应的库存信息"),
-//						Toast.LENGTH_LONG).show();
-            Toast.makeText(this, "找不到对应的库存信息", Toast.LENGTH_LONG).show();
-            //ADD CAIXY TEST START
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            //ADD CAIXY TEST END
-            return false;
-        }
-
-
-        JSONArray jsarray = batchList.getJSONArray("batch");
-        ArrayList array = new ArrayList();
-        ArrayList arrayName = new ArrayList();
-        ArrayList arrayFree1 = new ArrayList();
-        ArrayList arrayOrg = new ArrayList();
-        ArrayList arrayCompanyId = new ArrayList();
-        for (int i = 0; i < jsarray.length(); i++) {
-            if (batch.equals(jsarray.getJSONObject(i).getString("vlot"))) {
-                if (wareHouseID.equals(jsarray.getJSONObject(i).getString("cwarehouseid"))) {
-                    currentObj.SetvFree1(jsarray.getJSONObject(i).getString("vfree1"));
-
-                    return true;
-                }
-
-            }
-        }
-
-        if (wareHouseID != null && !wareHouseID.equals("")) {
-//				Toast.makeText(this, batchList.getString("该货品在你选择的仓库中不存在,请不要扫描该货品!"),
-//						Toast.LENGTH_LONG).show();
-            Toast.makeText(this, "该货品在你选择的仓库中不存在,请不要扫描该货品", Toast.LENGTH_LONG).show();
-            //ADD CAIXY TEST START
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            //ADD CAIXY TEST END
-            return false;
-        }
-        //需要异常处理一下。
-        if (array.size() != 0) {
-            Object[] objs = array.toArray();
-            Object[] objsname = arrayName.toArray();
-            Object[] objvFree1List = arrayFree1.toArray();
-            Object[] objvOrg = arrayOrg.toArray();
-            Object[] objvcompanyId = arrayCompanyId.toArray();
-
-            warehouseList = new String[objs.length];
-            warehouseNameList = new String[objs.length];
-            vFree1List = new String[objs.length];
-            OrgList = new String[objs.length];
-            companyIdList = new String[objs.length];
-
-            for (int i = 0; i < objsname.length; i++) {
-                warehouseList[i] = objsname[i].toString();
-            }
-
-            for (int i = 0; i < objs.length; i++) {
-                warehouseNameList[i] = objs[i].toString();
-            }
-            for (int i = 0; i < objvFree1List.length; i++) {
-                vFree1List[i] = objvFree1List[i].toString();
-            }
-            for (int i = 0; i < objvOrg.length; i++) {
-                OrgList[i] = objvOrg[i].toString();
-            }
-
-            for (int i = 0; i < objvcompanyId.length; i++) {
-                companyIdList[i] = objvcompanyId[i].toString();
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
     //扫描二维码解析功能函数
     private void ScanBarcode(String barcode) throws JSONException, ParseException, IOException {
         if (barcode.equals("")) {
@@ -736,22 +612,6 @@ public class SalesDeliveryScan extends Activity {
             txtSDScanBarcode.requestFocus();
             return;
         }
-        //先注销
-        //判断是否已经有AccID,如果有但是和扫描出来的AccID不一样,提示错误.
-//        if(tmpAccID!=null && !tmpAccID.equals(""))
-//        {
-//            if(!tmpAccID.equals(bar.AccID))
-//            {
-//
-//                txtSDScanBarcode.setText("");
-//                txtSDScanBarcode.requestFocus();
-//                Toast.makeText(this, "扫描的条码不属于该任务帐套,该货品不能够扫入", Toast.LENGTH_LONG).show();
-//                // ADD CAIXY TEST START
-//                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-//                // ADD CAIXY TEST END
-//                return;
-//            }
-//        }
 
         String FinishBarCode = bar.FinishBarCode;
 
@@ -788,17 +648,6 @@ public class SalesDeliveryScan extends Activity {
             txtSDScanBarcode.requestFocus();
             return;
         }
-//先注销
-//        if(ScanType.equals("销售出库"))
-//        {
-//            if(!ConformBatch(bar.cInvCode,bar.cBatch,tmpAccID))
-//            {
-//                //表示这个批次这里没有，需要重新打印
-//                txtSDScanBarcode.setText("");
-//                txtSDScanBarcode.requestFocus();
-//                return;
-//            }
-//        }
 //先注销
 
 //        if(OkFkg.equals("ng"))
@@ -1146,66 +995,66 @@ public class SalesDeliveryScan extends Activity {
 //
 //	  	}
 
-//    private boolean ConformGetSERINOInfo() throws JSONException, ParseException, IOException
-//    {
-//
-//
-//
-//        //获得当前单据的流水号
-//        JSONObject SERINOList = null;
-//        JSONObject para = new JSONObject();
-//
-//        //,bar.cBatch,,bar.AccID
-//        para.put("FunctionName", "GetSERINOCVInfo");
-//        para.put("INVCODE",bar.cInvCode);
-//        para.put("CLOT",bar.cBatch);
-//        para.put("SERINO",bar.cSerino);
-//        para.put("WHID",wareHouseID);
-//
-//        para.put("TableName","SERINO");
-//
-//        if(!MainLogin.getwifiinfo()) {
-//            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
-//            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-//            return false;
-//        }
-//        SERINOList = Common.
-//                DoHttpQuery(para, "CommonQuery", tmpAccID);
-//
-//
-//        if(SERINOList==null)
-//        {
-//            Toast.makeText(this, R.string.WangLuoChuXianWenTi, Toast.LENGTH_LONG).show();
-//            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-//            return false;
-//        }
-//
-//
-//        if(!SERINOList.getBoolean("Status"))
-//        {
-//            return true;
-//        }
-//        else
-//        {
-//            JSONArray jsarraySERINO = null;
-//            jsarraySERINO = SERINOList.getJSONArray("SERINO");
-//
-//            String bsttype = ((JSONObject)jsarraySERINO.getJSONObject(0)).getString("bsttype").toString();
-//
-//            if(bsttype.equals("0"))
-//            {
-//                return true;
-//            }
-//            else
-//            {
-//                Toast.makeText(this, "扫描的条码流水号在仓库中已经存在,该条码不能被扫入",
-//                        Toast.LENGTH_LONG).show();
-//                //ADD CAIXY TEST START
-//                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-//                return false;
-//            }
-//        }
-//    }
+    private boolean ConformGetSERINOInfo() throws JSONException, ParseException, IOException
+    {
+
+
+
+        //获得当前单据的流水号
+        JSONObject SERINOList = null;
+        JSONObject para = new JSONObject();
+
+        //,bar.cBatch,,bar.AccID
+        para.put("FunctionName", "GetSERINOCVInfo");
+        para.put("INVCODE",bar.cInvCode);
+        para.put("CLOT",bar.cBatch);
+        para.put("SERINO",bar.cSerino);
+        para.put("WHID",wareHouseID);
+
+        para.put("TableName","SERINO");
+
+        if(!MainLogin.getwifiinfo()) {
+            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
+            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+            return false;
+        }
+        SERINOList = Common.
+                DoHttpQuery(para, "CommonQuery", tmpAccID);
+
+
+        if(SERINOList==null)
+        {
+            Toast.makeText(this, R.string.WangLuoChuXianWenTi, Toast.LENGTH_LONG).show();
+            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+            return false;
+        }
+
+
+        if(!SERINOList.getBoolean("Status"))
+        {
+            return true;
+        }
+        else
+        {
+            JSONArray jsarraySERINO = null;
+            jsarraySERINO = SERINOList.getJSONArray("SERINO");
+
+            String bsttype = ((JSONObject)jsarraySERINO.getJSONObject(0)).getString("bsttype").toString();
+
+            if(bsttype.equals("0"))
+            {
+                return true;
+            }
+            else
+            {
+                Toast.makeText(this, "扫描的条码流水号在仓库中已经存在,该条码不能被扫入",
+                        Toast.LENGTH_LONG).show();
+                //ADD CAIXY TEST START
+                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+                return false;
+            }
+        }
+    }
 
     //确认如果有上游单据,那么判断是否超过其数量
     private boolean ConformDetailQty(Double Qty, String sBillBID, String sBillHID) throws JSONException {
@@ -1369,8 +1218,6 @@ public class SalesDeliveryScan extends Activity {
         mapScanDetail.put("InvName",currentObj.getInvName() );
         mapScanDetail.put("InvCode", currentObj.getInvCode());
         mapScanDetail.put("AccID", tmpAccID);
-//        mapScanDetail.put("QTY", bar.QTY);
-//        mapScanDetail.put("NUM", bar.NUM);
         mapScanDetail.put("Weights", bar.Weights.trim());
         mapScanDetail.put("Measname", jsonCheckGetBillCode.getString("measname"));
         mapScanDetail.put("Batch", currentObj.GetBatch());

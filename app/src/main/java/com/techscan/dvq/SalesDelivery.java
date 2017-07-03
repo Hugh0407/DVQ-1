@@ -1071,15 +1071,27 @@ public class SalesDelivery extends Activity {
 
                 if(tvSaleOutSelect.getText().toString().equals("销售出库"))
                 {
-                    newBodyJSON.put("pk_measdoc", tempJso.getString("pk_measdoc"));
                     newBodyJSON.put("measname", tempJso.getString("measname"));
                     newBodyJSON.put("invcode", tempJso.getString("invcode"));
                     newBodyJSON.put("invname", tempJso.getString("invname"));
                     newBodyJSON.put("invspec", tempJso.getString("invspec"));
                     newBodyJSON.put("invtype", tempJso.getString("invtype"));
+                    //销售订单附表ID
+                    newBodyJSON.put("corder_bid", tempJso.getString("corder_bid"));
+                    //销售主表ID
+                    newBodyJSON.put("csaleid", tempJso.getString("csaleid"));
+
+                    newBodyJSON.put("pk_corp", tempJso.getString("pk_corp"));
+                    //注册地址
+                    newBodyJSON.put("vreceiveaddress", tempJso.getString("vreceiveaddress"));
+                    //存货ID
+                    newBodyJSON.put("cinventoryid", tempJso.getString("cinventoryid"));
+                    //建议发货库存组织
+                    newBodyJSON.put("cadvisecalbodyid", tempJso.getString("cadvisecalbodyid"));
                     newBodyJSON.put("billcode", tmpBillCode);
-                    newBodyJSON.put("batchcode", tempJso.getString("vbatchcode"));
-                    newBodyJSON.put("invbasdocid", tempJso.getString("cinvbasdocid"));
+                    //存货档案主键
+                    newBodyJSON.put("cinvbasdocid", tempJso.getString("cinvbasdocid"));
+                    //creceeiptareaid 
                     newBodyJSON.put("invmandocid", tempJso.getString("cinvmandocid"));
                     String number = tempJso.getString("nnumber");
                     String outnumber = tempJso.getString("ntotaloutinvnum");
@@ -1097,16 +1109,12 @@ public class SalesDelivery extends Activity {
                     newBodyJSON.put("sourcerowno", tempJso.getString("vsourcerowno"));
                     newBodyJSON.put("sourcehid", tempJso.getString("csourcebillid"));
                     newBodyJSON.put("sourcebid", tempJso.getString("csourcebillbodyid"));
-                    newBodyJSON.put("sourcehcode", tempJso.getString("vsourcereceivecode"));
-                    newBodyJSON.put("sourcetype", tempJso.getString("vsourcetype"));
                     newBodyJSON.put("crowno", tempJso.getString("crowno"));
                     newBodyJSON.put("billhid", tempJso.getString("csalereceiveid"));
                     newBodyJSON.put("billbid", tempJso.getString("csalereceiveid_bid"));
                     newBodyJSON.put("billhcode", tmpBillCode);
-                    newBodyJSON.put("billtype", "4331");
+//                    newBodyJSON.put("billtype", "4331");
                     newBodyJSON.put("ddeliverdate", tempJso.getString("ddeliverdate"));
-                    newBodyJSON.put("pk_defdoc6", tempJso.getString("pk_defdoc6"));
-                    newBodyJSON.put("def6", tempJso.getString("vdef6"));
                 }
                 newBodyArray.put(newBodyJSON);
             }

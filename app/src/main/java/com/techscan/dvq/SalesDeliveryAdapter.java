@@ -45,15 +45,6 @@ public class SalesDeliveryAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-//
-//
-//                new int[]{R.id.txtTransScanInvCode, R.id.txtTransScanInvName,
-//                        R.id.txtTransScanBatch, R.id.txtTransScanAccId,
-//                        R.id.txtTransScanTotalNum, R.id.txtTransScanBarCode,
-//                        R.id.txtTransScanSeriNo, R.id.txtTransScanBillCode,
-//                        R.id.txtTransScanScanCount, R.id.txtTransBox}
-
-
         ViewHolder viewHolder;
         if (convertView == null) {
             viewHolder = new ViewHolder();
@@ -64,10 +55,7 @@ public class SalesDeliveryAdapter extends BaseAdapter {
             viewHolder.QTY = (TextView) convertView.findViewById(R.id.txtQTY);
             viewHolder.UNIT = (TextView) convertView.findViewById(R.id.txtUnit);
             viewHolder.Spec = (TextView) convertView.findViewById(R.id.txtSpec);
-            viewHolder.Model = (TextView) convertView.findViewById(R.id.txtModel);
-//            viewHolder.BillCode = (TextView) convertView.findViewById(R.id.txtTransScanBillCode);
-//            viewHolder.ScanedNum = (TextView) convertView.findViewById(R.id.txtTransScanScanCount);
-//            viewHolder.box = (TextView) convertView.findViewById(R.id.txtTransBox);
+            viewHolder.Type = (TextView) convertView.findViewById(R.id.txtModel);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -78,7 +66,7 @@ public class SalesDeliveryAdapter extends BaseAdapter {
         viewHolder.QTY.setText(mList.get(position).get("Weights").toString());
         viewHolder.UNIT.setText(mList.get(position).get("Measname").toString());
         viewHolder.Spec.setText(mList.get(position).get("invspec").toString());
-        viewHolder.Model.setText(mList.get(position).get("invtype").toString());
+        viewHolder.Type.setText(mList.get(position).get("invtype").toString());
         return convertView;
     }
 
@@ -87,7 +75,7 @@ public class SalesDeliveryAdapter extends BaseAdapter {
         TextView InvName;
         TextView Batch;
         TextView Spec;
-        TextView Model;
+        TextView Type;
         TextView QTY;
         TextView UNIT;
 
