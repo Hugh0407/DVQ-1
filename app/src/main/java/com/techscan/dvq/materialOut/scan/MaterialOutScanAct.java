@@ -79,7 +79,7 @@ public class MaterialOutScanAct extends Activity {
 
 
     String TAG = "MaterialOutScanAct";
-    List<HashMap<String, String>> detailList;
+    List<Goods> detailList;
     List<Goods> ovList;
 
     @Override
@@ -126,7 +126,7 @@ public class MaterialOutScanAct extends Activity {
         mEdNum.setOnKeyListener(mOnKeyListener);
         mEdNum.addTextChangedListener(new CustomTextWatcher(mEdNum));
         mEdBarCode.addTextChangedListener(new CustomTextWatcher(mEdBarCode));
-        detailList = new ArrayList<HashMap<String, String>>();
+        detailList = new ArrayList<Goods>();
         ovList = new ArrayList<Goods>();
     }
 
@@ -231,7 +231,7 @@ public class MaterialOutScanAct extends Activity {
             return true;
         } else if (barCode.length == 7 && barCode[0].equals("TC")) {    //TC|SKU|LOT|TAX|QTY|NUM|SN
             for (int i = 0; i < detailList.size(); i++) {
-                if (detailList.get(i).get("barcode").equals(Bar)) {
+                if (detailList.get(i).getBarcode().equals(Bar)) {
                     Utils.showToast(MaterialOutScanAct.this, "该托盘已扫描");
                     return false;
                 }
@@ -264,56 +264,23 @@ public class MaterialOutScanAct extends Activity {
         int detailSize = detailList.size();
         for (int i = 0; i < detailSize; i++) {
             if (i == 0) {
-                Goods goods = new Goods();
-                HashMap<String, String> hashMap = detailList.get(i);
-                String qty = String.valueOf(hashMap.get("qty"));
-                goods.setBarcode(hashMap.get("barcode"));
-                goods.setEncoding(hashMap.get("encoding"));
-                goods.setName(hashMap.get("name"));
-                goods.setType(hashMap.get("type"));
-                goods.setSpec(hashMap.get("spec"));
-                goods.setUnit(hashMap.get("unit"));
-                goods.setLot(hashMap.get("lot"));
-                goods.setCostObject(hashMap.get("cost_object"));
-                goods.setPk_invbasdoc(hashMap.get("pk_invbasdoc"));
-                goods.setPk_invmandoc(hashMap.get("pk_invmandoc"));
-                if (TextUtils.isEmpty(qty)) {
-                    qty = "0.0";
-                }
-                goods.setQty(Float.valueOf(qty));
+                Goods goods = detailList.get(i);
                 ovList.add(goods);
             } else {
                 int ovSize = ovList.size();
                 for (int j = 0; j < ovSize; j++) {
                     Goods existGoods = ovList.get(j);
                     //相同物料相同批次的要合并，通过名字和批次合并
-                    HashMap<String, String> hashMap = detailList.get(i);
-                    if (hashMap.get("pk_invbasdoc").equals(existGoods.getPk_invbasdoc())
-                            && hashMap.get("lot").equals(existGoods.getLot())) {
-                        existGoods.setQty(existGoods.getQty() + Float.valueOf(hashMap.get("qty")));
+                    Goods good = detailList.get(i);
+                    if (good.getPk_invbasdoc().equals(existGoods.getPk_invbasdoc())
+                            && good.getLot().equals(existGoods.getLot())) {
+                        existGoods.setQty(existGoods.getQty() + good.getQty());
                     } else {
-                        Goods goods1 = new Goods();
-                        String qty = String.valueOf(hashMap.get("qty"));
-                        goods1.setBarcode(hashMap.get("barcode"));
-                        goods1.setEncoding(hashMap.get("encoding"));
-                        goods1.setName(hashMap.get("name"));
-                        goods1.setType(hashMap.get("type"));
-                        goods1.setUnit(hashMap.get("unit"));
-                        goods1.setSpec(hashMap.get("spec"));
-                        goods1.setLot(hashMap.get("lot"));
-                        goods1.setCostObject(hashMap.get("cost_object"));
-                        goods1.setPk_invbasdoc(hashMap.get("pk_invbasdoc"));
-                        goods1.setPk_invmandoc(hashMap.get("pk_invmandoc"));
-                        if (TextUtils.isEmpty(qty)) {
-                            qty = "0.0";
-                        }
-                        goods1.setQty(Float.valueOf(qty));
-                        ovList.add(goods1);
+                        ovList.add(good);
                     }
                 }
             }
         }
-
     }
 
     /**
@@ -322,71 +289,19 @@ public class MaterialOutScanAct extends Activity {
      * @return
      */
     private boolean addDataToDetailList() {
-        HashMap<String, String> hashMap = new HashMap<String, String>();
-        hashMap.put("barcode", mEdBarCode.getText().toString());
-        hashMap.put("encoding", mEdEncoding.getText().toString());
-        hashMap.put("name", mEdName.getText().toString());
-        hashMap.put("type", mEdType.getText().toString());
-        hashMap.put("spec", mEdType.getText().toString());
-        hashMap.put("unit", mEdUnit.getText().toString());
-        hashMap.put("lot", mEdLot.getText().toString());
-        hashMap.put("qty", mEdQty.getText().toString());
-        hashMap.put("cost_object", mEdCostObject.getText().toString());
-        hashMap.put("pk_invbasdoc", pk_invbasdoc);
-        hashMap.put("pk_invmandoc", pk_invmandoc);
-        return detailList.add(hashMap);
-//        // 合并相同批次
-//        // 将相同货物的数量合并
-//        if (ovList.size() == 0) {
-//            Goods goods = new Goods();
-//            String qty = String.valueOf(hashMap.get("qty"));
-//            goods.setBarcode(hashMap.get("barcode"));
-//            goods.setEncoding(hashMap.get("encoding"));
-//            goods.setName(hashMap.get("name"));
-//            goods.setType(hashMap.get("type"));
-//            goods.setSpec(hashMap.get("spec"));
-//            goods.setUnit(hashMap.get("unit"));
-//            goods.setLot(hashMap.get("lot"));
-//            goods.setCostObject(hashMap.get("cost_object"));
-//            goods.setPk_invbasdoc(hashMap.get("pk_invbasdoc"));
-//            goods.setPk_invmandoc(hashMap.get("pk_invmandoc"));
-//            if (TextUtils.isEmpty(qty)) {
-//                qty = "0.0";
-//            }
-//            goods.setQty(Float.valueOf(qty));
-//            ovList.add(goods);
-//            return true;
-//        } else {
-//            for (int j = 0; j < ovList.size(); j++) {
-//                Goods existGoods = ovList.get(j);
-//                //相同物料相同批次的要合并，通过名字和批次合并
-//                if (hashMap.get("name").equals(existGoods.getName())
-//                        && hashMap.get("lot").equals(existGoods.getLot())) {
-//                    existGoods.setQty(existGoods.getQty() + Float.valueOf(hashMap.get("qty")));
-//                    return true;
-//                } else {
-//                    Goods goods1 = new Goods();
-//                    String qty = String.valueOf(hashMap.get("qty"));
-//                    goods1.setBarcode(hashMap.get("barcode"));
-//                    goods1.setEncoding(hashMap.get("encoding"));
-//                    goods1.setName(hashMap.get("name"));
-//                    goods1.setType(hashMap.get("type"));
-//                    goods1.setUnit(hashMap.get("unit"));
-//                    goods1.setSpec(hashMap.get("spec"));
-//                    goods1.setLot(hashMap.get("lot"));
-//                    goods1.setCostObject(hashMap.get("cost_object"));
-//                    goods1.setPk_invbasdoc(hashMap.get("pk_invbasdoc"));
-//                    goods1.setPk_invmandoc(hashMap.get("pk_invmandoc"));
-//                    if (TextUtils.isEmpty(qty)) {
-//                        qty = "0.0";
-//                    }
-//                    goods1.setQty(Float.valueOf(qty));
-//                    ovList.add(goods1);
-//                    return true;
-//                }
-//            }
-//        }
-//        return false;
+        Goods goods = new Goods();
+        goods.setBarcode(mEdBarCode.getText().toString());
+        goods.setEncoding(mEdEncoding.getText().toString());
+        goods.setName(mEdName.getText().toString());
+        goods.setType(mEdType.getText().toString());
+        goods.setSpec(mEdSpectype.getText().toString());
+        goods.setUnit(mEdUnit.getText().toString());
+        goods.setLot(mEdLot.getText().toString());
+        goods.setQty(Float.valueOf(mEdQty.getText().toString()));
+        goods.setCostObject(mEdCostObject.getText().toString());
+        goods.setPk_invbasdoc(pk_invbasdoc);
+        goods.setPk_invmandoc(pk_invmandoc);
+        return detailList.add(goods);
     }
 
     /**
@@ -503,15 +418,7 @@ public class MaterialOutScanAct extends Activity {
             switch (ed.getId()) {
                 case R.id.ed_bar_code:
                     if (TextUtils.isEmpty(mEdBarCode.getText().toString())) {
-                        mEdEncoding.setText("");
-                        mEdType.setText("");
-                        mEdLot.setText("");
-                        mEdName.setText("");
-                        mEdUnit.setText("");
-                        mEdQty.setText("");
-                        mEdSpectype.setText("");
-                        mEdNum.setText("");
-                        mEdWeight.setText("");
+                        ChangeAllEdTextToEmpty();
                     }
                     break;
                 case R.id.ed_num:
