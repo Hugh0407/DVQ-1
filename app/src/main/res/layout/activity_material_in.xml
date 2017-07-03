@@ -39,12 +39,10 @@
                 android:singleLine="true"
                 android:textAllCaps="true"/>
 
-            <ImageButton
-                android:id="@+id/refer_bill_num"
+            <Space
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:layout_marginRight="5dp"
-                android:background="@drawable/browse"/>
+                android:layout_marginRight="5dp"/>
 
         </LinearLayout>
 

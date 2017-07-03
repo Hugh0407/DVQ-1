@@ -317,6 +317,7 @@ public class MaterialOutScanAct extends Activity {
         mEdQty.setText("");
         mEdWeight.setText("");
         mEdSpectype.setText("");
+        mEdCostObject.setText("");
     }
 
     /**

@@ -4,11 +4,13 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -49,14 +51,13 @@ import butterknife.OnClick;
 import static com.techscan.dvq.common.Utils.HANDER_DEPARTMENT;
 import static com.techscan.dvq.common.Utils.HANDER_SAVE_RESULT;
 import static com.techscan.dvq.common.Utils.HANDER_STORG;
+import static com.techscan.dvq.common.Utils.showToast;
 
 public class ProductOutAct extends Activity {
 
 
     @InjectView(R.id.bill_num)
     EditText mBillNum;
-    @InjectView(R.id.refer_bill_num)
-    ImageButton mReferBillNum;
     @InjectView(R.id.bill_date)
     EditText mBillDate;
     @InjectView(R.id.wh)
@@ -98,6 +99,7 @@ public class ProductOutAct extends Activity {
     int month;
     int day;
     Calendar mycalendar;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,13 +114,11 @@ public class ProductOutAct extends Activity {
      *
      * @param view
      */
-    @OnClick({R.id.refer_bill_num, R.id.refer_wh, R.id.refer_organization,
+    @OnClick({R.id.refer_wh, R.id.refer_organization,
             R.id.refer_lei_bie, R.id.btnPurInScan, R.id.btnPurinSave,
             R.id.btnBack, R.id.refer_department, R.id.bill_date})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.refer_bill_num:
-                break;
             case R.id.refer_wh:
                 try {
                     btnWarehouseClick();
@@ -139,16 +139,23 @@ public class ProductOutAct extends Activity {
                 }
                 break;
             case R.id.btnPurInScan:
-                Intent in = new Intent(ProductOutAct.this, MaterialOutScanAct.class);
-                startActivityForResult(in, 95);
+                if (isAllEdNotEmpty()) {
+                    Intent in = new Intent(ProductOutAct.this, MaterialOutScanAct.class);
+                    startActivityForResult(in, 95);
+                } else {
+                    showToast(ProductOutAct.this, "请先核对信息，再进行扫描");
+                }
                 break;
             case R.id.btnPurinSave:
                 if (tempList != null && tempList.size() > 0) {
                     try {
                         SaveInfo(tempList);
+                        showProgressDialog();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                } else {
+                    showToast(ProductOutAct.this, "没有需要保存的数据");
                 }
                 break;
             case R.id.btnBack:
@@ -289,10 +296,19 @@ public class ProductOutAct extends Activity {
                     break;
                 case HANDER_SAVE_RESULT:
                     JSONObject saveResult = (JSONObject) msg.obj;
-                    if (saveResult != null) {
-                        Log.d(TAG, "保存结果:" + saveResult.toString());
-                    } else {
-                        Log.d(TAG, "null");
+                    try {
+                        if (saveResult != null && saveResult.getBoolean("Status")) {
+                            Log.d(TAG, "保存" + saveResult.toString());
+                            showToast(ProductOutAct.this, "数据保存成功");
+                            tempList.clear();
+                            changeAllEdToEmpty();
+                            mBillNum.requestFocus();
+                        } else {
+                            showToast(ProductOutAct.this, "数据保存失败，请重试");
+                        }
+                        progressDialogDismiss();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
                     break;
                 default:
@@ -318,6 +334,7 @@ public class ProductOutAct extends Activity {
         tableHead.put("PK_CALBODY", PK_CALBODY);
         tableHead.put("PK_CORP", MainLogin.objLog.STOrgCode);
         tableHead.put("VBILLCODE", mBillNum.getText().toString());
+        tableHead.put("CUSERNAME", MainLogin.objLog.LoginUser);
         table.put("Head", tableHead);
         JSONObject tableBody = new JSONObject();
         JSONArray bodyArray = new JSONArray();
@@ -326,11 +343,14 @@ public class ProductOutAct extends Activity {
             object.put("CINVBASID", c.getPk_invbasdoc());
             object.put("CINVENTORYID", c.getPk_invmandoc());
             object.put("WGDATE", mBillDate.getText().toString());    //LEO要求，将时间添加到表体上
+
             float c_2 = c.getQty();
             DecimalFormat decimalFormat = new DecimalFormat(".00"); //构造方法的字符格式这里如果小数不足2位,会以0补足.
             String qty = decimalFormat.format(c_2);                 //format 返回的是字符串
 
-            object.put("NOUTNUM", qty);
+            object.put("NINNUM", qty);
+            object.put("CINVCODE", c.getEncoding());
+            object.put("BLOTMGT", "1");
             object.put("PK_BODYCALBODY", PK_CALBODY);
             object.put("PK_CORP", MainLogin.objLog.STOrgCode);
             object.put("VBATCHCODE", c.getLot());
@@ -341,7 +361,7 @@ public class ProductOutAct extends Activity {
         table.put("GUIDS", UUID.randomUUID().toString());
         Log.d(TAG, "SaveInfo: " + table.toString());
 
-        SaveThread saveThread = new SaveThread(table, "SaveMaterialOut", mHandler, HANDER_SAVE_RESULT);
+        SaveThread saveThread = new SaveThread(table, "SavePrdStockIn", mHandler, HANDER_SAVE_RESULT);
         Thread thread = new Thread(saveThread);
         thread.start();
     }
@@ -354,7 +374,7 @@ public class ProductOutAct extends Activity {
         // ViewGrid.putExtra("rdflag", "1");
         // ViewGrid.putExtra("rdcode", "202");
         ViewGrid.putExtra("AccID", "");
-        ViewGrid.putExtra("rdflag", "1");
+        ViewGrid.putExtra("rdflag", "0");   //0 ----》入库  1----》出库
         ViewGrid.putExtra("rdcode", "");
         startActivityForResult(ViewGrid, 98);
     }
@@ -444,6 +464,121 @@ public class ProductOutAct extends Activity {
         RequestThread requestThread = new RequestThread(parameter, mHandler, HANDER_DEPARTMENT);
         Thread td = new Thread(requestThread);
         td.start();
+    }
+
+    private boolean isAllEdNotEmpty() {
+        return (!TextUtils.isEmpty(mBillNum.getText().toString())
+                && !TextUtils.isEmpty(mBillDate.getText().toString())
+                && !TextUtils.isEmpty(mWh.getText().toString())
+                && !TextUtils.isEmpty(mOrganization.getText().toString())
+                && !TextUtils.isEmpty(mLeiBie.getText().toString())
+                && !TextUtils.isEmpty(mDepartment.getText().toString()));
+    }
+    private void changeAllEdToEmpty(){
+        mBillNum.setText("");
+        mBillDate.setText("");
+        mWh.setText("");
+        mOrganization.setText("");
+        mLeiBie.setText("");
+        mDepartment.setText("");
+    }
+
+    /**
+     * 保存单据的dialog
+     */
+    private void showProgressDialog() {
+        progressDialog = new ProgressDialog(ProductOutAct.this);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);// 设置进度条的形式为圆形转动的进度条
+        progressDialog.setCancelable(false);// 设置是否可以通过点击Back键取消
+        progressDialog.setCanceledOnTouchOutside(false);// 设置在点击Dialog外是否取消Dialog进度条
+        // progressDialog.setIcon(R.drawable.ic_launcher);
+        // 设置提示的title的图标，默认是没有的，如果没有设置title的话只设置Icon是不会显示图标的
+        progressDialog.setTitle("保存单据");
+        // dismiss监听
+//        progressDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+//
+//            @Override
+//            public void onDismiss(DialogInterface progressDialog) {
+//                // TODO Auto-generated method stub
+//
+//            }
+//        });
+        // 监听Key事件被传递给dialog
+//        progressDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+//
+//            @Override
+//            public boolean onKey(DialogInterface progressDialog, int keyCode,
+//                                 KeyEvent event) {
+//                // TODO Auto-generated method stub
+//                return false;
+//            }
+//        });
+        // 监听cancel事件
+//        progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+//
+//            @Override
+//            public void onCancel(DialogInterface progressDialog) {
+//                // TODO Auto-generated method stub
+//
+//            }
+//        });
+        //设置可点击的按钮，最多有三个(默认情况下)
+//        progressDialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定",
+//                new DialogInterface.OnClickListener() {
+//
+//                    @Override
+//                    public void onClick(DialogInterface progressDialog, int which) {
+//                        // TODO Auto-generated method stub
+//
+//                    }
+//                });
+//        progressDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "取消",
+//                new DialogInterface.OnClickListener() {
+//
+//                    @Override
+//                    public void onClick(DialogInterface progressDialog, int which) {
+//                        // TODO Auto-generated method stub
+//
+//                    }
+//                });
+//        progressDialog.setButton(DialogInterface.BUTTON_NEUTRAL, "中立",
+//                new DialogInterface.OnClickListener() {
+//
+//                    @Override
+//                    public void onClick(DialogInterface progressDialog, int which) {
+//                        // TODO Auto-generated method stub
+//
+//                    }
+//                });
+        progressDialog.setMessage("正在保存，请等待...");
+        progressDialog.show();
+        new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                    if (progressDialog.isShowing()) {
+                        Thread.sleep(30 * 1000);
+                        // cancel和dismiss方法本质都是一样的，都是从屏幕中删除Dialog,唯一的区别是
+                        // 调用cancel方法会回调DialogInterface.OnCancelListener如果注册的话,dismiss方法不会回掉
+                        progressDialog.cancel();
+                        // progressDialog.dismiss();
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }).start();
+    }
+
+    /**
+     * progressDialog 消失
+     */
+    private void progressDialogDismiss() {
+        if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
     }
 
 
