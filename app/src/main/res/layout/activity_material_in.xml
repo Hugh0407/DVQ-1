@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/pagebackgroup"
     tools:context="com.techscan.dvq.materialOut.MaterialOutAct">
 
     <LinearLayout
@@ -234,7 +235,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginBottom="16dp"
                 android:layout_marginTop="8dp"
-                android:background="@drawable/edittext_style"
+                android:background="@drawable/edittext_blur"
                 android:gravity="left|top"
                 android:padding="8dp"/>
         </LinearLayout>

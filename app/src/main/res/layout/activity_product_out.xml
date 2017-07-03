@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/pagebackgroup"
     android:orientation="vertical"
     tools:context="com.techscan.dvq.productOut.ProductOutAct">
 
@@ -241,7 +242,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginBottom="16dp"
                 android:layout_marginTop="8dp"
-                android:background="@drawable/edittext_style"
+                android:background="@drawable/edittext_blur"
                 android:gravity="left|top"
                 android:padding="8dp"/>
         </LinearLayout>

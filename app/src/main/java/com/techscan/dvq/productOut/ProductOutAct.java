@@ -30,7 +30,7 @@ import com.techscan.dvq.common.RequestThread;
 import com.techscan.dvq.common.SaveThread;
 import com.techscan.dvq.materialOut.DepartmentListAct;
 import com.techscan.dvq.materialOut.StorgListACt;
-import com.techscan.dvq.materialOut.scan.MaterialOutScanAct;
+import com.techscan.dvq.productOut.scan.ProductOutScanAct;
 
 import org.apache.http.ParseException;
 import org.json.JSONArray;
@@ -140,7 +140,7 @@ public class ProductOutAct extends Activity {
                 break;
             case R.id.btnPurInScan:
                 if (isAllEdNotEmpty()) {
-                    Intent in = new Intent(ProductOutAct.this, MaterialOutScanAct.class);
+                    Intent in = new Intent(ProductOutAct.this, ProductOutScanAct.class);
                     startActivityForResult(in, 95);
                 } else {
                     showToast(ProductOutAct.this, "请先核对信息，再进行扫描");
@@ -196,6 +196,7 @@ public class ProductOutAct extends Activity {
             String warehousecode = data.getStringExtra("result2");
             String warehouseName = data.getStringExtra("result3");
             CWAREHOUSEID = warehousePK1;
+            mWh.requestFocus();
             mWh.setText(warehouseName);
         }
         // 收发类别的回传数据 <----VlistRdcl.class
@@ -206,6 +207,7 @@ public class ProductOutAct extends Activity {
             String RdIDA = data.getStringExtra("RdIDA");    //需要回传的id
             String RdIDB = data.getStringExtra("RdIDB");
             CDISPATCHERID = RdIDA;
+            mLeiBie.requestFocus();
             mLeiBie.setText(name);
         }
         //部门信息的回传数据 <----DepartmentListAct.class
@@ -214,6 +216,7 @@ public class ProductOutAct extends Activity {
             String pk_deptdoc = data.getStringExtra("pk_deptdoc");
             String deptcode = data.getStringExtra("deptcode");
             CDPTID = pk_deptdoc;
+            mDepartment.requestFocus();
             mDepartment.setText(deptname);
         }
 
@@ -228,6 +231,7 @@ public class ProductOutAct extends Activity {
             String pk_areacl = data.getStringExtra("pk_areacl");
             String bodyname = data.getStringExtra("bodyname");
             String pk_calbody = data.getStringExtra("pk_calbody");
+            mOrganization.requestFocus();
             mOrganization.setText(bodyname);
             PK_CALBODY = pk_calbody;
         }
@@ -297,14 +301,18 @@ public class ProductOutAct extends Activity {
                 case HANDER_SAVE_RESULT:
                     JSONObject saveResult = (JSONObject) msg.obj;
                     try {
-                        if (saveResult != null && saveResult.getBoolean("Status")) {
-                            Log.d(TAG, "保存" + saveResult.toString());
-                            showToast(ProductOutAct.this, "数据保存成功");
-                            tempList.clear();
-                            changeAllEdToEmpty();
-                            mBillNum.requestFocus();
-                        } else {
-                            showToast(ProductOutAct.this, "数据保存失败，请重试");
+                        if (saveResult!=null){
+                            if (saveResult.getBoolean("Status")){
+                                Log.d(TAG, "保存" + saveResult.toString());
+                                showToast(ProductOutAct.this, saveResult.getString("ErrMsg"));
+                                tempList.clear();
+                                changeAllEdToEmpty();
+                                mBillNum.requestFocus();
+                            }else {
+                                showToast(ProductOutAct.this, saveResult.getString("ErrMsg"));
+                            }
+                        }else {
+                            showToast(ProductOutAct.this,"数据提交失败!");
                         }
                         progressDialogDismiss();
                     } catch (JSONException e) {
@@ -474,7 +482,8 @@ public class ProductOutAct extends Activity {
                 && !TextUtils.isEmpty(mLeiBie.getText().toString())
                 && !TextUtils.isEmpty(mDepartment.getText().toString()));
     }
-    private void changeAllEdToEmpty(){
+
+    private void changeAllEdToEmpty() {
         mBillNum.setText("");
         mBillDate.setText("");
         mWh.setText("");
