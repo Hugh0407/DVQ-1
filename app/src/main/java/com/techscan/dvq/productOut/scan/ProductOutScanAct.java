@@ -174,6 +174,7 @@ public class ProductOutScanAct extends Activity {
         }
         mEdBarCode.setText(Bar);
         mEdBarCode.setSelection(mEdBarCode.length());   //将光标移动到最后的位置
+        mEdBarCode.selectAll();
         String[] barCode = Bar.split("\\|");
         if (barCode.length == 9 && barCode[0].equals("P")) {// 包码 P|SKU|LOT|WW|TAX|QTY|CW|ONLY|SN    9位
             mEdLot.setEnabled(false);
