@@ -330,7 +330,6 @@ public class SalesDeliveryScan extends Activity {
             if (!TaskBatch.equals("null")) {
                 if (TaskBatch.equals(bar.cBatch.trim())) {
                     //确认了存货
-//                    Log.d(TAG, "ConformDetail: "+"进来了");
                     if (jsarray.getJSONObject(i).getString("invcode").equals(bar.cInvCode.trim())) {
                         String nnum = ((JSONObject) (jsarray.get(i))).getString("number");
                         String ntranoutnum = ((JSONObject) (jsarray.get(i))).getString("outnumber");

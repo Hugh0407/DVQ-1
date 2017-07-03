@@ -215,6 +215,7 @@ public class SaleBillInfoOrderList extends Activity {
 					return ;
 				}
 				jas = Common.DoHttpQuery(para, "CommonQuery", "");
+				//
 				Log.d(TAG, "GetAndBindingBillInfoDetail: "+jas.toString());
 			} catch (Exception ex)
 			{
@@ -330,6 +331,7 @@ public class SaleBillInfoOrderList extends Activity {
 				map.put("BillDate",tempJso.getString("dbilldate"));
 				map.put("BillCode",tempJso.getString("vreceiptcode"));
 				map.put("CustName",tempJso.getString("custname"));
+				map.put("Csaleid",tempJso.getString("csaleid"));
 				map.put("saleflg", "");
 
 //				map.put("pk_corp", tempJso.getString("pk_corp"));
@@ -351,90 +353,6 @@ public class SaleBillInfoOrderList extends Activity {
 //				map.put("ctransporttypeid", tempJso.getString("ctransporttypeid"));//运输方式ID
 //
 //				map.put("cbiztype", tempJso.getString("cbiztype"));
-
-			}
-
-			else if(fsFunctionName.equals("GetSaledH"))//退回再送单
-			{
-
-				map.put("pk_corp", tempJso.getString("pk_corp"));
-				map.put("custname", tempJso.getString("custname"));
-				map.put("pk_cubasdoc", tempJso.getString("pk_cubasdoc"));
-				map.put("pk_cumandoc", tempJso.getString("ccustomerid"));
-				map.put("billID", tempJso.getString("cgeneralhid"));
-				map.put("billCode", tempJso.getString("vbillcode"));
-				map.put("AccID", tempJso.getString("AccID"));
-				map.put("vdef11", tempJso.getString("vuserdef11"));
-				map.put("vdef12", tempJso.getString("vuserdef12"));
-				map.put("vdef13", tempJso.getString("vuserdef13"));
-				map.put("saleflg", "");
-				if(tempJso.getString("AccID").equals("A"))
-				{
-					map.put("coperatorid", MainLogin.objLog.UserID);//操作者
-					map.put("ctransporttypeid", "0001AA100000000003U7");//运输方式ID
-				}
-				else
-				{
-					map.put("coperatorid", MainLogin.objLog.UserIDB);//操作者
-					map.put("ctransporttypeid", "0001DD10000000000XQT");//运输方式ID
-				}
-
-				map.put("cbiztype", tempJso.getString("cbiztype"));
-			}
-
-			else if(fsFunctionName.equals("GetSaleOutHead"))//退回不送单//D
-			{
-
-				map.put("pk_corp", tempJso.getString("pk_corp"));
-				map.put("custname", tempJso.getString("custname"));
-				map.put("pk_cubasdoc", tempJso.getString("pk_cubasdoc"));
-				map.put("pk_cumandoc", tempJso.getString("ccustomerid"));
-				map.put("billID", tempJso.getString("csaleid"));
-				map.put("billCode", tempJso.getString("vreceiptcode"));
-				map.put("AccID", tempJso.getString("AccID"));
-				map.put("vdef11", tempJso.getString("vdef11"));
-				map.put("vdef12", tempJso.getString("vdef12"));
-				map.put("vdef13", tempJso.getString("vdef13"));
-				map.put("saleflg", "D");
-				if(tempJso.getString("AccID").equals("A"))
-				{
-					map.put("coperatorid", MainLogin.objLog.UserID);//操作者
-					map.put("ctransporttypeid", "0001AA100000000003U7");//运输方式ID
-				}
-				else
-				{
-					map.put("coperatorid", MainLogin.objLog.UserIDB);//操作者
-					map.put("ctransporttypeid", "0001DD10000000000XQT");//运输方式ID
-				}
-				map.put("cbiztype", tempJso.getString("cbiztype"));
-
-
-			}
-
-			else if(fsFunctionName.equals("GetSaleTakeHead"))//退回不送单//T
-			{
-				map.put("pk_corp", tempJso.getString("pk_corp"));
-				map.put("custname", tempJso.getString("custname"));
-				map.put("pk_cubasdoc", tempJso.getString("pk_cubasdoc"));
-				map.put("pk_cumandoc", tempJso.getString("pk_cumandoc"));
-				map.put("billID", tempJso.getString("pk_take"));
-				map.put("billCode", tempJso.getString("vreceiptcode"));
-				map.put("AccID", tempJso.getString("AccID"));
-				map.put("vdef11", tempJso.getString("vdef11"));
-				map.put("vdef12", tempJso.getString("vdef12"));
-				map.put("vdef13", tempJso.getString("vdef13"));
-				map.put("saleflg", "T");
-				if(tempJso.getString("AccID").equals("A"))
-				{
-					map.put("coperatorid", MainLogin.objLog.UserID);//操作者
-					map.put("ctransporttypeid", "0001AA100000000003U7");//运输方式ID
-				}
-				else
-				{
-					map.put("coperatorid", MainLogin.objLog.UserIDB);//操作者
-					map.put("ctransporttypeid", "0001DD10000000000XQT");//运输方式ID
-				}
-				map.put("cbiztype", tempJso.getString("cbiztype"));
 			}
 
 			list.add(map);

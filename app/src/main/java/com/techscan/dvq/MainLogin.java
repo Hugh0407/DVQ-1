@@ -149,6 +149,7 @@ public class MainLogin extends Activity {
 
             AlertDialog.Builder bulider = new AlertDialog.Builder(this)
                     .setTitle(R.string.TiXing).setMessage("请输入用户名和密码");
+
             bulider.setPositiveButton(R.string.QueDing, null).create().show();
             return;
         }

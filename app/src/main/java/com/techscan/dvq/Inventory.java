@@ -1,7 +1,5 @@
 package com.techscan.dvq;
 
-import android.util.Log;
-
 import org.apache.http.ParseException;
 import org.json.JSONArray;
 import org.json.JSONException;
