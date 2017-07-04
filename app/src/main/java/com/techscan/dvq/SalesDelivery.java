@@ -41,6 +41,7 @@ import static android.content.ContentValues.TAG;
 public class SalesDelivery extends Activity {
 
     String CWAREHOUSEID = "";    //库存组织
+    String CSENDWAREID = "";
     String sBillCodes ;//单据号查询
     String sBeginDate ;//制单日期开始查询
     String sEndDate ;//制单日期结束查询
@@ -1076,43 +1077,36 @@ public class SalesDelivery extends Activity {
                     newBodyJSON.put("invname", tempJso.getString("invname"));
                     newBodyJSON.put("invspec", tempJso.getString("invspec"));
                     newBodyJSON.put("invtype", tempJso.getString("invtype"));
+                    newBodyJSON.put("crowno", tempJso.getString("crowno"));
+                    newBodyJSON.put("batchcode","");
                     //销售订单附表ID
-                    newBodyJSON.put("corder_bid", tempJso.getString("corder_bid"));
+                    newBodyJSON.put("csourcebillbodyid", tempJso.getString("corder_bid"));
                     //销售主表ID
-                    newBodyJSON.put("csaleid", tempJso.getString("csaleid"));
+                    newBodyJSON.put("csourcebillid", tempJso.getString("csaleid"));
 
-                    newBodyJSON.put("pk_corp", tempJso.getString("pk_corp"));
+                    newBodyJSON.put("pk_sendcorp", tempJso.getString("pk_corp"));
                     //注册地址
                     newBodyJSON.put("vreceiveaddress", tempJso.getString("vreceiveaddress"));
                     //存货ID
-                    newBodyJSON.put("cinventoryid", tempJso.getString("cinventoryid"));
+                    newBodyJSON.put("cinvmandocid", tempJso.getString("cinventoryid"));
                     //建议发货库存组织
-                    newBodyJSON.put("cadvisecalbodyid", tempJso.getString("cadvisecalbodyid"));
+                    newBodyJSON.put("csendcalbodyid", tempJso.getString("cadvisecalbodyid"));
                     newBodyJSON.put("billcode", tmpBillCode);
                     //存货档案主键
                     newBodyJSON.put("cinvbasdocid", tempJso.getString("cinvbasdocid"));
                     //creceeiptareaid 
-                    newBodyJSON.put("invmandocid", tempJso.getString("cinvmandocid"));
+//                    newBodyJSON.put("invmandocid", tempJso.getString("cinvmandocid"));
                     String number = tempJso.getString("nnumber");
-                    String outnumber = tempJso.getString("ntotaloutinvnum");
-                    if(!outnumber.equals("null")) {
-                        outnumber = outnumber.replaceAll("\\.0", "");
-                    } else {
-                    }
                     if(!number.equals("null")) {
                         number = number.replaceAll("\\.0", "");
                     } else {
                     }
-                    //int shouldoutnum = Integer.valueOf(number).intValue() - Integer.valueOf(outnumber).intValue();
                     newBodyJSON.put("number", number);
-                    newBodyJSON.put("outnumber", outnumber);
-                    newBodyJSON.put("sourcerowno", tempJso.getString("vsourcerowno"));
                     newBodyJSON.put("sourcehid", tempJso.getString("csourcebillid"));
                     newBodyJSON.put("sourcebid", tempJso.getString("csourcebillbodyid"));
-                    newBodyJSON.put("crowno", tempJso.getString("crowno"));
-                    newBodyJSON.put("billhid", tempJso.getString("csalereceiveid"));
-                    newBodyJSON.put("billbid", tempJso.getString("csalereceiveid_bid"));
-                    newBodyJSON.put("billhcode", tmpBillCode);
+//                    newBodyJSON.put("billhid", tempJso.getString("csalereceiveid"));
+//                    newBodyJSON.put("billbid", tempJso.getString("csalereceiveid_bid"));
+                    newBodyJSON.put("billcode", tmpBillCode);
 //                    newBodyJSON.put("billtype", "4331");
                     newBodyJSON.put("ddeliverdate", tempJso.getString("ddeliverdate"));
                 }
@@ -1252,8 +1246,14 @@ public class SalesDelivery extends Activity {
 
                 if(tvSaleOutSelect.getText().toString().equals("销售出库"))
                 {
-                    newHeadJSON.put("ccalbodyid", tempJso.getString("ccalbodyid"));
+                    newHeadJSON.put("VDEF1", tempJso.getString("vdef1"));
+                    newHeadJSON.put("VDEF2", tempJso.getString("vdef2"));
+                    newHeadJSON.put("VDEF5", tempJso.getString("vdef5"));
+                    newHeadJSON.put("cbiztype", tempJso.getString("cbiztype"));
+                    newHeadJSON.put("CSALECORPID", tempJso.getString("csalecorpid"));
+                    newHeadJSON.put("PK_CORP", tempJso.getString("pk_corp"));
                     newHeadJSON.put("cdeptid", tempJso.getString("cdeptid"));
+                    newHeadJSON.put("ccalbodyid", tempJso.getString("ccalbodyid"));
                     newHeadJSON.put("coperatorid", tempJso.getString("coperatorid"));
                     newHeadJSON.put("ccustomerid", tempJso.getString("ccustomerid"));
                     newHeadJSON.put("vreceiveaddress", tempJso.getString("vreceiveaddress"));
@@ -1263,25 +1263,15 @@ public class SalesDelivery extends Activity {
                     newHeadJSON.put("cdeptid", tempJso.getString("cdeptid"));
                     newHeadJSON.put("capproveid", tempJso.getString("capproveid"));
                     newHeadJSON.put("ccalbodyid", tempJso.getString("ccalbodyid"));
-
-                    newHeadJSON.put("cbiztype", tempJso.getString("cbiztype"));
                     newHeadJSON.put("creceiptcustomerid", tempJso.getString("creceiptcustomerid"));
-
                     newHeadJSON.put("nheadsummny", tempJso.getString("nheadsummny"));
                     newHeadJSON.put("creceipttype", tempJso.getString("creceipttype"));
-
                 }
-
-
                 newHeadArray.put(newHeadJSON);
             }
-
             jsonBillHead.put("Status", true);
             jsonBillHead.put("dbBody", newHeadArray);
-
             GetBillBFlg = "1";
-
-
         }
         catch (JSONException e)
         {
@@ -1668,20 +1658,20 @@ public class SalesDelivery extends Activity {
                     }
 
 
-                    try {
-                        GetWHPosStatus();
-                    } catch (JSONException e) {
-                        Toast.makeText(SalesDelivery.this,"获取仓库状态失败", Toast.LENGTH_LONG).show();
-                        //ADD CAIXY TEST START
-                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                        //ADD CAIXY TEST END
+//                    try {
+//                        GetWHPosStatus();
+//                    } catch (JSONException e) {
+//                        Toast.makeText(SalesDelivery.this,"获取仓库状态失败", Toast.LENGTH_LONG).show();
+//                        //ADD CAIXY TEST START
+//                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                        //ADD CAIXY TEST END
+//
+//                    }
 
-                    }
-
-                    if(tmpWHStatus.equals(""))
-                    {
-                        return;
-                    }
+//                    if(tmpWHStatus.equals(""))
+//                    {
+//                        return;
+//                    }
 //					if(tmpWHStatus.equals("Y"))
 //					{
 //						if(tmpposCode.equals(""))
@@ -1696,16 +1686,13 @@ public class SalesDelivery extends Activity {
 //					}
 
                     Intent intDeliveryScan = new Intent(SalesDelivery.this,SalesDeliveryScan.class);
-                    intDeliveryScan.putExtra("AccID", tmpAccID);
                     intDeliveryScan.putExtra("TaskJonsBody",jsonBillBodyTask.toString());
-
                     SerializableList lstScanSaveDetial = new SerializableList();
                     lstScanSaveDetial.setList(lstSaveBody);
                     intDeliveryScan.putExtra("lstScanSaveDetial", lstScanSaveDetial);
-                    intDeliveryScan.putExtra("Warehouse", tmpWarehousePK);
                     String sTaskCount = TaskCount + "" ;
                     intDeliveryScan.putExtra("TaskCount",sTaskCount);
-                    intDeliveryScan.putExtra("tmpCorpPK",tmpCorpPK);
+//                    intDeliveryScan.putExtra("tmpCorpPK",tmpCorpPK);
                     intDeliveryScan.putStringArrayListExtra("ScanedBarcode", ScanedBarcode);
                     intDeliveryScan.putExtra("ScanType",tvSaleOutSelect.getText().toString());
                     startActivityForResult(intDeliveryScan,86);
@@ -1825,6 +1812,8 @@ public class SalesDelivery extends Activity {
             }
 
             JSONObject rev = Common.DoHttpQuery(para, "CommonQuery", "");
+            Log.d(TAG, "btnWarehouseClick: " + rev.toString());
+
             if (rev == null) {
                 // 网络通讯错误
                 Toast.makeText(this, "错误！网络通讯错误", Toast.LENGTH_LONG).show();

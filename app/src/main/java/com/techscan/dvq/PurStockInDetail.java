@@ -1376,9 +1376,9 @@ public class PurStockInDetail extends Activity {
                 new String[]{"BillCode", "InvCode", "InvName", "Batch",
                         "InvNum"},
                 // ImageItem的XML文件里面的一个ImageView,两个TextView ID
-                new int[]{R.id.txtTranstaskBillCode,
+                new int[]{
                         R.id.txtTranstaskInvCode, R.id.txtTranstaskInvName,
-                        R.id.txtTranstaskBatch, R.id.txtTranstaskInvNum});
+                       R.id.txtTranstaskInvNum});
         new AlertDialog.Builder(PurStockInDetail.this).setTitle("源单信息")
                 .setAdapter(listItemAdapter, null)
                 .setPositiveButton(R.string.QueRen, null).show();

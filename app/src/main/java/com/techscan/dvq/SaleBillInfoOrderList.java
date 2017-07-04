@@ -216,7 +216,8 @@ public class SaleBillInfoOrderList extends Activity {
 				}
 				jas = Common.DoHttpQuery(para, "CommonQuery", "");
 				//
-				Log.d(TAG, "GetAndBindingBillInfoDetail: "+jas.toString());
+				Log.d(TAG, "ListHead:"+"AAA");
+				Log.d(TAG, "ListHead:"+jas.toString());
 			} catch (Exception ex)
 			{
 				Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();

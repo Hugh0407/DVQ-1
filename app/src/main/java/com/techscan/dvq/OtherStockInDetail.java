@@ -1209,12 +1209,11 @@ public class OtherStockInDetail extends Activity {
                 new SimpleAdapter(OtherStockInDetail.this, lstTaskBody,//数据源
                         R.layout.vlisttranstask,//ListItem的XML实现
                         //动态数组与ImageItem对应的子项
-                        new String[]{"BillCode", "InvCode", "InvName", "Batch", "InvNum"},
+                        new String[]{ "InvCode", "InvName", "Batch", "InvNum"},
                         //ImageItem的XML文件里面的一个ImageView,两个TextView ID
-                        new int[]{R.id.txtTranstaskBillCode,
+                        new int[]{
                                 R.id.txtTranstaskInvCode,
                                 R.id.txtTranstaskInvName,
-                                R.id.txtTranstaskBatch,
                                 R.id.txtTranstaskInvNum}
                 );
         new AlertDialog.Builder(OtherStockInDetail.this).setTitle("源单信息")

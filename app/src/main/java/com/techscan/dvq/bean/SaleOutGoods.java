@@ -18,6 +18,7 @@ public class SaleOutGoods implements Parcelable{
     String barcode;
     String pk_invbasdoc;
     String pk_invmandoc;
+//    String
 
     public SaleOutGoods() {
     }

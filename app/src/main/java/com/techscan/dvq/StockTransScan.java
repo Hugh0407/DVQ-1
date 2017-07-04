@@ -710,14 +710,14 @@ public class StockTransScan extends Activity {
 						StockTransScan.this, lsTaskBody,// 数据源
 						R.layout.vlisttranstask,// ListItem的XML实现
 						// 动态数组与ImageItem对应的子项
-						new String[] { "InvCode", "InvName", "Batch", "AccID",
+						new String[] { "InvCode", "InvName", "Batch",
 								"InvNum", "BillCode" },
 						// ImageItem的XML文件里面的一个ImageView,两个TextView ID
 						new int[] { R.id.txtTranstaskInvCode,
 								R.id.txtTranstaskInvName,
-								R.id.txtTranstaskBatch, R.id.txtTranstaskAccId,
+
 								R.id.txtTranstaskInvNum,
-								R.id.txtTranstaskBillCode });
+								 });
 				new AlertDialog.Builder(StockTransScan.this).setTitle(R.string.YuanDanXinXi)
 						.setAdapter(listItemAdapter, null)
 						.setPositiveButton(R.string.QueRen, null).show();
