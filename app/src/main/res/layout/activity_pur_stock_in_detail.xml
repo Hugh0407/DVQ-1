@@ -29,7 +29,8 @@
                 android:layout_height="30dp"
                 android:layout_weight="1"
                 android:background="@drawable/edittext_style"
-                android:layout_marginLeft="5dp"/>
+                android:layout_marginLeft="5dp"
+                android:singleLine="true"/>
         </LinearLayout>
 
         <LinearLayout

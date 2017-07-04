@@ -96,8 +96,8 @@ public class PurStockInDetail extends Activity {
     EditText txtPurTotal;
     EditText txtPurUnit;
 
-    int ishouldinnum = 0;
-    int iinnum = 0;
+    Double ishouldinnum;
+    Double iinnum;
 
     List<Map<String, Object>> lstTaskBody = null;
 
@@ -258,6 +258,7 @@ public class PurStockInDetail extends Activity {
                 JSONObject temp = new JSONObject();
                 temp = serinos.getJSONObject(i);
                 if (temp.getString("serino").equals(serino)) {
+                    //temp.put("box", TotalBox);
                     // Toast.makeText(this, "该条码已经被扫描过了,不能再次扫描",
                     // Toast.LENGTH_LONG).show();
                     // //ADD CAIXY TEST START
@@ -366,7 +367,8 @@ public class PurStockInDetail extends Activity {
         SplitBarcode bar = new SplitBarcode(Scanbarcode);
         m_cSplitBarcode = bar;
 
-        if(bar.BarcodeType.equals("C") && bar.BarcodeType.equals("TC"))
+        if(!bar.BarcodeType.equals("C") && !bar.BarcodeType.equals("TC")
+                && !bar.BarcodeType.equals("Y"))
             bar.creatorOk = false;
 
         if (bar.creatorOk == false) {
@@ -528,7 +530,12 @@ public class PurStockInDetail extends Activity {
                         return false;
                     }
 
-                    if (ScanSerial(bar.CheckBarCode, Free1, bar.TotalBox) == false) {
+                    if(bar.BarcodeType.equals("C") || bar.BarcodeType.equals("TC")) {
+                        Double ldTotal = (Double) m_mapInvBaseInfo.get("quantity") * (Integer)m_mapInvBaseInfo.get("number");
+                        txtPurTotal.setText(ldTotal.toString());
+                    }
+
+                    if (ScanSerial(bar.FinishBarCode, Free1, txtPurTotal.getText().toString()) == false) {
                         txtBarcode.setText("");
                         txtBarcode.requestFocus();
                         return false;
@@ -544,8 +551,11 @@ public class PurStockInDetail extends Activity {
 //						return false;
 //					}
 
-                    int doneqty = temp.getInt("doneqty");
-                    temp.put("doneqty", doneqty + 1);
+//                    int doneqty = temp.getInt("doneqty");
+//                    temp.put("doneqty", doneqty + 1);
+
+                    Double doneqty = temp.getDouble("doneqty");
+                    temp.put("doneqty", doneqty + Double.parseDouble(txtPurTotal.getText().toString()));
                     break;
                 }
             }
@@ -567,16 +577,16 @@ public class PurStockInDetail extends Activity {
         JSONArray arrays;
         try {
             arrays = jsBody.getJSONArray("PurBody");
-            ishouldinnum = 0;
-            iinnum = 0;
+            ishouldinnum = 0.0;
+            iinnum = 0.0;
             for (int i = 0; i < arrays.length(); i++) {
                 String sshouldinnum = ((JSONObject) (arrays.get(i)))
                         .getString("nshouldinnum");
                 String sinnum = ((JSONObject) (arrays.get(i)))
                         .getString("doneqty");
 
-                ishouldinnum = ishouldinnum + Integer.valueOf(sshouldinnum);
-                iinnum = iinnum + Integer.valueOf(sinnum);
+                ishouldinnum = ishouldinnum + Double.valueOf(sshouldinnum);
+                iinnum = iinnum + Double.valueOf(sinnum);
             }
         } catch (JSONException e1) {
             // TODO Auto-generated catch block
@@ -587,8 +597,8 @@ public class PurStockInDetail extends Activity {
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             // ADD CAIXY TEST END
         }
-        tvPurcount.setText("总共" + ishouldinnum + "件 | " + "已扫" + iinnum
-                + "件 | " + "未扫" + (ishouldinnum - iinnum) + "件");
+        tvPurcount.setText("总共" + ishouldinnum + " | " + "已扫" + iinnum
+                + " | " + "未扫" + (ishouldinnum - iinnum) );
 
         txtBarcode.requestFocus();
         txtBarcode.setText("");
@@ -911,11 +921,19 @@ public class PurStockInDetail extends Activity {
         if(m_mapInvBaseInfo.get("barcodetype").toString().equals("TC")) {
             txtBatch.setFocusableInTouchMode(false);
             txtBatch.setFocusable(false);
+            txtPurNumber.setFocusableInTouchMode(false);
+            txtPurNumber.setFocusable(false);
+            txtPurTotal.setFocusableInTouchMode(false);
+            txtPurTotal.setFocusable(false);
             ScanedToGet();
         }
         else if(m_mapInvBaseInfo.get("barcodetype").toString().equals("C") ) {
             txtBatch.setFocusableInTouchMode(false);
             txtBatch.setFocusable(false);
+            txtPurNumber.setFocusableInTouchMode(true);
+            txtPurNumber.setFocusable(true);
+            txtPurTotal.setFocusableInTouchMode(false);
+            txtPurTotal.setFocusable(false);
             txtPurNumber.requestFocus();
             txtPurNumber.selectAll();
         }
@@ -924,6 +942,10 @@ public class PurStockInDetail extends Activity {
             txtBatch.setFocusable(true);
             txtBatch.requestFocus();
             txtBatch.selectAll();
+            txtPurTotal.setFocusableInTouchMode(true);
+            txtPurTotal.setFocusable(true);
+            txtPurNumber.setFocusableInTouchMode(false);
+            txtPurNumber.setFocusable(false);
             //txtPurNumber.setVisibility();
         }
     }
@@ -1017,14 +1039,19 @@ public class PurStockInDetail extends Activity {
     };
 
     private void Return() {
-        if (jsBoxTotal != null && jsSerino != null) {
+//        if (jsBoxTotal != null && jsSerino != null) {
+        if (jsSerino != null) {
             Intent intent = new Intent();
 
-            intent.putExtra("box", jsBoxTotal.toString());
-            Log.d("TAG", "ReturnjsBoxTotal: " + jsBoxTotal);
+//            intent.putExtra("box", jsBoxTotal.toString());
+            //Log.d("TAG", "ReturnjsBoxTotal: " + jsBoxTotal);
+            intent.putExtra("box", "");
             intent.putExtra("head", jsHead.toString());
+            Log.d("TAG", "ReturnScanedhead: " + jsHead);
             intent.putExtra("body", jsBody.toString());
+            Log.d("TAG", "ReturnScanedbody: " + jsBody);
             intent.putExtra("serino", jsSerino.toString());
+            Log.d("TAG", "ReturnScanedSerino: " + jsSerino);
             intent.putStringArrayListExtra("ScanedBarcode", ScanedBarcode);
             Log.d("TAG", "ReturnScanedBarcode: " + ScanedBarcode);
             PurStockInDetail.this.setResult(1, intent);// 设置回传数据。resultCode值是1，这个值在主窗口将用来区分回传数据的来源，以做不同的处理
@@ -1058,6 +1085,7 @@ public class PurStockInDetail extends Activity {
             String sInvCode = ((JSONObject) (arrays.get(i)))
                     .getString("invcode");
             String serino = ((JSONObject) (arrays.get(i))).getString("serino");
+            String sTotal = ((JSONObject) (arrays.get(i))).getString("box");
 
             map.put("invcode", sInvCode);
             map.put("invname",
@@ -1065,8 +1093,8 @@ public class PurStockInDetail extends Activity {
             map.put("batch", sBatch);
             map.put("sno", sSerial);
             map.put("serino", serino);
-
             map.put("okflg", " ");
+            map.put("total", sTotal);
 //            JSONArray boxs = jsBoxTotal.getJSONArray("BoxList");
 //            for (int x = 0; x < boxs.length(); x++) {
 //                JSONObject temp = boxs.getJSONObject(x);
@@ -1093,11 +1121,11 @@ public class PurStockInDetail extends Activity {
                 PurStockInDetail.this, lstTaskBody,// 数据源
                 R.layout.vlistpurdetail,// ListItem的XML实现
                 // 动态数组与ImageItem对应的子项
-                new String[]{"invname", "invcode", "batch", "sno", "okflg"},
+                new String[]{"invname", "invcode", "batch", "serino", "okflg", "total"},
                 // ImageItem的XML文件里面的一个ImageView,两个TextView ID
                 new int[]{R.id.listpurdetailinvName,
                         R.id.listpurdetailinvCode, R.id.listpurdetailinvBatch,
-                        R.id.listpurdetailSno, R.id.listpurdetailinvok});
+                        R.id.listpurdetailSno, R.id.listpurdetailinvok, R.id.listpurdetailTotal});
 
         DeleteButton = new AlertDialog.Builder(this).setTitle(getString(R.string.SaoMiaoMingXiXinXi))
                 .setSingleChoiceItems(listItemAdapter, 0, buttonDelOnClick)
@@ -1154,6 +1182,7 @@ public class PurStockInDetail extends Activity {
                     String batch = (String) mapTemp.get("batch");
                     String sno = (String) mapTemp.get("sno");
                     String serino = (String) mapTemp.get("serino");
+                    Double ScanedTotal = Double.valueOf(mapTemp.get("total").toString());
 
                     if (ScanedBarcode != null || ScanedBarcode.size() > 0) {
                         for (int si = 0; si < ScanedBarcode.size(); si++) {
@@ -1192,47 +1221,47 @@ public class PurStockInDetail extends Activity {
                         }
 
                         int it = 0;
-                        JSONArray boxs = jsBoxTotal.getJSONArray("BoxList");
-                        JSONArray newboxs = new JSONArray();
-                        for (int x = 0; x < boxs.length(); x++) {
-                            JSONObject tempBox = new JSONObject();
-                            JSONObject temp = boxs.getJSONObject(x);
-                            if (temp.getString("serial").equals(sno)
-                                    && temp.getString("invcode")
-                                    .equals(invcode)
-                                    && temp.getString("batch").equals(batch)) {
-                                int icurrent;
-                                int itotal;
-                                icurrent = temp.getInt("current") - 1;
-                                itotal = temp.getInt("total");
-                                if (icurrent + 1 == itotal) {
-                                    it = 1;
-                                }
-//								if (icurrent != 0)
-//								{
-//									tempBox.put("serial", sno);
-//									tempBox.put("total", itotal);
-//									tempBox.put("current", icurrent);
-//									tempBox.put("invcode", invcode);
-//									tempBox.put("batch", batch);
-//									newboxs.put(tempBox);
+//                        JSONArray boxs = jsBoxTotal.getJSONArray("BoxList");
+//                        JSONArray newboxs = new JSONArray();
+//                        for (int x = 0; x < boxs.length(); x++) {
+//                            JSONObject tempBox = new JSONObject();
+//                            JSONObject temp = boxs.getJSONObject(x);
+//                            if (temp.getString("serial").equals(sno)
+//                                    && temp.getString("invcode")
+//                                    .equals(invcode)
+//                                    && temp.getString("batch").equals(batch)) {
+//                                int icurrent;
+//                                int itotal;
+//                                icurrent = temp.getInt("current") - 1;
+//                                itotal = temp.getInt("total");
+//                                if (icurrent + 1 == itotal) {
+//                                    it = 1;
+//                                }
+////								if (icurrent != 0)
+////								{
+////									tempBox.put("serial", sno);
+////									tempBox.put("total", itotal);
+////									tempBox.put("current", icurrent);
+////									tempBox.put("invcode", invcode);
+////									tempBox.put("batch", batch);
+////									newboxs.put(tempBox);
+////
+////								}
+//                            } else {
 //
-//								}
-                            } else {
-
-                                tempBox = temp;
-                                newboxs.put(tempBox);
-                            }
-
-                        }
+//                                tempBox = temp;
+//                                newboxs.put(tempBox);
+//                            }
+//
+//                        }
 
                         jsBoxTotal = new JSONObject();
 
-                        if (serinos.length() > 0) {
-                            jsBoxTotal.put("BoxList", newboxs);
-                        }
+//                        if (serinos.length() > 0) {
+//                            jsBoxTotal.put("BoxList", newboxs);
+//                        }
 
-                        if (it == 1) {
+                        //if (it == 1) {
 
                             JSONArray bodys = jsBody.getJSONArray("PurBody");
                             JSONArray bodynews = new JSONArray();
@@ -1247,8 +1276,8 @@ public class PurStockInDetail extends Activity {
 
                                 if (invcodeold.equals(invcode)
                                         && batchcodeold.equals(batch)) {
-                                    int doneqty = temp.getInt("doneqty");
-                                    temp.put("doneqty", doneqty - 1);
+                                    Double doneqty = temp.getDouble("doneqty");
+                                    temp.put("doneqty", doneqty - ScanedTotal);
                                 }
 
                                 bodynews.put(temp);
@@ -1258,13 +1287,13 @@ public class PurStockInDetail extends Activity {
                             jsBody.put("Status", "true");
                             jsBody.put("PurBody", bodynews);
 
-                        }
+                        //}
 
                         JSONArray arraysCount;
                         try {
                             arraysCount = jsBody.getJSONArray("PurBody");
-                            ishouldinnum = 0;
-                            iinnum = 0;
+                            ishouldinnum = 0.0;
+                            iinnum = 0.0;
                             for (int i = 0; i < arraysCount.length(); i++) {
                                 String sshouldinnum = ((JSONObject) (arraysCount
                                         .get(i))).getString("nshouldinnum");
@@ -1272,16 +1301,16 @@ public class PurStockInDetail extends Activity {
                                         .get(i))).getString("doneqty");
 
                                 ishouldinnum = ishouldinnum
-                                        + Integer.valueOf(sshouldinnum);
-                                iinnum = iinnum + Integer.valueOf(sinnum);
+                                        + Double.valueOf(sshouldinnum);
+                                iinnum = iinnum + Double.valueOf(sinnum);
                             }
                         } catch (JSONException e1) {
                             // TODO Auto-generated catch block
                             e1.printStackTrace();
                         }
-                        tvPurcount.setText("总共" + ishouldinnum + "件 | " + "已扫"
-                                + iinnum + "件 | " + "未扫"
-                                + (ishouldinnum - iinnum) + "件");
+                        tvPurcount.setText("总共" + ishouldinnum + " | " + "已扫"
+                                + iinnum + " | " + "未扫"
+                                + (ishouldinnum - iinnum) );
                         //SaveScanedBody();//写入本地
                         IniDetail();
 
@@ -1390,6 +1419,21 @@ public class PurStockInDetail extends Activity {
                     }
                 case id.txtPurNumber:
                     if (arg1 == 66 && arg2.getAction() == KeyEvent.ACTION_UP) {
+                        m_mapInvBaseInfo.put("number",Integer.valueOf(txtPurNumber.getText().toString()));
+                        ScanedToGet();
+                        return true;
+                    }
+                case id.txtPurBatch:
+                    if (arg1 == 66 && arg2.getAction() == KeyEvent.ACTION_UP) {
+                        if(txtBatch.getText().toString().equals(""))
+                                return false;
+                        m_cSplitBarcode.cBatch = txtBatch.getText().toString().replace("\r", "").replace("\n", "");
+                        m_mapInvBaseInfo.put("batch",txtBatch.getText().toString().replace("\r", "").replace("\n", ""));
+                        txtPurTotal.requestFocus();
+                        return true;
+                    }
+                case id.txtPurTotal:
+                    if (arg1 == 66 && arg2.getAction() == KeyEvent.ACTION_UP) {
                         ScanedToGet();
                         return true;
                     }
@@ -1447,8 +1491,9 @@ public class PurStockInDetail extends Activity {
                 temp = this.getIntent().getStringExtra("serino");
                 jsSerino = new JSONObject(temp);
 
-                temp = this.getIntent().getStringExtra("box");
-                jsBoxTotal = new JSONObject(temp);
+                //temp = this.getIntent().getStringExtra("box");
+                //jsBoxTotal = new JSONObject(temp);
+                jsBoxTotal = null;
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -1488,6 +1533,8 @@ public class PurStockInDetail extends Activity {
         this.txtBarcode.addTextChangedListener(watchers);
         txtBarcode.setOnKeyListener(myTxtListener);
         txtPurNumber.setOnKeyListener(myTxtListener);
+        txtBatch.setOnKeyListener(myTxtListener);
+        txtPurTotal.setOnKeyListener(myTxtListener);
 
         ActionBar actionBar = this.getActionBar();
         actionBar.setTitle("采购入库扫描明细");
@@ -1521,8 +1568,8 @@ public class PurStockInDetail extends Activity {
 
         JSONArray arrays;
         try {
-            ishouldinnum = 0;
-            iinnum = 0;
+            ishouldinnum = 0.0;
+            iinnum = 0.0;
             if (jsBody == null || !jsBody.has("PurBody")) {
                 Common.ReScanErr = true;
                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
@@ -1536,8 +1583,8 @@ public class PurStockInDetail extends Activity {
                 String sinnum = ((JSONObject) (arrays.get(i)))
                         .getString("doneqty");
 
-                ishouldinnum = ishouldinnum + Integer.valueOf(sshouldinnum);
-                iinnum = iinnum + Integer.valueOf(sinnum);
+                ishouldinnum = ishouldinnum + Double.valueOf(sshouldinnum);
+                iinnum = iinnum + Double.valueOf(sinnum);
             }
         } catch (JSONException e1) {
             // TODO Auto-generated catch block
@@ -1549,7 +1596,7 @@ public class PurStockInDetail extends Activity {
             // ADD CAIXY TEST END
         }
         tvPurcount.setText("总量" + ishouldinnum + " | " + "已扫" + iinnum
-                + "件 | " + "未扫" + (ishouldinnum - iinnum));
+                + " | " + "未扫" + (ishouldinnum - iinnum));
 
         ReScanBody();
     }
