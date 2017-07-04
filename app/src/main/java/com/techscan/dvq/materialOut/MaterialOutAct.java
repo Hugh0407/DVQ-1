@@ -86,6 +86,7 @@ public class MaterialOutAct extends Activity {
 
 
     List<Goods> tempList;
+    HashMap<String, String> checkInfo;
 
     String CDISPATCHERID = "";//收发类别code
     String CDPTID = "";  //部门id
@@ -148,15 +149,17 @@ public class MaterialOutAct extends Activity {
                 }
                 break;
             case R.id.btnPurinSave:
-                if (tempList != null && tempList.size() > 0) {
-                    try {
-                        SaveInfo(tempList);
-                        showProgressDialog();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                if (checkSaveInfo()) {
+                    if (tempList != null && tempList.size() > 0) {
+                        try {
+                            SaveInfo(tempList);
+                            showProgressDialog();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        showToast(MaterialOutAct.this, "没有需要保存的数据");
                     }
-                } else {
-                    showToast(MaterialOutAct.this, "没有需要保存的数据");
                 }
                 break;
             case R.id.btnBack:
@@ -188,6 +191,43 @@ public class MaterialOutAct extends Activity {
         }
     }
 
+    /**
+     * 检查表头信息是否正确
+     */
+    private boolean checkSaveInfo() {
+        if (TextUtils.isEmpty(mBillNum.getText().toString())) {
+            showToast(MaterialOutAct.this, "单据号不能为空");
+            mBillNum.requestFocus();
+            return false;
+        }
+        if (TextUtils.isEmpty(mBillDate.getText().toString())) {
+            showToast(MaterialOutAct.this, "日期不能为空");
+            mBillDate.requestFocus();
+            return false;
+        }
+        if (!mWh.getText().toString().equals(checkInfo.get("Warehouse"))) {
+            showToast(MaterialOutAct.this, "仓库信息不正确");
+            mWh.requestFocus();
+            return false;
+        }
+        if (!mOrganization.getText().toString().equals(checkInfo.get("Organization"))) {
+            showToast(MaterialOutAct.this, "组织信息不正确");
+            mOrganization.requestFocus();
+            return false;
+        }
+        if (!mLeiBie.getText().toString().equals(checkInfo.get("LeiBie"))) {
+            showToast(MaterialOutAct.this, "收发类别信息不正确");
+            mLeiBie.requestFocus();
+            return false;
+        }
+        if (!mDepartment.getText().toString().equals(checkInfo.get("Department"))) {
+            showToast(MaterialOutAct.this, "部门信息不正确");
+            mDepartment.requestFocus();
+            return false;
+        }
+        return true;
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -199,6 +239,7 @@ public class MaterialOutAct extends Activity {
             CWAREHOUSEID = warehousePK1;
             mWh.requestFocus();
             mWh.setText(warehouseName);
+            checkInfo.put("Warehouse", warehouseName);
         }
         // 收发类别的回传数据 <----VlistRdcl.class
         if (requestCode == 98 && resultCode == 2) {
@@ -210,6 +251,7 @@ public class MaterialOutAct extends Activity {
             CDISPATCHERID = RdIDA;
             mLeiBie.requestFocus();
             mLeiBie.setText(name);
+            checkInfo.put("LeiBie", name);
         }
         //部门信息的回传数据 <----DepartmentListAct.class
         if (requestCode == 96 && resultCode == 4) {
@@ -219,6 +261,7 @@ public class MaterialOutAct extends Activity {
             CDPTID = pk_deptdoc;
             mDepartment.requestFocus();
             mDepartment.setText(deptname);
+            checkInfo.put("Department", deptname);
         }
 
         //扫描明细的回传数据 <----MaterialOutScanAct.class
@@ -235,6 +278,7 @@ public class MaterialOutAct extends Activity {
             mOrganization.requestFocus();
             mOrganization.setText(bodyname);
             PK_CALBODY = pk_calbody;
+            checkInfo.put("Organization", bodyname);
         }
     }
 
@@ -258,6 +302,7 @@ public class MaterialOutAct extends Activity {
         mOrganization.setOnKeyListener(mOnKeyListener);
         mLeiBie.setOnKeyListener(mOnKeyListener);
         mDepartment.setOnKeyListener(mOnKeyListener);
+        checkInfo = new HashMap<String, String>();
     }
 
     /**
@@ -303,18 +348,18 @@ public class MaterialOutAct extends Activity {
                     JSONObject saveResult = (JSONObject) msg.obj;
                     Log.d(TAG, "保存" + saveResult.toString());
                     try {
-                        if (saveResult!=null){
-                            if (saveResult.getBoolean("Status")){
+                        if (saveResult != null) {
+                            if (saveResult.getBoolean("Status")) {
                                 Log.d(TAG, "保存" + saveResult.toString());
                                 showToast(MaterialOutAct.this, saveResult.getString("ErrMsg"));
                                 tempList.clear();
                                 changeAllEdToEmpty();
                                 mBillNum.requestFocus();
-                            }else {
+                            } else {
                                 showToast(MaterialOutAct.this, saveResult.getString("ErrMsg"));
                             }
-                        }else {
-                            showToast(MaterialOutAct.this,"数据提交失败!");
+                        } else {
+                            showToast(MaterialOutAct.this, "数据提交失败!");
                         }
                         progressDialogDismiss();
                     } catch (JSONException e) {
@@ -452,14 +497,14 @@ public class MaterialOutAct extends Activity {
     private void SaveInfo(List<Goods> goodsList) throws JSONException {
         final JSONObject table = new JSONObject();
         JSONObject tableHead = new JSONObject();
-        tableHead.put("CDISPATCHERID", CDISPATCHERID);
-        tableHead.put("CDPTID", CDPTID);
-        tableHead.put("CUSER", MainLogin.objLog.UserID);
-        tableHead.put("CWAREHOUSEID", CWAREHOUSEID);
-        tableHead.put("PK_CALBODY", PK_CALBODY);
-        tableHead.put("PK_CORP", MainLogin.objLog.STOrgCode);
-        tableHead.put("VBILLCODE", mBillNum.getText().toString());
-        tableHead.put("CUSERNAME", MainLogin.objLog.LoginUser);
+        tableHead.put("VBILLCODE", mBillNum.getText().toString());  //单据号
+        tableHead.put("CDISPATCHERID", CDISPATCHERID);              //收发类别code
+        tableHead.put("CDPTID", CDPTID);                            //部门id
+        tableHead.put("CUSER", MainLogin.objLog.UserID);            //用户id
+        tableHead.put("CWAREHOUSEID", CWAREHOUSEID);                //库存组织
+        tableHead.put("PK_CALBODY", PK_CALBODY);                    //仓库id
+        tableHead.put("PK_CORP", MainLogin.objLog.STOrgCode);       //组织编号
+        tableHead.put("CUSERNAME", MainLogin.objLog.LoginUser);     //用户名称
         table.put("Head", tableHead);
         JSONObject tableBody = new JSONObject();
         JSONArray bodyArray = new JSONArray();

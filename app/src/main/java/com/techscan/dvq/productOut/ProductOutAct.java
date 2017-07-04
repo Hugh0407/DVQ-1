@@ -86,6 +86,7 @@ public class ProductOutAct extends Activity {
     ImageButton mReferDepartment;
     private String TAG = this.getClass().getSimpleName();
     List<Goods> tempList;
+    HashMap<String, String> checkInfo;
 
     String CDISPATCHERID = "";//收发类别code
     String CDPTID = "";  //部门id
@@ -147,15 +148,17 @@ public class ProductOutAct extends Activity {
                 }
                 break;
             case R.id.btnPurinSave:
-                if (tempList != null && tempList.size() > 0) {
-                    try {
-                        SaveInfo(tempList);
-                        showProgressDialog();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                if (checkSaveInfo()) {
+                    if (tempList != null && tempList.size() > 0) {
+                        try {
+                            SaveInfo(tempList);
+                            showProgressDialog();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        showToast(ProductOutAct.this, "没有需要保存的数据");
                     }
-                } else {
-                    showToast(ProductOutAct.this, "没有需要保存的数据");
                 }
                 break;
             case R.id.btnBack:
@@ -185,6 +188,43 @@ public class ProductOutAct extends Activity {
                 dpd.show();//显示DatePickerDialog组件
                 break;
         }
+    }
+
+    /**
+     * 检查表头信息是否正确
+     */
+    private boolean checkSaveInfo() {
+        if (TextUtils.isEmpty(mBillNum.getText().toString())) {
+            showToast(ProductOutAct.this, "单据号不能为空");
+            mBillNum.requestFocus();
+            return false;
+        }
+        if (TextUtils.isEmpty(mBillDate.getText().toString())) {
+            showToast(ProductOutAct.this, "日期不能为空");
+            mBillDate.requestFocus();
+            return false;
+        }
+        if (!mWh.getText().toString().equals(checkInfo.get("Warehouse"))) {
+            showToast(ProductOutAct.this, "仓库信息不正确");
+            mWh.requestFocus();
+            return false;
+        }
+        if (!mOrganization.getText().toString().equals(checkInfo.get("Organization"))) {
+            showToast(ProductOutAct.this, "组织信息不正确");
+            mOrganization.requestFocus();
+            return false;
+        }
+        if (!mLeiBie.getText().toString().equals(checkInfo.get("LeiBie"))) {
+            showToast(ProductOutAct.this, "收发类别信息不正确");
+            mLeiBie.requestFocus();
+            return false;
+        }
+        if (!mDepartment.getText().toString().equals(checkInfo.get("Department"))) {
+            showToast(ProductOutAct.this, "部门信息不正确");
+            mDepartment.requestFocus();
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -301,18 +341,18 @@ public class ProductOutAct extends Activity {
                 case HANDER_SAVE_RESULT:
                     JSONObject saveResult = (JSONObject) msg.obj;
                     try {
-                        if (saveResult!=null){
-                            if (saveResult.getBoolean("Status")){
+                        if (saveResult != null) {
+                            if (saveResult.getBoolean("Status")) {
                                 Log.d(TAG, "保存" + saveResult.toString());
                                 showToast(ProductOutAct.this, saveResult.getString("ErrMsg"));
                                 tempList.clear();
                                 changeAllEdToEmpty();
                                 mBillNum.requestFocus();
-                            }else {
+                            } else {
                                 showToast(ProductOutAct.this, saveResult.getString("ErrMsg"));
                             }
-                        }else {
-                            showToast(ProductOutAct.this,"数据提交失败!");
+                        } else {
+                            showToast(ProductOutAct.this, "数据提交失败!");
                         }
                         progressDialogDismiss();
                     } catch (JSONException e) {
