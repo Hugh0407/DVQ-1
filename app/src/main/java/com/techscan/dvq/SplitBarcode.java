@@ -45,10 +45,11 @@ public class SplitBarcode {
             return;
         }
         FinishBarCode = Barcode;
-        CheckBarCode = Barcode;
 
         BarcodeType = lsSplitArray[0];
         cInvCode = lsSplitArray[1];
+
+        CheckBarCode = BarcodeType + "|" + cInvCode;
 
         switch (eBarcodeType.getBarcodeType(BarcodeType)) {
             case Y:
@@ -67,6 +68,7 @@ public class SplitBarcode {
                 dQuantity = Double.parseDouble(lsSplitArray[4]);
                 cSerino = lsSplitArray[5];
                 iNumber = 1;
+                CheckBarCode = CheckBarCode + "|" + cBatch;
                 break;
             case TC:
                 if (lsSplitArray.length != 7) {
@@ -78,6 +80,7 @@ public class SplitBarcode {
                 dQuantity = Double.parseDouble(lsSplitArray[4]);
                 iNumber = Integer.parseInt(lsSplitArray[5]);
                 cSerino = lsSplitArray[6];
+                CheckBarCode = CheckBarCode + "|" + cBatch;
                 break;
             case P:
                 if (lsSplitArray.length != 9) {
@@ -92,6 +95,7 @@ public class SplitBarcode {
                 OnlyFlag = lsSplitArray[7];
                 cSerino = lsSplitArray[8];
                 iNumber = 1;
+                CheckBarCode = CheckBarCode + "|" + cBatch;
                 break;
             case TP:
                 if (lsSplitArray.length != 10) {
@@ -106,6 +110,7 @@ public class SplitBarcode {
                 CWFlag = lsSplitArray[7];
                 OnlyFlag = lsSplitArray[8];
                 cSerino = lsSplitArray[9];
+                CheckBarCode = CheckBarCode + "|" + cBatch;
                 break;
             default:
                 creatorOk = false;

@@ -59,7 +59,7 @@ public class PurStockIn extends Activity
 	
 	private ArrayList<String> ScanedBarcode = new ArrayList<String>();
 	Button btnSave;
-	Button btnUpdate;
+	//Button btnUpdate;
 	ImageButton btnBrowOrderNo;
 	Button btnExit;
 	Button btnScan;
@@ -527,7 +527,7 @@ public class PurStockIn extends Activity
 		saveHeadJons.put("bincode", this.m_PosCode);					//货位号
 		saveHeadJons.put("WarehouseID", this.m_WarehouseID);
 		saveHeadJons.put("pk_purcorp", pk_purcorp);
-		saveHeadJons.put("pk_corp", "1001");	
+		saveHeadJons.put("pk_corp", pk_purcorp);
 		
 		
 		JSONArray lstSerino = new JSONArray();
@@ -655,6 +655,7 @@ public class PurStockIn extends Activity
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             return false;
         }
+		Log.d("TAG", "SavePurOrder: " + saveJons);
 		JSONObject jas= Common.DoHttpQuery(saveJons, "VerifyInBound", "A"); 
 		
 		if(jas==null)
@@ -898,36 +899,55 @@ public class PurStockIn extends Activity
 //				return;
 //			}
 //		}
-		Log.d("TAG", "SaveBoxTotal: " + jsBoxTotal);
-		if(jsBoxTotal == null||jsBoxTotal.length() == 0)
-		{
-			 AlertDialog.Builder bulider = 
-					 new AlertDialog.Builder(this).setTitle(R.string.XunWen).setMessage("本次没有扫描明细" +
-					 		"你确认要保存采购入库单吗"+"?");
-			 bulider.setNegativeButton(R.string.QuXiao, null);
-			 bulider.setPositiveButton(R.string.QueRen, listenSave2).create().show();
-		}
-		else
-		{
-			try {
-				Save();
-				
-			} catch (ParseException e) {
-				Toast.makeText(PurStockIn.this, R.string.WangLuoChuXianWenTi ,
-						Toast.LENGTH_LONG).show();
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (JSONException e) {
-				Toast.makeText(PurStockIn.this, R.string.WangLuoChuXianWenTi ,
-						Toast.LENGTH_LONG).show();
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				Toast.makeText(PurStockIn.this, R.string.WangLuoChuXianWenTi ,
-						Toast.LENGTH_LONG).show();
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+//		Log.d("TAG", "SaveBoxTotal: " + jsBoxTotal);
+//		if(jsBoxTotal == null||jsBoxTotal.length() == 0)
+//		{
+//			 AlertDialog.Builder bulider =
+//					 new AlertDialog.Builder(this).setTitle(R.string.XunWen).setMessage("本次没有扫描明细" +
+//					 		"你确认要保存采购入库单吗"+"?");
+//			 bulider.setNegativeButton(R.string.QuXiao, null);
+//			 bulider.setPositiveButton(R.string.QueRen, listenSave2).create().show();
+//		}
+//		else
+//		{
+//			try {
+//				Save();
+//
+//			} catch (ParseException e) {
+//				Toast.makeText(PurStockIn.this, R.string.WangLuoChuXianWenTi ,
+//						Toast.LENGTH_LONG).show();
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			} catch (JSONException e) {
+//				Toast.makeText(PurStockIn.this, R.string.WangLuoChuXianWenTi ,
+//						Toast.LENGTH_LONG).show();
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			} catch (IOException e) {
+//				Toast.makeText(PurStockIn.this, R.string.WangLuoChuXianWenTi ,
+//						Toast.LENGTH_LONG).show();
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
+		try {
+			Save();
+
+		} catch (ParseException e) {
+			Toast.makeText(PurStockIn.this, R.string.WangLuoChuXianWenTi ,
+					Toast.LENGTH_LONG).show();
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JSONException e) {
+			Toast.makeText(PurStockIn.this, R.string.WangLuoChuXianWenTi ,
+					Toast.LENGTH_LONG).show();
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			Toast.makeText(PurStockIn.this, R.string.WangLuoChuXianWenTi ,
+					Toast.LENGTH_LONG).show();
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
   	
@@ -1369,49 +1389,49 @@ public class PurStockIn extends Activity
 					Exit();
 					break;
 				}
-				case R.id.btnPurinUpdate:
-				{
-					if(tmpBillStatus.equals("Y"))
-					{
-						try {
-							Update();
-						} catch (ParseException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-							Toast.makeText(PurStockIn.this, R.string.WangLuoChuXianWenTi ,
-									Toast.LENGTH_LONG).show();
-							//ADD CAIXY TEST START
-							MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-							//ADD CAIXY TEST END
-						} catch (JSONException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-							Toast.makeText(PurStockIn.this, R.string.WangLuoChuXianWenTi ,
-									Toast.LENGTH_LONG).show();
-							//ADD CAIXY TEST START
-							MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-							//ADD CAIXY TEST END
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-							Toast.makeText(PurStockIn.this, R.string.WangLuoChuXianWenTi ,
-									Toast.LENGTH_LONG).show();
-							//ADD CAIXY TEST START
-							MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-							//ADD CAIXY TEST END
-						}
-						break;
-					}
-					else
-					{
-						Toast.makeText(PurStockIn.this, "采购退货时无法使用暂存功能" ,
-								Toast.LENGTH_LONG).show();
-						//ADD CAIXY TEST START
-						MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-						break;
-					}
-					
-				}
+//				case R.id.btnPurinUpdate:
+//				{
+//					if(tmpBillStatus.equals("Y"))
+//					{
+//						try {
+//							Update();
+//						} catch (ParseException e) {
+//							// TODO Auto-generated catch block
+//							e.printStackTrace();
+//							Toast.makeText(PurStockIn.this, R.string.WangLuoChuXianWenTi ,
+//									Toast.LENGTH_LONG).show();
+//							//ADD CAIXY TEST START
+//							MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//							//ADD CAIXY TEST END
+//						} catch (JSONException e) {
+//							// TODO Auto-generated catch block
+//							e.printStackTrace();
+//							Toast.makeText(PurStockIn.this, R.string.WangLuoChuXianWenTi ,
+//									Toast.LENGTH_LONG).show();
+//							//ADD CAIXY TEST START
+//							MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//							//ADD CAIXY TEST END
+//						} catch (IOException e) {
+//							// TODO Auto-generated catch block
+//							e.printStackTrace();
+//							Toast.makeText(PurStockIn.this, R.string.WangLuoChuXianWenTi ,
+//									Toast.LENGTH_LONG).show();
+//							//ADD CAIXY TEST START
+//							MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//							//ADD CAIXY TEST END
+//						}
+//						break;
+//					}
+//					else
+//					{
+//						Toast.makeText(PurStockIn.this, "采购退货时无法使用暂存功能" ,
+//								Toast.LENGTH_LONG).show();
+//						//ADD CAIXY TEST START
+//						MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//						break;
+//					}
+//
+//				}
 				case R.id.btnPurinSave:
 				{
 
@@ -1494,7 +1514,7 @@ public class PurStockIn extends Activity
 		SaveFlg=0;
 		
 		btnSave = (Button)findViewById(R.id.btnPurinSave);
-		btnUpdate = (Button)findViewById(R.id.btnPurinUpdate);
+//		btnUpdate = (Button)findViewById(R.id.btnPurinUpdate);
 		btnExit = (Button)findViewById(R.id.btnPurInExit);
 		btnScan = (Button)findViewById(R.id.btnPurInScan);
 		btnBrowOrderNo = (ImageButton)findViewById(R.id.btnPurBrower);
@@ -1508,7 +1528,7 @@ public class PurStockIn extends Activity
 		this.tvbillstatus.setText("  ");
 		
 		btnSave.setOnClickListener(myListner);
-		btnUpdate.setOnClickListener(myListner);
+		//btnUpdate.setOnClickListener(myListner);
 		btnBrowOrderNo.setOnClickListener(myListner);
 		btnExit.setOnClickListener(myListner);
 		btnScan.setOnClickListener(myListner);
@@ -1524,7 +1544,7 @@ public class PurStockIn extends Activity
     	//txtPosition.setAllCaps(true);
     	
     	btnSave.setFocusable(false);
-    	btnUpdate.setFocusable(false);
+    	//btnUpdate.setFocusable(false);
     	btnBrowOrderNo.setFocusable(false);
     	btnExit.setFocusable(false);
     	btnScan.setFocusable(false);
@@ -2155,7 +2175,8 @@ public class PurStockIn extends Activity
 				this.jsBody = new JSONObject(bodyJS);			
 				this.jsHead = new JSONObject(headJS);
 				this.jsSerino = new JSONObject(serJS);
-				this.jsBoxTotal = new JSONObject(boxJS);
+//				this.jsBoxTotal = new JSONObject(boxJS);
+				this.jsBoxTotal = null;
 			}
 			catch (JSONException e)
 			{
