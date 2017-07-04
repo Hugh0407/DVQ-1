@@ -35,6 +35,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -176,6 +178,21 @@ public class ProductOutScanAct extends Activity {
         mEdBarCode.setSelection(mEdBarCode.length());   //将光标移动到最后的位置
         mEdBarCode.selectAll();
         String[] barCode = Bar.split("\\|");
+        /*********************************************************************/
+        //判断每一段的条码是否正确
+        for (int i = 0; i < barCode.length; i++) {
+            if (TextUtils.isEmpty(barCode[i])) {
+                return false;
+            }
+            if (i == 0) {
+                continue;
+            }
+            if (!isNumber(barCode[i])) {
+                return false;
+            }
+        }
+        /*********************************************************************/
+
         if (barCode.length == 9 && barCode[0].equals("P")) {// 包码 P|SKU|LOT|WW|TAX|QTY|CW|ONLY|SN    9位
             mEdLot.setEnabled(false);
             mEdQty.setEnabled(false);
@@ -221,29 +238,38 @@ public class ProductOutScanAct extends Activity {
         }
     }
 
+    public boolean isNumber(String str) {
+        Pattern pattern = Pattern.compile("[0-9]*");
+        Matcher isNum = pattern.matcher(str);
+        return isNum.matches();
+    }
+
     private void addDataToOvList() {
         ovList.clear();
         int detailSize = detailList.size();
         for (int i = 0; i < detailSize; i++) {
-            if (i == 0) {
-                Goods goods = detailList.get(i);
-                ovList.add(goods);
+            Goods dtGood = detailList.get(i);
+            if (ovList.contains(dtGood)) {
+                int j = ovList.indexOf(dtGood);
+                Goods ovGood = ovList.get(j);
+                ovGood.setQty(ovGood.getQty() + dtGood.getQty());
             } else {
-                int ovSize = ovList.size();
-                for (int j = 0; j < ovSize; j++) {
-                    Goods existGoods = ovList.get(j);
-                    //相同物料相同批次的要合并，通过名字和批次合并
-                    Goods good = detailList.get(i);
-                    if (good.getPk_invbasdoc().equals(existGoods.getPk_invbasdoc())
-                            && good.getLot().equals(existGoods.getLot())) {
-                        existGoods.setQty(existGoods.getQty() + good.getQty());
-                    } else {
-                        ovList.add(good);
-                    }
-                }
+                Goods good = new Goods();
+                good.setBarcode(dtGood.getBarcode());
+                good.setEncoding(dtGood.getEncoding());
+                good.setName(dtGood.getName());
+                good.setType(dtGood.getType());
+                good.setUnit(dtGood.getUnit());
+                good.setLot(dtGood.getLot());
+                good.setSpec(dtGood.getSpec());
+                good.setQty(dtGood.getQty());
+                good.setNum(dtGood.getNum());
+                good.setPk_invbasdoc(dtGood.getPk_invbasdoc());
+                good.setPk_invmandoc(dtGood.getPk_invmandoc());
+                good.setCostObject(dtGood.getCostObject());
+                ovList.add(good);
             }
         }
-
     }
 
     /**
@@ -379,7 +405,15 @@ public class ProductOutScanAct extends Activity {
             switch (ed.getId()) {
                 case R.id.ed_bar_code:
                     if (TextUtils.isEmpty(mEdBarCode.getText().toString())) {
-                        ChangeAllEdTextToEmpty();
+                        mEdNum.setText("");
+                        mEdEncoding.setText("");
+                        mEdName.setText("");
+                        mEdType.setText("");
+                        mEdUnit.setText("");
+                        mEdLot.setText("");
+                        mEdQty.setText("");
+                        mEdWeight.setText("");
+                        mEdSpectype.setText("");
                     }
                     break;
                 case ed_num:
