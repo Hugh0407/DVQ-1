@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/pagebackgroup"
     android:orientation="vertical"
     tools:context="com.techscan.dvq.productOut.ProductOutAct">
 
@@ -29,10 +30,10 @@
                 android:text="单据号"/>
 
             <EditText
-                android:layout_margin="1dp"
                 android:id="@+id/bill_num"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_margin="1dp"
                 android:layout_weight="3"
                 android:background="@drawable/edittext_style"
                 android:ems="10"
@@ -40,12 +41,10 @@
                 android:singleLine="true"
                 android:textAllCaps="true"/>
 
-            <ImageButton
-                android:id="@+id/refer_bill_num"
+            <Space
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:layout_marginRight="5dp"
-                android:background="@drawable/browse"/>
+                android:layout_marginRight="5dp"/>
 
         </LinearLayout>
 
@@ -63,10 +62,10 @@
                 android:text="入库日期"/>
 
             <EditText
-                android:layout_margin="1dp"
                 android:id="@+id/bill_date"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_margin="1dp"
                 android:layout_weight="3"
                 android:background="@drawable/edittext_style"
                 android:clickable="true"
@@ -97,10 +96,10 @@
                 android:text="仓库"/>
 
             <EditText
-                android:layout_margin="1dp"
                 android:id="@+id/wh"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_margin="1dp"
                 android:layout_weight="3"
                 android:background="@drawable/edittext_style"
                 android:ems="10"
@@ -125,16 +124,16 @@
 
             <TextView
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:text="库存组织"/>
 
             <EditText
-                android:layout_margin="1dp"
                 android:id="@+id/organization"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_margin="1dp"
                 android:layout_weight="3"
                 android:background="@drawable/edittext_style"
                 android:ems="10"
@@ -159,16 +158,16 @@
 
             <TextView
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:text="收发类别"/>
 
             <EditText
-                android:layout_margin="1dp"
                 android:id="@+id/lei_bie"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_margin="1dp"
                 android:layout_weight="3"
                 android:background="@drawable/edittext_style"
                 android:ems="10"
@@ -200,10 +199,10 @@
                 android:text="部门"/>
 
             <EditText
-                android:layout_margin="1dp"
                 android:id="@+id/department"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_margin="1dp"
                 android:layout_weight="3"
                 android:background="@drawable/edittext_style"
                 android:ems="10"
@@ -243,7 +242,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginBottom="16dp"
                 android:layout_marginTop="8dp"
-                android:background="@drawable/edittext_style"
+                android:background="@drawable/edittext_blur"
                 android:gravity="left|top"
                 android:padding="8dp"/>
         </LinearLayout>

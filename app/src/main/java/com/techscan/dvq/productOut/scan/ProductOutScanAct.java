@@ -1,9 +1,8 @@
-package com.techscan.dvq.materialOut.scan;
+package com.techscan.dvq.productOut.scan;
 
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -17,12 +16,10 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.techscan.dvq.MainLogin;
 import com.techscan.dvq.R;
@@ -46,7 +43,7 @@ import butterknife.OnClick;
 import static com.techscan.dvq.R.id.ed_num;
 
 
-public class MaterialOutScanAct extends Activity {
+public class ProductOutScanAct extends Activity {
 
     @InjectView(R.id.ed_bar_code)
     EditText mEdBarCode;    //条码
@@ -70,13 +67,10 @@ public class MaterialOutScanAct extends Activity {
     Button mBtnDetail;
     @InjectView(R.id.btn_back)
     Button mBtnBack;
-    @InjectView(R.id.ed_num)
+    @InjectView(ed_num)
     EditText mEdNum;
     @InjectView(R.id.ed_weight)
     EditText mEdWeight;
-    @InjectView(R.id.ed_cost_object)
-    EditText mEdCostObject;
-
 
     String TAG = "MaterialOutScanAct";
     List<Goods> detailList;
@@ -85,7 +79,7 @@ public class MaterialOutScanAct extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_material_out_scan);
+        setContentView(R.layout.activity_product_out_scan);
         ButterKnife.inject(this);
         initView();
     }
@@ -95,11 +89,11 @@ public class MaterialOutScanAct extends Activity {
         switch (view.getId()) {
             case R.id.btn_overview:
                 addDataToOvList();
-                MyBaseAdapter ovAdapter = new MyBaseAdapter(MaterialOutScanAct.this, ovList);
+                MyBaseAdapter ovAdapter = new MyBaseAdapter(ProductOutScanAct.this, ovList);
                 showDialog(ovList, ovAdapter, "扫描总览");
                 break;
             case R.id.btn_detail:
-                MyBaseAdapter myBaseAdapter = new MyBaseAdapter(MaterialOutScanAct.this, detailList);
+                MyBaseAdapter myBaseAdapter = new MyBaseAdapter(ProductOutScanAct.this, detailList);
                 showDialog(detailList, myBaseAdapter, "扫描明细");
                 break;
             case R.id.btn_back:
@@ -108,9 +102,9 @@ public class MaterialOutScanAct extends Activity {
                     Bundle bundle = new Bundle();
                     bundle.putParcelableArrayList("overViewList", (ArrayList<? extends Parcelable>) ovList);
                     in.putExtras(bundle);
-                    MaterialOutScanAct.this.setResult(5, in);
+                    ProductOutScanAct.this.setResult(5, in);
                 } else {
-                    Toast.makeText(this, "没有扫描单据", Toast.LENGTH_SHORT).show();
+                    Utils.showToast(ProductOutScanAct.this, "没有扫描单据");
                 }
                 finish();
                 break;
@@ -155,29 +149,12 @@ public class MaterialOutScanAct extends Activity {
         }
     };
 
-    private void showDialog(final List list, final BaseAdapter adapter, String title) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(MaterialOutScanAct.this);
+    private void showDialog(List list, BaseAdapter adapter, String title) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(ProductOutScanAct.this);
         builder.setTitle(title);
         if (list.size() > 0) {
-            View view = LayoutInflater.from(MaterialOutScanAct.this).inflate(R.layout.dialog_scan_details, null);
+            View view = LayoutInflater.from(ProductOutScanAct.this).inflate(R.layout.dialog_scan_details, null);
             ListView lv = (ListView) view.findViewById(R.id.lv);
-            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                    Log.d(TAG, "onItemClick: ");
-                    AlertDialog.Builder delDialog = new AlertDialog.Builder(MaterialOutScanAct.this);
-                    delDialog.setTitle("是否删除该条数据");
-                    delDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            list.remove(position);
-                            adapter.notifyDataSetChanged();
-                        }
-                    });
-                    delDialog.setNegativeButton("取消", null);
-                    delDialog.show();
-                }
-            });
             lv.setAdapter(adapter);
             builder.setView(view);
         } else {
@@ -199,44 +176,29 @@ public class MaterialOutScanAct extends Activity {
         mEdBarCode.setSelection(mEdBarCode.length());   //将光标移动到最后的位置
         mEdBarCode.selectAll();
         String[] barCode = Bar.split("\\|");
-        if (barCode.length == 2 && barCode[0].equals("Y")) {          //Y|SKU
-            //如果是液体的话需要输入液体总量，将数量设置不可编辑
-            mEdNum.setEnabled(false);
-            mEdLot.setEnabled(true);
-            mEdQty.setEnabled(true);
-            mEdLot.requestFocus();  //如果是液体需要手动输入“批次”和“总量”,这里将光标跳到“批次（lot）”
-            String encoding = barCode[1];
-            mEdEncoding.setText(encoding);
-            GetInvBaseInfo(encoding);
-            mEdLot.setText("");
-            mEdQty.setText("");
-            return true;
-        } else if (barCode.length == 6 && barCode[0].equals("C")) {   //C|SKU|LOT|TAX|QTY|SN
-            //如果是包码，批次和总重都改变为不可编辑，数量由员工输入，焦点跳到“数量”
+        if (barCode.length == 9 && barCode[0].equals("P")) {// 包码 P|SKU|LOT|WW|TAX|QTY|CW|ONLY|SN    9位
             mEdLot.setEnabled(false);
             mEdQty.setEnabled(false);
             mEdLot.setTextColor(Color.WHITE);
             mEdQty.setTextColor(Color.WHITE);
-            mEdNum.setEnabled(true);
-            mEdNum.requestFocus();  //包码扫描后光标跳到“数量”,输入数量,添加到列表
             String encoding = barCode[1];
             mEdEncoding.setText(encoding);
-            GetInvBaseInfo(encoding);
             mEdLot.setText(barCode[2]);
-            mEdWeight.setText(barCode[4]);
-            mEdQty.setText("");
-            mEdNum.setText("1");
-            mEdNum.selectAll();
+            mEdWeight.setText(barCode[5]);
+            GetInvBaseInfo(encoding);
+            mEdQty.setText("0.00");
+            mEdNum.setEnabled(true);
+            mEdNum.requestFocus();  //包码扫描后光标跳到“数量”,输入数量,添加到列表
             mEdNum.setSelection(mEdNum.length());   //将光标移动到最后的位置
             return true;
-        } else if (barCode.length == 7 && barCode[0].equals("TC")) {    //TC|SKU|LOT|TAX|QTY|NUM|SN
+        } else if (barCode.length == 10 && barCode[0].equals("TP")) {//盘码TP|SKU|LOT|WW|TAX|QTY|NUM|CW|ONLY|SN
             for (int i = 0; i < detailList.size(); i++) {
                 if (detailList.get(i).getBarcode().equals(Bar)) {
-                    Utils.showToast(MaterialOutScanAct.this, "该托盘已扫描");
+                    Utils.showToast(ProductOutScanAct.this, "该托盘已扫描");
                     return false;
                 }
             }
-            //如果是盘码，全都设置为不可编辑
+            //如果是盘码，全都设置为不可编辑，默认这三个是可编辑的
             mEdLot.setEnabled(false);
             mEdQty.setEnabled(false);
             mEdNum.setEnabled(false);
@@ -245,16 +207,16 @@ public class MaterialOutScanAct extends Activity {
             mEdNum.setTextColor(Color.WHITE);
             String encoding = barCode[1];
             mEdEncoding.setText(encoding);
-            GetInvBaseInfo(encoding);
             mEdLot.setText(barCode[2]);
-            mEdWeight.setText(barCode[4]);
-            mEdNum.setText(barCode[5]);
-            float qty = Float.valueOf(barCode[4]);
-            float num = Float.valueOf(barCode[5]);
-            mEdQty.setText(String.valueOf(qty * num));
+            mEdWeight.setText(barCode[5]);
+            mEdNum.setText(barCode[6]);
+            double weight = Double.valueOf(barCode[5]);
+            double mEdNum = Double.valueOf(barCode[6]);
+            mEdQty.setText(String.valueOf(weight * mEdNum));
+            GetInvBaseInfo(encoding);
             return true;
         } else {
-            Toast.makeText(MaterialOutScanAct.this, "条码有误重新输入", Toast.LENGTH_SHORT).show();
+            Utils.showToast(ProductOutScanAct.this, "条码有误重新输入");
             return false;
         }
     }
@@ -281,6 +243,7 @@ public class MaterialOutScanAct extends Activity {
                 }
             }
         }
+
     }
 
     /**
@@ -298,7 +261,7 @@ public class MaterialOutScanAct extends Activity {
         goods.setUnit(mEdUnit.getText().toString());
         goods.setLot(mEdLot.getText().toString());
         goods.setQty(Float.valueOf(mEdQty.getText().toString()));
-        goods.setCostObject(mEdCostObject.getText().toString());
+        goods.setCostObject("");    // 默认没有
         goods.setPk_invbasdoc(pk_invbasdoc);
         goods.setPk_invmandoc(pk_invmandoc);
         return detailList.add(goods);
@@ -318,7 +281,6 @@ public class MaterialOutScanAct extends Activity {
         mEdQty.setText("");
         mEdWeight.setText("");
         mEdSpectype.setText("");
-        mEdCostObject.setText("");
     }
 
     /**
@@ -387,7 +349,6 @@ public class MaterialOutScanAct extends Activity {
                 mEdUnit.setText(map.get("measname").toString());
                 mEdType.setText(map.get("invtype").toString());
                 mEdSpectype.setText(map.get("invspec").toString());
-                mEdCostObject.setText(map.get("invname").toString());
             }
 
         }
@@ -421,10 +382,10 @@ public class MaterialOutScanAct extends Activity {
                         ChangeAllEdTextToEmpty();
                     }
                     break;
-                case R.id.ed_num:
+                case ed_num:
                     if (!TextUtils.isEmpty(mEdNum.getText())) {
                         if (Float.valueOf(mEdNum.getText().toString()) < 0) {
-                            Toast.makeText(MaterialOutScanAct.this, "数量不能为0", Toast.LENGTH_SHORT).show();
+                            Utils.showToast(ProductOutScanAct.this, "数量不能为0");
                             return;
                         } else {
                             float num = Float.valueOf(mEdNum.getText().toString());
@@ -459,20 +420,20 @@ public class MaterialOutScanAct extends Activity {
                                 BarAnalysis();
                             }
                         } else {
-                            Toast.makeText(MaterialOutScanAct.this, "请输入条码", Toast.LENGTH_SHORT).show();
+                            Utils.showToast(ProductOutScanAct.this, "请输入条码");
                         }
 
                         return true;
                     case R.id.ed_lot:
                         if (TextUtils.isEmpty(mEdLot.getText())) {
-                            Toast.makeText(MaterialOutScanAct.this, "请输入批次号", Toast.LENGTH_SHORT).show();
+                            Utils.showToast(ProductOutScanAct.this, "请输入批次号");
                         } else {
                             mEdQty.requestFocus();  //输入完批次后讲焦点跳到“总量（mEdQty）”
                         }
                         return true;
                     case R.id.ed_qty:
                         if (TextUtils.isEmpty(mEdQty.getText())) {
-                            Toast.makeText(MaterialOutScanAct.this, "请输入数量", Toast.LENGTH_SHORT).show();
+                            Utils.showToast(ProductOutScanAct.this, "请输入数量");
                         } else {
                             //只有是液体的时候需要输入总量，输入完成将数据添加到list
 //                            if (isAllEdNotNull() && ) {
@@ -486,7 +447,7 @@ public class MaterialOutScanAct extends Activity {
                         return true;
                     case ed_num:
                         if (TextUtils.isEmpty(mEdNum.getText())) {
-                            Toast.makeText(MaterialOutScanAct.this, "请输入数量", Toast.LENGTH_SHORT).show();
+                            Utils.showToast(ProductOutScanAct.this, "请输入数量");
                         } else {
                             //包码需要输入 有多少包，并计算出总数量
                             float num = Float.valueOf(mEdNum.getText().toString());
@@ -500,7 +461,7 @@ public class MaterialOutScanAct extends Activity {
                                 }
 //                            }
                             } else {
-                                Toast.makeText(MaterialOutScanAct.this, "数量不正确", Toast.LENGTH_SHORT).show();
+                                Utils.showToast(ProductOutScanAct.this, "数量不正确");
                             }
                         }
                         return true;
@@ -510,3 +471,4 @@ public class MaterialOutScanAct extends Activity {
         }
     };
 }
+

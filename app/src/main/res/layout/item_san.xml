@@ -27,7 +27,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="BILLCODE"
+            android:text="INVCODE"
             android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -141,7 +141,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Model"
+            android:text="Type"
             android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold" />

@@ -1,6 +1,7 @@
 package com.techscan.dvq.materialOut;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,8 +9,8 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.techscan.dvq.R;
+import com.techscan.dvq.bean.Goods;
 
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -19,18 +20,18 @@ import java.util.List;
 public class MyBaseAdapter extends BaseAdapter {
 
     private Context mContext;
-    private List<HashMap<String, String>> mList;
+    private List<Goods> mList;
 
-    public MyBaseAdapter(Context context, List<HashMap<String, String>> list) {
+    public MyBaseAdapter(Context context, List<Goods> list) {
         mContext = context;
         mList = list;
     }
 
-    public void setList(List<HashMap<String, String>> list) {
+    public void setList(List<Goods> list) {
         mList = list;
     }
 
-    public List<HashMap<String, String>> getList() {
+    public List<Goods> getList() {
         return mList;
     }
 
@@ -76,12 +77,16 @@ public class MyBaseAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        viewHolder.name.setText(mList.get(position).get("name"));
-        viewHolder.encoding.setText(mList.get(position).get("encoding"));
-        viewHolder.type.setText(mList.get(position).get("type"));
-        viewHolder.lot.setText(mList.get(position).get("lot"));
-        viewHolder.qty.setText(mList.get(position).get("qty"));
-        viewHolder.spec.setText(mList.get(position).get("spec"));
+        viewHolder.name.setText(mList.get(position).getName());
+        viewHolder.encoding.setText(mList.get(position).getEncoding());
+        viewHolder.type.setText(mList.get(position).getType());
+        viewHolder.lot.setText(mList.get(position).getLot());
+        viewHolder.spec.setText(mList.get(position).getSpec());
+        if (TextUtils.isEmpty(String.valueOf(mList.get(position).getQty()))) {
+            viewHolder.qty.setText("0.00");
+        } else {
+            viewHolder.qty.setText(String.valueOf(mList.get(position).getQty()));
+        }
         return convertView;
     }
 

@@ -1,5 +1,8 @@
 package com.techscan.dvq.common;
 
+import android.content.Context;
+import android.widget.Toast;
+
 import java.text.SimpleDateFormat;
 
 /**
@@ -16,5 +19,9 @@ public class Utils {
         java.util.Date date = new java.util.Date(time);
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         return df.format(date);
+    }
+
+    public static void showToast(Context context, String msg) {
+        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
     }
 }

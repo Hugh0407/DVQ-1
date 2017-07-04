@@ -269,7 +269,10 @@
         <!-- </intent-filter> -->
         <!--  -->
         <!-- </activity> -->
-        <activity android:name=".SaleChooseTime">
+        <activity android:name=".SaleChooseTime"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"
+            >
+
         </activity>
         <activity android:name=".materialOut.MaterialOutAct">
         </activity>
@@ -284,6 +287,8 @@
         <activity android:name=".statusChange.StatusChangeAct">
         </activity>
         <activity android:name=".statusChange.scan.SCScanAct">
+        </activity>
+        <activity android:name=".productOut.scan.ProductOutScanAct">
         </activity>
     </application>
 
