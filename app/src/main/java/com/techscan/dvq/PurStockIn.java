@@ -538,9 +538,7 @@ public class PurStockIn extends Activity
 			
 			head = jsHead.getJSONArray("PurGood");
 			
-			
 			JSONArray arrays =jsSerino.getJSONArray("Serino");
-			
 	    	
 			for(int i = 0;i<arrays.length();i++)
 			{
@@ -551,7 +549,7 @@ public class PurStockIn extends Activity
 				String serino = ((JSONObject)(arrays.get(i))).getString("serino");
 				serino = serino.replace("\n", "");		
 				String totalnum = ((JSONObject)(arrays.get(i))).getString("box");			
-				totalnum = Integer.valueOf(totalnum).toString();			
+				totalnum = Double.valueOf(totalnum).toString();
 				String sbarcode = serino;
 				String sfree1 = ((JSONObject)(arrays.get(i))).getString("vfree1");
 				
@@ -638,7 +636,7 @@ public class PurStockIn extends Activity
 					obj.put("cininvid", bodys.getJSONObject(i).getString("cinventoryid"));				//调入存货标识    
 					obj.put("cinvbasid", bodys.getJSONObject(i).getString("cinvbasid"));			//存货基本标识   
 					obj.put("cquoteunitid", bodys.getJSONObject(i).getString("cquoteunitid"));		//报价计量单位ID    
-					obj.put("nnum", bodys.getJSONObject(i).getInt("doneqty")*-1);															//数量
+					obj.put("nnum", bodys.getJSONObject(i).getDouble("doneqty")*-1);					//数量
 					obj.put("vbatch", bodys.getJSONObject(i).getString("vbatchcode"));					//批次
 					obj.put("vfree1", bodys.getJSONObject(i).getString("vfree1"));					//自由项1 产地  	
 					jsDBBody.put(y + "", obj);
@@ -970,11 +968,11 @@ public class PurStockIn extends Activity
 		{
 			if(SavePurOrder()==true)
 			{
-				if(SaveDBOrder()==true)
-				{
+//				if(SaveDBOrder()==true)
+//				{
 					SaveOk();
 					IniActivyMemor();
-				}
+//				}
 			}
 			
 			return;
@@ -982,8 +980,8 @@ public class PurStockIn extends Activity
 
 		
 
-		if(!CheckBox())
-			return;
+//		if(!CheckBox())
+//			return;
 		
 
 		

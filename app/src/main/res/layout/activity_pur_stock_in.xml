@@ -22,7 +22,7 @@
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:text="采购入库单" />
+                android:text="采购订单" />
             <EditText
                 android:id="@+id/txtPurOrderNo"
                 android:layout_width="wrap_content"
