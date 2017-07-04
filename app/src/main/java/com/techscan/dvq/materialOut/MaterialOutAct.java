@@ -287,9 +287,6 @@ public class MaterialOutAct extends Activity {
      * 初始化原始数据
      */
     private void initView() {
-//        mOrganization.setText("C00");   // TODO: 2017/6/21 暂时默认设置
-//        mLeiBie.setText("0105");
-//        mDepartment.setText("物流部");
         ActionBar actionBar = this.getActionBar();
         actionBar.setTitle("材料出库");
         mycalendar = Calendar.getInstance();//初始化Calendar日历对象

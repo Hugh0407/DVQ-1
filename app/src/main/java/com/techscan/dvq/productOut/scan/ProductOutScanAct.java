@@ -3,6 +3,7 @@ package com.techscan.dvq.productOut.scan;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -16,10 +17,12 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.techscan.dvq.MainLogin;
 import com.techscan.dvq.R;
@@ -92,7 +95,7 @@ public class ProductOutScanAct extends Activity {
             case R.id.btn_overview:
                 addDataToOvList();
                 MyBaseAdapter ovAdapter = new MyBaseAdapter(ProductOutScanAct.this, ovList);
-                showDialog(ovList, ovAdapter, "扫描总览");
+                showOvDialog(ovList, ovAdapter, "扫描总览");
                 break;
             case R.id.btn_detail:
                 MyBaseAdapter myBaseAdapter = new MyBaseAdapter(ProductOutScanAct.this, detailList);
@@ -151,7 +154,40 @@ public class ProductOutScanAct extends Activity {
         }
     };
 
-    private void showDialog(List list, BaseAdapter adapter, String title) {
+    private void showDialog(final List list, final BaseAdapter adapter, String title) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(ProductOutScanAct.this);
+        builder.setTitle(title);
+        if (list.size() > 0) {
+            View view = LayoutInflater.from(ProductOutScanAct.this).inflate(R.layout.dialog_scan_details, null);
+            ListView lv = (ListView) view.findViewById(R.id.lv);
+            if (title.equals("扫描明细")) { //只有明细的页面是可点击的，总览页面是不可点击的
+                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                        AlertDialog.Builder delDialog = new AlertDialog.Builder(ProductOutScanAct.this);
+                        delDialog.setTitle("是否删除该条数据");
+                        delDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                list.remove(position);
+                                adapter.notifyDataSetChanged();
+                            }
+                        });
+                        delDialog.setNegativeButton("取消", null);
+                        delDialog.show();
+                    }
+                });
+            }
+            lv.setAdapter(adapter);
+            builder.setView(view);
+        } else {
+            builder.setMessage("没有扫描内容");
+        }
+        builder.setPositiveButton("确定", null);
+        builder.show();
+    }
+
+    private void showOvDialog(List list, BaseAdapter adapter, String title) {
         AlertDialog.Builder builder = new AlertDialog.Builder(ProductOutScanAct.this);
         builder.setTitle(title);
         if (list.size() > 0) {
@@ -181,11 +217,11 @@ public class ProductOutScanAct extends Activity {
         /*********************************************************************/
         //判断每一段的条码是否正确
         for (int i = 0; i < barCode.length; i++) {
-            if (TextUtils.isEmpty(barCode[i])) {
-                return false;
-            }
             if (i == 0) {
                 continue;
+            }
+            if (TextUtils.isEmpty(barCode[i])) {
+                return false;
             }
             if (!isNumber(barCode[i])) {
                 return false;
@@ -238,6 +274,12 @@ public class ProductOutScanAct extends Activity {
         }
     }
 
+    /**
+     * 通过正则表达式匹配数字
+     *
+     * @param str
+     * @return
+     */
     public boolean isNumber(String str) {
         Pattern pattern = Pattern.compile("[0-9]*");
         Matcher isNum = pattern.matcher(str);
@@ -417,18 +459,18 @@ public class ProductOutScanAct extends Activity {
                     }
                     break;
                 case ed_num:
-                    if (!TextUtils.isEmpty(mEdNum.getText())) {
-                        if (Float.valueOf(mEdNum.getText().toString()) < 0) {
-                            Utils.showToast(ProductOutScanAct.this, "数量不能为0");
-                            return;
-                        } else {
-                            float num = Float.valueOf(mEdNum.getText().toString());
-                            float weight = Float.valueOf(mEdWeight.getText().toString());
-                            mEdQty.setText(String.valueOf(num * weight));
-                        }
-                    } else {
+
+                    if (TextUtils.isEmpty(mEdNum.getText())) {
                         mEdQty.setText("0.00");
+                        return;
                     }
+                    if (Float.valueOf(mEdNum.getText().toString()) < 0) {
+                        Utils.showToast(ProductOutScanAct.this, "数量不能为0");
+                        return;
+                    }
+                    float num = Float.valueOf(mEdNum.getText().toString());
+                    float weight = Float.valueOf(mEdWeight.getText().toString());
+                    mEdQty.setText(String.valueOf(num * weight));
                     break;
 
             }
@@ -446,17 +488,31 @@ public class ProductOutScanAct extends Activity {
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
                 switch (v.getId()) {
                     case R.id.ed_bar_code:
-                        if (!TextUtils.isEmpty(mEdBarCode.getText())) {
-                            if (isAllEdNotNull() && addDataToDetailList()) {
-                                mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
-                                ChangeAllEdTextToEmpty();
-                            } else {
-                                BarAnalysis();
-                            }
+//                        if (!TextUtils.isEmpty(mEdBarCode.getText())) {
+//                            if (isAllEdNotNull() && addDataToDetailList()) {
+//                                mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
+//                                ChangeAllEdTextToEmpty();
+//                            } else {
+//                                BarAnalysis();
+//                            }
+//                        } else {
+//                            Utils.showToast(ProductOutScanAct.this, "请输入条码");
+//                        }
+                        if (TextUtils.isEmpty(mEdBarCode.getText().toString())) {
+                            Toast.makeText(ProductOutScanAct.this, "请输入条码", Toast.LENGTH_SHORT).show();
+                            return true;
                         } else {
-                            Utils.showToast(ProductOutScanAct.this, "请输入条码");
+                            if (!BarAnalysis()) {
+                                Utils.showToast(ProductOutScanAct.this, "条码有误");
+                                return true;
+                            }
                         }
 
+                        if (isAllEdNotNull()) {
+                            addDataToDetailList();
+                            mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
+                            ChangeAllEdTextToEmpty();
+                        }
                         return true;
                     case R.id.ed_lot:
                         if (TextUtils.isEmpty(mEdLot.getText())) {
