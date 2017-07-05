@@ -715,9 +715,9 @@ public class StockTransScan extends Activity {
 						// ImageItem的XML文件里面的一个ImageView,两个TextView ID
 						new int[] { R.id.txtTranstaskInvCode,
 								R.id.txtTranstaskInvName,
-								R.id.txtTranstaskBatch,
+
 								R.id.txtTranstaskInvNum,
-								R.id.txtTranstaskBillCode });
+								 });
 				new AlertDialog.Builder(StockTransScan.this).setTitle(R.string.YuanDanXinXi)
 						.setAdapter(listItemAdapter, null)
 						.setPositiveButton(R.string.QueRen, null).show();

@@ -2467,10 +2467,10 @@ public class StockTransScanIn extends Activity {
 
                     SimpleAdapter listItemAdapter = new SimpleAdapter(StockTransScanIn.this, lsTaskBody,
                             R.layout.vlisttranstask,
-                            new String[]{"InvCode", "InvName", "Batch","InvNum", "BillCode"},
+                            new String[]{"InvCode", "InvName", "Batch",  "InvNum", "BillCode"},
                             new int[]{R.id.txtTranstaskInvCode, R.id.txtTranstaskInvName,
-                                    R.id.txtTranstaskBatch,
-                                    R.id.txtTranstaskInvNum, R.id.txtTranstaskBillCode}
+
+                                    R.id.txtTranstaskInvNum}
                     );
                     new AlertDialog.Builder(StockTransScanIn.this).setTitle(R.string.YuanDanXinXi)
                             .setAdapter(listItemAdapter, null)

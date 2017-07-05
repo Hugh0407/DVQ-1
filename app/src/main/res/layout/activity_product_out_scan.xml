@@ -178,6 +178,7 @@
                 android:background="@drawable/edittext_style"
                 android:ems="10"
                 android:maxLines="1"
+                android:enabled="false"
                 android:singleLine="true"
                 android:textAllCaps="true"/>
 
@@ -211,6 +212,7 @@
                     android:ems="10"
                     android:inputType="number"
                     android:maxLines="1"
+                    android:enabled="false"
                     android:singleLine="true"
                     android:textAllCaps="true"/>
 
@@ -272,6 +274,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/edittext_style"
                     android:ems="10"
+                    android:enabled="false"
                     android:inputType="numberDecimal"
                     android:maxLines="1"
                     android:singleLine="true"

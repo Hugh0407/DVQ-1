@@ -509,30 +509,26 @@ public class PurStockInDetail extends Activity {
             boolean isFind = false;
             for (int i = 0; i < bodys.length(); i++) {
                 JSONObject temp = bodys.getJSONObject(i);
-                if (temp.getString("invcode").equals(m_mapInvBaseInfo.get("invcode").toString())) {
+                if (temp.getString("invcode").equals(m_mapInvBaseInfo.get("invcode").toString())
+                        && temp.getString("vbatchcode").equals(
+                        m_mapInvBaseInfo.get("batch").toString())) {
                     isFind = true;
                     //ShowDetail();
 
-                    //String Free1 = temp.getString("vfree1");
-                    String Free1 = "";
+                    String Free1 = temp.getString("vfree1");
+
                     // 寻找到了对应存货
-                    Double doneqty = 0.0;
-                    if(!temp.getString("nconfirmnum").isEmpty() &&
-                            !temp.getString("nconfirmnum").toLowerCase().equals("null")) {
-                        doneqty = temp.getDouble("nconfirmnum");
-                        if (doneqty >= temp.getDouble("nordernum")) {
-                            Toast.makeText(this, "这个存货已经超过应收数量了,不允许收!",
-                                    Toast.LENGTH_LONG).show();
-                            // ADD CAIXY TEST START
-                            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                            // ADD CAIXY TEST END
+                    if (temp.getInt("doneqty") >= temp.getInt("nshouldinnum")) {
+                        Toast.makeText(this, "这个存货已经超过应收数量了,不允许收!",
+                                Toast.LENGTH_LONG).show();
+                        // ADD CAIXY TEST START
+                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+                        // ADD CAIXY TEST END
 
-                            txtBarcode.setText("");
-                            txtBarcode.requestFocus();
-                            return false;
-                        }
+                        txtBarcode.setText("");
+                        txtBarcode.requestFocus();
+                        return false;
                     }
-
 
                     if(bar.BarcodeType.equals("C") || bar.BarcodeType.equals("TC")) {
                         Double ldTotal = (Double) m_mapInvBaseInfo.get("quantity") * (Integer)m_mapInvBaseInfo.get("number");
@@ -558,8 +554,8 @@ public class PurStockInDetail extends Activity {
 //                    int doneqty = temp.getInt("doneqty");
 //                    temp.put("doneqty", doneqty + 1);
 
-                    //Double doneqty = temp.getDouble("doneqty");
-                    temp.put("nconfirmnum", doneqty + Double.parseDouble(txtPurTotal.getText().toString()));
+                    Double doneqty = temp.getDouble("doneqty");
+                    temp.put("doneqty", doneqty + Double.parseDouble(txtPurTotal.getText().toString()));
                     break;
                 }
             }
@@ -585,13 +581,12 @@ public class PurStockInDetail extends Activity {
             iinnum = 0.0;
             for (int i = 0; i < arrays.length(); i++) {
                 String sshouldinnum = ((JSONObject) (arrays.get(i)))
-                        .getString("nordernum");
+                        .getString("nshouldinnum");
                 String sinnum = ((JSONObject) (arrays.get(i)))
-                        .getString("nconfirmnum");
+                        .getString("doneqty");
 
                 ishouldinnum = ishouldinnum + Double.valueOf(sshouldinnum);
-                if(!sinnum.toLowerCase().equals("null") && !sinnum.isEmpty())
-                    iinnum = iinnum + Double.valueOf(sinnum);
+                iinnum = iinnum + Double.valueOf(sinnum);
             }
         } catch (JSONException e1) {
             // TODO Auto-generated catch block
@@ -1359,20 +1354,17 @@ public class PurStockInDetail extends Activity {
                     ((JSONObject) (arrays.get(i))).getString("invname"));
             map.put("InvCode",
                     ((JSONObject) (arrays.get(i))).getString("invcode"));
-//            String batchs = ((JSONObject) (arrays.get(i)))
-//                    .getString("vbatchcode");
-//            if (batchs == null || batchs.equals("") || batchs.equals("null")) {
-//                batchs = "批次未指定";
-//            }
-            map.put("Batch", "");// test caixy
-
-            String sinnum = ((JSONObject) (arrays.get(i)))
-                    .getString("nconfirmnum");
-            if(sinnum.toLowerCase().equals("null") || sinnum.isEmpty())
-                sinnum = "0.0";
-
+            String batchs = ((JSONObject) (arrays.get(i)))
+                    .getString("vbatchcode");
+            if (batchs == null || batchs.equals("") || batchs.equals("null")) {
+                batchs = "批次未指定";
+            }
+            map.put("Batch", batchs);// test caixy
             map.put("InvNum",
-                    sinnum + " / " + Double.valueOf(((JSONObject) (arrays.get(i))).getString("nordernum")));
+                    ((JSONObject) (arrays.get(i))).getString("doneqty")
+                            + " / "
+                            + ((JSONObject) (arrays.get(i)))
+                            .getString("nshouldinnum"));
             // map.put("DoneQty", )
             lstTaskBody.add(map);
         }
@@ -1381,11 +1373,12 @@ public class PurStockInDetail extends Activity {
                 PurStockInDetail.this, lstTaskBody,// 数据源
                 R.layout.vlisttranstask,// ListItem的XML实现
                 // 动态数组与ImageItem对应的子项
-                new String[]{"BillCode", "InvCode", "InvName", "Batch", "InvNum"},
+                new String[]{"BillCode", "InvCode", "InvName", "Batch",
+                        "InvNum"},
                 // ImageItem的XML文件里面的一个ImageView,两个TextView ID
-                new int[]{R.id.txtTranstaskBillCode,
+                new int[]{
                         R.id.txtTranstaskInvCode, R.id.txtTranstaskInvName,
-                        R.id.txtTranstaskInvNum, id.txtTranstaskBatch});
+                       R.id.txtTranstaskInvNum});
         new AlertDialog.Builder(PurStockInDetail.this).setTitle("源单信息")
                 .setAdapter(listItemAdapter, null)
                 .setPositiveButton(R.string.QueRen, null).show();
@@ -1486,7 +1479,7 @@ public class PurStockInDetail extends Activity {
 
         // this.btnDetail.
 
-
+        if (tag.equals("1")) {
 
             try {
                 String temp = this.getIntent().getStringExtra("head");
@@ -1495,10 +1488,8 @@ public class PurStockInDetail extends Activity {
                 temp = this.getIntent().getStringExtra("body");
                 jsBody = new JSONObject(temp);
 
-                if (tag.equals("1")) {
-                    temp = this.getIntent().getStringExtra("serino");
-                    jsSerino = new JSONObject(temp);
-                }
+                temp = this.getIntent().getStringExtra("serino");
+                jsSerino = new JSONObject(temp);
 
                 //temp = this.getIntent().getStringExtra("box");
                 //jsBoxTotal = new JSONObject(temp);
@@ -1513,6 +1504,7 @@ public class PurStockInDetail extends Activity {
                 // ADD CAIXY TEST END
             }
 
+        }
 
         txtPurType = (EditText)findViewById(R.id.txtPurType);
         txtPurSpec = (EditText)findViewById(R.id.txtPurSpec);
@@ -1587,13 +1579,12 @@ public class PurStockInDetail extends Activity {
             arrays = jsBody.getJSONArray("PurBody");
             for (int i = 0; i < arrays.length(); i++) {
                 String sshouldinnum = ((JSONObject) (arrays.get(i)))
-                        .getString("nordernum");
+                        .getString("nshouldinnum");
                 String sinnum = ((JSONObject) (arrays.get(i)))
-                        .getString("nconfirmnum");
+                        .getString("doneqty");
 
                 ishouldinnum = ishouldinnum + Double.valueOf(sshouldinnum);
-                if(!sinnum.toLowerCase().equals("null") && !sinnum.isEmpty())
-                    iinnum = iinnum + Double.valueOf(sinnum);
+                iinnum = iinnum + Double.valueOf(sinnum);
             }
         } catch (JSONException e1) {
             // TODO Auto-generated catch block

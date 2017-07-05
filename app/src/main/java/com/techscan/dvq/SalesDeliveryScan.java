@@ -114,8 +114,6 @@ public class SalesDeliveryScan extends Activity {
 
         //获得父画面传过来的数据
         Intent myintent = getIntent();
-        tmpAccID = myintent.getStringExtra("AccID");
-        tmpPK_corp = myintent.getStringExtra("tmpCorpPK");
         Tasknnum = Integer.valueOf(myintent.getStringExtra("TaskCount").toString());
         ScanedBarcode = myintent.getStringArrayListExtra("ScanedBarcode");
         tvSDcounts = (TextView) findViewById(R.id.tvSDcounts);
@@ -131,39 +129,11 @@ public class SalesDeliveryScan extends Activity {
         SerializableList lstScanSaveDetial = new SerializableList();
         lstScanSaveDetial = (SerializableList) myintent.getSerializableExtra("lstScanSaveDetial");
         lstSaveBody = lstScanSaveDetial.getList();
-//
-//        if(lstSaveBody!=null)
-//        {
-//            if(lstSaveBody.size() > 0)
-//            {
-//                listcount=lstSaveBody.size();
-//
-//                MyListAdapter listItemAdapter = new MyListAdapter(SalesDeliveryScan.this,lstSaveBody,//数据源
-//                        R.layout.vlisttransscanitem,
-//                        new String[] {"InvCode","InvName","Batch","AccID","TotalNum",
-//                                "BarCode","SeriNo","BillCode","ScanedNum","box"},
-//                        new int[] {R.id.txtTransScanInvCode,R.id.txtTransScanInvName,
-//                                R.id.txtTransScanBatch,R.id.txtTransScanAccId,
-//                                R.id.txtTransScanTotalNum,R.id.txtTransScanBarCode,
-//                                R.id.txtTransScanSeriNo,R.id.txtTransScanBillCode,
-//                                R.id.txtTransScanScanCount,R.id.txtTransBox}
-//                );
-//                lstSDScanDetail.setAdapter(listItemAdapter);
-//            }
-//        }
-//        if (lstSaveBody!=null|| lstSaveBody.size()>1){
-//        salesDeliveryAdapter = new SalesDeliveryAdapter(SalesDeliveryScan.this, lstSaveBody);
-//        lstSDScanDetail.setAdapter(salesDeliveryAdapter);
-//        }else
         if (lstSaveBody == null || lstSaveBody.size() < 1) {
             lstSaveBody = new ArrayList<Map<String, Object>>();
             salesDeliveryAdapter = new SalesDeliveryAdapter(SalesDeliveryScan.this, lstSaveBody);
             lstSDScanDetail.setAdapter(salesDeliveryAdapter);
         }
-//        lstSaveBody = new ArrayList<Map<String, Object>>();
-//        salesDeliveryAdapter = new SalesDeliveryAdapter(SalesDeliveryScan.this, lstSaveBody);
-//        lstSDScanDetail.setAdapter(salesDeliveryAdapter);
-        wareHouseID = myintent.getStringExtra("Warehouse");
 
 
         tvSDcounts.setText("总共" + Tasknnum + "件 | " + "已扫" + listcount + "件 | " + "未扫" + (Tasknnum - listcount) + "件");
@@ -183,6 +153,7 @@ public class SalesDeliveryScan extends Activity {
         }
         if (jonsTaskBody.has("dbBody")) {
             this.jsonBodyTask = jonsTaskBody;
+
         }
 
         if (jsonBodyTask.has("ModTaskData")) {
@@ -196,8 +167,7 @@ public class SalesDeliveryScan extends Activity {
                 e.printStackTrace();
             }
         }
-//
-//
+
 //				if(jsonBodyTask.has("RemoveTaskData"))
 //				{
 //					try {
@@ -284,25 +254,15 @@ public class SalesDeliveryScan extends Activity {
 
         for (int i = 0; i < arrays.length(); i++) {
             map = new HashMap<String, Object>();
+            tmpPK_corp =( (JSONObject) (arrays.get(i))).getString("pk_sendcorp").toString();
             map.put("InvName", ((JSONObject) (arrays.get(i))).getString("invname"));
             map.put("InvCode", ((JSONObject) (arrays.get(i))).getString("invcode"));
-            String batchs = ((JSONObject) (arrays.get(i))).getString("batchcode");
-            if (batchs == null || batchs.equals("") || batchs.equals("null")) {
-                batchs = "批次未指定";
-            }
-            //String TaskNum = ((JSONObject)(arrays.get(i))).getString("outnumber")+"/"+((JSONObject)(arrays.get(i))).getString("number");
-            map.put("Batch", batchs);
-            map.put("AccID", tmpAccID);
+            map.put("invspec", ((JSONObject) (arrays.get(i))).getString("invspec"));
+            map.put("invtype", ((JSONObject) (arrays.get(i))).getString("invtype"));
             String snumber = ((JSONObject) arrays.get(i)).getString("number");
-            String soutnumber = ((JSONObject) arrays.get(i)).getString("outnumber");
-
             String sTasknumber = "0";
-            if (!soutnumber.endsWith("null")) {
-                sTasknumber = soutnumber.replaceAll("\\.0", "");
-            }
-
-            map.put("InvNum", Integer.valueOf(snumber).intValue() - Integer.valueOf(sTasknumber).intValue());
-            map.put("BillCode", ((JSONObject) (arrays.get(i))).getString("billcode"));
+            map.put("InvNum","/"+ (Integer.valueOf(snumber).intValue() - Integer.valueOf(sTasknumber).intValue()));
+//            map.put("BillCode", ((JSONObject) (arrays.get(i))).getString("billcode"));
             lstBodyTask.add(map);
         }
     }
@@ -322,16 +282,15 @@ public class SalesDeliveryScan extends Activity {
         String Free1 = "";
         String invFlg = "ng";
         for (int i = 0; i < jsarray.length(); i++) {
-            //TaskCount = TaskCount + Integer.valueOf(((JSONObject)(JsonArrays.get(i))).getString("nnum").toString());
             String TaskBatch = ((JSONObject) (jsarray.get(i))).getString("batchcode");
-            if (!TaskBatch.equals("null")) {
+            if (!TaskBatch.equals("")) {
                 if (TaskBatch.equals(bar.cBatch.trim())) {
                     //确认了存货
                     if (jsarray.getJSONObject(i).getString("invcode").equals(bar.cInvCode.trim())) {
                         String nnum = ((JSONObject) (jsarray.get(i))).getString("number");
-                        String ntranoutnum = ((JSONObject) (jsarray.get(i))).getString("outnumber");
+                        String ntranoutnum = ((JSONObject) (jsarray.get(i))).getString("ntotaloutinvnum");
                         String snnum = "0";
-                        if (!ntranoutnum.equals("null")) {
+                        if (!ntranoutnum.equals("")) {
                             snnum = (ntranoutnum.replaceAll("\\.0", ""));
                         }
                         int shouldinnum = Integer.valueOf(nnum) - Integer.valueOf(snnum);
@@ -339,7 +298,6 @@ public class SalesDeliveryScan extends Activity {
 
 
                         invFlg = "ok";
-                        //String Taskbatch = ((JSONObject)(jsarray.get(i))).getString("noutnum");
 //                        if(!Tasknnum.equals("0"))
 //                        {
 ////		  		  				if(!ScanType.equals("销售出库"))
@@ -357,31 +315,26 @@ public class SalesDeliveryScan extends Activity {
                     }
                 }
             } else {
-                if (jsarray.getJSONObject(i).getString("invcode").equals(bar.cInvCode)) {
+                if (jsarray.getJSONObject(i).getString("invcode").equals(bar.cInvCode.trim())) {
                     String nnum = ((JSONObject) (jsarray.get(i))).getString("number");
-                    String ntranoutnum = ((JSONObject) (jsarray.get(i))).getString("outnumber");
+//                    String ntranoutnum = ((JSONObject) (jsarray.get(i))).getString("ntotaloutinvnum");
 
                     String snnum = "0";
-                    if (!ntranoutnum.equals("null")) {
-                        snnum = (ntranoutnum.replaceAll("\\.0", ""));
-                    }
+//                    if (!ntranoutnum.equals("null")) {
+//                        snnum = (ntranoutnum.replaceAll("\\.0", ""));
+//                    }
                     int shouldinnum = Integer.valueOf(nnum) - Integer.valueOf(snnum);
                     String Tasknnum = shouldinnum + "";
                     invFlg = "ok";
-                    //String Taskbatch = ((JSONObject)(jsarray.get(i))).getString("noutnum");
                     if (!Tasknnum.equals("0")) {
                         OkFkg = "ok";
-                        if (!ScanType.equals("销售出库")) {
-                            Free1 = jsarray.getJSONObject(i).getString("vfree1");
-                        }
-                        return true;
                     }
                 }
             }
         }
 
         if (invFlg.equals("ok")) {
-            currentObj = new Inventory(bar.cInvCode, tmpPK_corp,tmpAccID);
+            currentObj = new Inventory(bar.cInvCode, tmpPK_corp,"");
             if (currentObj.getErrMsg() != null && !currentObj.getErrMsg().equals(""))
 
             {
@@ -394,11 +347,6 @@ public class SalesDeliveryScan extends Activity {
             }
             currentObj.SetSerino(bar.cSerino.trim());
             currentObj.SetBatch(bar.cBatch.trim());
-//            currentObj.SetcurrentID(bar.currentBox);
-//            currentObj.SettotalID(bar.TotalBox);
-            currentObj.SetAccID(tmpAccID);
-            currentObj.SetvFree1(Free1);
-
             return true;
         } else {
             //String invFlg = "ng";
@@ -618,7 +566,6 @@ public class SalesDeliveryScan extends Activity {
         if (ScanedBarcode != null || ScanedBarcode.size() > 0) {
             for (int si = 0; si < ScanedBarcode.size(); si++) {
                 String BarCode = ScanedBarcode.get(si).toString();
-
                 if (BarCode.equals(FinishBarCode)) {
                     txtSDScanBarcode.setText("");
                     txtSDScanBarcode.requestFocus();
@@ -650,17 +597,17 @@ public class SalesDeliveryScan extends Activity {
         }
 //先注销
 
-//        if(OkFkg.equals("ng"))
-//        {
-//            Toast.makeText(this, "超出上游单据任务数量,该条码不能被扫入",
-//                    Toast.LENGTH_LONG).show();
-//            //ADD CAIXY TEST START
-//            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-//            //ADD CAIXY TEST END
-//            txtSDScanBarcode.setText("");
-//            txtSDScanBarcode.requestFocus();
-//            return;
-//        }
+        if(OkFkg.equals("ng"))
+        {
+            Toast.makeText(this, "超出上游单据任务数量,该条码不能被扫入",
+                    Toast.LENGTH_LONG).show();
+            //ADD CAIXY TEST START
+            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+            //ADD CAIXY TEST END
+            txtSDScanBarcode.setText("");
+            txtSDScanBarcode.requestFocus();
+            return;
+        }
 //先注销
 //        if(!ScanType.equals("销售出库"))
 //        {
@@ -1057,8 +1004,8 @@ public class SalesDeliveryScan extends Activity {
     }
 
     //确认如果有上游单据,那么判断是否超过其数量
-    private boolean ConformDetailQty(Double Qty, String sBillBID, String sBillHID) throws JSONException {
-        ScanInvOK = "1";
+    private boolean ConformDetailQty(Double Qty) throws JSONException {
+//        ScanInvOK = "1";
         if (lstSaveBody == null || lstSaveBody.size() < 1) {
             return true;
         }
@@ -1066,8 +1013,7 @@ public class SalesDeliveryScan extends Activity {
         for (int j = 0; j < lstSaveBody.size(); j++) {
             Map<String, Object> temp1 = (Map<String, Object>) lstSaveBody.get(j);
             if (temp1.get("SeriNo").equals(currentObj.GetSerino()) && temp1.get("InvCode").equals(currentObj.getInvCode())
-                    && temp1.get("Batch").equals(currentObj.GetBatch()) && temp1.get("spacenum").equals("0")
-                    && temp1.get("billbid").equals(sBillBID) && temp1.get("billhid").equals(sBillHID)) {
+                    && temp1.get("Batch").equals(currentObj.GetBatch()) ) {
                 return true;
             }
         }
@@ -1075,7 +1021,6 @@ public class SalesDeliveryScan extends Activity {
         for (int i = 0; i < lstSaveBody.size(); i++) {
             Map<String, Object> temp = (Map<String, Object>) lstSaveBody.get(i);
             if (temp.get("invbasdocid").equals(currentObj.Invbasdoc())) {
-                if (temp.get("billbid").equals(sBillBID) && temp.get("billhid").equals(sBillHID) && temp.get("spacenum").equals("0"))
                     inQty += 1;
             }
         }
@@ -1099,18 +1044,18 @@ public class SalesDeliveryScan extends Activity {
             String lsJsonInvCode = ((JSONObject) (JsonArrays.get(i))).getString("invcode");
             String lsJsonInvBatch = ((JSONObject) (JsonArrays.get(i))).getString("batchcode");
             String Outnum = "0";
-            String sOutnum = ((JSONObject) (JsonArrays.get(i))).getString("outnumber");
-            if (!sOutnum.equals("null")) {
+            String sOutnum = ((JSONObject) (JsonArrays.get(i))).getString("ntotaloutinvnum");
+            if (!sOutnum.equals("")) {
                 Outnum = sOutnum;
             }
-            Double ldJsonInvQty = ((JSONObject) (JsonArrays.get(i))).getDouble("number") - Double.valueOf(Outnum);
+            Double ldJsonInvQty = ((JSONObject) (JsonArrays.get(i))).getDouble("number")- Double.valueOf(Outnum);
             if (lsJsonInvBatch == null || lsJsonInvBatch.equals("") || lsJsonInvBatch.equals("null")) {
                 lsJsonInvBatch = "批次未指定";
             }
             if (lsBarInvCode.equals(lsJsonInvCode) && ldJsonInvQty > 0) {
 //                if(lsBarBacth.equals(lsJsonInvBatch))
 //                {
-//                    if(ConformDetailQty(ldJsonInvQty,((JSONObject)(JsonArrays.get(i))).getString("billbid"),((JSONObject)(JsonArrays.get(i))).getString("billhid")))
+//                    if(ConformDetailQty(ldJsonInvQty))
 //                    {
 //
 //                    }
@@ -1127,20 +1072,19 @@ public class SalesDeliveryScan extends Activity {
 
                 String Outnum = "0";
 
-                String sOutnum = ((JSONObject) (JsonArrays.get(j))).getString("outnumber");
+                String sOutnum = ((JSONObject) (JsonArrays.get(j))).getString("ntotaloutinvnum");
 
-                if (!sOutnum.equals("null")) {
+                if (!sOutnum.equals("")) {
                     Outnum = sOutnum;
                 }
 
-                Double ldJsonInvQty = ((JSONObject) (JsonArrays.get(j))).getDouble("number") - Double.valueOf(Outnum);
+                Double ldJsonInvQty = ((JSONObject) (JsonArrays.get(j))).getDouble("number")- Double.valueOf(Outnum);
 
                 if (lsJsonInvBatch == null || lsJsonInvBatch.equals("") || lsJsonInvBatch.equals("null")) {
                     lsJsonInvBatch = "批次未指定";
                 }
                 if (lsBarInvCode.equals(lsJsonInvCode) && ldJsonInvQty > 0 && lsJsonInvBatch.equals("批次未指定")) {
-//                    if(ConformDetailQty(ldJsonInvQty,
-//                            ((JSONObject)(JsonArrays.get(j))).getString("billbid"),((JSONObject)(JsonArrays.get(j))).getString("billhid")))
+//                    if(ConformDetailQty(ldJsonInvQty)
 //                    {
 //                        return (JSONObject)JsonArrays.get(j);
 //                    }
@@ -1191,7 +1135,7 @@ public class SalesDeliveryScan extends Activity {
         return true;
     }
 
-
+//绑定数据
     private void BindingScanDetail(JSONObject jsonCheckGetBillCode, SplitTongChengBarCode bar,
                                    String sType, Map<String, Object> mapGetScanedDetail) throws JSONException {
 //        ArrayList<Map<String, Object>> lstCurrentBox = null;
@@ -1217,7 +1161,6 @@ public class SalesDeliveryScan extends Activity {
 //            mapScanDetail.put(lsKey,lstCurrentBox);
         mapScanDetail.put("InvName",currentObj.getInvName() );
         mapScanDetail.put("InvCode", currentObj.getInvCode());
-        mapScanDetail.put("AccID", tmpAccID);
         mapScanDetail.put("Weights", bar.Weights.trim());
         mapScanDetail.put("Measname", jsonCheckGetBillCode.getString("measname"));
         mapScanDetail.put("Batch", currentObj.GetBatch());
@@ -1230,38 +1173,31 @@ public class SalesDeliveryScan extends Activity {
 //            mapScanDetail.put("TotalNum", Integer.parseInt(currentObj.totalID()));
 //            mapScanDetail.put("ScanedNum", lstCurrentBox.size());
         //开始单据行号
-        mapScanDetail.put("sourcerowno", jsonCheckGetBillCode.getString("sourcerowno"));
+//        mapScanDetail.put("sourcerowno", jsonCheckGetBillCode.getString("sourcerowno"));
         //源单单据行号(参照单 )
         mapScanDetail.put("crowno", jsonCheckGetBillCode.getString("crowno"));
         //开始单表头
-        mapScanDetail.put("sourcehid", jsonCheckGetBillCode.getString("sourcehid"));
-        //源单表头(参照单 )
-        mapScanDetail.put("billhid", jsonCheckGetBillCode.getString("billhid"));
-        //开始单表体
-        mapScanDetail.put("sourcebid", jsonCheckGetBillCode.getString("sourcebid"));
+//        mapScanDetail.put("sourcehid", jsonCheckGetBillCode.getString("sourcehid"));
+//        //源单表头(参照单 )
+//        mapScanDetail.put("billhid", jsonCheckGetBillCode.getString("billhid"));
+//        //开始单表体
+//        mapScanDetail.put("sourcebid", jsonCheckGetBillCode.getString("sourcebid"));
         //源单表体(参照单 )
-        mapScanDetail.put("billbid", jsonCheckGetBillCode.getString("billbid"));
+//        mapScanDetail.put("billbid", jsonCheckGetBillCode.getString("billbid"));
         //开始单据类型
-        mapScanDetail.put("sourcetype", jsonCheckGetBillCode.getString("sourcetype"));
+//        mapScanDetail.put("sourcetype", jsonCheckGetBillCode.getString("sourcetype"));
         //源单据类型(参照单 )
-        mapScanDetail.put("billtype", jsonCheckGetBillCode.getString("billtype"));
+//        mapScanDetail.put("billtype", jsonCheckGetBillCode.getString("billtype"));
         //开始单据号
-        mapScanDetail.put("sourcehcode", jsonCheckGetBillCode.getString("sourcehcode"));
         //单据号(参照单 )
-        mapScanDetail.put("billhcode", jsonCheckGetBillCode.getString("billhcode"));
-        mapScanDetail.put("BillCode", jsonCheckGetBillCode.getString("billhcode"));
-        mapScanDetail.put("pk_defdoc6", jsonCheckGetBillCode.getString("pk_defdoc6"));
-        mapScanDetail.put("def6", jsonCheckGetBillCode.getString("def6"));
         mapScanDetail.put("ddeliverdate", jsonCheckGetBillCode.getString("ddeliverdate"));
-        mapScanDetail.put("pk_measdoc", jsonCheckGetBillCode.getString("pk_measdoc"));
         //存货基本标识
-        mapScanDetail.put("invbasdocid", jsonCheckGetBillCode.getString("invbasdocid"));
+//        mapScanDetail.put("invbasdocid", jsonCheckGetBillCode.getString("invbasdocid"));
         //存货管理ID
 //            mapScanDetail.put("invmandocid", currentObj.Invmandoc());
         //自由项一
 //            mapScanDetail.put("free1", currentObj.vFree1());
         //单据批次
-        mapScanDetail.put("billbatchcode", jsonCheckGetBillCode.getString("batchcode"));
         //批次
 
         //该货位该存货编码批次有几件货?
@@ -1648,10 +1584,10 @@ public class SalesDeliveryScan extends Activity {
 
                     SimpleAdapter listItemAdapter = new SimpleAdapter(SalesDeliveryScan.this, lstBodyTask,
                             R.layout.vlisttranstask,
-                            new String[]{"InvCode", "InvName", "Batch", "AccID", "InvNum", "BillCode"},
-                            new int[]{R.id.txtTranstaskInvCode, R.id.txtTranstaskInvName,
-                                    R.id.txtTranstaskBatch,
-                                    R.id.txtTranstaskInvNum, R.id.txtTranstaskBillCode}
+                            new String[]{"InvName","InvNum","InvCode", "invspec", "invtype"},
+                            new int[]{R.id.txtTranstaskInvName, R.id.txtTranstaskInvNum,
+                                    R.id.txtTranstaskInvCode,R.id.txtSpec,
+                                    R.id.txtType}
                     );
                     new AlertDialog.Builder(SalesDeliveryScan.this).setTitle("源单信息")
                             .setAdapter(listItemAdapter, null)

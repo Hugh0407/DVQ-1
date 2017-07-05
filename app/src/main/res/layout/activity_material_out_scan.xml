@@ -11,7 +11,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="vertical">
 
@@ -177,6 +177,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/edittext_style"
                 android:ems="10"
+                android:enabled="false"
                 android:maxLines="1"
                 android:singleLine="true"
                 android:textAllCaps="true"/>
@@ -201,8 +202,10 @@
                 android:layout_width="0dp"
                 android:layout_height="30dp"
                 android:layout_weight="1"
+                android:textColor="@color/white"
                 android:background="@drawable/edittext_style"
                 android:ems="10"
+                android:enabled="false"
                 android:maxLines="1"
                 android:singleLine="true"
                 android:textAllCaps="true"/>
@@ -237,6 +240,7 @@
                     android:ems="10"
                     android:inputType="number"
                     android:maxLines="1"
+                    android:enabled="false"
                     android:singleLine="true"
                     android:textAllCaps="true"/>
 
@@ -292,6 +296,7 @@
                     android:text="总量"/>
 
                 <EditText
+                    android:enabled="false"
                     android:id="@+id/ed_qty"
                     android:layout_width="0dp"
                     android:layout_height="30dp"

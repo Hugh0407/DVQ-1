@@ -1,11 +1,15 @@
 package com.techscan.dvq;
 
+import android.util.Log;
+
 import org.apache.http.ParseException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+
+import static android.content.ContentValues.TAG;
 
 public class Inventory {
     private String m_InvCode;
@@ -144,6 +148,7 @@ public class Inventory {
 
         try {
             JSONObject rev = Common.DoHttpQuery(para, "CommonQuery", AccID);
+            Log.d(TAG, "Inventory: "+rev.toString());
 
 
             if (rev == null) {
