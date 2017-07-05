@@ -143,6 +143,9 @@ public class ProductOutAct extends Activity {
                 if (isAllEdNotEmpty()) {
                     Intent in = new Intent(ProductOutAct.this, ProductOutScanAct.class);
                     startActivityForResult(in, 95);
+                    if (tempList != null) {
+                        tempList.clear();
+                    }
                 } else {
                     showToast(ProductOutAct.this, "请先核对信息，再进行扫描");
                 }
@@ -194,6 +197,12 @@ public class ProductOutAct extends Activity {
      * 检查表头信息是否正确
      */
     private boolean checkSaveInfo() {
+
+        if (checkInfo.size() == 0) {
+            showToast(ProductOutAct.this, "单据信息不正确请核对");
+            return false;
+        }
+
         if (TextUtils.isEmpty(mBillNum.getText().toString())) {
             showToast(ProductOutAct.this, "单据号不能为空");
             mBillNum.requestFocus();
@@ -238,6 +247,19 @@ public class ProductOutAct extends Activity {
             CWAREHOUSEID = warehousePK1;
             mWh.requestFocus();
             mWh.setText(warehouseName);
+            mOrganization.requestFocus();
+            checkInfo.put("Warehouse", warehouseName);
+        }
+        //材料出库库存组织的回传数据 <----StorgListACt.class
+        if (requestCode == 94 && resultCode == 6) {
+            String pk_areacl = data.getStringExtra("pk_areacl");
+            String bodyname = data.getStringExtra("bodyname");
+            String pk_calbody = data.getStringExtra("pk_calbody");
+            mOrganization.requestFocus();
+            mOrganization.setText(bodyname);
+            mLeiBie.requestFocus();
+            PK_CALBODY = pk_calbody;
+            checkInfo.put("Organization", bodyname);
         }
         // 收发类别的回传数据 <----VlistRdcl.class
         if (requestCode == 98 && resultCode == 2) {
@@ -249,6 +271,8 @@ public class ProductOutAct extends Activity {
             CDISPATCHERID = RdIDA;
             mLeiBie.requestFocus();
             mLeiBie.setText(name);
+            mDepartment.requestFocus();
+            checkInfo.put("LeiBie", name);
         }
         //部门信息的回传数据 <----DepartmentListAct.class
         if (requestCode == 96 && resultCode == 4) {
@@ -258,6 +282,7 @@ public class ProductOutAct extends Activity {
             CDPTID = pk_deptdoc;
             mDepartment.requestFocus();
             mDepartment.setText(deptname);
+            checkInfo.put("Department", deptname);
         }
 
         //扫描明细的回传数据 <----MaterialOutScanAct.class
@@ -266,15 +291,6 @@ public class ProductOutAct extends Activity {
             tempList = bundle.getParcelableArrayList("overViewList");
         }
 
-        //材料出库库存组织的回传数据 <----StorgListACt.class
-        if (requestCode == 94 && resultCode == 6) {
-            String pk_areacl = data.getStringExtra("pk_areacl");
-            String bodyname = data.getStringExtra("bodyname");
-            String pk_calbody = data.getStringExtra("pk_calbody");
-            mOrganization.requestFocus();
-            mOrganization.setText(bodyname);
-            PK_CALBODY = pk_calbody;
-        }
     }
 
     /**
@@ -282,9 +298,6 @@ public class ProductOutAct extends Activity {
      * 初始化原始数据
      */
     private void initView() {
-//        mOrganization.setText("C00");   // TODO: 2017/6/21 暂时默认设置
-//        mLeiBie.setText("0105");
-//        mDepartment.setText("物流部");
         ActionBar actionBar = this.getActionBar();
         actionBar.setTitle("成品入库");
         mycalendar = Calendar.getInstance();//初始化Calendar日历对象
@@ -297,6 +310,7 @@ public class ProductOutAct extends Activity {
         mOrganization.setOnKeyListener(mOnKeyListener);
         mLeiBie.setOnKeyListener(mOnKeyListener);
         mDepartment.setOnKeyListener(mOnKeyListener);
+        checkInfo = new HashMap<String, String>();
     }
 
     /**
@@ -344,15 +358,15 @@ public class ProductOutAct extends Activity {
                         if (saveResult != null) {
                             if (saveResult.getBoolean("Status")) {
                                 Log.d(TAG, "保存" + saveResult.toString());
-                                showToast(ProductOutAct.this, saveResult.getString("ErrMsg"));
+                                showResultDialog(saveResult.getString("ErrMsg"));
                                 tempList.clear();
                                 changeAllEdToEmpty();
                                 mBillNum.requestFocus();
                             } else {
-                                showToast(ProductOutAct.this, saveResult.getString("ErrMsg"));
+                                showResultDialog(saveResult.getString("ErrMsg"));
                             }
                         } else {
-                            showToast(ProductOutAct.this, "数据提交失败!");
+                            showResultDialog("数据提交失败!");
                         }
                         progressDialogDismiss();
                     } catch (JSONException e) {
@@ -530,6 +544,7 @@ public class ProductOutAct extends Activity {
         mOrganization.setText("");
         mLeiBie.setText("");
         mDepartment.setText("");
+        mRemark.setText("");
     }
 
     /**
@@ -628,6 +643,20 @@ public class ProductOutAct extends Activity {
         if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
+    }
+
+    /**
+     * 显示保存的返回结果的信息
+     *
+     * @param message
+     */
+    private void showResultDialog(String message) {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(ProductOutAct.this);
+        dialog.setTitle("保存信息");
+        dialog.setMessage(message);
+        dialog.setPositiveButton("关闭", null);
+        dialog.show();
+
     }
 
 

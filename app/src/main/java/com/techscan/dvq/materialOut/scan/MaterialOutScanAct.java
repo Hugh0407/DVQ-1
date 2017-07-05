@@ -30,7 +30,6 @@ import com.techscan.dvq.bean.Goods;
 import com.techscan.dvq.common.RequestThread;
 import com.techscan.dvq.common.Utils;
 import com.techscan.dvq.materialOut.MyBaseAdapter;
-import com.techscan.dvq.productOut.scan.ProductOutScanAct;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -97,7 +96,6 @@ public class MaterialOutScanAct extends Activity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_overview:
-                addDataToOvList();
                 MyBaseAdapter ovAdapter = new MyBaseAdapter(MaterialOutScanAct.this, ovList);
                 showDialog(ovList, ovAdapter, "扫描总览");
                 break;
@@ -175,6 +173,7 @@ public class MaterialOutScanAct extends Activity {
                             public void onClick(DialogInterface dialog, int which) {
                                 list.remove(position);
                                 adapter.notifyDataSetChanged();
+                                addDataToOvList();
                             }
                         });
                         delDialog.setNegativeButton("取消", null);
@@ -191,6 +190,7 @@ public class MaterialOutScanAct extends Activity {
         builder.show();
     }
 
+
     /**
      * 条码解析
      */
@@ -203,17 +203,22 @@ public class MaterialOutScanAct extends Activity {
         mEdBarCode.setSelection(mEdBarCode.length());   //将光标移动到最后的位置
         mEdBarCode.selectAll();
         String[] barCode = Bar.split("\\|");
+        /*********************************************************************/
+        //判断每一段的条码是否正确
         for (int i = 0; i < barCode.length; i++) {
-            if (TextUtils.isEmpty(barCode[i])) {
-                return false;
-            }
             if (i == 0) {
                 continue;
             }
+            if (TextUtils.isEmpty(barCode[i])) {
+                Utils.showToast(MaterialOutScanAct.this, "条码错误");
+                return false;
+            }
             if (!isNumber(barCode[i])) {
+                Utils.showToast(MaterialOutScanAct.this, "条码中存在非数字字符");
                 return false;
             }
         }
+        /*********************************************************************/
         if (barCode.length == 2 && barCode[0].equals("Y")) {          //Y|SKU
             //如果是液体的话需要输入液体总量，将数量设置不可编辑
             mEdNum.setEnabled(false);
@@ -336,6 +341,7 @@ public class MaterialOutScanAct extends Activity {
         goods.setPk_invbasdoc(pk_invbasdoc);
         goods.setPk_invmandoc(pk_invmandoc);
         detailList.add(goods);
+        addDataToOvList();
     }
 
     /**
@@ -353,6 +359,9 @@ public class MaterialOutScanAct extends Activity {
         mEdWeight.setText("");
         mEdSpectype.setText("");
         mEdCostObject.setText("");
+        mEdLot.setEnabled(false);
+        mEdNum.setEnabled(false);
+        mEdQty.setEnabled(false);
     }
 
     /**
@@ -477,11 +486,16 @@ public class MaterialOutScanAct extends Activity {
 //                        mEdQty.setText("0.00");
 //                    }
                     if (TextUtils.isEmpty(mEdNum.getText())) {
-                        mEdQty.setText("0.00");
+                        mEdQty.setText("");
+                        return;
+                    }
+                    if (!isNumber(mEdNum.getText().toString())) {
+                        Utils.showToast(MaterialOutScanAct.this, "数量不正确");
+                        mEdNum.setText("");
                         return;
                     }
                     if (Float.valueOf(mEdNum.getText().toString()) < 0) {
-                        Utils.showToast(MaterialOutScanAct.this, "数量不能为0");
+                        Utils.showToast(MaterialOutScanAct.this, "数量不正确");
                         return;
                     }
                     float num = Float.valueOf(mEdNum.getText().toString());
@@ -503,53 +517,48 @@ public class MaterialOutScanAct extends Activity {
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
                 switch (v.getId()) {
                     case R.id.ed_bar_code:
-                        if (TextUtils.isEmpty(mEdBarCode.getText().toString())) {
-                            Toast.makeText(MaterialOutScanAct.this, "请输入条码", Toast.LENGTH_SHORT).show();
-                            return true;
-                        } else {
-                            if (!BarAnalysis()) {
-                                Utils.showToast(MaterialOutScanAct.this, "条码有误");
-                                return true;
+                        if (!TextUtils.isEmpty(mEdBarCode.getText().toString())) {
+                            if (isAllEdNotNull()) {
+                                addDataToDetailList();
+                                mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
+                                ChangeAllEdTextToEmpty();
+                            } else {
+                                BarAnalysis();
                             }
+                        } else {
+                            Utils.showToast(MaterialOutScanAct.this, "请输入条码");
                         }
-
-                        if (isAllEdNotNull()) {
-                            addDataToDetailList();
-                            mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
-                            ChangeAllEdTextToEmpty();
-                        }
-//                        if (!TextUtils.isEmpty(mEdBarCode.getText().toString())) {
-//                            if (isAllEdNotNull()) {
-//                                addDataToDetailList();
-//                                mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
-//                                ChangeAllEdTextToEmpty();
-//                            } else {
-//                                if (!BarAnalysis()) {
-//                                    Utils.showToast(MaterialOutScanAct.this, "条码有误");
-//                                }
-//                            }
-//                        } else {
-//                            Toast.makeText(MaterialOutScanAct.this, "请输入条码", Toast.LENGTH_SHORT).show();
-//                        }
 
                         return true;
                     case R.id.ed_lot:
                         if (TextUtils.isEmpty(mEdLot.getText().toString())) {
-                            Toast.makeText(MaterialOutScanAct.this, "请输入批次号", Toast.LENGTH_SHORT).show();
+                            Utils.showToast(MaterialOutScanAct.this, "请输入批次号");
+                            return true;
                         } else {
                             mEdQty.requestFocus();  //输入完批次后讲焦点跳到“总量（mEdQty）”
                         }
                         return true;
                     case R.id.ed_qty:
                         if (TextUtils.isEmpty(mEdQty.getText().toString())) {
-                            Toast.makeText(MaterialOutScanAct.this, "请输入数量", Toast.LENGTH_SHORT).show();
+                            Utils.showToast(MaterialOutScanAct.this, "请输入数量");
+                            return true;
                         } else {
-                            //只有是液体的时候需要输入总量，输入完成将数据添加到list
-//                            if (isAllEdNotNull() && ) {
+                            String qty_s = mEdQty.getText().toString();
+                            if (!isNumber(qty_s)) {
+                                Utils.showToast(MaterialOutScanAct.this, "总量不正确");
+                                mEdQty.setText("");
+                                return true;
+                            }
+                            float qty_f = Float.valueOf(qty_s);
+                            if (qty_f <= 0) {
+                                Utils.showToast(MaterialOutScanAct.this, "总量不正确");
+                                mEdQty.setText("");
+                                return true;
+                            }
+
                             addDataToDetailList();
                             mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
                             ChangeAllEdTextToEmpty();
-//                            }
 
                         }
                         return true;
@@ -575,7 +584,10 @@ public class MaterialOutScanAct extends Activity {
                             Utils.showToast(MaterialOutScanAct.this, "请输入数量");
                             return true;
                         }
-
+                        if (!isNumber(mEdNum.getText().toString())) {
+                            Utils.showToast(MaterialOutScanAct.this, "数量不正确");
+                            return true;
+                        }
                         //包码需要输入 有多少包，并计算出总数量
                         float num = Float.valueOf(mEdNum.getText().toString());
                         if (num < 0) {

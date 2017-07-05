@@ -144,6 +144,9 @@ public class MaterialOutAct extends Activity {
                 if (isAllEdNotEmpty()) {
                     Intent in = new Intent(MaterialOutAct.this, MaterialOutScanAct.class);
                     startActivityForResult(in, 95);
+                    if (tempList != null) {
+                        tempList.clear();
+                    }
                 } else {
                     showToast(MaterialOutAct.this, "请先核对信息，再进行扫描");
                 }
@@ -195,6 +198,10 @@ public class MaterialOutAct extends Activity {
      * 检查表头信息是否正确
      */
     private boolean checkSaveInfo() {
+        if (checkInfo.size() == 0) {
+            showToast(MaterialOutAct.this, "单据信息不正确请核对");
+            return false;
+        }
         if (TextUtils.isEmpty(mBillNum.getText().toString())) {
             showToast(MaterialOutAct.this, "单据号不能为空");
             mBillNum.requestFocus();
@@ -239,7 +246,19 @@ public class MaterialOutAct extends Activity {
             CWAREHOUSEID = warehousePK1;
             mWh.requestFocus();
             mWh.setText(warehouseName);
+            mOrganization.requestFocus();
             checkInfo.put("Warehouse", warehouseName);
+        }
+        //材料出库库存组织的回传数据 <----StorgListACt.class
+        if (requestCode == 94 && resultCode == 6) {
+            String pk_areacl = data.getStringExtra("pk_areacl");
+            String bodyname = data.getStringExtra("bodyname");
+            String pk_calbody = data.getStringExtra("pk_calbody");
+            mOrganization.requestFocus();
+            mOrganization.setText(bodyname);
+            mLeiBie.requestFocus();
+            PK_CALBODY = pk_calbody;
+            checkInfo.put("Organization", bodyname);
         }
         // 收发类别的回传数据 <----VlistRdcl.class
         if (requestCode == 98 && resultCode == 2) {
@@ -251,6 +270,7 @@ public class MaterialOutAct extends Activity {
             CDISPATCHERID = RdIDA;
             mLeiBie.requestFocus();
             mLeiBie.setText(name);
+            mDepartment.requestFocus();
             checkInfo.put("LeiBie", name);
         }
         //部门信息的回传数据 <----DepartmentListAct.class
@@ -270,16 +290,6 @@ public class MaterialOutAct extends Activity {
             tempList = bundle.getParcelableArrayList("overViewList");
         }
 
-        //材料出库库存组织的回传数据 <----StorgListACt.class
-        if (requestCode == 94 && resultCode == 6) {
-            String pk_areacl = data.getStringExtra("pk_areacl");
-            String bodyname = data.getStringExtra("bodyname");
-            String pk_calbody = data.getStringExtra("pk_calbody");
-            mOrganization.requestFocus();
-            mOrganization.setText(bodyname);
-            PK_CALBODY = pk_calbody;
-            checkInfo.put("Organization", bodyname);
-        }
     }
 
     /**
@@ -348,15 +358,15 @@ public class MaterialOutAct extends Activity {
                         if (saveResult != null) {
                             if (saveResult.getBoolean("Status")) {
                                 Log.d(TAG, "保存" + saveResult.toString());
-                                showToast(MaterialOutAct.this, saveResult.getString("ErrMsg"));
+                                showResultDialog(saveResult.getString("ErrMsg"));
                                 tempList.clear();
                                 changeAllEdToEmpty();
                                 mBillNum.requestFocus();
                             } else {
-                                showToast(MaterialOutAct.this, saveResult.getString("ErrMsg"));
+                                showResultDialog(saveResult.getString("ErrMsg"));
                             }
                         } else {
-                            showToast(MaterialOutAct.this, "数据提交失败!");
+                            showResultDialog("数据提交失败!");
                         }
                         progressDialogDismiss();
                     } catch (JSONException e) {
@@ -376,6 +386,7 @@ public class MaterialOutAct extends Activity {
         mOrganization.setText("");
         mLeiBie.setText("");
         mDepartment.setText("");
+        mRemark.setText("");
     }
 
     /**
@@ -465,6 +476,20 @@ public class MaterialOutAct extends Activity {
 
             }
         }).start();
+    }
+
+    /**
+     * 显示保存的返回结果的信息
+     *
+     * @param message
+     */
+    private void showResultDialog(String message) {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(MaterialOutAct.this);
+        dialog.setTitle("保存信息");
+        dialog.setMessage(message);
+        dialog.setPositiveButton("关闭", null);
+        dialog.show();
+
     }
 
     /**
