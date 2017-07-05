@@ -1650,7 +1650,7 @@ public class SalesDeliveryScan extends Activity {
                             R.layout.vlisttranstask,
                             new String[]{"InvCode", "InvName", "Batch", "AccID", "InvNum", "BillCode"},
                             new int[]{R.id.txtTranstaskInvCode, R.id.txtTranstaskInvName,
-                                    R.id.txtTranstaskBatch, R.id.txtTranstaskAccId,
+                                    R.id.txtTranstaskBatch,
                                     R.id.txtTranstaskInvNum, R.id.txtTranstaskBillCode}
                     );
                     new AlertDialog.Builder(SalesDeliveryScan.this).setTitle("源单信息")

@@ -11,15 +11,6 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:orientation="horizontal" >
-        
-        <TextView
-            android:id="@+id/txtTranstaskAccId"
-            android:layout_width="18dp"
-            android:layout_height="wrap_content"
-            android:text="A"
-            android:textColor="#000000"
-            android:textSize="18sp"
-            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/txtTranstaskBillCode"

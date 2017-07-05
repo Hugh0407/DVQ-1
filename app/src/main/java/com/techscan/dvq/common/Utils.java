@@ -14,6 +14,8 @@ public class Utils {
     public static final int HANDER_DEPARTMENT = 1;
     public static final int HANDER_STORG = 2;
     public static final int HANDER_SAVE_RESULT = 3;
+    public static final int HANDER_POORDER_HEAD= 4;
+    public static final int HANDER_POORDER_BODY= 5;
 
     public static String formatTime(long time) {
         java.util.Date date = new java.util.Date(time);

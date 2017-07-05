@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -74,51 +75,59 @@ public class PurOrderList extends Activity {
 			return null;
 		}
 		JSONArray jsarray= jas.getJSONArray("PurGood");
-		
-		for(int i = 0;i<jsarray.length();i++)
-		{
+		for(int i = 0;i<jsarray.length();i++) {
 			tempJso = jsarray.getJSONObject(i);
-			String instorname = tempJso.getString("outstorname");
-			if (instorname.equals("null"))
-			{
-				instorname = " ";
-			}
-			
 			map = new HashMap<String, Object>();
-			
-			String freplenishflag = tempJso.getString("freplenishflag");
-			
-			if(freplenishflag.equals("Y"))//判断是否为退货
-			{
-				map.put("billstatus", "N");//红字采购
-				map.put("billstatusE", "退货");//红字采购
-			}
-			else
-			{
-				map.put("billstatus", "Y");//蓝字采购
-				map.put("billstatusE", " ");//蓝字采购
-			}
-						
-			map.put("No", tempJso.getString("vbillcode"));
-			map.put("Vendor", tempJso.getString("custname") + "     ");
-			map.put("Warehouse",instorname);
-			map.put("BillId",tempJso.getString("cgeneralhid"));
-			map.put("WarehouseID", tempJso.getString("cwarehouseid"));
-			map.put("pk_purcorp", tempJso.getString("pk_purcorp"));
-			map.put("pk_calbody", tempJso.getString("pk_calbody"));
-			
-			
-			if(tempJso.has("accid"))
-			{
-				map.put("AccID", tempJso.getString("accid"));
-			}
-			else
-			{
-				map.put("AccID", tempJso.getString("AccID"));
-			}
+			map.put("busicode",tempJso.get("busicode"));
+			map.put("billcode",tempJso.get("billcode"));
+			map.put("corderid",tempJso.get("corderid"));
+			map.put("businame",tempJso.get("businame"));
+			map.put("purorgname",tempJso.get("purorgname"));
+			map.put("dorderdate",tempJso.get("dorderdate"));
 			list.add(map);
 		}
 		return list;
+//			String instorname = tempJso.getString("outstorname");
+//			if (instorname.equals("null"))
+//			{
+//				instorname = " ";
+//			}
+//
+//			map = new HashMap<String, Object>();
+//
+//			String freplenishflag = tempJso.getString("freplenishflag");
+//
+//			if(freplenishflag.equals("Y"))//判断是否为退货
+//			{
+//				map.put("billstatus", "N");//红字采购
+//				map.put("billstatusE", "退货");//红字采购
+//			}
+//			else
+//			{
+//				map.put("billstatus", "Y");//蓝字采购
+//				map.put("billstatusE", " ");//蓝字采购
+//			}
+//
+//			map.put("No", tempJso.getString("vbillcode"));
+//			map.put("Vendor", tempJso.getString("custname") + "     ");
+//			map.put("Warehouse",instorname);
+//			map.put("BillId",tempJso.getString("cgeneralhid"));
+//			map.put("WarehouseID", tempJso.getString("cwarehouseid"));
+//			map.put("pk_purcorp", tempJso.getString("pk_purcorp"));
+//			map.put("pk_calbody", tempJso.getString("pk_calbody"));
+//
+//
+//			if(tempJso.has("accid"))
+//			{
+//				map.put("AccID", tempJso.getString("accid"));
+//			}
+//			else
+//			{
+//				map.put("AccID", tempJso.getString("AccID"));
+//			}
+//			list.add(map);
+//		}
+//		return list;
 	}
 
 	
@@ -128,7 +137,7 @@ public class PurOrderList extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		
 		super.onCreate(savedInstanceState);
-		this.setTitle("采购入库单明细");
+		this.setTitle("采购订单列表");
 		setContentView(R.layout.activity_pur_order_list);
 		ListView listView  = (ListView)findViewById(id.purlist);
 		listView.setDivider(new ColorDrawable(Color.GRAY));
@@ -147,6 +156,9 @@ public class PurOrderList extends Activity {
 		String BillHead="";
 		
 		BillHead = this.getIntent().getStringExtra("BillCode");
+
+		String sStartDate = this.getIntent().getStringExtra("StartDate");
+		String sEndDate = this.getIntent().getStringExtra("EndDate");
 		
 		
 		StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites()  
@@ -162,9 +174,12 @@ public class PurOrderList extends Activity {
 		FunctionName="CommonQuery";
 		try 
 		{
-			para.put("BillHead", BillHead);
-			para.put("accId", "A");
-			para.put("FunctionName","GetInBoundBillHeadNoCompanyCode");
+			para.put("CompanyCode", MainLogin.objLog.CompanyCode);
+			para.put("BillCode", BillHead);
+			para.put("OrgId", MainLogin.objLog.STOrgCode);
+			para.put("sDate", sStartDate);
+			para.put("sEndDate", sEndDate);
+			para.put("FunctionName","GetPOList");
 			para.put("TableName", "PurGood");
 			
 		} 
@@ -196,6 +211,7 @@ public class PurOrderList extends Activity {
 	            return ;
 	        }
 			jas = Common.DoHttpQuery(para, FunctionName, "");
+			Log.d("TAG", "GetPOList: " + jas);
 		} catch (Exception ex)
 		{
 			Toast.makeText(this, R.string.WangLuoChuXianWenTi, Toast.LENGTH_LONG).show();
@@ -234,6 +250,7 @@ public class PurOrderList extends Activity {
 		        {
 		        	this.finish();
 		        }
+				Common.cancelLoading();
 				return;
 			}
 			
@@ -247,6 +264,7 @@ public class PurOrderList extends Activity {
 		        {
 		        	this.finish();
 		        }
+				Common.cancelLoading();
 				return;
 			}
 			
@@ -285,9 +303,9 @@ public class PurOrderList extends Activity {
         SimpleAdapter listItemAdapter = new SimpleAdapter(this,mData,//数据源   
                 R.layout.vlistpurs,//ListItem的XML实现  
                 //动态数组与ImageItem对应的子项          
-                new String[] {"No","Vendor", "Warehouse","billstatusE"},   
+                new String[] {"billcode","dorderdate", "businame","purorgname","corderid"},
                 //ImageItem的XML文件里面的一个ImageView,两个TextView ID  
-                new int[] {R.id.listpurorder,R.id.listvendor,R.id.listpurwarehouse,R.id.billstatus}   
+                new int[] {R.id.listorder,R.id.listorderdate,R.id.listbusiname,R.id.listpurorgname, R.id.listcorderid}
             ); 
                 
         list.setOnItemClickListener((OnItemClickListener) itemListener);		
@@ -298,15 +316,15 @@ public class PurOrderList extends Activity {
         	
         	Map<String,Object> map=(Map<String, Object>) mData.get(0);
             
-            String orderNo = map.get("No").toString();
-            String billId=map.get("BillId").toString();
-            String vendor = map.get("Vendor").toString();
-            String warehouse = map.get("Warehouse").toString();
-            String warehouseID = map.get("WarehouseID").toString();
-            String pk_purcorp =  map.get("pk_purcorp").toString();
-            String pk_calbody =  map.get("pk_calbody").toString();
+            String orderNo = map.get("billcode").toString();
+            String billId = map.get("corderid").toString();
+//            String vendor = map.get("Vendor").toString();
+//            String warehouse = map.get("Warehouse").toString();
+//            String warehouseID = map.get("WarehouseID").toString();
+//            String pk_purcorp =  map.get("pk_purcorp").toString();
+//            String pk_calbody =  map.get("pk_calbody").toString();
 
-            String billstatus =  map.get("billstatus").toString();
+//            String billstatus =  map.get("billstatus").toString();
             
 //del walter todo 20170616 暂时删除 ----->>>>>
 //			if(!Common.CheckUserRole("A", "1001", "40080602"))
@@ -328,15 +346,15 @@ public class PurOrderList extends Activity {
             
             
             Intent intent = new Intent();      
-            intent.putExtra("result", orderNo);// 把返回数据存入Intent  
+            intent.putExtra("BillCode", orderNo);// 把返回数据存入Intent
             intent.putExtra("BillId", billId);
-            intent.putExtra("Vendor", vendor);
-            intent.putExtra("Warehouse", warehouse.toString());
-            intent.putExtra("WarehouseID", warehouseID);
-            intent.putExtra("AccID", "A");
-            intent.putExtra("pk_purcorp", pk_purcorp);
-            intent.putExtra("pk_calbody", pk_calbody);
-            intent.putExtra("billstatus", billstatus);
+//            intent.putExtra("Vendor", vendor);
+//            intent.putExtra("Warehouse", warehouse.toString());
+//            intent.putExtra("WarehouseID", warehouseID);
+//            intent.putExtra("AccID", "A");
+//            intent.putExtra("pk_purcorp", pk_purcorp);
+//            intent.putExtra("pk_calbody", pk_calbody);
+//            intent.putExtra("billstatus", billstatus);
             
             PurOrderList.this.setResult(1,intent);
             PurOrderList.this.finish();
@@ -375,15 +393,15 @@ public class PurOrderList extends Activity {
             // @SuppressWarnings("unchecked")
 			Map<String,Object> map=(Map<String, Object>) adapter.getItem(arg2);
              
-             String orderNo = map.get("No").toString();
-             String billId=map.get("BillId").toString();
-             String vendor = map.get("Vendor").toString();
-             String warehouse = map.get("Warehouse").toString();
-             String warehouseID = map.get("WarehouseID").toString();
-             String pk_purcorp =  map.get("pk_purcorp").toString();
-             String pk_calbody =  map.get("pk_calbody").toString();
-             
-             String billstatus =  map.get("billstatus").toString();
+             String orderNo = map.get("billcode").toString();
+             String billId=map.get("corderid").toString();
+//             String vendor = map.get("Vendor").toString();
+//             String warehouse = map.get("Warehouse").toString();
+//             String warehouseID = map.get("WarehouseID").toString();
+//             String pk_purcorp =  map.get("pk_purcorp").toString();
+//             String pk_calbody =  map.get("pk_calbody").toString();
+//
+//             String billstatus =  map.get("billstatus").toString();
 
 //del walter todo 20170616 暂时删除 ----->>>>>
 //     		if(!Common.CheckUserRole("A", "1001", "40080602"))
@@ -405,16 +423,16 @@ public class PurOrderList extends Activity {
              
              
              Intent intent = new Intent();      
-             intent.putExtra("result", orderNo);// 把返回数据存入Intent  
+             intent.putExtra("BillCode", orderNo);// 把返回数据存入Intent
              intent.putExtra("BillId", billId);
-             intent.putExtra("Vendor", vendor);
-             intent.putExtra("Warehouse", warehouse.toString());
-             intent.putExtra("WarehouseID", warehouseID);
-             intent.putExtra("AccID", "A");
-             intent.putExtra("pk_purcorp", pk_purcorp);
-             intent.putExtra("pk_calbody", pk_calbody);
-             
-             intent.putExtra("billstatus", billstatus);
+//             intent.putExtra("Vendor", vendor);
+//             intent.putExtra("Warehouse", warehouse.toString());
+//             intent.putExtra("WarehouseID", warehouseID);
+//             intent.putExtra("AccID", "A");
+//             intent.putExtra("pk_purcorp", pk_purcorp);
+//             intent.putExtra("pk_calbody", pk_calbody);
+//
+//             intent.putExtra("billstatus", billstatus);
              
              PurOrderList.this.setResult(1,intent);
              PurOrderList.this.finish();

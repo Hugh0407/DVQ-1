@@ -11,9 +11,47 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_weight="1">
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="5dp">
+            <EditText
+                android:id="@+id/txtStartDate"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:ems="10"
+                android:singleLine="true"
+                android:textAllCaps="true"
+                android:background="@drawable/edittext_style"
+                android:layout_weight="0.4"
+                android:hint="订单开始日"/>
+
+            <TextView
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:text=" ~ "
+                android:layout_weight="0.2"/>
+
+            <EditText
+                android:id="@+id/txtEndDate"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:ems="10"
+                android:singleLine="true"
+                android:textAllCaps="true"
+                android:background="@drawable/edittext_style"
+                android:layout_weight="0.4"
+                android:hint="订单结束日"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
             android:padding="5dp">
@@ -41,25 +79,7 @@
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:orientation="horizontal"
-            android:padding="5dp"
-            android:gravity="center_vertical">
-            <TextView
-                android:id="@+id/tvPurHW"
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                android:text="仓　　　库" />
-            <TextView
-                android:id="@+id/labWHName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:text="----"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="5dp"
             android:gravity="center_vertical">
@@ -75,46 +95,163 @@
                 android:layout_alignParentRight="true"
                 android:text="----"/>
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="仓库"/>
+
+            <EditText
+                android:id="@+id/wh"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:background="@drawable/edittext_style"
+                android:ems="10"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textAllCaps="true"/>
+            <ImageButton
+                android:id="@+id/refer_wh"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/browse"/>
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:orientation="horizontal"
+            android:layout_height="wrap_content"
             android:padding="5dp"
+            android:orientation="horizontal"
             android:gravity="center_vertical">
+
             <TextView
-                android:id="@+id/tvbillstatus"
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="库存组织"/>
+
+            <EditText
+                android:id="@+id/organization"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_weight="3"
+                android:background="@drawable/edittext_style"
+                android:ems="10"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textAllCaps="true"/>
+
+            <ImageButton
+                android:id="@+id/refer_organization"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/browse"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="收发类别"/>
+
+            <EditText
+                android:id="@+id/lei_bie"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_weight="3"
+                android:background="@drawable/edittext_style"
+                android:ems="10"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textAllCaps="true"/>
+
+            <ImageButton
+                android:id="@+id/refer_lei_bie"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/browse"/>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="部门"/>
+
+            <EditText
+                android:id="@+id/department"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_weight="3"
+                android:background="@drawable/edittext_style"
+                android:ems="10"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textAllCaps="true"/>
+
+            <ImageButton
+                android:id="@+id/refer_department"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/browse"/>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center_vertical">
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="退　　　货"
-                android:textColor="@color/red" />
+                android:gravity="center"
+                android:text="备注"/>
+
+            <EditText
+                android:id="@+id/remark"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@drawable/edittext_style"
+                android:layout_weight="1"/>
         </LinearLayout>
-        <TextView
-            android:id="@+id/TextView01"
-            android:layout_width="wrap_content"
-            android:layout_height="10px"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:text=" " />
-
-
-
-
-
-
-
-
-        <TextView
-            android:id="@+id/TextView02"
-            android:layout_width="wrap_content"
-            android:layout_height="10px"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:text="  " />
-
 
     </LinearLayout>
-
 
     <LinearLayout
         android:id="@+id/PurStockInButtonBar"
