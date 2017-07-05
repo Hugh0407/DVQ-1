@@ -136,7 +136,5 @@ public class StatusChangeAct extends Activity {
             startActivityForResult(otherOrderDetail, 93);
         }
     }
-
-
 }
 
