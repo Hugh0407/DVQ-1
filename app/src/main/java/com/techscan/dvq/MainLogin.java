@@ -891,7 +891,6 @@ public class MainLogin extends Activity {
 
         @Override
         public void handleMessage(Message msg) {
-
             super.handleMessage(msg);
             pd.cancel();
             update();
@@ -991,7 +990,6 @@ public class MainLogin extends Activity {
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-
         }
 
     }

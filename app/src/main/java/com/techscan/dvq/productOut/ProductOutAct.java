@@ -95,7 +95,6 @@ public class ProductOutAct extends Activity {
     String PK_CALBODY = "";      //仓库id
     String PK_CORP;         //公司
     String VBILLCOD;        //单据号
-    String isReturn;    //从上菜单页面穿过来的是否退货的标志位，Y退货，N不退货
 
     int year;
     int month;
@@ -312,7 +311,6 @@ public class ProductOutAct extends Activity {
         mLeiBie.setOnKeyListener(mOnKeyListener);
         mDepartment.setOnKeyListener(mOnKeyListener);
         checkInfo = new HashMap<String, String>();
-        isReturn = this.getIntent().getStringExtra("isReturn");
     }
 
     /**
@@ -403,7 +401,7 @@ public class ProductOutAct extends Activity {
             mRemark.setText("");
         }
         tableHead.put("VNOTE", mRemark.getText().toString());
-        tableHead.put("FREPLENISHFLAG", isReturn);    //N不退，Y退
+        tableHead.put("FREPLENISHFLAG", "N");    //N不退，Y退
         table.put("Head", tableHead);
         JSONObject tableBody = new JSONObject();
         JSONArray bodyArray = new JSONArray();
@@ -419,8 +417,6 @@ public class ProductOutAct extends Activity {
             String qty = decimalFormat.format(c_2);                 //format 返回的是字符串
 
 /*********************************************************************/
-
-
             object.put("NINNUM", qty);
             object.put("CINVCODE", c.getEncoding());
             object.put("BLOTMGT", "1");

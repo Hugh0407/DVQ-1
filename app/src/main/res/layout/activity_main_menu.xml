@@ -1,58 +1,66 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/pagebackgroup"
-    tools:context="com.techscan.dvq.MainMenu" >
-
-    <GridView
-        android:id="@+id/gvMainMenu"
-        android:layout_width="fill_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/tvLoginCompanyName"
-        android:gravity="center"
-        android:horizontalSpacing="1dp"
-        android:numColumns="3"
-        android:stretchMode="columnWidth"
-        android:verticalSpacing="1dp"
-        android:layout_alignParentRight="true"
-        android:layout_above="@+id/TestButtonBar">
-
-    </GridView>
+    android:orientation="vertical"
+    tools:context="com.techscan.dvq.MainMenu">
 
     <TextView
         android:id="@+id/tvLoginCompanyName"
         android:layout_width="match_parent"
         android:layout_height="20sp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
         android:layout_margin="5dp"
+        android:gravity="center"
         android:text="公司名称"
         android:textColor="@android:color/holo_blue_light"
         android:textSize="16sp"
-        android:textStyle="bold" />
-    
-        <LinearLayout
-        android:id="@+id/TestButtonBar"
+        android:textStyle="bold"/>
+
+    <GridView
+        android:id="@+id/gvMainMenu"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:horizontalSpacing="1dp"
+        android:numColumns="3"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="1dp">
+
+    </GridView>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:background="#d7d6d6"
-        android:orientation="horizontal" >
+        android:orientation="horizontal">
 
         <Button
-            android:id="@+id/btnLogOut"
+            android:id="@+id/btn_xun"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/button_normal_style"
-            android:textColor="@color/white"
-            android:text="退出登录"
-            />
+            android:text="王"/>
+
+        <Button
+            android:id="@+id/btn_hu"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/button_normal_style"
+            android:text="许"/>
 
     </LinearLayout>
 
-</RelativeLayout>
+    <Button
+        android:id="@+id/btnLogOut"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_normal_style"
+        android:text="退出登录"
+        android:textColor="@color/white"
+        />
+
+</LinearLayout>

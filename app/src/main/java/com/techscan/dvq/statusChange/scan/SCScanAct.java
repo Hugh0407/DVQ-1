@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -141,17 +142,11 @@ public class SCScanAct extends Activity {
                 showDialog(detailList, myBaseAdapter, "扫描明细");
                 break;
             case R.id.btn_back:
-
                 if (dataList.size() > 0) {
-                    Intent in = new Intent();
-                    Bundle bundle = new Bundle();
-                    bundle.putParcelableArrayList("dataList", (ArrayList<? extends Parcelable>) dataList);
-                    in.putExtras(bundle);
-                    activity.setResult(7, in);
+                    showFinishDialog();
                 } else {
-                    Utils.showToast(activity,"没有扫描单据");
+                    Utils.showToast(activity, "没有扫描单据");
                 }
-
                 finish();
                 break;
         }
@@ -170,11 +165,9 @@ public class SCScanAct extends Activity {
                     //表头的请求结果
                     JSONObject jsonHead = (JSONObject) msg.obj;
                     try {
-                        if (jsonHead != null) {
+                        if (jsonHead != null && jsonHead.getBoolean("Status")) {
                             Log.d("TAG", "jsonHead: " + jsonHead.toString());
-                            if (jsonHead.getBoolean("Status")) {
-                                Log.d("TAG", "jsonHead: ");
-                            }
+
                         } else {
 
                         }
@@ -311,6 +304,25 @@ public class SCScanAct extends Activity {
         td.start();
     }
 
+    private void showFinishDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setTitle("提示");
+        builder.setMessage("存在扫描数据,是否退出");
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent in = new Intent();
+                Bundle bundle = new Bundle();
+                bundle.putParcelableArrayList("dataList", (ArrayList<? extends Parcelable>) dataList);
+                in.putExtras(bundle);
+                activity.setResult(7, in);
+                finish();
+            }
+        });
+        builder.setNegativeButton("取消", null);
+        builder.show();
+    }
+
     /**
      * 保存单据的dialog
      */
@@ -321,7 +333,7 @@ public class SCScanAct extends Activity {
         progressDialog.setCanceledOnTouchOutside(false);// 设置在点击Dialog外是否取消Dialog进度条
         // progressDialog.setIcon(R.drawable.ic_launcher);
         // 设置提示的title的图标，默认是没有的，如果没有设置title的话只设置Icon是不会显示图标的
-        progressDialog.setTitle("拉取单据");
+        progressDialog.setTitle("获取单据");
         // dismiss监听
 //        progressDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
 //
@@ -390,8 +402,10 @@ public class SCScanAct extends Activity {
                         // cancel和dismiss方法本质都是一样的，都是从屏幕中删除Dialog,唯一的区别是
                         // 调用cancel方法会回调DialogInterface.OnCancelListener如果注册的话,dismiss方法不会回掉
                         // progressDialog.dismiss();
-                        progressDialog.cancel();
-                        finish();
+                        if (progressDialog.isShowing()) {
+                            progressDialog.dismiss();
+                            finish();
+                        }
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -429,7 +443,7 @@ public class SCScanAct extends Activity {
             //判断该条码在“任务” 列表中是否存在
             for (PurGood pur : dataList) {
                 if (!pur.getInvcode().equals(barCode[1]) && !pur.getVbatchcode().equals(barCode[2])) {
-                    Utils.showToast(activity, "条码有误");
+                    Utils.showToast(activity, "条码有误!");
                     return false;
                 }
             }
@@ -454,7 +468,7 @@ public class SCScanAct extends Activity {
             //判断该条码在“任务” 列表中是否存在
             for (PurGood pur : dataList) {
                 if (!pur.getInvcode().equals(barCode[1]) && !pur.getVbatchcode().equals(barCode[2])) {
-                    Utils.showToast(activity, "条码有误");
+                    Utils.showToast(activity, "条码有误!");
                     return false;
                 }
             }
@@ -462,7 +476,7 @@ public class SCScanAct extends Activity {
 
             for (int i = 0; i < detailList.size(); i++) {
                 if (detailList.get(i).getBarcode().equals(Bar)) {
-                    Utils.showToast(activity, "该托盘已扫描");
+                    Utils.showToast(activity, "该托盘已扫描!");
                     return false;
                 }
             }

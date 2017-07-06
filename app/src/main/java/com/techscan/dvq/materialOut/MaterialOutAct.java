@@ -95,7 +95,6 @@ public class MaterialOutAct extends Activity {
     String PK_CALBODY = "";      //仓库id
     String PK_CORP;         //公司
     String VBILLCOD;        //单据号
-    String isReturn;
 
     int year;
     int month;
@@ -311,7 +310,6 @@ public class MaterialOutAct extends Activity {
         mLeiBie.setOnKeyListener(mOnKeyListener);
         mDepartment.setOnKeyListener(mOnKeyListener);
         checkInfo = new HashMap<String, String>();
-        isReturn = this.getIntent().getStringExtra("isReturn");
     }
 
     /**
@@ -534,7 +532,7 @@ public class MaterialOutAct extends Activity {
             mRemark.setText("");
         }
         tableHead.put("VNOTE", mRemark.getText().toString());
-        tableHead.put("FREPLENISHFLAG", isReturn);    //N不退，Y退,是否退货标志位，从上一界面传过来
+        tableHead.put("FREPLENISHFLAG", "N");    //N不退,是否退货标志位
         table.put("Head", tableHead);
         JSONObject tableBody = new JSONObject();
         JSONArray bodyArray = new JSONArray();

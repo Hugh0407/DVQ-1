@@ -3,10 +3,12 @@ package com.techscan.dvq;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
@@ -19,18 +21,31 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.techscan.dvq.materialOut.MaterialOutAct;
 import com.techscan.dvq.R.id;
+import com.techscan.dvq.common.Utils;
+import com.techscan.dvq.materialOut.MaterialOutAct;
 import com.techscan.dvq.productOut.ProductOutAct;
 import com.techscan.dvq.statusChange.StatusChangeAct;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
 
 public class MainMenu extends Activity {
 
     Button btnLogOut = null;
+    @InjectView(id.btn_xun)
+    Button mBtnXun;
+    @InjectView(id.btn_hu)
+    Button mBtnHu;
     private String[] BillTypeNameList = null;
     private String[] BillTypeCodeList = null;
 
@@ -51,7 +66,7 @@ public class MainMenu extends Activity {
     TextView tvLoginCompanyName = null;
 
     static AlertDialog alertDialog = null;
-    static android.app.ProgressDialog PD = null;
+    static ProgressDialog PD = null;
 
     // private SoundPool sp;// 声明一个SoundPool
     // private int MainLogin.music;// 定义一个int来设置suondID
@@ -94,6 +109,7 @@ public class MainMenu extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
+        ButterKnife.inject(this);
 
         ActionBar actionBar = this.getActionBar();
         actionBar.setTitle("主菜单");
@@ -111,11 +127,11 @@ public class MainMenu extends Activity {
         // 把你的声音素材放到res/raw里，第2个参数即为资源文件，第3个为音乐的优先级
         // // ADD CAIXY END
 
-        tvLoginCompanyName = (TextView) findViewById(R.id.tvLoginCompanyName);
+        tvLoginCompanyName = (TextView) findViewById(id.tvLoginCompanyName);
         String sCompanyName = MainLogin.objLog.CompanyName;
         tvLoginCompanyName.setText(" " + sCompanyName);
-        gridview = (GridView) findViewById(R.id.gvMainMenu);
-        btnLogOut = (Button) findViewById(R.id.btnLogOut);
+        gridview = (GridView) findViewById(id.gvMainMenu);
+        btnLogOut = (Button) findViewById(id.btnLogOut);
         btnLogOut.setOnClickListener(ButtonOnClickListener);
 
         ArrayList<HashMap<String, Object>> lstImageItem = new ArrayList<HashMap<String, Object>>();
@@ -137,6 +153,13 @@ public class MainMenu extends Activity {
         map = new HashMap<String, Object>();
         map.put("ItemImage", R.drawable.icon_ck_cl);
         map.put("ItemText", "材料出库");
+        lstImageItem.add(map);
+//*********************************************************************
+//*********************************************************************
+// by liuya 时间07.06
+        map = new HashMap<String, Object>();
+        map.put("ItemImage", R.drawable.ic_launcher);
+        map.put("ItemText", "材料退库");
         lstImageItem.add(map);
 //*********************************************************************
 
@@ -219,7 +242,7 @@ public class MainMenu extends Activity {
                 lstImageItem,// 数据来源
                 R.layout.girdviewitem,
                 new String[]{"ItemImage", "ItemText"}, new int[]{
-                R.id.gvimgItem, R.id.gvtvItem});
+                id.gvimgItem, id.gvtvItem});
         gridview.setAdapter(saImageItems);
         gridview.setOnItemClickListener(new ItemClickListener());
 
@@ -270,6 +293,44 @@ public class MainMenu extends Activity {
     // }
 
     public Context context;
+
+    @OnClick({id.btn_xun, id.btn_hu})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case id.btn_xun:
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            JSONObject jsonObject = new JSONObject(Utils.jsonWang);
+                            Log.d("TAG", "xun: " + jsonObject.toString());
+                            Common.DoHttpQuery(jsonObject, "SavePurStockIn", "A");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
+                break;
+            case id.btn_hu:
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            JSONObject jsonObject = new JSONObject(Utils.jsonXu);
+                            Log.d("TAG", "hu: " + jsonObject.toString());
+                            Common.DoHttpQuery(jsonObject, "SaveSaleReceive", "A");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
+                break;
+        }
+    }
 
     class ItemClickListener implements OnItemClickListener {
 
@@ -329,14 +390,20 @@ public class MainMenu extends Activity {
 //                        break;
 //                    }
 //                    ShowStockMove();
-                //*********************************************************************
+//*********************************************************************
 //成品入库模块  时间06.27  by liuya
                 case 3:
+                    Utils.showToast(MainMenu.this, "待加");
+                    break;
+//*********************************************************************
+//*********************************************************************
+//成品入库模块  时间06.27  by liuya
+                case 4:
                     ShowProductOut();
                     break;
 //*********************************************************************
                 //形态转换模块  时间06.28  by liuya
-                case 4:
+                case 5:
                     ShowStatusChange();
                     break;
 //*********************************************************************
@@ -358,7 +425,7 @@ public class MainMenu extends Activity {
                     }
                     ShowStockTransIn();
                     break;
-                case 5:
+                case 13:
                     if (!Common.CheckUserRole("", "", "40080602")) {
                         MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                         Toast.makeText(MainMenu.this, "没有使用该模块的权限",
@@ -615,7 +682,7 @@ public class MainMenu extends Activity {
     private void ShowMaterialIn() {
         ShowLoading();
         Intent MaterialOut = new Intent(this, MaterialOutAct.class);
-        showIsReturnDialog(MaterialOut);
+        startActivity(MaterialOut);
         cancelLoading();
     }
 
@@ -624,7 +691,7 @@ public class MainMenu extends Activity {
     private void ShowProductOut() {
         ShowLoading();
         Intent ProductOut = new Intent(this, ProductOutAct.class);
-        showIsReturnDialog(ProductOut);
+        startActivity(ProductOut);
         cancelLoading();
     }
 
@@ -687,7 +754,7 @@ public class MainMenu extends Activity {
 
         ShowLoading();
         Intent SaleIn = new Intent(this, PurStockIn.class);
-        SaleIn.putExtra("freplenishflag","N");
+        SaleIn.putExtra("freplenishflag", "N");
         startActivity(SaleIn);
     }
 
@@ -695,7 +762,7 @@ public class MainMenu extends Activity {
 //		alertDialog.setTitle("数据加载中,请稍等。。。");
 //		alertDialog.setMessage("");
 //		alertDialog.show();
-        PD = android.app.ProgressDialog.show(this, "Loading...", "数据加载中,请稍等。。。", true, false);
+        PD = ProgressDialog.show(this, "Loading...", "数据加载中,请稍等。。。", true, false);
     }
 
     public static void cancelLoading() {
