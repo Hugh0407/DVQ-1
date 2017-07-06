@@ -11,110 +11,287 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_weight="1">
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:padding="5dp">
-            <TextView
-                android:id="@+id/tvsearchInvUnitName"
-                android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="3dp"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
+            android:layout_margin="3dp"
+            android:background="#51555e">
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:text="采购订单" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+                <EditText
+                    android:id="@+id/txtStartDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:ems="10"
+                    android:singleLine="true"
+                    android:textAllCaps="true"
+                    android:background="@drawable/edittext_style"
+                    android:layout_weight="0.4"
+                    android:hint="订单开始日"/>
+
+                <TextView
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:text=" ~ "
+                    android:layout_weight="0.2"/>
+
+                <EditText
+                    android:id="@+id/txtEndDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:ems="10"
+                    android:singleLine="true"
+                    android:textAllCaps="true"
+                    android:background="@drawable/edittext_style"
+                    android:layout_weight="0.4"
+                    android:hint="订单结束日"
+                    android:layout_marginRight="3dp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp">
+
+                <TextView
+                    android:id="@+id/tvsearchInvUnitName"
+                    android:layout_width="76dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:text="采购订单" />
+
+                <EditText
+                    android:id="@+id/txtPurOrderNo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:ems="10"
+                    android:singleLine="true"
+                    android:textAllCaps="true"
+                    android:background="@drawable/edittext_style"
+                    android:layout_weight="1"/>
+                <ImageButton
+                    android:id="@+id/btnPurBrower"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginLeft="3dp"
+                    android:background="@drawable/browse"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
+                android:gravity="center_vertical">
+                <TextView
+                    android:id="@+id/tvPurVen"
+                    android:layout_width="76dp"
+                    android:layout_height="wrap_content"
+                    android:text="供应商" />
+                <TextView
+                    android:id="@+id/labPurVendor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="----"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="入库单号"/>
+
             <EditText
-                android:id="@+id/txtPurOrderNo"
+                android:id="@+id/txtpurinbillcode"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
-                android:ems="10"
-                android:singleLine="true"
-                android:textAllCaps="true"
+                android:layout_weight="1"
                 android:background="@drawable/edittext_style"
-                android:layout_weight="1"/>
-            <ImageButton
-                android:id="@+id/btnPurBrower"
+                android:ems="10"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textAllCaps="true"/>
+            <TextView
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:layout_marginLeft="5dp"
-                android:background="@drawable/browse"/>
+                android:layout_marginLeft="3dp"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
             android:orientation="horizontal"
-            android:padding="5dp"
             android:gravity="center_vertical">
-            <TextView
-                android:id="@+id/tvPurHW"
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                android:text="仓　　　库" />
-            <TextView
-                android:id="@+id/labWHName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:text="----"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:orientation="horizontal"
-            android:padding="5dp"
-            android:gravity="center_vertical">
-            <TextView
-                android:id="@+id/tvPurVen"
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                android:text="供　应　商" />
-            <TextView
-                android:id="@+id/labPurVendor"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:text="----"/>
-        </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:orientation="horizontal"
-            android:padding="5dp"
-            android:gravity="center_vertical">
             <TextView
-                android:id="@+id/tvbillstatus"
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="仓库"/>
+
+            <EditText
+                android:id="@+id/wh"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="退　　　货"
-                android:textColor="@color/red" />
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:background="@drawable/edittext_style"
+                android:ems="10"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textAllCaps="true"/>
+            <ImageButton
+                android:id="@+id/refer_wh"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginLeft="3dp"
+                android:background="@drawable/browse"/>
+
         </LinearLayout>
-        <TextView
-            android:id="@+id/TextView01"
-            android:layout_width="wrap_content"
-            android:layout_height="10px"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:text=" " />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="库存组织"/>
+
+            <EditText
+                android:id="@+id/organization"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_weight="3"
+                android:background="@drawable/edittext_style"
+                android:ems="10"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textAllCaps="true"/>
+
+            <ImageButton
+                android:id="@+id/refer_organization"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginLeft="3dp"
+                android:background="@drawable/browse"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="收发类别"/>
+
+            <EditText
+                android:id="@+id/lei_bie"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_weight="3"
+                android:background="@drawable/edittext_style"
+                android:ems="10"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textAllCaps="true"/>
+
+            <ImageButton
+                android:id="@+id/refer_lei_bie"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginLeft="3dp"
+                android:background="@drawable/browse"/>
+
+        </LinearLayout>
 
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="部门"/>
+
+            <EditText
+                android:id="@+id/department"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_weight="3"
+                android:background="@drawable/edittext_style"
+                android:ems="10"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textAllCaps="true"/>
+
+            <ImageButton
+                android:id="@+id/refer_department"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginLeft="3dp"
+                android:background="@drawable/browse"/>
+
+        </LinearLayout>
 
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:gravity="top">
 
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:text="备注"/>
 
-
-
-        <TextView
-            android:id="@+id/TextView02"
-            android:layout_width="wrap_content"
-            android:layout_height="10px"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:text="  " />
-
+            <EditText
+                android:id="@+id/remark"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/edittext_style"
+                android:layout_weight="1"/>
+        </LinearLayout>
 
     </LinearLayout>
-
 
     <LinearLayout
         android:id="@+id/PurStockInButtonBar"
