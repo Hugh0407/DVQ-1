@@ -4,10 +4,12 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -139,6 +141,17 @@ public class SCScanAct extends Activity {
                 showDialog(detailList, myBaseAdapter, "扫描明细");
                 break;
             case R.id.btn_back:
+
+                if (dataList.size() > 0) {
+                    Intent in = new Intent();
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelableArrayList("dataList", (ArrayList<? extends Parcelable>) dataList);
+                    in.putExtras(bundle);
+                    activity.setResult(7, in);
+                } else {
+                    Utils.showToast(activity,"没有扫描单据");
+                }
+
                 finish();
                 break;
         }
@@ -181,13 +194,16 @@ public class SCScanAct extends Activity {
                                 JSONObject object = jsonArray.getJSONObject(i);
                                 purGood = new PurGood();
                                 purGood.setSourceBill(m_BillNo);
-                                purGood.setNshouldinnum(0 + "/" + object.getString("nshouldinnum"));
+                                purGood.setNshouldinnum(object.getString("nshouldinnum"));
                                 purGood.setInvcode(object.getString("invcode"));
                                 purGood.setInvname(object.getString("invname"));
                                 purGood.setVbatchcode(object.getString("vbatchcode"));
+                                purGood.setFbillrowflag(object.getString("fbillrowflag"));
                                 dataList.add(purGood);
                             }
                             progressDialogDismiss();
+                        } else {
+                            Log.d("TAG", "jsonBody = null ");
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -305,7 +321,7 @@ public class SCScanAct extends Activity {
         progressDialog.setCanceledOnTouchOutside(false);// 设置在点击Dialog外是否取消Dialog进度条
         // progressDialog.setIcon(R.drawable.ic_launcher);
         // 设置提示的title的图标，默认是没有的，如果没有设置title的话只设置Icon是不会显示图标的
-        progressDialog.setTitle("保存单据");
+        progressDialog.setTitle("拉取单据");
         // dismiss监听
 //        progressDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
 //
@@ -362,7 +378,7 @@ public class SCScanAct extends Activity {
 //
 //                    }
 //                });
-        progressDialog.setMessage("正在保存，请等待...");
+        progressDialog.setMessage("正在获取数据，请等待...");
         progressDialog.show();
         new Thread(new Runnable() {
 
@@ -373,8 +389,9 @@ public class SCScanAct extends Activity {
                         Thread.sleep(30 * 1000);
                         // cancel和dismiss方法本质都是一样的，都是从屏幕中删除Dialog,唯一的区别是
                         // 调用cancel方法会回调DialogInterface.OnCancelListener如果注册的话,dismiss方法不会回掉
-                        progressDialog.cancel();
                         // progressDialog.dismiss();
+                        progressDialog.cancel();
+                        finish();
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -406,24 +423,17 @@ public class SCScanAct extends Activity {
         mEdBarCode.setSelection(mEdBarCode.length());   //将光标移动到最后的位置
         mEdBarCode.selectAll();
         String[] barCode = Bar.split("\\|");
-        /*********************************************************************/
-        //判断每一段的条码是否正确
-        for (int i = 0; i < barCode.length; i++) {
-            if (i == 0) {
-                continue;
-            }
-            if (TextUtils.isEmpty(barCode[i])) {
-                Utils.showToast(activity, "条码错误");
-                return false;
-            }
-            if (!isNumber(barCode[i])) {
-                Utils.showToast(activity, "条码中存在非数字字符");
-                return false;
-            }
-        }
-        /*********************************************************************/
-
         if (barCode.length == 9 && barCode[0].equals("P")) {// 包码 P|SKU|LOT|WW|TAX|QTY|CW|ONLY|SN    9位
+
+            /*********************************************************************/
+            //判断该条码在“任务” 列表中是否存在
+            for (PurGood pur : dataList) {
+                if (!pur.getInvcode().equals(barCode[1]) && !pur.getVbatchcode().equals(barCode[2])) {
+                    Utils.showToast(activity, "条码有误");
+                    return false;
+                }
+            }
+            /*********************************************************************/
             mEdLot.setEnabled(false);
             mEdQty.setEnabled(false);
             mEdLot.setTextColor(Color.WHITE);
@@ -432,14 +442,24 @@ public class SCScanAct extends Activity {
             mEdEncoding.setText(encoding);
             mEdLot.setText(barCode[2]);
             mEdWeight.setText(barCode[5]);
-            GetInvBaseInfo(encoding);
             mEdQty.setText("");
             mEdNum.setEnabled(true);
             mEdNum.setText("1");
             mEdNum.requestFocus();  //包码扫描后光标跳到“数量”,输入数量,添加到列表
             mEdNum.setSelection(mEdNum.length());   //将光标移动到最后的位置
+            GetInvBaseInfo(encoding);
             return true;
         } else if (barCode.length == 10 && barCode[0].equals("TP")) {//盘码TP|SKU|LOT|WW|TAX|QTY|NUM|CW|ONLY|SN
+            /*********************************************************************/
+            //判断该条码在“任务” 列表中是否存在
+            for (PurGood pur : dataList) {
+                if (!pur.getInvcode().equals(barCode[1]) && !pur.getVbatchcode().equals(barCode[2])) {
+                    Utils.showToast(activity, "条码有误");
+                    return false;
+                }
+            }
+            /*********************************************************************/
+
             for (int i = 0; i < detailList.size(); i++) {
                 if (detailList.get(i).getBarcode().equals(Bar)) {
                     Utils.showToast(activity, "该托盘已扫描");
@@ -518,7 +538,7 @@ public class SCScanAct extends Activity {
      *
      * @return
      */
-    private void addDataToDetailList() {
+    private boolean addDataToDetailList() {
         Goods goods = new Goods();
         goods.setBarcode(mEdBarCode.getText().toString());
         goods.setEncoding(mEdEncoding.getText().toString());
@@ -531,7 +551,18 @@ public class SCScanAct extends Activity {
         goods.setCostObject(mEdCostObject.getText().toString());
         goods.setPk_invbasdoc(pk_invbasdoc);
         goods.setPk_invmandoc(pk_invmandoc);
-        detailList.add(goods);
+        for (PurGood pur : dataList) {
+            if (pur.getInvcode().equals(goods.getEncoding()) &&
+                    pur.getVbatchcode().equals(goods.getLot())) {
+                float nowNum = goods.getQty() + Float.valueOf(pur.getNum_task());
+                if (nowNum > Float.valueOf(pur.getNshouldinnum())) {
+                    Utils.showToast(activity, "数量过多,请重新扫描");
+                    return false;
+                }
+                pur.setNum_task(String.valueOf(nowNum));
+            }
+        }
+        return detailList.add(goods);
     }
 
     /**
@@ -624,8 +655,7 @@ public class SCScanAct extends Activity {
                 switch (v.getId()) {
                     case R.id.ed_bar_code:
                         if (!TextUtils.isEmpty(mEdBarCode.getText().toString())) {
-                            if (isAllEdNotNull()) {
-                                addDataToDetailList();
+                            if (isAllEdNotNull() && addDataToDetailList()) {
                                 mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
                                 ChangeAllEdTextToEmpty();
                             } else {
@@ -659,9 +689,10 @@ public class SCScanAct extends Activity {
 
                         float weight = Float.valueOf(mEdWeight.getText().toString());
                         mEdQty.setText(String.valueOf(num * weight));
-                        addDataToDetailList();
-                        mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
-                        ChangeAllEdTextToEmpty();
+                        if (addDataToDetailList()) {
+                            mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
+                            ChangeAllEdTextToEmpty();
+                        }
                         return true;
                 }
             }

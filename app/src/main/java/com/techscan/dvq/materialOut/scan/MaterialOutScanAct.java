@@ -203,22 +203,22 @@ public class MaterialOutScanAct extends Activity {
         mEdBarCode.setSelection(mEdBarCode.length());   //将光标移动到最后的位置
         mEdBarCode.selectAll();
         String[] barCode = Bar.split("\\|");
-        /*********************************************************************/
-        //判断每一段的条码是否正确
-        for (int i = 0; i < barCode.length; i++) {
-            if (i == 0) {
-                continue;
-            }
-            if (TextUtils.isEmpty(barCode[i])) {
-                Utils.showToast(MaterialOutScanAct.this, "条码错误");
-                return false;
-            }
-            if (!isNumber(barCode[i])) {
-                Utils.showToast(MaterialOutScanAct.this, "条码中存在非数字字符");
-                return false;
-            }
-        }
-        /*********************************************************************/
+//        /*********************************************************************/
+//        //判断每一段的条码是否正确
+//        for (int i = 0; i < barCode.length; i++) {
+//            if (i == 0) {
+//                continue;
+//            }
+//            if (TextUtils.isEmpty(barCode[i])) {
+//                Utils.showToast(MaterialOutScanAct.this, "条码错误");
+//                return false;
+//            }
+//            if (!isNumber(barCode[i])) {
+//                Utils.showToast(MaterialOutScanAct.this, "条码中存在非数字字符");
+//                return false;
+//            }
+//        }
+//        /*********************************************************************/
         if (barCode.length == 2 && barCode[0].equals("Y")) {          //Y|SKU
             //如果是液体的话需要输入液体总量，将数量设置不可编辑
             mEdNum.setEnabled(false);

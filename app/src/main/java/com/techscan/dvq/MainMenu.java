@@ -37,6 +37,7 @@ public class MainMenu extends Activity {
     String fileName = null;
     String fileNameScan = null;
     String ScanedFileName = null;
+    String isReturn;//是否退货的标志位，N 不退货，Y退货
     String UserID = null;
     File file = null;
     File fileScan = null;
@@ -614,7 +615,7 @@ public class MainMenu extends Activity {
     private void ShowMaterialIn() {
         ShowLoading();
         Intent MaterialOut = new Intent(this, MaterialOutAct.class);
-        startActivity(MaterialOut);
+        showIsReturnDialog(MaterialOut);
         cancelLoading();
     }
 
@@ -623,14 +624,39 @@ public class MainMenu extends Activity {
     private void ShowProductOut() {
         ShowLoading();
         Intent ProductOut = new Intent(this, ProductOutAct.class);
-        startActivity(ProductOut);
+        showIsReturnDialog(ProductOut);
         cancelLoading();
     }
-    // 显示成品入库画面
+
+    /**
+     * 是否退货的dialog
+     */
+    private void showIsReturnDialog(final Intent intent) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainMenu.this);
+        builder.setTitle("是否退货");
+        builder.setItems(new String[]{"退货", "不退货"}, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case 1:
+                        isReturn = "Y";
+                        break;
+                    case 2:
+                        isReturn = "N";
+                        break;
+                }
+                intent.putExtra("isReturn", isReturn);
+                startActivity(intent);
+            }
+        });
+        builder.show();
+    }
+
+    // 显示形态转换画面
     private void ShowStatusChange() {
         ShowLoading();
-        Intent ProductOut = new Intent(this, StatusChangeAct.class);
-        startActivity(ProductOut);
+        Intent statusChange = new Intent(this, StatusChangeAct.class);
+        startActivity(statusChange);
         cancelLoading();
     }
 
