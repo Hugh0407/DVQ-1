@@ -602,7 +602,7 @@ public class PurStockInDetail extends Activity {
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             // ADD CAIXY TEST END
         }
-        tvPurcount.setText("总共" + ishouldinnum + " | " + "已扫" + iinnum
+        tvPurcount.setText("总量" + ishouldinnum + " | " + "已扫" + iinnum
                 + " | " + "未扫" + (ishouldinnum - iinnum) );
 
         txtBarcode.requestFocus();
@@ -1281,8 +1281,8 @@ public class PurStockInDetail extends Activity {
 
                                 if (invcodeold.equals(invcode)
                                         && batchcodeold.equals(batch)) {
-                                    Double doneqty = temp.getDouble("doneqty");
-                                    temp.put("doneqty", doneqty - ScanedTotal);
+                                    Double doneqty = temp.getDouble("nconfirmnum");
+                                    temp.put("nconfirmnum", doneqty - ScanedTotal);
                                 }
 
                                 bodynews.put(temp);
@@ -1301,19 +1301,20 @@ public class PurStockInDetail extends Activity {
                             iinnum = 0.0;
                             for (int i = 0; i < arraysCount.length(); i++) {
                                 String sshouldinnum = ((JSONObject) (arraysCount
-                                        .get(i))).getString("nshouldinnum");
+                                        .get(i))).getString("nordernum");
                                 String sinnum = ((JSONObject) (arraysCount
-                                        .get(i))).getString("doneqty");
+                                        .get(i))).getString("nconfirmnum");
 
                                 ishouldinnum = ishouldinnum
                                         + Double.valueOf(sshouldinnum);
-                                iinnum = iinnum + Double.valueOf(sinnum);
+                                if(!sinnum.toLowerCase().equals("null") && !sinnum.isEmpty())
+                                    iinnum = iinnum + Double.valueOf(sinnum);
                             }
                         } catch (JSONException e1) {
                             // TODO Auto-generated catch block
                             e1.printStackTrace();
                         }
-                        tvPurcount.setText("总共" + ishouldinnum + " | " + "已扫"
+                        tvPurcount.setText("总量" + ishouldinnum + " | " + "已扫"
                                 + iinnum + " | " + "未扫"
                                 + (ishouldinnum - iinnum) );
                         //SaveScanedBody();//写入本地

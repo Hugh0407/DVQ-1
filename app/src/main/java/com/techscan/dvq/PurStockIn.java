@@ -125,8 +125,8 @@ public class PurStockIn extends Activity {
 	String pk_calbody = "";
 	String m_AccID = "A";
 
-	String m_BillID;
-	String m_BillNo;
+	String m_BillID="";
+	String m_BillNo="";
 
 	String m_companyCode = "1001";
 
@@ -1546,7 +1546,6 @@ public class PurStockIn extends Activity {
 							return;
 						}
 
-
 						if(CWAREHOUSEID.isEmpty()){
 							Toast.makeText(PurStockIn.this, "请输入仓库号" ,Toast.LENGTH_LONG).show();
 							MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
@@ -2454,7 +2453,8 @@ public class PurStockIn extends Activity {
 //				this.tvbillstatus.setText("采 购  退 货");
 //			}
 			//this.txtPosition.requestFocus();
-			SaveScanedHead();
+
+			//SaveScanedHead();
 
 			//得到采购订单表头和表体
 			HashMap<String, String> parameter = new HashMap<String, String>();
