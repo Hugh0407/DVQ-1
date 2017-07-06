@@ -11,7 +11,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="vertical">
 
@@ -22,7 +22,6 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/tvsearchInvUnitName"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginRight="4dp"
@@ -177,8 +176,36 @@
                 android:layout_weight="1"
                 android:background="@drawable/edittext_style"
                 android:ems="10"
-                android:maxLines="1"
                 android:enabled="false"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textAllCaps="true"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="6dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="4dp"
+                android:gravity="center_vertical"
+                android:text="海关手册号"/>
+
+            <EditText
+                android:inputType="text"
+                android:id="@+id/ed_manual"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:background="@drawable/edittext_style"
+                android:ems="10"
+                android:enabled="false"
+                android:maxLines="1"
                 android:singleLine="true"
                 android:textAllCaps="true"/>
 
@@ -210,9 +237,9 @@
                     android:layout_weight="1"
                     android:background="@drawable/edittext_style"
                     android:ems="10"
+                    android:enabled="false"
                     android:inputType="number"
                     android:maxLines="1"
-                    android:enabled="false"
                     android:singleLine="true"
                     android:textAllCaps="true"/>
 
@@ -317,7 +344,6 @@
 
 
     <LinearLayout
-        android:id="@+id/PurStockInButtonBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#d7d6d6"

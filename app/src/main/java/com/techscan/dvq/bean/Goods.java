@@ -23,6 +23,7 @@ public class Goods implements Parcelable {
     String pk_invbasdoc;
     String pk_invmandoc;
     String costObject;
+    String manual;  // ∫£πÿ ÷≤·∫≈
 
     public Goods() {
     }
@@ -40,6 +41,7 @@ public class Goods implements Parcelable {
         pk_invbasdoc = in.readString();
         pk_invmandoc = in.readString();
         costObject = in.readString();
+        manual = in.readString();
     }
 
     public static final Creator<Goods> CREATOR = new Creator<Goods>() {
@@ -53,37 +55,6 @@ public class Goods implements Parcelable {
             return new Goods[size];
         }
     };
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Goods other = (Goods) obj;
-        if (pk_invbasdoc == null) {
-            if (other.pk_invbasdoc != null)
-                return false;
-        } else if (!pk_invbasdoc.equals(other.pk_invbasdoc))
-            return false;
-        if (lot == null) {
-            if (other.lot != null)
-                return false;
-        } else if (!lot.equals(other.lot))
-            return false;
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((lot == null) ? 0 : lot.hashCode());
-        result = prime * result + ((pk_invbasdoc == null) ? 0 : pk_invbasdoc.hashCode());
-        return result;
-    }
 
     public String getBarcode() {
         return barcode;
@@ -181,6 +152,14 @@ public class Goods implements Parcelable {
         this.costObject = costObject;
     }
 
+    public String getManual() {
+        return manual;
+    }
+
+    public void setManual(String manual) {
+        this.manual = manual;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -200,5 +179,6 @@ public class Goods implements Parcelable {
         dest.writeString(pk_invbasdoc);
         dest.writeString(pk_invmandoc);
         dest.writeString(costObject);
+        dest.writeString(manual);
     }
 }

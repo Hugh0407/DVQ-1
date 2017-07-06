@@ -71,10 +71,12 @@ public class ProductOutScanAct extends Activity {
     Button mBtnDetail;
     @InjectView(R.id.btn_back)
     Button mBtnBack;
-    @InjectView(ed_num)
-    EditText mEdNum;
     @InjectView(R.id.ed_weight)
     EditText mEdWeight;
+    @InjectView(R.id.ed_manual)
+    EditText mEdManual;
+    @InjectView(R.id.ed_num)
+    EditText mEdNum;
 
     String TAG = "MaterialOutScanAct";
     List<Goods> detailList;
@@ -122,6 +124,7 @@ public class ProductOutScanAct extends Activity {
         mEdLot.setOnKeyListener(mOnKeyListener);
         mEdQty.setOnKeyListener(mOnKeyListener);
         mEdNum.setOnKeyListener(mOnKeyListener);
+        mEdManual.setOnKeyListener(mOnKeyListener);
         mEdNum.addTextChangedListener(new CustomTextWatcher(mEdNum));
         mEdBarCode.addTextChangedListener(new CustomTextWatcher(mEdBarCode));
         detailList = new ArrayList<Goods>();
@@ -219,18 +222,19 @@ public class ProductOutScanAct extends Activity {
         if (barCode.length == 9 && barCode[0].equals("P")) {// 包码 P|SKU|LOT|WW|TAX|QTY|CW|ONLY|SN    9位
             mEdLot.setEnabled(false);
             mEdQty.setEnabled(false);
+            mEdNum.setEnabled(true);
+            mEdNum.setFocusable(true);
             mEdLot.setTextColor(Color.WHITE);
             mEdQty.setTextColor(Color.WHITE);
             String encoding = barCode[1];
             mEdEncoding.setText(encoding);
             mEdLot.setText(barCode[2]);
             mEdWeight.setText(barCode[5]);
-            GetInvBaseInfo(encoding);
             mEdQty.setText("");
-            mEdNum.setEnabled(true);
             mEdNum.setText("1");
             mEdNum.requestFocus();  //包码扫描后光标跳到“数量”,输入数量,添加到列表
             mEdNum.setSelection(mEdNum.length());   //将光标移动到最后的位置
+            GetInvBaseInfo(encoding);
             return true;
         } else if (barCode.length == 10 && barCode[0].equals("TP")) {//盘码TP|SKU|LOT|WW|TAX|QTY|NUM|CW|ONLY|SN
             for (int i = 0; i < detailList.size(); i++) {
@@ -240,9 +244,13 @@ public class ProductOutScanAct extends Activity {
                 }
             }
             //如果是盘码，全都设置为不可编辑，默认这三个是可编辑的
+            mEdManual.setEnabled(true);
+            mEdManual.requestFocus();
             mEdLot.setEnabled(false);
             mEdQty.setEnabled(false);
             mEdNum.setEnabled(false);
+            mEdNum.setFocusable(false);
+            mEdQty.setFocusable(false);
             mEdLot.setTextColor(Color.WHITE);
             mEdQty.setTextColor(Color.WHITE);
             mEdNum.setTextColor(Color.WHITE);
@@ -297,6 +305,7 @@ public class ProductOutScanAct extends Activity {
                 good.setPk_invbasdoc(dtGood.getPk_invbasdoc());
                 good.setPk_invmandoc(dtGood.getPk_invmandoc());
                 good.setCostObject(dtGood.getCostObject());
+                good.setManual(dtGood.getManual());
                 ovList.add(good);
             }
         }
@@ -320,6 +329,10 @@ public class ProductOutScanAct extends Activity {
         goods.setCostObject("");    // 默认没有
         goods.setPk_invbasdoc(pk_invbasdoc);
         goods.setPk_invmandoc(pk_invmandoc);
+        if (mEdManual.getText().toString().isEmpty()) {
+            mEdManual.setText("");
+        }
+        goods.setManual(mEdManual.getText().toString());
         detailList.add(goods);
         addDataToOvList();
         return true;
@@ -339,9 +352,11 @@ public class ProductOutScanAct extends Activity {
         mEdQty.setText("");
         mEdWeight.setText("");
         mEdSpectype.setText("");
+        mEdManual.setText("");
         mEdLot.setEnabled(false);
         mEdNum.setEnabled(false);
         mEdQty.setEnabled(false);
+        mEdManual.setEnabled(false);
     }
 
     /**
@@ -553,6 +568,15 @@ public class ProductOutScanAct extends Activity {
                         addDataToDetailList();
                         mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
                         ChangeAllEdTextToEmpty();
+                        return true;
+                    case R.id.ed_manual:
+                        if (isAllEdNotNull()) {
+                            addDataToDetailList();
+                            mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
+                            ChangeAllEdTextToEmpty();
+                        } else {
+                            Utils.showToast(ProductOutScanAct.this, "信息不完整，请核对");
+                        }
                         return true;
                 }
             }

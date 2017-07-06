@@ -95,6 +95,7 @@ public class ProductOutAct extends Activity {
     String PK_CALBODY = "";      //仓库id
     String PK_CORP;         //公司
     String VBILLCOD;        //单据号
+    String isReturn;    //从上菜单页面穿过来的是否退货的标志位，Y退货，N不退货
 
     int year;
     int month;
@@ -311,6 +312,7 @@ public class ProductOutAct extends Activity {
         mLeiBie.setOnKeyListener(mOnKeyListener);
         mDepartment.setOnKeyListener(mOnKeyListener);
         checkInfo = new HashMap<String, String>();
+        isReturn = this.getIntent().getStringExtra("isReturn");
     }
 
     /**
@@ -397,6 +399,11 @@ public class ProductOutAct extends Activity {
         tableHead.put("PK_CORP", MainLogin.objLog.STOrgCode);
         tableHead.put("VBILLCODE", mBillNum.getText().toString());
         tableHead.put("CUSERNAME", MainLogin.objLog.LoginUser);
+        if (mRemark.getText().toString().isEmpty()) {
+            mRemark.setText("");
+        }
+        tableHead.put("VNOTE", mRemark.getText().toString());
+        tableHead.put("FREPLENISHFLAG", isReturn);    //N不退，Y退
         table.put("Head", tableHead);
         JSONObject tableBody = new JSONObject();
         JSONArray bodyArray = new JSONArray();
@@ -406,9 +413,13 @@ public class ProductOutAct extends Activity {
             object.put("CINVENTORYID", c.getPk_invmandoc());
             object.put("WGDATE", mBillDate.getText().toString());    //LEO要求，将时间添加到表体上
 
+/*********************************************************************/
             float c_2 = c.getQty();
             DecimalFormat decimalFormat = new DecimalFormat(".00"); //构造方法的字符格式这里如果小数不足2位,会以0补足.
             String qty = decimalFormat.format(c_2);                 //format 返回的是字符串
+
+/*********************************************************************/
+
 
             object.put("NINNUM", qty);
             object.put("CINVCODE", c.getEncoding());
@@ -416,6 +427,7 @@ public class ProductOutAct extends Activity {
             object.put("PK_BODYCALBODY", PK_CALBODY);
             object.put("PK_CORP", MainLogin.objLog.STOrgCode);
             object.put("VBATCHCODE", c.getLot());
+            object.put("VFREE4", c.getManual());    //海关手册号
             bodyArray.put(object);
         }
         tableBody.put("ScanDetails", bodyArray);

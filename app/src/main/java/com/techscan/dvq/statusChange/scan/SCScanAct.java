@@ -188,6 +188,8 @@ public class SCScanAct extends Activity {
                                 dataList.add(purGood);
                             }
                             progressDialogDismiss();
+                        } else {
+                            Log.d("TAG", "jsonBody = null ");
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -305,7 +307,7 @@ public class SCScanAct extends Activity {
         progressDialog.setCanceledOnTouchOutside(false);// 设置在点击Dialog外是否取消Dialog进度条
         // progressDialog.setIcon(R.drawable.ic_launcher);
         // 设置提示的title的图标，默认是没有的，如果没有设置title的话只设置Icon是不会显示图标的
-        progressDialog.setTitle("保存单据");
+        progressDialog.setTitle("拉取单据");
         // dismiss监听
 //        progressDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
 //
@@ -362,7 +364,7 @@ public class SCScanAct extends Activity {
 //
 //                    }
 //                });
-        progressDialog.setMessage("正在保存，请等待...");
+        progressDialog.setMessage("正在获取数据，请等待...");
         progressDialog.show();
         new Thread(new Runnable() {
 

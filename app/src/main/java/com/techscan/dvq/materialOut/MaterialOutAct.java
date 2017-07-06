@@ -95,6 +95,7 @@ public class MaterialOutAct extends Activity {
     String PK_CALBODY = "";      //仓库id
     String PK_CORP;         //公司
     String VBILLCOD;        //单据号
+    String isReturn;
 
     int year;
     int month;
@@ -310,6 +311,7 @@ public class MaterialOutAct extends Activity {
         mLeiBie.setOnKeyListener(mOnKeyListener);
         mDepartment.setOnKeyListener(mOnKeyListener);
         checkInfo = new HashMap<String, String>();
+        isReturn = this.getIntent().getStringExtra("isReturn");
     }
 
     /**
@@ -527,6 +529,11 @@ public class MaterialOutAct extends Activity {
         tableHead.put("PK_CALBODY", PK_CALBODY);                    //仓库id
         tableHead.put("PK_CORP", MainLogin.objLog.STOrgCode);       //组织编号
         tableHead.put("CUSERNAME", MainLogin.objLog.LoginUser);     //用户名称
+        if (mRemark.getText().toString().isEmpty()) {
+            mRemark.setText("");
+        }
+        tableHead.put("VNOTE", mRemark.getText().toString());
+        tableHead.put("FREPLENISHFLAG", isReturn);    //N不退，Y退,是否退货标志位，从上一界面传过来
         table.put("Head", tableHead);
         JSONObject tableBody = new JSONObject();
         JSONArray bodyArray = new JSONArray();
@@ -556,25 +563,6 @@ public class MaterialOutAct extends Activity {
         Thread thread = new Thread(saveThread);
         thread.start();
 
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    JSONObject jas = Common.DoHttpQuery(table, "SaveMaterialOut", "A");
-//                    if (jas != null && jas.getBoolean("Status")) {
-//                        Log.d(TAG, "保存" + jas.toString());
-//                        Toast.makeText(MaterialOutAct.this, "数据保存成功", Toast.LENGTH_SHORT).show();
-//                        tempList.clear();
-//                    } else {
-//                        Toast.makeText(MaterialOutAct.this, "数据保存失败，请重试", Toast.LENGTH_SHORT).show();
-//                    }
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }).start();
     }
 
     // 打开收发类别画面

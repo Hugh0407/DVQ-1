@@ -56,7 +56,6 @@ public class StatusChangeAct extends Activity {
         ButterKnife.inject(this);
         ActionBar actionBar = this.getActionBar();
         actionBar.setTitle("ÐÎÌ¬×ª»»");
-
     }
 
 
