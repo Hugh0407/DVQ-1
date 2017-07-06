@@ -661,6 +661,7 @@ public class MainMenu extends Activity {
 
         ShowLoading();
         Intent SaleIn = new Intent(this, PurStockIn.class);
+        SaleIn.putExtra("freplenishflag","N");
         startActivity(SaleIn);
     }
 

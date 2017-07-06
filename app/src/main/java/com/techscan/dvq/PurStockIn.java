@@ -100,6 +100,8 @@ public class PurStockIn extends Activity {
 	EditText txtDepartment;
 	EditText txtStartDate;
 	EditText txtEndDate;
+	EditText txtPurInBillCode;
+	EditText txtReMark;
 
 	String CDISPATCHERID = "";//收发类别code
 	String CDPTID = "";  //部门id
@@ -117,6 +119,7 @@ public class PurStockIn extends Activity {
 	JSONObject jsBoxTotal;
 	JSONObject jsSerino;
 
+	String m_FrePlenishFlag = "N";
 	String m_WarehouseID = "";
 	String pk_purcorp = "";
 	String pk_calbody = "";
@@ -526,7 +529,7 @@ public class PurStockIn extends Activity {
 		//保存审核采购入库
 		jsDBBody = new JSONObject();
 
-
+		JSONArray heads = jsHead.getJSONArray("PurGood");
 		JSONObject saveHeadJons = new JSONObject();
 //		saveHeadJons.put("cgeneralhid", this.m_BillID);                    //采购入库单ID
 //		saveHeadJons.put("coperatorid", MainLogin.objLog.UserID);        //操作员
@@ -534,15 +537,17 @@ public class PurStockIn extends Activity {
 //		saveHeadJons.put("WarehouseID", this.m_WarehouseID);
 //		saveHeadJons.put("pk_purcorp", pk_purcorp);
 //		saveHeadJons.put("pk_corp", pk_purcorp);
-		saveHeadJons.put("VBILLCODE", m_BillNo);                    //采购订单code
+		saveHeadJons.put("VBILLCODE", txtPurInBillCode.getText().toString()); //采购入库单号(手输)
 		saveHeadJons.put("CUSER", MainLogin.objLog.UserID);               //操作员ID
 		saveHeadJons.put("CUSERNAME", MainLogin.objLog.UserName);        //操作员Name
 		saveHeadJons.put("CWAREHOUSEID", CWAREHOUSEID);               //仓库
-		saveHeadJons.put("PK_CORP", pk_purcorp);
+		saveHeadJons.put("PK_CORP", MainLogin.objLog.CompanyCode);
 		saveHeadJons.put("CDISPATCHERID", CDISPATCHERID);             //收发类别code
 		saveHeadJons.put("PK_CALBODY", PK_CALBODY);                    //库存组织
 		saveHeadJons.put("CDPTID", CDPTID);                    //部门
-
+		saveHeadJons.put("CBIZTYPE", heads.getJSONObject(0).getString("cbiztype"));
+		saveHeadJons.put("VNOTE", txtReMark.getText().toString());//备注
+		saveHeadJons.put("FREPLENISHFLAG", m_FrePlenishFlag);//退货标志
 
 		JSONArray lstSerino = new JSONArray();
 		//JSONArray head = new JSONArray();
@@ -630,7 +635,7 @@ public class PurStockIn extends Activity {
 
 		JSONArray arraySaveBody = new JSONArray();
 		if (NoScanSave == false) {
-			JSONArray heads = jsHead.getJSONArray("PurGood");
+			//JSONArray heads = jsHead.getJSONArray("PurGood");
 			JSONArray bodys = jsBody.getJSONArray("PurBody");
 			JSONArray arraysSerino = jsSerino.getJSONArray("Serino");
 
@@ -653,6 +658,7 @@ public class PurStockIn extends Activity {
 //								!bodys.getJSONObject(i).getString("nconfirmnum").isEmpty())
 //							ldDoneQty = bodys.getJSONObject(i).getDouble("nconfirmnum");
 							obj.put("NINNUM", arraysSerino.getJSONObject(j).getDouble("box"));                    //数量
+							obj.put("NORDERNUM", bodys.getJSONObject(i).getDouble("nordernum"));
 							obj.put("PK_BODYCALBODY", PK_CALBODY);
 							obj.put("VBATCHCODE", arraysSerino.getJSONObject(j).getString("batch"));
 							obj.put("SOURCCEBILLHID", bodys.getJSONObject(i).getString("corderid"));
@@ -1532,24 +1538,37 @@ public class PurStockIn extends Activity {
 							MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
 							return;
 						}
+
+						if(txtPurInBillCode.getText().toString().isEmpty()){
+							Toast.makeText(PurStockIn.this, "请输入采购入库单号" ,Toast.LENGTH_LONG).show();
+							MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+							txtPurInBillCode.requestFocus();
+							return;
+						}
+
+
 						if(CWAREHOUSEID.isEmpty()){
 							Toast.makeText(PurStockIn.this, "请输入仓库号" ,Toast.LENGTH_LONG).show();
 							MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+							txtWareHouse.requestFocus();
 							return;
 						}
-						if(txtOrganization.getText().toString().isEmpty()){
+						if(PK_CALBODY.isEmpty()){
 							Toast.makeText(PurStockIn.this, "请输入库存组织号" ,Toast.LENGTH_LONG).show();
 							MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+							txtOrganization.requestFocus();
 							return;
 						}
-						if(CWAREHOUSEID.isEmpty()){
+						if(CDISPATCHERID.isEmpty()){
 							Toast.makeText(PurStockIn.this, "请输入收发类别" ,Toast.LENGTH_LONG).show();
 							MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+							txtCategory.requestFocus();
 							return;
 						}
 						if(CDPTID.isEmpty()){
 							Toast.makeText(PurStockIn.this, "请输入部门" ,Toast.LENGTH_LONG).show();
 							MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+							txtDepartment.requestFocus();
 							return;
 						}
 
@@ -1649,7 +1668,9 @@ public class PurStockIn extends Activity {
 //		actionBar.show();
 		
 		SaveFlg=0;
-		
+
+		m_FrePlenishFlag = this.getIntent().getStringExtra("freplenishflag");//退货标志 Y退货 N入库
+
 		btnSave = (Button)findViewById(R.id.btnPurinSave);
 //		btnUpdate = (Button)findViewById(R.id.btnPurinUpdate);
 		btnExit = (Button)findViewById(R.id.btnPurInExit);
@@ -1659,7 +1680,7 @@ public class PurStockIn extends Activity {
 		labVendor = (TextView)findViewById(R.id.labPurVendor);
 		txtPurOrderNo = (EditText)findViewById(R.id.txtPurOrderNo);
 //		txtPosition = (EditText)findViewById(R.id.txtPurPosition);
-
+		txtPurInBillCode = (EditText)findViewById(R.id.txtpurinbillcode);
 		//labWHName = (TextView)findViewById(R.id.labWHName);
 		//tvbillstatus = (TextView)findViewById(R.id.tvbillstatus);
 		//this.tvbillstatus.setText("  ");
@@ -1690,7 +1711,7 @@ public class PurStockIn extends Activity {
 		//txtStartDate.setOnKeyListener(mOnKeyListener);
 		txtEndDate.setOnFocusChangeListener(myFocusListener);
 		//txtEndDate.setOnKeyListener(mOnKeyListener);
-
+		txtReMark = (EditText)findViewById(id.remark);
 		Date SDate = new Date();
 		Date EDate = new Date();
 		SimpleDateFormat Dateformat=new SimpleDateFormat("yyyy-MM-dd");
