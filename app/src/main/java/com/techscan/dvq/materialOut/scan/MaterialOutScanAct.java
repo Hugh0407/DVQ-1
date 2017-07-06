@@ -474,17 +474,6 @@ public class MaterialOutScanAct extends Activity {
                     }
                     break;
                 case R.id.ed_num:
-//                    if (!TextUtils.isEmpty(mEdNum.getText().toString())) {
-//                        if (Float.valueOf(mEdNum.getText().toString()) < 0) {
-//                            Toast.makeText(MaterialOutScanAct.this, "数量不能为0", Toast.LENGTH_SHORT).show();
-//                        } else {
-//                            float num = Float.valueOf(mEdNum.getText().toString());
-//                            float weight = Float.valueOf(mEdWeight.getText().toString());
-//                            mEdQty.setText(String.valueOf(num * weight));
-//                        }
-//                    } else {
-//                        mEdQty.setText("0.00");
-//                    }
                     if (TextUtils.isEmpty(mEdNum.getText())) {
                         mEdQty.setText("");
                         return;
