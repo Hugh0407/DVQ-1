@@ -470,6 +470,7 @@ public class MaterialOutAct extends Activity {
                         // cancel和dismiss方法本质都是一样的，都是从屏幕中删除Dialog,唯一的区别是
                         // 调用cancel方法会回调DialogInterface.OnCancelListener如果注册的话,dismiss方法不会回掉
                         progressDialog.cancel();
+                        finish();
                         // progressDialog.dismiss();
                     }
                 } catch (InterruptedException e) {

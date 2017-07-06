@@ -68,9 +68,11 @@ public class ScAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.item_sc_scan, null);
             viewHolder.bill = (TextView) convertView.findViewById(R.id.bill);
             viewHolder.num = (TextView) convertView.findViewById(R.id.num);
+            viewHolder.num_task = (TextView) convertView.findViewById(R.id.num_task);
             viewHolder.sku = (TextView) convertView.findViewById(R.id.sku);
             viewHolder.name = (TextView) convertView.findViewById(R.id.name);
             viewHolder.lot = (TextView) convertView.findViewById(R.id.lot);
+            viewHolder.change = (TextView) convertView.findViewById(R.id.change);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -80,14 +82,25 @@ public class ScAdapter extends BaseAdapter {
         viewHolder.sku.setText(mList.get(position).getInvcode());
         viewHolder.name.setText(mList.get(position).getInvname());
         viewHolder.lot.setText(mList.get(position).getVbatchcode());
+        viewHolder.num_task.setText(mList.get(position).getNum_task());
+        String fbillrowflag = mList.get(position).getFbillrowflag();
+        if (fbillrowflag.equals("2")) {
+            viewHolder.change.setText("转换前");
+        }
+        if (fbillrowflag.equals("3")) {
+            viewHolder.change.setText("转换后");
+        }
+
         return convertView;
     }
 
     private static class ViewHolder {
         TextView bill;
         TextView num;
+        TextView num_task;
         TextView sku;
         TextView name;
         TextView lot;
+        TextView change;
     }
 }

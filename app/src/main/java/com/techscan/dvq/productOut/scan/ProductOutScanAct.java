@@ -202,22 +202,6 @@ public class ProductOutScanAct extends Activity {
         mEdBarCode.setSelection(mEdBarCode.length());   //将光标移动到最后的位置
         mEdBarCode.selectAll();
         String[] barCode = Bar.split("\\|");
-        /*********************************************************************/
-        //判断每一段的条码是否正确
-        for (int i = 0; i < barCode.length; i++) {
-            if (i == 0) {
-                continue;
-            }
-            if (TextUtils.isEmpty(barCode[i])) {
-                Utils.showToast(ProductOutScanAct.this, "条码错误");
-                return false;
-            }
-            if (!isNumber(barCode[i])) {
-                Utils.showToast(ProductOutScanAct.this, "条码中存在非数字字符");
-                return false;
-            }
-        }
-        /*********************************************************************/
 
         if (barCode.length == 9 && barCode[0].equals("P")) {// 包码 P|SKU|LOT|WW|TAX|QTY|CW|ONLY|SN    9位
             mEdLot.setEnabled(false);
