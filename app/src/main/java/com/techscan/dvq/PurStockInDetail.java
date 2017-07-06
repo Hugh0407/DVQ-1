@@ -365,12 +365,6 @@ public class PurStockInDetail extends Activity {
         }
 
         SplitBarcode bar = new SplitBarcode(Scanbarcode);
-        m_cSplitBarcode = bar;
-
-        if(!bar.BarcodeType.equals("C") && !bar.BarcodeType.equals("TC")
-                && !bar.BarcodeType.equals("Y"))
-            bar.creatorOk = false;
-
         if (bar.creatorOk == false) {
             Toast.makeText(this, "扫描的不是正确货品条码", Toast.LENGTH_LONG).show();
             //ADD CAIXY TEST START
@@ -378,6 +372,12 @@ public class PurStockInDetail extends Activity {
             //ADD CAIXY TEST END
             return false;
         }
+
+        m_cSplitBarcode = bar;
+
+        if(!bar.BarcodeType.equals("C") && !bar.BarcodeType.equals("TC")
+                && !bar.BarcodeType.equals("Y"))
+            bar.creatorOk = false;
 
         String FinishBarCode = bar.FinishBarCode;
 
@@ -1489,9 +1489,11 @@ public class PurStockInDetail extends Activity {
             try {
                 String temp = this.getIntent().getStringExtra("head");
                 jsHead = new JSONObject(temp);
+                Log.d("TAG", "GetDetailHead: " + temp);
 
                 temp = this.getIntent().getStringExtra("body");
                 jsBody = new JSONObject(temp);
+                Log.d("TAG", "GetDetailBody: " + temp);
 
                 if (tag.equals("1")) {
                     temp = this.getIntent().getStringExtra("serino");

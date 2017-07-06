@@ -545,7 +545,7 @@ public class PurStockIn extends Activity {
 		saveHeadJons.put("CDISPATCHERID", CDISPATCHERID);             //收发类别code
 		saveHeadJons.put("PK_CALBODY", PK_CALBODY);                    //库存组织
 		saveHeadJons.put("CDPTID", CDPTID);                    //部门
-		saveHeadJons.put("CBIZTYPE", heads.getJSONObject(0).getString("cbiztype"));
+		saveHeadJons.put("CBIZTYPE", heads.getJSONObject(0).getString("cbiztype"));//业务类型
 		saveHeadJons.put("VNOTE", txtReMark.getText().toString());//备注
 		saveHeadJons.put("FREPLENISHFLAG", m_FrePlenishFlag);//退货标志
 
@@ -962,28 +962,34 @@ public class PurStockIn extends Activity {
 			return;
 		}
 
-
-		if (NoScanSave == true) {
-			if (SavePurOrder() == true) {
-//				if(SaveDBOrder()==true)
-//				{
-				SaveOk();
-				IniActivyMemor();
-//				}
-			}
-
-			return;
+		if (SavePurOrder() == true) {
+			//SaveOk();
+			IniActivyMemor();
 		}
+
+//		Log.d("TAG", "NoScanSave: " + NoScanSave);
+//
+//		if (NoScanSave == true) {
+//			if (SavePurOrder() == true) {
+////				if(SaveDBOrder()==true)
+////				{
+//				SaveOk();
+//				IniActivyMemor();
+////				}
+//			}
+//
+//			return;
+//		}
 
 
 //		if(!CheckBox())
 //			return;
 
 
-		boolean isHaveDB = false;
-		JSONArray bodys = jsBody.getJSONArray("PurBody");
+//		boolean isHaveDB = false;
+//		JSONArray bodys = jsBody.getJSONArray("PurBody");
 
-		isHaveDB = true;
+//		isHaveDB = true;
 //		for (int i = 0; i < bodys.length(); i++) {
 //			if (bodys.getJSONObject(i).getInt("doneqty")
 //					< bodys.getJSONObject(i).getInt("nshouldinnum")) {
@@ -991,17 +997,17 @@ public class PurStockIn extends Activity {
 //				break;
 //			}
 //		}
-		if (isHaveDB && SaveFlg == 0 && tmpBillStatus.equals("Y")) {
-			AlertDialog.Builder bulider =
-					new AlertDialog.Builder(this).setTitle(R.string.XunWen).setMessage("有未扫描到的商品," +
-							"你确认要保存吗" + "?");
-			bulider.setNegativeButton(R.string.QuXiao, null);
-			bulider.setPositiveButton(R.string.QueRen, listenSave).create().show();
-		} else {
-			SavePurOrder();
-			SaveOk();
-			IniActivyMemor();
-		}
+//		if (isHaveDB && SaveFlg == 0 && tmpBillStatus.equals("Y")) {
+//			AlertDialog.Builder bulider =
+//					new AlertDialog.Builder(this).setTitle(R.string.XunWen).setMessage("有未扫描到的商品," +
+//							"你确认要保存吗" + "?");
+//			bulider.setNegativeButton(R.string.QuXiao, null);
+//			bulider.setPositiveButton(R.string.QueRen, listenSave).create().show();
+//		} else {
+//			SavePurOrder();
+//			SaveOk();
+//			IniActivyMemor();
+//		}
 
 
 	}
@@ -1295,10 +1301,21 @@ public class PurStockIn extends Activity {
 		if(jsHead != null){
 			scanDetail.putExtra("head", jsHead.toString());
 		}
+		else{
+			Toast.makeText(PurStockIn.this, "没有得到表头数据", Toast.LENGTH_LONG).show();
+			MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+			return;
+		}
+		Log.d("TAG", "PutScanDetailBody: " + jsBody);
 		if (jsBody != null) {
 //	       	 SerializableJSONObject sjs = new SerializableJSONObject();
 //	       	 sjs.setJs(jsBody);
 			scanDetail.putExtra("body", jsBody.toString());
+		}
+		else{
+			Toast.makeText(PurStockIn.this, "没有得到表体数据", Toast.LENGTH_LONG).show();
+			MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+			return;
 		}
 		if (jsSerino != null) {
 //	       	 SerializableJSONObject sjs = new SerializableJSONObject();
@@ -1457,6 +1474,16 @@ public class PurStockIn extends Activity {
 						if (jsHead.getBoolean("Status")) {
 							labVendor.setText(head.getJSONObject(0).getString("custname"));
 						}
+
+						//得到表体
+						HashMap<String, String> parameter = new HashMap<String, String>();
+						parameter.put("FunctionName", "GetPOBody");
+						parameter.put("CORDERID", m_BillID);
+						parameter.put("TableName", "PurBody");
+						RequestThread requestThread = new RequestThread(parameter, mHandler, HANDER_POORDER_BODY);
+						Thread td = new Thread(requestThread);
+						td.start();
+
 					} catch (JSONException e) {
 						e.printStackTrace();
 					}
@@ -1945,11 +1972,25 @@ public class PurStockIn extends Activity {
    		scanDetail = null;
    		jsDBBody= null;
    		jsDBHead= null;
+
+		CWAREHOUSEID = "";
+		CDISPATCHERID = "";
+		PK_CALBODY = "";
+		CDPTID = "";
+		m_FrePlenishFlag = "";
+
+		txtPurInBillCode.setText("");
+		txtWareHouse.setText("");
+		txtOrganization.setText("");
+		txtCategory.setText("");
+		txtDepartment.setText("");
+		txtReMark.setText("");
+
    		m_WarehouseID = "";
-   		m_BillID= null;
-   		m_BillNo= null;
-   		m_PosCode= null;
-   		m_PosName= null;
+   		m_BillID= "";
+   		m_BillNo= "";
+   		m_PosCode= "";
+   		m_PosName= "";
    		tmpBillStatus = "";
    		tmpWHStatus = "";
    		ScanedBarcode = new ArrayList<String>();
@@ -2463,14 +2504,6 @@ public class PurStockIn extends Activity {
 			parameter.put("TableName", "PurGood");
 			RequestThread requestThread = new RequestThread(parameter, mHandler, HANDER_POORDER_HEAD);
 			Thread td = new Thread(requestThread);
-			td.start();
-
-			parameter = new HashMap<String, String>();
-			parameter.put("FunctionName", "GetPOBody");
-			parameter.put("CORDERID", m_BillID);
-			parameter.put("TableName", "PurBody");
-			requestThread = new RequestThread(parameter, mHandler, HANDER_POORDER_BODY);
-			td = new Thread(requestThread);
 			td.start();
 		}
 		if(requestCode == 35)
