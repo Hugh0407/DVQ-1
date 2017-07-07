@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -39,7 +40,16 @@ import static android.content.ContentValues.TAG;
 
 
 public class SalesDelivery extends Activity {
-
+    String  CCUSTBASDOCID ="";
+    String  CRECEIVECUSTBASID ="";
+    String CCUSTOMERID = "";
+     String CBIZTYPE = "";
+    String  CSALECORPID = "";
+     String PK_CORP = "";
+    String  VDEF1 = "";
+    String VDEF2 = "";
+    String VDEF5 = "";
+    String NOTOTALNUMBER = "";
     String CWAREHOUSEID = "";    //库存组织
     String CSENDWAREID = "";
     String sBillCodes;//单据号查询
@@ -1184,6 +1194,17 @@ public class SalesDelivery extends Activity {
                     newHeadJSON.put("creceiptcustomerid", tempJso.getString("creceiptcustomerid"));
                     newHeadJSON.put("nheadsummny", tempJso.getString("nheadsummny"));
                     newHeadJSON.put("creceipttype", tempJso.getString("creceipttype"));
+                    CBIZTYPE = tempJso.getString("cbiztype").toString();
+                    CSALECORPID = tempJso.getString("csalecorpid").toString();
+                    PK_CORP = tempJso.getString("pk_corp").toString();
+                    VDEF1 = tempJso.getString("vdef1").toString();
+                    VDEF2 = tempJso.getString("vdef2").toString();
+                    VDEF5 = tempJso.getString("vdef5").toString();
+                    if (!TextUtils.isEmpty(VDEF5)){
+                        VDEF5 = "";
+                    }
+                    CCUSTOMERID  = tempJso.getString("ccustomerid").toString();
+                    CCUSTBASDOCID = tempJso.getString("ccustbasdocid").toString();
                 }
                 newHeadArray.put(newHeadJSON);
             }
@@ -1542,7 +1563,7 @@ public class SalesDelivery extends Activity {
                                 Toast.LENGTH_LONG).show();
 
                         // ADD CAIXY TEST START
-                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                         // ADD CAIXY TEST END
                         return;
                     }
@@ -1595,6 +1616,8 @@ public class SalesDelivery extends Activity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+                    } else {
+                        Log.d("TAG", "onClick: saleOutGoodsLists== null ");
                     }
 //                    try {
 //
@@ -2495,13 +2518,19 @@ public class SalesDelivery extends Activity {
     private void SaveInfo(List<SaleOutGoods> saleOutGoodsLists) throws JSONException {
         final JSONObject table = new JSONObject();
         JSONObject tableHead = new JSONObject();
-        tableHead.put("SourceBill", "");
-        tableHead.put("BillNum", "");
-        tableHead.put("CUSER", MainLogin.objLog.UserID);
-        tableHead.put("OutWarehouse", "");
-        tableHead.put("PK_CALBODY", "");
+        tableHead.put("CBIZTYPE", CBIZTYPE);
+        tableHead.put("COPERATORID", MainLogin.objLog.UserID);
+        tableHead.put("CRECEIPTTYE", "4331");
+        tableHead.put("CSALECORPID", CSALECORPID);
         tableHead.put("PK_CORP", MainLogin.objLog.STOrgCode);
+<<<<<<< Updated upstream
         tableHead.put("VBILLCODE", "");
+=======
+        tableHead.put("VDEF1", VDEF1);
+        tableHead.put("VDEF2", VDEF2);
+        tableHead.put("VDEF5", VDEF5);
+        tableHead.put("NOTOTALNUMBER","200.00");// TODO: 2017/7/4
+>>>>>>> Stashed changes
         table.put("Head", tableHead);
         JSONObject tableBody = new JSONObject();
         JSONArray bodyArray = new JSONArray();
@@ -2512,24 +2541,43 @@ public class SalesDelivery extends Activity {
             float price = saleOutGoods.getQty();
             DecimalFormat decimalFormat = new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
             String qty = decimalFormat.format(price);//format 返回的是字符串
-//            String invCode;
-//            String invName;
-//            String unit;
-//            String batch;
-//            float qty;
-//            int num;
-//            String barcode;
-//            String pk_invbasdoc;
-//            String pk_invmandoc;
-            object.put("invCode", saleOutGoods.getInvCode());
-            object.put("invName", saleOutGoods.getInvName());
-            object.put("unit", saleOutGoods.getUnit());
-            object.put("batch", saleOutGoods.getBatch());
-            object.put("barcode", saleOutGoods.getBarcode());
-            object.put("qty", qty);
-            object.put("pk_invbasdoc", saleOutGoods.getPk_invbasdoc());
-            object.put("pk_invmandoc", saleOutGoods.getPk_invmandoc());
-
+//            CROWNO
+//            CBIZTYPE,CBIZTYPE
+//            CCUSTBASDOCID,CCUSTBASDOCID
+//            CCUSTMANDOCID ,CCUSTOMERID
+//            CINVBASDOCID,CINVBASDOCID
+//            CINVMANDOCID,CINVENTORYID
+//            CRECEIVEAREAID,CRECEIPTAREID
+//            CRECEIVECUSTBASID,CCUSTBASDOCID
+//            CSENDCALBODYID,CADVISECALBODYID
+//            CSENDWAREID,  --仓库
+//            CSOURCEBILLBODYID,CORDER_BID
+//            CSOURCEBILLID,CSALEID
+//            NNUMBER
+//            NTOTALOUTINVNUM
+//            PK_SENDCORP,PK_CORP
+//            VBATCHCODE
+//            VRECEIVEADDRESS,VRECEIVEADDRESS
+//            VRECEIVEPERSON,--用户名
+            object.put("CROWNO", saleOutGoods.getCROWNO());
+            object.put("CBIZTYPE", CBIZTYPE);//表头
+            object.put("CCUSTBASDOCID", CCUSTBASDOCID);
+            object.put("CCUSTMANDOCID", CCUSTOMERID);//表头customerID
+            object.put("CINVBASDOCID", saleOutGoods.getCINVBASDOCID());
+            object.put("CINVMANDOCID", saleOutGoods.getCINVENTORYID());
+            object.put("CRECEIVEAREAID", "");
+            object.put("CRECEIVECUSTBASID",CCUSTBASDOCID);//自己获取
+            object.put("CSENDCALBODYID", saleOutGoods.getCADVISECALBODYID());
+            object.put("CSENDWAREID", CWAREHOUSEID);//仓库
+            object.put("CSOURCEBILLBODYID", saleOutGoods.getCORDER_BID());
+            object.put("CSOURCEBILLID",saleOutGoods.getCSALEID());
+//            Log.d(TAG, "SaveInfo: "+saleOutGoods.getCSALEID());
+            object.put("NNUMBER", qty);
+            object.put("NTOTALOUTINVNUM",saleOutGoods.getNum());
+            object.put("PK_SENDCORP", saleOutGoods.getPK_CORP());
+            object.put("VBATCHCODE", saleOutGoods.getBatch());
+            object.put("VRECEIVEADDRESS", saleOutGoods.getVRECEIVEADDRESS());
+            object.put("VRECEIVEPERSON",MainLogin.objLog.LoginUser);
             bodyArray.put(object);
         }
         tableBody.put("ScanDetails", bodyArray);
@@ -2537,22 +2585,22 @@ public class SalesDelivery extends Activity {
         table.put("GUIDS", UUID.randomUUID().toString());
         Log.d(TAG, "SaveInfo: " + table.toString());
 
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    JSONObject jas = Common.DoHttpQuery(table, "SaveMaterialOut", "A");
-//                    if (jas != null) {
-//                        Log.d(TAG, "保存" + jas.toString());
-//                    } else {
-//                        Log.d(TAG, "null ");
-//                    }
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }).start();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    JSONObject jas = Common.DoHttpQuery(table, "SaveSaleReceive", "A");
+                    if (jas != null) {
+                        Log.d(TAG, "保存" + jas.toString());
+                    } else {
+                        Log.d(TAG, "null ");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 }
