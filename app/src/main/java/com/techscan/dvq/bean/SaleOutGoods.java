@@ -8,7 +8,7 @@ import android.os.Parcelable;
  * 成品销售出库
  */
 
-public class SaleOutGoods implements Parcelable{
+public class SaleOutGoods implements Parcelable {
     String invCode;
     String invName;
     String unit;
@@ -18,6 +18,16 @@ public class SaleOutGoods implements Parcelable{
     String barcode;
     String pk_invbasdoc;
     String pk_invmandoc;
+    String VRECEIVEADDRESS;
+    String CROWNO;
+    String CCUSTBASDOCID;
+    String CINVBASDOCID;
+    String CINVENTORYID;
+    String CRECEEIPTAREAID;
+    String CADVISECALBODYID;
+    String CORDER_BID;
+    String CSALEID;
+    String PK_CORP;
 //    String
 
     public SaleOutGoods() {
@@ -33,6 +43,16 @@ public class SaleOutGoods implements Parcelable{
         barcode = in.readString();
         pk_invbasdoc = in.readString();
         pk_invmandoc = in.readString();
+        VRECEIVEADDRESS = in.readString();
+        CROWNO = in.readString();
+        CCUSTBASDOCID = in.readString();
+        CINVBASDOCID = in.readString();
+        CINVENTORYID = in.readString();
+        CRECEEIPTAREAID = in.readString();
+        CADVISECALBODYID = in.readString();
+        CORDER_BID = in.readString();
+        CSALEID = in.readString();
+        PK_CORP = in.readString();
     }
 
     public static final Creator<SaleOutGoods> CREATOR = new Creator<SaleOutGoods>() {
@@ -83,7 +103,7 @@ public class SaleOutGoods implements Parcelable{
         return qty;
     }
 
-    public void setQty(Float qty) {
+    public void setQty(float qty) {
         this.qty = qty;
     }
 
@@ -119,6 +139,86 @@ public class SaleOutGoods implements Parcelable{
         this.pk_invmandoc = pk_invmandoc;
     }
 
+    public String getVRECEIVEADDRESS() {
+        return VRECEIVEADDRESS;
+    }
+
+    public void setVRECEIVEADDRESS(String VRECEIVEADDRESS) {
+        this.VRECEIVEADDRESS = VRECEIVEADDRESS;
+    }
+
+    public String getCROWNO() {
+        return CROWNO;
+    }
+
+    public void setCROWNO(String CROWNO) {
+        this.CROWNO = CROWNO;
+    }
+
+    public String getCCUSTBASDOCID() {
+        return CCUSTBASDOCID;
+    }
+
+    public void setCCUSTBASDOCID(String CCUSTBASDOCID) {
+        this.CCUSTBASDOCID = CCUSTBASDOCID;
+    }
+
+    public String getCINVBASDOCID() {
+        return CINVBASDOCID;
+    }
+
+    public void setCINVBASDOCID(String CINVBASDOCID) {
+        this.CINVBASDOCID = CINVBASDOCID;
+    }
+
+    public String getCINVENTORYID() {
+        return CINVENTORYID;
+    }
+
+    public void setCINVENTORYID(String CINVENTORYID) {
+        this.CINVENTORYID = CINVENTORYID;
+    }
+
+    public String getCRECEEIPTAREAID() {
+        return CRECEEIPTAREAID;
+    }
+
+    public void setCRECEEIPTAREAID(String CRECEEIPTAREAID) {
+        this.CRECEEIPTAREAID = CRECEEIPTAREAID;
+    }
+
+    public String getCADVISECALBODYID() {
+        return CADVISECALBODYID;
+    }
+
+    public void setCADVISECALBODYID(String CADVISECALBODYID) {
+        this.CADVISECALBODYID = CADVISECALBODYID;
+    }
+
+    public String getCORDER_BID() {
+        return CORDER_BID;
+    }
+
+    public void setCORDER_BID(String CORDER_BID) {
+        this.CORDER_BID = CORDER_BID;
+    }
+
+    public String getCSALEID() {
+        return CSALEID;
+    }
+
+    public void setCSALEID(String CSALEID) {
+        this.CSALEID = CSALEID;
+    }
+
+    public String getPK_CORP() {
+        return PK_CORP;
+    }
+
+    public void setPK_CORP(String PK_CORP) {
+        this.PK_CORP = PK_CORP;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -135,5 +235,15 @@ public class SaleOutGoods implements Parcelable{
         dest.writeString(barcode);
         dest.writeString(pk_invbasdoc);
         dest.writeString(pk_invmandoc);
+        dest.writeString(VRECEIVEADDRESS);
+        dest.writeString(CROWNO);
+        dest.writeString(CCUSTBASDOCID);
+        dest.writeString(CINVBASDOCID);
+        dest.writeString(CINVENTORYID);
+        dest.writeString(CRECEEIPTAREAID);
+        dest.writeString(CADVISECALBODYID);
+        dest.writeString(CORDER_BID);
+        dest.writeString(CSALEID);
+        dest.writeString(PK_CORP);
     }
 }

@@ -1,6 +1,7 @@
 package com.techscan.dvq;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,13 +61,18 @@ public class SalesDeliveryAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
+//        if (mList.contains("InvCode"))
         viewHolder.InvCode.setText(mList.get(position).get("InvCode").toString());
         viewHolder.InvName.setText(mList.get(position).get("InvName").toString());
         viewHolder.Batch.setText(mList.get(position).get("Batch").toString());
-        viewHolder.QTY.setText(mList.get(position).get("Weights").toString());
         viewHolder.UNIT.setText(mList.get(position).get("Measname").toString());
         viewHolder.Spec.setText(mList.get(position).get("invspec").toString());
         viewHolder.Type.setText(mList.get(position).get("invtype").toString());
+        if (TextUtils.isEmpty(String.valueOf(mList.get(position).get("Weights").toString()))) {
+            viewHolder.QTY.setText("0.00");
+        } else {
+            viewHolder.QTY.setText(String.valueOf(mList.get(position).get("Weights").toString()));
+        }
         return convertView;
     }
 

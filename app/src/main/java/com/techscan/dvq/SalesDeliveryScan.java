@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,13 +39,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import static android.content.ContentValues.TAG;
+import static com.techscan.dvq.R.id.lstSDScanDetail;
+
 //import com.techscan.dvq.StockTransScan.ButtonOnClickClearconfirm;
 //import com.techscan.dvq.StockTransScanIn.MyListAdapter;
 
 public class SalesDeliveryScan extends Activity {
     private Integer ScanedQty;
     EditText txtSDScanBarcode = null;
-    ListView lstSDScanDetail = null;
+    ListView listViewScanDetail = null;
     Button btnSDScanTask = null;
     Button btnSDScanClear = null;
     Button btnSDScanReturn = null;
@@ -54,7 +58,9 @@ public class SalesDeliveryScan extends Activity {
     int listcount = 0;
     int Tasknnum = 0;
     String ScanInvOK = "0";
-    SalesDeliveryAdapter salesDeliveryAdapter;
+    SimpleAdapter listItemTaskAdapter  =null;
+
+    SalesDeliveryAdapter salesDeliveryAdapter = null;
 
     private ArrayList<String> ScanedBarcode = new ArrayList<String>();
     private SplitTongChengBarCode bar = null;            //当前扫描条码解析
@@ -100,9 +106,9 @@ public class SalesDeliveryScan extends Activity {
         txtSDScanBarcode = (EditText) findViewById(R.id.txtSDScanBarcode);
         txtSDScanBarcode.setOnKeyListener(EditTextOnKeyListener);
 
-        lstSDScanDetail = (ListView) findViewById(R.id.lstSDScanDetail);
-//        lstSDScanDetail.setOnItemClickListener(myListItemListener);
-//        lstSDScanDetail.setOnItemLongClickListener(myListItemLongListener);
+        listViewScanDetail = (ListView) findViewById(lstSDScanDetail);
+//        listViewScanDetail.setOnItemClickListener(myListItemListener);
+//        listViewScanDetail.setOnItemLongClickListener(myListItemLongListener);
 
         btnSDScanTask = (Button) findViewById(R.id.btnSDScanTask);
         btnSDScanTask.setOnClickListener(ButtonOnClickListener);
@@ -123,7 +129,10 @@ public class SalesDeliveryScan extends Activity {
         btnSDScanReturn.setFocusable(false);
 
         ScanType = myintent.getStringExtra("ScanType");
-
+//        if(lstBodyTask==null||lstBodyTask.size()<1){
+//            lstBodyTask = new ArrayList<Map<String, Object>>();
+//            listItemTaskAdapter = new SimpleAdapter(SalesDeliveryScan.this,lstBodyTask,0,null,null);
+//        }
         //获得父画面传过来的扫描详细数据
         listcount = 0;
         SerializableList lstScanSaveDetial = new SerializableList();
@@ -132,11 +141,11 @@ public class SalesDeliveryScan extends Activity {
         if (lstSaveBody == null || lstSaveBody.size() < 1) {
             lstSaveBody = new ArrayList<Map<String, Object>>();
             salesDeliveryAdapter = new SalesDeliveryAdapter(SalesDeliveryScan.this, lstSaveBody);
-            lstSDScanDetail.setAdapter(salesDeliveryAdapter);
+            listViewScanDetail.setAdapter(salesDeliveryAdapter);
         }
 
 
-        tvSDcounts.setText("总共" + Tasknnum + "件 | " + "已扫" + listcount + "件 | " + "未扫" + (Tasknnum - listcount) + "件");
+//        tvSDcounts.setText("总共" + Tasknnum + "件 | " + "已扫" + listcount + "件 | " + "未扫" + (Tasknnum - listcount) + "件");
 
 
         //获得父画面传过来的任务详细数据
@@ -259,9 +268,8 @@ public class SalesDeliveryScan extends Activity {
             map.put("InvCode", ((JSONObject) (arrays.get(i))).getString("invcode"));
             map.put("invspec", ((JSONObject) (arrays.get(i))).getString("invspec"));
             map.put("invtype", ((JSONObject) (arrays.get(i))).getString("invtype"));
-            String snumber = ((JSONObject) arrays.get(i)).getString("number");
-            String sTasknumber = "0";
-            map.put("InvNum","/"+ (Integer.valueOf(snumber).intValue() - Integer.valueOf(sTasknumber).intValue()));
+            map.put("numChange","0");
+            map.put("InvNum","/"+ ((JSONObject) arrays.get(i)).getString("number"));
 //            map.put("BillCode", ((JSONObject) (arrays.get(i))).getString("billcode"));
             lstBodyTask.add(map);
         }
@@ -288,11 +296,11 @@ public class SalesDeliveryScan extends Activity {
                     //确认了存货
                     if (jsarray.getJSONObject(i).getString("invcode").equals(bar.cInvCode.trim())) {
                         String nnum = ((JSONObject) (jsarray.get(i))).getString("number");
-                        String ntranoutnum = ((JSONObject) (jsarray.get(i))).getString("ntotaloutinvnum");
+//                        String ntranoutnum = ((JSONObject) (jsarray.get(i))).getString("ntotaloutinvnum");
                         String snnum = "0";
-                        if (!ntranoutnum.equals("")) {
-                            snnum = (ntranoutnum.replaceAll("\\.0", ""));
-                        }
+//                        if (!ntranoutnum.equals("")) {
+//                            snnum = (ntranoutnum.replaceAll("\\.0", ""));
+//                        }
                         int shouldinnum = Integer.valueOf(nnum) - Integer.valueOf(snnum);
                         String Tasknnum = shouldinnum + "";
 
@@ -414,6 +422,8 @@ public class SalesDeliveryScan extends Activity {
         public void onClick(DialogInterface dialog, int whichButton) {
             if (whichButton == DialogInterface.BUTTON_POSITIVE) {
                 try {
+                    lstSaveBody.clear();
+                    salesDeliveryAdapter.notifyDataSetChanged() ;
                     ClearAllScanDetail();
                 } catch (JSONException e) {
                     Toast.makeText(SalesDeliveryScan.this, e.getMessage(), Toast.LENGTH_LONG).show();
@@ -521,10 +531,10 @@ public class SalesDeliveryScan extends Activity {
             JsonModTaskData = new JSONObject();
         ScanedBarcode = new ArrayList<String>();
         lstSaveBody = new ArrayList<Map<String, Object>>();
-//        lstSDScanDetail.setAdapter(null);
+//        listViewScanDetail.setAdapter(null);
         txtSDScanBarcode.setText("");
         listcount = lstSaveBody.size();
-        tvSDcounts.setText("总共" + Tasknnum + "件 | " + "已扫" + listcount + "件 | " + "未扫" + (Tasknnum - listcount) + "件");
+//        tvSDcounts.setText("总共" + Tasknnum + "件 | " + "已扫" + listcount + "件 | " + "未扫" + (Tasknnum - listcount) + "件");
 
     }
 
@@ -679,12 +689,12 @@ public class SalesDeliveryScan extends Activity {
             //add caixy 解决扫描任务匹配不正确问题
 //            Double ldJsonInvQty = ((JSONObject)(JsonArrays.get(i))).getDouble("number");
             String nnum = ((JSONObject) (JsonArrays.get(i))).getString("number");
-            String ntranoutnum = ((JSONObject) (JsonArrays.get(i))).getString("outnumber");
+//            String ntranoutnum = ((JSONObject) (JsonArrays.get(i))).getString("outnumber");
             String snnum = "0";
 
-            if (!ntranoutnum.equals("null")) {
-                snnum = (ntranoutnum.replaceAll("\\.0", ""));
-            }
+//            if (!ntranoutnum.equals("null")) {
+//                snnum = (ntranoutnum.replaceAll("\\.0", ""));
+//            }
 
             int shouldinnum = Integer.valueOf(nnum) - Integer.valueOf(snnum);
 
@@ -965,8 +975,7 @@ public class SalesDeliveryScan extends Activity {
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             return false;
         }
-        SERINOList = Common.
-                DoHttpQuery(para, "CommonQuery", tmpAccID);
+        SERINOList = Common.DoHttpQuery(para, "CommonQuery", tmpAccID);
 
 
         if(SERINOList==null)
@@ -1044,10 +1053,10 @@ public class SalesDeliveryScan extends Activity {
             String lsJsonInvCode = ((JSONObject) (JsonArrays.get(i))).getString("invcode");
             String lsJsonInvBatch = ((JSONObject) (JsonArrays.get(i))).getString("batchcode");
             String Outnum = "0";
-            String sOutnum = ((JSONObject) (JsonArrays.get(i))).getString("ntotaloutinvnum");
-            if (!sOutnum.equals("")) {
-                Outnum = sOutnum;
-            }
+//            String sOutnum = ((JSONObject) (JsonArrays.get(i))).getString("ntotaloutinvnum");
+//            if (!sOutnum.equals("")) {
+//                Outnum = sOutnum;
+//            }
             Double ldJsonInvQty = ((JSONObject) (JsonArrays.get(i))).getDouble("number")- Double.valueOf(Outnum);
             if (lsJsonInvBatch == null || lsJsonInvBatch.equals("") || lsJsonInvBatch.equals("null")) {
                 lsJsonInvBatch = "批次未指定";
@@ -1072,11 +1081,11 @@ public class SalesDeliveryScan extends Activity {
 
                 String Outnum = "0";
 
-                String sOutnum = ((JSONObject) (JsonArrays.get(j))).getString("ntotaloutinvnum");
+//                String sOutnum = ((JSONObject) (JsonArrays.get(j))).getString("ntotaloutinvnum");
 
-                if (!sOutnum.equals("")) {
-                    Outnum = sOutnum;
-                }
+//                if (!sOutnum.equals("")) {
+//                    Outnum = sOutnum;
+//                }
 
                 Double ldJsonInvQty = ((JSONObject) (JsonArrays.get(j))).getDouble("number")- Double.valueOf(Outnum);
 
@@ -1104,7 +1113,7 @@ public class SalesDeliveryScan extends Activity {
      */
     private Boolean CheckHasScaned(JSONObject jsonCheckGetBillCode, SplitTongChengBarCode bar) throws JSONException {
 
-//        ListAdapter ScanDetailAdapter = lstSDScanDetail.getAdapter();
+//        ListAdapter ScanDetailAdapter = listViewScanDetail.getAdapter();
 
 //        String lsKey = jsonCheckGetBillCode.getString("billcode")
 //                + bar.AccID + bar.cInvCode + bar.cBatch + bar.cSerino;
@@ -1131,17 +1140,16 @@ public class SalesDeliveryScan extends Activity {
 //            }
 //        }
 
-        BindingScanDetail(jsonCheckGetBillCode, bar, "ADD", null);
+        BindingScanDetail(jsonCheckGetBillCode, bar);
         return true;
     }
 
 //绑定数据
-    private void BindingScanDetail(JSONObject jsonCheckGetBillCode, SplitTongChengBarCode bar,
-                                   String sType, Map<String, Object> mapGetScanedDetail) throws JSONException {
+    private void BindingScanDetail(JSONObject jsonCheckGetBillCode, SplitTongChengBarCode bar
+                                  ) throws JSONException {
 //        ArrayList<Map<String, Object>> lstCurrentBox = null;
 //        Map<String,Object> mapCurrentBox = new HashMap<String,Object>();
         mapScanDetail = new HashMap<String, Object>();
-
 //        if(lstSaveBody==null || lstSaveBody.size()<1)
 //        {
 //            lstSaveBody = new ArrayList<Map<String, Object>>();
@@ -1158,12 +1166,33 @@ public class SalesDeliveryScan extends Activity {
 //            lstCurrentBox = new ArrayList<Map<String,Object>>();
 //            lstCurrentBox.add(mapCurrentBox);
 
-//            mapScanDetail.put(lsKey,lstCurrentBox);
+//            mapScanDetail.put(lsKey,lstCurrentBox);  //销售订单附表ID
+//        newBodyJSON.put("csourcebillbodyid", tempJso.getString("corder_bid"));
+//        //销售主表ID
+//        newBodyJSON.put("csourcebillid", tempJso.getString("csaleid"));
+//
+//        newBodyJSON.put("pk_sendcorp", tempJso.getString("pk_corp"));
+//        //注册地址
+//        newBodyJSON.put("vreceiveaddress", tempJso.getString("vreceiveaddress"));
+//        //存货ID
+//        newBodyJSON.put("cinvmandocid", tempJso.getString("cinventoryid"));
+//        //建议发货库存组织
+//        newBodyJSON.put("csendcalbodyid", tempJso.getString("cadvisecalbodyid"));
+//        newBodyJSON.put("cinvbasdocid", tempJso.getString("cinvbasdocid"));
         mapScanDetail.put("InvName",currentObj.getInvName() );
         mapScanDetail.put("InvCode", currentObj.getInvCode());
         mapScanDetail.put("Weights", bar.Weights.trim());
+        mapScanDetail.put("numChange",bar.Weights.trim());
+        mapScanDetail.put("Number", jsonCheckGetBillCode.getString("number"));
         mapScanDetail.put("Measname", jsonCheckGetBillCode.getString("measname"));
         mapScanDetail.put("Batch", currentObj.GetBatch());
+        mapScanDetail.put("csourcebillbodyid", jsonCheckGetBillCode.getString("csourcebillbodyid"));
+        mapScanDetail.put("csourcebillid", jsonCheckGetBillCode.getString("csourcebillid"));
+        mapScanDetail.put("pk_sendcorp", jsonCheckGetBillCode.getString("pk_sendcorp"));
+        mapScanDetail.put("vreceiveaddress", jsonCheckGetBillCode.getString("vreceiveaddress"));
+        mapScanDetail.put("cinventoryid", jsonCheckGetBillCode.getString("cinvmandocid"));
+        mapScanDetail.put("cadvisecalbodyid", jsonCheckGetBillCode.getString("csendcalbodyid"));
+        mapScanDetail.put("cinvbasdocid", jsonCheckGetBillCode.getString("cinvbasdocid"));
         mapScanDetail.put("SeriNo", currentObj.GetSerino());
         mapScanDetail.put("BarCode", bar.FinishBarCode.trim());
         mapScanDetail.put("pk_invbasdoc",currentObj.Invbasdoc());
@@ -1212,24 +1241,38 @@ public class SalesDeliveryScan extends Activity {
 //                mapScanDetail.put("spacenum", "0");
 //                mapScanDetail.put("box", "分包未完");
 //            }
+        //
+        lstBodyTask .add(mapScanDetail);
+//        if (listItemTaskAdapter==null){
+//            return;
+//        }else{
+//            listItemTaskAdapter.notifyDataSetInvalidated();
+//        }
+//        listItemTaskAdapter.notifyDataSetInvalidated();
         lstSaveBody.add(mapScanDetail);
-//        Log.d(TAG, "BindingScanDetail: " + lstSaveBody.size());
-
+//        addItemsTo(bar.Weights.trim(),currentObj.getInvName(),jsonCheckGetBillCode.getString("number"),currentObj.Invspec(),currentObj.Invtype(), currentObj.getInvCode());
         int count = lstSaveBody.size();
+        Log.d(TAG, "COUNT: "+count);
         Map<String, Object> mapScanDetails;
-
         for (int i = 0;i<count; i++){
             mapScanDetails = lstSaveBody.get(i);
             if (saleGoodsLists.size()==0){
                 SaleOutGoods saleOutGoods = new SaleOutGoods();
-                saleOutGoods.setBarcode((String) mapScanDetails.get("BarCode"));
-                saleOutGoods.setInvCode((String) mapScanDetails.get("InvCode"));
                 saleOutGoods.setInvName((String) mapScanDetails.get("InvName"));
-                saleOutGoods.setPk_invbasdoc((String) mapScanDetails.get("pk_invbasdoc"));
-                saleOutGoods.setPk_invmandoc((String) mapScanDetails.get("pk_invmandoc"));
+                saleOutGoods.setInvCode((String) mapScanDetails.get("InvCode"));
+                String qty = String.valueOf(mapScanDetails.get("Weights"));
                 saleOutGoods.setBatch((String) mapScanDetails.get("Batch"));
                 saleOutGoods.setUnit((String) mapScanDetails.get("Measname"));
-                String qty = String.valueOf(mapScanDetails.get("Weights"));
+                saleOutGoods.setNum(Integer.valueOf((String) mapScanDetails.get("Number")));
+                saleOutGoods.setCORDER_BID((String) mapScanDetails.get("csourcebillbodyid"));
+                saleOutGoods.setCSALEID((String) mapScanDetails.get("csourcebillid"));
+                saleOutGoods.setPK_CORP((String) mapScanDetails.get("pk_sendcorp"));
+                saleOutGoods.setVRECEIVEADDRESS((String) mapScanDetails.get("vreceiveaddress"));
+                saleOutGoods.setCINVENTORYID((String) mapScanDetails.get("cinventoryid"));
+                saleOutGoods.setCADVISECALBODYID((String) mapScanDetails.get("cadvisecalbodyid"));
+                saleOutGoods.setCINVBASDOCID((String) mapScanDetails.get("cinvbasdocid"));
+                saleOutGoods.setPk_invbasdoc((String) mapScanDetails.get("pk_invbasdoc"));
+                saleOutGoods.setPk_invmandoc((String) mapScanDetails.get("pk_invmandoc"));
                 if (TextUtils.isEmpty(qty)) {
                     qty = "0.0";
                 }
@@ -1239,17 +1282,24 @@ public class SalesDeliveryScan extends Activity {
                 for (int j = 0; j< saleGoodsLists.size(); j++) {
                     SaleOutGoods existGoods = saleGoodsLists.get(j);
                     //相同物料相同批次的要合并，通过名字和批次比较
-                    if (mapScanDetails.get("InvName").equals(existGoods.getInvName())&&mapScanDetails.get("Batch").equals(existGoods.getBatch())) {
+                    if (mapScanDetails.get("InvName").equals(existGoods.getInvName())&&mapScanDetails.get("InvCode").equals(existGoods.getInvCode())) {
                         existGoods.setQty(existGoods.getQty() + Float.valueOf((String )mapScanDetails.get("Weights")));
                     } else {
                         SaleOutGoods saleOutGoods_c = new SaleOutGoods();
-                        saleOutGoods_c.setBarcode((String) mapScanDetails.get("BarCode"));
-                        saleOutGoods_c.setInvCode((String) mapScanDetails.get("InvCode"));
                         saleOutGoods_c.setInvName((String) mapScanDetails.get("InvName"));
-                        saleOutGoods_c.setPk_invbasdoc((String) mapScanDetails.get("pk_invbasdoc"));
-                        saleOutGoods_c.setPk_invmandoc((String) mapScanDetails.get("pk_invmandoc"));
+                        saleOutGoods_c.setInvCode((String) mapScanDetails.get("InvCode"));
                         saleOutGoods_c.setBatch((String) mapScanDetails.get("Batch"));
                         saleOutGoods_c.setUnit((String) mapScanDetails.get("Measname"));
+                        saleOutGoods_c.setNum((Integer.valueOf((String) mapScanDetails.get("Number"))));
+                        saleOutGoods_c.setCORDER_BID((String) mapScanDetails.get("csourcebillbodyid"));
+                        saleOutGoods_c.setCSALEID((String) mapScanDetails.get("csourcebillid"));
+                        saleOutGoods_c.setPK_CORP((String) mapScanDetails.get("pk_sendcorp"));
+                        saleOutGoods_c.setVRECEIVEADDRESS((String) mapScanDetails.get("vreceiveaddress"));
+                        saleOutGoods_c.setCINVENTORYID((String) mapScanDetails.get("cinventoryid"));
+                        saleOutGoods_c.setCADVISECALBODYID((String) mapScanDetails.get("cadvisecalbodyid"));
+                        saleOutGoods_c.setCINVBASDOCID((String) mapScanDetails.get("cinvbasdocid"));
+                        saleOutGoods_c.setPk_invbasdoc((String) mapScanDetails.get("pk_invbasdoc"));
+                        saleOutGoods_c.setPk_invmandoc((String) mapScanDetails.get("pk_invmandoc"));
                         String qty = String.valueOf(mapScanDetails.get("Weights"));
                         if (TextUtils.isEmpty(qty)) {
                             qty = "0.0";
@@ -1278,10 +1328,10 @@ public class SalesDeliveryScan extends Activity {
 //            saleGoodsLists.add(saleOutGoods);
 //        }
 //        salesDeliveryAdapter = new SalesDeliveryAdapter(SalesDeliveryScan.this, lstSaveBody);
-//        lstSDScanDetail.setAdapter(salesDeliveryAdapter);
+//        listViewScanDetail.setAdapter(salesDeliveryAdapter);
         salesDeliveryAdapter.notifyDataSetInvalidated();
         listcount = lstSaveBody.size();
-        tvSDcounts.setText("总重" + Tasknnum + "件 | " + "已扫" + listcount + "件 | " + "未扫" + (Tasknnum - listcount) + "件");
+//        tvSDcounts.setText("总重" + Tasknnum + "件 | " + "已扫" + listcount + "件 | " + "未扫" + (Tasknnum - listcount) + "件");
 //        MyListAdapter listItemAdapter = new MyListAdapter(SalesDeliveryScan.this,lstSaveBody,//数据源
 //                R.layout.vlisttransscanitem,
 ////					new String[] {"InvCode","InvName","Batch","AccID","TotalNum",
@@ -1300,7 +1350,7 @@ public class SalesDeliveryScan extends Activity {
 //                        R.id.txtTransScanBatch,R.id.txtTransScanAccId,
 //                       }
 //        );
-//        lstSDScanDetail.setAdapter(listItemAdapter);
+//        listViewScanDetail.setAdapter(listItemAdapter);
     }
 
 //    private OnItemClickListener myListItemListener =
@@ -1313,7 +1363,7 @@ public class SalesDeliveryScan extends Activity {
 //                    Adapter adapter = arg0.getAdapter();
 //                    Map<String,Object> mapCurrent = (Map<String, Object>) adapter.getItem(arg2);
 //                    Log.d(TAG, "onItemClick: "+ mapCurrent.toString());
-////                    Map<String,Object> mapCurrent = (Map<String,Object>)lstSDScanDetail.getAdapter().getItem(arg2);
+////                    Map<String,Object> mapCurrent = (Map<String,Object>)listViewScanDetail.getAdapter().getItem(arg2);
 //                    String lsKey = mapCurrent.get("BillCode").toString() +
 //                            mapCurrent.get("AccID").toString() +
 //                            mapCurrent.get("InvCode").toString() +
@@ -1342,7 +1392,7 @@ public class SalesDeliveryScan extends Activity {
 //                public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
 //                                               int arg2, long arg3) {
 //
-//                    Map<String,Object> mapCurrent = (Map<String,Object>)lstSDScanDetail.getAdapter().getItem(arg2);
+//                    Map<String,Object> mapCurrent = (Map<String,Object>)listViewScanDetail.getAdapter().getItem(arg2);
 //                    String lsKey = mapCurrent.get("billbid").toString() +
 //                            mapCurrent.get("InvCode").toString() +
 //                            mapCurrent.get("crowno").toString()+
@@ -1383,12 +1433,12 @@ public class SalesDeliveryScan extends Activity {
 
 
         listcount = lstSaveBody.size();
-        tvSDcounts.setText("总共" + Tasknnum + "件 | " + "已扫" + listcount + "件 | " + "未扫" + (Tasknnum - listcount) + "件");
+//        tvSDcounts.setText("总共" + Tasknnum + "件 | " + "已扫" + listcount + "件 | " + "未扫" + (Tasknnum - listcount) + "件");
 
 
-        MyListAdapter listItemAdapter = (MyListAdapter) lstSDScanDetail.getAdapter();
+        MyListAdapter listItemAdapter = (MyListAdapter) listViewScanDetail.getAdapter();
         listItemAdapter.notifyDataSetChanged();
-        lstSDScanDetail.setAdapter(listItemAdapter);
+        listViewScanDetail.setAdapter(listItemAdapter);
 
 
         if (JsonModTaskData == null || JsonModTaskData.length() < 1)
@@ -1582,20 +1632,20 @@ public class SalesDeliveryScan extends Activity {
                     if (lstBodyTask == null || lstBodyTask.size() < 1)
                         return;
 
-                    SimpleAdapter listItemAdapter = new SimpleAdapter(SalesDeliveryScan.this, lstBodyTask,
-                            R.layout.vlisttranstask,
-                            new String[]{"InvName","InvNum","InvCode", "invspec", "invtype"},
+                    listItemTaskAdapter  = new SimpleAdapter(SalesDeliveryScan.this, lstBodyTask,
+                            R.layout.saleouttask,
+                            new String[]{"InvName","InvNum","InvCode", "invspec", "invtype","numChange"},
                             new int[]{R.id.txtTranstaskInvName, R.id.txtTranstaskInvNum,
                                     R.id.txtTranstaskInvCode,R.id.txtSpec,
-                                    R.id.txtType}
+                                    R.id.txtType,R.id.txtScanNum}
                     );
                     new AlertDialog.Builder(SalesDeliveryScan.this).setTitle("源单信息")
-                            .setAdapter(listItemAdapter, null)
+                            .setAdapter(listItemTaskAdapter, null)
                             .setPositiveButton(R.string.QueRen, null).show();
                     break;
                 case id.btnSDScanClear:
 
-                    if (lstSDScanDetail.getCount() < 1)
+                    if (listViewScanDetail.getCount() < 1)
                         //MOD BY WUQIONG END
                         return;
 
@@ -1708,4 +1758,17 @@ public class SalesDeliveryScan extends Activity {
         }
 
     }
+
+//    public void addItemsTo(String InvName,String InvCode,String Spec,String Type,String Number,String numChange){
+//        Map<String,Object> map= new HashMap<String, Object>();
+//        map.put("numChange", numChange);
+//        map.put("InvCode",InvCode);
+//        map.put("InvName",InvName);
+//        map.put("inspec",Spec);
+//        map.put("intype",Type);
+//        map.put("InNum",Number);
+//        lstBodyTask.clear();
+//        lstBodyTask.add(map);
+//        listViewScanDetail.invalidateViews(); //listView刷新
+//    }
 }
