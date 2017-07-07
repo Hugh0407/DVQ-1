@@ -2,8 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.techscan.dvq.SettingActivity"
-    android:background="@drawable/pagebackgroup">
+    tools:context="com.techscan.dvq.SettingActivity">
 
     <LinearLayout
         android:id="@+id/SettingsButtonBar"
