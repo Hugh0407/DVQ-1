@@ -5,7 +5,7 @@ import android.os.Parcelable;
 
 /**
  * Created by liuya on 2017/6/22.
- * 材料出库 用到的对象
+ * 材料出库 对象
  */
 
 public class Goods implements Parcelable {
@@ -56,6 +56,36 @@ public class Goods implements Parcelable {
         }
     };
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Goods other = (Goods) obj;
+        if (pk_invbasdoc == null) {
+            if (other.pk_invbasdoc != null)
+                return false;
+        } else if (!pk_invbasdoc.equals(other.pk_invbasdoc))
+            return false;
+        if (lot == null) {
+            if (other.lot != null)
+                return false;
+        } else if (!lot.equals(other.lot))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((lot == null) ? 0 : lot.hashCode());
+        result = prime * result + ((pk_invbasdoc == null) ? 0 : pk_invbasdoc.hashCode());
+        return result;
+    }
     public String getBarcode() {
         return barcode;
     }
