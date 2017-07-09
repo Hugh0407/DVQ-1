@@ -270,7 +270,6 @@
         <!--  -->
         <!-- </activity> -->
         <activity android:name=".SaleChooseTime"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden"
             >
 
         </activity>

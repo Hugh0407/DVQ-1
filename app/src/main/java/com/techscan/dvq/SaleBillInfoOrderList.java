@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,8 +26,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static android.content.ContentValues.TAG;
 
 public class SaleBillInfoOrderList extends Activity {
 
@@ -216,8 +213,8 @@ public class SaleBillInfoOrderList extends Activity {
 				}
 				jas = Common.DoHttpQuery(para, "CommonQuery", "");
 				//
-				Log.d(TAG, "ListHead:"+"AAA");
-				Log.d(TAG, "ListHead:"+jas.toString());
+//				Log.d(TAG, "ListHead:"+"AAA");
+//				Log.d(TAG, "ListHead:"+jas.toString());
 			} catch (Exception ex)
 			{
 				Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();

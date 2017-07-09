@@ -778,126 +778,6 @@ public class SalesDelivery extends Activity {
                     NewBodJSON.put("def6", tempJso.getString("vdef6"));
                 }
 
-//                if(tvSaleOutSelect.getText().toString().equals("退回再送"))  {
-//                    NewBodJSON.put("vfree1", tempJso.getString("vfree1"));
-//                    NewBodJSON.put("pk_measdoc", tempJso.getString("pk_measdoc"));
-//                    NewBodJSON.put("measname", tempJso.getString("measname"));
-//                    NewBodJSON.put("invcode", tempJso.getString("invcode"));
-//                    NewBodJSON.put("invname", tempJso.getString("invname"));
-//                    NewBodJSON.put("invspec", tempJso.getString("invspec"));
-//                    NewBodJSON.put("invtype", tempJso.getString("invtype"));
-//                    NewBodJSON.put("billcode", tmpBillCode);
-//                    NewBodJSON.put("batchcode", tempJso.getString("vbatchcode"));
-//                    NewBodJSON.put("invbasdocid", tempJso.getString("cinvbasid"));
-//                    NewBodJSON.put("invmandocid", tempJso.getString("cinventoryid"));
-//                    String number = tempJso.getString("noutnum");
-//                    String outnumber = tempJso.getString("outnum");
-//                    if(!outnumber.equals("null")) {
-//                        outnumber = outnumber.replaceAll("\\.0", "");
-//                    } else {
-//                    }
-//                    if(!number.equals("null")) {
-//                        number = number.replaceAll("\\.0", "");
-//                    } else {
-//                    }
-//                    NewBodJSON.put("number", number);
-//                    NewBodJSON.put("outnumber", outnumber);
-//                    NewBodJSON.put("sourcerowno",  tempJso.getString("vfirstrowno"));
-//                    NewBodJSON.put("sourcehid", tempJso.getString("cfirstbillhid"));
-//                    NewBodJSON.put("sourcebid", tempJso.getString("cfirstbillbid"));
-//                    NewBodJSON.put("sourcehcode", tempJso.getString("vfirstbillcode"));
-//                    NewBodJSON.put("sourcetype", tempJso.getString("cfirsttype"));
-//                    NewBodJSON.put("crowno", tempJso.getString("crowno"));
-//                    NewBodJSON.put("billhid", tempJso.getString("cgeneralhid"));
-//                    NewBodJSON.put("billbid", tempJso.getString("cgeneralbid"));
-//                    NewBodJSON.put("billhcode", tmpBillCode);
-//                    NewBodJSON.put("billtype", "4C");
-//                    NewBodJSON.put("ddeliverdate", tempJso.getString("ddeliverdate"));
-//                    NewBodJSON.put("pk_defdoc6", tempJso.getString("pk_defdoc6"));
-//                    NewBodJSON.put("def6", tempJso.getString("vuserdef6"));
-//                }
-
-//                if(tvSaleOutSelect.getText().toString().equals("退回不送")) {
-//                    if(sSaleFlg.equals("D"))
-//                    {
-//                        NewBodJSON.put("vfree1", tempJso.getString("vfree1"));
-//                        NewBodJSON.put("pk_measdoc", tempJso.getString("pk_measdoc"));
-//                        NewBodJSON.put("measname", tempJso.getString("measname"));
-//                        NewBodJSON.put("invcode", tempJso.getString("invcode"));
-//                        NewBodJSON.put("invname", tempJso.getString("invname"));
-//                        NewBodJSON.put("invspec", tempJso.getString("invspec"));
-//                        NewBodJSON.put("invtype", tempJso.getString("invtype"));
-//                        NewBodJSON.put("billcode", tmpBillCode);
-//                        NewBodJSON.put("batchcode", tempJso.getString("cbatchid"));
-//                        NewBodJSON.put("invbasdocid", tempJso.getString("cinvbasdocid"));
-//                        NewBodJSON.put("invmandocid", tempJso.getString("cinventoryid"));
-//                        String number = tempJso.getString("nnnumber");
-//                        String outnumber = tempJso.getString("noutnumber");
-//                        if(!outnumber.equals("null")) {
-//                            outnumber = outnumber.replaceAll("\\.0", "");
-//                        } else {
-//                        }
-//                        if(!number.equals("null")) {
-//                            number = number.replaceAll("\\.0", "");
-//                        } else {
-//                        }
-//                        NewBodJSON.put("number", number);
-//                        NewBodJSON.put("outnumber", outnumber);
-//                        NewBodJSON.put("sourcerowno", "");
-//                        NewBodJSON.put("sourcehid", "");
-//                        NewBodJSON.put("sourcebid", "");
-//                        NewBodJSON.put("sourcehcode", "");
-//                        NewBodJSON.put("sourcetype", "");
-//                        NewBodJSON.put("crowno", tempJso.getString("crowno"));
-//                        NewBodJSON.put("billhid", tempJso.getString("csaleid"));
-//                        NewBodJSON.put("billbid", tempJso.getString("corder_bid"));
-//                        NewBodJSON.put("billhcode", tmpBillCode);
-//                        NewBodJSON.put("billtype", "30");
-//                        NewBodJSON.put("ddeliverdate", tempJso.getString("dconsigndate"));
-//                        NewBodJSON.put("pk_defdoc6", tempJso.getString("pk_defdoc6"));
-//                        NewBodJSON.put("def6", tempJso.getString("vdef6"));
-//                    }
-//                    else if (sSaleFlg.equals("T"))
-//                    {
-//                        NewBodJSON.put("vfree1", tempJso.getString("vfree1"));
-//                        NewBodJSON.put("pk_measdoc", tempJso.getString("pk_measdoc"));
-//                        NewBodJSON.put("measname", tempJso.getString("measname"));
-//                        NewBodJSON.put("invcode", tempJso.getString("invcode"));
-//                        NewBodJSON.put("invname", tempJso.getString("invname"));
-//                        NewBodJSON.put("invspec", tempJso.getString("invspec"));
-//                        NewBodJSON.put("invtype", tempJso.getString("invtype"));
-//                        NewBodJSON.put("billcode", tmpBillCode);
-//                        NewBodJSON.put("batchcode", tempJso.getString("cbatchid"));
-//                        NewBodJSON.put("invbasdocid", tempJso.getString("cinvbasdocid"));
-//                        NewBodJSON.put("invmandocid", tempJso.getString("cinventoryid"));
-//                        String number = tempJso.getString("ntakenumber");
-//                        String outnumber = tempJso.getString("ninnumber");
-//                        if(!outnumber.equals("null")) {
-//                            outnumber = outnumber.replaceAll("\\.0", "");
-//                        } else {
-//                        }
-//                        if(!number.equals("null")) {
-//                            number = number.replaceAll("\\.0", "");
-//                        } else {
-//                        }
-//                        NewBodJSON.put("number", number);
-//                        NewBodJSON.put("outnumber", outnumber);
-//                        NewBodJSON.put("sourcerowno", "");
-//                        NewBodJSON.put("sourcehid", tempJso.getString("csourcebillid"));
-//                        NewBodJSON.put("sourcebid", tempJso.getString("csourcebillbodyid"));
-//                        NewBodJSON.put("sourcehcode", tempJso.getString("vsourcecode"));
-//                        NewBodJSON.put("sourcetype", tempJso.getString("csourcebilltype"));
-//                        NewBodJSON.put("crowno", tempJso.getString("crowno"));
-//                        NewBodJSON.put("billhid", tempJso.getString("pk_take"));
-//                        NewBodJSON.put("billbid", tempJso.getString("pk_take_b"));
-//                        NewBodJSON.put("billhcode", tmpBillCode);
-//                        NewBodJSON.put("billtype", "3V");
-//                        NewBodJSON.put("ddeliverdate", "");
-//                        NewBodJSON.put("pk_defdoc6", tempJso.getString("pk_defdoc6"));
-//                        NewBodJSON.put("def6", tempJso.getString("vdef6"));
-//                    }
-//
-//                }
                 NewBodyarray.put(NewBodJSON);
             }
             jsonBillBodyTask2.put("Status", true);
@@ -966,7 +846,7 @@ public class SalesDelivery extends Activity {
                 return;
             }
             jas = Common.DoHttpQuery(para, "CommonQuery", "");
-            Log.d(TAG, "GetBillBodyDetailInfo: " + jas.toString());
+            Log.d(TAG, "GetBillBodyInfo: " + jas.toString());
 
         } catch (Exception ex) {
             Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
@@ -1027,7 +907,6 @@ public class SalesDelivery extends Activity {
                     newBodyJSON.put("csourcebillbodyid", tempJso.getString("corder_bid"));
                     //销售主表ID
                     newBodyJSON.put("csourcebillid", tempJso.getString("csaleid"));
-
                     newBodyJSON.put("pk_sendcorp", tempJso.getString("pk_corp"));
                     //注册地址
                     newBodyJSON.put("vreceiveaddress", tempJso.getString("vreceiveaddress"));
@@ -1597,6 +1476,10 @@ public class SalesDelivery extends Activity {
 //					}
 
                     Intent intDeliveryScan = new Intent(SalesDelivery.this, SalesDeliveryScan.class);
+                    intDeliveryScan.putExtra("BillCode", tmpBillCode);
+                    intDeliveryScan.putExtra("PK_CORP", PK_CORP);
+                    intDeliveryScan.putExtra("CSALEID", csaleid);
+                    intDeliveryScan.putExtra("ScanType", tvSaleOutSelect.getText().toString());
                     intDeliveryScan.putExtra("TaskJonsBody", jsonBillBodyTask.toString());
                     SerializableList lstScanSaveDetial = new SerializableList();
                     lstScanSaveDetial.setList(lstSaveBody);
@@ -1605,7 +1488,7 @@ public class SalesDelivery extends Activity {
                     intDeliveryScan.putExtra("TaskCount", sTaskCount);
 //                    intDeliveryScan.putExtra("tmpCorpPK",tmpCorpPK);
                     intDeliveryScan.putStringArrayListExtra("ScanedBarcode", ScanedBarcode);
-                    intDeliveryScan.putExtra("ScanType", tvSaleOutSelect.getText().toString());
+
                     startActivityForResult(intDeliveryScan, 86);
 
                     break;
@@ -2523,14 +2406,14 @@ public class SalesDelivery extends Activity {
         tableHead.put("CRECEIPTTYE", "4331");
         tableHead.put("CSALECORPID", CSALECORPID);
         tableHead.put("PK_CORP", MainLogin.objLog.STOrgCode);
-<<<<<<< Updated upstream
+
         tableHead.put("VBILLCODE", "");
-=======
+
         tableHead.put("VDEF1", VDEF1);
         tableHead.put("VDEF2", VDEF2);
         tableHead.put("VDEF5", VDEF5);
         tableHead.put("NOTOTALNUMBER","200.00");// TODO: 2017/7/4
->>>>>>> Stashed changes
+
         table.put("Head", tableHead);
         JSONObject tableBody = new JSONObject();
         JSONArray bodyArray = new JSONArray();
