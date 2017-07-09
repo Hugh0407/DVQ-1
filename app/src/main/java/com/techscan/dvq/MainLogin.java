@@ -148,7 +148,7 @@ public class MainLogin extends Activity {
         if (userName.equals("") || password.equals("")) {
 
             AlertDialog.Builder bulider = new AlertDialog.Builder(this)
-                    .setTitle(R.string.TiXing).setMessage("请输入用户名和密码");
+                    .setTitle(R.string.TiXing).setMessage("请输入用户名和密�?");
 
             bulider.setPositiveButton(R.string.QueDing, null).create().show();
             return;
@@ -246,7 +246,7 @@ public class MainLogin extends Activity {
         }
 
         if (v == 200) {
-            // Toast.makeText(this,"�����֤ͨ����׼������", Toast.LENGTH_SHORT).show();
+            // Toast.makeText(this,"�����֤ͨ����׼������?", Toast.LENGTH_SHORT).show();
             String result = EntityUtils.toString(httpResponse.getEntity());
             String jasstr = EncodingUtils.getString(EncodingUtils.getBytes(result, "ISO8859-1"), "gb2312");
 
@@ -317,7 +317,7 @@ public class MainLogin extends Activity {
 
     }
 
-    // �����Ի���İ�ť�¼�����
+    // �����Ի���İ�ť�¼�����?
     private Button.OnClickListener myListner = new Button.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -370,7 +370,7 @@ public class MainLogin extends Activity {
 
         if (!LoginInfo.getBoolean("Status")) {
 
-            Toast.makeText(this, "基础设置中的公司Code设置不正确,请检查！",
+            Toast.makeText(this, "基础设置中的公司Code设置不正�?,请检查！",
                     Toast.LENGTH_LONG).show();
             // ADD CAIXY TEST START
             sp.play(music, 1, 1, 0, 0, 1);
@@ -410,7 +410,7 @@ public class MainLogin extends Activity {
         }
 
         if (!LoginInfo.getBoolean("Status")) {
-            Toast.makeText(this, "基础设置中的库存组织设置不正确,请检查！",
+            Toast.makeText(this, "基础设置中的库存组织设置不正�?,请检查！",
                     Toast.LENGTH_LONG).show();
             // ADD CAIXY TEST START
             sp.play(music, 1, 1, 0, 0, 1);
@@ -431,7 +431,7 @@ public class MainLogin extends Activity {
 
         if (GetSTOrgFlg.equals("N")) {
 
-            Toast.makeText(this, "基础设置中的库存组织设置不正确,请检查！",
+            Toast.makeText(this, "基础设置中的库存组织设置不正�?,请检查！",
                     Toast.LENGTH_LONG).show();
             // ADD CAIXY TEST START
             sp.play(music, 1, 1, 0, 0, 1);
@@ -586,11 +586,11 @@ public class MainLogin extends Activity {
         pwds = (EditText) findViewById(R.id.txtPassword);
         // btnSet = (Button)findViewById(R.id.btnSetting);
         //LGalertDialog = new AlertDialog.Builder(this).create();
-        Drawable TitleBar = this.getResources().getDrawable(
-                R.drawable.bg_barbackgroup);
+//        Drawable TitleBar = this.getResources().getDrawable(
+//                R.color.white);
         ActionBar actionBar = this.getActionBar();
         actionBar.setTitle(R.string.title);
-        actionBar.setBackgroundDrawable(TitleBar);
+//        actionBar.setBackgroundDrawable(TitleBar);
         actionBar.show();
 
         btnLogin.setOnClickListener(myListner);
@@ -673,7 +673,7 @@ public class MainLogin extends Activity {
     }
 
     /**
-     * ��ð汾��
+     * ��ð汾��?
      */
     public int getVerCode(Context context) {
         int verCode = -1;
@@ -688,7 +688,7 @@ public class MainLogin extends Activity {
     }
 
     /**
-     * ��ð汾����
+     * ��ð汾����?
      */
     public String getVerName(Context context) {
         String verName = "";
@@ -791,7 +791,7 @@ public class MainLogin extends Activity {
         sb.append(verName);
         sb.append(" Code:");
         sb.append(verCode);
-        sb.append("\n�������°汾���������");
+        sb.append("\n�������°汾���������?");
         Dialog dialog = new AlertDialog.Builder(this).setTitle(R.string.RuanJianGengXin)
                 .setMessage(sb.toString())
                 .setPositiveButton(R.string.QueDing, new DialogInterface.OnClickListener() {
@@ -820,7 +820,7 @@ public class MainLogin extends Activity {
         sb.append(newVerName);
         sb.append(" Code:");
         sb.append(verCode);
-        sb.append(",�Ƿ����");
+        sb.append(",�Ƿ����?");
         Dialog dialog = new AlertDialog.Builder(this)
                 .setTitle(R.string.RuanJianGengXin)
                 .setMessage(sb.toString())

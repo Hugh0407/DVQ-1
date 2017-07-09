@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content" 
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="30dp"
+    android:paddingBottom="30dp"
+    android:background="@drawable/bg_gridview_item">
     
     <ImageView
         android:id="@+id/gvimgItem"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_centerHorizontal="true"/>
 
     <TextView
@@ -18,8 +19,7 @@
         android:layout_below="@+id/gvimgItem"
         android:layout_centerHorizontal="true"
         android:text="货位调整"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+        android:textColor="@color/black"
+        android:textSize="12sp" />
 
 </RelativeLayout>

@@ -8,7 +8,7 @@
         android:id="@+id/LoginImageBar"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="#2f3640"
+        android:background="#eeeeee"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -23,7 +23,7 @@
             android:id="@+id/imageView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/tclogo_white"
+            android:src="@drawable/tclogo_blue"
             android:layout_weight="0.07" />
 
         <LinearLayout
@@ -33,7 +33,6 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="30dp"
-            android:background="#1f262e"
             android:gravity="center"
             android:orientation="vertical">
 

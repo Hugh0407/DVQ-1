@@ -3,20 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/pagebackgroup"
     android:orientation="vertical"
     tools:context="com.techscan.dvq.MainMenu">
 
     <TextView
         android:id="@+id/tvLoginCompanyName"
         android:layout_width="match_parent"
-        android:layout_height="20sp"
+        android:layout_height="30sp"
         android:layout_margin="5dp"
-        android:gravity="center"
+        android:gravity="center_vertical"
         android:text="公司名称"
-        android:textColor="@android:color/holo_blue_light"
+        android:textColor="#1e82d2"
         android:textSize="16sp"
-        android:textStyle="bold"/>
+        android:textStyle="bold"></TextView>
 
     <GridView
         android:id="@+id/gvMainMenu"
@@ -31,28 +30,46 @@
 
     </GridView>
 
-    <LinearLayout
+    <RadioGroup
+        android:id="@+id/TypeBar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/btn_xun"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:background="@color/white">
+        <RadioButton
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/button_normal_style"
-            android:text="王"/>
-
-        <Button
-            android:id="@+id/btn_hu"
+            android:drawableTop="@drawable/bg_radiobutton_crk"
+            android:button="@null"
+            android:text="出入库"
+            android:textSize="12sp"
+            android:textColor="@drawable/rb_text_color"
+            android:gravity="center"
+            android:id="@+id/radioButton1"/>
+        <RadioButton
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/button_normal_style"
-            android:text="许"/>
-
-    </LinearLayout>
+            android:drawableTop="@drawable/bg_radionbutton_tk"
+            android:button="@null"
+            android:text="退库"
+            android:textSize="12sp"
+            android:textColor="@drawable/rb_text_color"
+            android:gravity="center"
+            android:id="@+id/radioButton2"/>
+        <RadioButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/bg_radiobutton_other"
+            android:button="@null"
+            android:text="其它"
+            android:textSize="12sp"
+            android:textColor="@drawable/rb_text_color"
+            android:gravity="center"
+            android:id="@+id/radioButton3"/>
+    </RadioGroup>
 
     <Button
         android:id="@+id/btnLogOut"
@@ -62,5 +79,4 @@
         android:text="退出登录"
         android:textColor="@color/white"
         />
-
 </LinearLayout>
