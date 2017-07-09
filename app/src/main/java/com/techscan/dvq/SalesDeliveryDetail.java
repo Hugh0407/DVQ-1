@@ -11,8 +11,10 @@ import android.os.Message;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +26,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -38,7 +42,7 @@ public class SalesDeliveryDetail extends Activity {
     String CSALEID = "";
     String PK_CORP = "";
     JSONObject jsBody;
-//    JSONObject jsBoxTotal;
+    JSONObject jsBoxTotal;
     JSONObject jsSerino;
 
     Double number;
@@ -79,6 +83,10 @@ public class SalesDeliveryDetail extends Activity {
     private HashMap<String, Object> m_mapSaleBaseInfo = null;
     private SplitBarcode m_cSplitBarcode = null;
     private ArrayList<String> ScanedBarcode = new ArrayList<String>();
+    List<Map<String, Object>> lstTaskBody = null;
+    private AlertDialog DeleteButton = null;
+    private AlertDialog SelectButton = null;
+    private ButtonOnClick buttonDelOnClick = new ButtonOnClick(0);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -391,6 +399,9 @@ public class SalesDeliveryDetail extends Activity {
             temp.put("invname", m_mapSaleBaseInfo.get("invname").toString());
             temp.put("batch", m_mapSaleBaseInfo.get("batch").toString());
             temp.put("sno", m_mapSaleBaseInfo.get("serino").toString());
+            temp.put("invtype", m_mapSaleBaseInfo.get("invtype").toString());
+            temp.put("invspec", m_mapSaleBaseInfo.get("invspec").toString());
+
             // caixy 需要增加产地
             temp.put("vfree1", Free1);
 
@@ -420,6 +431,8 @@ public class SalesDeliveryDetail extends Activity {
             temp.put("invname", m_mapSaleBaseInfo.get("invname").toString());
             temp.put("batch", m_mapSaleBaseInfo.get("batch").toString());
             temp.put("sno", m_mapSaleBaseInfo.get("serino").toString());
+            temp.put("invtype", m_mapSaleBaseInfo.get("invtype").toString());
+            temp.put("invspec", m_mapSaleBaseInfo.get("invspec").toString());
             // caixy 需要增加产地
             temp.put("vfree1", Free1);
 
@@ -562,11 +575,305 @@ public class SalesDeliveryDetail extends Activity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btnTask:
+                try {
+                    ShowTaskDig();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+                }
                 break;
             case R.id.btnDetail:
+                try {
+                    ShowDetailDig();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 break;
             case R.id.btnReturn:
                 break;
         }
     }
+
+    private void ShowTaskDig() throws JSONException {
+        lstTaskBody = new ArrayList<Map<String, Object>>();
+        // purBody
+        Map<String, Object> map;
+
+        if (jsBody == null) {
+            Toast.makeText(this, R.string.MeiYouDeDaoBiaoTiShuJu, Toast.LENGTH_LONG).show();
+            // ADD CAIXY TEST START
+            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+            // ADD CAIXY TEST END
+            return;
+        }
+        JSONArray arrays = jsBody.getJSONArray("dbBody");
+
+        for (int i = 0; i < arrays.length(); i++) {
+            map = new HashMap<String, Object>();
+            map.put("InvName",
+                    ((JSONObject) (arrays.get(i))).getString("invname"));
+            map.put("InvCode",
+                    ((JSONObject) (arrays.get(i))).getString("invcode"));
+            map.put("Invspec",
+                    ((JSONObject) (arrays.get(i))).getString("invspec"));
+            map.put("Invtype",
+                    ((JSONObject) (arrays.get(i))).getString("invtype"));
+            String sinnum = ((JSONObject) (arrays.get(i))).getString("nconfirmnum");
+            if(sinnum.toLowerCase().equals("null") || sinnum.isEmpty())
+                sinnum = "0.0";
+            map.put("InvNum",
+                    sinnum + " / " + Double.valueOf(((JSONObject) (arrays.get(i))).getString("nnumber")));
+            // map.put("DoneQty", )
+            lstTaskBody.add(map);
+        }
+
+        SimpleAdapter listItemAdapter = new SimpleAdapter(
+                SalesDeliveryDetail.this,lstTaskBody,
+                R.layout.sale_out_scan_detail,
+                new String[]{"InvName","InvNum","InvCode", "Invspec", "Invtype"},
+                new int[]{R.id.txtTranstaskInvName, R.id.txtTranstaskInvNum,
+                        R.id.txtTranstaskInvCode,R.id.txtSpec,
+                        R.id.txtType});
+        new AlertDialog.Builder(SalesDeliveryDetail.this).setTitle("源单信息")
+                .setAdapter(listItemAdapter, null)
+                .setPositiveButton(R.string.QueRen, null).show();
+
+    }
+    private void  ShowDetailDig() throws JSONException {
+        lstTaskBody = new ArrayList<Map<String, Object>>();
+        Log.d("TAG", "jsSerino: " + jsSerino);
+        Map<String, Object> map;
+        if (jsSerino == null || !jsSerino.has("Serino")) {
+            Toast.makeText(this, "还没有扫描到的记录", Toast.LENGTH_LONG).show();
+            // ADD CAIXY TEST START
+            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+            // ADD CAIXY TEST END
+            return;
+        }
+        JSONArray arrays = jsSerino.getJSONArray("Serino");
+
+        for (int i = 0; i < arrays.length(); i++) {
+            map = new HashMap<String, Object>();
+
+            String sSerial = ((JSONObject) (arrays.get(i))).getString("sno");//序列号
+            String sBatch = ((JSONObject) (arrays.get(i))).getString("batch");
+            String sInvCode = ((JSONObject) (arrays.get(i)))
+                    .getString("invcode");
+            String serino = ((JSONObject) (arrays.get(i))).getString("serino");//条码
+            String sTotal = ((JSONObject) (arrays.get(i))).getString("box");
+            String invtype = ((JSONObject) (arrays.get(i))).getString("invtype");
+            String invspec = ((JSONObject) (arrays.get(i))).getString("invspec");
+            map.put("invcode", sInvCode);
+            map.put("serino", serino);
+            map.put("sno", sSerial);
+            map.put("invname",((JSONObject) (arrays.get(i))).getString("invname"));
+            map.put("batch", sBatch);
+            map.put("invtype", invtype);
+            map.put("invspec", invspec);
+            map.put("total", sTotal);
+            lstTaskBody.add(map);
+        }
+        // jsBoxTotal
+        Log.d("TAG", "lstTaskBody: " + lstTaskBody);
+        SimpleAdapter listItemAdapter = new SimpleAdapter(
+                SalesDeliveryDetail.this, lstTaskBody,// 数据源
+                R.layout.item_sale_out_details,// ListItem的XML实现
+                // 动态数组与ImageItem对应的子项
+                new String[]{"invname", "invcode", "invspec","invtype", "batch", "total"},
+                // ImageItem的XML文件里面的一个ImageView,两个TextView ID
+                new int[]{R.id.name,
+                        R.id.encoding, R.id.spec,
+                        R.id.type, R.id.lot, R.id.qty});
+
+        DeleteButton = new AlertDialog.Builder(this).setTitle(getString(R.string.SaoMiaoMingXiXinXi))
+                .setSingleChoiceItems(listItemAdapter, 0, buttonDelOnClick)
+                .setPositiveButton(R.string.QueRen, null).create();
+        // MOD CAIXY END
+
+        DeleteButton.getListView().setOnItemLongClickListener(
+                new AdapterView.OnItemLongClickListener() {
+                    @Override
+                    public boolean onItemLongClick(AdapterView<?> arg0,
+                                                   View arg1, int arg2, long arg3) {
+                        // TODO Auto-generated method stub
+                        // When clicked, show a toast with the TextView text
+
+                        ConfirmDelItem(arg2);
+
+                        return false;
+                    }
+                });
+
+        DeleteButton.show();
+
+    }
+    private class ButtonOnClick implements DialogInterface.OnClickListener {
+        public int index;
+
+        public ButtonOnClick(int index) {
+            this.index = index;
+        }
+
+        @Override
+        public void onClick(DialogInterface dialog, int whichButton) {
+            if (whichButton >= 0) {
+                index = whichButton;
+                // dialog.cancel();
+            } else {
+
+                if (dialog.equals(DeleteButton)) {
+                    if (whichButton == DialogInterface.BUTTON_POSITIVE) {
+                        return;
+                    } else if (whichButton == DialogInterface.BUTTON_NEGATIVE) {
+                        // 这里进行数据删除处理
+                        // ConfirmDelItem(index);
+                    }
+                }
+            }
+
+        }
+
+    }
+    private void ConfirmDelItem(int index) {
+        ButtonOnClickDelconfirm buttondel = new ButtonOnClickDelconfirm(index);
+        SelectButton = new AlertDialog.Builder(this).setTitle(R.string.QueRenShanChu)
+                .setMessage(R.string.NiQueRenShanChuGaiXingWeiJiLuMa).setPositiveButton(R.string.QueRen, buttondel)
+                .setNegativeButton(R.string.QuXiao, null).show();
+    }
+
+    private class ButtonOnClickDelconfirm implements
+            DialogInterface.OnClickListener {
+        public int index;
+
+        public ButtonOnClickDelconfirm(int index) {
+            this.index = index;
+        }
+
+        @Override
+        public void onClick(DialogInterface dialog, int whichButton) {
+            if (whichButton >= 0) {
+                index = whichButton;
+            } else {
+
+                if (whichButton == DialogInterface.BUTTON_POSITIVE) {
+
+                    Map<String, Object> mapTemp = (Map<String, Object>) lstTaskBody
+                            .get(index);
+                    String invcode = (String) mapTemp.get("invcode");
+                    String batch = (String) mapTemp.get("batch");
+                    String sno = (String) mapTemp.get("sno");
+                    String serino = (String) mapTemp.get("serino");
+                    Double ScanedTotal = Double.valueOf(mapTemp.get("total").toString());
+
+                    if (ScanedBarcode != null || ScanedBarcode.size() > 0) {
+                        for (int si = 0; si < ScanedBarcode.size(); si++) {
+                            String RemoveBarCode = ScanedBarcode.get(si).toString();
+                            int iBarlenth = RemoveBarCode.length() - 6;
+                            String RemoveBarCodeF = RemoveBarCode.substring(0, iBarlenth);
+
+                            if (RemoveBarCodeF.equals(serino)) {
+                                ScanedBarcode.remove(si);
+                                si--;
+                            }
+                        }
+                    }
+
+                    JSONArray arrays;
+                    try {
+                        arrays = jsSerino.getJSONArray("Serino");
+
+                        HashMap<String, Object> Temp = new HashMap<String, Object>();
+                        JSONArray serinos = new JSONArray();
+
+                        for (int i = 0; i < arrays.length(); i++) {
+                            String serino1 = ((JSONObject) (arrays.get(i)))
+                                    .getString("serino");
+                            if (!serino1.equals(serino)) {
+                                JSONObject temp = new JSONObject();
+                                temp = arrays.getJSONObject(i);
+                                serinos.put(temp);
+                            }
+                        }
+
+                        jsSerino = new JSONObject();
+
+                        if (serinos.length() > 0) {
+                            jsSerino.put("Serino", serinos);
+                        }
+
+                        int it = 0;
+                        jsBoxTotal = new JSONObject();
+                        JSONArray bodys = jsBody.getJSONArray("dbBody");
+                        JSONArray bodynews = new JSONArray();
+                        // JSONArray serinos = new JSONArray();
+                        for (int i = 0; i < bodys.length(); i++) {
+                            JSONObject temp = bodys.getJSONObject(i);
+
+                            String invcodeold = ((JSONObject) (bodys.get(i)))
+                                    .getString("invcode");
+//                            String batchcodeold = ((JSONObject) (bodys
+//                                    .get(i))).getString("vbatchcode");
+
+//                            if (invcodeold.equals(invcode)
+//                                    && batchcodeold.equals(batch))
+                            if (invcodeold.equals(invcode))
+                            {
+                                Double doneqty = temp.getDouble("nconfirmnum");
+                                temp.put("nconfirmnum", doneqty - ScanedTotal);
+                            }
+
+                            bodynews.put(temp);
+                        }
+
+                        jsBody = new JSONObject();
+                        jsBody.put("Status", "true");
+                        jsBody.put("dbBody", bodynews);
+
+                        //}
+
+                        JSONArray arraysCount;
+                        try {
+                            arraysCount = jsBody.getJSONArray("dbBody");
+                            number = 0.0;
+                            ntotaloutinvnum = 0.0;
+                            for (int i = 0; i < arraysCount.length(); i++) {
+                                String sshouldinnum = ((JSONObject) (arraysCount
+                                        .get(i))).getString("nnumber");
+                                String sinnum = ((JSONObject) (arraysCount
+                                        .get(i))).getString("ntotaloutinvnum");
+
+                                number = number
+                                        + Double.valueOf(sshouldinnum);
+                                if(!sinnum.toLowerCase().equals("null") && !sinnum.isEmpty())
+                                    ntotaloutinvnum = ntotaloutinvnum + Double.valueOf(sinnum);
+                            }
+                        } catch (JSONException e1) {
+                            // TODO Auto-generated catch block
+                            e1.printStackTrace();
+                        }
+                        tvSalecount.setText("总量" + number + " | " + "已扫"
+                                + ntotaloutinvnum + " | " + "未扫"
+                                + (number - ntotaloutinvnum) );
+                        //SaveScanedBody();//写入本地
+                        IniDetail();
+
+                    } catch (JSONException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                        Toast.makeText(SalesDeliveryDetail.this, e.getMessage(),
+                                Toast.LENGTH_LONG).show();
+                        // ADD CAIXY TEST START
+                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+                        // ADD CAIXY TEST END
+                    }
+
+                    DeleteButton.cancel();
+
+                } else if (whichButton == DialogInterface.BUTTON_NEGATIVE) {
+                    return;
+                }
+            }
+        }
+    }
+
 }

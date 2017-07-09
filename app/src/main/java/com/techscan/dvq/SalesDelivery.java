@@ -1475,7 +1475,7 @@ public class SalesDelivery extends Activity {
 //						}
 //					}
 
-                    Intent intDeliveryScan = new Intent(SalesDelivery.this, SalesDeliveryScan.class);
+                    Intent intDeliveryScan = new Intent(SalesDelivery.this, SalesDeliveryDetail.class);
                     intDeliveryScan.putExtra("BillCode", tmpBillCode);
                     intDeliveryScan.putExtra("PK_CORP", PK_CORP);
                     intDeliveryScan.putExtra("CSALEID", csaleid);

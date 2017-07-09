@@ -1072,7 +1072,7 @@ public class PurStockInDetail extends Activity {
         }
     }
 
-    private void ShowDetailDig() throws JSONException {
+    private void  ShowDetailDig() throws JSONException {
         lstTaskBody = new ArrayList<Map<String, Object>>();
         Log.d("TAG", "jsSerino: " + jsSerino);
         Map<String, Object> map;

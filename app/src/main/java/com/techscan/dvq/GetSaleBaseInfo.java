@@ -72,7 +72,6 @@ public class GetSaleBaseInfo {
                 //pk_invmandoc = tempJso.getString("pk_invmandoc");
                 mapSaleBaseInfo.put("invtype", tempJso.getString("invtype"));   //ÐÍºÅ
                 mapSaleBaseInfo.put("invspec", tempJso.getString("invspec"));   //¹æ¸ñ
-                mapSaleBaseInfo.put("oppdimen", tempJso.getString("oppdimen"));
             }
 
         }
