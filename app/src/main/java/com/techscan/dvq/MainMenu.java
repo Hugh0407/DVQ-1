@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
@@ -23,21 +22,15 @@ import android.widget.Toast;
 
 import com.techscan.dvq.R.id;
 import com.techscan.dvq.common.Utils;
-import com.techscan.dvq.materialOut.MaterialOutAct;
-import com.techscan.dvq.productOut.ProductOutAct;
-import com.techscan.dvq.statusChange.StatusChangeAct;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.techscan.dvq.module.materialOut.MaterialOutAct;
+import com.techscan.dvq.module.productOut.ProductOutAct;
+import com.techscan.dvq.module.statusChange.StatusChangeAct;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
-import butterknife.OnClick;
 
 public class MainMenu extends Activity {
 

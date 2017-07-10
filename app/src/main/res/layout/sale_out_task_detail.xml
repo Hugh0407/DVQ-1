@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:padding="5dp">
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:orientation="horizontal" >
+        <TextView
+            android:textAllCaps="false"
+            android:id="@+id/txtTranstaskInvName"
+            android:layout_weight="2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="INVNAME"
+            android:textColor="#000000"
+            android:textSize="15sp"
+            android:textStyle="bold"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_below="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:orientation="horizontal" >
+        <LinearLayout
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="规格"
+                android:layout_weight="1"
+                android:textColor="#000000"
+                android:textSize="13sp"
+            />
+
+            <TextView
+                android:id="@+id/txtSpec"
+                android:layout_width="0dp"
+                android:layout_marginRight="15dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:gravity="right"
+                android:text="SPEC"
+                android:textColor="#000000"
+                android:textSize="13sp"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="型号"
+                android:layout_weight="1"
+                android:textColor="#000000"
+                android:textSize="13sp"
+                 />
+
+            <TextView
+                android:id="@+id/txtType"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:layout_marginRight="15dp"
+                android:gravity="right"
+                android:text="Type"
+                android:textColor="#000000"
+                android:textSize="13sp"
+                 />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/linearLayout1"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="存货编码"
+                android:textColor="#000000"
+                android:textSize="13sp"
+                android:layout_weight="0.09" />
+
+            <TextView
+                android:id="@+id/txtTranstaskInvCode"
+                android:layout_width="0dp"
+                android:layout_marginRight="15dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:gravity="right"
+                android:text="INVCODE"
+                android:textColor="#000000"
+                android:textSize="13sp"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/txtTranstaskInvNum"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginRight="2dp"
+                android:gravity="center"
+                android:text="NUM"
+                android:textColor="#000000"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</RelativeLayout>

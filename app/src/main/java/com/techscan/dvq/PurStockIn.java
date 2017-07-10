@@ -26,10 +26,8 @@ import android.widget.Toast;
 
 import com.techscan.dvq.R.id;
 import com.techscan.dvq.common.RequestThread;
-import com.techscan.dvq.common.Utils;
-import com.techscan.dvq.materialOut.DepartmentListAct;
-import com.techscan.dvq.materialOut.MaterialOutAct;
-import com.techscan.dvq.materialOut.StorgListACt;
+import com.techscan.dvq.module.materialOut.DepartmentListAct;
+import com.techscan.dvq.module.materialOut.StorgListACt;
 
 import org.apache.http.ParseException;
 import org.apache.http.util.EncodingUtils;
@@ -49,11 +47,9 @@ import java.util.Map;
 import java.util.UUID;
 
 import static com.techscan.dvq.common.Utils.HANDER_DEPARTMENT;
-import static com.techscan.dvq.common.Utils.HANDER_SAVE_RESULT;
 import static com.techscan.dvq.common.Utils.HANDER_STORG;
 import static com.techscan.dvq.common.Utils.HANDER_POORDER_HEAD;
 import static com.techscan.dvq.common.Utils.HANDER_POORDER_BODY;
-import static com.techscan.dvq.common.Utils.showToast;
 
 public class PurStockIn extends Activity {
 	private ButtonOnClick buttonOnClick = new ButtonOnClick(0);

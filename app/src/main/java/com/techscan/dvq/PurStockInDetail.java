@@ -40,6 +40,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static android.content.ContentValues.TAG;
+
 //import com.techscan.dvq.StockMoveScan.ButtonOnClickDelconfirm;
 //import com.techscan.dvq.StockMoveScan.ButtonOnClick;
 
@@ -172,6 +174,7 @@ public class PurStockInDetail extends Activity {
                 return;
             }
             jsBody = Common.DoHttpQuery(para, FunctionName, "");
+            Log.d(TAG, "AAA: "+jsBody.toString());
         } catch (JSONException e2) {
             e2.printStackTrace();
             Toast.makeText(this, e2.getMessage(), Toast.LENGTH_LONG).show();
@@ -1069,7 +1072,7 @@ public class PurStockInDetail extends Activity {
         }
     }
 
-    private void ShowDetailDig() throws JSONException {
+    private void  ShowDetailDig() throws JSONException {
         lstTaskBody = new ArrayList<Map<String, Object>>();
         Log.d("TAG", "jsSerino: " + jsSerino);
         Map<String, Object> map;

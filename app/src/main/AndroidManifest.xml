@@ -270,25 +270,24 @@
         <!--  -->
         <!-- </activity> -->
         <activity android:name=".SaleChooseTime"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden"
-            >
-
+            />
+        <activity android:name=".SalesDeliveryDetail" >
         </activity>
-        <activity android:name=".materialOut.MaterialOutAct">
+        <activity android:name=".module.materialOut.MaterialOutAct">
         </activity>
-        <activity android:name=".materialOut.scan.MaterialOutScanAct">
+        <activity android:name=".module.materialOut.scan.MaterialOutScanAct">
         </activity>
-        <activity android:name=".materialOut.DepartmentListAct">
+        <activity android:name=".module.materialOut.DepartmentListAct">
         </activity>
-        <activity android:name=".materialOut.StorgListACt">
+        <activity android:name=".module.materialOut.StorgListACt">
         </activity>
-        <activity android:name=".productOut.ProductOutAct">
+        <activity android:name=".module.productOut.ProductOutAct">
         </activity>
-        <activity android:name=".statusChange.StatusChangeAct">
+        <activity android:name=".module.statusChange.StatusChangeAct">
         </activity>
-        <activity android:name=".statusChange.scan.SCScanAct">
+        <activity android:name=".module.statusChange.scan.SCScanAct">
         </activity>
-        <activity android:name=".productOut.scan.ProductOutScanAct">
+        <activity android:name=".module.productOut.scan.ProductOutScanAct">
         </activity>
     </application>
 
