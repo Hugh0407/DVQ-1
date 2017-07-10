@@ -568,7 +568,6 @@ public class PurStockIn extends Activity {
 
 				if (lstSerino.length() < 1) {
 //					HashMap<String, Object> map = new HashMap<String, Object>();
-
 					JSONObject map = new JSONObject();
 					map.put("invcode", sInvCode);
 					map.put("batch", sBatch);
