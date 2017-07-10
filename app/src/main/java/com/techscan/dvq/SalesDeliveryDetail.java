@@ -128,7 +128,7 @@ public class SalesDeliveryDetail extends Activity {
                 String totalNumber = ((JSONObject) (arrays.get(i)))
                         .getString("nnumber");
                 String ntotalnum = ((JSONObject) (arrays.get(i)))
-                        .getString("ntotaloutinvnum");
+                        .getString("npacknumber");
                 number = number + Double.valueOf(totalNumber);
                 if(!ntotalnum.toLowerCase().equals("null") && !ntotalnum.isEmpty())
                     ntotaloutinvnum = ntotaloutinvnum + Double.valueOf(ntotalnum);
@@ -357,9 +357,9 @@ public class SalesDeliveryDetail extends Activity {
             ntotaloutinvnum = 0.0;
             for (int i = 0; i < arrays.length(); i++) {
                 String sshouldinnum = ((JSONObject) (arrays.get(i)))
-                        .getString("nordernum");
+                        .getString("nnumber");
                 String sinnum = ((JSONObject) (arrays.get(i)))
-                        .getString("nconfirmnum");
+                        .getString("npacknumber");
 
                 number = number + Double.valueOf(sshouldinnum);
                 if(!sinnum.toLowerCase().equals("null") && !sinnum.isEmpty())
@@ -840,7 +840,7 @@ public class SalesDeliveryDetail extends Activity {
                                 String sshouldinnum = ((JSONObject) (arraysCount
                                         .get(i))).getString("nnumber");
                                 String sinnum = ((JSONObject) (arraysCount
-                                        .get(i))).getString("ntotaloutinvnum");
+                                        .get(i))).getString("npacknumber");
 
                                 number = number
                                         + Double.valueOf(sshouldinnum);
