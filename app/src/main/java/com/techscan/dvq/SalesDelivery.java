@@ -356,6 +356,7 @@ public class SalesDelivery extends Activity {
             }
             Bundle bundle = data.getExtras();
             String saleBox = bundle.getString("box");
+
             String saleSerinno = bundle.getString("serino");
             String dbBody = bundle.getString("body");
             ScanedBarcode = bundle.getStringArrayList("ScanedBarcode");
@@ -365,7 +366,9 @@ public class SalesDelivery extends Activity {
 
                 this.jsBody = new JSONObject(dbBody);
 //                this.jsHead = new JSONObject(headJS);
+                Log.d(TAG, "AAAAAA: "+jsBody.toString());
                 this.jsSerino = new JSONObject(saleSerinno);
+                Log.d(TAG, "AAAAAA: "+jsSerino.toString());
 //				this.jsBoxTotal = new JSONObject(boxJS);
                 this.jsBoxTotal = null;
             }
@@ -1558,7 +1561,7 @@ public class SalesDelivery extends Activity {
 
 //                    if (saleOutGoodsLists != null && saleOutGoodsLists.size() > 0) {
 //                        try {
-//                            SaveInfo(saleOutGoodsLists);
+//                               (saleOutGoodsLists);
 //                        } catch (JSONException e) {
 //                            e.printStackTrace();
 //                        }
@@ -1689,7 +1692,7 @@ public class SalesDelivery extends Activity {
 
         if (NoScanSave == false) {
             //JSONArray heads = jsHead.getJSONArray("PurGood");
-            JSONArray bodys = jsBody.getJSONArray("PurBody");
+            JSONArray bodys = jsBody.getJSONArray("dbBody");
             JSONArray arraysSerino = jsSerino.getJSONArray("Serino");
 
 //			if (tmpBillStatus.equals("N")) {
