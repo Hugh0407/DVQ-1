@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/pagebackgroup"
     android:orientation="vertical"
     tools:context="com.techscan.dvq.statusChange.StatusChangeAct">
 
@@ -33,7 +32,6 @@
                 android:layout_weight="1"
                 android:background="@drawable/edittext_style"
                 android:ems="10"
-                android:textColor="@color/white"
                 android:enabled="false"
                 android:singleLine="true"
                 android:text="形态转换"

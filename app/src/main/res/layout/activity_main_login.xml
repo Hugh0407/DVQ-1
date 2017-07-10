@@ -80,7 +80,7 @@
                 android:layout_width="260dp"
                 android:layout_height="55dp"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/button_orange_style"
+                android:background="@drawable/button_blue_style"
                 android:text="登录"
                 android:textColor="@color/white"
                 android:fontFamily=""/>
@@ -97,7 +97,7 @@
                 android:layout_height="35dp"
                 android:layout_marginBottom="20dp"
                 android:layout_marginTop="2dp"
-                android:background="@drawable/button_blue_style"
+                android:background="@drawable/button_gray_style"
                 android:text="退出"
                 android:textColor="@color/white"/>
 
@@ -112,7 +112,7 @@
             android:layout_marginTop="20dp"
             android:layout_weight="0.04"
             android:text="Ver : X.X.X"
-            android:textColor="#ffffff"
+            android:textColor="#4988eb"
             android:textSize="12sp"/>
 
     </LinearLayout>

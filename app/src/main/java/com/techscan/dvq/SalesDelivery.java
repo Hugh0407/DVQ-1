@@ -2523,14 +2523,11 @@ public class SalesDelivery extends Activity {
         tableHead.put("CRECEIPTTYE", "4331");
         tableHead.put("CSALECORPID", CSALECORPID);
         tableHead.put("PK_CORP", MainLogin.objLog.STOrgCode);
-<<<<<<< Updated upstream
         tableHead.put("VBILLCODE", "");
-=======
         tableHead.put("VDEF1", VDEF1);
         tableHead.put("VDEF2", VDEF2);
         tableHead.put("VDEF5", VDEF5);
         tableHead.put("NOTOTALNUMBER","200.00");// TODO: 2017/7/4
->>>>>>> Stashed changes
         table.put("Head", tableHead);
         JSONObject tableBody = new JSONObject();
         JSONArray bodyArray = new JSONArray();
