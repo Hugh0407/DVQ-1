@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/pagebackgroup"
     android:orientation="vertical"
-    tools:context="com.techscan.dvq.statusChange.scan.SCScanAct">
+    tools:context=".module.statusChange.scan.SCScanAct">
 
     <LinearLayout
         android:layout_width="match_parent"

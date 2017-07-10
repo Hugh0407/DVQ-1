@@ -5,13 +5,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/pagebackgroup"
+    android:background="@color/white"
     android:orientation="vertical"
-    tools:context="com.techscan.dvq.productOut.ProductOutAct">
+    tools:context=".module.productOut.ProductOutAct">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="vertical">
 

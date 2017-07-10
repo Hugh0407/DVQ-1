@@ -1,4 +1,4 @@
-package com.techscan.dvq.materialOut.scan;
+package com.techscan.dvq.module.materialOut;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -15,15 +15,14 @@ import java.util.List;
 
 /**
  * Created by liuya on 2017/6/20.
- * “总览” 按钮中的dialog视图的 Adapter
  */
 
-public class OvAdapter extends BaseAdapter {
+public class MyBaseAdapter extends BaseAdapter {
 
-    Context mContext;
-    List<Goods> mList;
+    private Context mContext;
+    private List<Goods> mList;
 
-    public OvAdapter(Context context, List<Goods> list) {
+    public MyBaseAdapter(Context context, List<Goods> list) {
         mContext = context;
         mList = list;
     }
@@ -67,22 +66,22 @@ public class OvAdapter extends BaseAdapter {
         ViewHolder viewHolder;
         if (convertView == null) {
             viewHolder = new ViewHolder();
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_scan_ov, null);
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_scan_details, null);
             viewHolder.name = (TextView) convertView.findViewById(R.id.name);
             viewHolder.encoding = (TextView) convertView.findViewById(R.id.encoding);
-            viewHolder.qty = (TextView) convertView.findViewById(R.id.qty);
-            viewHolder.lot = (TextView) convertView.findViewById(R.id.lot);
-            viewHolder.spec = (TextView) convertView.findViewById(R.id.spec);
             viewHolder.type = (TextView) convertView.findViewById(R.id.type);
+            viewHolder.lot = (TextView) convertView.findViewById(R.id.lot);
+            viewHolder.qty = (TextView) convertView.findViewById(R.id.qty);
+            viewHolder.spec = (TextView) convertView.findViewById(R.id.spec);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         viewHolder.name.setText(mList.get(position).getName());
         viewHolder.encoding.setText(mList.get(position).getEncoding());
+        viewHolder.type.setText(mList.get(position).getType());
         viewHolder.lot.setText(mList.get(position).getLot());
         viewHolder.spec.setText(mList.get(position).getSpec());
-        viewHolder.type.setText(mList.get(position).getType());
         if (TextUtils.isEmpty(String.valueOf(mList.get(position).getQty()))) {
             viewHolder.qty.setText("0.00");
         } else {
@@ -94,9 +93,9 @@ public class OvAdapter extends BaseAdapter {
     private static class ViewHolder {
         TextView name;
         TextView encoding;
-        TextView qty;
-        TextView lot;
-        TextView spec;
         TextView type;
+        TextView lot;
+        TextView qty;
+        TextView spec;
     }
 }
