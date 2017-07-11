@@ -1758,13 +1758,12 @@ public class PurStockIn extends Activity {
     	btnBrowOrderNo.setFocusable(false);
     	btnExit.setFocusable(false);
     	btnScan.setFocusable(false);
-    	
-    	
 		
 		txtPurOrderNo.requestFocus();
 		//this.txtPosition.addTextChangedListener(watcher);
 		//this.txtPosition.setOnKeyListener(myTxtListener);
 		this.txtPurOrderNo.setOnKeyListener(myTxtListener);
+		txtPurOrderNo.setOnLongClickListener(myTxtLongClick);
 		
     	UserID = MainLogin.objLog.UserID;
     	//String LogName = BillType + UserID + dfd.format(day)+".txt";
@@ -1797,7 +1796,15 @@ public class PurStockIn extends Activity {
 		//当DatePickerDialog关闭时，更新日期显示
 		private void updateDate() {
 			//在TextView上显示日期
-			txtStartDate.setText(year + "-" + String.format("%02d", (month + 1)) + "-" + day);
+			String lsStartDate = year + "-" + String.format("%02d", (month + 1)) + "-" + String.format("%02d", day);
+			if(Common.CompareDate(lsStartDate, txtEndDate.getText().toString())){
+				txtStartDate.setText(lsStartDate);
+			}
+			else{
+				Toast.makeText(PurStockIn.this, "开始日大于结束日或日期格式不正确", Toast.LENGTH_LONG).show();
+				MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+
+			}
 			txtStartDate.selectAll();
 		}
 
@@ -1821,7 +1828,15 @@ public class PurStockIn extends Activity {
 		//当DatePickerDialog关闭时，更新日期显示
 		private void updateDate() {
 			//在TextView上显示日期
-			txtEndDate.setText(year + "-" + String.format("%02d", (month + 1)) + "-" + day);
+			String lsEndDate = year + "-" + String.format("%02d", (month + 1)) + "-" + String.format("%02d", day);
+			if(Common.CompareDate(txtStartDate.getText().toString(), lsEndDate)){
+				txtEndDate.setText(lsEndDate);
+			}
+			else{
+				Toast.makeText(PurStockIn.this, "开始日大于结束日或日期格式不正确", Toast.LENGTH_LONG).show();
+				MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+
+			}
 			txtEndDate.selectAll();
 		}
 
@@ -2202,10 +2217,35 @@ public class PurStockIn extends Activity {
 	    	
 	    
 	    }
-		
-	
-	
-    private OnKeyListener myTxtListener = new 
+	private View.OnLongClickListener myTxtLongClick = new View.OnLongClickListener() {
+		@Override
+		public boolean onLongClick(View view) {
+			switch(view.getId()){
+
+				case R.id.txtPurOrderNo:
+					Common.ShowLoading(MyContext);
+					if(jsDBBody == null || jsDBBody.length() < 1)
+					{
+
+					}
+					else
+					{
+						Toast.makeText(PurStockIn.this, R.string.GaiRenWuYiJingBeiSaoMiao_WuFaXiuGaiDingDan, Toast.LENGTH_LONG).show();
+						//ADD CAIXY TEST START
+						MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+						//ADD CAIXY TEST END
+						break;
+					}
+					ShowOrderNoList("");
+					break;
+
+			}
+				return false;
+		}
+	};
+
+
+	private OnKeyListener myTxtListener = new
     		OnKeyListener()
     {
 		@Override
@@ -2452,11 +2492,11 @@ public class PurStockIn extends Activity {
 		//采购订单
 		if(requestCode==96)
 		{
+			txtPurOrderNo.requestFocus();
 			if(resultCode != 1)
 			{
 //				labVendor.setText(" ----");
-				txtPurOrderNo.setText("");
-				txtPurOrderNo.requestFocus();
+//				txtPurOrderNo.setText("");
 				return;
 			}
 			Bundle bundle = data.getExtras();      

@@ -20,6 +20,9 @@ import java.io.UnsupportedEncodingException;
 import java.util.Map;
 import java.util.Set;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Common {
 
     public String ScanBarCode = "";
@@ -352,6 +355,23 @@ public class Common {
 
 //		alertDialog.cancel();
         PD.dismiss();
+    }
+
+    //日期比较
+    public static Boolean CompareDate(String sStartDate, String sEndDate){
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd ");
+            Date dStartDate = sdf.parse(sStartDate);
+            Date dEndDate = sdf.parse(sEndDate);
+            if(dStartDate.getTime() <= dEndDate.getTime())
+                return true;
+            else
+                return false;
+        }
+        catch (Exception ex)
+        {
+            return false;
+        }
     }
 
 }
