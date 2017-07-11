@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/pagebackgroup"
+    android:background="@color/white"
     android:orientation="vertical"
     tools:context=".module.statusChange.StatusChangeAct">
 
@@ -25,7 +25,6 @@
                 android:text="单据类型"/>
 
             <EditText
-                android:focusable="false"
                 android:id="@+id/ed_bill_type"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -33,11 +32,12 @@
                 android:layout_weight="1"
                 android:background="@drawable/edittext_style"
                 android:ems="10"
-                android:textColor="@color/white"
                 android:enabled="false"
+                android:focusable="false"
                 android:singleLine="true"
                 android:text="形态转换"
-                android:textAllCaps="true"/>
+                android:textAllCaps="true"
+                android:textColor="@color/black"/>
 
             <ImageButton
                 android:id="@+id/btn_bill_type"

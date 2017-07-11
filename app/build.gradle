@@ -2,13 +2,13 @@ apply plugin: 'com.android.application'
 
 android {
     compileOptions.encoding = "GBK";
-    compileSdkVersion 20
+    compileSdkVersion 15
     buildToolsVersion "25.0.2"
 
     defaultConfig {
         applicationId "com.techscan.dvq"
         minSdkVersion 14
-        targetSdkVersion 20
+        targetSdkVersion 24
     }
 
     buildTypes {

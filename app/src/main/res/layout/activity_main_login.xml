@@ -82,8 +82,7 @@
                 android:layout_marginTop="20dp"
                 android:background="@drawable/button_orange_style"
                 android:text="登录"
-                android:textColor="@color/white"
-                android:fontFamily=""/>
+                android:textColor="@color/white"/>
 
             <TextView
                 android:id="@+id/textView2"
