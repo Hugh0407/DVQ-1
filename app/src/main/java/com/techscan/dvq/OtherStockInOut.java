@@ -342,13 +342,13 @@ public class OtherStockInOut extends Activity {
         saveOthIn.put("GUIDS", GUIDIn);
         saveOthOut.put("GUIDS", GUIDOut);
 
-        inHead.put("CBILLTYPECODE", "4A");            //单据类型
+        inHead.put("CBILLTYPECODE", "4A");//单据类型
         outHead.put("CBILLTYPECODE", "4I");
 
         inHead.put("CWAREHOUSEID", m_WarehouseID);                //仓库
         outHead.put("CWAREHOUSEID", m_WarehouseID);
 
-        inHead.put("PK_CALBODY", MainLogin.objLog.STOrgCode);                //库存组织
+        inHead.put("PK_CALBODY", MainLogin.objLog.STOrgCode); //库存组织
         outHead.put("PK_CALBODY", MainLogin.objLog.STOrgCode);
 
 
@@ -357,22 +357,22 @@ public class OtherStockInOut extends Activity {
 
 
         if (this.m_AccID.equals("A")) {
-            inHead.put("CBIZID", MainLogin.objLog.UserID);                //业务员
+            inHead.put("CBIZID", MainLogin.objLog.UserID);//业务员
             outHead.put("CBIZID", MainLogin.objLog.UserID);
 
-            inHead.put("CLASTMODIID", MainLogin.objLog.UserID);                //最后修改人
+            inHead.put("CLASTMODIID", MainLogin.objLog.UserID);  //最后修改人
             outHead.put("CLASTMODIID", MainLogin.objLog.UserID);
 
-            inHead.put("COPERATORID", MainLogin.objLog.UserID);                //制单人
+            inHead.put("COPERATORID", MainLogin.objLog.UserID); //制单人
             outHead.put("COPERATORID", MainLogin.objLog.UserID);
         } else {
-            inHead.put("CBIZID", MainLogin.objLog.UserIDB);                //业务员
+            inHead.put("CBIZID", MainLogin.objLog.UserIDB);  //业务员
             outHead.put("CBIZID", MainLogin.objLog.UserIDB);
 
-            inHead.put("CLASTMODIID", MainLogin.objLog.UserIDB);                //最后修改人
+            inHead.put("CLASTMODIID", MainLogin.objLog.UserIDB);  //最后修改人
             outHead.put("CLASTMODIID", MainLogin.objLog.UserIDB);
 
-            inHead.put("COPERATORID", MainLogin.objLog.UserIDB);                //制单人
+            inHead.put("COPERATORID", MainLogin.objLog.UserIDB);//制单人
             outHead.put("COPERATORID", MainLogin.objLog.UserIDB);
         }
 
