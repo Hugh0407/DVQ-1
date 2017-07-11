@@ -18,11 +18,8 @@ import com.techscan.dvq.MainLogin;
 import com.techscan.dvq.OtherOrderList;
 import com.techscan.dvq.R;
 import com.techscan.dvq.bean.PurGood;
-import com.techscan.dvq.common.SaveThread;
-import com.techscan.dvq.common.Utils;
 import com.techscan.dvq.module.statusChange.scan.SCScanAct;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -33,7 +30,6 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-import static android.content.ContentValues.TAG;
 import static com.techscan.dvq.common.Utils.showToast;
 
 
@@ -66,7 +62,7 @@ public class StatusChangeAct extends Activity {
     String WarehouseID = "";
     String AccID = "";
     String pk_corp = "";
-    List<PurGood> dataList;
+    List<PurGood> taskList;
     ProgressDialog progressDialog;
     Activity activity;
 
@@ -103,19 +99,24 @@ public class StatusChangeAct extends Activity {
                 ShowScanDetail();
                 break;
             case R.id.save:
-                if (checkSaveInfo()) {
-                    if (dataList != null && dataList.size() > 0) {
-//                        try {
-//                            SaveInfo(dataList);
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        }
-//                        showProgressDialog();
-                        Utils.showToast(activity, "等待接口");
-                    } else {
-                        showToast(activity, "没有需要保存的数据");
-                    }
+                try {
+                    saveInfo();
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
+//                if (checkSaveInfo()) {
+//                    if (dataList != null && dataList.size() > 0) {
+////                        try {
+////                            saveInfo(dataList);
+////                        } catch (JSONException e) {
+////                            e.printStackTrace();
+////                        }
+////                        showProgressDialog();
+//                        Utils.showToast(activity, "等待接口");
+//                    } else {
+//                        showToast(activity, "没有需要保存的数据");
+//                    }
+//                }
                 break;
             case R.id.back:
                 finish();
@@ -138,25 +139,74 @@ public class StatusChangeAct extends Activity {
         }
     };
 
-    private void SaveInfo(List<PurGood> list) throws JSONException {
+    private void saveInfo() throws JSONException {
+
         final JSONObject table = new JSONObject();
-        JSONObject tableHead = new JSONObject();
-        tableHead.put("CUSER", MainLogin.objLog.UserID);
-        table.put("Head", tableHead);
-        JSONObject tableBody = new JSONObject();
-        JSONArray bodyArray = new JSONArray();
-        for (PurGood pur : list) {
-            JSONObject object = new JSONObject();
-            object.put("CINVBASID", pur.getInvcode());
-            bodyArray.put(object);
+        JSONObject saveIn = new JSONObject();
+        JSONObject saveInHead = new JSONObject();
+        saveInHead.put("CWAREHOUSEID", WarehouseID);     //仓库
+        saveInHead.put("PK_CALBODY", MainLogin.objLog.STOrgCode);   //库存组织
+        saveInHead.put("CLASTMODIID", MainLogin.objLog.UserID);  //操作人id  ？
+        saveInHead.put("COPERATORID", MainLogin.objLog.UserID);  //操作人id   ？
+        saveInHead.put("CDISPATCHERID", "0001TC100000000011QO");//收发类别,邹俊豪说的先写死
+        JSONObject saveInBody = new JSONObject();
+        for (int i = 0; i < taskList.size(); i++) {
+            PurGood purGood = taskList.get(i);
+            if (purGood.getFbillrowflag().equals("2")) {
+                saveInBody.put("CSOURCEBILLBID", purGood.getCsourcebillbid());
+                saveInBody.put("CSOURCEBILLHID", purGood.getCsourcebillhid());
+                saveInBody.put("CFIRSTBILLBID", "");
+                saveInBody.put("CBODYWAREHOUSEID", WarehouseID);
+                saveInBody.put("INVCODE", purGood.getInvcode());
+                saveInBody.put("CINVBASID", purGood.getPk_invbasdoc());
+                saveInBody.put("CINVENTORYID", purGood.getCinventoryid());
+                saveInBody.put("NSHOULDOUTNUM", purGood.getNshouldinnum());
+                saveInBody.put("NINNUM", purGood.getNum_task());
+                saveInBody.put("VSOURCEBILLCODE", purGood.getSourceBill());
+                saveInBody.put("PK_BODYCALBODY", MainLogin.objLog.STOrgCode);
+                saveInBody.put("VSOURCEROWNO", purGood.getVsourcerowno());
+                saveInBody.put("VBATCHCODE", purGood.getVbatchcode());
+            }
         }
-        tableBody.put("ScanDetails", bodyArray);
-        table.put("Body", tableBody);
-        table.put("GUIDS", UUID.randomUUID().toString());
-        Log.d(TAG, "SaveInfo: " + table.toString());
-        SaveThread saveThread = new SaveThread(table, "SaveMaterialOut", mHandler, 1);
-        Thread thread = new Thread(saveThread);
-        thread.start();
+        saveIn.put("head", saveInHead);
+        saveIn.put("body", saveInBody);
+        saveIn.put("GUIDS", UUID.randomUUID().toString());
+        table.put("SaveIn", saveIn);
+
+        JSONObject saveOut = new JSONObject();
+        JSONObject saveOutHead = new JSONObject();
+        saveOutHead.put("CWAREHOUSEID", WarehouseID);
+        saveOutHead.put("PK_CALBODY", MainLogin.objLog.STOrgCode);
+        saveOutHead.put("CLASTMODIID", MainLogin.objLog.UserID);
+        saveOutHead.put("COPERATORID", MainLogin.objLog.UserID);
+        saveOutHead.put("CDISPATCHERID", "0001TC100000000011Q8");
+        JSONObject saveOutBody = new JSONObject();
+        for (int i = 0; i < taskList.size(); i++) {
+            PurGood purGood = taskList.get(i);
+            if (purGood.getFbillrowflag().equals("3")){
+                saveOutBody.put("CSOURCEBILLBID", purGood.getCsourcebillbid());
+                saveOutBody.put("CSOURCEBILLHID", purGood.getCsourcebillhid());
+                saveOutBody.put("CFIRSTBILLBID", "");
+                saveOutBody.put("CBODYWAREHOUSEID", WarehouseID);
+                saveOutBody.put("INVCODE", purGood.getInvcode());
+                saveOutBody.put("CINVBASID", purGood.getPk_invbasdoc());
+                saveOutBody.put("CINVENTORYID", purGood.getCinventoryid());
+                saveOutBody.put("NSHOULDOUTNUM", purGood.getNshouldinnum());
+                saveOutBody.put("NINNUM", purGood.getNum_task());
+                saveOutBody.put("VSOURCEBILLCODE", purGood.getSourceBill());
+                saveOutBody.put("VSOURCEROWNO", purGood.getVsourcerowno());
+                saveOutBody.put("PK_BODYCALBODY", MainLogin.objLog.STOrgCode);
+                saveOutBody.put("VBATCHCODE", purGood.getVbatchcode());
+            }
+        }
+        saveOut.put("head", saveOutHead);
+        saveOut.put("body", saveOutBody);
+        saveOut.put("GUIDS", UUID.randomUUID().toString());
+        table.put("SaveOut", saveOut);
+        Log.d("TAG", "saveInfo: " + table.toString());
+//        SaveThread saveThread = new SaveThread(table, "SaveMaterialOut", mHandler, 1);
+//        Thread thread = new Thread(saveThread);
+//        thread.start();
     }
 
     /**
@@ -277,10 +327,17 @@ public class StatusChangeAct extends Activity {
             pk_corp = data.getStringExtra("pk_corp");
             mEdSourceBill.setText(OrderNo);
             mEdSelectWh.setText(WarehouseName);
+            Log.d("TAG", "result: " + result);// result: 1
+            Log.d("TAG", "OrderNo: " + OrderNo);// OrderNo: ZH17062800001
+            Log.d("TAG", "OrderID: " + OrderID);//OrderID: 1011AA1000000004KP6R
+            Log.d("TAG", "WarehouseName: " + WarehouseName);// WarehouseName: 华奇工厂成品库
+            Log.d("TAG", "WarehouseID: " + WarehouseID);// WarehouseID: 1011TC100000000000LF
+            Log.d("TAG", "AccID: " + AccID);// AccID: B
+            Log.d("TAG", "pk_corp: " + pk_corp);// pk_corp: 1011
         }
         // 回传数据<----OtherStockInDetail.class，从ShowScanDetail(); 中跳过去
         if (requestCode == 93 && resultCode == 7) {
-            dataList = data.getParcelableArrayListExtra("dataList");
+            taskList = data.getParcelableArrayListExtra("taskList");
         }
     }
 
