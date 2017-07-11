@@ -55,6 +55,7 @@ public class SalesDelivery extends Activity {
     String sBillCodes = "";//单据号查询
     String sBeginDate = "";//制单日期开始查询
     String sEndDate = "";//制单日期结束查询
+    String CheckBillCode = "";
     JSONObject table = null;
     JSONObject jsBody = null;
     JSONObject jsBoxTotal = null;
@@ -71,6 +72,7 @@ public class SalesDelivery extends Activity {
     Button btnSalesDelScan;
     Button btnSalesDelSave;
     boolean NoScanSave = false;
+    HashMap<String, String> checkInfo = new HashMap<String, String>();
     private ArrayList<String> ScanedBarcode = new ArrayList<String>();
 
     String sBillAccID = "";
@@ -232,6 +234,7 @@ public class SalesDelivery extends Activity {
                             //wuqiong
                             try {
                                 jsonSaveHead = Common.MapTOJSONOBject(mapBillInfo);
+
 //                                Log.d(TAG, "onActivityResult: "+jsonSaveHead.toString());
                             } catch (JSONException e) {
                                 Toast.makeText(SalesDelivery.this, e.getMessage(), Toast.LENGTH_LONG).show();
@@ -241,6 +244,9 @@ public class SalesDelivery extends Activity {
                                 //ADD CAIXY TEST END
                             }
                             try {
+                                CheckBillCode = jsonSaveHead.getString("BillCode");
+                                checkInfo.put("BillCode",CheckBillCode);
+                                Log.d(TAG, "Check: " +checkInfo.toString());
                                 SaleFlg = jsonSaveHead.getString("saleflg");
                             } catch (JSONException e2) {
                                 // TODO Auto-generated catch block
@@ -255,16 +261,16 @@ public class SalesDelivery extends Activity {
                                 //获得表头信息
                                 GetBillHeadDetailInfo(SaleFlg);
                                 //获得表体信息
-                                GetBillBodyDetailInfo(SaleFlg);
+//                                GetBillBodyDetailInfo(SaleFlg);
                             } catch (Exception e1) {
                                 e1.printStackTrace();
                             }
 
-                            try {
-                                GetTaskCount();
-                            } catch (JSONException e1) {
-                                e1.printStackTrace();
-                            }
+//                            try {
+//                                GetTaskCount();
+//                            } catch (JSONException e1) {
+//                                e1.printStackTrace();
+//                            }
 //                            if(GetBillBFlg.equals("1"))
 //                            {
 //
@@ -281,55 +287,35 @@ public class SalesDelivery extends Activity {
                     }
                     //ADD BY WUQIONG 2015/04/27
                     break;
-//                case 2:         // 这是收发类别返回的地方
-//                    if (data != null)
-//                    {
-//                        Bundle bundle = data.getExtras();
-//                        if (bundle != null)
-//                        {
-//
-//                            tmprdCode = data.getStringExtra("Code");
-//                            tmprdID = data.getStringExtra("RdID");
-//                            tmprdName = data.getStringExtra("Name");
-//                            txtSalesDelRdcl.setText(tmprdName);
-//
-//                        }
-//                        else
-//                        {
-//                            txtSalesDelRdcl.setText("");
-//                        }
-//
-//                    }
-                //ADD BY WUQIONG 2015/04/27
-//                    break;
                 default:
                     break;
             }
-        } else if (requestCode == 86) {
-            if (resultCode == 6) {
-                if (data != null) {
-                    Bundle bundle = data.getExtras();
-                    if (bundle != null) {
-                        saleOutGoodsLists = bundle.getParcelableArrayList("SaleGoodsLists");
-//                        SerializableList ResultBodyList = new SerializableList();
-//                        ResultBodyList = (SerializableList)bundle.get("SaveBodyList");
-//                        lstSaveBody = ResultBodyList.getList();
-//                        ScanedBarcode = bundle.getStringArrayList("ScanedBarcode");
-
-//                        try {
-////                            jsonBillBodyTask = new JSONObject(bundle.getString("ScanTaskJson"));
-//                        } catch (JSONException e) {
-//                            // TODO Auto-generated catch block
-//                            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
-//                            //ADD CAIXY TEST START
-//                            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-//                            //ADD CAIXY TEST END
-//                            e.printStackTrace();
-//                        }
-                    }
-                }
-            }
         }
+//            else if (requestCode == 86) {
+//            if (resultCode == 6) {
+//                if (data != null) {
+//                    Bundle bundle = data.getExtras();
+//                    if (bundle != null) {
+//                        saleOutGoodsLists = bundle.getParcelableArrayList("SaleGoodsLists");
+////                        SerializableList ResultBodyList = new SerializableList();
+////                        ResultBodyList = (SerializableList)bundle.get("SaveBodyList");
+////                        lstSaveBody = ResultBodyList.getList();
+////                        ScanedBarcode = bundle.getStringArrayList("ScanedBarcode");
+//
+////                        try {
+//////                            jsonBillBodyTask = new JSONObject(bundle.getString("ScanTaskJson"));
+////                        } catch (JSONException e) {
+////                            // TODO Auto-generated catch block
+////                            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+////                            //ADD CAIXY TEST START
+////                            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+////                            //ADD CAIXY TEST END
+////                            e.printStackTrace();
+////                        }
+//                    }
+//                }
+//            }
+//        }
         //单据日期查询by XuHu
         else if (requestCode == 44) {
             if (resultCode == 4) {
@@ -355,8 +341,7 @@ public class SalesDelivery extends Activity {
                 return;
             }
             Bundle bundle = data.getExtras();
-            String saleBox = bundle.getString("box");
-
+            String saleTotalBox = bundle.getString("box");
             String saleSerinno = bundle.getString("serino");
             String dbBody = bundle.getString("body");
             ScanedBarcode = bundle.getStringArrayList("ScanedBarcode");
@@ -365,11 +350,10 @@ public class SalesDelivery extends Activity {
             {
 
                 this.jsBody = new JSONObject(dbBody);
-//                this.jsHead = new JSONObject(headJS);
                 Log.d(TAG, "AAAAAA: "+jsBody.toString());
                 this.jsSerino = new JSONObject(saleSerinno);
                 Log.d(TAG, "AAAAAA: "+jsSerino.toString());
-//				this.jsBoxTotal = new JSONObject(boxJS);
+//				this.jsBoxTotal = new JSONObject(saleTotalBox);
                 this.jsBoxTotal = null;
             }
             catch (JSONException e)
@@ -393,6 +377,8 @@ public class SalesDelivery extends Activity {
                 String warehouseName = data.getStringExtra("result3");
                 CWAREHOUSEID = warehousePK1;
                 txtSalesDelWH.setText(warehouseName);
+                checkInfo.put("WHName",warehouseName);
+                Log.d(TAG, "Check: " +checkInfo.toString());
             }
 
         }
@@ -1449,61 +1435,7 @@ public class SalesDelivery extends Activity {
                         // ADD CAIXY TEST END
                         return;
                     }
-
-                    if (jsonBillBodyTask == null || jsonBillBodyTask.length() < 1) {
-                        Toast.makeText(SalesDelivery.this, "没有取得订单表体",
-                                Toast.LENGTH_LONG).show();
-
-                        // ADD CAIXY TEST START
-//                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                        // ADD CAIXY TEST END
-                        return;
-                    }
-
-
-//                    try {
-//                        GetWHPosStatus();
-//                    } catch (JSONException e) {
-//                        Toast.makeText(SalesDelivery.this,"获取仓库状态失败", Toast.LENGTH_LONG).show();
-//                        //ADD CAIXY TEST START
-//                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-//                        //ADD CAIXY TEST END
-//
-//                    }
-
-//                    if(tmpWHStatus.equals(""))
-//                    {
-//                        return;
-//                    }
-//					if(tmpWHStatus.equals("Y"))
-//					{
-//						if(tmpposCode.equals(""))
-//						{
-//							Toast.makeText(SalesDelivery.this,R.string.QingShuRuHuoWeiHao, Toast.LENGTH_LONG).show();
-//
-//							//ADD CAIXY TEST START
-//							MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-//							//ADD CAIXY TEST END
-//							return;
-//						}
-//					}
-
-                    Intent intDeliveryScan = new Intent(SalesDelivery.this, SalesDeliveryDetail.class);
-                    intDeliveryScan.putExtra("BillCode", tmpBillCode);
-                    intDeliveryScan.putExtra("PK_CORP", PK_CORP);
-                    intDeliveryScan.putExtra("CSALEID", csaleid);
-                    intDeliveryScan.putExtra("ScanType", tvSaleOutSelect.getText().toString());
-                    intDeliveryScan.putExtra("TaskJonsBody", jsonBillBodyTask.toString());
-                    SerializableList lstScanSaveDetial = new SerializableList();
-                    lstScanSaveDetial.setList(lstSaveBody);
-                    intDeliveryScan.putExtra("lstScanSaveDetial", lstScanSaveDetial);
-                    String sTaskCount = TaskCount + "";
-                    intDeliveryScan.putExtra("TaskCount", sTaskCount);
-//                    intDeliveryScan.putExtra("tmpCorpPK",tmpCorpPK);
-                    intDeliveryScan.putStringArrayListExtra("ScanedBarcode", ScanedBarcode);
-
-                    startActivityForResult(intDeliveryScan, 42);
-
+                    SaleScan();
 //                    Intent deliveryScan = new Intent(SalesDelivery.this, SalesDeliveryScan.class);
 //                    deliveryScan.putExtra("BillCode", tmpBillCode);
 //                    deliveryScan.putExtra("PK_CORP", PK_CORP);
@@ -1518,11 +1450,20 @@ public class SalesDelivery extends Activity {
 ////                    intDeliveryScan.putExtra("tmpCorpPK",tmpCorpPK);
 //                    deliveryScan.putStringArrayListExtra("ScanedBarcode", ScanedBarcode);
 //                    startActivityForResult(deliveryScan, 86);
-
                     break;
                 case id.btnSalesDelSave:
+
                     try
                     {
+                        if (jsBody==null||jsBody.equals("")){
+                            Toast.makeText(SalesDelivery.this, "没有要保存的数据",
+                                    Toast.LENGTH_LONG).show();
+                            // ADD CAIXY TEST START
+                            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+                            // ADD CAIXY TEST END
+                            return;
+
+                        }
                     if (tvSaleOutSelect.getText().toString() == null || tvSaleOutSelect.getText().toString().equals("")) {
                         Toast.makeText(SalesDelivery.this, "请输入来源单据",
                                 Toast.LENGTH_LONG).show();
@@ -1532,7 +1473,7 @@ public class SalesDelivery extends Activity {
                         return;
                     }
 
-                    if (txtSalesDelPDOrder.getText().toString() == null || txtSalesDelPDOrder.getText().toString().equals("")) {
+                    if (txtSalesDelPDOrder.getText().toString() == null || (!txtSalesDelPDOrder.getText().toString().equals(checkInfo.get("BillCode")))) {
                         Toast.makeText(SalesDelivery.this, "没有选择单据号",
                                 Toast.LENGTH_LONG).show();
                         // ADD CAIXY TEST START
@@ -1541,7 +1482,7 @@ public class SalesDelivery extends Activity {
                         return;
                     }
 
-                    if (txtSalesDelWH.getText().toString() == null || txtSalesDelWH.getText().toString().equals("")) {
+                    if (txtSalesDelWH.getText().toString() == null || (!txtSalesDelWH.getText().toString().equals(checkInfo.get("WHName")))) {
                         Toast.makeText(SalesDelivery.this, "仓库没有选择",
                                 Toast.LENGTH_LONG).show();
                         // ADD CAIXY TEST START
@@ -1635,10 +1576,6 @@ public class SalesDelivery extends Activity {
 
                     break;
 
-//				case id.btnSalesDelCD:
-//					SetCDtype();
-//					break;
-
             }
         }
     }
@@ -1672,23 +1609,23 @@ public class SalesDelivery extends Activity {
         table.put("Head", tableHead);
         JSONObject tableBody = new JSONObject();
         JSONArray bodyArray = new JSONArray();
-        if (NoScanSave == false) {
-            JSONArray arrays = jsSerino.getJSONArray("Serino");
-            for (int i = 0; i < arrays.length(); i++) {
-//                String sSerial = ((JSONObject) (arrays.get(i))).getString("sno");
-                String sBatch = ((JSONObject) (arrays.get(i))).getString("batch");
-//                String sInvCode = ((JSONObject) (arrays.get(i))).getString("invcode");
-//                String serino = ((JSONObject) (arrays.get(i))).getString("serino");
-//                serino = serino.replace("\n", "");
-                String totalnum = ((JSONObject) (arrays.get(i))).getString("box");
-                totalnum = Double.valueOf(totalnum).toString();
-//                String sbarcode = serino;
-                JSONObject map = new JSONObject();
-                map.put("VBATCHCODE",sBatch);
-                map.put("NNUMBER",totalnum);
-
-            }
-        }
+//        if (NoScanSave == false) {
+//            JSONArray arrays = jsSerino.getJSONArray("Serino");
+//            for (int i = 0; i < arrays.length(); i++) {
+////                String sSerial = ((JSONObject) (arrays.get(i))).getString("sno");
+//                String sBatch = ((JSONObject) (arrays.get(i))).getString("batch");
+////                String sInvCode = ((JSONObject) (arrays.get(i))).getString("invcode");
+////                String serino = ((JSONObject) (arrays.get(i))).getString("serino");
+////                serino = serino.replace("\n", "");
+//                String totalnum = ((JSONObject) (arrays.get(i))).getString("box");
+//                totalnum = Double.valueOf(totalnum).toString();
+////                String sbarcode = serino;
+//                JSONObject map = new JSONObject();
+//                map.put("VBATCHCODE",sBatch);
+//                map.put("NNUMBER",totalnum);
+//
+//            }
+//        }
 
         if (NoScanSave == false) {
             //JSONArray heads = jsHead.getJSONArray("PurGood");
@@ -1723,6 +1660,9 @@ public class SalesDelivery extends Activity {
 //                        VBATCHCODE
 //                                VRECEIVEADDRESS,VRECEIVEADDRESS
 //                        VRECEIVEPERSON,--用户名
+                        Double box = arraysSerino.getJSONObject(j).getDouble("box");
+                        DecimalFormat decimalFormat = new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
+                        String totalBox = decimalFormat.format(box);//format 返回的是字符串
                         JSONObject object = new JSONObject();
                         object.put("CROWNO", bodys.getJSONObject(i).getString("crowno"));
                         object.put("CBIZTYPE", CBIZTYPE);//表头
@@ -1736,7 +1676,7 @@ public class SalesDelivery extends Activity {
                         object.put("CSENDWAREID", CWAREHOUSEID);//仓库
                         object.put("CSOURCEBILLBODYID", bodys.getJSONObject(i).getString("corder_bid"));
                         object.put("CSOURCEBILLID",bodys.getJSONObject(i).getString("csaleid"));
-                        object.put("NNUMBER", arraysSerino.getJSONObject(j).getDouble("box"));
+                        object.put("NNUMBER", totalBox);
                         object.put("NTOTALOUTINVNUM",bodys.getJSONObject(i).getString("nnumber"));
                         object.put("PK_SENDCORP", bodys.getJSONObject(i).getString("pk_corp"));
                         object.put("VBATCHCODE", arraysSerino.getJSONObject(j).getDouble("batch"));
@@ -1759,11 +1699,7 @@ public class SalesDelivery extends Activity {
     /**
      * 获取仓库信息
      * by Xuhu
-     *
-     */
-    /**
      * 点击仓库列表参照
-     *
      * @throws JSONException
      */
     private void btnWarehouseClick() throws JSONException {
@@ -2081,9 +2017,6 @@ public class SalesDelivery extends Activity {
                 Toast.makeText(this, "获取货位失败", Toast.LENGTH_LONG).show();
                 //ADD CAIXY TEST START
                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                //ADD CAIXY TEST END
-//				txtSalesDelPos.setText("");
-//				txtSalesDelPos.requestFocus();
                 tmpposCode = "";
                 tmpposName = "";
                 tmpposID = "";
@@ -2138,36 +2071,21 @@ public class SalesDelivery extends Activity {
             ViewGrid.putExtra("sEndDate", sEndDate);
             startActivityForResult(ViewGrid, 88);
         }
-//		if(tvSaleOutSelect.getText().toString().equals("退回再送"))
-//		{
-//			Intent ViewGrid = new Intent(this, SaleBillInfoOrderList.class);
-//			ViewGrid.putExtra("BillCodeKey", BillCodeKey);
-//			ViewGrid.putExtra("FunctionName", "退回再送");
-//			startActivityForResult(ViewGrid,88);
-//		}
-//		if(tvSaleOutSelect.getText().toString().equals("退回不送"))
-//		{
-//			Intent ViewGrid = new Intent(this, SaleBillInfoOrderList.class);
-//			ViewGrid.putExtra("FunctionName", "退回不送");//GetSaleTakeHead//GetSaleOutHead
-//			startActivityForResult(ViewGrid,88);
-//		}
 
     }
 
-    //打开收发类别画面
-//    private void btnSalesDelRdclClick(String Code) throws ParseException, IOException, JSONException
-//    {
-//        Intent ViewGrid = new Intent(this,VlistRdcl.class);
-//        ViewGrid.putExtra("FunctionName", "GetRdcl");
-//        ViewGrid.putExtra("AccID", tmpAccID);
-//        ViewGrid.putExtra("rdflag", rdflag);
-//        ViewGrid.putExtra("rdcode", Code);
-//        startActivityForResult(ViewGrid,88);
-//    }
+    private void SaleScan(){
+        Intent intDeliveryScan = new Intent(SalesDelivery.this, SalesDeliveryDetail.class);
+        intDeliveryScan.putExtra("BillCode", tmpBillCode);
+        intDeliveryScan.putExtra("PK_CORP", PK_CORP);
+        intDeliveryScan.putExtra("CSALEID", csaleid);
+        intDeliveryScan.putExtra("ScanType", tvSaleOutSelect.getText().toString());
+        startActivityForResult(intDeliveryScan, 42);
+    }
 
     //退出按钮
     private void Exit() {
-        if (saleOutGoodsLists.size() > 0) {
+        if (jsBody!=null) {
             AlertDialog.Builder bulider =
                     new AlertDialog.Builder(this).setTitle(R.string.XunWen).setMessage("扫描单据未保存，确认退出吗?");
             bulider.setNegativeButton(R.string.QuXiao, null);
@@ -2279,7 +2197,7 @@ public class SalesDelivery extends Activity {
 //            }
 
             //String sHBillCode = sendMapHead.get("No").toString();
-            String sBBillCode = sendMapBody.get("BillCode").toString();
+//            String sBBillCode = sendMapBody.get("BillCode").toString();
 
 //			if(tvSalesDelBillCode.getText().equals(sBBillCode))
 //			{
@@ -2492,7 +2410,6 @@ public class SalesDelivery extends Activity {
         this.jsonBillBodyTask = new JSONObject();
         this.jsonSaveHead = new JSONObject();
         this.txtSalesDelPDOrder.setText("");
-//		this.txtSalesDelPos.setText("");
         this.txtSalesDelRdcl.setText("");
         this.txtSalesDelWH.setText("");
         this.txtSalesDelCD.setText("");
@@ -2502,31 +2419,15 @@ public class SalesDelivery extends Activity {
         this.tmpposCode = "";
         this.tmpposName = "";
         this.tmpposID = "";
-
         this.sBillAccID = "";
         this.sBillCorpPK = "";
         this.sBillCode = "";
         this.SaleFlg = "";
-
-        //this.tmpOutManualNo = "";
         this.tmpCdTypeID = "";
-//		this.tvSalesDelBillCodeName.setText("");
-//		this.tvSalesDelAccIDName.setText("");
-//		this.tvSalesDelCorpName.setText("");
-//		this.tvSalesDelBillCode.setText("");
-//		this.tvSalesDelAccID.setText("");
-//		this.tvSalesDelCorp.setText("");
         this.ScanedBarcode = new ArrayList<String>();
-
         this.txtSalesDelPDOrder.requestFocus();
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.sales_delivery, menu);
-//        return true;
-//    }
 
 
     private void initView() {
