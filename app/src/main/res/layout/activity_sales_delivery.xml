@@ -122,15 +122,16 @@
                 android:id="@+id/tvCustomer"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_weight="0.085"
                 android:gravity="center"
-                android:text="客       户"/>
+                android:text="客  户"/>
 
             <EditText
                 android:id="@+id/txtSalesDelCD"
                 android:layout_width="0dp"
                 android:layout_height="30dp"
                 android:layout_marginTop="5dp"
-                android:layout_weight="4"
+                android:layout_weight="0.95"
                 android:background="@drawable/edittext_style"
                 android:ems="10"
                 android:singleLine="true"/>
@@ -148,6 +149,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
+                android:layout_weight="0.01"
                 android:text="单据日期"/>
 
 
@@ -156,7 +158,7 @@
                 android:layout_width="0dp"
                 android:layout_height="30dp"
                 android:layout_marginTop="5dp"
-                android:layout_weight="4"
+                android:layout_weight="0.99"
                 android:background="@drawable/edittext_style"
                 android:ems="10"
                 android:singleLine="true"/>

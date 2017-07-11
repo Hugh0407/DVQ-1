@@ -1692,6 +1692,35 @@ public class SalesDelivery extends Activity {
             table.put("GUIDS", UUID.randomUUID().toString());
             Log.d(TAG, "XXXXXX: " + table.toString());
 
+            if (!MainLogin.getwifiinfo()) {
+                Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
+                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+                return false;
+            }
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        JSONObject jas = Common.DoHttpQuery(table, "SaveSaleReceive", "A");
+                        if (jas != null) {
+                            Log.d(TAG, "保存" + jas.toString());
+                        } else {
+//                            Toast.makeText(SalesDelivery.this, "单据保存过程中出现了问题," +
+//                                    "请尝试再次提交或!", Toast.LENGTH_LONG).show();
+                            //ADD CAIXY TEST START
+                            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+
+                            //ADD CAIXY TEST END
+                            return;
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+
         }
         return true;
     }
