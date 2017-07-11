@@ -6,7 +6,6 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -129,8 +128,8 @@ public class SCScanAct extends Activity {
         m_AccID = this.getIntent().getStringExtra("AccID");
         m_WarehouseID = this.getIntent().getStringExtra("m_WarehouseID");
         m_pk_Corp = this.getIntent().getStringExtra("pk_corp");
-        GetOtherInOutHead();
-        GetOtherInOutBody();
+        getOtherInOutHead();
+        getOtherInOutBody();
     }
 
 
@@ -212,7 +211,7 @@ public class SCScanAct extends Activity {
                     JSONObject json = (JSONObject) msg.obj;
                     if (json != null) {
                         try {
-                            SetInvBaseToUI(json);
+                            setInvBaseToUI(json);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -233,8 +232,8 @@ public class SCScanAct extends Activity {
     String pk_invbasdoc = "";
     String pk_invmandoc = "";
 
-    private void SetInvBaseToUI(JSONObject json) throws JSONException {
-        Log.d("TAG", "SetInvBaseToUI: " + json);
+    private void setInvBaseToUI(JSONObject json) throws JSONException {
+        Log.d("TAG", "setInvBaseToUI: " + json);
         if (json.getBoolean("Status")) {
             JSONArray val = json.getJSONArray("baseInfo");
             HashMap<String, Object> map = null;
@@ -282,7 +281,7 @@ public class SCScanAct extends Activity {
     /**
      * 获取表头
      */
-    private void GetOtherInOutHead() {
+    private void getOtherInOutHead() {
         HashMap<String, String> parameter = new HashMap<String, String>();
         parameter.put("FunctionName", "GetOtherInOutHead");
         parameter.put("BillType", m_BillType);
@@ -300,7 +299,7 @@ public class SCScanAct extends Activity {
      *
      * @param sku 物料编码
      */
-    private void GetInvBaseInfo(String sku) {
+    private void getInvBaseInfo(String sku) {
         HashMap<String, String> parameter = new HashMap<String, String>();
         parameter.put("FunctionName", "GetInvBaseInfo");
         parameter.put("CompanyCode", MainLogin.objLog.CompanyCode);
@@ -314,7 +313,7 @@ public class SCScanAct extends Activity {
     /**
      * 获取表体
      */
-    private void GetOtherInOutBody() {
+    private void getOtherInOutBody() {
         HashMap<String, String> parameter = new HashMap<String, String>();
         parameter.put("FunctionName", "GetOtherInOutBody");
         parameter.put("BillID", m_BillID);
@@ -345,72 +344,14 @@ public class SCScanAct extends Activity {
     }
 
     /**
-     * 保存单据的dialog
+     * 获取数据的等待dialog
      */
     private void showProgressDialog() {
         progressDialog = new ProgressDialog(SCScanAct.this);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);// 设置进度条的形式为圆形转动的进度条
         progressDialog.setCancelable(false);// 设置是否可以通过点击Back键取消
         progressDialog.setCanceledOnTouchOutside(false);// 设置在点击Dialog外是否取消Dialog进度条
-        // progressDialog.setIcon(R.drawable.ic_launcher);
-        // 设置提示的title的图标，默认是没有的，如果没有设置title的话只设置Icon是不会显示图标的
         progressDialog.setTitle("获取单据");
-        // dismiss监听
-//        progressDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-//
-//            @Override
-//            public void onDismiss(DialogInterface progressDialog) {
-//                // TODO Auto-generated method stub
-//
-//            }
-//        });
-        // 监听Key事件被传递给dialog
-//        progressDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
-//
-//            @Override
-//            public boolean onKey(DialogInterface progressDialog, int keyCode,
-//                                 KeyEvent event) {
-//                // TODO Auto-generated method stub
-//                return false;
-//            }
-//        });
-        // 监听cancel事件
-//        progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-//
-//            @Override
-//            public void onCancel(DialogInterface progressDialog) {
-//                // TODO Auto-generated method stub
-//
-//            }
-//        });
-        //设置可点击的按钮，最多有三个(默认情况下)
-//        progressDialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定",
-//                new DialogInterface.OnClickListener() {
-//
-//                    @Override
-//                    public void onClick(DialogInterface progressDialog, int which) {
-//                        // TODO Auto-generated method stub
-//
-//                    }
-//                });
-//        progressDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "取消",
-//                new DialogInterface.OnClickListener() {
-//
-//                    @Override
-//                    public void onClick(DialogInterface progressDialog, int which) {
-//                        // TODO Auto-generated method stub
-//
-//                    }
-//                });
-//        progressDialog.setButton(DialogInterface.BUTTON_NEUTRAL, "中立",
-//                new DialogInterface.OnClickListener() {
-//
-//                    @Override
-//                    public void onClick(DialogInterface progressDialog, int which) {
-//                        // TODO Auto-generated method stub
-//
-//                    }
-//                });
         progressDialog.setMessage("正在获取数据，请等待...");
         progressDialog.show();
         new Thread(new Runnable() {
@@ -449,7 +390,7 @@ public class SCScanAct extends Activity {
     /**
      * 条码解析
      */
-    private boolean BarAnalysis() {
+    private boolean barAnalysis() {
         String Bar = mEdBarCode.getText().toString().trim();
         if (Bar.contains("\n")) {
             Bar = Bar.replace("\n", "");
@@ -469,10 +410,8 @@ public class SCScanAct extends Activity {
                 }
             }
             /*********************************************************************/
-            mEdLot.setEnabled(false);
-            mEdQty.setEnabled(false);
-            mEdLot.setTextColor(Color.WHITE);
-            mEdQty.setTextColor(Color.WHITE);
+//            mEdLot.setEnabled(false);
+//            mEdQty.setEnabled(false);
             String encoding = barCode[1];
             mEdEncoding.setText(encoding);
             mEdLot.setText(barCode[2]);
@@ -482,7 +421,7 @@ public class SCScanAct extends Activity {
             mEdNum.setText("1");
             mEdNum.requestFocus();  //包码扫描后光标跳到“数量”,输入数量,添加到列表
             mEdNum.setSelection(mEdNum.length());   //将光标移动到最后的位置
-            GetInvBaseInfo(encoding);
+            getInvBaseInfo(encoding);
             return true;
         } else if (barCode.length == 10 && barCode[0].equals("TP")) {//盘码TP|SKU|LOT|WW|TAX|QTY|NUM|CW|ONLY|SN
             /*********************************************************************/
@@ -502,12 +441,9 @@ public class SCScanAct extends Activity {
                 }
             }
             //如果是盘码，全都设置为不可编辑，默认这三个是可编辑的
-            mEdLot.setEnabled(false);
-            mEdQty.setEnabled(false);
-            mEdNum.setEnabled(false);
-            mEdLot.setTextColor(Color.WHITE);
-            mEdQty.setTextColor(Color.WHITE);
-            mEdNum.setTextColor(Color.WHITE);
+//            mEdLot.setEnabled(false);
+//            mEdQty.setEnabled(false);
+//            mEdNum.setEnabled(false);
             String encoding = barCode[1];
             mEdEncoding.setText(encoding);
             mEdLot.setText(barCode[2]);
@@ -516,7 +452,7 @@ public class SCScanAct extends Activity {
             double weight = Double.valueOf(barCode[5]);
             double mEdNum = Double.valueOf(barCode[6]);
             mEdQty.setText(String.valueOf(weight * mEdNum));
-            GetInvBaseInfo(encoding);
+            getInvBaseInfo(encoding);
             return true;
         } else {
             Utils.showToast(activity, "条码有误重新输入");
@@ -587,7 +523,7 @@ public class SCScanAct extends Activity {
     /**
      * 清空所有的Edtext
      */
-    private void ChangeAllEdTextToEmpty() {
+    private void changeAllEdTextToEmpty() {
         mEdNum.setText("");
         mEdBarCode.setText("");
         mEdEncoding.setText("");
@@ -676,9 +612,9 @@ public class SCScanAct extends Activity {
                         if (!TextUtils.isEmpty(mEdBarCode.getText().toString())) {
                             if (isAllEdNotNull() && addDataToDetailList()) {
                                 mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
-                                ChangeAllEdTextToEmpty();
+                                changeAllEdTextToEmpty();
                             } else {
-                                BarAnalysis();
+                                barAnalysis();
                             }
                         } else {
                             Utils.showToast(activity, "请输入条码");
@@ -710,7 +646,7 @@ public class SCScanAct extends Activity {
                         mEdQty.setText(String.valueOf(num * weight));
                         if (addDataToDetailList()) {
                             mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
-                            ChangeAllEdTextToEmpty();
+                            changeAllEdTextToEmpty();
                         }
                         return true;
                 }

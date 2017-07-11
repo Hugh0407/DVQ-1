@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -208,8 +207,6 @@ public class ProductOutScanAct extends Activity {
             mEdQty.setEnabled(false);
             mEdNum.setEnabled(true);
             mEdNum.setFocusable(true);
-            mEdLot.setTextColor(Color.WHITE);
-            mEdQty.setTextColor(Color.WHITE);
             String encoding = barCode[1];
             mEdEncoding.setText(encoding);
             mEdLot.setText(barCode[2]);
@@ -235,9 +232,6 @@ public class ProductOutScanAct extends Activity {
             mEdNum.setEnabled(false);
             mEdNum.setFocusable(false);
             mEdQty.setFocusable(false);
-            mEdLot.setTextColor(Color.WHITE);
-            mEdQty.setTextColor(Color.WHITE);
-            mEdNum.setTextColor(Color.WHITE);
             String encoding = barCode[1];
             mEdEncoding.setText(encoding);
             mEdLot.setText(barCode[2]);

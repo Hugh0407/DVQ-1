@@ -149,7 +149,7 @@ public class SalesDeliveryDetail extends Activity {
         @Override
         public boolean onKey(View v, int arg1, KeyEvent arg2) {
             switch (v.getId()) {
-                case R.id.txtPurBarcode:
+                case R.id.txtBarcode:
                     if (arg1 == 66 && arg2.getAction() == KeyEvent.ACTION_UP) {
                         ScanDetail(txtBarcode.getText().toString());
                         txtBarcode.requestFocus();
@@ -276,12 +276,11 @@ public class SalesDeliveryDetail extends Activity {
         else if(m_mapSaleBaseInfo.get("barcodetype").toString().equals("P") ) {
             txtSaleBatch.setFocusableInTouchMode(false);
             txtSaleBatch.setFocusable(false);
-            txtSaleNumber.setFocusableInTouchMode(true);
-            txtSaleNumber.setFocusable(true);
+            txtSaleNumber.setFocusableInTouchMode(false);
+            txtSaleNumber.setFocusable(false);
             txtSaleTotal.setFocusableInTouchMode(false);
             txtSaleTotal.setFocusable(false);
-            txtSaleNumber.requestFocus();
-            txtSaleNumber.selectAll();
+            ScanedToGet();
         }
     }
     private boolean ScanedToGet() {
@@ -297,9 +296,9 @@ public class SalesDeliveryDetail extends Activity {
                     String Free1 = "";
                     // 寻找到了对应存货
                     Double doneqty = 0.0;
-                    if(!temp.getString("nconfirmnum").isEmpty() &&
-                            !temp.getString("nconfirmnum").toLowerCase().equals("null")) {
-                        doneqty = temp.getDouble("nconfirmnum");
+                    if(!temp.getString("npacknumber").isEmpty() &&
+                            !temp.getString("npacknumber").toLowerCase().equals("null")) {
+                        doneqty = temp.getDouble("npacknumber");
                         if (doneqty  >= temp.getInt("nnumber")) {
                             Toast.makeText(this, "这个存货已经超过应收数量了,不允许收!",
                                     Toast.LENGTH_LONG).show();
@@ -331,7 +330,7 @@ public class SalesDeliveryDetail extends Activity {
 
                     //Double doneqty = temp.getDouble("doneqty");
                     //temp.put("doneqty", doneqty + Double.parseDouble(txtPurTotal.getText().toString()));
-                    temp.put("nconfirmnum", doneqty + Double.parseDouble(txtSaleTotal.getText().toString()));
+                    temp.put("npacknumber", doneqty + Double.parseDouble(txtSaleTotal.getText().toString()));
                     break;
                 }
             }
@@ -352,7 +351,7 @@ public class SalesDeliveryDetail extends Activity {
 
         JSONArray arrays;
         try {
-            arrays = jsBody.getJSONArray("PurBody");
+            arrays = jsBody.getJSONArray("dbBody");
             number = 0.0;
             ntotaloutinvnum = 0.0;
             for (int i = 0; i < arrays.length(); i++) {
@@ -401,10 +400,6 @@ public class SalesDeliveryDetail extends Activity {
             temp.put("sno", m_mapSaleBaseInfo.get("serino").toString());
             temp.put("invtype", m_mapSaleBaseInfo.get("invtype").toString());
             temp.put("invspec", m_mapSaleBaseInfo.get("invspec").toString());
-
-            // caixy 需要增加产地
-            temp.put("vfree1", Free1);
-
             serinos.put(temp);
             return true;
         } else {
@@ -433,12 +428,8 @@ public class SalesDeliveryDetail extends Activity {
             temp.put("sno", m_mapSaleBaseInfo.get("serino").toString());
             temp.put("invtype", m_mapSaleBaseInfo.get("invtype").toString());
             temp.put("invspec", m_mapSaleBaseInfo.get("invspec").toString());
-            // caixy 需要增加产地
-            temp.put("vfree1", Free1);
-
             serinos.put(temp);
         }
-
         return true;
     }
 
@@ -569,6 +560,9 @@ public class SalesDeliveryDetail extends Activity {
         txtSaleSpec.setText("");
         txtSaleTotal.setText("");
         txtSaleUnit.setText("");
+        txtSaleNumber.setText("");
+        txtSaleWeight.setText("");
+
     }
 
     @OnClick({R.id.btnTask, R.id.btnDetail, R.id.btnReturn})
@@ -590,7 +584,33 @@ public class SalesDeliveryDetail extends Activity {
                 }
                 break;
             case R.id.btnReturn:
+//                finish();
+                Return();
                 break;
+        }
+    }
+
+    private void Return() {
+        if (jsSerino != null) {
+            Intent intent = new Intent();
+//            intent.putExtra("box", jsBoxTotal.toString());
+            //Log.d("TAG", "ReturnjsBoxTotal: " + jsBoxTotal);
+            intent.putExtra("box", "");
+//            intent.putExtra("head", jsHead.toString());
+//            Log.d("TAG", "ReturnScanedhead: " + jsHead);
+            intent.putExtra("body", jsBody.toString());
+            Log.d("TAG", "ReturnScanedbody: " + jsBody);
+            intent.putExtra("serino", jsSerino.toString());
+            Log.d("TAG", "ReturnScanedSerino: " + jsSerino);
+            intent.putStringArrayListExtra("ScanedBarcode", ScanedBarcode);
+            Log.d("TAG", "ReturnScanedBarcode: " + ScanedBarcode);
+            SalesDeliveryDetail.this.setResult(24, intent);// 设置回传数据。resultCode值是1，这个值在主窗口将用来区分回传数据的来源，以做不同的处理
+            SalesDeliveryDetail.this.finish();
+
+        } else {
+            Intent intent = new Intent();
+            SalesDeliveryDetail.this.setResult(2, intent);// 设置回传数据。resultCode值是1，这个值在主窗口将用来区分回传数据的来源，以做不同的处理
+            SalesDeliveryDetail.this.finish();
         }
     }
 
@@ -618,7 +638,7 @@ public class SalesDeliveryDetail extends Activity {
                     ((JSONObject) (arrays.get(i))).getString("invspec"));
             map.put("Invtype",
                     ((JSONObject) (arrays.get(i))).getString("invtype"));
-            String sinnum = ((JSONObject) (arrays.get(i))).getString("nconfirmnum");
+            String sinnum = ((JSONObject) (arrays.get(i))).getString("npacknumber");
             if(sinnum.toLowerCase().equals("null") || sinnum.isEmpty())
                 sinnum = "0.0";
             map.put("InvNum",
@@ -629,7 +649,7 @@ public class SalesDeliveryDetail extends Activity {
 
         SimpleAdapter listItemAdapter = new SimpleAdapter(
                 SalesDeliveryDetail.this,lstTaskBody,
-                R.layout.sale_out_scan_detail,
+                R.layout.sale_out_task_detail,
                 new String[]{"InvName","InvNum","InvCode", "Invspec", "Invtype"},
                 new int[]{R.id.txtTranstaskInvName, R.id.txtTranstaskInvNum,
                         R.id.txtTranstaskInvCode,R.id.txtSpec,
@@ -699,6 +719,7 @@ public class SalesDeliveryDetail extends Activity {
                         // When clicked, show a toast with the TextView text
 
                         ConfirmDelItem(arg2);
+                        IniDetail();
 
                         return false;
                     }
@@ -768,10 +789,10 @@ public class SalesDeliveryDetail extends Activity {
                     if (ScanedBarcode != null || ScanedBarcode.size() > 0) {
                         for (int si = 0; si < ScanedBarcode.size(); si++) {
                             String RemoveBarCode = ScanedBarcode.get(si).toString();
-                            int iBarlenth = RemoveBarCode.length() - 6;
-                            String RemoveBarCodeF = RemoveBarCode.substring(0, iBarlenth);
-
-                            if (RemoveBarCodeF.equals(serino)) {
+                            Log.d(TAG, "BBB: "+RemoveBarCode);
+//                            int iBarlenth = RemoveBarCode.length() - 6;
+//                            String RemoveBarCodeF = RemoveBarCode.substring(0, iBarlenth);
+                            if (RemoveBarCode.equals(serino)) {
                                 ScanedBarcode.remove(si);
                                 si--;
                             }
@@ -818,8 +839,8 @@ public class SalesDeliveryDetail extends Activity {
 //                                    && batchcodeold.equals(batch))
                             if (invcodeold.equals(invcode))
                             {
-                                Double doneqty = temp.getDouble("nconfirmnum");
-                                temp.put("nconfirmnum", doneqty - ScanedTotal);
+                                Double doneqty = temp.getDouble("npacknumber");
+                                temp.put("npacknumber", doneqty - ScanedTotal);
                             }
 
                             bodynews.put(temp);

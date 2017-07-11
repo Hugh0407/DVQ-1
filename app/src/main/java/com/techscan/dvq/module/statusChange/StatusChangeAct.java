@@ -78,6 +78,8 @@ public class StatusChangeAct extends Activity {
         ActionBar actionBar = this.getActionBar();
         actionBar.setTitle("形态转换");
         activity = this;
+        mBtnBillType.setVisibility(View.INVISIBLE);
+        mBtnSelectWh.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -109,7 +111,7 @@ public class StatusChangeAct extends Activity {
 //                            e.printStackTrace();
 //                        }
 //                        showProgressDialog();
-                        Utils.showToast(activity,"等待接口");
+                        Utils.showToast(activity, "等待接口");
                     } else {
                         showToast(activity, "没有需要保存的数据");
                     }
@@ -160,14 +162,14 @@ public class StatusChangeAct extends Activity {
     /**
      * 保存单据的dialog
      */
-    private void showProgressDialog() {
+    private void showProgressDialog(String title, String message) {
         progressDialog = new ProgressDialog(activity);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);// 设置进度条的形式为圆形转动的进度条
         progressDialog.setCancelable(false);// 设置是否可以通过点击Back键取消
         progressDialog.setCanceledOnTouchOutside(false);// 设置在点击Dialog外是否取消Dialog进度条
         // progressDialog.setIcon(R.drawable.ic_launcher);
         // 设置提示的title的图标，默认是没有的，如果没有设置title的话只设置Icon是不会显示图标的
-        progressDialog.setTitle("保存单据");
+        progressDialog.setTitle(title);
         // dismiss监听
 //        progressDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
 //
@@ -224,7 +226,7 @@ public class StatusChangeAct extends Activity {
 //
 //                    }
 //                });
-        progressDialog.setMessage("正在保存，请等待...");
+        progressDialog.setMessage(message);
         progressDialog.show();
         new Thread(new Runnable() {
 

@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -144,7 +143,7 @@ public class MaterialOutScanAct extends Activity {
                     JSONObject json = (JSONObject) msg.obj;
                     if (json != null) {
                         try {
-                            SetInvBaseToUI(json);
+                            setInvBaseToUI(json);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -194,7 +193,7 @@ public class MaterialOutScanAct extends Activity {
     /**
      * 条码解析
      */
-    private boolean BarAnalysis() {
+    private boolean barAnalysis() {
         String Bar = mEdBarCode.getText().toString().trim();
         if (Bar.contains("\n")) {
             Bar = Bar.replace("\n", "");
@@ -227,7 +226,7 @@ public class MaterialOutScanAct extends Activity {
             mEdLot.requestFocus();  //如果是液体需要手动输入“批次”和“总量”,这里将光标跳到“批次（lot）”
             String encoding = barCode[1];
             mEdEncoding.setText(encoding);
-            GetInvBaseInfo(encoding);
+            getInvBaseInfo(encoding);
             mEdLot.setText("");
             mEdQty.setText("");
             return true;
@@ -235,13 +234,11 @@ public class MaterialOutScanAct extends Activity {
             //如果是包码，批次和总重都改变为不可编辑，数量由员工输入，焦点跳到“数量”
             mEdLot.setEnabled(false);
             mEdQty.setEnabled(false);
-            mEdLot.setTextColor(Color.WHITE);
-            mEdQty.setTextColor(Color.WHITE);
             mEdNum.setEnabled(true);
             mEdNum.requestFocus();  //包码扫描后光标跳到“数量”,输入数量,添加到列表
             String encoding = barCode[1];
             mEdEncoding.setText(encoding);
-            GetInvBaseInfo(encoding);
+            getInvBaseInfo(encoding);
             mEdLot.setText(barCode[2]);
             mEdWeight.setText(barCode[4]);
             mEdQty.setText("");
@@ -260,12 +257,9 @@ public class MaterialOutScanAct extends Activity {
             mEdLot.setEnabled(false);
             mEdQty.setEnabled(false);
             mEdNum.setEnabled(false);
-            mEdLot.setTextColor(Color.WHITE);
-            mEdQty.setTextColor(Color.WHITE);
-            mEdNum.setTextColor(Color.WHITE);
             String encoding = barCode[1];
             mEdEncoding.setText(encoding);
-            GetInvBaseInfo(encoding);
+            getInvBaseInfo(encoding);
             mEdLot.setText(barCode[2]);
             mEdWeight.setText(barCode[4]);
             mEdNum.setText(barCode[5]);
@@ -347,7 +341,7 @@ public class MaterialOutScanAct extends Activity {
     /**
      * 清空所有的Edtext
      */
-    private void ChangeAllEdTextToEmpty() {
+    private void changeAllEdTextToEmpty() {
         mEdNum.setText("");
         mEdBarCode.setText("");
         mEdEncoding.setText("");
@@ -385,7 +379,7 @@ public class MaterialOutScanAct extends Activity {
      *
      * @param sku 物料编码
      */
-    private void GetInvBaseInfo(String sku) {
+    private void getInvBaseInfo(String sku) {
         HashMap<String, String> parameter = new HashMap<String, String>();
         parameter.put("FunctionName", "GetInvBaseInfo");
         parameter.put("CompanyCode", MainLogin.objLog.CompanyCode);
@@ -406,8 +400,8 @@ public class MaterialOutScanAct extends Activity {
     String pk_invbasdoc = "";
     String pk_invmandoc = "";
 
-    private void SetInvBaseToUI(JSONObject json) throws JSONException {
-        Log.d(TAG, "SetInvBaseToUI: " + json);
+    private void setInvBaseToUI(JSONObject json) throws JSONException {
+        Log.d(TAG, "setInvBaseToUI: " + json);
         if (json.getBoolean("Status")) {
             JSONArray val = json.getJSONArray("baseInfo");
             HashMap<String, Object> map = null;
@@ -510,9 +504,9 @@ public class MaterialOutScanAct extends Activity {
                             if (isAllEdNotNull()) {
                                 addDataToDetailList();
                                 mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
-                                ChangeAllEdTextToEmpty();
+                                changeAllEdTextToEmpty();
                             } else {
-                                BarAnalysis();
+                                barAnalysis();
                             }
                         } else {
                             Utils.showToast(MaterialOutScanAct.this, "请输入条码");
@@ -547,7 +541,7 @@ public class MaterialOutScanAct extends Activity {
 
                             addDataToDetailList();
                             mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
-                            ChangeAllEdTextToEmpty();
+                            changeAllEdTextToEmpty();
 
                         }
                         return true;
@@ -563,7 +557,7 @@ public class MaterialOutScanAct extends Activity {
 ////                            if (isAllEdNotNull() && ) {
 //                                addDataToDetailList();
 //                                mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
-//                                ChangeAllEdTextToEmpty();
+//                                changeAllEdTextToEmpty();
 ////                            }
 //                            } else {
 //                                Toast.makeText(MaterialOutScanAct.this, "数量不正确", Toast.LENGTH_SHORT).show();
@@ -589,7 +583,7 @@ public class MaterialOutScanAct extends Activity {
 //                            if (isAllEdNotNull() && ) {
                         addDataToDetailList();
                         mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
-                        ChangeAllEdTextToEmpty();
+                        changeAllEdTextToEmpty();
                         return true;
                 }
             }
