@@ -88,11 +88,11 @@ public class PurStockIn extends Activity {
 
 	ImageButton btnWarehouse;
 	ImageButton btnOrganization;
-	ImageButton btnCategory;
+	//ImageButton btnCategory;
 	ImageButton btnDepartment;
 	EditText txtWareHouse;
 	EditText txtOrganization;
-	EditText txtCategory;
+	//EditText txtCategory;
 	EditText txtDepartment;
 	EditText txtStartDate;
 	EditText txtEndDate;
@@ -1393,6 +1393,7 @@ public class PurStockIn extends Activity {
 	}
 
 	private void btnReferSTOrgList() {
+		Common.ShowLoading(MyContext);
 		HashMap<String, String> parameter = new HashMap<String, String>();
 		parameter.put("FunctionName", "GetSTOrgList");
 		parameter.put("CompanyCode", MainLogin.objLog.CompanyCode);
@@ -1415,6 +1416,7 @@ public class PurStockIn extends Activity {
 	}
 
 	private void btnReferDepartment() {
+		Common.ShowLoading(MyContext);
 		HashMap<String, String> parameter = new HashMap<String, String>();
 		parameter.put("FunctionName", "GetDeptList");
 		parameter.put("CompanyCode", MainLogin.objLog.CompanyCode);
@@ -1443,6 +1445,7 @@ public class PurStockIn extends Activity {
 					} catch (JSONException e) {
 						e.printStackTrace();
 					}
+					Common.cancelLoading();
 					break;
 				case HANDER_STORG:
 					JSONObject storg = (JSONObject) msg.obj;
@@ -1458,6 +1461,7 @@ public class PurStockIn extends Activity {
 					} catch (JSONException e) {
 						e.printStackTrace();
 					}
+					Common.cancelLoading();
 					break;
 				case HANDER_POORDER_HEAD:
 					try {
@@ -1480,6 +1484,7 @@ public class PurStockIn extends Activity {
 						td.start();
 
 					} catch (JSONException e) {
+						Common.cancelLoading();
 						e.printStackTrace();
 					}
 					break;
@@ -1487,6 +1492,7 @@ public class PurStockIn extends Activity {
 					jsBody = (JSONObject) msg.obj;
 					//jsBody = jsonBody;
 					Log.d("TAG", "PurBody: " + jsBody);
+					Common.cancelLoading();
 					break;
 				default:
 					break;
@@ -1502,6 +1508,22 @@ public class PurStockIn extends Activity {
 		{
 			switch(v.getId())
 			{
+				case R.id.txtStartDate: {
+					year = Integer.valueOf(txtStartDate.getText().toString().split("-")[0]);
+					month = Integer.valueOf(txtStartDate.getText().toString().split("-")[1]) - 1;
+					day = Integer.valueOf(txtStartDate.getText().toString().split("-")[2]);
+					DatePickerDialog dpd = new DatePickerDialog(PurStockIn.this, SDatelistener, year, month, day);
+					dpd.show();//显示DatePickerDialog组件
+					break;
+				}
+				case R.id.txtEndDate: {
+					year = Integer.valueOf(txtEndDate.getText().toString().split("-")[0]);
+					month = Integer.valueOf(txtEndDate.getText().toString().split("-")[1]) - 1;
+					day = Integer.valueOf(txtEndDate.getText().toString().split("-")[2]);
+					DatePickerDialog dpd = new DatePickerDialog(PurStockIn.this, EDatelistener, year, month, day);
+					dpd.show();//显示DatePickerDialog组件
+					break;
+				}
 				case R.id.btnPurInExit:
 				{
 					Exit();
@@ -1580,12 +1602,12 @@ public class PurStockIn extends Activity {
 							txtOrganization.requestFocus();
 							return;
 						}
-						if(CDISPATCHERID.isEmpty()){
-							Toast.makeText(PurStockIn.this, "请输入收发类别" ,Toast.LENGTH_LONG).show();
-							MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-							txtCategory.requestFocus();
-							return;
-						}
+//						if(CDISPATCHERID.isEmpty()){
+//							Toast.makeText(PurStockIn.this, "请输入收发类别" ,Toast.LENGTH_LONG).show();
+//							MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//							txtCategory.requestFocus();
+//							return;
+//						}
 						if(CDPTID.isEmpty()){
 							Toast.makeText(PurStockIn.this, "请输入部门" ,Toast.LENGTH_LONG).show();
 							MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
@@ -1641,6 +1663,7 @@ public class PurStockIn extends Activity {
 								//ADD CAIXY TEST START
 								MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
 								//ADD CAIXY TEST END
+								Common.cancelLoading();
 			    				break;
 			    	}
 					ShowOrderNoList("");
@@ -1649,23 +1672,26 @@ public class PurStockIn extends Activity {
 				}
 				case R.id.refer_wh:
 					try {
+						Common.ShowLoading(MyContext);
 						btnWarehouseClick();
+						Common.cancelLoading();
 					} catch (JSONException e) {
+						Common.cancelLoading();
 						e.printStackTrace();
 					}
 					break;
 				case R.id.refer_organization:
 					btnReferSTOrgList();
 					break;
-				case R.id.refer_lei_bie:
-					try {
-						btnRdclClick("");
-					} catch (IOException e) {
-						e.printStackTrace();
-					} catch (JSONException e) {
-						e.printStackTrace();
-					}
-					break;
+//				case R.id.refer_lei_bie:
+//					try {
+//						btnRdclClick("");
+//					} catch (IOException e) {
+//						e.printStackTrace();
+//					} catch (JSONException e) {
+//						e.printStackTrace();
+//					}
+//					break;
 				case R.id.refer_department:
 					btnReferDepartment();
 					break;
@@ -1716,21 +1742,23 @@ public class PurStockIn extends Activity {
 		btnWarehouse.setOnClickListener(myListner);
 		btnOrganization = (ImageButton)findViewById(id.refer_organization);
 		btnOrganization.setOnClickListener(myListner);
-		btnCategory = (ImageButton)findViewById(id.refer_lei_bie);
-		btnCategory.setOnClickListener(myListner);
+		//btnCategory = (ImageButton)findViewById(id.refer_lei_bie);
+		//btnCategory.setOnClickListener(myListner);
 		btnDepartment = (ImageButton)findViewById(id.refer_department);
 		btnDepartment.setOnClickListener(myListner);
 
 		txtWareHouse = (EditText)findViewById(R.id.wh);
 		txtOrganization = (EditText)findViewById(R.id.organization);
-		txtCategory = (EditText)findViewById(R.id.lei_bie);
+		//txtCategory = (EditText)findViewById(R.id.lei_bie);
 		txtDepartment = (EditText)findViewById(R.id.department);
 
 		txtStartDate = (EditText)findViewById(id.txtStartDate);
 		txtEndDate = (EditText)findViewById(id.txtEndDate);
 		txtStartDate.setOnFocusChangeListener(myFocusListener);
+		txtStartDate.setOnClickListener(myListner);
 		//txtStartDate.setOnKeyListener(mOnKeyListener);
 		txtEndDate.setOnFocusChangeListener(myFocusListener);
+		txtEndDate.setOnClickListener(myListner);
 		//txtEndDate.setOnKeyListener(mOnKeyListener);
 		txtReMark = (EditText)findViewById(id.remark);
 		Date SDate = new Date();
@@ -1804,7 +1832,7 @@ public class PurStockIn extends Activity {
 				MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
 
 			}
-			txtStartDate.selectAll();
+			//txtStartDate.clearFocus();
 		}
 
 	};
@@ -1836,7 +1864,7 @@ public class PurStockIn extends Activity {
 				MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
 
 			}
-			txtEndDate.selectAll();
+			//txtEndDate.clearFocus();
 		}
 
 	};
@@ -1992,7 +2020,7 @@ public class PurStockIn extends Activity {
 		txtPurInBillCode.setText("");
 		txtWareHouse.setText("");
 		txtOrganization.setText("");
-		txtCategory.setText("");
+		//txtCategory.setText("");
 		txtDepartment.setText("");
 		txtReMark.setText("");
 
@@ -2243,7 +2271,6 @@ public class PurStockIn extends Activity {
 		}
 	};
 
-
 	private OnKeyListener myTxtListener = new
     		OnKeyListener()
     {
@@ -2464,8 +2491,8 @@ public class PurStockIn extends Activity {
 			String RdIDA = data.getStringExtra("RdIDA");    //需要回传的id
 			String RdIDB = data.getStringExtra("RdIDB");
 			CDISPATCHERID = RdIDA;
-			txtCategory.requestFocus();
-			txtCategory.setText(name);
+//			txtCategory.requestFocus();
+//			txtCategory.setText(name);
 		}
 
 		//部门信息的回传数据
@@ -2532,6 +2559,7 @@ public class PurStockIn extends Activity {
 
 			//SaveScanedHead();
 
+			Common.ShowLoading(MyContext);
 			//得到采购订单表头和表体
 			HashMap<String, String> parameter = new HashMap<String, String>();
 			parameter.put("FunctionName", "GetPOHead");
@@ -2541,6 +2569,7 @@ public class PurStockIn extends Activity {
 			Thread td = new Thread(requestThread);
 			td.start();
 		}
+		//扫描详细画面返回
 		if(requestCode == 35)
 		{
 

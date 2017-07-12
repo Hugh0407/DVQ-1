@@ -16,8 +16,8 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingLeft="3dp"
-            android:paddingTop="3dp"
-            android:paddingBottom="3dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
             android:layout_margin="3dp"
             android:background="@color/white">
             <LinearLayout
@@ -34,7 +34,8 @@
                     android:textAllCaps="true"
                     android:background="@drawable/edittext_style"
                     android:layout_weight="0.4"
-                    android:hint="订单开始日"/>
+                    android:hint="订单开始日"
+                    android:editable="false"/>
 
                 <TextView
                     android:layout_width="60dp"
@@ -53,7 +54,8 @@
                     android:background="@drawable/edittext_style"
                     android:layout_weight="0.4"
                     android:hint="订单结束日"
-                    android:layout_marginRight="3dp"/>
+                    android:layout_marginRight="3dp"
+                    android:editable="false"/>
 
             </LinearLayout>
 
@@ -112,7 +114,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="3dp"
+            android:padding="5dp"
             android:orientation="horizontal"
             android:gravity="center_vertical">
             <TextView
@@ -139,7 +141,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="3dp"
+            android:padding="5dp"
             android:orientation="horizontal"
             android:gravity="center_vertical">
 
@@ -171,7 +173,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="3dp"
+            android:padding="5dp"
             android:orientation="horizontal"
             android:gravity="center_vertical">
 
@@ -201,44 +203,44 @@
 
         </LinearLayout>
 
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:padding="5dp"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:gravity="center_vertical">-->
+
+            <!--<TextView-->
+                <!--android:layout_width="68dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:gravity="center_vertical"-->
+                <!--android:text="收发类别"/>-->
+
+            <!--<EditText-->
+                <!--android:id="@+id/lei_bie"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="30dp"-->
+                <!--android:layout_weight="3"-->
+                <!--android:background="@drawable/edittext_style"-->
+                <!--android:ems="10"-->
+                <!--android:maxLines="1"-->
+                <!--android:singleLine="true"-->
+                <!--android:textAllCaps="true"/>-->
+
+            <!--<ImageButton-->
+                <!--android:id="@+id/refer_lei_bie"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginLeft="3dp"-->
+                <!--android:background="@drawable/browse"/>-->
+
+        <!--</LinearLayout>-->
+
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="3dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
-
-            <TextView
-                android:layout_width="68dp"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="收发类别"/>
-
-            <EditText
-                android:id="@+id/lei_bie"
-                android:layout_width="0dp"
-                android:layout_height="30dp"
-                android:layout_weight="3"
-                android:background="@drawable/edittext_style"
-                android:ems="10"
-                android:maxLines="1"
-                android:singleLine="true"
-                android:textAllCaps="true"/>
-
-            <ImageButton
-                android:id="@+id/refer_lei_bie"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="3dp"
-                android:background="@drawable/browse"/>
-
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="3dp"
+            android:padding="5dp"
             android:orientation="horizontal"
             android:gravity="center_vertical">
 
@@ -272,10 +274,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="3dp"
+            android:padding="5dp"
             android:layout_weight="1"
-            android:orientation="horizontal"
-            android:gravity="top">
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="68dp"
@@ -287,7 +288,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/edittext_style"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:gravity="left|top"/>
         </LinearLayout>
 
     </LinearLayout>

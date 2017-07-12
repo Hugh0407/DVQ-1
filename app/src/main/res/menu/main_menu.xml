@@ -8,5 +8,10 @@
         <!--android:showAsAction="ifRoom|withText"-->
         <!--android:icon="@drawable/icon_qh"-->
         <!--android:title="@string/action_settings"/>-->
+    <item android:id="@+id/menu_exit"
+        android:title="@string/menu_exit"
+        android:orderInCategory="100"
+        android:icon="@drawable/icon_exit"
+        android:showAsAction="ifRoom|withText" />
 
 </menu>

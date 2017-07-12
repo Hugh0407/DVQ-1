@@ -9,6 +9,7 @@
     <string name="title">彤程条码操作系统</string>
     <string name="spassword">用户登录密码：</string>
     <string name="menu_settings">设置</string>
+    <string name="menu_exit">退出</string>
     <string name="title_activity_main_login">MainLogin</string>
     <string name="title_activity_main_form">MainForm</string>
     <string name="title_activity_menu_form">MenuForm</string>

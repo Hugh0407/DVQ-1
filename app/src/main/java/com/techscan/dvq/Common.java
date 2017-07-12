@@ -360,7 +360,7 @@ public class Common {
     //日期比较
     public static Boolean CompareDate(String sStartDate, String sEndDate){
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd ");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Date dStartDate = sdf.parse(sStartDate);
             Date dEndDate = sdf.parse(sEndDate);
             if(dStartDate.getTime() <= dEndDate.getTime())
