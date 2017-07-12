@@ -1,6 +1,5 @@
 package com.techscan.dvq.module.statusChange.scan;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,11 +17,10 @@ import java.util.List;
 
 public class ScAdapter extends BaseAdapter {
 
-    private Context mContext;
+
     private List<PurGood> mList;
 
-    public ScAdapter(Context context, List<PurGood> list) {
-        mContext = context;
+    public ScAdapter(List<PurGood> list) {
         mList = list;
     }
 
@@ -65,7 +63,7 @@ public class ScAdapter extends BaseAdapter {
         ViewHolder viewHolder;
         if (convertView == null) {
             viewHolder = new ViewHolder();
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_sc_scan, null);
+            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_sc_scan, null);
             viewHolder.bill = (TextView) convertView.findViewById(R.id.bill);
             viewHolder.num = (TextView) convertView.findViewById(R.id.num);
             viewHolder.num_task = (TextView) convertView.findViewById(R.id.num_task);
