@@ -37,14 +37,13 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
 import static com.techscan.dvq.R.id.ed_num;
+import static com.techscan.dvq.common.Utils.isNumber;
 
 /**
  * 形态转换模块下的 扫描界面
@@ -129,7 +128,6 @@ public class SCScanAct extends Activity {
         m_WarehouseID = this.getIntent().getStringExtra("m_WarehouseID");
         m_pk_Corp = this.getIntent().getStringExtra("pk_corp");
         getOtherInOutHead();
-        getOtherInOutBody();
     }
 
 
@@ -137,16 +135,16 @@ public class SCScanAct extends Activity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_task:
-                ScAdapter scAdapter = new ScAdapter(SCScanAct.this, taskList);
+                ScAdapter scAdapter = new ScAdapter(taskList);
                 showDialog(taskList, scAdapter, "任务信息");
                 break;
             case R.id.btn_detail:
-                MyBaseAdapter myBaseAdapter = new MyBaseAdapter(activity, detailList);
+                MyBaseAdapter myBaseAdapter = new MyBaseAdapter(detailList);
                 showDialog(detailList, myBaseAdapter, "扫描明细");
                 break;
             case R.id.btn_back:
                 if (detailList.size() > 0) {
-                    showFinishDialog();
+                    setDataToBack();
                 } else {
                     Utils.showToast(activity, "没有扫描单据");
                     finish();
@@ -165,6 +163,7 @@ public class SCScanAct extends Activity {
             super.handleMessage(msg);
             switch (msg.what) {
                 case 1:
+
                     //表头的请求结果
                     JSONObject jsonHead = (JSONObject) msg.obj;
                     try {
@@ -172,11 +171,12 @@ public class SCScanAct extends Activity {
                             Log.d("TAG", "jsonHead: " + jsonHead.toString());
 
                         } else {
-
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                    //当表头请求完毕后，开始请求表体
+                    getOtherInOutBody();
                     break;
                 case 2:
                     //表体的请求结果
@@ -191,20 +191,25 @@ public class SCScanAct extends Activity {
                                 object = jsonArray.getJSONObject(i);
                                 purGood = new PurGood();
                                 purGood.setSourceBill(m_BillNo);
+                                purGood.setPk_invbasdoc(object.getString("pk_invbasdoc"));
                                 purGood.setNshouldinnum(object.getString("nshouldinnum"));
                                 purGood.setInvcode(object.getString("invcode"));
                                 purGood.setInvname(object.getString("invname"));
+                                purGood.setCinventoryid(object.getString("cinventoryid"));
                                 purGood.setVbatchcode(object.getString("vbatchcode"));
-                                purGood.setFbillrowflag(object.getString("fbillrowflag"));
+                                purGood.setFbillrowflag(object.getString("fbillrowflag"));  //2转换前，3转换后
+                                purGood.setNshouldinnum(object.getString("nshouldinnum"));
+                                purGood.setVbatchcode(object.getString("vbatchcode"));
+                                purGood.setVsourcerowno(object.getString("crowno"));
                                 taskList.add(purGood);
                             }
-                            progressDialogDismiss();
                         } else {
                             Log.d("TAG", "jsonBody = null ");
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                    progressDialogDismiss();
                     break;
                 case 3:
                     //条码解析的请求结果，并且把数据设置到UI上
@@ -295,6 +300,20 @@ public class SCScanAct extends Activity {
     }
 
     /**
+     * 获取表体
+     */
+    private void getOtherInOutBody() {
+        HashMap<String, String> parameter = new HashMap<String, String>();
+        parameter.put("FunctionName", "GetOtherInOutBody");
+        parameter.put("BillID", m_BillID);
+        parameter.put("accId", m_AccID);
+        parameter.put("TableName", "PurBody");
+        RequestThread requestThread = new RequestThread(parameter, mHandler, 2);
+        Thread td = new Thread(requestThread);
+        td.start();
+    }
+
+    /**
      * 获取存货基本信息
      *
      * @param sku 物料编码
@@ -310,21 +329,7 @@ public class SCScanAct extends Activity {
         td.start();
     }
 
-    /**
-     * 获取表体
-     */
-    private void getOtherInOutBody() {
-        HashMap<String, String> parameter = new HashMap<String, String>();
-        parameter.put("FunctionName", "GetOtherInOutBody");
-        parameter.put("BillID", m_BillID);
-        parameter.put("accId", m_AccID);
-        parameter.put("TableName", "PurBody");
-        RequestThread requestThread = new RequestThread(parameter, mHandler, 2);
-        Thread td = new Thread(requestThread);
-        td.start();
-    }
-
-    private void showFinishDialog() {
+    private void setDataToBack() {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setTitle("提示");
         builder.setMessage("存在扫描数据,是否退出");
@@ -458,18 +463,6 @@ public class SCScanAct extends Activity {
             Utils.showToast(activity, "条码有误重新输入");
             return false;
         }
-    }
-
-    /**
-     * 通过正则表达式匹配数字
-     *
-     * @param str
-     * @return
-     */
-    public boolean isNumber(String str) {
-        Pattern pattern = Pattern.compile("[0-9]*");
-        Matcher isNum = pattern.matcher(str);
-        return isNum.matches();
     }
 
     /**

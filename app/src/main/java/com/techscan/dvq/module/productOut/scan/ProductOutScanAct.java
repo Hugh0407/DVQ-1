@@ -26,7 +26,6 @@ import com.techscan.dvq.MainLogin;
 import com.techscan.dvq.R;
 import com.techscan.dvq.bean.Goods;
 import com.techscan.dvq.common.RequestThread;
-import com.techscan.dvq.common.Utils;
 import com.techscan.dvq.module.materialOut.MyBaseAdapter;
 
 import org.json.JSONArray;
@@ -36,14 +35,15 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
 import static com.techscan.dvq.R.id.ed_num;
+import static com.techscan.dvq.common.Utils.formatDecimal;
+import static com.techscan.dvq.common.Utils.isNumber;
+import static com.techscan.dvq.common.Utils.showToast;
 
 
 public class ProductOutScanAct extends Activity {
@@ -78,15 +78,23 @@ public class ProductOutScanAct extends Activity {
     EditText mEdNum;
 
     String TAG = "MaterialOutScanAct";
-    List<Goods> detailList;
-    List<Goods> ovList;
+    public static List<Goods> detailList = new ArrayList<Goods>();
+    public static List<Goods> ovList = new ArrayList<Goods>();
+    Activity mActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_out_scan);
         ButterKnife.inject(this);
+        mActivity = this;
         initView();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mActivity = null;
     }
 
     @OnClick({R.id.btn_overview, R.id.btn_detail, R.id.btn_back})
@@ -94,11 +102,11 @@ public class ProductOutScanAct extends Activity {
         switch (view.getId()) {
             case R.id.btn_overview:
 
-                MyBaseAdapter ovAdapter = new MyBaseAdapter(ProductOutScanAct.this, ovList);
+                MyBaseAdapter ovAdapter = new MyBaseAdapter(ovList);
                 showDialog(ovList, ovAdapter, "扫描总览");
                 break;
             case R.id.btn_detail:
-                MyBaseAdapter myBaseAdapter = new MyBaseAdapter(ProductOutScanAct.this, detailList);
+                MyBaseAdapter myBaseAdapter = new MyBaseAdapter(detailList);
                 showDialog(detailList, myBaseAdapter, "扫描明细");
                 break;
             case R.id.btn_back:
@@ -107,13 +115,17 @@ public class ProductOutScanAct extends Activity {
                     Bundle bundle = new Bundle();
                     bundle.putParcelableArrayList("overViewList", (ArrayList<? extends Parcelable>) ovList);
                     in.putExtras(bundle);
-                    ProductOutScanAct.this.setResult(5, in);
+                    mActivity.setResult(5, in);
                 } else {
-                    Utils.showToast(ProductOutScanAct.this, "没有扫描单据");
+                    showToast(mActivity, "没有扫描单据");
                 }
                 finish();
                 break;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
     }
 
     private void initView() {
@@ -126,8 +138,6 @@ public class ProductOutScanAct extends Activity {
         mEdManual.setOnKeyListener(mOnKeyListener);
         mEdNum.addTextChangedListener(new CustomTextWatcher(mEdNum));
         mEdBarCode.addTextChangedListener(new CustomTextWatcher(mEdBarCode));
-        detailList = new ArrayList<Goods>();
-        ovList = new ArrayList<Goods>();
     }
 
     /**
@@ -143,7 +153,7 @@ public class ProductOutScanAct extends Activity {
                     JSONObject json = (JSONObject) msg.obj;
                     if (json != null) {
                         try {
-                            SetInvBaseToUI(json);
+                            setInvBaseToUI(json);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -156,16 +166,16 @@ public class ProductOutScanAct extends Activity {
     };
 
     private void showDialog(final List list, final BaseAdapter adapter, String title) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(ProductOutScanAct.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
         builder.setTitle(title);
         if (list.size() > 0) {
-            View view = LayoutInflater.from(ProductOutScanAct.this).inflate(R.layout.dialog_scan_details, null);
+            View view = LayoutInflater.from(mActivity).inflate(R.layout.dialog_scan_details, null);
             ListView lv = (ListView) view.findViewById(R.id.lv);
             if (title.equals("扫描明细")) { //只有明细的页面是可点击的，总览页面是不可点击的
                 lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                        AlertDialog.Builder delDialog = new AlertDialog.Builder(ProductOutScanAct.this);
+                        AlertDialog.Builder delDialog = new AlertDialog.Builder(mActivity);
                         delDialog.setTitle("是否删除该条数据");
                         delDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
@@ -192,7 +202,7 @@ public class ProductOutScanAct extends Activity {
     /**
      * 条码解析
      */
-    private boolean BarAnalysis() {
+    private boolean barAnalysis() {
         String Bar = mEdBarCode.getText().toString().trim();
         if (Bar.contains("\n")) {
             Bar = Bar.replace("\n", "");
@@ -215,12 +225,12 @@ public class ProductOutScanAct extends Activity {
             mEdNum.setText("1");
             mEdNum.requestFocus();  //包码扫描后光标跳到“数量”,输入数量,添加到列表
             mEdNum.setSelection(mEdNum.length());   //将光标移动到最后的位置
-            GetInvBaseInfo(encoding);
+            getInvBaseInfo(encoding);
             return true;
         } else if (barCode.length == 10 && barCode[0].equals("TP")) {//盘码TP|SKU|LOT|WW|TAX|QTY|NUM|CW|ONLY|SN
             for (int i = 0; i < detailList.size(); i++) {
                 if (detailList.get(i).getBarcode().equals(Bar)) {
-                    Utils.showToast(ProductOutScanAct.this, "该托盘已扫描");
+                    showToast(mActivity, "该托盘已扫描");
                     return false;
                 }
             }
@@ -239,25 +249,13 @@ public class ProductOutScanAct extends Activity {
             mEdNum.setText(barCode[6]);
             double weight = Double.valueOf(barCode[5]);
             double mEdNum = Double.valueOf(barCode[6]);
-            mEdQty.setText(String.valueOf(weight * mEdNum));
-            GetInvBaseInfo(encoding);
+            mEdQty.setText(formatDecimal(weight * mEdNum));
+            getInvBaseInfo(encoding);
             return true;
         } else {
-            Utils.showToast(ProductOutScanAct.this, "条码有误重新输入");
+            showToast(mActivity, "条码有误重新输入");
             return false;
         }
-    }
-
-    /**
-     * 通过正则表达式匹配数字
-     *
-     * @param str
-     * @return
-     */
-    public boolean isNumber(String str) {
-        Pattern pattern = Pattern.compile("[0-9]*");
-        Matcher isNum = pattern.matcher(str);
-        return isNum.matches();
     }
 
     private void addDataToOvList() {
@@ -319,7 +317,7 @@ public class ProductOutScanAct extends Activity {
     /**
      * 清空所有的Edtext
      */
-    private void ChangeAllEdTextToEmpty() {
+    private void changeAllEdTextToEmpty() {
         mEdNum.setText("");
         mEdBarCode.setText("");
         mEdEncoding.setText("");
@@ -358,7 +356,7 @@ public class ProductOutScanAct extends Activity {
      *
      * @param sku 物料编码
      */
-    private void GetInvBaseInfo(String sku) {
+    private void getInvBaseInfo(String sku) {
         HashMap<String, String> parameter = new HashMap<String, String>();
         parameter.put("FunctionName", "GetInvBaseInfo");
         parameter.put("CompanyCode", MainLogin.objLog.CompanyCode);
@@ -379,8 +377,8 @@ public class ProductOutScanAct extends Activity {
     String pk_invbasdoc = "";
     String pk_invmandoc = "";
 
-    private void SetInvBaseToUI(JSONObject json) throws JSONException {
-        Log.d(TAG, "SetInvBaseToUI: " + json);
+    private void setInvBaseToUI(JSONObject json) throws JSONException {
+        Log.d(TAG, "setInvBaseToUI: " + json);
         if (json.getBoolean("Status")) {
             JSONArray val = json.getJSONArray("baseInfo");
             HashMap<String, Object> map = null;
@@ -451,17 +449,18 @@ public class ProductOutScanAct extends Activity {
                         return;
                     }
                     if (!isNumber(mEdNum.getText().toString())) {
-                        Utils.showToast(ProductOutScanAct.this, "数量不正确");
+                        showToast(mActivity, "数量不正确");
                         mEdNum.setText("");
                         return;
                     }
-                    if (Float.valueOf(mEdNum.getText().toString()) < 0) {
-                        Utils.showToast(ProductOutScanAct.this, "数量不正确");
+                    if (Float.valueOf(mEdNum.getText().toString()) <= 0) {
+                        mEdNum.setText("");
+                        showToast(mActivity, "数量不正确");
                         return;
                     }
                     float num = Float.valueOf(mEdNum.getText().toString());
                     float weight = Float.valueOf(mEdWeight.getText().toString());
-                    mEdQty.setText(String.valueOf(num * weight));
+                    mEdQty.setText(formatDecimal(num * weight));
                     break;
 
             }
@@ -483,17 +482,17 @@ public class ProductOutScanAct extends Activity {
                             if (isAllEdNotNull()) {
                                 addDataToDetailList();
                                 mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
-                                ChangeAllEdTextToEmpty();
+                                changeAllEdTextToEmpty();
                             } else {
-                                BarAnalysis();
+                                barAnalysis();
                             }
                         } else {
-                            Utils.showToast(ProductOutScanAct.this, "请输入条码");
+                            showToast(mActivity, "请输入条码");
                         }
                         return true;
                     case R.id.ed_lot:
                         if (TextUtils.isEmpty(mEdLot.getText())) {
-                            Utils.showToast(ProductOutScanAct.this, "请输入批次号");
+                            showToast(mActivity, "请输入批次号");
                             return true;
                         } else {
                             mEdQty.requestFocus();  //输入完批次后讲焦点跳到“总量（mEdQty）”
@@ -502,41 +501,42 @@ public class ProductOutScanAct extends Activity {
                     case R.id.ed_qty:
 
                         if (TextUtils.isEmpty(mEdQty.getText())) {
-                            Utils.showToast(ProductOutScanAct.this, "请输入总量");
+                            showToast(mActivity, "请输入总量");
                         } else {
                             String qty_s = mEdQty.getText().toString();
                             if (!isNumber(qty_s)) {
-                                Utils.showToast(ProductOutScanAct.this, "总量不正确");
+                                showToast(mActivity, "总量不正确");
                                 mEdQty.setText("");
                                 return true;
                             }
                             float qty_f = Float.valueOf(qty_s);
                             if (qty_f <= 0) {
-                                Utils.showToast(ProductOutScanAct.this, "总量不正确");
+                                showToast(mActivity, "总量不正确");
                                 mEdQty.setText("");
                                 return true;
                             }
 
                             if (addDataToDetailList()) {
                                 mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
-                                ChangeAllEdTextToEmpty();
+                                changeAllEdTextToEmpty();
                             }
 
                         }
                         return true;
                     case ed_num:
                         if (TextUtils.isEmpty(mEdNum.getText().toString())) {
-                            Utils.showToast(ProductOutScanAct.this, "请输入数量");
+                            showToast(mActivity, "请输入数量");
                             return true;
                         }
                         if (!isNumber(mEdNum.getText().toString())) {
-                            Utils.showToast(ProductOutScanAct.this, "数量不正确");
+                            showToast(mActivity, "数量不正确");
                             return true;
                         }
                         //包码需要输入 有多少包，并计算出总数量
                         float num = Float.valueOf(mEdNum.getText().toString());
-                        if (num < 0) {
-                            Utils.showToast(ProductOutScanAct.this, "数量不正确");
+                        if (num <= 0) {
+                            mEdNum.setText("");
+                            showToast(mActivity, "数量不正确");
                             return true;
                         }
 
@@ -545,15 +545,15 @@ public class ProductOutScanAct extends Activity {
 //                            if (isAllEdNotNull() && ) {
                         addDataToDetailList();
                         mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
-                        ChangeAllEdTextToEmpty();
+                        changeAllEdTextToEmpty();
                         return true;
                     case R.id.ed_manual:
                         if (isAllEdNotNull()) {
                             addDataToDetailList();
                             mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
-                            ChangeAllEdTextToEmpty();
+                            changeAllEdTextToEmpty();
                         } else {
-                            Utils.showToast(ProductOutScanAct.this, "信息不完整，请核对");
+                            showToast(mActivity, "信息不完整，请核对");
                         }
                         return true;
                 }

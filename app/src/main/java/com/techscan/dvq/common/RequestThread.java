@@ -14,8 +14,8 @@ import java.util.Map;
 
 /**
  * Created by liuya on 2017/6/23.
+ *
  */
-
 public class RequestThread implements Runnable {
 
     private HashMap<String, String> parameter;

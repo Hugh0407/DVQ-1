@@ -28,6 +28,7 @@ import com.techscan.dvq.VlistRdcl;
 import com.techscan.dvq.bean.Goods;
 import com.techscan.dvq.common.RequestThread;
 import com.techscan.dvq.common.SaveThread;
+import com.techscan.dvq.common.Utils;
 import com.techscan.dvq.module.materialOut.scan.MaterialOutScanAct;
 
 import org.apache.http.ParseException;
@@ -36,7 +37,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -49,6 +49,7 @@ import butterknife.OnClick;
 import static com.techscan.dvq.common.Utils.HANDER_DEPARTMENT;
 import static com.techscan.dvq.common.Utils.HANDER_SAVE_RESULT;
 import static com.techscan.dvq.common.Utils.HANDER_STORG;
+import static com.techscan.dvq.common.Utils.showResultDialog;
 import static com.techscan.dvq.common.Utils.showToast;
 
 public class MaterialOutAct extends Activity {
@@ -100,6 +101,7 @@ public class MaterialOutAct extends Activity {
     int month;
     int day;
     Calendar mycalendar;
+    Activity mActivity;
 
     ProgressDialog progressDialog;
 
@@ -108,7 +110,14 @@ public class MaterialOutAct extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_material_in);
         ButterKnife.inject(this);
+        mActivity = this;
         initView();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mActivity = null;
     }
 
     /**
@@ -142,26 +151,26 @@ public class MaterialOutAct extends Activity {
                 break;
             case R.id.btnPurInScan:
                 if (isAllEdNotEmpty()) {
-                    Intent in = new Intent(MaterialOutAct.this, MaterialOutScanAct.class);
+                    Intent in = new Intent(mActivity, MaterialOutScanAct.class);
                     startActivityForResult(in, 95);
                     if (tempList != null) {
                         tempList.clear();
                     }
                 } else {
-                    showToast(MaterialOutAct.this, "请先核对信息，再进行扫描");
+                    showToast(mActivity, "请先核对信息，再进行扫描");
                 }
                 break;
             case R.id.btnPurinSave:
                 if (checkSaveInfo()) {
                     if (tempList != null && tempList.size() > 0) {
                         try {
-                            SaveInfo(tempList);
+                            saveInfo(tempList);
                             showProgressDialog();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     } else {
-                        showToast(MaterialOutAct.this, "没有需要保存的数据");
+                        showToast(mActivity, "没有需要保存的数据");
                     }
                 }
                 break;
@@ -173,11 +182,15 @@ public class MaterialOutAct extends Activity {
                     bulider.setPositiveButton(R.string.QueRen, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            MaterialOutScanAct.ovList.clear();
+                            MaterialOutScanAct.detailList.clear();
                             dialog.dismiss();
                             finish();
                         }
                     }).create().show();
                 } else {
+                    MaterialOutScanAct.ovList.clear();
+                    MaterialOutScanAct.detailList.clear();
                     finish();
                 }
                 break;
@@ -188,7 +201,7 @@ public class MaterialOutAct extends Activity {
                 year = mycalendar.get(Calendar.YEAR); //获取Calendar对象中的年
                 month = mycalendar.get(Calendar.MONTH);//获取Calendar对象中的月
                 day = mycalendar.get(Calendar.DAY_OF_MONTH);//获取这个月的第几天
-                DatePickerDialog dpd = new DatePickerDialog(MaterialOutAct.this, Datelistener, year, month, day);
+                DatePickerDialog dpd = new DatePickerDialog(mActivity, Datelistener, year, month, day);
                 dpd.show();//显示DatePickerDialog组件
                 break;
         }
@@ -199,36 +212,36 @@ public class MaterialOutAct extends Activity {
      */
     private boolean checkSaveInfo() {
         if (checkInfo.size() == 0) {
-            showToast(MaterialOutAct.this, "单据信息不正确请核对");
+            showToast(mActivity, "单据信息不正确请核对");
             return false;
         }
         if (TextUtils.isEmpty(mBillNum.getText().toString())) {
-            showToast(MaterialOutAct.this, "单据号不能为空");
+            showToast(mActivity, "单据号不能为空");
             mBillNum.requestFocus();
             return false;
         }
         if (TextUtils.isEmpty(mBillDate.getText().toString())) {
-            showToast(MaterialOutAct.this, "日期不能为空");
+            showToast(mActivity, "日期不能为空");
             mBillDate.requestFocus();
             return false;
         }
         if (!mWh.getText().toString().equals(checkInfo.get("Warehouse"))) {
-            showToast(MaterialOutAct.this, "仓库信息不正确");
+            showToast(mActivity, "仓库信息不正确");
             mWh.requestFocus();
             return false;
         }
         if (!mOrganization.getText().toString().equals(checkInfo.get("Organization"))) {
-            showToast(MaterialOutAct.this, "组织信息不正确");
+            showToast(mActivity, "组织信息不正确");
             mOrganization.requestFocus();
             return false;
         }
         if (!mLeiBie.getText().toString().equals(checkInfo.get("LeiBie"))) {
-            showToast(MaterialOutAct.this, "收发类别信息不正确");
+            showToast(mActivity, "收发类别信息不正确");
             mLeiBie.requestFocus();
             return false;
         }
         if (!mDepartment.getText().toString().equals(checkInfo.get("Department"))) {
-            showToast(MaterialOutAct.this, "部门信息不正确");
+            showToast(mActivity, "部门信息不正确");
             mDepartment.requestFocus();
             return false;
         }
@@ -292,6 +305,11 @@ public class MaterialOutAct extends Activity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+
+    }
+
     /**
      * 初始化界面
      * 初始化原始数据
@@ -328,7 +346,7 @@ public class MaterialOutAct extends Activity {
                             JSONArray val = json.getJSONArray("department");
                             JSONObject temp = new JSONObject();
                             temp.put("department", val);
-                            Intent ViewGrid = new Intent(MaterialOutAct.this, DepartmentListAct.class);
+                            Intent ViewGrid = new Intent(mActivity, DepartmentListAct.class);
                             ViewGrid.putExtra("myData", temp.toString());
                             startActivityForResult(ViewGrid, 96);
                         }
@@ -343,7 +361,7 @@ public class MaterialOutAct extends Activity {
                             JSONArray val = storg.getJSONArray("STOrg");
                             JSONObject temp = new JSONObject();
                             temp.put("STOrg", val);
-                            Intent StorgList = new Intent(MaterialOutAct.this, StorgListACt.class);
+                            Intent StorgList = new Intent(mActivity, StorgListACt.class);
                             StorgList.putExtra("STOrg", temp.toString());
                             startActivityForResult(StorgList, 94);
                         }
@@ -353,20 +371,21 @@ public class MaterialOutAct extends Activity {
                     break;
                 case HANDER_SAVE_RESULT:
                     JSONObject saveResult = (JSONObject) msg.obj;
-                    Log.d(TAG, "保存" + saveResult.toString());
                     try {
                         if (saveResult != null) {
                             if (saveResult.getBoolean("Status")) {
                                 Log.d(TAG, "保存" + saveResult.toString());
-                                showResultDialog(saveResult.getString("ErrMsg"));
+                                showResultDialog(mActivity, saveResult.getString("ErrMsg"));
+                                MaterialOutScanAct.ovList.clear();
+                                MaterialOutScanAct.detailList.clear();
                                 tempList.clear();
                                 changeAllEdToEmpty();
                                 mBillNum.requestFocus();
                             } else {
-                                showResultDialog(saveResult.getString("ErrMsg"));
+                                showResultDialog(mActivity, saveResult.getString("ErrMsg"));
                             }
                         } else {
-                            showResultDialog("数据提交失败!");
+                            showResultDialog(mActivity, "数据提交失败!");
                         }
                         progressDialogDismiss();
                     } catch (JSONException e) {
@@ -393,69 +412,13 @@ public class MaterialOutAct extends Activity {
      * 保存单据的dialog
      */
     private void showProgressDialog() {
-        progressDialog = new ProgressDialog(MaterialOutAct.this);
+        progressDialog = new ProgressDialog(mActivity);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);// 设置进度条的形式为圆形转动的进度条
         progressDialog.setCancelable(false);// 设置是否可以通过点击Back键取消
         progressDialog.setCanceledOnTouchOutside(false);// 设置在点击Dialog外是否取消Dialog进度条
         // progressDialog.setIcon(R.drawable.ic_launcher);
         // 设置提示的title的图标，默认是没有的，如果没有设置title的话只设置Icon是不会显示图标的
         progressDialog.setTitle("保存单据");
-        // dismiss监听
-//        progressDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-//
-//            @Override
-//            public void onDismiss(DialogInterface progressDialog) {
-//                // TODO Auto-generated method stub
-//
-//            }
-//        });
-        // 监听Key事件被传递给dialog
-//        progressDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
-//
-//            @Override
-//            public boolean onKey(DialogInterface progressDialog, int keyCode,
-//                                 KeyEvent event) {
-//                // TODO Auto-generated method stub
-//                return false;
-//            }
-//        });
-        // 监听cancel事件
-//        progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-//
-//            @Override
-//            public void onCancel(DialogInterface progressDialog) {
-//                // TODO Auto-generated method stub
-//
-//            }
-//        });
-        //设置可点击的按钮，最多有三个(默认情况下)
-//        progressDialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定",
-//                new DialogInterface.OnClickListener() {
-//
-//                    @Override
-//                    public void onClick(DialogInterface progressDialog, int which) {
-//                        // TODO Auto-generated method stub
-//
-//                    }
-//                });
-//        progressDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "取消",
-//                new DialogInterface.OnClickListener() {
-//
-//                    @Override
-//                    public void onClick(DialogInterface progressDialog, int which) {
-//                        // TODO Auto-generated method stub
-//
-//                    }
-//                });
-//        progressDialog.setButton(DialogInterface.BUTTON_NEUTRAL, "中立",
-//                new DialogInterface.OnClickListener() {
-//
-//                    @Override
-//                    public void onClick(DialogInterface progressDialog, int which) {
-//                        // TODO Auto-generated method stub
-//
-//                    }
-//                });
         progressDialog.setMessage("正在保存，请等待...");
         progressDialog.show();
         new Thread(new Runnable() {
@@ -468,7 +431,6 @@ public class MaterialOutAct extends Activity {
                         // cancel和dismiss方法本质都是一样的，都是从屏幕中删除Dialog,唯一的区别是
                         // 调用cancel方法会回调DialogInterface.OnCancelListener如果注册的话,dismiss方法不会回掉
                         progressDialog.cancel();
-                        finish();
                         // progressDialog.dismiss();
                     }
                 } catch (InterruptedException e) {
@@ -477,20 +439,6 @@ public class MaterialOutAct extends Activity {
 
             }
         }).start();
-    }
-
-    /**
-     * 显示保存的返回结果的信息
-     *
-     * @param message
-     */
-    private void showResultDialog(String message) {
-        AlertDialog.Builder dialog = new AlertDialog.Builder(MaterialOutAct.this);
-        dialog.setTitle("保存信息");
-        dialog.setMessage(message);
-        dialog.setPositiveButton("关闭", null);
-        dialog.show();
-
     }
 
     /**
@@ -517,7 +465,7 @@ public class MaterialOutAct extends Activity {
      * @param goodsList
      * @throws JSONException
      */
-    private void SaveInfo(List<Goods> goodsList) throws JSONException {
+    private void saveInfo(List<Goods> goodsList) throws JSONException {
         final JSONObject table = new JSONObject();
         JSONObject tableHead = new JSONObject();
         tableHead.put("VBILLCODE", mBillNum.getText().toString());  //单据号
@@ -540,12 +488,7 @@ public class MaterialOutAct extends Activity {
             JSONObject object = new JSONObject();
             object.put("CINVBASID", c.getPk_invbasdoc());
             object.put("CINVENTORYID", c.getPk_invmandoc());
-
-            float qty_f = c.getQty();
-            DecimalFormat decimalFormat = new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
-            String qty = decimalFormat.format(qty_f);//format 返回的是字符串
-
-            object.put("NOUTNUM", qty);
+            object.put("NOUTNUM", Utils.formatDecimal(c.getQty()));
             object.put("CINVCODE", c.getEncoding());
             object.put("BLOTMGT", "1");
             object.put("COSTOBJECT", c.getPk_invmandoc());
@@ -557,7 +500,7 @@ public class MaterialOutAct extends Activity {
         tableBody.put("ScanDetails", bodyArray);
         table.put("Body", tableBody);
         table.put("GUIDS", UUID.randomUUID().toString());
-        Log.d(TAG, "SaveInfo: " + table.toString());
+        Log.d(TAG, "saveInfo: " + table.toString());
         SaveThread saveThread = new SaveThread(table, "SaveMaterialOut", mHandler, HANDER_SAVE_RESULT);
         Thread thread = new Thread(saveThread);
         thread.start();
@@ -692,7 +635,7 @@ public class MaterialOutAct extends Activity {
         @Override
         public void onFocusChange(View view, boolean hasFocus) {
             if (hasFocus) {
-                DatePickerDialog dpd = new DatePickerDialog(MaterialOutAct.this, Datelistener, year, month, day);
+                DatePickerDialog dpd = new DatePickerDialog(mActivity, Datelistener, year, month, day);
                 dpd.show();//显示DatePickerDialog组件
             }
         }

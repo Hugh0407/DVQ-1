@@ -176,7 +176,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/edittext_style"
                     android:singleLine="true"
-                    android:editable="false"/>
+                    android:enabled="false"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="0dp"
@@ -191,6 +191,7 @@
                     android:text="重  　量"/>
 
                 <EditText
+                    android:textColor="@color/black"
                     android:focusable="false"
                     android:id="@+id/txtSaleWeight"
                     android:layout_width="0dp"
@@ -223,6 +224,7 @@
                     android:text="总  　量"/>
 
                 <EditText
+                    android:textColor="@color/black"
                     android:focusable="false"
                     android:inputType="number"
                     android:id="@+id/txtSaleTotal"

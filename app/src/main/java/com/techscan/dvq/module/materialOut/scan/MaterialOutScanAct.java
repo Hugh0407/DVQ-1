@@ -21,13 +21,11 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.techscan.dvq.MainLogin;
 import com.techscan.dvq.R;
 import com.techscan.dvq.bean.Goods;
 import com.techscan.dvq.common.RequestThread;
-import com.techscan.dvq.common.Utils;
 import com.techscan.dvq.module.materialOut.MyBaseAdapter;
 
 import org.json.JSONArray;
@@ -37,14 +35,15 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
 import static com.techscan.dvq.R.id.ed_num;
+import static com.techscan.dvq.common.Utils.formatDecimal;
+import static com.techscan.dvq.common.Utils.isNumber;
+import static com.techscan.dvq.common.Utils.showToast;
 
 
 public class MaterialOutScanAct extends Activity {
@@ -80,26 +79,34 @@ public class MaterialOutScanAct extends Activity {
 
 
     String TAG = "MaterialOutScanAct";
-    List<Goods> detailList;
-    List<Goods> ovList;
+    public static List<Goods> detailList = new ArrayList<Goods>();
+    public static List<Goods> ovList = new ArrayList<Goods>();
+    Activity mActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_material_out_scan);
         ButterKnife.inject(this);
-        initView();
+        mActivity = this;
+        init();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mActivity = null;
     }
 
     @OnClick({R.id.btn_overview, R.id.btn_detail, R.id.btn_back})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_overview:
-                MyBaseAdapter ovAdapter = new MyBaseAdapter(MaterialOutScanAct.this, ovList);
+                MyBaseAdapter ovAdapter = new MyBaseAdapter(ovList);
                 showDialog(ovList, ovAdapter, "扫描总览");
                 break;
             case R.id.btn_detail:
-                MyBaseAdapter myBaseAdapter = new MyBaseAdapter(MaterialOutScanAct.this, detailList);
+                MyBaseAdapter myBaseAdapter = new MyBaseAdapter(detailList);
                 showDialog(detailList, myBaseAdapter, "扫描明细");
                 break;
             case R.id.btn_back:
@@ -108,16 +115,20 @@ public class MaterialOutScanAct extends Activity {
                     Bundle bundle = new Bundle();
                     bundle.putParcelableArrayList("overViewList", (ArrayList<? extends Parcelable>) ovList);
                     in.putExtras(bundle);
-                    MaterialOutScanAct.this.setResult(5, in);
+                    mActivity.setResult(5, in);
                 } else {
-                    Toast.makeText(this, "没有扫描单据", Toast.LENGTH_SHORT).show();
+                    showToast(mActivity,"没有扫描单据");
                 }
                 finish();
                 break;
         }
     }
 
-    private void initView() {
+    @Override
+    public void onBackPressed() {
+    }
+
+    private void init() {
         ActionBar actionBar = this.getActionBar();
         actionBar.setTitle("物品扫描");
         mEdBarCode.setOnKeyListener(mOnKeyListener);
@@ -126,8 +137,6 @@ public class MaterialOutScanAct extends Activity {
         mEdNum.setOnKeyListener(mOnKeyListener);
         mEdNum.addTextChangedListener(new CustomTextWatcher(mEdNum));
         mEdBarCode.addTextChangedListener(new CustomTextWatcher(mEdBarCode));
-        detailList = new ArrayList<Goods>();
-        ovList = new ArrayList<Goods>();
     }
 
     /**
@@ -156,16 +165,16 @@ public class MaterialOutScanAct extends Activity {
     };
 
     private void showDialog(final List list, final BaseAdapter adapter, String title) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(MaterialOutScanAct.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
         builder.setTitle(title);
         if (list.size() > 0) {
-            View view = LayoutInflater.from(MaterialOutScanAct.this).inflate(R.layout.dialog_scan_details, null);
+            View view = LayoutInflater.from(mActivity).inflate(R.layout.dialog_scan_details, null);
             ListView lv = (ListView) view.findViewById(R.id.lv);
             if (title.equals("扫描明细")) { //只有明细的页面是可点击的，总览页面是不可点击的
                 lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                        AlertDialog.Builder delDialog = new AlertDialog.Builder(MaterialOutScanAct.this);
+                        AlertDialog.Builder delDialog = new AlertDialog.Builder(mActivity);
                         delDialog.setTitle("是否删除该条数据");
                         delDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
@@ -209,11 +218,11 @@ public class MaterialOutScanAct extends Activity {
 //                continue;
 //            }
 //            if (TextUtils.isEmpty(barCode[i])) {
-//                Utils.showToast(MaterialOutScanAct.this, "条码错误");
+//                showToast(mActivity, "条码错误");
 //                return false;
 //            }
 //            if (!isNumber(barCode[i])) {
-//                Utils.showToast(MaterialOutScanAct.this, "条码中存在非数字字符");
+//                showToast(mActivity, "条码中存在非数字字符");
 //                return false;
 //            }
 //        }
@@ -249,7 +258,7 @@ public class MaterialOutScanAct extends Activity {
         } else if (barCode.length == 7 && barCode[0].equals("TC")) {    //TC|SKU|LOT|TAX|QTY|NUM|SN
             for (int i = 0; i < detailList.size(); i++) {
                 if (detailList.get(i).getBarcode().equals(Bar)) {
-                    Utils.showToast(MaterialOutScanAct.this, "该托盘已扫描");
+                    showToast(mActivity, "该托盘已扫描");
                     return false;
                 }
             }
@@ -265,25 +274,14 @@ public class MaterialOutScanAct extends Activity {
             mEdNum.setText(barCode[5]);
             float qty = Float.valueOf(barCode[4]);
             float num = Float.valueOf(barCode[5]);
-            mEdQty.setText(String.valueOf(qty * num));
+            mEdQty.setText(formatDecimal(qty * num));
             return true;
         } else {
-            Toast.makeText(MaterialOutScanAct.this, "条码有误重新输入", Toast.LENGTH_SHORT).show();
+            showToast(mActivity, "条码有误重新输入");
             return false;
         }
     }
 
-    /**
-     * 判断是否都是数字，使用正则表达式
-     *
-     * @param str
-     * @return
-     */
-    public boolean isNumber(String str) {
-        Pattern pattern = Pattern.compile("[0-9]*");
-        Matcher isNum = pattern.matcher(str);
-        return isNum.matches();
-    }
 
     /**
      * 添加数据到总览列表中，重写了Goods的equals和hashcode
@@ -426,7 +424,6 @@ public class MaterialOutScanAct extends Activity {
                 mEdSpectype.setText(map.get("invspec").toString());
                 mEdCostObject.setText(map.get("invname").toString());
             }
-
         }
     }
 
@@ -473,22 +470,22 @@ public class MaterialOutScanAct extends Activity {
                         return;
                     }
                     if (!isNumber(mEdNum.getText().toString())) {
-                        Utils.showToast(MaterialOutScanAct.this, "数量不正确");
+                        showToast(mActivity, "数量不正确");
                         mEdNum.setText("");
                         return;
                     }
-                    if (Float.valueOf(mEdNum.getText().toString()) < 0) {
-                        Utils.showToast(MaterialOutScanAct.this, "数量不正确");
+                    if (Float.valueOf(mEdNum.getText().toString()) <= 0) {
+                        mEdNum.setText("");
+                        showToast(mActivity, "数量不正确");
                         return;
                     }
                     float num = Float.valueOf(mEdNum.getText().toString());
                     float weight = Float.valueOf(mEdWeight.getText().toString());
-                    mEdQty.setText(String.valueOf(num * weight));
+                    mEdQty.setText(formatDecimal(num * weight));
                     break;
             }
         }
     }
-
 
     /**
      * 回车键的点击事件
@@ -509,13 +506,12 @@ public class MaterialOutScanAct extends Activity {
                                 barAnalysis();
                             }
                         } else {
-                            Utils.showToast(MaterialOutScanAct.this, "请输入条码");
+                            showToast(mActivity, "请输入条码");
                         }
-
                         return true;
                     case R.id.ed_lot:
                         if (TextUtils.isEmpty(mEdLot.getText().toString())) {
-                            Utils.showToast(MaterialOutScanAct.this, "请输入批次号");
+                            showToast(mActivity, "请输入批次号");
                             return true;
                         } else {
                             mEdQty.requestFocus();  //输入完批次后讲焦点跳到“总量（mEdQty）”
@@ -523,18 +519,18 @@ public class MaterialOutScanAct extends Activity {
                         return true;
                     case R.id.ed_qty:
                         if (TextUtils.isEmpty(mEdQty.getText().toString())) {
-                            Utils.showToast(MaterialOutScanAct.this, "请输入数量");
+                            showToast(mActivity, "请输入数量");
                             return true;
                         } else {
                             String qty_s = mEdQty.getText().toString();
                             if (!isNumber(qty_s)) {
-                                Utils.showToast(MaterialOutScanAct.this, "总量不正确");
+                                showToast(mActivity, "总量不正确");
                                 mEdQty.setText("");
                                 return true;
                             }
                             float qty_f = Float.valueOf(qty_s);
                             if (qty_f <= 0) {
-                                Utils.showToast(MaterialOutScanAct.this, "总量不正确");
+                                showToast(mActivity, "总量不正确");
                                 mEdQty.setText("");
                                 return true;
                             }
@@ -542,12 +538,11 @@ public class MaterialOutScanAct extends Activity {
                             addDataToDetailList();
                             mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
                             changeAllEdTextToEmpty();
-
                         }
                         return true;
                     case ed_num:
 //                        if (TextUtils.isEmpty(mEdNum.getText().toString())) {
-//                            Toast.makeText(MaterialOutScanAct.this, "请输入数量", Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(mActivity, "请输入数量", Toast.LENGTH_SHORT).show();
 //                        } else {
 //                            //包码需要输入 有多少包，并计算出总数量
 //                            float num = Float.valueOf(mEdNum.getText().toString());
@@ -560,21 +555,22 @@ public class MaterialOutScanAct extends Activity {
 //                                changeAllEdTextToEmpty();
 ////                            }
 //                            } else {
-//                                Toast.makeText(MaterialOutScanAct.this, "数量不正确", Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(mActivity, "数量不正确", Toast.LENGTH_SHORT).show();
 //                            }
 //                        }
                         if (TextUtils.isEmpty(mEdNum.getText().toString())) {
-                            Utils.showToast(MaterialOutScanAct.this, "请输入数量");
+                            showToast(mActivity, "请输入数量");
                             return true;
                         }
                         if (!isNumber(mEdNum.getText().toString())) {
-                            Utils.showToast(MaterialOutScanAct.this, "数量不正确");
+                            showToast(mActivity, "数量不正确");
                             return true;
                         }
                         //包码需要输入 有多少包，并计算出总数量
                         float num = Float.valueOf(mEdNum.getText().toString());
-                        if (num < 0) {
-                            Utils.showToast(MaterialOutScanAct.this, "数量不正确");
+                        if (num <= 0) {
+                            mEdNum.setText("");
+                            showToast(mActivity, "数量不正确");
                             return true;
                         }
 
