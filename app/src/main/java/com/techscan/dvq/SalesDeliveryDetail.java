@@ -8,6 +8,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -17,6 +20,8 @@ import android.widget.EditText;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.techscan.dvq.common.Utils;
 
 import org.apache.http.ParseException;
 import org.json.JSONArray;
@@ -28,6 +33,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -44,7 +51,8 @@ public class SalesDeliveryDetail extends Activity {
     JSONObject jsBody;
     JSONObject jsBoxTotal;
     JSONObject jsSerino;
-
+    String  weight = "";
+    String  num = "";
     Double number;
     Double ntotaloutinvnum;
     @InjectView(R.id.TextView31)
@@ -147,23 +155,35 @@ public class SalesDeliveryDetail extends Activity {
 
     private View.OnKeyListener myTxtListener = new View.OnKeyListener() {
         @Override
-        public boolean onKey(View v, int arg1, KeyEvent arg2) {
-            switch (v.getId()) {
-                case R.id.txtBarcode:
-                    if (arg1 == 66 && arg2.getAction() == KeyEvent.ACTION_UP) {
-                        ScanDetail(txtBarcode.getText().toString());
-                        txtBarcode.requestFocus();
-                        txtBarcode.setText("");
-                        return true;
-                    }
-//                case R.id.txtSaleNumber:
-//                    if (arg1 == 66 && arg2.getAction() == KeyEvent.ACTION_UP) {
-//                        Log.d(TAG, "onKey: "+"333");
-//                        m_mapSaleBaseInfo.put("number",Integer.valueOf(txtSaleNumber.getText().toString()));
-//                        ScanedToGet();
-//                        return true;
-//                    }
+        public boolean onKey(View v, int keyCode, KeyEvent event) {
+            if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
+                switch (v.getId()) {
+                    case R.id.txtBarcode:
+                            ScanDetail(txtBarcode.getText().toString());
+                            txtBarcode.requestFocus();
+                            txtBarcode.setText("");
+                            return true;
+                    case R.id.txtSaleNumber:
+                            Log.d(TAG, "onKey: "+"333");
+                        if (TextUtils.isEmpty(txtSaleNumber.getText())) {
+//                        txtSaleNumber.setText("");
+                            return false;
+                        }
+                        if (!isNumber(txtSaleNumber.getText().toString())) {
+                            Utils.showToast(SalesDeliveryDetail.this, "数量不正确");
+                            txtSaleNumber.setText("");
+                            return false;
+                        }
+                        if (Float.valueOf(txtSaleNumber.getText().toString()) <= 0) {
+                            Utils.showToast(SalesDeliveryDetail.this, "数量不正确");
+                            return false;
+                        }
+                            m_mapSaleBaseInfo.put("number",Integer.valueOf(txtSaleNumber.getText().toString()));
+                            ScanedToGet();
+                            return true;
+                }
             }
+
             return false;
         }
 
@@ -171,93 +191,98 @@ public class SalesDeliveryDetail extends Activity {
     /**
      * mEdBarCode（条码）的监听
      */
-//    private TextWatcher watchers = new TextWatcher() {
-//
-//        @Override
-//        public void afterTextChanged(Editable s) {
-//            // TODO Auto-generated method stub
-//            // m_OutPosID="";
-//        }
-//
-//        @Override
-//        public void beforeTextChanged(CharSequence s, int start, int count,
-//                                      int after) {
-//            // TODO Auto-generated method stub
-//        }
-//
-//        @Override
-//        public void onTextChanged(CharSequence s, int start, int before,
-//                                  int count) {
-//
-//        }
-//
-//    };
-//    private class CustomTextWatcher implements TextWatcher {
-//        EditText ed;
-//
-//        public CustomTextWatcher(EditText ed) {
-//            this.ed = ed;
-//        }
-//
-//        @Override
-//        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//        }
-//
-//        @Override
-//        public void onTextChanged(CharSequence s, int start, int before, int count) {
-//
-//        }
-//
-//        @Override
-//        public void afterTextChanged(Editable s) {
-//            switch (ed.getId()) {
-//                case R.id.txtBarcode:
-//                    if (TextUtils.isEmpty(txtBarcode.getText().toString())) {
-////                        txtSaleNumber.setText("");
-////                        txtSaleWeight.setText("");
-////                        txtSaleInvCode.setText("");
-////                        txtSaleInvName.setText("");
-////                        txtSaleTotal.setText("");
-////                        txtSaleType.setText("");
-////                        txtSaleUnit.setText("");
-////                        txtSaleSpec.setText("");
-////                        txtSaleBatch.setText("");
-//
-//                    }
-//                    break;
-//                case R.id.txtSaleNumber:
-//                    if (TextUtils.isEmpty(txtSaleNumber.getText())) {
-////                        txtSaleNumber.setText("");
-//                        return;
-//                    }
-//                    if (!isNumber(txtSaleNumber.getText().toString())) {
-//                        Utils.showToast(SalesDeliveryDetail.this, "数量不正确");
+    private TextWatcher watchers = new TextWatcher() {
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            // TODO Auto-generated method stub
+            // m_OutPosID="";
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count,
+                                      int after) {
+            // TODO Auto-generated method stub
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before,
+                                  int count) {
+
+        }
+
+    };
+    private class CustomTextWatcher implements TextWatcher {
+        EditText ed;
+
+        public CustomTextWatcher(EditText ed) {
+            this.ed = ed;
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            switch (ed.getId()) {
+                case R.id.txtBarcode:
+                    if (TextUtils.isEmpty(txtBarcode.getText().toString())) {
 //                        txtSaleNumber.setText("");
-//                        return;
-//                    }
-//                    if (Float.valueOf(txtSaleNumber.getText().toString()) < 0) {
-//                        Utils.showToast(SalesDeliveryDetail.this, "数量不正确");
-//                        return;
-//                    }
-//                    String  num = txtSaleNumber.getText().toString();
-//                    m_mapSaleBaseInfo.put("number",Integer.valueOf(num));
+//                        txtSaleWeight.setText("");
+//                        txtSaleInvCode.setText("");
+//                        txtSaleInvName.setText("");
+//                        txtSaleTotal.setText("");
+//                        txtSaleType.setText("");
+//                        txtSaleUnit.setText("");
+//                        txtSaleSpec.setText("");
+//                        txtSaleBatch.setText("");
+
+                    }
+                    break;
+                case R.id.txtSaleNumber:
+                    if (TextUtils.isEmpty(txtSaleNumber.getText())) {
+//                        Utils.showToast(SalesDeliveryDetail.this, "数量不能为空");
+                        return;
+                    }
+                    if (!isNumber(txtSaleNumber.getText().toString())) {
+                        Utils.showToast(SalesDeliveryDetail.this, "数量不正确");
+                        txtSaleNumber.setText("");
+                        return;
+                    }
+                    if (Float.valueOf(txtSaleNumber.getText().toString()) <= 0) {
+                        Utils.showToast(SalesDeliveryDetail.this, "数量不正确");
+                        return;
+                    }
+
+                      num = txtSaleNumber.getText().toString();
+                      weight = txtSaleWeight.getText().toString();
+                    float  a = Float.valueOf(num);
+                    float  b = Float.valueOf(weight);
+                    txtSaleTotal.setText(String.valueOf(a*b));
+                    m_mapSaleBaseInfo.put("number",Integer.valueOf(num));
 //                    ScanedToGet();
-//                    break;
-//            }
-//        }
-//    }
-//    /**
-//     * 判断是否都是数字，使用正则表达式
-//     *
-//     * @param str
-//     * @return
-//     */
-//    public boolean isNumber(String str) {
-//        Pattern pattern = Pattern.compile("[0-9]*");
-//        Matcher isNum = pattern.matcher(str);
-//        return isNum.matches();
-//    }
+                    break;
+            }
+        }
+    }
+    /**
+     * 判断是否都是数字，使用正则表达式
+     *
+     * @param str
+     * @return
+     */
+    public boolean isNumber(String str) {
+        Pattern pattern = Pattern.compile("[0-9]*");
+        Matcher isNum = pattern.matcher(str);
+        return isNum.matches();
+    }
 
 
     private boolean ScanDetail(String Scanbarcode) {
@@ -285,18 +310,21 @@ public class SalesDeliveryDetail extends Activity {
         if (bar.BarcodeType.equals("P") || bar.BarcodeType.equals("TP")){
 
             String FinishBarCode = bar.FinishBarCode;
+            if (bar.BarcodeType.equals("TP")){
             if (ScanedBarcode != null || ScanedBarcode.size() > 0) {
                 for (int si = 0; si < ScanedBarcode.size(); si++) {
                     String BarCode = ScanedBarcode.get(si).toString();
-
+                    Log.d(TAG, "BBBB: "+BarCode);
                     if (BarCode.equals(FinishBarCode)) {
-                        Toast.makeText(this, "该条码已经被扫描过了,不能再次扫描", Toast.LENGTH_LONG)
+//                    if (BarCode.substring(0,2).equals("TP")) {
+                        Toast.makeText(this, "该条码已经被扫描过了,不能再次扫描", Toast.LENGTH_SHORT)
                                 .show();
                         // ADD CAIXY TEST START
                         MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                         // ADD CAIXY TEST END
                         return false;
-                    }
+//                    }
+                }}
                 }
             }
         }else{
@@ -399,6 +427,7 @@ public class SalesDeliveryDetail extends Activity {
             txtSaleBatch.setFocusable(false);
             txtSaleNumber.setFocusableInTouchMode(true);
             txtSaleNumber.setFocusable(true);
+            txtSaleNumber.setEnabled(true);
             txtSaleTotal.setFocusableInTouchMode(false);
             txtSaleTotal.setFocusable(false);
             txtSaleNumber.requestFocus();
@@ -418,8 +447,13 @@ public class SalesDeliveryDetail extends Activity {
                     String Free1 = "";
                     // 寻找到了对应存货
                     Double doneqty = 0.0;
-                    if(!temp.getString("nottaloutinvnum").isEmpty() && !temp.getString("nottaloutinvnum").toLowerCase().equals("null")) {
+                    if(!temp.getString("nottaloutinvnum").isEmpty()) {
+//                        String qq = temp.getString("nottaloutinvnum");
+//                        if (!TextUtils.isEmpty(qq)){
+//                            qq = "0";
+//                        }
                         doneqty = temp.getDouble("nottaloutinvnum");
+//                        doneqty = Double.valueOf(qq);
                         if(bar.BarcodeType.equals("P") || bar.BarcodeType.equals("TP")) {
                             Double ldTotal = (Double) m_mapSaleBaseInfo.get("quantity") * (Integer)m_mapSaleBaseInfo.get("number");
                             txtSaleTotal.setText(ldTotal.toString());
@@ -427,13 +461,12 @@ public class SalesDeliveryDetail extends Activity {
                         doneqty = doneqty +Double.parseDouble(txtSaleTotal.getText().toString());
                         Log.d(TAG, "ScanedToGet: "+doneqty.toString());
                         if (doneqty  > temp.getInt("nnumber")) {
-                            IniDetail();
                             Toast.makeText(this, "这个存货已经超过应发数量了,不允出库!",
                                     Toast.LENGTH_LONG).show();
                             // ADD CAIXY TEST START
                             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                             // ADD CAIXY TEST END
-
+                            IniDetail();
                             txtBarcode.setText("");
                             txtBarcode.requestFocus();
                             return false;
@@ -459,7 +492,7 @@ public class SalesDeliveryDetail extends Activity {
 
                     //Double doneqty = temp.getDouble("doneqty");
                     //temp.put("doneqty", doneqty + Double.parseDouble(txtPurTotal.getText().toString()));
-//                    temp.put("nottaloutinvnum", doneqty + Double.parseDouble(txtSaleTotal.getText().toString()));
+//                    temp.put("nottaloutinvnum ", doneqty + Double.parseDouble(txtSaleTotal.getText().toString()));
                     temp.put("nottaloutinvnum", doneqty);
                     break;
                 }
@@ -489,7 +522,7 @@ public class SalesDeliveryDetail extends Activity {
                         .getString("nnumber");
                 String sinnum = ((JSONObject) (arrays.get(i)))
                         .getString("nottaloutinvnum");
-
+                Log.d(TAG, "ScanedToGet: "+sinnum);
                 number = number + Double.valueOf(sshouldinnum);
                 if(!sinnum.toLowerCase().equals("null") && !sinnum.isEmpty())
                     ntotaloutinvnum = ntotaloutinvnum + Double.valueOf(sinnum);
@@ -515,6 +548,7 @@ public class SalesDeliveryDetail extends Activity {
 
     private boolean ScanSerial(String serino, String Free1, String TotalBox)
             throws JSONException {
+        Log.d(TAG, "TTTT: "+TotalBox);
         if (jsSerino == null)
             jsSerino = new JSONObject();
 
@@ -679,8 +713,9 @@ public class SalesDeliveryDetail extends Activity {
 
     private void initView() {
         txtBarcode.setOnKeyListener(myTxtListener);
-//        txtBarcode.addTextChangedListener(new CustomTextWatcher(txtBarcode));
-//        txtSaleNumber.addTextChangedListener(new CustomTextWatcher(txtSaleNumber));
+        txtSaleNumber.setOnKeyListener(myTxtListener);
+        txtBarcode.addTextChangedListener(new CustomTextWatcher(txtBarcode));
+        txtSaleNumber.addTextChangedListener(new CustomTextWatcher(txtSaleNumber));
 //        this.txtBarcode.addTextChangedListener(watchers);
     }
 
@@ -813,10 +848,10 @@ public class SalesDeliveryDetail extends Activity {
 
             String sSerial = ((JSONObject) (arrays.get(i))).getString("sno");//序列号
             String sBatch = ((JSONObject) (arrays.get(i))).getString("batch");
-            String sInvCode = ((JSONObject) (arrays.get(i)))
-                    .getString("invcode");
+            String sInvCode = ((JSONObject) (arrays.get(i))).getString("invcode");
             String serino = ((JSONObject) (arrays.get(i))).getString("serino");//条码
             String sTotal = ((JSONObject) (arrays.get(i))).getString("box");
+//            Log.d(TAG, "WWWW: "+sTotal);
             String invtype = ((JSONObject) (arrays.get(i))).getString("invtype");
             String invspec = ((JSONObject) (arrays.get(i))).getString("invspec");
             map.put("invcode", sInvCode);
@@ -920,7 +955,8 @@ public class SalesDeliveryDetail extends Activity {
                     String batch = (String) mapTemp.get("batch");
                     String sno = (String) mapTemp.get("sno");
                     String serino = (String) mapTemp.get("serino");
-                    Double ScanedTotal = Double.valueOf(mapTemp.get("total").toString());
+                    String totals = (String)mapTemp.get("total");
+                    Double ScanedTotal = Double.parseDouble(mapTemp.get("total").toString());
 
                     if (ScanedBarcode != null || ScanedBarcode.size() > 0) {
                         for (int si = 0; si < ScanedBarcode.size(); si++) {
