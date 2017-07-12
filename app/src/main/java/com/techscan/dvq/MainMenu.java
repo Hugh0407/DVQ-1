@@ -16,7 +16,10 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.SimpleAdapter;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,9 +35,12 @@ import java.util.HashMap;
 
 import butterknife.ButterKnife;
 
+import android.view.Menu;
+import android.view.MenuItem;
+
 public class MainMenu extends Activity {
 
-    Button btnLogOut = null;
+    //Button btnLogOut = null;
 //    @InjectView(id.btn_xun)
 //    Button mBtnXun;
 //    @InjectView(id.btn_hu)
@@ -60,6 +66,11 @@ public class MainMenu extends Activity {
 
     static AlertDialog alertDialog = null;
     static ProgressDialog PD = null;
+
+    private RadioButton radioButton1;
+    private RadioButton radioButton2;
+    private RadioButton radioButton3;
+    private RadioGroup RadioGroupType;
 
     // private SoundPool sp;// 声明一个SoundPool
     // private int MainLogin.music;// 定义一个int来设置suondID
@@ -119,58 +130,93 @@ public class MainMenu extends Activity {
         // MainLogin.music = MainLogin.sp.load(this, R.raw.xxx, 1); //
         // 把你的声音素材放到res/raw里，第2个参数即为资源文件，第3个为音乐的优先级
         // // ADD CAIXY END
+        RadioGroupType = (RadioGroup) findViewById(id.TypeBar);
+        RadioGroupType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                switch (i){
+                    case id.radioButton1:
+                        setMenuItem(1);
+                        break;
+                    case id.radioButton2:
+                        setMenuItem(2);
+                        break;
+                    case id.radioButton3:
+                        setMenuItem(3);
+                        break;
+                }
+            }
+        });
+        radioButton1 = (RadioButton) findViewById(id.radioButton1);
+        radioButton2 = (RadioButton) findViewById(id.radioButton2);
+        radioButton3 = (RadioButton) findViewById(id.radioButton3);
+
+        radioButton1.setSelected(true);
 
         tvLoginCompanyName = (TextView) findViewById(id.tvLoginCompanyName);
         String sCompanyName = MainLogin.objLog.CompanyName;
         tvLoginCompanyName.setText(" " + sCompanyName);
         gridview = (GridView) findViewById(id.gvMainMenu);
-        btnLogOut = (Button) findViewById(id.btnLogOut);
-        btnLogOut.setOnClickListener(ButtonOnClickListener);
+        //btnLogOut = (Button) findViewById(id.btnLogOut);
+        //btnLogOut.setOnClickListener(ButtonOnClickListener);
 
-        ArrayList<HashMap<String, Object>> lstImageItem = new ArrayList<HashMap<String, Object>>();
-
-        HashMap<String, Object> map;
-
-        map = new HashMap<String, Object>();
-        map.put("ItemImage", R.drawable.icon_rk_cg);
-        map.put("ItemText", "采购入库");
-        lstImageItem.add(map);
-
-        map = new HashMap<String, Object>();
-        map.put("ItemImage", R.drawable.icon_ck_xs);
-        map.put("ItemText", "销售出库");
-        lstImageItem.add(map);
-
-//*********************************************************************
-// by liuya 时间06.19
-        map = new HashMap<String, Object>();
-        map.put("ItemImage", R.drawable.icon_ck_cl);
-        map.put("ItemText", "材料出库");
-        lstImageItem.add(map);
-//*********************************************************************
-//*********************************************************************
-// by liuya 时间07.06
-        map = new HashMap<String, Object>();
-        map.put("ItemImage", R.drawable.ic_launcher);
-        map.put("ItemText", "材料退库");
-        lstImageItem.add(map);
-//*********************************************************************
-
-//*********************************************************************
-// by liuya 时间06.27
-        map = new HashMap<String, Object>();
-        map.put("ItemImage", R.drawable.icon_rk_cp);
-        map.put("ItemText", "成品入库");
-        lstImageItem.add(map);
-//*********************************************************************
-
-        //*********************************************************************
-// by liuya 时间06.27
-        map = new HashMap<String, Object>();
-        map.put("ItemImage", R.drawable.icon_xt_zh);
-        map.put("ItemText", "形态转换");
-        lstImageItem.add(map);
-//*********************************************************************
+        setMenuItem(1);
+//        ArrayList<HashMap<String, Object>> lstImageItem = new ArrayList<HashMap<String, Object>>();
+//
+//        HashMap<String, Object> map;
+//        if(radioButton1.isSelected()){
+//            map = new HashMap<String, Object>();
+//            map.put("ItemImage", R.drawable.icon_rk_cg);
+//            map.put("ItemText", "采购入库");
+//            lstImageItem.add(map);
+//
+//            //*********************************************************************
+//            // by liuya 时间06.19
+//            map = new HashMap<String, Object>();
+//            map.put("ItemImage", R.drawable.icon_ck_cl);
+//            map.put("ItemText", "材料出库");
+//            lstImageItem.add(map);
+//            //*********************************************************************
+//
+//            //*********************************************************************
+//            // by liuya 时间06.27
+//            map = new HashMap<String, Object>();
+//            map.put("ItemImage", R.drawable.icon_rk_cp);
+//            map.put("ItemText", "成品入库");
+//            lstImageItem.add(map);
+//            //*********************************************************************
+//
+//            map = new HashMap<String, Object>();
+//            map.put("ItemImage", R.drawable.icon_ck_xs);
+//            map.put("ItemText", "销售出库");
+//            lstImageItem.add(map);
+//        }
+//        else if(radioButton2.isSelected()){
+//            //*********************************************************************
+//            // by walter 时间07.11
+//            map = new HashMap<String, Object>();
+//            map.put("ItemImage", R.drawable.ic_launcher);
+//            map.put("ItemText", "采购退库");
+//            lstImageItem.add(map);
+//            //*********************************************************************
+//
+//            //*********************************************************************
+//            // by liuya 时间07.06
+//            map = new HashMap<String, Object>();
+//            map.put("ItemImage", R.drawable.ic_launcher);
+//            map.put("ItemText", "材料退库");
+//            lstImageItem.add(map);
+//            //*********************************************************************
+//        }
+//        else if(radioButton3.isSelected()) {
+//            //*********************************************************************
+//            // by liuya 时间06.27
+//            map = new HashMap<String, Object>();
+//            map.put("ItemImage", R.drawable.icon_xt_zh);
+//            map.put("ItemText", "形态转换");
+//            lstImageItem.add(map);
+//            //*********************************************************************
+//        }
 //		map = new HashMap<String, Object>();
 //		map.put("ItemImage", R.drawable.icon_cgdh);
 //		map.put("ItemText", "单据查询");
@@ -231,6 +277,96 @@ public class MainMenu extends Activity {
 //		map.put("ItemText", "清除缓存");
 //		lstImageItem.add(map);
 
+//        SimpleAdapter saImageItems = new SimpleAdapter(this,
+//                lstImageItem,// 数据来源
+//                R.layout.girdviewitem,
+//                new String[]{"ItemImage", "ItemText"}, new int[]{
+//                id.gvimgItem, id.gvtvItem});
+//        gridview.setAdapter(saImageItems);
+//        gridview.setOnItemClickListener(new ItemClickListener());
+
+    }
+
+    private  void setMenuItem(int irbType){
+        ArrayList<HashMap<String, Object>> lstImageItem = new ArrayList<HashMap<String, Object>>();
+
+        HashMap<String, Object> map;
+
+        switch(irbType){
+            case 1:
+                map = new HashMap<String, Object>();
+                map.put("ItemImage", R.drawable.icon_rk_cg);
+                map.put("ItemText", "采购入库");
+                lstImageItem.add(map);
+
+                //*********************************************************************
+                // by liuya 时间06.19
+                map = new HashMap<String, Object>();
+                map.put("ItemImage", R.drawable.icon_ck_cl);
+                map.put("ItemText", "材料出库");
+                lstImageItem.add(map);
+                //*********************************************************************
+
+                //*********************************************************************
+                // by liuya 时间06.27
+                map = new HashMap<String, Object>();
+                map.put("ItemImage", R.drawable.icon_rk_cp);
+                map.put("ItemText", "成品入库");
+                lstImageItem.add(map);
+                //*********************************************************************
+
+                map = new HashMap<String, Object>();
+                map.put("ItemImage", R.drawable.icon_ck_xs);
+                map.put("ItemText", "销售出库");
+                lstImageItem.add(map);
+
+                map = new HashMap<String, Object>();
+                lstImageItem.add(map);
+
+                map = new HashMap<String, Object>();
+                lstImageItem.add(map);
+
+                break;
+
+            case 2:
+                //*********************************************************************
+                // by walter 时间07.11
+                map = new HashMap<String, Object>();
+                map.put("ItemImage", R.drawable.ic_launcher);
+                map.put("ItemText", "采购退库");
+                lstImageItem.add(map);
+                //*********************************************************************
+
+                //*********************************************************************
+                // by liuya 时间07.06
+                map = new HashMap<String, Object>();
+                map.put("ItemImage", R.drawable.ic_launcher);
+                map.put("ItemText", "材料退库");
+                lstImageItem.add(map);
+                //*********************************************************************
+
+                map = new HashMap<String, Object>();
+                lstImageItem.add(map);
+
+                break;
+
+            case 3:
+                //*********************************************************************
+                // by liuya 时间06.27
+                map = new HashMap<String, Object>();
+                map.put("ItemImage", R.drawable.icon_xt_zh);
+                map.put("ItemText", "形态转换");
+                lstImageItem.add(map);
+                //*********************************************************************
+
+                map = new HashMap<String, Object>();
+                lstImageItem.add(map);
+
+                map = new HashMap<String, Object>();
+                lstImageItem.add(map);
+                break;
+
+        }
         SimpleAdapter saImageItems = new SimpleAdapter(this,
                 lstImageItem,// 数据来源
                 R.layout.girdviewitem,
@@ -238,21 +374,29 @@ public class MainMenu extends Activity {
                 id.gvimgItem, id.gvtvItem});
         gridview.setAdapter(saImageItems);
         gridview.setOnItemClickListener(new ItemClickListener());
-
     }
 
-    private OnClickListener ButtonOnClickListener = new OnClickListener() {
-
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()) { // btnSDScanReturn
-                case id.btnLogOut:
-                    Common.lsUrl = MainLogin.objLog.LoginString;
-                    finish();
-                    break;
-            }
-        }
-    };
+//    private OnClickListener ButtonOnClickListener = new OnClickListener() {
+//
+//        @Override
+//        public void onClick(View v) {
+//            switch (v.getId()) { // btnSDScanReturn
+//                case id.btnLogOut:
+//
+//                    AlertDialog.Builder bulider = new AlertDialog.Builder(MainMenu.this).setTitle(R.string.XunWen).setMessage("是否确定退出系统");
+//                    bulider.setNegativeButton(R.string.QuXiao, null);
+//                    bulider.setPositiveButton(R.string.QueRen, new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            Common.lsUrl = MainLogin.objLog.LoginString;
+//                            finish();
+//                        }
+//                    }).create().show();
+//
+//                    break;
+//            }
+//        }
+//    };
     // private writeTxt writeTxt ;
     // private void UpdateLog()
     // {
@@ -314,10 +458,25 @@ public class MainMenu extends Activity {
 //					break;
 //				}
 //del walter todo 20170615 权限判断暂时删除 <<<<<-----
-                    ShowPurIn();
-                    break;
+//                    ShowPurIn();
+//                    break;
 //				ShowSearchBillActivity();
 //				break;
+                    if(RadioGroupType.getCheckedRadioButtonId() == id.radioButton1){
+                        //采购入库
+                        ShowPurIn();
+                    }
+                    else if(RadioGroupType.getCheckedRadioButtonId() == id.radioButton2){
+                        //采购退库
+                        Utils.showToast(MainMenu.this, "采购退库待加");
+                    }
+                    else if(RadioGroupType.getCheckedRadioButtonId() == id.radioButton3){
+                        //*********************************************************************
+                        //形态转换模块  时间06.28  by liuya
+                            ShowStatusChange();
+                        //*********************************************************************
+                    }
+                    break;
                 case 1:
                     //销售出库
 //del walter todo 20170615 权限判断暂时删除 ----->>>>>
@@ -328,15 +487,39 @@ public class MainMenu extends Activity {
 //					break;
 //				}
 //del walter todo 20170615 权限判断暂时删除 <<<<<-----
-                    ShowSaleOut();
-                    break;
+//                    ShowSaleOut();
+//                    break;
 //				ShowSearchMain();
 //				break;
-//*********************************************************************
-//材料入库模块  时间06.19  by liuya
-                case 2:
-                    ShowMaterialIn();
+                    if(RadioGroupType.getCheckedRadioButtonId() == id.radioButton1){
+                        //*********************************************************************
+                        //材料出库模块  时间06.19  by liuya
+                        ShowMaterialIn();
+                        //*********************************************************************
+                    }
+                    else if(RadioGroupType.getCheckedRadioButtonId() == id.radioButton2){
+                        //材料退
+                        Utils.showToast(MainMenu.this, "材料退库待加");
+                    }
+                    else if(RadioGroupType.getCheckedRadioButtonId() == id.radioButton3){
+
+                    }
                     break;
+                case 2:
+                    if(RadioGroupType.getCheckedRadioButtonId() == id.radioButton1){
+                        //*********************************************************************
+                        //成品入库模块  时间06.27  by liuya
+                        ShowProductOut();
+                        //*********************************************************************
+                    }
+                    else if(RadioGroupType.getCheckedRadioButtonId() == id.radioButton2){
+
+                    }
+                    else if(RadioGroupType.getCheckedRadioButtonId() == id.radioButton3){
+                    }
+                    break;
+//                    ShowMaterialIn();
+//                    break;
 //*********************************************************************
 //                    if (!Common.CheckUserRole("", "", "40081014")) {
 //                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
@@ -346,22 +529,24 @@ public class MainMenu extends Activity {
 //                    }
 //                    ShowStockMove();
 //*********************************************************************
-//成品入库模块  时间06.27  by liuya
                 case 3:
-                    Utils.showToast(MainMenu.this, "待加");
+//                    Utils.showToast(MainMenu.this, "待加");
+//                    break;
+                    if(RadioGroupType.getCheckedRadioButtonId() == id.radioButton1){
+                        //销售出库
+                        ShowSaleOut();
+                    }
+                    else if(RadioGroupType.getCheckedRadioButtonId() == id.radioButton2){
+
+                    }
+                    else if(RadioGroupType.getCheckedRadioButtonId() == id.radioButton3){
+                    }
                     break;
-//*********************************************************************
-//*********************************************************************
-//成品入库模块  时间06.27  by liuya
+
+
                 case 4:
-                    ShowProductOut();
+                    //ShowProductOut();
                     break;
-//*********************************************************************
-                //形态转换模块  时间06.28  by liuya
-                case 5:
-                    ShowStatusChange();
-                    break;
-//*********************************************************************
                 case 11:
                     if (!Common.CheckUserRole("", "", "40080820")) {
                         MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
@@ -484,19 +669,28 @@ public class MainMenu extends Activity {
         return true;
     }
 
-//	@Override
-//	public boolean onOptionsItemSelected(MenuItem item) {
-//		// Handle action bar item clicks here. The action bar will
-//		// automatically handle clicks on the Home/Up button, so long
-//		// as you specify a parent activity in AndroidManifest.xml.
-//		int id = item.getItemId();
-//		if (id == R.id.action_settings) {
-//			Changeline();
-//			return true;
-//		}
-//
-//		return super.onOptionsItemSelected(item);
-//	}
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle action bar item clicks here. The action bar will
+		// automatically handle clicks on the Home/Up button, so long
+		// as you specify a parent activity in AndroidManifest.xml.
+		int id = item.getItemId();
+		if (id == R.id.menu_exit) {
+            //
+            AlertDialog.Builder bulider = new AlertDialog.Builder(MainMenu.this).setTitle(R.string.XunWen).setMessage("是否确定退出系统");
+            bulider.setNegativeButton(R.string.QuXiao, null);
+            bulider.setPositiveButton(R.string.QueRen, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Common.lsUrl = MainLogin.objLog.LoginString;
+                    finish();
+                }
+            }).create().show();
+            return true;
+		}
+
+		return super.onOptionsItemSelected(item);
+	}
 
     private void Changeline() {
 

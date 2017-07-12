@@ -16,8 +16,8 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingLeft="3dp"
-            android:paddingTop="3dp"
-            android:paddingBottom="3dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
             android:layout_margin="3dp"
             android:background="@color/white">
             <LinearLayout
@@ -34,7 +34,8 @@
                     android:textAllCaps="true"
                     android:background="@drawable/edittext_style"
                     android:layout_weight="0.4"
-                    android:hint="订单开始日"/>
+                    android:hint="订单开始日"
+                    android:editable="false"/>
 
                 <TextView
                     android:layout_width="60dp"
@@ -53,7 +54,8 @@
                     android:background="@drawable/edittext_style"
                     android:layout_weight="0.4"
                     android:hint="订单结束日"
-                    android:layout_marginRight="3dp"/>
+                    android:layout_marginRight="3dp"
+                    android:editable="false"/>
 
             </LinearLayout>
 
@@ -67,7 +69,7 @@
 
                 <TextView
                     android:id="@+id/tvsearchInvUnitName"
-                    android:layout_width="76dp"
+                    android:layout_width="64dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:text="采购订单" />
@@ -83,8 +85,8 @@
                     android:layout_weight="1"/>
                 <ImageButton
                     android:id="@+id/btnPurBrower"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="3dp"
                     android:background="@drawable/browse"/>
             </LinearLayout>
@@ -97,7 +99,7 @@
                 android:gravity="center_vertical">
                 <TextView
                     android:id="@+id/tvPurVen"
-                    android:layout_width="76dp"
+                    android:layout_width="64dp"
                     android:layout_height="wrap_content"
                     android:text="供应商" />
                 <TextView
@@ -112,11 +114,11 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="3dp"
+            android:padding="5dp"
             android:orientation="horizontal"
             android:gravity="center_vertical">
             <TextView
-                android:layout_width="80dp"
+                android:layout_width="68dp"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:text="入库单号"/>
@@ -132,19 +134,19 @@
                 android:singleLine="true"
                 android:textAllCaps="true"/>
             <TextView
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:layout_marginLeft="3dp"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="3dp"
+            android:padding="5dp"
             android:orientation="horizontal"
             android:gravity="center_vertical">
 
             <TextView
-                android:layout_width="80dp"
+                android:layout_width="68dp"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:text="仓库"/>
@@ -161,8 +163,8 @@
                 android:textAllCaps="true"/>
             <ImageButton
                 android:id="@+id/refer_wh"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="3dp"
                 android:background="@drawable/browse"/>
 
@@ -171,12 +173,12 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="3dp"
+            android:padding="5dp"
             android:orientation="horizontal"
             android:gravity="center_vertical">
 
             <TextView
-                android:layout_width="80dp"
+                android:layout_width="68dp"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:text="库存组织"/>
@@ -194,56 +196,56 @@
 
             <ImageButton
                 android:id="@+id/refer_organization"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="3dp"
                 android:background="@drawable/browse"/>
 
         </LinearLayout>
 
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:padding="5dp"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:gravity="center_vertical">-->
+
+            <!--<TextView-->
+                <!--android:layout_width="68dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:gravity="center_vertical"-->
+                <!--android:text="收发类别"/>-->
+
+            <!--<EditText-->
+                <!--android:id="@+id/lei_bie"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="30dp"-->
+                <!--android:layout_weight="3"-->
+                <!--android:background="@drawable/edittext_style"-->
+                <!--android:ems="10"-->
+                <!--android:maxLines="1"-->
+                <!--android:singleLine="true"-->
+                <!--android:textAllCaps="true"/>-->
+
+            <!--<ImageButton-->
+                <!--android:id="@+id/refer_lei_bie"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginLeft="3dp"-->
+                <!--android:background="@drawable/browse"/>-->
+
+        <!--</LinearLayout>-->
+
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="3dp"
+            android:padding="5dp"
             android:orientation="horizontal"
             android:gravity="center_vertical">
 
             <TextView
-                android:layout_width="80dp"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="收发类别"/>
-
-            <EditText
-                android:id="@+id/lei_bie"
-                android:layout_width="0dp"
-                android:layout_height="30dp"
-                android:layout_weight="3"
-                android:background="@drawable/edittext_style"
-                android:ems="10"
-                android:maxLines="1"
-                android:singleLine="true"
-                android:textAllCaps="true"/>
-
-            <ImageButton
-                android:id="@+id/refer_lei_bie"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_marginLeft="3dp"
-                android:background="@drawable/browse"/>
-
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="3dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
-
-            <TextView
-                android:layout_width="80dp"
+                android:layout_width="68dp"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:text="部门"/>
@@ -261,8 +263,8 @@
 
             <ImageButton
                 android:id="@+id/refer_department"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="3dp"
                 android:background="@drawable/browse"/>
 
@@ -272,13 +274,12 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="3dp"
+            android:padding="5dp"
             android:layout_weight="1"
-            android:orientation="horizontal"
-            android:gravity="top">
+            android:orientation="horizontal">
 
             <TextView
-                android:layout_width="80dp"
+                android:layout_width="68dp"
                 android:layout_height="wrap_content"
                 android:text="备注"/>
 
@@ -287,7 +288,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/edittext_style"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:gravity="left|top"/>
         </LinearLayout>
 
     </LinearLayout>

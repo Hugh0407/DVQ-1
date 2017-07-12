@@ -18,7 +18,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=" 编码:"
-            android:textColor="@color/white"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -28,7 +27,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="INVCODE"
-            android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold" />
     </LinearLayout>
@@ -46,7 +44,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=" 名称:"
-            android:textColor="@color/white"
             android:textSize="16sp" />
 
         <TextView
@@ -55,7 +52,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="INVNAME"
-            android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -75,7 +71,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=" 批次:"
-            android:textColor="@color/white"
             android:textSize="16sp" />
 
         <TextView
@@ -84,7 +79,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="BATCH"
-            android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -104,7 +98,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=" 规格:"
-            android:textColor="@color/white"
             android:textSize="16sp" />
 
         <TextView
@@ -113,7 +106,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Spec"
-            android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -133,7 +125,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=" 型号:"
-            android:textColor="@color/white"
             android:textSize="16sp" />
 
         <TextView
@@ -142,7 +133,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Type"
-            android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -165,7 +155,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=" 重量:"
-                android:textColor="@color/white"
                 android:textSize="18sp" />
 
             <TextView
@@ -173,8 +162,7 @@
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:gravity="right"
-                android:text=""
-                android:textColor="@color/white"
+                android:text="QTY"
                 android:textSize="18sp" />
 
         </LinearLayout>

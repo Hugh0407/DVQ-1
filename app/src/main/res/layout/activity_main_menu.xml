@@ -13,9 +13,9 @@
         android:layout_margin="5dp"
         android:gravity="center_vertical"
         android:text="公司名称"
-        android:textColor="#1e82d2"
+        android:textColor="#4988eb"
         android:textSize="16sp"
-        android:textStyle="bold"></TextView>
+        android:textStyle="bold"/>
 
     <GridView
         android:id="@+id/gvMainMenu"
@@ -33,50 +33,55 @@
     <RadioGroup
         android:id="@+id/TypeBar"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="45dp"
+        android:background="#4988eb"
         android:orientation="horizontal"
-        android:background="@color/white">
+        android:paddingTop="5dp">
+
         <RadioButton
+            android:id="@+id/radioButton1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:button="@null"
+            android:checked="true"
             android:drawableTop="@drawable/bg_radiobutton_crk"
-            android:button="@null"
+            android:gravity="center"
             android:text="出入库"
-            android:textSize="12sp"
             android:textColor="@drawable/rb_text_color"
-            android:gravity="center"
-            android:id="@+id/radioButton1"/>
+            android:textSize="12sp"/>
+
         <RadioButton
+            android:id="@+id/radioButton2"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:button="@null"
             android:drawableTop="@drawable/bg_radionbutton_tk"
-            android:button="@null"
-            android:text="退库"
-            android:textSize="12sp"
-            android:textColor="@drawable/rb_text_color"
             android:gravity="center"
-            android:id="@+id/radioButton2"/>
+            android:text="退库"
+            android:textColor="@drawable/rb_text_color"
+            android:textSize="12sp"/>
+
         <RadioButton
+            android:id="@+id/radioButton3"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:drawableTop="@drawable/bg_radiobutton_other"
             android:button="@null"
-            android:text="其它"
-            android:textSize="12sp"
-            android:textColor="@drawable/rb_text_color"
+            android:drawableTop="@drawable/bg_radiobutton_other"
             android:gravity="center"
-            android:id="@+id/radioButton3"/>
+            android:text="其它"
+            android:textColor="@drawable/rb_text_color"
+            android:textSize="12sp"/>
     </RadioGroup>
 
-    <Button
-        android:id="@+id/btnLogOut"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/button_normal_style"
-        android:text="退出登录"
-        android:textColor="@color/white"
-        />
+    <!--<Button-->
+    <!--android:id="@+id/btnLogOut"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="40dp"-->
+    <!--android:background="@drawable/button_normal_style"-->
+    <!--android:text="退出登录"-->
+    <!--android:textColor="@color/white"-->
+    <!--/>-->
 </LinearLayout>
