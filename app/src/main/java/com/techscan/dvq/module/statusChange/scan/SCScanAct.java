@@ -37,14 +37,13 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
 import static com.techscan.dvq.R.id.ed_num;
+import static com.techscan.dvq.common.Utils.isNumber;
 
 /**
  * 形态转换模块下的 扫描界面
@@ -136,17 +135,17 @@ public class SCScanAct extends Activity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_task:
-                ScAdapter scAdapter = new ScAdapter(SCScanAct.this, taskList);
+                ScAdapter scAdapter = new ScAdapter(taskList);
                 showDialog(taskList, scAdapter, "任务信息");
                 break;
             case R.id.btn_detail:
-                MyBaseAdapter myBaseAdapter = new MyBaseAdapter(activity, detailList);
+                MyBaseAdapter myBaseAdapter = new MyBaseAdapter(detailList);
                 showDialog(detailList, myBaseAdapter, "扫描明细");
                 break;
             case R.id.btn_back:
                 if (detailList.size() > 0) {
-                } else {
                     setDataToBack();
+                } else {
                     Utils.showToast(activity, "没有扫描单据");
                     finish();
                 }
@@ -464,18 +463,6 @@ public class SCScanAct extends Activity {
             Utils.showToast(activity, "条码有误重新输入");
             return false;
         }
-    }
-
-    /**
-     * 通过正则表达式匹配数字
-     *
-     * @param str
-     * @return
-     */
-    public boolean isNumber(String str) {
-        Pattern pattern = Pattern.compile("[0-9]*");
-        Matcher isNum = pattern.matcher(str);
-        return isNum.matches();
     }
 
     /**

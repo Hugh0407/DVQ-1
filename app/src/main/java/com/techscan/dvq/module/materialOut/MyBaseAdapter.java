@@ -1,6 +1,5 @@
 package com.techscan.dvq.module.materialOut;
 
-import android.content.Context;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,11 +18,9 @@ import java.util.List;
 
 public class MyBaseAdapter extends BaseAdapter {
 
-    private Context mContext;
     private List<Goods> mList;
 
-    public MyBaseAdapter(Context context, List<Goods> list) {
-        mContext = context;
+    public MyBaseAdapter(List<Goods> list) {
         mList = list;
     }
 
@@ -66,7 +63,7 @@ public class MyBaseAdapter extends BaseAdapter {
         ViewHolder viewHolder;
         if (convertView == null) {
             viewHolder = new ViewHolder();
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_scan_details, null);
+            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_scan_details, null);
             viewHolder.name = (TextView) convertView.findViewById(R.id.name);
             viewHolder.encoding = (TextView) convertView.findViewById(R.id.encoding);
             viewHolder.type = (TextView) convertView.findViewById(R.id.type);

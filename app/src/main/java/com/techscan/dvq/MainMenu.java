@@ -287,44 +287,6 @@ public class MainMenu extends Activity {
 
     public Context context;
 
-//    @OnClick({id.btn_xun, id.btn_hu})
-//    public void onViewClicked(View view) {
-//        switch (view.getId()) {
-//            case id.btn_xun:
-//                new Thread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        try {
-//                            JSONObject jsonObject = new JSONObject(Utils.jsonWang);
-//                            Log.d("TAG", "xun: " + jsonObject.toString());
-//                            Common.DoHttpQuery(jsonObject, "SavePurStockIn", "A");
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                }).start();
-//                break;
-//            case id.btn_hu:
-//                new Thread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        try {
-//                            JSONObject jsonObject = new JSONObject(Utils.jsonXu);
-//                            Log.d("TAG", "hu: " + jsonObject.toString());
-//                            Common.DoHttpQuery(jsonObject, "SaveSaleReceive", "A");
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                }).start();
-//                break;
-//        }
-//    }
-
     class ItemClickListener implements OnItemClickListener {
 
         @Override

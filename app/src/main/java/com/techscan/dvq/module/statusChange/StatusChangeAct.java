@@ -18,6 +18,7 @@ import com.techscan.dvq.MainLogin;
 import com.techscan.dvq.OtherOrderList;
 import com.techscan.dvq.R;
 import com.techscan.dvq.bean.PurGood;
+import com.techscan.dvq.common.SaveThread;
 import com.techscan.dvq.module.statusChange.scan.SCScanAct;
 
 import org.json.JSONException;
@@ -134,6 +135,12 @@ public class StatusChangeAct extends Activity {
             super.handleMessage(msg);
             switch (msg.what) {
                 case 1:
+                    JSONObject j = (JSONObject) msg.obj;
+                    if (j != null) {
+                        Log.d("TAG", "JSONObject: " + j.toString());
+                    } else {
+                        Log.d("TAG", "JSONObject: null ");
+                    }
                     break;
             }
         }
@@ -141,7 +148,43 @@ public class StatusChangeAct extends Activity {
 
     private void saveInfo() throws JSONException {
 
+        String CFIRSTBILLBID = null;
+        String CFIRSTBILLHID = null;
         final JSONObject table = new JSONObject();
+        JSONObject saveOut = new JSONObject();
+        JSONObject saveOutHead = new JSONObject();
+        saveOutHead.put("CWAREHOUSEID", WarehouseID);
+        saveOutHead.put("PK_CALBODY", MainLogin.objLog.STOrgCode);
+        saveOutHead.put("CLASTMODIID", MainLogin.objLog.UserID);
+        saveOutHead.put("COPERATORID", MainLogin.objLog.UserID);
+        saveOutHead.put("CDISPATCHERID", "0001TC100000000011Q8");
+        JSONObject saveOutBody = new JSONObject();
+        for (int i = 0; i < taskList.size(); i++) {
+            PurGood purGood = taskList.get(i);
+            if (purGood.getFbillrowflag().equals("3")) {
+                saveOutBody.put("CSOURCEBILLBID", purGood.getCsourcebillbid());
+                saveOutBody.put("CSOURCEBILLHID", purGood.getCsourcebillhid());
+                CFIRSTBILLBID = purGood.getCsourcebillbid();
+                CFIRSTBILLHID = purGood.getCsourcebillhid();
+                saveOutBody.put("CFIRSTBILLBID", CFIRSTBILLBID);
+                saveOutBody.put("CFIRSTBILLHID", CFIRSTBILLHID);
+                saveOutBody.put("CBODYWAREHOUSEID", WarehouseID);
+                saveOutBody.put("INVCODE", purGood.getInvcode());
+                saveOutBody.put("CINVBASID", purGood.getPk_invbasdoc());
+                saveOutBody.put("CINVENTORYID", purGood.getCinventoryid());
+                saveOutBody.put("NSHOULDOUTNUM", purGood.getNshouldinnum());
+                saveOutBody.put("NINNUM", purGood.getNum_task());
+                saveOutBody.put("VSOURCEBILLCODE", purGood.getSourceBill());
+                saveOutBody.put("VSOURCEROWNO", purGood.getVsourcerowno());
+                saveOutBody.put("PK_BODYCALBODY", "1011TC100000000000KV");
+                saveOutBody.put("VBATCHCODE", purGood.getVbatchcode());
+            }
+        }
+        saveOut.put("head", saveOutHead);
+        saveOut.put("body", saveOutBody);
+        saveOut.put("GUIDS", UUID.randomUUID().toString());
+        table.put("SaveOut", saveOut);
+
         JSONObject saveIn = new JSONObject();
         JSONObject saveInHead = new JSONObject();
         saveInHead.put("CWAREHOUSEID", WarehouseID);     //²Ö¿â
@@ -155,7 +198,8 @@ public class StatusChangeAct extends Activity {
             if (purGood.getFbillrowflag().equals("2")) {
                 saveInBody.put("CSOURCEBILLBID", purGood.getCsourcebillbid());
                 saveInBody.put("CSOURCEBILLHID", purGood.getCsourcebillhid());
-                saveInBody.put("CFIRSTBILLBID", "");
+                saveInBody.put("CFIRSTBILLBID", CFIRSTBILLBID);
+                saveInBody.put("CFIRSTBILLHID", CFIRSTBILLHID);
                 saveInBody.put("CBODYWAREHOUSEID", WarehouseID);
                 saveInBody.put("INVCODE", purGood.getInvcode());
                 saveInBody.put("CINVBASID", purGood.getPk_invbasdoc());
@@ -163,7 +207,7 @@ public class StatusChangeAct extends Activity {
                 saveInBody.put("NSHOULDOUTNUM", purGood.getNshouldinnum());
                 saveInBody.put("NINNUM", purGood.getNum_task());
                 saveInBody.put("VSOURCEBILLCODE", purGood.getSourceBill());
-                saveInBody.put("PK_BODYCALBODY", MainLogin.objLog.STOrgCode);
+                saveInBody.put("PK_BODYCALBODY", "1011TC100000000000KV");
                 saveInBody.put("VSOURCEROWNO", purGood.getVsourcerowno());
                 saveInBody.put("VBATCHCODE", purGood.getVbatchcode());
             }
@@ -172,41 +216,10 @@ public class StatusChangeAct extends Activity {
         saveIn.put("body", saveInBody);
         saveIn.put("GUIDS", UUID.randomUUID().toString());
         table.put("SaveIn", saveIn);
-
-        JSONObject saveOut = new JSONObject();
-        JSONObject saveOutHead = new JSONObject();
-        saveOutHead.put("CWAREHOUSEID", WarehouseID);
-        saveOutHead.put("PK_CALBODY", MainLogin.objLog.STOrgCode);
-        saveOutHead.put("CLASTMODIID", MainLogin.objLog.UserID);
-        saveOutHead.put("COPERATORID", MainLogin.objLog.UserID);
-        saveOutHead.put("CDISPATCHERID", "0001TC100000000011Q8");
-        JSONObject saveOutBody = new JSONObject();
-        for (int i = 0; i < taskList.size(); i++) {
-            PurGood purGood = taskList.get(i);
-            if (purGood.getFbillrowflag().equals("3")){
-                saveOutBody.put("CSOURCEBILLBID", purGood.getCsourcebillbid());
-                saveOutBody.put("CSOURCEBILLHID", purGood.getCsourcebillhid());
-                saveOutBody.put("CFIRSTBILLBID", "");
-                saveOutBody.put("CBODYWAREHOUSEID", WarehouseID);
-                saveOutBody.put("INVCODE", purGood.getInvcode());
-                saveOutBody.put("CINVBASID", purGood.getPk_invbasdoc());
-                saveOutBody.put("CINVENTORYID", purGood.getCinventoryid());
-                saveOutBody.put("NSHOULDOUTNUM", purGood.getNshouldinnum());
-                saveOutBody.put("NINNUM", purGood.getNum_task());
-                saveOutBody.put("VSOURCEBILLCODE", purGood.getSourceBill());
-                saveOutBody.put("VSOURCEROWNO", purGood.getVsourcerowno());
-                saveOutBody.put("PK_BODYCALBODY", MainLogin.objLog.STOrgCode);
-                saveOutBody.put("VBATCHCODE", purGood.getVbatchcode());
-            }
-        }
-        saveOut.put("head", saveOutHead);
-        saveOut.put("body", saveOutBody);
-        saveOut.put("GUIDS", UUID.randomUUID().toString());
-        table.put("SaveOut", saveOut);
         Log.d("TAG", "saveInfo: " + table.toString());
-//        SaveThread saveThread = new SaveThread(table, "SaveMaterialOut", mHandler, 1);
-//        Thread thread = new Thread(saveThread);
-//        thread.start();
+        SaveThread saveThread = new SaveThread(table, "SaveMaterialOut", mHandler, 1);
+        Thread thread = new Thread(saveThread);
+        thread.start();
     }
 
     /**
