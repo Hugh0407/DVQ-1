@@ -8,9 +8,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -20,8 +17,6 @@ import android.widget.EditText;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.techscan.dvq.common.Utils;
 
 import org.apache.http.ParseException;
 import org.json.JSONArray;
@@ -33,8 +28,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -199,72 +192,74 @@ public class SalesDeliveryDetail extends Activity {
 //        }
 //
 //    };
-    private class CustomTextWatcher implements TextWatcher {
-        EditText ed;
-
-        public CustomTextWatcher(EditText ed) {
-            this.ed = ed;
-        }
-
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            switch (ed.getId()) {
-                case R.id.txtBarcode:
-                    if (TextUtils.isEmpty(txtBarcode.getText().toString())) {
+//    private class CustomTextWatcher implements TextWatcher {
+//        EditText ed;
+//
+//        public CustomTextWatcher(EditText ed) {
+//            this.ed = ed;
+//        }
+//
+//        @Override
+//        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//        }
+//
+//        @Override
+//        public void onTextChanged(CharSequence s, int start, int before, int count) {
+//
+//        }
+//
+//        @Override
+//        public void afterTextChanged(Editable s) {
+//            switch (ed.getId()) {
+//                case R.id.txtBarcode:
+//                    if (TextUtils.isEmpty(txtBarcode.getText().toString())) {
+////                        txtSaleNumber.setText("");
+////                        txtSaleWeight.setText("");
+////                        txtSaleInvCode.setText("");
+////                        txtSaleInvName.setText("");
+////                        txtSaleTotal.setText("");
+////                        txtSaleType.setText("");
+////                        txtSaleUnit.setText("");
+////                        txtSaleSpec.setText("");
+////                        txtSaleBatch.setText("");
+//
+//                    }
+//                    break;
+//                case R.id.txtSaleNumber:
+//                    if (TextUtils.isEmpty(txtSaleNumber.getText())) {
+////                        txtSaleNumber.setText("");
+//                        return;
+//                    }
+//                    if (!isNumber(txtSaleNumber.getText().toString())) {
+//                        Utils.showToast(SalesDeliveryDetail.this, "数量不正确");
 //                        txtSaleNumber.setText("");
-//                        txtSaleWeight.setText("");
-//                        txtSaleInvCode.setText("");
-//                        txtSaleInvName.setText("");
-//                        txtSaleTotal.setText("");
-//                        txtSaleType.setText("");
-//                        txtSaleUnit.setText("");
-//                        txtSaleSpec.setText("");
-//                        txtSaleBatch.setText("");
+//                        return;
+//                    }
+//                    if (Float.valueOf(txtSaleNumber.getText().toString()) < 0) {
+//                        Utils.showToast(SalesDeliveryDetail.this, "数量不正确");
+//                        return;
+//                    }
+//                    String  num = txtSaleNumber.getText().toString();
+//                    m_mapSaleBaseInfo.put("number",Integer.valueOf(num));
+//                    ScanedToGet();
+//                    break;
+//            }
+//        }
+//    }
+//    /**
+//     * 判断是否都是数字，使用正则表达式
+//     *
+//     * @param str
+//     * @return
+//     */
+//    public boolean isNumber(String str) {
+//        Pattern pattern = Pattern.compile("[0-9]*");
+//        Matcher isNum = pattern.matcher(str);
+//        return isNum.matches();
+//    }
 
-                    }
-                    break;
-                case R.id.txtSaleNumber:
-                    if (TextUtils.isEmpty(txtSaleNumber.getText())) {
-//                        txtSaleNumber.setText("");
-                        return;
-                    }
-                    if (!isNumber(txtSaleNumber.getText().toString())) {
-                        Utils.showToast(SalesDeliveryDetail.this, "数量不正确");
-                        txtSaleNumber.setText("");
-                        return;
-                    }
-                    if (Float.valueOf(txtSaleNumber.getText().toString()) < 0) {
-                        Utils.showToast(SalesDeliveryDetail.this, "数量不正确");
-                        return;
-                    }
-                    String  num = txtSaleNumber.getText().toString();
-                    m_mapSaleBaseInfo.put("number",Integer.valueOf(num));
-                    ScanedToGet();
-                    break;
-            }
-        }
-    }
-    /**
-     * 判断是否都是数字，使用正则表达式
-     *
-     * @param str
-     * @return
-     */
-    public boolean isNumber(String str) {
-        Pattern pattern = Pattern.compile("[0-9]*");
-        Matcher isNum = pattern.matcher(str);
-        return isNum.matches();
-    }
+
     private boolean ScanDetail(String Scanbarcode) {
         if (Scanbarcode == null || Scanbarcode.equals(""))
             return false;
@@ -430,6 +425,7 @@ public class SalesDeliveryDetail extends Activity {
                             txtSaleTotal.setText(ldTotal.toString());
                         }
                         doneqty = doneqty +Double.parseDouble(txtSaleTotal.getText().toString());
+                        Log.d(TAG, "ScanedToGet: "+doneqty.toString());
                         if (doneqty  > temp.getInt("nnumber")) {
                             IniDetail();
                             Toast.makeText(this, "这个存货已经超过应发数量了,不允出库!",
@@ -456,6 +452,7 @@ public class SalesDeliveryDetail extends Activity {
                     }
                     ScanedBarcode.add(bar.FinishBarCode);
                     MainLogin.sp.play(MainLogin.music2, 1, 1, 0, 0, 1);
+                    Log.d(TAG, "ScanedToGet: "+doneqty.toString());
 
 //                    int doneqty = temp.getInt("doneqty");
 //                    temp.put("doneqty", doneqty + 1);
@@ -682,8 +679,8 @@ public class SalesDeliveryDetail extends Activity {
 
     private void initView() {
         txtBarcode.setOnKeyListener(myTxtListener);
-        txtBarcode.addTextChangedListener(new CustomTextWatcher(txtBarcode));
-        txtSaleNumber.addTextChangedListener(new CustomTextWatcher(txtSaleNumber));
+//        txtBarcode.addTextChangedListener(new CustomTextWatcher(txtBarcode));
+//        txtSaleNumber.addTextChangedListener(new CustomTextWatcher(txtSaleNumber));
 //        this.txtBarcode.addTextChangedListener(watchers);
     }
 

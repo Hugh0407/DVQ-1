@@ -1679,7 +1679,7 @@ public class SalesDelivery extends Activity {
                         object.put("NNUMBER", totalBox);
                         object.put("NTOTALOUTINVNUM",bodys.getJSONObject(i).getString("nnumber"));
                         object.put("PK_SENDCORP", bodys.getJSONObject(i).getString("pk_corp"));
-                        object.put("VBATCHCODE", arraysSerino.getJSONObject(j).getDouble("batch"));
+                        object.put("VBATCHCODE", arraysSerino.getJSONObject(j).getString("batch"));
                         object.put("VRECEIVEADDRESS",bodys.getJSONObject(i).getString("vreceiveaddress"));
                         object.put("VRECEIVEPERSON",MainLogin.objLog.LoginUser);
                         bodyArray.put(object);
