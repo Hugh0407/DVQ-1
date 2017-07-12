@@ -43,7 +43,7 @@
             android:layout_weight="1"
             android:drawableTop="@drawable/bg_radiobutton_crk"
             android:button="@null"
-            android:text="出入库"
+            android:text="出入"
             android:textSize="12sp"
             android:textColor="@drawable/rb_text_color"
             android:gravity="center"
