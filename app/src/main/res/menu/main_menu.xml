@@ -13,5 +13,4 @@
         android:orderInCategory="100"
         android:icon="@drawable/icon_exit"
         android:showAsAction="ifRoom|withText" />
-
 </menu>
