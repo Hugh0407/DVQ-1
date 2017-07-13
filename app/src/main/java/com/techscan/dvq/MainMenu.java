@@ -10,16 +10,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
 import android.widget.GridView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SimpleAdapter;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,8 +33,7 @@ import java.util.HashMap;
 
 import butterknife.ButterKnife;
 
-import android.view.Menu;
-import android.view.MenuItem;
+import static com.techscan.dvq.MainLogin.objLog;
 
 public class MainMenu extends Activity {
 
@@ -154,7 +151,7 @@ public class MainMenu extends Activity {
         radioButton1.setSelected(true);
 
         tvLoginCompanyName = (TextView) findViewById(id.tvLoginCompanyName);
-        String sCompanyName = MainLogin.objLog.CompanyName;
+        String sCompanyName = objLog.CompanyName;
         tvLoginCompanyName.setText(" " + sCompanyName);
         gridview = (GridView) findViewById(id.gvMainMenu);
         //btnLogOut = (Button) findViewById(id.btnLogOut);
@@ -451,12 +448,12 @@ public class MainMenu extends Activity {
                 case 0:
                     //采购入库
 //del walter todo 20170615 权限判断暂时删除 ----->>>>>
-//				if (!Common.CheckUserRole("", "", "40080602")) {
-//					MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-//					Toast.makeText(MainMenu.this, "没有使用该模块的权限",
-//							Toast.LENGTH_LONG).show();
-//					break;
-//				}
+				if (!Common.CheckUserRole("", "", "40080602")) {
+					MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+					Toast.makeText(MainMenu.this, "没有使用该模块的权限",
+							Toast.LENGTH_LONG).show();
+					break;
+				}
 //del walter todo 20170615 权限判断暂时删除 <<<<<-----
 //                    ShowPurIn();
 //                    break;
@@ -682,7 +679,11 @@ public class MainMenu extends Activity {
             bulider.setPositiveButton(R.string.QueRen, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    Common.lsUrl = MainLogin.objLog.LoginString;
+                    Common.lsUrl = objLog.LoginString;
+                    MainLogin.objLog.UserID = "";
+                    MainLogin.objLog.UserName = "";
+                    MainLogin.objLog.LoginUser = "";
+                    MainLogin.objLog.Password = "";
                     finish();
                 }
             }).create().show();
@@ -695,7 +696,7 @@ public class MainMenu extends Activity {
     private void Changeline() {
 
         int lsindex = 0;
-        if (Common.lsUrl.equals(MainLogin.objLog.LoginString2)) {
+        if (Common.lsUrl.equals(objLog.LoginString2)) {
             lsindex = 1;
         }
 
@@ -738,11 +739,11 @@ public class MainMenu extends Activity {
                     if (whichButton == DialogInterface.BUTTON_POSITIVE) {
                         if (index == 0) {
 
-                            Common.lsUrl = MainLogin.objLog.LoginString;
+                            Common.lsUrl = objLog.LoginString;
                             ShowLineChange(LNameList[0]);
                             System.gc();
                         } else if (index == 1) {
-                            Common.lsUrl = MainLogin.objLog.LoginString2;
+                            Common.lsUrl = objLog.LoginString2;
                             ShowLineChange(LNameList[1]);
                             System.gc();
                         }
@@ -774,7 +775,7 @@ public class MainMenu extends Activity {
 
                         String BillName = BillTypeNameList[index].toString();
 
-                        UserID = MainLogin.objLog.UserID;
+                        UserID = objLog.UserID;
 
                         fileName = "/sdcard/DVQ/" + BillType + UserID + ".txt";
                         fileNameScan = "/sdcard/DVQ/" + BillType + "Scan"

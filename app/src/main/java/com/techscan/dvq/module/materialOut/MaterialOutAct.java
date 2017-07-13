@@ -548,34 +548,25 @@ public class MaterialOutAct extends Activity {
             if (rev == null) {
                 // ÍøÂçÍ¨Ñ¶´íÎó
                 Toast.makeText(this, "´íÎó£¡ÍøÂçÍ¨Ñ¶´íÎó", Toast.LENGTH_LONG).show();
-                // ADD CAIXY TEST START
                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                // ADD CAIXY TEST END
                 return;
             }
             if (rev.getBoolean("Status")) {
                 JSONArray val = rev.getJSONArray("warehouse");
-
                 JSONObject temp = new JSONObject();
                 temp.put("warehouse", val);
-
                 Intent ViewGrid = new Intent(this, ListWarehouse.class);
                 ViewGrid.putExtra("myData", temp.toString());
-
                 startActivityForResult(ViewGrid, 97);
             } else {
                 String Errmsg = rev.getString("ErrMsg");
                 Toast.makeText(this, Errmsg, Toast.LENGTH_LONG).show();
-                // ADD CAIXY TEST START
                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                // ADD CAIXY TEST END
             }
 
         } catch (Exception e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
-            // ADD CAIXY TEST START
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            // ADD CAIXY TEST END
         }
 
     }

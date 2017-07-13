@@ -292,12 +292,12 @@ public class MainLogin extends Activity {
 
                 Intent MenuForm = new Intent(this, MainMenu.class);
                 startActivity(MenuForm);
-                objLog.UserID = "";
-                objLog.UserName = "";
-                objLog.LoginUser = "";
-                objLog.Password = "";
-                userName = "";
-                password = "";
+//                objLog.UserID = "";
+//                objLog.UserName = "";
+//                objLog.LoginUser = "";
+//                objLog.Password = "";
+//                userName = "";
+//                password = "";
 
             } else {
                 String ErrMsg = jas.getString("ErrMsg");
@@ -444,112 +444,112 @@ public class MainLogin extends Activity {
             return false;
         }
 
-//walter todo 20170614 鏆傛椂鍒犻櫎 ----->>>>>
-//        JSONObject paraRole = new JSONObject();
-//        paraRole.put("FunctionName", "GetUserRole");
-//        paraRole.put("TableName", "UserRole");
-//        paraRole.put("UserIDA", objLog.UserID);
-//        paraRole.put("UserIDB", objLog.UserIDB);
-//
-//        JSONObject UserRole = null;
-//
-//        UserRole = Common.DoHttpQuery(paraRole, "CommonQuery", "");
-//
-//        if (UserRole == null) {
-//
-//            Toast.makeText(this, R.string.WangLuoChuXianWenTi, Toast.LENGTH_LONG)
-//                    .show();
-//            sp.play(music, 1, 1, 0, 0, 1);
-//            return false;
-//        }
-//
-//        if (!UserRole.has("Status")) {
-//
-//            Toast.makeText(this, R.string.WangLuoChuXianWenTi, Toast.LENGTH_LONG)
-//                    .show();
-//            sp.play(music, 1, 1, 0, 0, 1);
-//            return false;
-//        }
-//
-//        if (!UserRole.getBoolean("Status")) {
-//
-//            Toast.makeText(this, "取得用户权限失败",
-//                    Toast.LENGTH_LONG).show();
-//            // ADD CAIXY TEST START
-//            sp.play(music, 1, 1, 0, 0, 1);
-//            // ADD CAIXY TEST END
-//            return false;
-//        }
+//walter
+        JSONObject paraRole = new JSONObject();
+        paraRole.put("FunctionName", "GetUserRole");
+        paraRole.put("TableName", "UserRole");
+        paraRole.put("UserIDA", objLog.UserID);
+        paraRole.put("UserIDB", objLog.UserIDB);
+
+        JSONObject UserRole = null;
+
+        UserRole = Common.DoHttpQuery(paraRole, "CommonQuery", "");
+
+        if (UserRole == null) {
+
+            Toast.makeText(this, R.string.WangLuoChuXianWenTi, Toast.LENGTH_LONG)
+                    .show();
+            sp.play(music, 1, 1, 0, 0, 1);
+            return false;
+        }
+
+        if (!UserRole.has("Status")) {
+
+            Toast.makeText(this, R.string.WangLuoChuXianWenTi, Toast.LENGTH_LONG)
+                    .show();
+            sp.play(music, 1, 1, 0, 0, 1);
+            return false;
+        }
+
+        if (!UserRole.getBoolean("Status")) {
+
+            Toast.makeText(this, "取得用户权限失败",
+                    Toast.LENGTH_LONG).show();
+            // ADD CAIXY TEST START
+            sp.play(music, 1, 1, 0, 0, 1);
+            // ADD CAIXY TEST END
+            return false;
+        }
 
 
-//        MainLogin.objLog.arysUserRole = UserRole.getJSONArray("UserRole");
-//
-//
-//        JSONObject paraWHRole = new JSONObject();
-//        paraWHRole.put("FunctionName", "GetUserWHRole");
-//        paraWHRole.put("TableName", "UserWHRole");
-//        paraWHRole.put("UserIDA", objLog.UserID);
-//        paraWHRole.put("UserIDB", objLog.UserIDB);
-//
-//        JSONObject UserWHRole = null;
-//
-//        UserWHRole = Common.DoHttpQuery(paraWHRole, "CommonQuery", "");
-//
-//        if (UserWHRole == null) {
-//
-//            Toast.makeText(this, R.string.WangLuoChuXianWenTi, Toast.LENGTH_LONG)
-//                    .show();
-//            sp.play(music, 1, 1, 0, 0, 1);
-//            return false;
-//        }
-//
-//        if (!UserWHRole.has("Status")) {
-//
-//            Toast.makeText(this, R.string.WangLuoChuXianWenTi, Toast.LENGTH_LONG)
-//                    .show();
-//            sp.play(music, 1, 1, 0, 0, 1);
-//            return false;
-//        }
-//
-//        try {
-//            if (!UserWHRole.getBoolean("Status")) {
-//
-//                String ErrMsg = UserWHRole.getString("ErrMsg");
-//                if (ErrMsg.equals("没有可用数据")) {
-//                    MainLogin.objLog.arysUserWHRole = null;
-//                } else {
-//                    Toast.makeText(this, "取得用户仓库权限失败",
-//                            Toast.LENGTH_LONG).show();
-//                    // ADD CAIXY TEST START
-//                    sp.play(music, 1, 1, 0, 0, 1);
-//                    // ADD CAIXY TEST END
-//                    return false;
-//                }
-//
-//            } else {
-//                try {
-//                    MainLogin.objLog.arysUserWHRole = UserWHRole.getJSONArray("UserWHRole");
-//                } catch (JSONException e) {
-//                    // TODO Auto-generated catch block
-//                    Toast.makeText(this, "取得权限失败",
-//                            Toast.LENGTH_LONG).show();
-//                    // ADD CAIXY TEST START
-//                    sp.play(music, 1, 1, 0, 0, 1);
-//                    // ADD CAIXY TEST END
-//                    return false;
-//                }
-//            }
-//        } catch (JSONException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//            Toast.makeText(this, "取得权限失败",
-//                    Toast.LENGTH_LONG).show();
-//            // ADD CAIXY TEST START
-//            sp.play(music, 1, 1, 0, 0, 1);
-//            // ADD CAIXY TEST END
-//            return false;
-//        }
-//del walter todo 20170614 鏆傛椂鍒犻櫎 <<<<<----
+        MainLogin.objLog.arysUserRole = UserRole.getJSONArray("UserRole");
+
+
+        JSONObject paraWHRole = new JSONObject();
+        paraWHRole.put("FunctionName", "GetUserWHRole");
+        paraWHRole.put("TableName", "UserWHRole");
+        paraWHRole.put("UserIDA", objLog.UserID);
+        paraWHRole.put("UserIDB", objLog.UserIDB);
+
+        JSONObject UserWHRole = null;
+
+        UserWHRole = Common.DoHttpQuery(paraWHRole, "CommonQuery", "");
+
+        if (UserWHRole == null) {
+
+            Toast.makeText(this, R.string.WangLuoChuXianWenTi, Toast.LENGTH_LONG)
+                    .show();
+            sp.play(music, 1, 1, 0, 0, 1);
+            return false;
+        }
+
+        if (!UserWHRole.has("Status")) {
+
+            Toast.makeText(this, R.string.WangLuoChuXianWenTi, Toast.LENGTH_LONG)
+                    .show();
+            sp.play(music, 1, 1, 0, 0, 1);
+            return false;
+        }
+
+        try {
+            if (!UserWHRole.getBoolean("Status")) {
+
+                String ErrMsg = UserWHRole.getString("ErrMsg");
+                if (ErrMsg.equals("没有可用数据")) {
+                    MainLogin.objLog.arysUserWHRole = null;
+                } else {
+                    Toast.makeText(this, "取得用户仓库权限失败",
+                            Toast.LENGTH_LONG).show();
+                    // ADD CAIXY TEST START
+                    sp.play(music, 1, 1, 0, 0, 1);
+                    // ADD CAIXY TEST END
+                    return false;
+                }
+
+            } else {
+                try {
+                    MainLogin.objLog.arysUserWHRole = UserWHRole.getJSONArray("UserWHRole");
+                } catch (JSONException e) {
+                    // TODO Auto-generated catch block
+                    Toast.makeText(this, "取得权限失败",
+                            Toast.LENGTH_LONG).show();
+                    // ADD CAIXY TEST START
+                    sp.play(music, 1, 1, 0, 0, 1);
+                    // ADD CAIXY TEST END
+                    return false;
+                }
+            }
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            Toast.makeText(this, "取得权限失败",
+                    Toast.LENGTH_LONG).show();
+            // ADD CAIXY TEST START
+            sp.play(music, 1, 1, 0, 0, 1);
+            // ADD CAIXY TEST END
+            return false;
+        }
+//        del walter todo 20170614 鏆傛椂鍒犻櫎 <<<<<----
         return true;
 
     }
