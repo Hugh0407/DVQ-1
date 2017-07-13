@@ -201,6 +201,8 @@ public class SCScanAct extends Activity {
                                 purGood.setNshouldinnum(object.getString("nshouldinnum"));
                                 purGood.setVbatchcode(object.getString("vbatchcode"));
                                 purGood.setVsourcerowno(object.getString("crowno"));
+                                purGood.setCsourcebillhid(object.getString("csourcebillhid"));
+                                purGood.setCsourcebillbid(object.getString("csourcebillbid"));
                                 taskList.add(purGood);
                             }
                         } else {

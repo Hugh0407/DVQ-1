@@ -41,6 +41,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 
 import static android.content.ContentValues.TAG;
+import static com.techscan.dvq.common.Utils.formatDecimal;
 
 public class SalesDeliveryDetail extends Activity {
 
@@ -166,7 +167,7 @@ public class SalesDeliveryDetail extends Activity {
                     case R.id.txtSaleNumber:
                             Log.d(TAG, "onKey: "+"333");
                         if (TextUtils.isEmpty(txtSaleNumber.getText())) {
-//                        txtSaleNumber.setText("");
+                          Utils.showToast(SalesDeliveryDetail.this, "数量不能为空");
                             return false;
                         }
                         if (!isNumber(txtSaleNumber.getText().toString())) {
@@ -232,23 +233,23 @@ public class SalesDeliveryDetail extends Activity {
         @Override
         public void afterTextChanged(Editable s) {
             switch (ed.getId()) {
-                case R.id.txtBarcode:
-                    if (TextUtils.isEmpty(txtBarcode.getText().toString())) {
-//                        txtSaleNumber.setText("");
-//                        txtSaleWeight.setText("");
-//                        txtSaleInvCode.setText("");
-//                        txtSaleInvName.setText("");
-//                        txtSaleTotal.setText("");
-//                        txtSaleType.setText("");
-//                        txtSaleUnit.setText("");
-//                        txtSaleSpec.setText("");
-//                        txtSaleBatch.setText("");
-
-                    }
-                    break;
+//                case R.id.txtBarcode:
+//                    if (TextUtils.isEmpty(txtBarcode.getText().toString())) {
+////                        txtSaleNumber.setText("");
+////                        txtSaleWeight.setText("");
+////                        txtSaleInvCode.setText("");
+////                        txtSaleInvName.setText("");
+////                        txtSaleTotal.setText("");
+////                        txtSaleType.setText("");
+////                        txtSaleUnit.setText("");
+////                        txtSaleSpec.setText("");
+////                        txtSaleBatch.setText("");
+//
+//                    }
+//                    break;
                 case R.id.txtSaleNumber:
                     if (TextUtils.isEmpty(txtSaleNumber.getText())) {
-//                        Utils.showToast(SalesDeliveryDetail.this, "数量不能为空");
+                        txtSaleNumber.setText("0");
                         return;
                     }
                     if (!isNumber(txtSaleNumber.getText().toString())) {
@@ -256,17 +257,15 @@ public class SalesDeliveryDetail extends Activity {
                         txtSaleNumber.setText("");
                         return;
                     }
-                    if (Float.valueOf(txtSaleNumber.getText().toString()) <= 0) {
+                    if (Float.valueOf(txtSaleNumber.getText().toString()) < 0) {
                         Utils.showToast(SalesDeliveryDetail.this, "数量不正确");
                         return;
                     }
-
-                      num = txtSaleNumber.getText().toString();
-                      weight = txtSaleWeight.getText().toString();
+                   num = txtSaleNumber.getText().toString();
                     float  a = Float.valueOf(num);
-                    float  b = Float.valueOf(weight);
-                    txtSaleTotal.setText(String.valueOf(a*b));
-                    m_mapSaleBaseInfo.put("number",Integer.valueOf(num));
+                    float  b = Float.valueOf(txtSaleWeight.getText().toString());
+                    txtSaleTotal.setText(formatDecimal(a*b));
+                    m_mapSaleBaseInfo.put("number",Integer.valueOf(txtSaleNumber.getText().toString()));
 //                    ScanedToGet();
                     break;
             }
