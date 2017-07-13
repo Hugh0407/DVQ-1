@@ -140,8 +140,8 @@ public class PurOrderList extends Activity {
 		this.setTitle("采购订单列表");
 		setContentView(R.layout.activity_pur_order_list);
 		ListView listView  = (ListView)findViewById(id.purlist);
-		listView.setDivider(new ColorDrawable(Color.GRAY));
-		listView.setDividerHeight(1);
+//		listView.setDivider(new ColorDrawable(Color.GRAY));
+//		listView.setDividerHeight(1);
 
 		JSONObject para = new JSONObject();
 		//ADD CAIXY START
