@@ -448,12 +448,12 @@ public class MainMenu extends Activity {
                 case 0:
                     //采购入库
 //del walter todo 20170615 权限判断暂时删除 ----->>>>>
-				if (!Common.CheckUserRole("", "", "40080602")) {
-					MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-					Toast.makeText(MainMenu.this, "没有使用该模块的权限",
-							Toast.LENGTH_LONG).show();
-					break;
-				}
+//				if (!Common.CheckUserRole("", "", "40080602")) {
+//					MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//					Toast.makeText(MainMenu.this, "没有使用该模块的权限",
+//							Toast.LENGTH_LONG).show();
+//					break;
+//				}
 //del walter todo 20170615 权限判断暂时删除 <<<<<-----
 //                    ShowPurIn();
 //                    break;

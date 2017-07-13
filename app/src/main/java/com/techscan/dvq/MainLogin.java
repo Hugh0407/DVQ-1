@@ -292,12 +292,6 @@ public class MainLogin extends Activity {
 
                 Intent MenuForm = new Intent(this, MainMenu.class);
                 startActivity(MenuForm);
-//                objLog.UserID = "";
-//                objLog.UserName = "";
-//                objLog.LoginUser = "";
-//                objLog.Password = "";
-//                userName = "";
-//                password = "";
 
             } else {
                 String ErrMsg = jas.getString("ErrMsg");
