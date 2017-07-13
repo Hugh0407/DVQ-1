@@ -10,7 +10,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.net.Uri;
@@ -52,7 +51,7 @@ import java.util.Date;
 
 public class MainLogin extends Activity {
     // protected static final Context context = null;
-    // ï¿½Ø¼ï¿½ï¿½Ä¶ï¿½ï¿½ï¿½
+    // ¿Ø¼þµÄ¶¨Òå
     Button btnLogin, btnExit;
     String LoginString, LoginString2, CompanyCode, OrgCode, WhCode, WhCodeB;
     public static String tempFilePath = "";
@@ -63,8 +62,8 @@ public class MainLogin extends Activity {
     static String sWIFIMin = null;
     static String sWIFIMax = null;
 
-    String newVerName = "";// ï¿½Â°æ±¾ï¿½ï¿½ï¿½ï¿½
-    int newVerCode = -1;// ï¿½Â°æ±¾ï¿½ï¿½
+    String newVerName = "";// ÐÂ°æ±¾Ãû³Æ
+    int newVerCode = -1;// ÐÂ°æ±¾ºÅ
     ProgressDialog pd = null;
     String UPDATE_SERVERAPK = "dvq.apk";
 
@@ -75,15 +74,15 @@ public class MainLogin extends Activity {
     TextView tvVer;
     // ADD CAIXY END 15/04/15
     // ADD CAIXY TEST START
-    public static SoundPool sp;// ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½SoundPool
-    public static int music;// ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½intï¿½ï¿½ï¿½ï¿½ï¿½ï¿½suondID
-    public static int music2;// ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½intï¿½ï¿½ï¿½ï¿½ï¿½ï¿½suondID
+    public static SoundPool sp;// ÉùÃ÷Ò»¸öSoundPool
+    public static int music;// ¶¨ÒåÒ»¸öintÀ´ÉèÖÃsuondID
+    public static int music2;// ¶¨ÒåÒ»¸öintÀ´ÉèÖÃsuondID
     // ADD CAIXY TEST END
 
     public static Common objLog = new Common();
 
     //objLog.LoginString = LoginString;
-    // ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½
+    // ´ò¿ªÉèÖÃ»­Ãæ
     private void LoadSettingForm() {
         Intent abcd = new Intent(MainLogin.this, SettingActivity.class);
         startActivityForResult(abcd, R.layout.activity_setting);
@@ -91,10 +90,10 @@ public class MainLogin extends Activity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_MENU) {// ï¿½ï¿½ï¿½ï¿½meuï¿½ï¿½ï¿½Â¼ï¿½ //do something...
+        if (keyCode == KeyEvent.KEYCODE_MENU) {// À¹½Ømeu¼üÊÂ¼þ
             return false;
         }
-        if (keyCode == KeyEvent.KEYCODE_BACK) {// ï¿½ï¿½ï¿½Ø·ï¿½ï¿½Ø°ï¿½Å¥ï¿½Â¼ï¿½ //do something...
+        if (keyCode == KeyEvent.KEYCODE_BACK) {// À¹½Ø·µ»Ø°´Å¥ÊÂ¼þ
             return false;
         }
         return true;
@@ -107,7 +106,7 @@ public class MainLogin extends Activity {
         }
     };
 
-    // È¡ï¿½ï¿½ï¿½ï¿½Å¥
+    // È¡Ïû°´Å¥¶Ô»°¿òÊÂ¼þ
     private void Exit() {
         AlertDialog.Builder bulider = new AlertDialog.Builder(this).setTitle(
                 R.string.XunWen).setMessage(R.string.NiQueDingYaoTuiChuMa);
@@ -121,13 +120,13 @@ public class MainLogin extends Activity {
         SharedPreferences mySharedPreferences = getSharedPreferences(
                 SettingActivity.PREFERENCE_SETTING, Activity.MODE_PRIVATE);
 
-        LoginString = mySharedPreferences.getString("Address", "");        //ï¿½ï¿½ï¿½ï¿½Ö·
-        LoginString2 = mySharedPreferences.getString("Address2", "");    //ï¿½ï¿½ï¿½ï¿½Ö·
+        LoginString = mySharedPreferences.getString("Address", "");        //Ö÷µØÖ·
+        LoginString2 = mySharedPreferences.getString("Address2", "");    //¸±µØÖ·
         CompanyCode = mySharedPreferences.getString("CompanyCode", "");
         OrgCode = mySharedPreferences.getString("OrgCode", "");
-        WhCode = mySharedPreferences.getString("WhCode", "");// ï¿½ï¿½È¡Aï¿½ï¿½Ë¾ï¿½Ä¹ï¿½ï¿½Ë²Ö¿ï¿½
+        WhCode = mySharedPreferences.getString("WhCode", "");// »ñÈ¡A¹«Ë¾µÄ¹ýÂË²Ö¿â
         // AccId=mySharedPreferences.getString("AccId", "A");
-        WhCodeB = mySharedPreferences.getString("AccId", "");// ï¿½ï¿½È¡Bï¿½ï¿½Ë¾ï¿½Ä¹ï¿½ï¿½Ë²Ö¿ï¿½
+        WhCodeB = mySharedPreferences.getString("AccId", "");// »ñÈ¡B¹«Ë¾µÄ¹ýÂË²Ö¿â
 
         // EditText user=(EditText)findViewById(R.id.txtUserName);
         // EditText pwds=(EditText)findViewById(R.id.txtPassword);
@@ -141,14 +140,14 @@ public class MainLogin extends Activity {
             bulider.setPositiveButton(R.string.QueDing, null).create().show();
             return;
         }
-        user.setText("a1");
-        pwds.setText("123456aS!");
+//        user.setText("a1");
+//        pwds.setText("123456aS!");
         String userName = user.getText().toString().replace("\n", "");
         String password = pwds.getText().toString().replace("\n", "");
         if (userName.equals("") || password.equals("")) {
 
             AlertDialog.Builder bulider = new AlertDialog.Builder(this)
-                    .setTitle(R.string.TiXing).setMessage("è¯·è¾“å…¥ç”¨æˆ·åå’Œå¯†ç ?");
+                    .setTitle(R.string.TiXing).setMessage("ÓÃ»§Ãû»òÕßÃÜÂë²»ÄÜÎª¿Õ");
 
             bulider.setPositiveButton(R.string.QueDing, null).create().show();
             return;
@@ -165,7 +164,7 @@ public class MainLogin extends Activity {
         if (lsUrl.equals("")) {
             lsUrl = LoginString;
         }
-//ï¿½ï¿½Ê±ï¿½Ø±ï¿½
+//ÔÝÊ±¹Ø±Õ
 //		if(UrlErr > 0)
 //		{
 //			if(lsUrl.equals(LoginString))
@@ -178,7 +177,7 @@ public class MainLogin extends Activity {
 //			}
 //		}	
 
-        // ï¿½ï¿½ï¿½Ã·ï¿½ï¿½ï¿½
+        // µ÷ÓÃ·þÎñ
         HttpPost httpPost = new HttpPost(lsUrl);
         httpPost.addHeader("Self-Test", "V");
         httpPost.addHeader("User-Code", user.getText().toString().replace("\n", ""));
@@ -211,7 +210,7 @@ public class MainLogin extends Activity {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
             sp.play(music, 1, 1, 0, 0, 1);
             return;
-//			//ï¿½ï¿½ï¿½ï¿½ï¿½Ð»ï¿½ï¿½ï¿½ï¿½Ãµï¿½Ö·
+//			//Ôö¼ÓÇÐ»»±¸ÓÃµØÖ·
 //			if(UrlErr>2)
 //			{
 //				UrlErr = 0;
@@ -239,14 +238,14 @@ public class MainLogin extends Activity {
             return;
         }
 
-        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        // Íê³ÉÉí·ÝÑéÖ¤£¬½øÈëÖ÷»­Ãæ
         int v = 0;
         if (httpResponse != null) {
             v = httpResponse.getStatusLine().getStatusCode();
         }
 
         if (v == 200) {
-            // Toast.makeText(this,"ï¿½ï¿½ï¿½ï¿½ï¿½Ö¤Í¨ï¿½ï¿½ï¿½ï¿½×¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿?", Toast.LENGTH_SHORT).show();
+            // Toast.makeText(this,"Éí·ÝÑéÖ¤Í¨¹ý£¬×¼±¸½øÈë", Toast.LENGTH_SHORT).show();
             String result = EntityUtils.toString(httpResponse.getEntity());
             String jasstr = EncodingUtils.getString(EncodingUtils.getBytes(result, "ISO8859-1"), "gb2312");
 
@@ -279,7 +278,7 @@ public class MainLogin extends Activity {
 
                 objLog.UserIDB = jas.getString("useridb");
                 objLog.VersionCode = Version;
-                // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ò³ï¿½ï¿½
+                //Ôö¼Ó ÉèÖÃÒ³Ãæ
 
 
                 SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
@@ -293,6 +292,12 @@ public class MainLogin extends Activity {
 
                 Intent MenuForm = new Intent(this, MainMenu.class);
                 startActivity(MenuForm);
+                objLog.UserID = "";
+                objLog.UserName = "";
+                objLog.LoginUser = "";
+                objLog.Password = "";
+                userName = "";
+                password = "";
 
             } else {
                 String ErrMsg = jas.getString("ErrMsg");
@@ -305,7 +310,7 @@ public class MainLogin extends Activity {
             }
         }
 //		else {
-//			Toast.makeText(this, "ï¿½ï¿½ï¿½Ê´ï¿½ï¿½ï¿½", Toast.LENGTH_LONG).show();
+//			Toast.makeText(this, "·ÃÎÊ´íÎó", Toast.LENGTH_LONG).show();
 //			// ADD CAIXY TEST START
 //			
 //			sp.play(music, 1, 1, 0, 0, 1);
@@ -317,7 +322,7 @@ public class MainLogin extends Activity {
 
     }
 
-    // ï¿½ï¿½ï¿½ï¿½ï¿½Ô»ï¿½ï¿½ï¿½Ä°ï¿½Å¥ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿?
+    // ´´½¨¶Ô»°¿òµÄ°´Å¥ÊÂ¼þÕìÌý
     private Button.OnClickListener myListner = new Button.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -370,7 +375,7 @@ public class MainLogin extends Activity {
 
         if (!LoginInfo.getBoolean("Status")) {
 
-            Toast.makeText(this, "åŸºç¡€è®¾ç½®ä¸­çš„å…¬å¸Codeè®¾ç½®ä¸æ­£ç¡?,è¯·æ£€æŸ¥ï¼",
+            Toast.makeText(this, "»ù´¡ÉèÖÃÖÐµÄ¹«Ë¾CodeÉèÖÃ²»ÕýÈ·,Çë¼ì²é",
                     Toast.LENGTH_LONG).show();
             // ADD CAIXY TEST START
             sp.play(music, 1, 1, 0, 0, 1);
@@ -410,7 +415,7 @@ public class MainLogin extends Activity {
         }
 
         if (!LoginInfo.getBoolean("Status")) {
-            Toast.makeText(this, "åŸºç¡€è®¾ç½®ä¸­çš„åº“å­˜ç»„ç»‡è®¾ç½®ä¸æ­£ç¡?,è¯·æ£€æŸ¥ï¼",
+            Toast.makeText(this, "»ù´¡ÉèÖÃÖÐµÄ¿â´æ×éÖ¯ÉèÖÃ²»ÕýÈ·,Çë¼ì²é£¡",
                     Toast.LENGTH_LONG).show();
             // ADD CAIXY TEST START
             sp.play(music, 1, 1, 0, 0, 1);
@@ -431,7 +436,7 @@ public class MainLogin extends Activity {
 
         if (GetSTOrgFlg.equals("N")) {
 
-            Toast.makeText(this, "åŸºç¡€è®¾ç½®ä¸­çš„åº“å­˜ç»„ç»‡è®¾ç½®ä¸æ­£ç¡?,è¯·æ£€æŸ¥ï¼",
+            Toast.makeText(this, "»ù´¡ÉèÖÃÖÐµÄ¿â´æ×éÖ¯ÉèÖÃ²»ÕýÈ·,Çë¼ì²é£¡",
                     Toast.LENGTH_LONG).show();
             // ADD CAIXY TEST START
             sp.play(music, 1, 1, 0, 0, 1);
@@ -468,7 +473,7 @@ public class MainLogin extends Activity {
 //
 //        if (!UserRole.getBoolean("Status")) {
 //
-//            Toast.makeText(this, "È¡ï¿½ï¿½ï¿½Ã»ï¿½È¨ï¿½ï¿½Ê§ï¿½ï¿½",
+//            Toast.makeText(this, "È¡µÃÓÃ»§È¨ÏÞÊ§°Ü",
 //                    Toast.LENGTH_LONG).show();
 //            // ADD CAIXY TEST START
 //            sp.play(music, 1, 1, 0, 0, 1);
@@ -510,10 +515,10 @@ public class MainLogin extends Activity {
 //            if (!UserWHRole.getBoolean("Status")) {
 //
 //                String ErrMsg = UserWHRole.getString("ErrMsg");
-//                if (ErrMsg.equals("Ã»ï¿½Ð¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")) {
+//                if (ErrMsg.equals("Ã»ÓÐ¿ÉÓÃÊý¾Ý")) {
 //                    MainLogin.objLog.arysUserWHRole = null;
 //                } else {
-//                    Toast.makeText(this, "È¡ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Ö¿ï¿½È¨ï¿½ï¿½Ê§ï¿½ï¿½",
+//                    Toast.makeText(this, "È¡µÃÓÃ»§²Ö¿âÈ¨ÏÞÊ§°Ü",
 //                            Toast.LENGTH_LONG).show();
 //                    // ADD CAIXY TEST START
 //                    sp.play(music, 1, 1, 0, 0, 1);
@@ -526,7 +531,7 @@ public class MainLogin extends Activity {
 //                    MainLogin.objLog.arysUserWHRole = UserWHRole.getJSONArray("UserWHRole");
 //                } catch (JSONException e) {
 //                    // TODO Auto-generated catch block
-//                    Toast.makeText(this, "È¡ï¿½ï¿½È¨ï¿½ï¿½Ê§ï¿½ï¿½",
+//                    Toast.makeText(this, "È¡µÃÈ¨ÏÞÊ§°Ü",
 //                            Toast.LENGTH_LONG).show();
 //                    // ADD CAIXY TEST START
 //                    sp.play(music, 1, 1, 0, 0, 1);
@@ -537,7 +542,7 @@ public class MainLogin extends Activity {
 //        } catch (JSONException e) {
 //            // TODO Auto-generated catch block
 //            e.printStackTrace();
-//            Toast.makeText(this, "È¡ï¿½ï¿½È¨ï¿½ï¿½Ê§ï¿½ï¿½",
+//            Toast.makeText(this, "È¡µÃÈ¨ÏÞÊ§°Ü",
 //                    Toast.LENGTH_LONG).show();
 //            // ADD CAIXY TEST START
 //            sp.play(music, 1, 1, 0, 0, 1);
@@ -603,9 +608,9 @@ public class MainLogin extends Activity {
         tvVer.setOnClickListener(myListner);
         // ADD CAIXY END 15/04/15
         // ADD CAIXY TEST
-        sp = new SoundPool(10, AudioManager.STREAM_SYSTEM, 5);// ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÎªÍ¬Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í£ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-        music = sp.load(this, R.raw.xxx, 1); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø²Ä·Åµï¿½res/rawï¿½ï£¬ï¿½ï¿½2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½Ô´ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½3ï¿½ï¿½Îªï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½È¼ï¿½
-        music2 = sp.load(this, R.raw.yyy, 1); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø²Ä·Åµï¿½res/rawï¿½ï£¬ï¿½ï¿½2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½Ô´ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½3ï¿½ï¿½Îªï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½È¼ï¿½
+        sp = new SoundPool(10, AudioManager.STREAM_SYSTEM, 5);// µÚÒ»¸ö²ÎÊýÎªÍ¬Ê±²¥·ÅÊý¾ÝÁ÷µÄ×î´ó¸öÊý£¬µÚ¶þÊý¾ÝÁ÷ÀàÐÍ£¬µÚÈýÎªÉùÒôÖÊÁ¿
+        music = sp.load(this, R.raw.xxx, 1); // °ÑÄãµÄÉùÒôËØ²Ä·Åµ½res/rawÀï£¬µÚ2¸ö²ÎÊý¼´Îª×ÊÔ´ÎÄ¼þ£¬µÚ3¸öÎªÒôÀÖµÄÓÅÏÈ¼¶
+        music2 = sp.load(this, R.raw.yyy, 1); // °ÑÄãµÄÉùÒôËØ²Ä·Åµ½res/rawÀï£¬µÚ2¸ö²ÎÊý¼´Îª×ÊÔ´ÎÄ¼þ£¬µÚ3¸öÎªÒôÀÖµÄÓÅÏÈ¼¶
         // ADD CAIXY TEST
 
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
@@ -636,11 +641,11 @@ public class MainLogin extends Activity {
             if (getServerVer()) {
                 int vercode = getVerCode(this);
                 if (newVerCode > vercode) {
-                    doNewVersionUpdate(LoginString);// ï¿½ï¿½ï¿½ï¿½ï¿½Â°æ±¾ï¿½ï¿½ï¿½ï¿½
+                    doNewVersionUpdate(LoginString);// ·¢ÏÖÐÂ°æ±¾¸üÐÂ
                 } else {
-                    // Toast.makeText(getApplicationContext(),"Ä¿Ç°ï¿½ï¿½ï¿½ï¿½ï¿½Â°æ±¾ï¿½ï¿½ï¿½ï¿½Ð»ï¿½ï¿½ï¿½ï¿½Ö§ï¿½ï¿½",Toast.LENGTH_LONG).show();//Ã»ï¿½ï¿½ï¿½Â°æ±¾
+                    // Toast.makeText(getApplicationContext(),"Ä¿Ç°ÊÇ×îÐÂ°æ±¾£¬¸ÐÐ»ÄúµÄÖ§³Ö",Toast.LENGTH_LONG).show();//Ã»ÓÐÐÂ°æ±¾
                 }
-            }// ï¿½Óºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½æ±¾ï¿½ï¿½
+            }// ×Óº¯Êý£¬»ñÈ¡°æ±¾ºÅ
         }
 
     }
@@ -673,7 +678,7 @@ public class MainLogin extends Activity {
     }
 
     /**
-     * ï¿½ï¿½Ã°æ±¾ï¿½ï¿?
+     * »ñµÃ°æ±¾ºÅ
      */
     public int getVerCode(Context context) {
         int verCode = -1;
@@ -688,7 +693,7 @@ public class MainLogin extends Activity {
     }
 
     /**
-     * ï¿½ï¿½Ã°æ±¾ï¿½ï¿½ï¿½ï¿?
+     * »ñµÃ°æ±¾Ãû³Æ
      */
     public String getVerName(Context context) {
         String verName = "";
@@ -702,13 +707,13 @@ public class MainLogin extends Activity {
     }
 
     /**
-     * ï¿½Ó·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë»ï¿½Ã°æ±¾ï¿½ï¿½ï¿½ï¿½æ±¾ï¿½ï¿½ï¿½ï¿½
+     * ´Ó·þÎñÆ÷¶Ë»ñµÃ°æ±¾ºÅÓë°æ±¾Ãû³Æ
      *
      * @return
      */
     String lsUrl = "";
 
-    //int UrlErr = 0;    //ï¿½ï¿½Ê±ï¿½Ø±ï¿½
+    //int UrlErr = 0;    //ÔÝÊ±¹Ø±Õ
     public boolean getServerVer() {
         try {
 
@@ -781,17 +786,17 @@ public class MainLogin extends Activity {
     }
 
     /**
-     * ï¿½ï¿½ï¿½ï¿½ï¿½Â°æ±¾
+     * ²»¸üÐÂ°æ±¾
      */
     public void notNewVersionUpdate() {
         int verCode = this.getVerCode(this);
         String verName = this.getVerName(this);
         StringBuffer sb = new StringBuffer();
-        sb.append("ï¿½ï¿½Ç°ï¿½æ±¾ï¿½ï¿½");
+        sb.append("µ±Ç°°æ±¾£º");
         sb.append(verName);
         sb.append(" Code:");
         sb.append(verCode);
-        sb.append("\nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â°æ±¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿?");
+        sb.append("\nÒÑÊÇ×îÐÂ°æ±¾£¬ÎÞÐè¸üÐÂ");
         Dialog dialog = new AlertDialog.Builder(this).setTitle(R.string.RuanJianGengXin)
                 .setMessage(sb.toString())
                 .setPositiveButton(R.string.QueDing, new DialogInterface.OnClickListener() {
@@ -806,32 +811,32 @@ public class MainLogin extends Activity {
     }
 
     /**
-     * ï¿½ï¿½ï¿½Â°æ±¾
+     * ¸üÐÂ°æ±¾
      */
     public void doNewVersionUpdate(final String DownStr) {
         int verCode = this.getVerCode(this);
         String verName = this.getVerName(this);
         StringBuffer sb = new StringBuffer();
-        sb.append("ï¿½ï¿½Ç°ï¿½æ±¾ï¿½ï¿½");
+        sb.append("µ±Ç°°æ±¾£º");
         sb.append(verName);
         sb.append(" Code:");
         sb.append(verCode);
-        sb.append(",ï¿½ï¿½ï¿½Ö°æ±¾ï¿½ï¿½");
+        sb.append(",·¢ÏÖ°æ±¾£º");
         sb.append(newVerName);
         sb.append(" Code:");
         sb.append(verCode);
-        sb.append(",ï¿½Ç·ï¿½ï¿½ï¿½ï¿?");
+        sb.append(",ÊÇ·ñ¸üÐÂ");
         Dialog dialog = new AlertDialog.Builder(this)
                 .setTitle(R.string.RuanJianGengXin)
                 .setMessage(sb.toString())
-                .setPositiveButton("ï¿½ï¿½ï¿½ï¿½", new DialogInterface.OnClickListener() {
+                .setPositiveButton("¸üÐÂ", new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // TODO Auto-generated method stub
                         pd = new ProgressDialog(MainLogin.this);
-                        pd.setTitle("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
-                        pd.setMessage("ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½ï¿½");
+                        pd.setTitle("ÕýÔÚÏÂÔØ");
+                        pd.setMessage("ÇëÉÔÖÐ...");
                         pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                         String downfile = DownStr.substring(0,
                                 DownStr.length() - 13);
@@ -840,7 +845,7 @@ public class MainLogin extends Activity {
 
                     }
                 })
-                .setNegativeButton("ï¿½Ý²ï¿½ï¿½ï¿½ï¿½ï¿½",
+                .setNegativeButton("ÔÝ²»¸üÐÂ",
                         new DialogInterface.OnClickListener() {
 
                             @Override
@@ -850,12 +855,12 @@ public class MainLogin extends Activity {
                                 finish();
                             }
                         }).create();
-        // ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½Â¿ï¿½
+        // ÏÔÊ¾¸üÐÂ¿ò
         dialog.show();
     }
 
     /**
-     * ï¿½ï¿½ï¿½ï¿½apk
+     * ÏÂÔØapk
      */
     public void downFile(final String url) {
         pd.show();
@@ -898,7 +903,7 @@ public class MainLogin extends Activity {
     };
 
     /**
-     * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É£ï¿½Í¨ï¿½ï¿½handlerï¿½ï¿½ï¿½ï¿½ï¿½Ø¶Ô»ï¿½ï¿½ï¿½È¡ï¿½ï¿½
+     * ÏÂÔØÍê³É£¬Í¨¹ýhandler½«ÏÂÔØ¶Ô»°¿òÈ¡Ïû
      */
     public void down() {
         new Thread() {
@@ -910,7 +915,7 @@ public class MainLogin extends Activity {
     }
 
     /**
-     * ï¿½ï¿½×°Ó¦ï¿½ï¿½
+     * °²×°Ó¦ÓÃ
      */
     public void update() {
         File file = new File(tempFilePath);
@@ -936,7 +941,7 @@ public class MainLogin extends Activity {
         // MenuInflater inflater = getMenuInflater();
         // inflater.inflate(R.menu.activity_main_login, menu);
         // return super.onCreateOptionsMenu(menu);
-        // MenuItem SetItem = menu.add(1,1,1,"ï¿½ï¿½ï¿½ï¿½");
+        // MenuItem SetItem = menu.add(1,1,1,"ÉèÖÃ");
         // SetItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         return true;
     }
@@ -1000,26 +1005,26 @@ public class MainLogin extends Activity {
 	 * HashMap<String,String>(); ab.put("a", "a"); HashMap<String,String>
 	 * abc=new HashMap<String,String>(); abc.put("a", "a"); am.add(ab);
 	 * am.add(abc); SimpleAdapter listItemAdapter = new
-	 * SimpleAdapter(this,am,//ï¿½ï¿½ï¿½ï¿½Ô´
-	 * android.R.layout.simple_list_item_single_choice,//ListItemï¿½ï¿½XMLÊµï¿½ï¿½
-	 * //ï¿½ï¿½Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ImageItemï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ new String[] {"a"},
-	 * //ImageItemï¿½ï¿½XMLï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ImageView,ï¿½ï¿½ï¿½ï¿½TextView ID new int[]
+	 * SimpleAdapter(this,am,//Êý¾ÝÔ´
+	 * android.R.layout.simple_list_item_single_choice,//ListItemµÄXMLÊµÏÖ
+	 * //¶¯Ì¬Êý×éÓëImageItem¶ÔÓ¦µÄ×ÓÏî new String[] {"a"},
+	 * //ImageItemµÄXMLÎÄ¼þÀïÃæµÄÒ»¸öImageView,Á½¸öTextView ID new int[]
 	 * {android.R.id.text1} );
-	 * 
+	 *
 	 * OnItemSelectedListener abs=new OnItemSelectedListener() { //
-	 * ï¿½ï¿½positionï¿½î±»Ñ¡ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½Ã·ï¿½ï¿½ï¿½ï¿½ï¿½
-	 * 
+	 * µÚpositionÏî±»Ñ¡ÖÐÊ±¼¤·¢¸Ã·½·¨¡£
+	 *
 	 * @Override public void onItemSelected(AdapterView<?> parent, View view,
 	 * int position, long id) { for(int i=0;i<parent.getCount();i++){ View
 	 * v=parent.getChildAt(parent.getCount()-1-i); if (position == i) {
 	 * v.setBackgroundColor(Color.RED); } else {
 	 * v.setBackgroundColor(Color.TRANSPARENT); } } }
-	 * 
+	 *
 	 * @Override public void onNothingSelected(AdapterView<?> parent) { } };
 	 * DeleteButton =new
-	 * AlertDialog.Builder(this).setTitle("É¨ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½Ï¢").setSingleChoiceItems
-	 * (listItemAdapter, 0, null).setNegativeButton("É¾ï¿½ï¿½",
-	 * null).setPositiveButton("È·ï¿½ï¿½",null).create();
+	 * AlertDialog.Builder(this).setTitle("É¨ÃèÃ÷Ï¸ÐÅÏ¢").setSingleChoiceItems
+	 * (listItemAdapter, 0, null).setNegativeButton("É¾³ý",
+	 * null).setPositiveButton("È·¶¨",null).create();
 	 * DeleteButton.getListView().setOnItemClickListener(new
 	 * OnItemClickListener() {
 	 * 

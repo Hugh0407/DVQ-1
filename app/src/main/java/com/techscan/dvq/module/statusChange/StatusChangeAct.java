@@ -21,6 +21,7 @@ import com.techscan.dvq.bean.PurGood;
 import com.techscan.dvq.common.SaveThread;
 import com.techscan.dvq.module.statusChange.scan.SCScanAct;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -155,10 +156,12 @@ public class StatusChangeAct extends Activity {
         JSONObject saveOutHead = new JSONObject();
         saveOutHead.put("CWAREHOUSEID", WarehouseID);
         saveOutHead.put("PK_CALBODY", MainLogin.objLog.STOrgCode);
+        saveOutHead.put("PK_CORP", MainLogin.objLog.STOrgCode);
         saveOutHead.put("CLASTMODIID", MainLogin.objLog.UserID);
         saveOutHead.put("COPERATORID", MainLogin.objLog.UserID);
         saveOutHead.put("CDISPATCHERID", "0001TC100000000011Q8");
         JSONObject saveOutBody = new JSONObject();
+        JSONArray saveOutArray = new JSONArray();
         for (int i = 0; i < taskList.size(); i++) {
             PurGood purGood = taskList.get(i);
             if (purGood.getFbillrowflag().equals("3")) {
@@ -173,15 +176,18 @@ public class StatusChangeAct extends Activity {
                 saveOutBody.put("CINVBASID", purGood.getPk_invbasdoc());
                 saveOutBody.put("CINVENTORYID", purGood.getCinventoryid());
                 saveOutBody.put("NSHOULDOUTNUM", purGood.getNshouldinnum());
-                saveOutBody.put("NINNUM", purGood.getNum_task());
+                saveOutBody.put("NSHOULDOUTNUM", "100.00");
+                saveOutBody.put("NOUTNUM", purGood.getNum_task());
+                saveOutBody.put("PK_BODYCALBODY", "1011TC100000000000KV");
                 saveOutBody.put("VSOURCEBILLCODE", purGood.getSourceBill());
                 saveOutBody.put("VSOURCEROWNO", purGood.getVsourcerowno());
-                saveOutBody.put("PK_BODYCALBODY", "1011TC100000000000KV");
                 saveOutBody.put("VBATCHCODE", purGood.getVbatchcode());
+                saveOutBody.put("CSOURCETYPE", "4N");
             }
         }
-        saveOut.put("head", saveOutHead);
-        saveOut.put("body", saveOutBody);
+        saveOutArray.put(saveOutBody);
+        saveOut.put("Head", saveOutHead);
+        saveOut.put("Body", saveOutArray);
         saveOut.put("GUIDS", UUID.randomUUID().toString());
         table.put("SaveOut", saveOut);
 
@@ -189,10 +195,12 @@ public class StatusChangeAct extends Activity {
         JSONObject saveInHead = new JSONObject();
         saveInHead.put("CWAREHOUSEID", WarehouseID);     //仓库
         saveInHead.put("PK_CALBODY", MainLogin.objLog.STOrgCode);   //库存组织
+        saveInHead.put("PK_CORP", MainLogin.objLog.STOrgCode);   //库存组织
         saveInHead.put("CLASTMODIID", MainLogin.objLog.UserID);  //操作人id  ？
         saveInHead.put("COPERATORID", MainLogin.objLog.UserID);  //操作人id   ？
         saveInHead.put("CDISPATCHERID", "0001TC100000000011QO");//收发类别,邹俊豪说的先写死
         JSONObject saveInBody = new JSONObject();
+        JSONArray saveInArray = new JSONArray();
         for (int i = 0; i < taskList.size(); i++) {
             PurGood purGood = taskList.get(i);
             if (purGood.getFbillrowflag().equals("2")) {
@@ -204,20 +212,24 @@ public class StatusChangeAct extends Activity {
                 saveInBody.put("INVCODE", purGood.getInvcode());
                 saveInBody.put("CINVBASID", purGood.getPk_invbasdoc());
                 saveInBody.put("CINVENTORYID", purGood.getCinventoryid());
-                saveInBody.put("NSHOULDOUTNUM", purGood.getNshouldinnum());
+//                saveInBody.put("NSHOULDOUTNUM", purGood.getNshouldinnum());
+                saveInBody.put("NSHOULDOUTNUM", "100.00");
                 saveInBody.put("NINNUM", purGood.getNum_task());
                 saveInBody.put("VSOURCEBILLCODE", purGood.getSourceBill());
                 saveInBody.put("PK_BODYCALBODY", "1011TC100000000000KV");
+                saveInBody.put("VSOURCEBILLCODE", purGood.getSourceBill());
                 saveInBody.put("VSOURCEROWNO", purGood.getVsourcerowno());
                 saveInBody.put("VBATCHCODE", purGood.getVbatchcode());
+                saveInBody.put("CSOURCETYPE", "4N");
             }
         }
-        saveIn.put("head", saveInHead);
-        saveIn.put("body", saveInBody);
+        saveInArray.put(saveInBody);
+        saveIn.put("Head", saveInHead);
+        saveIn.put("Body", saveInArray);
         saveIn.put("GUIDS", UUID.randomUUID().toString());
         table.put("SaveIn", saveIn);
         Log.d("TAG", "saveInfo: " + table.toString());
-        SaveThread saveThread = new SaveThread(table, "SaveMaterialOut", mHandler, 1);
+        SaveThread saveThread = new SaveThread(table, "SaveOtherInOutBill", mHandler, 1);
         Thread thread = new Thread(saveThread);
         thread.start();
     }
