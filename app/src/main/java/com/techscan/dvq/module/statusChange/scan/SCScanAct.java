@@ -86,10 +86,11 @@ public class SCScanAct extends Activity {
     String m_AccID;
     String m_WarehouseID;
     String m_pk_Corp;
-    List<PurGood> taskList;
     ProgressDialog progressDialog;
     Activity activity;
-    List<Goods> detailList;
+
+    public static List<PurGood> taskList = new ArrayList<PurGood>();
+    public static List<Goods> detailList = new ArrayList<Goods>();
 
     @Override
 
@@ -109,8 +110,6 @@ public class SCScanAct extends Activity {
         mEdNum.setOnKeyListener(mOnKeyListener);
         mEdNum.addTextChangedListener(new CustomTextWatcher(mEdNum));
         mEdBarCode.addTextChangedListener(new CustomTextWatcher(mEdBarCode));
-        taskList = new ArrayList<PurGood>();
-        detailList = new ArrayList<Goods>();
     }
 
     @Override
@@ -120,14 +119,16 @@ public class SCScanAct extends Activity {
     }
 
     private void initTaskData() {
-        showProgressDialog();
         m_BillNo = this.getIntent().getStringExtra("BillNo");
         m_BillID = this.getIntent().getStringExtra("OrderID");
         m_BillType = this.getIntent().getStringExtra("OrderType");
         m_AccID = this.getIntent().getStringExtra("AccID");
         m_WarehouseID = this.getIntent().getStringExtra("m_WarehouseID");
         m_pk_Corp = this.getIntent().getStringExtra("pk_corp");
-        getOtherInOutHead();
+        if (taskList.size() == 0) {
+            showProgressDialog();
+            getOtherInOutHead();
+        }
     }
 
 
@@ -216,14 +217,13 @@ public class SCScanAct extends Activity {
                 case 3:
                     //条码解析的请求结果，并且把数据设置到UI上
                     JSONObject json = (JSONObject) msg.obj;
-                    if (json != null) {
-                        try {
-                            setInvBaseToUI(json);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    } else {
+                    if (null == json) {
                         return;
+                    }
+                    try {
+                        setInvBaseToUI(json);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
                     break;
             }
@@ -359,7 +359,7 @@ public class SCScanAct extends Activity {
         progressDialog.setCancelable(false);// 设置是否可以通过点击Back键取消
         progressDialog.setCanceledOnTouchOutside(false);// 设置在点击Dialog外是否取消Dialog进度条
         progressDialog.setTitle("获取单据");
-        progressDialog.setMessage("正在获取数据，请等待...");
+        progressDialog.setMessage("正在获取数据,请等待...");
         progressDialog.show();
         new Thread(new Runnable() {
 
@@ -373,7 +373,6 @@ public class SCScanAct extends Activity {
                         // progressDialog.dismiss();
                         if (progressDialog.isShowing()) {
                             progressDialog.dismiss();
-                            finish();
                         }
                     }
                 } catch (InterruptedException e) {
@@ -440,7 +439,6 @@ public class SCScanAct extends Activity {
                 }
             }
             /*********************************************************************/
-
             for (int i = 0; i < detailList.size(); i++) {
                 if (detailList.get(i).getBarcode().equals(Bar)) {
                     Utils.showToast(activity, "该托盘已扫描!");

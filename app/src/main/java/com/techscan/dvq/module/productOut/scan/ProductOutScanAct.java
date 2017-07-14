@@ -101,7 +101,6 @@ public class ProductOutScanAct extends Activity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_overview:
-
                 MyBaseAdapter ovAdapter = new MyBaseAdapter(ovList);
                 showDialog(ovList, ovAdapter, "…®√Ë◊‹¿¿");
                 break;

@@ -2,7 +2,9 @@ package com.techscan.dvq.module.statusChange;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,6 +21,7 @@ import com.techscan.dvq.OtherOrderList;
 import com.techscan.dvq.R;
 import com.techscan.dvq.bean.PurGood;
 import com.techscan.dvq.common.SaveThread;
+import com.techscan.dvq.common.Utils;
 import com.techscan.dvq.module.statusChange.scan.SCScanAct;
 
 import org.json.JSONArray;
@@ -32,6 +35,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
+import static com.techscan.dvq.common.Utils.showResultDialog;
 import static com.techscan.dvq.common.Utils.showToast;
 
 
@@ -101,27 +105,42 @@ public class StatusChangeAct extends Activity {
                 ShowScanDetail();
                 break;
             case R.id.save:
+                if (!checkSaveInfo()) {
+                    Utils.showToast(activity, "请核对单据!");
+                    return;
+                }
+
+                if (taskList.size() < 0 || null == taskList) {
+                    Utils.showToast(activity, "没有需要保存的数据");
+                    return;
+                }
+
                 try {
                     saveInfo();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-//                if (checkSaveInfo()) {
-//                    if (dataList != null && dataList.size() > 0) {
-////                        try {
-////                            saveInfo(dataList);
-////                        } catch (JSONException e) {
-////                            e.printStackTrace();
-////                        }
-////                        showProgressDialog();
-//                        Utils.showToast(activity, "等待接口");
-//                    } else {
-//                        showToast(activity, "没有需要保存的数据");
-//                    }
-//                }
+                showProgressDialog("提示", "正在保存,请稍后...");
                 break;
             case R.id.back:
-                finish();
+                if (taskList != null && taskList.size() > 0) {
+                    AlertDialog.Builder bulider =
+                            new AlertDialog.Builder(this).setTitle(R.string.XunWen).setMessage("数据未保存是否退出");
+                    bulider.setNegativeButton(R.string.QuXiao, null);
+                    bulider.setPositiveButton(R.string.QueRen, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            SCScanAct.taskList.clear();
+                            SCScanAct.detailList.clear();
+                            dialog.dismiss();
+                            finish();
+                        }
+                    }).create().show();
+                } else {
+                    SCScanAct.taskList.clear();
+                    SCScanAct.detailList.clear();
+                    finish();
+                }
                 break;
         }
     }
@@ -136,19 +155,40 @@ public class StatusChangeAct extends Activity {
             super.handleMessage(msg);
             switch (msg.what) {
                 case 1:
-                    JSONObject j = (JSONObject) msg.obj;
-                    if (j != null) {
-                        Log.d("TAG", "JSONObject: " + j.toString());
-                    } else {
-                        Log.d("TAG", "JSONObject: null ");
+                    JSONObject info = (JSONObject) msg.obj;
+                    if (null == info) {
+                        Log.d("TAG", "info=null ");
+                        progressDialogDismiss();
+                        showResultDialog(activity, "数据提交失败!");
+                        return;
                     }
+                    try {
+                        if (info.getBoolean("Status")) {
+                            Log.d("TAG", "保存" + info.toString());
+                            showResultDialog(activity, info.getString("ErrMsg"));
+                            taskList.clear();
+                            SCScanAct.taskList.clear();
+                            SCScanAct.detailList.clear();
+                            changeAllEdToEmpty();
+                            mEdSourceBill.requestFocus();
+                        } else {
+                            showResultDialog(activity, info.getString("ErrMsg"));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    progressDialogDismiss();
                     break;
             }
         }
     };
 
-    private void saveInfo() throws JSONException {
+    private void changeAllEdToEmpty() {
+        mEdSourceBill.setText("");
+        mEdSelectWh.setText("");
+    }
 
+    private void saveInfo() throws JSONException {
         String CFIRSTBILLBID = null;
         String CFIRSTBILLHID = null;
         final JSONObject table = new JSONObject();
@@ -245,62 +285,6 @@ public class StatusChangeAct extends Activity {
         // progressDialog.setIcon(R.drawable.ic_launcher);
         // 设置提示的title的图标，默认是没有的，如果没有设置title的话只设置Icon是不会显示图标的
         progressDialog.setTitle(title);
-        // dismiss监听
-//        progressDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-//
-//            @Override
-//            public void onDismiss(DialogInterface progressDialog) {
-//                // TODO Auto-generated method stub
-//
-//            }
-//        });
-        // 监听Key事件被传递给dialog
-//        progressDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
-//
-//            @Override
-//            public boolean onKey(DialogInterface progressDialog, int keyCode,
-//                                 KeyEvent event) {
-//                // TODO Auto-generated method stub
-//                return false;
-//            }
-//        });
-        // 监听cancel事件
-//        progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-//
-//            @Override
-//            public void onCancel(DialogInterface progressDialog) {
-//                // TODO Auto-generated method stub
-//
-//            }
-//        });
-        //设置可点击的按钮，最多有三个(默认情况下)
-//        progressDialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定",
-//                new DialogInterface.OnClickListener() {
-//
-//                    @Override
-//                    public void onClick(DialogInterface progressDialog, int which) {
-//                        // TODO Auto-generated method stub
-//
-//                    }
-//                });
-//        progressDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "取消",
-//                new DialogInterface.OnClickListener() {
-//
-//                    @Override
-//                    public void onClick(DialogInterface progressDialog, int which) {
-//                        // TODO Auto-generated method stub
-//
-//                    }
-//                });
-//        progressDialog.setButton(DialogInterface.BUTTON_NEUTRAL, "中立",
-//                new DialogInterface.OnClickListener() {
-//
-//                    @Override
-//                    public void onClick(DialogInterface progressDialog, int which) {
-//                        // TODO Auto-generated method stub
-//
-//                    }
-//                });
         progressDialog.setMessage(message);
         progressDialog.show();
         new Thread(new Runnable() {
@@ -313,7 +297,6 @@ public class StatusChangeAct extends Activity {
                         // cancel和dismiss方法本质都是一样的，都是从屏幕中删除Dialog,唯一的区别是
                         // 调用cancel方法会回调DialogInterface.OnCancelListener如果注册的话,dismiss方法不会回掉
                         progressDialog.cancel();
-                        finish();
                         // progressDialog.dismiss();
                     }
                 } catch (InterruptedException e) {
