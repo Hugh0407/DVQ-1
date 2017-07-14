@@ -41,6 +41,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 
 import static android.content.ContentValues.TAG;
+import static android.util.Config.LOGD;
 
 public class SalesDeliveryDetail extends Activity {
 
@@ -51,6 +52,7 @@ public class SalesDeliveryDetail extends Activity {
     JSONObject jsBody;
     JSONObject jsBoxTotal;
     JSONObject jsSerino;
+    JSONObject jsTotal;
     String  weight = "";
     String  num = "";
     Double number;
@@ -95,6 +97,7 @@ public class SalesDeliveryDetail extends Activity {
     private AlertDialog DeleteButton = null;
     private AlertDialog SelectButton = null;
     private ButtonOnClick buttonDelOnClick = new ButtonOnClick(0);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -772,8 +775,19 @@ public class SalesDeliveryDetail extends Activity {
 //            Log.d("TAG", "ReturnScanedhead: " + jsHead);
             intent.putExtra("body", jsBody.toString());
             Log.d("TAG", "ReturnScanedbody: " + jsBody);
-            intent.putExtra("serino", jsSerino.toString());
-            Log.d("TAG", "ReturnScanedSerino: " + jsSerino);
+            JSONArray arrays = null;
+            JSONArray ss = null;
+            try {
+                arrays = jsSerino.getJSONArray("Serino");
+                ss = merge(arrays);
+                jsTotal = new JSONObject();
+                jsTotal.put("Serino",ss);
+                Log.d(TAG, "Return: "+ss.toString());
+                Log.d(TAG, "Return: "+jsTotal.toString());
+                intent.putExtra("serino", jsTotal.toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
             intent.putStringArrayListExtra("ScanedBarcode", ScanedBarcode);
             SalesDeliveryDetail.this.setResult(24, intent);// 设置回传数据。resultCode值是1，这个值在主窗口将用来区分回传数据的来源，以做不同的处理
@@ -864,7 +878,6 @@ public class SalesDeliveryDetail extends Activity {
             map.put("total", sTotal);
             lstTaskBody.add(map);
         }
-        delRepeatIndexid(arrays);
         Log.d("TAG", "lstTaskBody: " + lstTaskBody);
         SimpleAdapter listItemAdapter = new SimpleAdapter(
                 SalesDeliveryDetail.this, lstTaskBody,// 数据源
@@ -901,7 +914,7 @@ public class SalesDeliveryDetail extends Activity {
     /**
      * 根据批次sku相同合并数量
      */
-    public  JSONArray delRepeatIndexid(JSONArray array) {
+    public  JSONArray merge(JSONArray array) {
 
         JSONArray arrayTemp = new JSONArray();
         int num = 0;
@@ -916,11 +929,12 @@ public class SalesDeliveryDetail extends Activity {
             } else {
                 try {
                     int numJ = 0;
+                    Log.d(TAG, "Merge: "+arrayTemp.length());
                     for (int j = 0; j < arrayTemp.length(); j++) {
-
                         JSONObject newJsonObjectI = (JSONObject) array.get(i);
                         JSONObject newJsonObjectJ = (JSONObject) arrayTemp.get(j);
                         String invcode = newJsonObjectI.get("invcode").toString();
+                        String invname = newJsonObjectI.get("invname").toString();
                         String batch = newJsonObjectI.get("batch").toString();
                         String box = newJsonObjectI.get("box").toString();
                         String sno = newJsonObjectI.get("sno").toString();
@@ -935,8 +949,10 @@ public class SalesDeliveryDetail extends Activity {
                         if (invcode.equals(invcodeJ)&&batch.equals(batchJ)) {
                             double newValue = Double.parseDouble(box) + Double.parseDouble(boxJ);
                             JSONObject newObject = new JSONObject();
+                            arrayTemp.remove(j);
                             newObject.put("invcode", invcode);
                             newObject.put("batch", batch);
+                            newObject.put("invname", invname);
                             newObject.put("serino", serino);
                             newObject.put("sno", sno);
                             newObject.put("invtype", invtype);
@@ -945,16 +961,17 @@ public class SalesDeliveryDetail extends Activity {
                             arrayTemp.put(newObject);
                             break;
                         }
-                        Log.d(TAG, "DDDDD: "+"77");
-                        Log.d(TAG, "DDDDD: "+arrayTemp.toString());
+
                         numJ++;
 
-                        if (numJ - 1 == arrayTemp.length() - 1) {
-                            arrayTemp.put(array.get(i));
-                        }
-                    }
+                        String a = numJ+"";
+                        Log.d(TAG, "Merge: "+a);
 
-                    num++;
+
+                    }
+                    if (numJ - 1 == arrayTemp.length() - 1) {
+                        arrayTemp.put(array.get(i));
+                    }
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -1137,5 +1154,7 @@ public class SalesDeliveryDetail extends Activity {
             }
         }
     }
+
+
 
 }

@@ -1691,8 +1691,9 @@ public class SalesDelivery extends Activity {
             tableBody.put("ScanDetails", bodyArray);
             table.put("Body", tableBody);
             table.put("GUIDS", UUID.randomUUID().toString());
+            Log.d(TAG, "SaveSaleOrder: "+"98");
             Log.d(TAG, "XXXXXX: " + table.toString());
-
+            Log.d(TAG, "SaveSaleOrder: "+"99");
             if (!MainLogin.getwifiinfo()) {
                 Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
