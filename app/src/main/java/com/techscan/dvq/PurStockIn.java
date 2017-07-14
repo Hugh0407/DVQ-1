@@ -2592,7 +2592,6 @@ public class PurStockIn extends Activity {
 			
 			try 
 			{
-				
 				this.jsBody = new JSONObject(bodyJS);			
 				this.jsHead = new JSONObject(headJS);
 				this.jsSerino = new JSONObject(serJS);
