@@ -544,8 +544,8 @@ public class PurStockIn extends Activity {
 		saveHeadJons.put("CBIZTYPE", heads.getJSONObject(0).getString("cbiztype"));//业务类型
 		saveHeadJons.put("VNOTE", txtReMark.getText().toString());//备注
 		saveHeadJons.put("FREPLENISHFLAG", m_FrePlenishFlag);//退货标志
-		saveHeadJons.put("CPROVIDERID", heads.getJSONObject(0).getString("cproviderid"));//供应商ID
-		saveHeadJons.put("CUBASDOC", heads.getJSONObject(0).getString("cubasdoc"));//供应商管理ID
+		saveHeadJons.put("CPROVIDERID", heads.getJSONObject(0).getString("pk_cumandoc"));//供应商ID
+		saveHeadJons.put("CUBASDOC", heads.getJSONObject(0).getString("pk_cubasdoc"));//供应商管理ID
 
 		JSONArray lstSerino = new JSONArray();
 		//JSONArray head = new JSONArray();
