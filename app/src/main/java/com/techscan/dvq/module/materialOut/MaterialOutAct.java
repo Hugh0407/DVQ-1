@@ -547,7 +547,7 @@ public class MaterialOutAct extends Activity {
             JSONObject rev = Common.DoHttpQuery(para, "CommonQuery", "");
             if (rev == null) {
                 // ÍøÂçÍ¨Ñ¶´íÎó
-                Toast.makeText(this, "´íÎó£¡ÍøÂçÍ¨Ñ¶´íÎó", Toast.LENGTH_LONG).show();
+                Utils.showToast(this,"´íÎó£¡ÍøÂçÍ¨Ñ¶´íÎó");
                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                 return;
             }
@@ -565,7 +565,7 @@ public class MaterialOutAct extends Activity {
             }
 
         } catch (Exception e) {
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+            Utils.showToast(this,e.getMessage());
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
         }
 

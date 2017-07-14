@@ -61,12 +61,13 @@
                 android:layout_height="30dp"
                 android:layout_weight="1"
                 android:background="@drawable/edittext_style"
-                android:enabled="false"
                 android:ems="10"
+                android:enabled="false"
                 android:focusable="false"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:textAllCaps="true">
+                android:textAllCaps="true"
+                android:textColor="@color/black">
 
             </EditText>
 
@@ -86,18 +87,18 @@
                 android:text="名称"/>
 
             <EditText
-                android:textColor="@color/black"
                 android:id="@+id/ed_name"
                 android:layout_width="0dp"
                 android:layout_height="30dp"
                 android:layout_weight="1"
                 android:background="@drawable/edittext_style"
-                android:enabled="false"
                 android:ems="10"
+                android:enabled="false"
                 android:focusable="false"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:textAllCaps="true"/>
+                android:textAllCaps="true"
+                android:textColor="@color/black"/>
 
         </LinearLayout>
 
@@ -115,7 +116,6 @@
                 android:text="型号"/>
 
             <EditText
-                android:textColor="@color/black"
                 android:id="@+id/ed_type"
                 android:layout_width="0dp"
                 android:layout_height="30dp"
@@ -126,7 +126,8 @@
                 android:focusable="false"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:textAllCaps="true"/>
+                android:textAllCaps="true"
+                android:textColor="@color/black"/>
 
         </LinearLayout>
 
@@ -149,13 +150,13 @@
                 android:layout_height="30dp"
                 android:layout_weight="1"
                 android:background="@drawable/edittext_style"
-                android:enabled="false"
-                android:textColor="@color/black"
                 android:ems="10"
+                android:enabled="false"
                 android:focusable="false"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:textAllCaps="true"/>
+                android:textAllCaps="true"
+                android:textColor="@color/black"/>
 
         </LinearLayout>
 
@@ -173,7 +174,6 @@
                 android:text="批次"/>
 
             <EditText
-                android:textColor="@color/black"
                 android:id="@+id/ed_lot"
                 android:layout_width="0dp"
                 android:layout_height="30dp"
@@ -183,7 +183,8 @@
                 android:enabled="false"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:textAllCaps="true"/>
+                android:textAllCaps="true"
+                android:textColor="@color/black"/>
 
         </LinearLayout>
 
@@ -201,8 +202,6 @@
                 android:text="海关手册号"/>
 
             <EditText
-                android:textColor="@color/black"
-                android:inputType="text"
                 android:id="@+id/ed_manual"
                 android:layout_width="0dp"
                 android:layout_height="30dp"
@@ -210,9 +209,11 @@
                 android:background="@drawable/edittext_style"
                 android:ems="10"
                 android:enabled="false"
+                android:inputType="text"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:textAllCaps="true"/>
+                android:textAllCaps="true"
+                android:textColor="@color/black"/>
 
         </LinearLayout>
 
@@ -236,7 +237,6 @@
                     android:text="数量"/>
 
                 <EditText
-                    android:textColor="@color/black"
                     android:id="@+id/ed_num"
                     android:layout_width="0dp"
                     android:layout_height="30dp"
@@ -247,7 +247,8 @@
                     android:inputType="number"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:textAllCaps="true"/>
+                    android:textAllCaps="true"
+                    android:textColor="@color/black"/>
 
             </LinearLayout>
 
@@ -301,7 +302,6 @@
                     android:text="总量"/>
 
                 <EditText
-                    android:textColor="@color/black"
                     android:id="@+id/ed_qty"
                     android:layout_width="0dp"
                     android:layout_height="30dp"
@@ -312,7 +312,8 @@
                     android:inputType="numberDecimal"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:textAllCaps="true"/>
+                    android:textAllCaps="true"
+                    android:textColor="@color/black"/>
 
             </LinearLayout>
 
