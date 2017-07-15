@@ -43,19 +43,6 @@ import butterknife.OnClick;
 import static android.content.ContentValues.TAG;
 
 public class SalesDeliveryDetail extends Activity {
-
-    String ScanType = "";
-    String BillCode = "";
-    String CSALEID = "";
-    String PK_CORP = "";
-    JSONObject jsBody;
-    JSONObject jsBoxTotal;
-    JSONObject jsSerino;
-    JSONObject jsTotal;
-    String weight = "";
-    String num = "";
-    Double number;
-    Double ntotaloutinvnum;
     @InjectView(R.id.TextView31)
     TextView TextView31;
     @InjectView(R.id.txtBarcode)
@@ -96,6 +83,18 @@ public class SalesDeliveryDetail extends Activity {
     private AlertDialog DeleteButton = null;
     private AlertDialog SelectButton = null;
     private ButtonOnClick buttonDelOnClick = new ButtonOnClick(0);
+    String ScanType = "";
+    String BillCode = "";
+    String CSALEID = "";
+    String PK_CORP = "";
+    JSONObject jsBody;
+    JSONObject jsBoxTotal;
+    JSONObject jsSerino;
+    JSONObject jsTotal;
+    String weight = "";
+    String num = "";
+    Double number;
+    Double ntotaloutinvnum;
 
 
     @Override
@@ -106,12 +105,12 @@ public class SalesDeliveryDetail extends Activity {
         ActionBar actionBar = this.getActionBar();
         actionBar.setTitle("销售出库扫描明细");
         initView();
-        Intent intent = this.getIntent();
-        BillCode = intent.getStringExtra("BillCode");
-        PK_CORP = intent.getStringExtra("PK_CORP");
-        CSALEID = intent.getStringExtra("CSALEID");
-        ScanType = intent.getStringExtra("ScanType");
         try {
+            Intent intent = this.getIntent();
+            BillCode = intent.getStringExtra("BillCode");
+            PK_CORP = intent.getStringExtra("PK_CORP");
+            CSALEID = intent.getStringExtra("CSALEID");
+            ScanType = intent.getStringExtra("ScanType");
             ScanedBarcode = intent.getStringArrayListExtra("ScanedBarcode");
             BillCode = intent.getStringExtra("BillCode");
             PK_CORP = intent.getStringExtra("PK_CORP");
@@ -121,19 +120,14 @@ public class SalesDeliveryDetail extends Activity {
             temp = intent.getStringExtra("jsbody");
             jsBody = new JSONObject(temp);
             Log.d(TAG, "onCreate: " + jsBody.toString());
-
             temp = intent.getStringExtra("jsserino");
             jsSerino = new JSONObject(temp);
             Log.d(TAG, "onCreate: " + jsSerino.toString());
 
-        } catch (Exception e) {
-
-        }
-        try {
             if (jsBody == null) {
                 LoadSaleOutBody();
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(SalesDeliveryDetail.this, e.getMessage(), Toast.LENGTH_LONG).show();
             // ADD CAIXY TEST START
@@ -145,7 +139,6 @@ public class SalesDeliveryDetail extends Activity {
             number = 0.0;
             ntotaloutinvnum = 0.0;
             if (jsBody == null || !jsBody.has("dbBody")) {
-                Common.ReScanErr = true;
                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                 ReScanErr();
                 return;
@@ -185,18 +178,15 @@ public class SalesDeliveryDetail extends Activity {
                     case R.id.txtSaleNumber:
                         if (TextUtils.isEmpty(txtSaleNumber.getText())) {
                             Utils.showToast(SalesDeliveryDetail.this, "数量不能为空");
-//                            txtSaleNumber.requestFocus();
                             return true;
                         }
                         if (!isNumber(txtSaleNumber.getText().toString())) {
                             Utils.showToast(SalesDeliveryDetail.this, "数量不正确");
                             txtSaleNumber.setText("");
-//                            txtSaleNumber.requestFocus();
                             return true;
                         }
                         if (Float.valueOf(txtSaleNumber.getText().toString()) <= 0) {
                             Utils.showToast(SalesDeliveryDetail.this, "数量不正确");
-//                            txtSaleNumber.requestFocus();
                             return true;
                         }
                         m_mapSaleBaseInfo.put("number", Integer.valueOf(txtSaleNumber.getText().toString()));
@@ -207,7 +197,6 @@ public class SalesDeliveryDetail extends Activity {
                         return true;
                 }
             }
-
             return false;
         }
 
@@ -237,20 +226,6 @@ public class SalesDeliveryDetail extends Activity {
         @Override
         public void afterTextChanged(Editable s) {
             switch (ed.getId()) {
-//                case R.id.txtBarcode:
-//                    if (TextUtils.isEmpty(txtBarcode.getText().toString())) {
-////                        txtSaleNumber.setText("");
-////                        txtSaleWeight.setText("");
-////                        txtSaleInvCode.setText("");
-////                        txtSaleInvName.setText("");
-////                        txtSaleTotal.setText("");
-////                        txtSaleType.setText("");
-////                        txtSaleUnit.setText("");
-////                        txtSaleSpec.setText("");
-////                        txtSaleBatch.setText("");
-//
-//                    }
-//                    break;
                 case R.id.txtSaleNumber:
                     if (TextUtils.isEmpty(txtSaleNumber.getText())) {
 //                        txtSaleNumber.setText("");
@@ -273,14 +248,10 @@ public class SalesDeliveryDetail extends Activity {
                         num = "0";
                     }
                     weight = txtSaleWeight.getText().toString();
-                    Log.d(TAG, "afterTextChanged: " + number);
-                    Log.d(TAG, "afterTextChanged: " + weight);
                     float a = Float.valueOf(num);
                     float b = Float.valueOf(weight);
-                    Log.d(TAG, "afterTextChanged: " + "");
                     txtSaleTotal.setText(String.valueOf(a * b));
                     m_mapSaleBaseInfo.put("number", Integer.valueOf(txtSaleNumber.getText().toString()));
-//                    ScanedToGet();
                     break;
             }
         }
@@ -331,9 +302,7 @@ public class SalesDeliveryDetail extends Activity {
                         if (BarCode.equals(FinishBarCode)) {
                             Toast.makeText(this, "该条码已经被扫描过了,不能再次扫描", Toast.LENGTH_SHORT)
                                     .show();
-                            // ADD CAIXY TEST START
                             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                            // ADD CAIXY TEST END
                             return false;
                         }
                     }
@@ -341,23 +310,15 @@ public class SalesDeliveryDetail extends Activity {
             }
         } else {
             Toast.makeText(this, "条码类型不匹配", Toast.LENGTH_LONG).show();
-            //ADD CAIXY TEST START
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            //ADD CAIXY TEST END
             return false;
         }
-
-
         IniDetail();
         try {
-            //currentObj = new Inventory(bar.cInvCode, "BADV", bar.AccID);
             objSaleBaseInfo = new GetSaleBaseInfo(bar, mHandler, PK_CORP);
-//            objSaleBaseInfo = new GetSaleBaseInfo(bar, mHandler,PK_CORP);
         } catch (Exception ex) {
             Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
-            // ADD CAIXY TEST START
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            // ADD CAIXY TEST END
             return false;
         }
         return true;
@@ -376,9 +337,6 @@ public class SalesDeliveryDetail extends Activity {
                     JSONObject json = (JSONObject) msg.obj;
                     if (json != null) {
                         try {
-
-                            Log.d("TAG", "handleMessage: TEST");
-                            Log.d("TAG", "json: " + json);
                             objSaleBaseInfo.SetSaleBaseToParam(json);
                             m_mapSaleBaseInfo = objSaleBaseInfo.mapSaleBaseInfo;
                             SetInvBaseToUI();
@@ -406,7 +364,6 @@ public class SalesDeliveryDetail extends Activity {
         txtBarcode.setText(m_mapSaleBaseInfo.get("barcode").toString());
         txtSaleWeight.setText(m_mapSaleBaseInfo.get("quantity").toString());
         txtSaleNumber.setText(m_mapSaleBaseInfo.get("number").toString());
-
         Double ldTotal = (Double) m_mapSaleBaseInfo.get("quantity") * (Integer) m_mapSaleBaseInfo.get("number");
         txtSaleTotal.setText(ldTotal.toString());
         m_mapSaleBaseInfo.put("total", ldTotal);
@@ -464,7 +421,6 @@ public class SalesDeliveryDetail extends Activity {
                             return false;
                         }
                     }
-
                     if (ScanSerial(bar.FinishBarCode, Free1, txtSaleTotal.getText().toString()) == false) {
                         txtBarcode.setText("");
                         txtBarcode.requestFocus();
@@ -477,8 +433,6 @@ public class SalesDeliveryDetail extends Activity {
                     break;
                 }
             }
-
-
             if (isFind == false) {
                 IniDetail();
                 Toast.makeText(this, "这个存货不在本次扫描任务中", Toast.LENGTH_LONG).show();
@@ -502,22 +456,16 @@ public class SalesDeliveryDetail extends Activity {
             number = 0.0;
             ntotaloutinvnum = 0.0;
             for (int i = 0; i < arrays.length(); i++) {
-                String sshouldinnum = ((JSONObject) (arrays.get(i)))
-                        .getString("nnumber");
-                String sinnum = ((JSONObject) (arrays.get(i)))
-                        .getString("nottaloutinvnum");
+                String sshouldinnum = ((JSONObject) (arrays.get(i))).getString("nnumber");
+                String sinnum = ((JSONObject) (arrays.get(i))).getString("nottaloutinvnum");
                 number = number + Double.valueOf(sshouldinnum);
                 if (!sinnum.toLowerCase().equals("null") && !sinnum.isEmpty())
                     ntotaloutinvnum = ntotaloutinvnum + Double.valueOf(sinnum);
             }
         } catch (JSONException e1) {
-            // TODO Auto-generated catch block
             e1.printStackTrace();
-
             Toast.makeText(this, e1.getMessage(), Toast.LENGTH_LONG).show();
-            // ADD CAIXY TEST START
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            // ADD CAIXY TEST END
         }
         tvSalecount.setText("总量" + number + " | " + "已扫" + ntotaloutinvnum
                 + " | " + "未扫" + (number - ntotaloutinvnum));
@@ -549,14 +497,6 @@ public class SalesDeliveryDetail extends Activity {
             jsSerino.put("Serino", serinos);
         } else {
             JSONArray serinos = jsSerino.getJSONArray("Serino");
-
-//            for (int i = 0; i < serinos.length(); i++) {
-//                JSONObject temp = new JSONObject();
-//                temp = serinos.getJSONObject(i);
-////                if (temp.getString("serino").equals(serino)) {
-////                    return true;
-////                }
-//            }
             JSONObject temp = new JSONObject();
             temp.put("serino", serino);
             temp.put("box", TotalBox);
@@ -568,7 +508,6 @@ public class SalesDeliveryDetail extends Activity {
             temp.put("invspec", m_mapSaleBaseInfo.get("invspec").toString());
             serinos.put(temp);
             jsSerino.put("Serino", serinos);
-
         }
         return true;
     }
@@ -576,9 +515,7 @@ public class SalesDeliveryDetail extends Activity {
     private void LoadSaleOutBody() throws ParseException, IOException {
         if (BillCode == null || BillCode.equals("") || CSALEID == null || CSALEID.equals("")) {
             Toast.makeText(this, "请先确认需要扫描的订单号", Toast.LENGTH_LONG).show();
-            // ADD CAIXY TEST START
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            // ADD CAIXY TEST END
             return;
         }
 
@@ -597,9 +534,7 @@ public class SalesDeliveryDetail extends Activity {
                 e.printStackTrace();
                 Toast.makeText(SalesDeliveryDetail.this, e.getMessage(),
                         Toast.LENGTH_LONG).show();
-                // ADD CAIXY TEST START
                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                // ADD CAIXY TEST END
             }
             try {
                 if (!MainLogin.getwifiinfo()) {
@@ -612,18 +547,14 @@ public class SalesDeliveryDetail extends Activity {
                 Log.d(TAG, "GetBillBodyDetailInfo: " + jsBody.toString());
             } catch (Exception e) {
                 Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
-                // ADD CAIXY TEST START
                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                // ADD CAIXY TEST END
                 return;
             }
 
             try {
                 if (jsBody == null) {
                     Toast.makeText(this, R.string.WangLuoChuXianWenTi, Toast.LENGTH_LONG).show();
-                    //ADD CAIXY TEST START
                     MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                    //ADD CAIXY TEST END
                     return;
                 }
 
@@ -640,27 +571,19 @@ public class SalesDeliveryDetail extends Activity {
                         errMsg = getString(R.string.WangLuoChuXianWenTi);
                     }
                     Toast.makeText(this, errMsg, Toast.LENGTH_LONG).show();
-                    //ADD CAIXY TEST START
                     MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                    //ADD CAIXY TEST END
                     return;
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
                 Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
-                //ADD CAIXY TEST START
                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                //ADD CAIXY TEST END
                 return;
             } catch (Exception e) {
                 Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
-                //ADD CAIXY TEST START
                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                //ADD CAIXY TEST END
                 return;
             }
-
-
         } else {
             return;
         }
@@ -670,7 +593,8 @@ public class SalesDeliveryDetail extends Activity {
 
     private void ReScanErr() {
         AlertDialog.Builder bulider =
-                new AlertDialog.Builder(this).setTitle(R.string.CuoWu).setMessage("数据加载出现错误" + "\r\n" + "退出该模块并且再次尝试加载缓存");
+                new AlertDialog.Builder(this).setTitle(R.string.CuoWu).setMessage("数据加载出现错误" + "\r\n" +
+                        "退出该模块并且再次尝试加载缓存");
 
         bulider.setPositiveButton(R.string.QueRen, listenExit).setCancelable(false).create().show();
         MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
@@ -679,8 +603,7 @@ public class SalesDeliveryDetail extends Activity {
 
     private DialogInterface.OnClickListener listenExit = new
             DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog,
-                                    int whichButton) {
+                public void onClick(DialogInterface dialog, int whichButton) {
                     finish();
                     System.gc();
                 }
@@ -692,11 +615,9 @@ public class SalesDeliveryDetail extends Activity {
         txtSaleNumber.setOnKeyListener(myTxtListener);
         txtBarcode.addTextChangedListener(new CustomTextWatcher(txtBarcode));
         txtSaleNumber.addTextChangedListener(new CustomTextWatcher(txtSaleNumber));
-//        this.txtBarcode.addTextChangedListener(watchers);
     }
 
     private void IniDetail() {
-//        currentObj = null;
         txtSaleInvName.setText("");
         txtSaleInvCode.setText("");
         txtSaleBatch.setText("");
@@ -743,12 +664,9 @@ public class SalesDeliveryDetail extends Activity {
                         Log.d(TAG, "Return: " + jsSerino.toString());
                         intent.putStringArrayListExtra("ScanedBarcode", ScanedBarcode);
                         SalesDeliveryDetail.this.setResult(24, intent);
-//                        SalesDeliveryDetail.this.finish();
-
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-
                 } else {
                     Toast.makeText(SalesDeliveryDetail.this, "没有扫描到数据", Toast.LENGTH_SHORT).show();
                 }
@@ -759,9 +677,7 @@ public class SalesDeliveryDetail extends Activity {
 
     private void ShowTaskDig() throws JSONException {
         lstTaskBody = new ArrayList<Map<String, Object>>();
-        // purBody
         Map<String, Object> map;
-
         if (jsBody == null) {
             Toast.makeText(this, R.string.MeiYouDeDaoBiaoTiShuJu, Toast.LENGTH_LONG).show();
             // ADD CAIXY TEST START
@@ -770,7 +686,6 @@ public class SalesDeliveryDetail extends Activity {
             return;
         }
         JSONArray arrays = jsBody.getJSONArray("dbBody");
-
         for (int i = 0; i < arrays.length(); i++) {
             map = new HashMap<String, Object>();
             map.put("InvName",
@@ -786,7 +701,6 @@ public class SalesDeliveryDetail extends Activity {
                 sinnum = "0.0";
             map.put("InvNum",
                     sinnum + " / " + Double.valueOf(((JSONObject) (arrays.get(i))).getString("nnumber")));
-            // map.put("DoneQty", )
             lstTaskBody.add(map);
         }
 
@@ -809,9 +723,7 @@ public class SalesDeliveryDetail extends Activity {
         Map<String, Object> map;
         if (jsSerino == null || !jsSerino.has("Serino")) {
             Toast.makeText(this, "还没有扫描到的记录", Toast.LENGTH_SHORT).show();
-            // ADD CAIXY TEST START
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            // ADD CAIXY TEST END
             return;
         }
         JSONArray arrays = jsSerino.getJSONArray("Serino");
@@ -849,7 +761,6 @@ public class SalesDeliveryDetail extends Activity {
         DeleteButton = new AlertDialog.Builder(this).setTitle(getString(R.string.SaoMiaoMingXiXinXi))
                 .setSingleChoiceItems(listItemAdapter, 0, buttonDelOnClick)
                 .setPositiveButton(R.string.QueRen, null).create();
-        // MOD CAIXY END
 
         DeleteButton.getListView().setOnItemLongClickListener(
                 new AdapterView.OnItemLongClickListener() {
@@ -917,7 +828,6 @@ public class SalesDeliveryDetail extends Activity {
                                     String RemoveBarCode = ScanedBarcode.get(si).toString();
                                     if (RemoveBarCode.equals(serino)) {
                                         ScanedBarcode.remove(si);
-                                        si--;
                                     }
                                 }
                             }
@@ -925,10 +835,8 @@ public class SalesDeliveryDetail extends Activity {
                             JSONArray arrays;
                             try {
                                 arrays = jsSerino.getJSONArray("Serino");
-
                                 HashMap<String, Object> Temp = new HashMap<String, Object>();
                                 JSONArray serinos = new JSONArray();
-
                                 for (int i = 0; i < arrays.length(); i++) {
                                     String serino1 = ((JSONObject) (arrays.get(i)))
                                             .getString("serino");
@@ -938,34 +846,26 @@ public class SalesDeliveryDetail extends Activity {
                                         serinos.put(temp);
                                     }
                                 }
-
                                 jsSerino = new JSONObject();
-
                                 if (serinos.length() > 0) {
                                     jsSerino.put("Serino", serinos);
                                 }
                                 JSONArray bodys = jsBody.getJSONArray("dbBody");
                                 JSONArray bodynews = new JSONArray();
-                                // JSONArray serinos = new JSONArray();
                                 for (int i = 0; i < bodys.length(); i++) {
                                     JSONObject temp = bodys.getJSONObject(i);
-
                                     String invcodeold = ((JSONObject) (bodys.get(i)))
                                             .getString("invcode");
                                     if (invcodeold.equals(invcode)) {
                                         Double doneqty = temp.getDouble("nottaloutinvnum");
                                         temp.put("nottaloutinvnum", doneqty - ScanedTotal);
                                     }
-
                                     bodynews.put(temp);
                                 }
 
                                 jsBody = new JSONObject();
                                 jsBody.put("Status", "true");
                                 jsBody.put("dbBody", bodynews);
-
-                                //}
-
                                 JSONArray arraysCount;
                                 try {
                                     arraysCount = jsBody.getJSONArray("dbBody");
@@ -989,7 +889,6 @@ public class SalesDeliveryDetail extends Activity {
                                 tvSalecount.setText("总量" + number + " | " + "已扫"
                                         + ntotaloutinvnum + " | " + "未扫"
                                         + (number - ntotaloutinvnum));
-                                //SaveScanedBody();//写入本地
                                 IniDetail();
 
                             } catch (JSONException e) {
@@ -997,13 +896,9 @@ public class SalesDeliveryDetail extends Activity {
                                 e.printStackTrace();
                                 Toast.makeText(SalesDeliveryDetail.this, e.getMessage(),
                                         Toast.LENGTH_LONG).show();
-                                // ADD CAIXY TEST START
                                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                                // ADD CAIXY TEST END
                             }
-
                             DeleteButton.cancel();
-
                     }
                 })
                 .setNegativeButton(R.string.QuXiao, null).show();
@@ -1039,7 +934,7 @@ public class SalesDeliveryDetail extends Activity {
                             String RemoveBarCode = ScanedBarcode.get(si).toString();
                             if (RemoveBarCode.equals(serino)) {
                                 ScanedBarcode.remove(si);
-                                si--;
+//                                si--;
                             }
                         }
                     }
@@ -1111,7 +1006,7 @@ public class SalesDeliveryDetail extends Activity {
                         tvSalecount.setText("总量" + number + " | " + "已扫"
                                 + ntotaloutinvnum + " | " + "未扫"
                                 + (number - ntotaloutinvnum));
-                        //SaveScanedBody();//写入本地
+
                         IniDetail();
 
                     } catch (JSONException e) {
@@ -1119,9 +1014,7 @@ public class SalesDeliveryDetail extends Activity {
                         e.printStackTrace();
                         Toast.makeText(SalesDeliveryDetail.this, e.getMessage(),
                                 Toast.LENGTH_LONG).show();
-                        // ADD CAIXY TEST START
                         MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                        // ADD CAIXY TEST END
                     }
 
                     DeleteButton.cancel();
