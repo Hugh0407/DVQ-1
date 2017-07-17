@@ -421,8 +421,7 @@ public class MaterialOutAct extends Activity {
         progressDialog.setTitle("保存单据");
         progressDialog.setMessage("正在保存，请等待...");
         progressDialog.show();
-        new Thread(new Runnable() {
-
+        Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -436,9 +435,9 @@ public class MaterialOutAct extends Activity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-
             }
-        }).start();
+        });
+        thread.start();
     }
 
     /**
@@ -547,7 +546,7 @@ public class MaterialOutAct extends Activity {
             JSONObject rev = Common.DoHttpQuery(para, "CommonQuery", "");
             if (rev == null) {
                 // 网络通讯错误
-                Utils.showToast(this,"错误！网络通讯错误");
+                Utils.showToast(this, "错误！网络通讯错误");
                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                 return;
             }
@@ -565,7 +564,7 @@ public class MaterialOutAct extends Activity {
             }
 
         } catch (Exception e) {
-            Utils.showToast(this,e.getMessage());
+            Utils.showToast(this, e.getMessage());
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
         }
 

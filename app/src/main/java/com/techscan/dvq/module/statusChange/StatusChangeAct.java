@@ -35,6 +35,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
+import static com.techscan.dvq.common.Utils.formatDecimal;
 import static com.techscan.dvq.common.Utils.showResultDialog;
 import static com.techscan.dvq.common.Utils.showToast;
 
@@ -203,25 +204,25 @@ public class StatusChangeAct extends Activity {
         JSONObject saveOutBody = new JSONObject();
         JSONArray saveOutArray = new JSONArray();
         for (int i = 0; i < taskList.size(); i++) {
-            PurGood purGood = taskList.get(i);
-            if (purGood.getFbillrowflag().equals("3")) {
-                saveOutBody.put("CSOURCEBILLBID", purGood.getCsourcebillbid());
-                saveOutBody.put("CSOURCEBILLHID", purGood.getCsourcebillhid());
-                CFIRSTBILLBID = purGood.getCsourcebillbid();
-                CFIRSTBILLHID = purGood.getCsourcebillhid();
+            PurGood outGood = taskList.get(i);
+            if (outGood.getFbillrowflag().equals("3")) {
+                saveOutBody.put("CSOURCEBILLBID", outGood.getCsourcebillbid());
+                saveOutBody.put("CSOURCEBILLHID", outGood.getCsourcebillhid());
+                CFIRSTBILLBID = outGood.getCsourcebillbid();
+                CFIRSTBILLHID = outGood.getCsourcebillhid();
                 saveOutBody.put("CFIRSTBILLBID", CFIRSTBILLBID);
                 saveOutBody.put("CFIRSTBILLHID", CFIRSTBILLHID);
                 saveOutBody.put("CBODYWAREHOUSEID", WarehouseID);
-                saveOutBody.put("INVCODE", purGood.getInvcode());
-                saveOutBody.put("CINVBASID", purGood.getPk_invbasdoc());
-                saveOutBody.put("CINVENTORYID", purGood.getCinventoryid());
-                saveOutBody.put("NSHOULDOUTNUM", purGood.getNshouldinnum());
-                saveOutBody.put("NSHOULDOUTNUM", "100.00");
-                saveOutBody.put("NOUTNUM", purGood.getNum_task());
+                saveOutBody.put("INVCODE", outGood.getInvcode());
+                saveOutBody.put("CINVBASID", outGood.getPk_invbasdoc());
+                saveOutBody.put("CINVENTORYID", outGood.getCinventoryid());
+                saveOutBody.put("NSHOULDOUTNUM", formatDecimal(outGood.getNshouldinnum()));
+//                saveOutBody.put("NSHOULDOUTNUM", "100.00");
+                saveOutBody.put("NOUTNUM", outGood.getNum_task());
                 saveOutBody.put("PK_BODYCALBODY", "1011TC100000000000KV");
-                saveOutBody.put("VSOURCEBILLCODE", purGood.getSourceBill());
-                saveOutBody.put("VSOURCEROWNO", purGood.getVsourcerowno());
-                saveOutBody.put("VBATCHCODE", purGood.getVbatchcode());
+                saveOutBody.put("VSOURCEBILLCODE", outGood.getSourceBill());
+                saveOutBody.put("VSOURCEROWNO", outGood.getVsourcerowno());
+                saveOutBody.put("VBATCHCODE", outGood.getVbatchcode());
                 saveOutBody.put("CSOURCETYPE", "4N");
             }
         }
@@ -238,28 +239,27 @@ public class StatusChangeAct extends Activity {
         saveInHead.put("PK_CORP", MainLogin.objLog.STOrgCode);   //库存组织
         saveInHead.put("CLASTMODIID", MainLogin.objLog.UserID);  //操作人id  ？
         saveInHead.put("COPERATORID", MainLogin.objLog.UserID);  //操作人id   ？
-        saveInHead.put("CDISPATCHERID", "0001TC100000000011QO");//收发类别,邹俊豪说的先写死
+        saveInHead.put("CDISPATCHERID", "0001TC100000000011QO");//收发类别,邹俊豪说的,先写死!!!
         JSONObject saveInBody = new JSONObject();
         JSONArray saveInArray = new JSONArray();
         for (int i = 0; i < taskList.size(); i++) {
-            PurGood purGood = taskList.get(i);
-            if (purGood.getFbillrowflag().equals("2")) {
-                saveInBody.put("CSOURCEBILLBID", purGood.getCsourcebillbid());
-                saveInBody.put("CSOURCEBILLHID", purGood.getCsourcebillhid());
+            PurGood inGood = taskList.get(i);
+            if (inGood.getFbillrowflag().equals("2")) {
+                saveInBody.put("CSOURCEBILLBID", inGood.getCsourcebillbid());
+                saveInBody.put("CSOURCEBILLHID", inGood.getCsourcebillhid());
                 saveInBody.put("CFIRSTBILLBID", CFIRSTBILLBID);
                 saveInBody.put("CFIRSTBILLHID", CFIRSTBILLHID);
                 saveInBody.put("CBODYWAREHOUSEID", WarehouseID);
-                saveInBody.put("INVCODE", purGood.getInvcode());
-                saveInBody.put("CINVBASID", purGood.getPk_invbasdoc());
-                saveInBody.put("CINVENTORYID", purGood.getCinventoryid());
-//                saveInBody.put("NSHOULDOUTNUM", purGood.getNshouldinnum());
-                saveInBody.put("NSHOULDOUTNUM", "100.00");
-                saveInBody.put("NINNUM", purGood.getNum_task());
-                saveInBody.put("VSOURCEBILLCODE", purGood.getSourceBill());
+                saveInBody.put("INVCODE", inGood.getInvcode());
+                saveInBody.put("CINVBASID", inGood.getPk_invbasdoc());
+                saveInBody.put("NSHOULDOUTNUM", formatDecimal(inGood.getNshouldinnum()));
+//                saveInBody.put("NSHOULDOUTNUM", "100.00");
+                saveInBody.put("NINNUM", inGood.getNum_task());
+                saveInBody.put("VSOURCEBILLCODE", inGood.getSourceBill());
                 saveInBody.put("PK_BODYCALBODY", "1011TC100000000000KV");
-                saveInBody.put("VSOURCEBILLCODE", purGood.getSourceBill());
-                saveInBody.put("VSOURCEROWNO", purGood.getVsourcerowno());
-                saveInBody.put("VBATCHCODE", purGood.getVbatchcode());
+                saveInBody.put("VSOURCEBILLCODE", inGood.getSourceBill());
+                saveInBody.put("VSOURCEROWNO", inGood.getVsourcerowno());
+                saveInBody.put("VBATCHCODE", inGood.getVbatchcode());
                 saveInBody.put("CSOURCETYPE", "4N");
             }
         }
@@ -287,8 +287,7 @@ public class StatusChangeAct extends Activity {
         progressDialog.setTitle(title);
         progressDialog.setMessage(message);
         progressDialog.show();
-        new Thread(new Runnable() {
-
+        Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -302,9 +301,9 @@ public class StatusChangeAct extends Activity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-
             }
-        }).start();
+        });
+        thread.start();
     }
 
     /**

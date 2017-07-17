@@ -31,17 +31,31 @@ public class Utils {
         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
     }
 
+    /**++++++++++++++
+     * 格式化小数，一律格式为两位小数
+     *
+     * @param num 必须为float类型
+     * @return 字符串
+     */
     public static String formatDecimal(float num) {
         DecimalFormat decimalFormat = new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
-        String s = decimalFormat.format(num);//format 返回的是字符串
-        return s;
+        return decimalFormat.format(num);
+    }
+
+    public static String formatDecimal(double num) {
+        return formatDecimal(num);
+    }
+
+    public static String formatDecimal(String num) {
+        float n = Float.valueOf(num);
+        return formatDecimal(n);
     }
 
     /**
      * 判断是否都是数字，使用正则表达式
      *
-     * @param str
-     * @return
+     * @param str 待匹配的字符串
+     * @return 匹配结果, 是数字返回true, 不是数字返回false
      */
     public static boolean isNumber(String str) {
         Pattern pattern = Pattern.compile("[0-9]*");
@@ -49,16 +63,10 @@ public class Utils {
         return isNum.matches();
     }
 
-    public static String formatDecimal(double num) {
-        DecimalFormat decimalFormat = new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
-        String s = decimalFormat.format(num);//format 返回的是字符串
-        return s;
-    }
-
     /**
      * 显示保存的返回结果的信息
      *
-     * @param message
+     * @param message dialog内容信息
      */
     public static void showResultDialog(Context context, String message) {
         AlertDialog.Builder dialog = new AlertDialog.Builder(context);

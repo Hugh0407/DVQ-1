@@ -88,7 +88,6 @@ public class ScAdapter extends BaseAdapter {
         if (fbillrowflag.equals("3")) {
             viewHolder.change.setText("×ª»»ºó");
         }
-
         return convertView;
     }
 
