@@ -1049,6 +1049,7 @@ public class PurStockInDetail extends Activity {
     private void Return() {
 //        if (jsBoxTotal != null && jsSerino != null) {
         if (jsSerino != null) {
+            Log.d(TAG, "Return: "+jsSerino.toString());
             Intent intent = new Intent();
 
 //            intent.putExtra("box", jsBoxTotal.toString());
@@ -1197,7 +1198,6 @@ public class PurStockInDetail extends Activity {
                             String RemoveBarCode = ScanedBarcode.get(si).toString();
                             int iBarlenth = RemoveBarCode.length() - 6;
                             String RemoveBarCodeF = RemoveBarCode.substring(0, iBarlenth);
-
                             if (RemoveBarCodeF.equals(serino)) {
                                 ScanedBarcode.remove(si);
                                 si--;
@@ -1223,7 +1223,7 @@ public class PurStockInDetail extends Activity {
                         }
 
                         jsSerino = new JSONObject();
-
+//
                         if (serinos.length() > 0) {
                             jsSerino.put("Serino", serinos);
                         }

@@ -3,6 +3,7 @@ package com.techscan.dvq.saleout.scan;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,12 +22,13 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
-import com.techscan.dvq.MainLogin;
 import com.techscan.dvq.R;
-import com.techscan.dvq.bean.Goods;
+import com.techscan.dvq.bean.PurSaleOutGoods;
+import com.techscan.dvq.bean.SaleOutGoods;
 import com.techscan.dvq.common.RequestThread;
-import com.techscan.dvq.module.materialOut.MyBaseAdapter;
+import com.techscan.dvq.common.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,104 +42,123 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-import static com.techscan.dvq.R.id.ed_num;
+import static android.content.ContentValues.TAG;
 import static com.techscan.dvq.common.Utils.formatDecimal;
 import static com.techscan.dvq.common.Utils.isNumber;
 import static com.techscan.dvq.common.Utils.showToast;
 
 
+/**
+ * 形态转换模块下的 扫描界面
+ */
+
 public class Sale extends Activity {
 
-    @InjectView(R.id.ed_bar_code)
-    EditText mEdBarCode;    //条码
-    @InjectView(R.id.ed_encoding)
-    EditText mEdEncoding;   //编码（Sku）
-    @InjectView(R.id.ed_type)
-    EditText mEdType;   // 型号
-    @InjectView(R.id.ed_spectype)
-    EditText mEdSpectype;   //规格
-    @InjectView(R.id.ed_lot)
-    EditText mEdLot;        //批次
-    @InjectView(R.id.ed_name)
-    EditText mEdName;       //物料名
-    @InjectView(R.id.ed_unit)
-    EditText mEdUnit;
-    @InjectView(R.id.ed_qty)
-    EditText mEdQty;
-    @InjectView(R.id.btn_overview)
-    Button mBtnOverview;
-    @InjectView(R.id.btn_detail)
-    Button mBtnDetail;
-    @InjectView(R.id.btn_back)
-    Button mBtnBack;
-    @InjectView(R.id.ed_num)
-    EditText mEdNum;
-    @InjectView(R.id.ed_weight)
-    EditText mEdWeight;
-    @InjectView(R.id.ed_cost_object)
-    EditText mEdCostObject;
+   @InjectView(R.id.txtBarcode)
+    EditText txtBarcode;
+    @InjectView(R.id.txtSaleInvCode)
+    EditText txtSaleInvCode;
+    @InjectView(R.id.txtSaleInvName)
+    EditText txtSaleInvName;
+    @InjectView(R.id.txtSaleType)
+    EditText txtSaleType;
+    @InjectView(R.id.txtSaleSpec)
+    EditText txtSaleSpec;
+    @InjectView(R.id.txtSaleBatch)
+    EditText txtSaleBatch;
+    @InjectView(R.id.txtSaleNumber)
+    EditText txtSaleNumber;
+    @InjectView(R.id.txtSaleWeight)
+    EditText txtSaleWeight;
+    @InjectView(R.id.txtSaleTotal)
+    EditText txtSaleTotal;
+    @InjectView(R.id.txtSaleUnit)
+    EditText txtSaleUnit;
+    @InjectView(R.id.btnTask)
+    Button btnTask;
+    @InjectView(R.id.btnDetail)
+    Button btnDetail;
+    @InjectView(R.id.btnReturn)
+    Button btnReturn;
+    @InjectView(R.id.tvSalecount)
+    TextView tvSalecount;
 
-
-    String TAG = "Sale";
-    public static List<Goods> detailList = new ArrayList<Goods>();
-    public static List<Goods> ovList = new ArrayList<Goods>();
-    Activity mActivity;
+    String PK_CORP;
+    String BillCode;
+    String CSALEID;
+    ProgressDialog progressDialog;
+    Activity activity;
+    JSONObject jsonBody;
+    public static List<PurSaleOutGoods> taskList = new ArrayList<PurSaleOutGoods>();
+    public static List<SaleOutGoods> detailList = new ArrayList<SaleOutGoods>();
+    public static List<SaleOutGoods> ovList = new ArrayList<SaleOutGoods>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sale_out_scan);
+        setContentView(R.layout.sale_out_scan_detail_new);
         ButterKnife.inject(this);
-        mActivity = this;
+        activity = this;
         init();
+        initTaskData();
+    }
+
+    private void init() {
+        ActionBar actionBar = this.getActionBar();
+        actionBar.setTitle("销售出库扫描");
+        txtBarcode.setOnKeyListener(mOnKeyListener);
+        txtSaleNumber.setOnKeyListener(mOnKeyListener);
+        txtSaleNumber.addTextChangedListener(new CustomTextWatcher(txtSaleNumber));
+        txtBarcode.addTextChangedListener(new CustomTextWatcher(txtBarcode));
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mActivity = null;
+        activity = null;
     }
 
-    @OnClick({R.id.btn_overview, R.id.btn_detail, R.id.btn_back})
+    private void initTaskData() {
+        PK_CORP = this.getIntent().getStringExtra("PK_CORP");
+        BillCode = this.getIntent().getStringExtra("BillCode");
+        CSALEID = this.getIntent().getStringExtra("CSALEID");
+        if (taskList.size() == 0) {
+            showProgressDialog();
+            getSaleOutBody();
+        }
+    }
+    @OnClick({R.id.btnTask, R.id.btnDetail, R.id.btnReturn})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.btn_overview:
-                MyBaseAdapter ovAdapter = new MyBaseAdapter(ovList);
-                showDialog(ovList, ovAdapter, "扫描总览");
+            case R.id.btnTask:
+                SaleOutTaskAdapter scAdapter = new SaleOutTaskAdapter(taskList);
+                showDialog(taskList, scAdapter, "任务信息");
                 break;
-            case R.id.btn_detail:
-                MyBaseAdapter myBaseAdapter = new MyBaseAdapter(detailList);
+            case R.id.btnDetail:
+                SalesOutDetailAdapter myBaseAdapter = new SalesOutDetailAdapter(detailList);
                 showDialog(detailList, myBaseAdapter, "扫描明细");
                 break;
-            case R.id.btn_back:
+            case R.id.btnReturn:
+//               if (detailList.size() > 0) {
+//                    setDataToBack();
+//                } else {
+//                    Utils.showToast(activity, "没有扫描单据");
+//                    finish();
+//                }
+//                break;
                 if (ovList.size() > 0) {
                     Intent in = new Intent();
                     Bundle bundle = new Bundle();
                     bundle.putParcelableArrayList("overViewList", (ArrayList<? extends Parcelable>) ovList);
                     in.putExtras(bundle);
-                    mActivity.setResult(5, in);
+                    Sale.this.setResult(5, in);
                 } else {
-                    showToast(mActivity,"没有扫描单据");
+                    showToast( Sale.this,"没有扫描单据");
                 }
                 finish();
-                break;
         }
     }
 
-    @Override
-    public void onBackPressed() {
-    }
-
-    private void init() {
-        ActionBar actionBar = this.getActionBar();
-        actionBar.setTitle("销售出库扫面界面");
-        mEdBarCode.setOnKeyListener(mOnKeyListener);
-        mEdLot.setOnKeyListener(mOnKeyListener);
-        mEdQty.setOnKeyListener(mOnKeyListener);
-        mEdNum.setOnKeyListener(mOnKeyListener);
-        mEdNum.addTextChangedListener(new CustomTextWatcher(mEdNum));
-        mEdBarCode.addTextChangedListener(new CustomTextWatcher(mEdBarCode));
-    }
 
     /**
      * 网络请求后的线程通信
@@ -149,229 +170,53 @@ public class Sale extends Activity {
             super.handleMessage(msg);
             switch (msg.what) {
                 case 1:
-                    JSONObject json = (JSONObject) msg.obj;
-                    if (json != null) {
-                        try {
-                            setInvBaseToUI(json);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                    //表体的请求结果
+                    jsonBody = new JSONObject();
+                   jsonBody = (JSONObject) msg.obj;
+                    try {
+                        if (jsonBody != null && jsonBody.getBoolean("Status")) {
+                            Log.d("TAG", "jsonBody: " + jsonBody);
+                            JSONArray jsonArray = jsonBody.getJSONArray("dbBody");
+                            PurSaleOutGoods purSaleOutGoods;
+                            JSONObject object;
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                object = jsonArray.getJSONObject(i);
+                                purSaleOutGoods = new PurSaleOutGoods();
+                                purSaleOutGoods.setInvCode(object.getString("invcode"));
+                                Log.d(TAG, "handleMessage: "+object.getString("invcode"));
+                                purSaleOutGoods.setNumber(object.getString("nnumber"));
+                                purSaleOutGoods.setInvName(object.getString("invname"));
+                                purSaleOutGoods.setSpec(object.getString("invspec"));
+                                purSaleOutGoods.setType(object.getString("invtype"));
+                                taskList.add(purSaleOutGoods);
+                            }
+
+//                            tvSalecount.setText("总量" + jsonBody.getString("nnumber") + " | " + "已扫" + jsonBody.getString("nottaloutinvnum")
+//                                    + " | " + "未扫" + (Float.valueOf( jsonBody.getString("nnumber"))  -Float.valueOf(jsonBody.getString("nottaloutinvnum"))));
+                        } else {
+                            Log.d("TAG", "jsonBody = null ");
                         }
-                    } else {
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    progressDialogDismiss();
+                    break;
+                case 3:
+                    //条码解析的请求结果，并且把数据设置到UI上
+                    JSONObject json = (JSONObject) msg.obj;
+                    if (null == json) {
                         return;
+                    }
+                    try {
+                        setInvBaseToUI(json);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
                     break;
             }
         }
     };
-
-    private void showDialog(final List list, final BaseAdapter adapter, String title) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
-        builder.setTitle(title);
-        if (list.size() > 0) {
-            View view = LayoutInflater.from(mActivity).inflate(R.layout.dialog_scan_details, null);
-            ListView lv = (ListView) view.findViewById(R.id.lv);
-            if (title.equals("扫描明细")) { //只有明细的页面是可点击的，总览页面是不可点击的
-                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                        AlertDialog.Builder delDialog = new AlertDialog.Builder(mActivity);
-                        delDialog.setTitle("是否删除该条数据");
-                        delDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                list.remove(position);
-                                adapter.notifyDataSetChanged();
-                                addDataToOvList();
-                            }
-                        });
-                        delDialog.setNegativeButton("取消", null);
-                        delDialog.show();
-                    }
-                });
-            }
-            lv.setAdapter(adapter);
-            builder.setView(view);
-        } else {
-            builder.setMessage("没有扫描内容");
-        }
-        builder.setPositiveButton("确定", null);
-        builder.show();
-    }
-
-
-    /**
-     * 条码解析
-     */
-    private boolean barAnalysis() {
-        String Bar = mEdBarCode.getText().toString().trim();
-        if (Bar.contains("\n")) {
-            Bar = Bar.replace("\n", "");
-        }
-        mEdBarCode.setText(Bar);
-        mEdBarCode.setSelection(mEdBarCode.length());   //将光标移动到最后的位置
-        mEdBarCode.selectAll();
-        String[] barCode = Bar.split("\\|");
-        if (barCode.length == 2 && barCode[0].equals("Y")) {          //Y|SKU
-            //如果是液体的话需要输入液体总量，将数量设置不可编辑
-            mEdNum.setEnabled(false);
-            mEdLot.setEnabled(true);
-            mEdQty.setEnabled(true);
-            mEdLot.requestFocus();  //如果是液体需要手动输入“批次”和“总量”,这里将光标跳到“批次（lot）”
-            String encoding = barCode[1];
-            mEdEncoding.setText(encoding);
-            getInvBaseInfo(encoding);
-            mEdLot.setText("");
-            mEdQty.setText("");
-            return true;
-        } else if (barCode.length == 6 && barCode[0].equals("C")) {   //C|SKU|LOT|TAX|QTY|SN
-            //如果是包码，批次和总重都改变为不可编辑，数量由员工输入，焦点跳到“数量”
-            mEdLot.setEnabled(false);
-            mEdQty.setEnabled(false);
-            mEdNum.setEnabled(true);
-            mEdNum.requestFocus();  //包码扫描后光标跳到“数量”,输入数量,添加到列表
-            String encoding = barCode[1];
-            mEdEncoding.setText(encoding);
-            getInvBaseInfo(encoding);
-            mEdLot.setText(barCode[2]);
-            mEdWeight.setText(barCode[4]);
-            mEdQty.setText("");
-            mEdNum.setText("1");
-            mEdNum.selectAll();
-            mEdNum.setSelection(mEdNum.length());   //将光标移动到最后的位置
-            return true;
-        } else if (barCode.length == 7 && barCode[0].equals("TC")) {    //TC|SKU|LOT|TAX|QTY|NUM|SN
-            for (int i = 0; i < detailList.size(); i++) {
-                if (detailList.get(i).getBarcode().equals(Bar)) {
-                    showToast(mActivity, "该托盘已扫描");
-                    return false;
-                }
-            }
-            //如果是盘码，全都设置为不可编辑
-            mEdLot.setEnabled(false);
-            mEdQty.setEnabled(false);
-            mEdNum.setEnabled(false);
-            String encoding = barCode[1];
-            mEdEncoding.setText(encoding);
-            getInvBaseInfo(encoding);
-            mEdLot.setText(barCode[2]);
-            mEdWeight.setText(barCode[4]);
-            mEdNum.setText(barCode[5]);
-            float qty = Float.valueOf(barCode[4]);
-            float num = Float.valueOf(barCode[5]);
-            mEdQty.setText(formatDecimal(qty * num));
-            return true;
-        } else {
-            showToast(mActivity, "条码有误重新输入");
-            return false;
-        }
-    }
-
-
-    /**
-     * 添加数据到总览列表中，重写了Goods的equals和hashcode
-     */
-    private void addDataToOvList() {
-        ovList.clear();
-        int detailSize = detailList.size();
-        for (int i = 0; i < detailSize; i++) {
-            Goods dtGood = detailList.get(i);
-            if (ovList.contains(dtGood)) {
-                int j = ovList.indexOf(dtGood);
-                Goods ovGood = ovList.get(j);
-                ovGood.setQty(ovGood.getQty() + dtGood.getQty());
-            } else {
-                Goods good = new Goods();
-                good.setBarcode(dtGood.getBarcode());
-                good.setEncoding(dtGood.getEncoding());
-                good.setName(dtGood.getName());
-                good.setType(dtGood.getType());
-                good.setUnit(dtGood.getUnit());
-                good.setLot(dtGood.getLot());
-                good.setSpec(dtGood.getSpec());
-                good.setQty(dtGood.getQty());
-                good.setNum(dtGood.getNum());
-                good.setPk_invbasdoc(dtGood.getPk_invbasdoc());
-                good.setPk_invmandoc(dtGood.getPk_invmandoc());
-                good.setCostObject(dtGood.getCostObject());
-                ovList.add(good);
-            }
-        }
-    }
-
-    /**
-     * 添加信息到 集合中
-     *
-     * @return
-     */
-    private void addDataToDetailList() {
-        Goods goods = new Goods();
-        goods.setBarcode(mEdBarCode.getText().toString());
-        goods.setEncoding(mEdEncoding.getText().toString());
-        goods.setName(mEdName.getText().toString());
-        goods.setType(mEdType.getText().toString());
-        goods.setSpec(mEdSpectype.getText().toString());
-        goods.setUnit(mEdUnit.getText().toString());
-        goods.setLot(mEdLot.getText().toString());
-        goods.setQty(Float.valueOf(mEdQty.getText().toString()));
-        goods.setCostObject(mEdCostObject.getText().toString());
-        goods.setPk_invbasdoc(pk_invbasdoc);
-        goods.setPk_invmandoc(pk_invmandoc);
-        detailList.add(goods);
-        addDataToOvList();
-    }
-
-    /**
-     * 清空所有的Edtext
-     */
-    private void changeAllEdTextToEmpty() {
-        mEdNum.setText("");
-        mEdBarCode.setText("");
-        mEdEncoding.setText("");
-        mEdName.setText("");
-        mEdType.setText("");
-        mEdUnit.setText("");
-        mEdLot.setText("");
-        mEdQty.setText("");
-        mEdWeight.setText("");
-        mEdSpectype.setText("");
-        mEdCostObject.setText("");
-        mEdLot.setEnabled(false);
-        mEdNum.setEnabled(false);
-        mEdQty.setEnabled(false);
-    }
-
-    /**
-     * 判断所有的edtext是否为空
-     *
-     * @return true---->所有的ed都不为空,false---->所有的ed都为空
-     */
-    private boolean isAllEdNotNull() {
-        return (!TextUtils.isEmpty(mEdBarCode.getText())
-                && !TextUtils.isEmpty(mEdEncoding.getText())
-                && !TextUtils.isEmpty(mEdName.getText())
-                && !TextUtils.isEmpty(mEdType.getText())
-                && !TextUtils.isEmpty(mEdSpectype.getText())
-                && !TextUtils.isEmpty(mEdUnit.getText())
-                && !TextUtils.isEmpty(mEdLot.getText())
-                && !TextUtils.isEmpty(mEdQty.getText()));
-    }
-
-    /**
-     * 获取存货基本信息
-     *
-     * @param sku 物料编码
-     */
-    private void getInvBaseInfo(String sku) {
-        HashMap<String, String> parameter = new HashMap<String, String>();
-        parameter.put("FunctionName", "GetInvBaseInfo");
-        parameter.put("CompanyCode", MainLogin.objLog.CompanyCode);
-        parameter.put("InvCode", sku);
-        parameter.put("TableName", "baseInfo");
-        RequestThread requestThread = new RequestThread(parameter, mHandler, 1);
-        Thread td = new Thread(requestThread);
-        td.start();
-    }
-
 
     /**
      * 通过获取到的json 解析得到物料信息,并设置到UI上
@@ -383,7 +228,7 @@ public class Sale extends Activity {
     String pk_invmandoc = "";
 
     private void setInvBaseToUI(JSONObject json) throws JSONException {
-        Log.d(TAG, "setInvBaseToUI: " + json);
+        Log.d("TAG", "setInvBaseToUI: " + json);
         if (json.getBoolean("Status")) {
             JSONArray val = json.getJSONArray("baseInfo");
             HashMap<String, Object> map = null;
@@ -402,14 +247,353 @@ public class Sale extends Activity {
                 map.put("oppdimen", tempJso.getString("oppdimen"));   //重量
             }
             if (map != null) {
-                mEdName.setText(map.get("invname").toString());
-                mEdUnit.setText(map.get("measname").toString());
-                mEdType.setText(map.get("invtype").toString());
-                mEdSpectype.setText(map.get("invspec").toString());
-                mEdCostObject.setText(map.get("invname").toString());
+                txtSaleInvName.setText(map.get("invname").toString());
+                txtSaleUnit.setText(map.get("measname").toString());
+                txtSaleType.setText(map.get("invtype").toString());
+                txtSaleSpec.setText(map.get("invspec").toString());
+            }
+
+        }
+    }
+
+
+    private void showDialog(final List list, final BaseAdapter adapter, String title) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(Sale.this);
+        builder.setTitle(title);
+        if (list.size() > 0) {
+            View view = LayoutInflater.from(Sale.this).inflate(R.layout.dialog_scan_details, null);
+            ListView lv = (ListView) view.findViewById(R.id.lv);
+            if (title.equals("扫描明细")) { //只有明细的页面是可点击的，总览页面是不可点击的
+                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                        AlertDialog.Builder delDialog = new AlertDialog.Builder(Sale.this);
+                        delDialog.setTitle("是否删除该条数据");
+                        delDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                list.remove(position);
+
+                                adapter.notifyDataSetChanged();
+//                                addDataToDetailList();
+                            }
+                        });
+                        delDialog.setNegativeButton("取消", null);
+                        delDialog.show();
+                    }
+                });
+            }
+            lv.setAdapter(adapter);
+            builder.setView(view);
+        } else {
+            builder.setMessage("没有扫描内容");
+        }
+        builder.setPositiveButton("确定", null);
+        builder.show();
+    }
+
+    /**
+     * 获取表体
+     */
+    private void getSaleOutBody() {
+        HashMap<String, String> parameter = new HashMap<String, String>();
+        parameter.put("FunctionName", "GetSaleOutBodyNew");
+        parameter.put("BillCode", BillCode);
+        parameter.put("CSALEID", CSALEID);
+        parameter.put("CorpPK", "4100");
+        parameter.put("TableName", "dbBody");
+        Log.d(TAG, "GetBillBodyDetailInfo: " + BillCode);
+        RequestThread requestThread = new RequestThread(parameter, mHandler, 1);
+        Thread td = new Thread(requestThread);
+        td.start();
+    }
+
+
+    /**
+     * 获取存货基本信息
+     *
+     * @param
+     */
+    private void getInvBaseInfo(String invcode) {
+        HashMap<String, String> parameter = new HashMap<String, String>();
+        parameter.put("FunctionName", "GetInvBaseInfo");
+        parameter.put("CompanyCode", PK_CORP);
+        parameter.put("InvCode", invcode);
+        parameter.put("TableName", "baseInfo");
+        RequestThread requestThread = new RequestThread(parameter, mHandler, 3);
+        Thread td = new Thread(requestThread);
+        td.start();
+    }
+
+    private void setDataToBack() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setTitle("提示");
+        builder.setMessage("存在扫描数据,是否退出");
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent in = new Intent();
+                Bundle bundle = new Bundle();
+                bundle.putParcelableArrayList("taskList", (ArrayList<? extends Parcelable>) taskList);
+                in.putExtras(bundle);
+                activity.setResult(7, in);
+                finish();
+            }
+        });
+        builder.setNegativeButton("取消", null);
+        builder.show();
+    }
+
+    /**
+     * 获取数据的等待dialog
+     */
+    private void showProgressDialog() {
+        progressDialog = new ProgressDialog(Sale.this);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);// 设置进度条的形式为圆形转动的进度条
+        progressDialog.setCancelable(false);// 设置是否可以通过点击Back键取消
+        progressDialog.setCanceledOnTouchOutside(false);// 设置在点击Dialog外是否取消Dialog进度条
+        progressDialog.setTitle("获取单据");
+        progressDialog.setMessage("正在获取数据,请等待...");
+        progressDialog.show();
+        new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                    if (progressDialog.isShowing()) {
+                        Thread.sleep(30 * 1000);
+                        // cancel和dismiss方法本质都是一样的，都是从屏幕中删除Dialog,唯一的区别是
+                        // 调用cancel方法会回调DialogInterface.OnCancelListener如果注册的话,dismiss方法不会回掉
+                        // progressDialog.dismiss();
+                        if (progressDialog.isShowing()) {
+                            progressDialog.dismiss();
+                        }
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }).start();
+    }
+
+
+    /**
+     * progressDialog 消失
+     */
+    private void progressDialogDismiss() {
+        if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
+    }
+
+    /**
+     * 条码解析
+     */
+    private boolean barAnalysis() {
+        String Bar = txtBarcode.getText().toString().trim();
+        if (Bar.contains("\n")) {
+            Bar = Bar.replace("\n", "");
+        }
+        txtBarcode.setText(Bar);
+        txtBarcode.setSelection(txtBarcode.length());   //将光标移动到最后的位置
+        txtBarcode.selectAll();
+        String[] barCode = Bar.split("\\|");
+        if (barCode.length == 9 && barCode[0].equals("P")) {
+
+            /*********************************************************************/
+            //判断该条码在“任务” 列表中是否存在
+            for (PurSaleOutGoods pur : taskList) {
+                Log.d(TAG, "barAnalysis: "+taskList.size());
+
+                Log.d(TAG, "barAnalysis: "+pur.getInvCode());
+                Log.d(TAG, "barAnalysis: "+barCode[1].toString());
+//                if (!pur.getInvCode().equals(barCode[1].trim())) {
+//                    Utils.showToast(activity, "该条码不在本次扫描任务中!");
+//                    return false;
+//                }
+            }
+            /*********************************************************************/
+
+            String invcode = barCode[1];
+            txtSaleInvCode.setText(invcode);
+            txtSaleBatch.setText(barCode[2]);
+            txtSaleWeight.setText(barCode[5]);
+            txtSaleTotal.setText("");
+            txtSaleNumber.setEnabled(true);
+            txtSaleNumber.setText("1");
+            txtSaleNumber.requestFocus();  //包码扫描后光标跳到“数量”,输入数量,添加到列表
+            txtSaleNumber.setSelection(txtSaleNumber.length());   //将光标移动到最后的位置
+            getInvBaseInfo(invcode);
+            return true;
+        } else if (barCode.length == 10 && barCode[0].equals("TP")) {//盘码TP|SKU|LOT|WW|TAX|QTY|NUM|CW|ONLY|SN
+            /*********************************************************************/
+            //判断该条码在“任务” 列表中是否存在
+            for (PurSaleOutGoods pur : taskList) {
+                if (!pur.getInvCode().equals(barCode[1])) {
+                    Utils.showToast(activity, "条码有误!");
+                    return false;
+                }
+            }
+            /*********************************************************************/
+            for (int i = 0; i < detailList.size(); i++) {
+                if (detailList.get(i).getBarcode().equals(Bar)) {
+                    Utils.showToast(activity, "该托盘已扫描!");
+                    return false;
+                }
+            }
+            //如果是盘码，全都设置为不可编辑，默认这三个是可编辑的
+//            mEdLot.setEnabled(false);
+//            mEdQty.setEnabled(false);
+//            mEdNum.setEnabled(false);
+            String invcode = barCode[1];
+            txtSaleInvCode.setText(invcode);
+            txtSaleBatch.setText(barCode[2]);
+            txtSaleWeight.setText(barCode[5]);
+            txtSaleNumber.setText(barCode[6]);
+            double weight = Double.valueOf(barCode[5]);
+            double mEdNum = Double.valueOf(barCode[6]);
+            txtSaleTotal.setText(String.valueOf(weight * mEdNum));
+            getInvBaseInfo(invcode);
+            return true;
+        } else {
+            Utils.showToast(activity, "条码类型不匹配");
+            return false;
+        }
+    }
+
+    /**
+     * 判断所有的edtext是否为空
+     *
+     * @return true---->所有的ed都不为空,false---->所有的ed都为空
+     */
+    private boolean isAllEdNotNull() {
+        return (!TextUtils.isEmpty(txtBarcode.getText())
+                && !TextUtils.isEmpty(txtSaleNumber.getText())
+                && !TextUtils.isEmpty(txtSaleInvCode.getText())
+                && !TextUtils.isEmpty(txtSaleBatch.getText())
+                && !TextUtils.isEmpty(txtSaleInvName.getText())
+                && !TextUtils.isEmpty(txtSaleSpec.getText())
+                && !TextUtils.isEmpty(txtSaleType.getText())
+                && !TextUtils.isEmpty(txtSaleWeight.getText())
+                && !TextUtils.isEmpty(txtSaleUnit.getText())
+                && !TextUtils.isEmpty(txtSaleTotal.getText()));
+    }
+
+    /**
+     * 添加信息到 集合中
+     *
+     * @return
+     */
+    private void addDataToDetailList() {
+        SaleOutGoods goods = new SaleOutGoods();
+        try {
+            goods.setBarcode(txtBarcode.getText().toString());
+            goods.setInvCode(txtSaleInvCode.getText().toString());
+            goods.setInvName(txtSaleInvName.getText().toString());
+            goods.setType(txtSaleType.getText().toString());
+            goods.setSpec(txtSaleSpec.getText().toString());
+            goods.setUnit(txtSaleUnit.getText().toString());
+            goods.setBatch(txtSaleBatch.getText().toString());
+            goods.setQty(Float.valueOf(txtSaleTotal.getText().toString()));
+            goods.setPk_invbasdoc(pk_invbasdoc);
+            goods.setPk_invmandoc(pk_invmandoc);
+            Log.d(TAG, "MMM: "+ "9" );
+            Log.d(TAG, "MMM: "+  txtSaleBatch.getText().toString());
+            Log.d(TAG, "MMM: "+ "10" );
+            goods.setNumber(jsonBody.getString("nnumber").toString());
+            goods.setCadvisecalbodyid(jsonBody.getString("cadvisecalbodyid").toString());
+            goods.setCinvbasdocid(jsonBody.getString("cinvbasdocid").toString());
+            goods.setCinventoryid(jsonBody.getString("cinventoryid").toString());
+            goods.setCorder_bid(jsonBody.getString("corder_bid").toString());
+            goods.setCrowno(jsonBody.getString("crowno").toString());
+            goods.setCsaleid(jsonBody.getString("csaleid").toString());
+            goods.setPk_corp(jsonBody.getString("pk_corp").toString());
+            goods.setVreceiveaddress(jsonBody.getString("vreceiveaddress").toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        for (PurSaleOutGoods pur : taskList) {
+            if (pur.getInvCode().equals(goods.getInvCode())) {
+                float nowNum = goods.getQty() + Float.valueOf(pur.getNum_task());
+                if (nowNum > Float.valueOf(pur.getNumber())) {
+                    Utils.showToast(activity, "数量过多,请重新扫描");
+                    return ;
+                }
+                pur.setNum_task(String.valueOf(nowNum));
+            }
+        }
+        detailList.add(goods);
+        addDataToOvList();
+
+    }
+
+    /**
+     * 添加数据到总览列表中，重写了Goods的equals和hashcode
+     */
+    private void addDataToOvList() {
+        ovList.clear();
+        int detailSize = detailList.size();
+        for (int i = 0; i < detailSize; i++) {
+            SaleOutGoods dtGood = detailList.get(i);
+            if (ovList.contains(dtGood)) {
+                int j = ovList.indexOf(dtGood);
+                SaleOutGoods ovGood = ovList.get(j);
+                ovGood.setQty(ovGood.getQty() + dtGood.getQty());
+            } else {
+                try {
+                    SaleOutGoods goods = new SaleOutGoods();
+                    goods.setBarcode(txtBarcode.getText().toString());
+                    goods.setInvCode(txtSaleInvCode.getText().toString());
+                    goods.setInvName(txtSaleInvName.getText().toString());
+                    goods.setType(txtSaleType.getText().toString());
+                    goods.setSpec(txtSaleSpec.getText().toString());
+                    goods.setUnit(txtSaleUnit.getText().toString());
+                    goods.setBatch(txtSaleBatch.getText().toString());
+                    goods.setQty(Float.valueOf(txtSaleTotal.getText().toString()));
+                    goods.setPk_invbasdoc(pk_invbasdoc);
+                    goods.setPk_invmandoc(pk_invmandoc);
+                    goods.setNumber(jsonBody.getString("nnumber").toString());
+                    goods.setCadvisecalbodyid(jsonBody.getString("cadvisecalbodyid").toString());
+                    goods.setCinvbasdocid(jsonBody.getString("cinvbasdocid").toString());
+                    goods.setCinventoryid(jsonBody.getString("cinventoryid").toString());
+                    goods.setCorder_bid(jsonBody.getString("corder_bid").toString());
+                    goods.setCrowno(jsonBody.getString("crowno").toString());
+                    goods.setCsaleid(jsonBody.getString("csaleid").toString());
+                    goods.setPk_corp(jsonBody.getString("pk_corp").toString());
+                    goods.setVreceiveaddress(jsonBody.getString("vreceiveaddress").toString());
+                    ovList.add(goods);
+                    Log.d(TAG, "addDataToOvList: "+ovList.size());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
             }
         }
     }
+
+
+    /**
+     * 清空所有的Edtext
+     */
+    private void changeAllEdTextToEmpty() {
+        txtSaleNumber.setText("");
+        txtBarcode.setText("");
+        txtSaleInvCode.setText("");
+        txtSaleInvName.setText("");
+        txtSaleType.setText("");
+        txtSaleUnit.setText("");
+        txtSaleBatch.setText("");
+        txtSaleTotal.setText("");
+        txtSaleWeight.setText("");
+        txtSaleSpec.setText("");
+        txtSaleNumber.setEnabled(false);
+        txtSaleWeight.setEnabled(false);
+        txtSaleTotal.setEnabled(false);
+    }
+
+
 
     /**
      * mEdBarCode（条码）的监听
@@ -435,37 +619,35 @@ public class Sale extends Activity {
         public void afterTextChanged(Editable s) {
             switch (ed.getId()) {
                 case R.id.ed_bar_code:
-                    if (TextUtils.isEmpty(mEdBarCode.getText().toString())) {
-                        mEdNum.setText("");
-                        mEdEncoding.setText("");
-                        mEdName.setText("");
-                        mEdType.setText("");
-                        mEdUnit.setText("");
-                        mEdLot.setText("");
-                        mEdQty.setText("");
-                        mEdWeight.setText("");
-                        mEdSpectype.setText("");
-                        mEdCostObject.setText("");
+                    if (TextUtils.isEmpty(txtBarcode.getText().toString())) {
+                        txtSaleNumber.setText("");
+                        txtSaleInvCode.setText("");
+                        txtSaleInvName.setText("");
+                        txtSaleType.setText("");
+                        txtSaleUnit.setText("");
+                        txtSaleBatch.setText("");
+                        txtSaleTotal.setText("");
+                        txtSaleWeight.setText("");
+                        txtSaleSpec.setText("");
                     }
                     break;
-                case R.id.ed_num:
-                    if (TextUtils.isEmpty(mEdNum.getText())) {
-                        mEdQty.setText("");
+                case R.id.txtSaleNumber:
+                    if (TextUtils.isEmpty(txtSaleNumber.getText())) {
+                        txtSaleTotal.setText("");
                         return;
                     }
-                    if (!isNumber(mEdNum.getText().toString())) {
-                        showToast(mActivity, "数量不正确");
-                        mEdNum.setText("");
+                    if (!isNumber(txtSaleNumber.getText().toString())) {
+                        Utils.showToast(activity, "数量不正确");
+                        txtSaleNumber.setText("");
                         return;
                     }
-                    if (Float.valueOf(mEdNum.getText().toString()) <= 0) {
-                        mEdNum.setText("");
-                        showToast(mActivity, "数量不正确");
+                    if (Float.valueOf(txtSaleNumber.getText().toString()) < 0) {
+                        Utils.showToast(activity, "数量不正确");
                         return;
                     }
-                    float num = Float.valueOf(mEdNum.getText().toString());
-                    float weight = Float.valueOf(mEdWeight.getText().toString());
-                    mEdQty.setText(formatDecimal(num * weight));
+                    float num = Float.valueOf(txtSaleNumber.getText().toString());
+                    float weight = Float.valueOf(txtSaleWeight.getText().toString());
+                    txtSaleTotal.setText(formatDecimal(num * weight));
                     break;
             }
         }
@@ -480,90 +662,40 @@ public class Sale extends Activity {
         public boolean onKey(View v, int keyCode, KeyEvent event) {
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
                 switch (v.getId()) {
-                    case R.id.ed_bar_code:
-                        if (!TextUtils.isEmpty(mEdBarCode.getText().toString())) {
+                    case R.id.txtBarcode:
+                        if (!TextUtils.isEmpty(txtBarcode.getText().toString())) {
                             if (isAllEdNotNull()) {
-                                addDataToDetailList();
-                                mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
+                                txtBarcode.requestFocus();  //如果添加成功将管标跳到“条码”框
                                 changeAllEdTextToEmpty();
                             } else {
                                 barAnalysis();
                             }
                         } else {
-                            showToast(mActivity, "请输入条码");
+                            Utils.showToast(activity, "请输入条码");
                         }
                         return true;
-                    case R.id.ed_lot:
-                        if (TextUtils.isEmpty(mEdLot.getText().toString())) {
-                            showToast(mActivity, "请输入批次号");
-                            return true;
-                        } else {
-                            mEdQty.requestFocus();  //输入完批次后讲焦点跳到“总量（mEdQty）”
-                        }
-                        return true;
-                    case R.id.ed_qty:
-                        if (TextUtils.isEmpty(mEdQty.getText().toString())) {
-                            showToast(mActivity, "请输入数量");
-                            return true;
-                        } else {
-                            String qty_s = mEdQty.getText().toString();
-                            if (!isNumber(qty_s)) {
-                                showToast(mActivity, "总量不正确");
-                                mEdQty.setText("");
-                                return true;
-                            }
-                            float qty_f = Float.valueOf(qty_s);
-                            if (qty_f <= 0) {
-                                showToast(mActivity, "总量不正确");
-                                mEdQty.setText("");
-                                return true;
-                            }
-
-                            addDataToDetailList();
-                            mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
-                            changeAllEdTextToEmpty();
-                        }
-                        return true;
-                    case ed_num:
-//                        if (TextUtils.isEmpty(mEdNum.getText().toString())) {
-//                            Toast.makeText(mActivity, "请输入数量", Toast.LENGTH_SHORT).show();
-//                        } else {
-//                            //包码需要输入 有多少包，并计算出总数量
-//                            float num = Float.valueOf(mEdNum.getText().toString());
-//                            if (num > 0) {
-//                                float weight = Float.valueOf(mEdWeight.getText().toString());
-//                                mEdQty.setText(String.valueOf(num * weight));
-////                            if (isAllEdNotNull() && ) {
-//                                addDataToDetailList();
-//                                mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
-//                                changeAllEdTextToEmpty();
-////                            }
-//                            } else {
-//                                Toast.makeText(mActivity, "数量不正确", Toast.LENGTH_SHORT).show();
-//                            }
-//                        }
-                        if (TextUtils.isEmpty(mEdNum.getText().toString())) {
-                            showToast(mActivity, "请输入数量");
+                    case R.id.txtSaleNumber:
+                        if (TextUtils.isEmpty(txtSaleNumber.getText().toString())) {
+                            Utils.showToast(activity, "请输入数量");
                             return true;
                         }
-                        if (!isNumber(mEdNum.getText().toString())) {
-                            showToast(mActivity, "数量不正确");
+                        if (!isNumber(txtSaleNumber.getText().toString())) {
+                            Utils.showToast(activity, "数量不正确");
                             return true;
                         }
                         //包码需要输入 有多少包，并计算出总数量
-                        float num = Float.valueOf(mEdNum.getText().toString());
-                        if (num <= 0) {
-                            mEdNum.setText("");
-                            showToast(mActivity, "数量不正确");
+                        float num = Float.valueOf(txtSaleNumber.getText().toString());
+                        if (num < 0) {
+                            Utils.showToast(activity, "数量不正确");
                             return true;
                         }
 
-                        float weight = Float.valueOf(mEdWeight.getText().toString());
-                        mEdQty.setText(String.valueOf(num * weight));
-//                            if (isAllEdNotNull() && ) {
-                        addDataToDetailList();
-                        mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
-                        changeAllEdTextToEmpty();
+                        float weight = Float.valueOf(txtSaleWeight.getText().toString());
+                        txtSaleTotal.setText(formatDecimal(num * weight));
+                            addDataToDetailList();
+                            txtBarcode.requestFocus();  //如果添加成功将管标跳到“条码”框
+                            changeAllEdTextToEmpty();
+
                         return true;
                 }
             }

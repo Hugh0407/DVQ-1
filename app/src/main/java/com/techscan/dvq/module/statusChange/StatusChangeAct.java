@@ -35,6 +35,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
+import static android.content.ContentValues.TAG;
 import static com.techscan.dvq.common.Utils.showResultDialog;
 import static com.techscan.dvq.common.Utils.showToast;
 
@@ -346,6 +347,8 @@ public class StatusChangeAct extends Activity {
         // 回传数据<----OtherStockInDetail.class，从ShowScanDetail(); 中跳过去
         if (requestCode == 93 && resultCode == 7) {
             taskList = data.getParcelableArrayListExtra("taskList");
+            Log.d(TAG, "onActivityResult: "+taskList);
+            Log.d(TAG, "onActivityResult: "+taskList.toArray());
         }
     }
 

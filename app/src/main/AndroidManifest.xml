@@ -271,6 +271,8 @@
         <!-- </activity> -->
         <activity android:name=".SaleChooseTime"
             />
+        <activity android:name=".saleout.scan.Sale"
+            />
         <activity android:name=".SalesDeliveryDetail" >
         </activity>
         <activity android:name=".module.materialOut.MaterialOutAct">

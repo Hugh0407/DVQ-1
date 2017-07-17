@@ -10,62 +10,27 @@ import android.os.Parcelable;
 
 public class SaleOutGoods implements Parcelable {
     String invCode;
+    String spec;
+    String type;
     String invName;
     String unit;
     String batch;
-    float qty;
-    int num;
     String barcode;
+    float qty;
+    String crowno;
+    String cinvbasdocid;
+    String cinventoryid;
+    String cadvisecalbodyid;
+    String corder_bid;
+    String csaleid;
+    String pk_corp;
+    String number;
     String pk_invbasdoc;
     String pk_invmandoc;
-    String VRECEIVEADDRESS;
-    String CROWNO;
-    String CCUSTBASDOCID;
-    String CINVBASDOCID;
-    String CINVENTORYID;
-    String CRECEEIPTAREAID;
-    String CADVISECALBODYID;
-    String CORDER_BID;
-    String CSALEID;
-    String PK_CORP;
-//    String
+    String vreceiveaddress;
 
     public SaleOutGoods() {
     }
-
-    protected SaleOutGoods(Parcel in) {
-        invCode = in.readString();
-        invName = in.readString();
-        unit = in.readString();
-        batch = in.readString();
-        qty = in.readFloat();
-        num = in.readInt();
-        barcode = in.readString();
-        pk_invbasdoc = in.readString();
-        pk_invmandoc = in.readString();
-        VRECEIVEADDRESS = in.readString();
-        CROWNO = in.readString();
-        CCUSTBASDOCID = in.readString();
-        CINVBASDOCID = in.readString();
-        CINVENTORYID = in.readString();
-        CRECEEIPTAREAID = in.readString();
-        CADVISECALBODYID = in.readString();
-        CORDER_BID = in.readString();
-        CSALEID = in.readString();
-        PK_CORP = in.readString();
-    }
-
-    public static final Creator<SaleOutGoods> CREATOR = new Creator<SaleOutGoods>() {
-        @Override
-        public SaleOutGoods createFromParcel(Parcel in) {
-            return new SaleOutGoods(in);
-        }
-
-        @Override
-        public SaleOutGoods[] newArray(int size) {
-            return new SaleOutGoods[size];
-        }
-    };
 
     public String getInvCode() {
         return invCode;
@@ -73,6 +38,22 @@ public class SaleOutGoods implements Parcelable {
 
     public void setInvCode(String invCode) {
         this.invCode = invCode;
+    }
+
+    public String getSpec() {
+        return spec;
+    }
+
+    public void setSpec(String spec) {
+        this.spec = spec;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getInvName() {
@@ -99,28 +80,115 @@ public class SaleOutGoods implements Parcelable {
         this.batch = batch;
     }
 
-    public float getQty() {
-        return qty;
-    }
-
-    public void setQty(float qty) {
-        this.qty = qty;
-    }
-
-    public int getNum() {
-        return num;
-    }
-
-    public void setNum(int num) {
-        this.num = num;
-    }
-
     public String getBarcode() {
         return barcode;
     }
 
     public void setBarcode(String barcode) {
         this.barcode = barcode;
+    }
+
+    public float getQty() {
+        return qty;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        SaleOutGoods other = (SaleOutGoods) obj;
+        if (pk_invbasdoc == null) {
+            if (other.pk_invbasdoc != null)
+                return false;
+        } else if (!pk_invbasdoc.equals(other.pk_invbasdoc))
+            return false;
+        if (invCode == null) {
+            if (other.invCode != null)
+                return false;
+        } else if (!invCode.equals(other.invCode))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((invCode == null) ? 0 : invCode.hashCode());
+        result = prime * result + ((pk_invbasdoc == null) ? 0 : pk_invbasdoc.hashCode());
+        return result;
+    }
+
+    public void setQty(float qty) {
+        this.qty = qty;
+    }
+
+    public String getCrowno() {
+        return crowno;
+    }
+
+    public void setCrowno(String crowno) {
+        this.crowno = crowno;
+    }
+
+    public String getCinvbasdocid() {
+        return cinvbasdocid;
+    }
+
+    public void setCinvbasdocid(String cinvbasdocid) {
+        this.cinvbasdocid = cinvbasdocid;
+    }
+
+    public String getCinventoryid() {
+        return cinventoryid;
+    }
+
+    public void setCinventoryid(String cinventoryid) {
+        this.cinventoryid = cinventoryid;
+    }
+
+    public String getCadvisecalbodyid() {
+        return cadvisecalbodyid;
+    }
+
+    public void setCadvisecalbodyid(String cadvisecalbodyid) {
+        this.cadvisecalbodyid = cadvisecalbodyid;
+    }
+
+    public String getCorder_bid() {
+        return corder_bid;
+    }
+
+    public void setCorder_bid(String corder_bid) {
+        this.corder_bid = corder_bid;
+    }
+
+    public String getCsaleid() {
+        return csaleid;
+    }
+
+    public void setCsaleid(String csaleid) {
+        this.csaleid = csaleid;
+    }
+
+    public String getPk_corp() {
+        return pk_corp;
+    }
+
+    public void setPk_corp(String pk_corp) {
+        this.pk_corp = pk_corp;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
     }
 
     public String getPk_invbasdoc() {
@@ -139,84 +207,57 @@ public class SaleOutGoods implements Parcelable {
         this.pk_invmandoc = pk_invmandoc;
     }
 
-    public String getVRECEIVEADDRESS() {
-        return VRECEIVEADDRESS;
+    public String getVreceiveaddress() {
+        return vreceiveaddress;
     }
 
-    public void setVRECEIVEADDRESS(String VRECEIVEADDRESS) {
-        this.VRECEIVEADDRESS = VRECEIVEADDRESS;
+    public void setVreceiveaddress(String vreceiveaddress) {
+        this.vreceiveaddress = vreceiveaddress;
     }
 
-    public String getCROWNO() {
-        return CROWNO;
+    protected SaleOutGoods(Parcel in) {
+        invCode = in.readString();
+        spec = in.readString();
+        type = in.readString();
+        invName = in.readString();
+        unit = in.readString();
+        batch = in.readString();
+        barcode = in.readString();
+        qty = in.readFloat();
+        crowno = in.readString();
+        cinvbasdocid = in.readString();
+        cinventoryid = in.readString();
+        cadvisecalbodyid = in.readString();
+        corder_bid = in.readString();
+        csaleid = in.readString();
+        pk_corp = in.readString();
+        number = in.readString();
+        pk_invbasdoc = in.readString();
+        pk_invmandoc = in.readString();
+        vreceiveaddress = in.readString();
     }
 
-    public void setCROWNO(String CROWNO) {
-        this.CROWNO = CROWNO;
-    }
-
-    public String getCCUSTBASDOCID() {
-        return CCUSTBASDOCID;
-    }
-
-    public void setCCUSTBASDOCID(String CCUSTBASDOCID) {
-        this.CCUSTBASDOCID = CCUSTBASDOCID;
-    }
-
-    public String getCINVBASDOCID() {
-        return CINVBASDOCID;
-    }
-
-    public void setCINVBASDOCID(String CINVBASDOCID) {
-        this.CINVBASDOCID = CINVBASDOCID;
-    }
-
-    public String getCINVENTORYID() {
-        return CINVENTORYID;
-    }
-
-    public void setCINVENTORYID(String CINVENTORYID) {
-        this.CINVENTORYID = CINVENTORYID;
-    }
-
-    public String getCRECEEIPTAREAID() {
-        return CRECEEIPTAREAID;
-    }
-
-    public void setCRECEEIPTAREAID(String CRECEEIPTAREAID) {
-        this.CRECEEIPTAREAID = CRECEEIPTAREAID;
-    }
-
-    public String getCADVISECALBODYID() {
-        return CADVISECALBODYID;
-    }
-
-    public void setCADVISECALBODYID(String CADVISECALBODYID) {
-        this.CADVISECALBODYID = CADVISECALBODYID;
-    }
-
-    public String getCORDER_BID() {
-        return CORDER_BID;
-    }
-
-    public void setCORDER_BID(String CORDER_BID) {
-        this.CORDER_BID = CORDER_BID;
-    }
-
-    public String getCSALEID() {
-        return CSALEID;
-    }
-
-    public void setCSALEID(String CSALEID) {
-        this.CSALEID = CSALEID;
-    }
-
-    public String getPK_CORP() {
-        return PK_CORP;
-    }
-
-    public void setPK_CORP(String PK_CORP) {
-        this.PK_CORP = PK_CORP;
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(invCode);
+        dest.writeString(spec);
+        dest.writeString(type);
+        dest.writeString(invName);
+        dest.writeString(unit);
+        dest.writeString(batch);
+        dest.writeString(barcode);
+        dest.writeFloat(qty);
+        dest.writeString(crowno);
+        dest.writeString(cinvbasdocid);
+        dest.writeString(cinventoryid);
+        dest.writeString(cadvisecalbodyid);
+        dest.writeString(corder_bid);
+        dest.writeString(csaleid);
+        dest.writeString(pk_corp);
+        dest.writeString(number);
+        dest.writeString(pk_invbasdoc);
+        dest.writeString(pk_invmandoc);
+        dest.writeString(vreceiveaddress);
     }
 
     @Override
@@ -224,26 +265,15 @@ public class SaleOutGoods implements Parcelable {
         return 0;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(invCode);
-        dest.writeString(invName);
-        dest.writeString(unit);
-        dest.writeString(batch);
-        dest.writeFloat(qty);
-        dest.writeInt(num);
-        dest.writeString(barcode);
-        dest.writeString(pk_invbasdoc);
-        dest.writeString(pk_invmandoc);
-        dest.writeString(VRECEIVEADDRESS);
-        dest.writeString(CROWNO);
-        dest.writeString(CCUSTBASDOCID);
-        dest.writeString(CINVBASDOCID);
-        dest.writeString(CINVENTORYID);
-        dest.writeString(CRECEEIPTAREAID);
-        dest.writeString(CADVISECALBODYID);
-        dest.writeString(CORDER_BID);
-        dest.writeString(CSALEID);
-        dest.writeString(PK_CORP);
-    }
+    public static final Creator<SaleOutGoods> CREATOR = new Creator<SaleOutGoods>() {
+        @Override
+        public SaleOutGoods createFromParcel(Parcel in) {
+            return new SaleOutGoods(in);
+        }
+
+        @Override
+        public SaleOutGoods[] newArray(int size) {
+            return new SaleOutGoods[size];
+        }
+    };
 }
