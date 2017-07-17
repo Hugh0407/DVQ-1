@@ -130,6 +130,7 @@ public class ProductOutScanAct extends Activity {
     private void initView() {
         ActionBar actionBar = this.getActionBar();
         actionBar.setTitle("物品扫描");
+//        mEdNum.setInputType(InputType.TYPE_NULL); // 设置ed不弹出软键盘, 使用物理键输入
         mEdBarCode.setOnKeyListener(mOnKeyListener);
         mEdLot.setOnKeyListener(mOnKeyListener);
         mEdQty.setOnKeyListener(mOnKeyListener);
@@ -215,6 +216,7 @@ public class ProductOutScanAct extends Activity {
             mEdLot.setEnabled(false);
             mEdQty.setEnabled(false);
             mEdNum.setEnabled(true);
+            mEdManual.setEnabled(true);
             mEdNum.setFocusable(true);
             String encoding = barCode[1];
             mEdEncoding.setText(encoding);
@@ -239,6 +241,7 @@ public class ProductOutScanAct extends Activity {
             mEdLot.setEnabled(false);
             mEdQty.setEnabled(false);
             mEdNum.setEnabled(false);
+            mEdManual.setEnabled(true);
             mEdNum.setFocusable(false);
             mEdQty.setFocusable(false);
             String encoding = barCode[1];
