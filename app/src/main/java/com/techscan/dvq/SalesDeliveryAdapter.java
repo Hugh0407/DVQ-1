@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.techscan.dvq.R;
+
 import java.util.List;
 import java.util.Map;
 

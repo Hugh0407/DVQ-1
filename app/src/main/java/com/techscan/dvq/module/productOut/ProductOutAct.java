@@ -577,8 +577,7 @@ public class ProductOutAct extends Activity {
         progressDialog.setTitle("保存单据");
         progressDialog.setMessage("正在保存，请等待...");
         progressDialog.show();
-        new Thread(new Runnable() {
-
+        Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -592,9 +591,9 @@ public class ProductOutAct extends Activity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-
             }
-        }).start();
+        });
+        thread.start();
     }
 
     /**

@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/name"
+        android:id="@+id/txtInvName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="存货名称"
@@ -32,7 +32,7 @@
                 android:textSize="16sp"/>
 
             <TextView
-                android:id="@+id/encoding"
+                android:id="@+id/txtInvCode"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -62,7 +62,7 @@
                 android:textSize="16sp"/>
 
             <TextView
-                android:id="@+id/spec"
+                android:id="@+id/txtSpec"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
@@ -85,7 +85,7 @@
                 android:textSize="16sp"/>
 
             <TextView
-                android:id="@+id/type"
+                android:id="@+id/txtType"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
@@ -115,7 +115,7 @@
                 android:textSize="16sp"/>
 
             <TextView
-                android:id="@+id/lot"
+                android:id="@+id/txtBatch"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
@@ -138,7 +138,7 @@
                 android:textSize="16sp"/>
 
             <TextView
-                android:id="@+id/qty"
+                android:id="@+id/txtQty"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
