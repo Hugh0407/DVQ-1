@@ -107,10 +107,6 @@ public class SalesDeliveryDetail extends Activity {
         actionBar.setTitle("销售出库扫描明细");
         initView();
         Intent intent = this.getIntent();
-//        BillCode = intent.getStringExtra("BillCode");
-//        PK_CORP = intent.getStringExtra("PK_CORP");
-//        CSALEID = intent.getStringExtra("CSALEID");
-//        ScanType = intent.getStringExtra("ScanType");
         try {
             ScanedBarcode = intent.getStringArrayListExtra("ScanedBarcode");
             BillCode = intent.getStringExtra("BillCode");
@@ -121,7 +117,6 @@ public class SalesDeliveryDetail extends Activity {
             temp = intent.getStringExtra("jsbody");
             jsBody = new JSONObject(temp);
             Log.d(TAG, "onCreate: " + jsBody.toString());
-
             temp = intent.getStringExtra("jsserino");
             jsSerino = new JSONObject(temp);
             Log.d(TAG, "onCreate: " + jsSerino.toString());
@@ -136,7 +131,6 @@ public class SalesDeliveryDetail extends Activity {
         } catch (IOException e) {
             e.printStackTrace();
             Toast.makeText(SalesDeliveryDetail.this, e.getMessage(), Toast.LENGTH_LONG).show();
-            // ADD CAIXY TEST START
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             e.printStackTrace();
         }
@@ -171,7 +165,49 @@ public class SalesDeliveryDetail extends Activity {
                 + " | " + "未扫" + (number - ntotaloutinvnum));
 
     }
+    @OnClick({R.id.btnTask, R.id.btnDetail, R.id.btnReturn})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.btnTask:
+                try {
+                    ShowTaskDig();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+                }
+                break;
+            case R.id.btnDetail:
+                try {
+                    ShowDetailDig();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case R.id.btnReturn:
+                if (jsSerino != null) {
+                    Log.d(TAG, "OOO: " + jsSerino.toString());
+                    try {
+                        Intent intent = new Intent();
+                        intent.putExtra("body", jsBody.toString());
+                        Log.d("TAG", "ReturnScanedbody: " + jsBody);
+                        intent.putExtra("serino", jsSerino.toString());
+                        Log.d(TAG, "Return: " + jsSerino.toString());
+                        intent.putStringArrayListExtra("ScanedBarcode", ScanedBarcode);
+                        SalesDeliveryDetail.this.setResult(24, intent);
+//                        SalesDeliveryDetail.this.finish();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
+                } else {
+                    if (jsSerino==null) {
+                        Toast.makeText(SalesDeliveryDetail.this, "没有扫描到数据", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                finish();
+                break;
+        }
+    }
     private void initView() {
         txtBarcode.setOnKeyListener(myTxtListener);
         txtSaleNumber.setOnKeyListener(myTxtListener);
@@ -266,7 +302,7 @@ public class SalesDeliveryDetail extends Activity {
             switch (ed.getId()) {
                 case R.id.txtSaleNumber:
                     if (TextUtils.isEmpty(txtSaleNumber.getText())) {
-//                        txtSaleNumber.setText("");
+                        txtSaleTotal.setText("");
                         return;
                     }
                     if (!isNumber(txtSaleNumber.getText().toString())) {
@@ -703,55 +739,7 @@ public class SalesDeliveryDetail extends Activity {
 
 
 
-    @OnClick({R.id.btnTask, R.id.btnDetail, R.id.btnReturn})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.btnTask:
-                try {
-                    ShowTaskDig();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                }
-                break;
-            case R.id.btnDetail:
-                try {
-                    ShowDetailDig();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                break;
-            case R.id.btnReturn:
-                if (jsSerino==null){
-                    Toast.makeText(SalesDeliveryDetail.this, "qunimade", Toast.LENGTH_SHORT).show();
-                }
-                if (jsSerino != null) {
-                    Log.d(TAG, "OOO: " + jsSerino.toString());
-                    try {
-                        Intent intent = new Intent();
-                        intent.putExtra("body", jsBody.toString());
-                        Log.d("TAG", "ReturnScanedbody: " + jsBody);
-                        intent.putExtra("serino", jsSerino.toString());
-                        Log.d(TAG, "Return: " + jsSerino.toString());
-                        intent.putStringArrayListExtra("ScanedBarcode", ScanedBarcode);
-                        SalesDeliveryDetail.this.setResult(24, intent);
-//                        SalesDeliveryDetail.this.finish();
 
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                } else {
-                    if (jsSerino==null) {
-                        Toast.makeText(SalesDeliveryDetail.this, "没有扫描到数据", Toast.LENGTH_SHORT).show();
-//                        Log.d(TAG, "OOO: " + jsSerino.toString());
-                    }
-
-                }
-                finish();
-                break;
-        }
-    }
 
     private void ShowTaskDig() throws JSONException {
         lstTaskBody = new ArrayList<Map<String, Object>>();
@@ -854,7 +842,6 @@ public class SalesDeliveryDetail extends Activity {
                                                    View parent, int position, long arg3) {
                         // TODO Auto-generated method stub
                         // When clicked, show a toast with the TextView text
-
                         ConfirmDelItem(position);
                         IniDetail();
                         return false;
