@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class StorgListACt extends Activity {
+public class StorgListAct extends Activity {
 
     Button btnBack = null;
     public List<Map<String, Object>> mData;
@@ -96,8 +96,8 @@ public class StorgListACt extends Activity {
             intent.putExtra("pk_areacl", pk_areacl);// 把返回数据存入Intent
             intent.putExtra("bodyname", bodyname);// 把返回数据存入Intent
             intent.putExtra("pk_calbody", pk_calbody);// 把返回数据存入Intent
-            StorgListACt.this.setResult(6, intent);// 设置回传数据。resultCode值是1，这个值在主窗口将用来区分回传数据的来源，以做不同的处理
-            StorgListACt.this.finish();// 关闭子窗口ChildActivity
+            StorgListAct.this.setResult(6, intent);// 设置回传数据。resultCode值是1，这个值在主窗口将用来区分回传数据的来源，以做不同的处理
+            StorgListAct.this.finish();// 关闭子窗口ChildActivity
         }
     };
 

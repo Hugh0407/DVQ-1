@@ -30,7 +30,7 @@ import com.techscan.dvq.common.RequestThread;
 import com.techscan.dvq.common.SaveThread;
 import com.techscan.dvq.common.Utils;
 import com.techscan.dvq.module.materialOut.DepartmentListAct;
-import com.techscan.dvq.module.materialOut.StorgListACt;
+import com.techscan.dvq.module.materialOut.StorgListAct;
 import com.techscan.dvq.module.productOut.scan.ProductOutScanAct;
 
 import org.apache.http.ParseException;
@@ -264,7 +264,7 @@ public class ProductOutAct extends Activity {
             mOrganization.requestFocus();
             checkInfo.put("Warehouse", warehouseName);
         }
-        //材料出库库存组织的回传数据 <----StorgListACt.class
+        //材料出库库存组织的回传数据 <----StorgListAct.class
         if (requestCode == 94 && resultCode == 6) {
             String pk_areacl = data.getStringExtra("pk_areacl");
             String bodyname = data.getStringExtra("bodyname");
@@ -358,7 +358,7 @@ public class ProductOutAct extends Activity {
                             JSONArray val = storg.getJSONArray("STOrg");
                             JSONObject temp = new JSONObject();
                             temp.put("STOrg", val);
-                            Intent StorgList = new Intent(mActivity, StorgListACt.class);
+                            Intent StorgList = new Intent(mActivity, StorgListAct.class);
                             StorgList.putExtra("STOrg", temp.toString());
                             startActivityForResult(StorgList, 94);
                         }
