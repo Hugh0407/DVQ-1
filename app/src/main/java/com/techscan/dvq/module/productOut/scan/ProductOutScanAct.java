@@ -26,6 +26,7 @@ import com.techscan.dvq.MainLogin;
 import com.techscan.dvq.R;
 import com.techscan.dvq.bean.Goods;
 import com.techscan.dvq.common.RequestThread;
+import com.techscan.dvq.common.SoundHelper;
 import com.techscan.dvq.module.materialOut.MyBaseAdapter;
 
 import org.json.JSONArray;
@@ -81,6 +82,7 @@ public class ProductOutScanAct extends Activity {
     public static List<Goods> detailList = new ArrayList<Goods>();
     public static List<Goods> ovList = new ArrayList<Goods>();
     Activity mActivity;
+    boolean isBaoBarCode = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,6 +156,10 @@ public class ProductOutScanAct extends Activity {
                     if (json != null) {
                         try {
                             setInvBaseToUI(json);
+                            if (isBaoBarCode) {
+                                addDataToDetailList();
+                                isBaoBarCode = false;
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -253,6 +259,7 @@ public class ProductOutScanAct extends Activity {
             double mEdNum = Double.valueOf(barCode[6]);
             mEdQty.setText(formatDecimal(weight * mEdNum));
             getInvBaseInfo(encoding);
+            isBaoBarCode = true;
             return true;
         } else {
             showToast(mActivity, "条码有误重新输入");
@@ -313,6 +320,8 @@ public class ProductOutScanAct extends Activity {
         goods.setManual(mEdManual.getText().toString());
         detailList.add(goods);
         addDataToOvList();
+        SoundHelper.playOK();
+
         return true;
     }
 

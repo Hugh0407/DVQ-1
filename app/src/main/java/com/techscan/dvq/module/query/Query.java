@@ -17,6 +17,7 @@ import android.widget.EditText;
 import com.techscan.dvq.MainLogin;
 import com.techscan.dvq.R;
 import com.techscan.dvq.common.RequestThread;
+import com.techscan.dvq.common.SoundHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -100,12 +101,13 @@ public class Query extends Activity {
 
                     try {
                         if (json.getBoolean("Status")) {
-                            Log.d("TAG", "'json: ");
-                            try {
-                                setInvBaseToUI(json);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
+                            SoundHelper.playOK();
+                            Log.d("TAG", "'json: " + json.toString());
+//                            try {
+//                                setInvBaseToUI(json);
+//                            } catch (JSONException e) {
+//                                e.printStackTrace();
+//                            }
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -226,7 +228,7 @@ public class Query extends Activity {
                 map.put("invcode", tempJso.getString("invcode"));
                 map.put("invname", tempJso.getString("invname"));
                 map.put("pk_cubasdoc", tempJso.getString("pk_cubasdoc"));
-                map.put("vuserdef4", tempJso.getString("vuserdef4"));   //海关手册号
+                map.put("vfree4", tempJso.getString("vfree4"));   //海关手册号
                 map.put("invtype", tempJso.getString("invtype"));   //型号
                 map.put("invspec", tempJso.getString("invspec"));   //规格
                 map.put("dbilldate", tempJso.getString("dbilldate"));
@@ -239,7 +241,7 @@ public class Query extends Activity {
                 mEdLot.setText(map.get("vbatchcode").toString());
                 mEdSupplier.setText(map.get("custname").toString());
 //                mEdShelfLife.setText(map.get("createtime").toString());
-                String s = map.get("vuserdef4").toString();
+                String s = map.get("vfree4").toString();
                 if (s.equals("null")) {
                     mEdManual.setText("");
                 } else {
