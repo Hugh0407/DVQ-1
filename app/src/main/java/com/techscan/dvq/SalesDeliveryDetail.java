@@ -252,7 +252,7 @@ public class SalesDeliveryDetail extends Activity {
 //                    break;
                 case R.id.txtSaleNumber:
                     if (TextUtils.isEmpty(txtSaleNumber.getText())) {
-//                        txtSaleNumber.setText("");
+                        txtSaleTotal.setText("");
                         return;
                     }
                     if (!isNumber(txtSaleNumber.getText().toString())) {
@@ -732,7 +732,6 @@ public class SalesDeliveryDetail extends Activity {
                 }
                 break;
             case R.id.btnReturn:
-                Log.d(TAG, "OOO: " + jsSerino.toString());
                 if (jsSerino != null) {
                     try {
                         Intent intent = new Intent();

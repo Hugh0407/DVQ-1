@@ -43,6 +43,9 @@ public class SaleChooseTime extends Activity {
     String sEndDate = "";
     String sBillCodes = "";
     String sBeginDate = "";
+
+    String months;
+    String dayys;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -249,8 +252,18 @@ public class SaleChooseTime extends Activity {
           txtEndDate.setOnFocusChangeListener(myFocusListener);
           txtBillCode.setOnKeyListener(mOnKeyListener);
           txtBeginDate.setOnKeyListener(mOnKeyListener);
-
-
+        if (month<9){
+            months = "0"+(month+1);
+        }else{
+            months = (month+1)+"";
+        }
+        if (day<10){
+            dayys = "0"+(day);
+        }else{
+            dayys = day+"";
+        }
+          txtBeginDate.setText((year+"")+"-"+months+"-"+dayys);
+          txtEndDate.setText((year+"")+"-"+months+"-"+dayys);
            }
 
 
