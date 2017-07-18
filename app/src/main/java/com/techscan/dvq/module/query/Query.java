@@ -5,6 +5,9 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -46,12 +49,12 @@ public class Query extends Activity {
     EditText mEdManual;
     @InjectView(R.id.ed_in_time)
     EditText mEdInTime;
+    @InjectView(R.id.ed_total_num)
+    EditText mEdTotalNum;
     @InjectView(R.id.btn_back)
     Button mBtnBack;
 
     Activity mActivity;
-    @InjectView(R.id.ed_total_num)
-    EditText mEdTotalNum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +84,7 @@ public class Query extends Activity {
         ActionBar actionBar = this.getActionBar();
         actionBar.setTitle("查询扫描");
         mEdBarCode.setOnKeyListener(new MyOnKeyListener(mEdBarCode));
+        mEdBarCode.addTextChangedListener(new CustomTextWatcher(mEdBarCode));
     }
 
     Handler mHandler = new Handler() {
@@ -90,19 +94,24 @@ public class Query extends Activity {
             switch (msg.what) {
                 case 1:
                     JSONObject json = (JSONObject) msg.obj;
-                    if (json != null) {
-                        Log.d("TAG", "'json: ");
-                        try {
-                            setInvBaseToUI(json);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    } else {
+                    if (null == json) {
                         return;
+                    }
+
+                    try {
+                        if (json.getBoolean("Status")) {
+                            Log.d("TAG", "'json: ");
+                            try {
+                                setInvBaseToUI(json);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
                     break;
                 default:
-
                     break;
             }
         }
@@ -119,6 +128,7 @@ public class Query extends Activity {
         String[] barCode = Bar.split("\\|");
         if (barCode.length == 6 && barCode[0].equals("C")) {   //C|SKU|LOT|TAX|QTY|SN
             mEdLot.setText(barCode[2]);
+            mEdTotalNum.setText(barCode[3]);
             String encoding = barCode[1];
             String batchCode = barCode[2];
             getInvBaseInfoByBarcode(encoding, batchCode, MainLogin.objLog.STOrgCode);
@@ -135,30 +145,31 @@ public class Query extends Activity {
         } else if (barCode.length == 9 && barCode[0].equals("P")) {// 包码 P|SKU|LOT|WW|TAX|QTY|CW|ONLY|SN    9位
             String encoding = barCode[1];
 //            mEdEncoding.setText(encoding);
-//            mEdLot.setText(barCode[2]);
+            mEdLot.setText(barCode[2]);
 //            mEdWeight.setText(barCode[5]);
 //            mEdQty.setText("");
 //            mEdNum.setText("1");
 //            mEdNum.requestFocus();  //包码扫描后光标跳到“数量”,输入数量,添加到列表
 //            mEdNum.setSelection(mEdNum.length());   //将光标移动到最后的位置
             String batchCode = barCode[2];
+            mEdTotalNum.setText(barCode[5]);
             getInvBaseInfoByBarcode(encoding, batchCode, MainLogin.objLog.STOrgCode);
             return true;
         } else if (barCode.length == 10 && barCode[0].equals("TP")) {//盘码TP|SKU|LOT|WW|TAX|QTY|NUM|CW|ONLY|SN
 
             String encoding = barCode[1];
 //            mEdEncoding.setText(encoding);
-//            mEdLot.setText(barCode[2]);
+            mEdLot.setText(barCode[2]);
 //            mEdWeight.setText(barCode[5]);
 //            mEdNum.setText(barCode[6]);
-//            double weight = Double.valueOf(barCode[5]);
-//            double mEdNum = Double.valueOf(barCode[6]);
-//            mEdQty.setText(formatDecimal(weight * mEdNum));
+            double weight = Double.valueOf(barCode[5]);
+            double mEdNum = Double.valueOf(barCode[6]);
+            mEdTotalNum.setText(formatDecimal(weight * mEdNum));
             String batchCode = barCode[2];
             getInvBaseInfoByBarcode(encoding, batchCode, MainLogin.objLog.STOrgCode);
             return true;
         } else {
-            showToast(mActivity, "条码有误重新输入");
+            showToast(mActivity, "条码有误,重新输入");
             return false;
         }
     }
@@ -167,6 +178,14 @@ public class Query extends Activity {
      * 清空所有的Edtext
      */
     private void changeAllEdTextToEmpty() {
+        mEdName.setText("");
+        mEdSpec.setText("");
+        mEdLot.setText("");
+        mEdTotalNum.setText("");
+        mEdSupplier.setText("");
+        mEdInTime.setText("");
+        mEdShelfLife.setText("");
+        mEdManual.setText("");
 
     }
 
@@ -211,7 +230,6 @@ public class Query extends Activity {
                 map.put("invtype", tempJso.getString("invtype"));   //型号
                 map.put("invspec", tempJso.getString("invspec"));   //规格
                 map.put("dbilldate", tempJso.getString("dbilldate"));
-                map.put("pk_cumandoc", tempJso.getString("pk_cumandoc"));
                 map.put("vbatchcode", tempJso.getString("vbatchcode")); //批次
                 map.put("custname", tempJso.getString("custname"));
             }
@@ -219,7 +237,7 @@ public class Query extends Activity {
                 mEdName.setText(map.get("invname").toString());
                 mEdSpec.setText(map.get("invspec").toString());
                 mEdLot.setText(map.get("vbatchcode").toString());
-//                mEdSupplier.setText(map.get("createtime").toString());
+                mEdSupplier.setText(map.get("custname").toString());
 //                mEdShelfLife.setText(map.get("createtime").toString());
                 String s = map.get("vuserdef4").toString();
                 if (s.equals("null")) {
@@ -232,7 +250,7 @@ public class Query extends Activity {
         }
     }
 
-    class MyOnKeyListener implements View.OnKeyListener {
+    private class MyOnKeyListener implements View.OnKeyListener {
         EditText ed;
 
         public MyOnKeyListener(EditText ed) {
@@ -251,4 +269,39 @@ public class Query extends Activity {
             return false;
         }
     }
+
+    /**
+     * mEdBarCode（条码）的监听
+     */
+    private class CustomTextWatcher implements TextWatcher {
+        EditText ed;
+
+        public CustomTextWatcher(EditText ed) {
+            this.ed = ed;
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            switch (ed.getId()) {
+                case R.id.ed_bar_code:
+                    if (TextUtils.isEmpty(mEdBarCode.getText().toString())) {
+                        changeAllEdTextToEmpty();
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
 }
