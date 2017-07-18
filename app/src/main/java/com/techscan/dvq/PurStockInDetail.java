@@ -536,9 +536,14 @@ public class PurStockInDetail extends Activity {
                             return false;
                         }
                     }
+                    Double ldTotal = 0.0;
+                    if(bar.BarcodeType.equals("C") ) {
+                        ldTotal = (Double) m_mapInvBaseInfo.get("quantity") * (Integer)m_mapInvBaseInfo.get("number");
+                        txtPurTotal.setText(ldTotal.toString());
+                    }
 
-                    if(bar.BarcodeType.equals("C") || bar.BarcodeType.equals("TC")) {
-                        Double ldTotal = (Double) m_mapInvBaseInfo.get("quantity") * (Integer)m_mapInvBaseInfo.get("number");
+                    if(bar.BarcodeType.equals("TC") ) {
+                        ldTotal = (Double) m_mapInvBaseInfo.get("quantity");
                         txtPurTotal.setText(ldTotal.toString());
                     }
 
