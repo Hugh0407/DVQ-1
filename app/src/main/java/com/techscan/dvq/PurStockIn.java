@@ -642,32 +642,47 @@ public class PurStockIn extends Activity {
 
 					for (int i = 0; i < bodys.length(); i++) {
 
-						if(arraysSerino.getJSONObject(j).getString("invcode").toLowerCase().equals(
-								bodys.getJSONObject(i).getString("invcode")))
-						//Double ldDoneQty = 0.0;
+						if(arraysSerino.getJSONObject(j).getString("invcode").toUpperCase().equals(
+								bodys.getJSONObject(i).getString("invcode").toUpperCase()))
 						{
-							JSONObject obj = new JSONObject();
-							obj.put("CINVBASID", bodys.getJSONObject(i).getString("cbaseid"));
-							obj.put("CINVENTORYID", bodys.getJSONObject(i).getString("cmangid"));
-							obj.put("CINVCODE", bodys.getJSONObject(i).getString("invcode"));
-							obj.put("BLOTMGT", "1");        //是否批次管理
-//						if (!bodys.getJSONObject(i).getString("nconfirmnum").toLowerCase().equals(null) &&
-//								!bodys.getJSONObject(i).getString("nconfirmnum").isEmpty())
-//							ldDoneQty = bodys.getJSONObject(i).getDouble("nconfirmnum");
-							obj.put("NINNUM", arraysSerino.getJSONObject(j).getDouble("box"));                    //数量
-							obj.put("NORDERNUM", bodys.getJSONObject(i).getDouble("nordernum"));
-							obj.put("PK_BODYCALBODY", PK_CALBODY);
-							obj.put("VBATCHCODE", arraysSerino.getJSONObject(j).getString("batch"));
-							obj.put("SOURCCEBILLHID", bodys.getJSONObject(i).getString("corderid"));
-							obj.put("SOURCCEBILLBID", bodys.getJSONObject(i).getString("corder_bid"));
-							obj.put("VENDORID", heads.getJSONObject(0).getString("cvendormangid"));
-							obj.put("VENDORBASID", heads.getJSONObject(0).getString("cvendorbaseid"));
-							obj.put("NPRICE", "0.00");
-							obj.put("VSOURCEBILLCODE", m_BillNo);
-							obj.put("VSOURCEBILLROWNO", bodys.getJSONObject(i).getString("crowno"));
-							//jsDBBody.put(y + "", obj);
-							arraySaveBody.put(obj);
-							y++;
+							Double ldDoneQty = 0.0;
+							boolean lbPutFlag = true;
+							for(int k=0; k < arraySaveBody.length(); k++){
+								if(arraysSerino.getJSONObject(j).getString("batch").toUpperCase().equals(
+										arraySaveBody.getJSONObject(k).getString("VBATCHCODE").toUpperCase())){
+									ldDoneQty = ldDoneQty + arraysSerino.getJSONObject(j).getDouble("box");
+									lbPutFlag = false;
+									break;
+								}
+								else
+									lbPutFlag = true;
+							}
+							if(lbPutFlag){
+								JSONObject obj = new JSONObject();
+								obj.put("CINVBASID", bodys.getJSONObject(i).getString("cbaseid"));
+								obj.put("CINVENTORYID", bodys.getJSONObject(i).getString("cmangid"));
+								obj.put("CINVCODE", bodys.getJSONObject(i).getString("invcode"));
+								obj.put("BLOTMGT", "1");        //是否批次管理
+	//						if (!bodys.getJSONObject(i).getString("nconfirmnum").toLowerCase().equals(null) &&
+	//								!bodys.getJSONObject(i).getString("nconfirmnum").isEmpty())
+	//							ldDoneQty = bodys.getJSONObject(i).getDouble("nconfirmnum");
+								obj.put("NINNUM", arraysSerino.getJSONObject(j).getDouble("box"));                    //数量
+								obj.put("NORDERNUM", bodys.getJSONObject(i).getDouble("nordernum"));
+								obj.put("PK_BODYCALBODY", PK_CALBODY);
+								obj.put("VBATCHCODE", arraysSerino.getJSONObject(j).getString("batch"));
+								obj.put("SOURCCEBILLHID", bodys.getJSONObject(i).getString("corderid"));
+								obj.put("SOURCCEBILLBID", bodys.getJSONObject(i).getString("corder_bid"));
+								obj.put("VENDORID", heads.getJSONObject(0).getString("cvendormangid"));
+								obj.put("VENDORBASID", heads.getJSONObject(0).getString("cvendorbaseid"));
+								obj.put("NPRICE", "0.00");
+								obj.put("VSOURCEBILLCODE", m_BillNo);
+								obj.put("VSOURCEBILLROWNO", bodys.getJSONObject(i).getString("crowno"));
+								//jsDBBody.put(y + "", obj);
+								arraySaveBody.put(obj);
+								y++;
+							}
+							else
+								arraysSerino.getJSONObject(j).put("NINNUM", ldDoneQty);
 						}
 					}
 				}
@@ -958,12 +973,14 @@ public class PurStockIn extends Activity {
 			//ADD CAIXY TEST END
 			return;
 		}
-
+		Common.ShowLoading(MyContext);
 		if (SavePurOrder() == true) {
 			//SaveOk();
+			Toast.makeText(this, "采购入库单保存成功", Toast.LENGTH_LONG).show();
+
 			IniActivyMemor();
 		}
-
+		Common.cancelLoading();
 //		Log.d("TAG", "NoScanSave: " + NoScanSave);
 //
 //		if (NoScanSave == true) {
@@ -1616,7 +1633,11 @@ public class PurStockIn extends Activity {
 							txtDepartment.requestFocus();
 							return;
 						}
-
+						if(jsSerino == null) {
+							Toast.makeText(PurStockIn.this, "没有扫描详细不能保存" ,Toast.LENGTH_LONG).show();
+							MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+							return;
+						}
 						Save1();
 					} 
 					catch (JSONException e) 
@@ -1988,6 +2009,11 @@ public class PurStockIn extends Activity {
 //		SelectButton=new AlertDialog.Builder(this).setTitle(R.string.QueRenTuiChu).setSingleChoiceItems(
 //				ExitNameList, -1, buttonOnClick).setPositiveButton(R.string.QueRen,
 //				buttonOnClick).setNegativeButton(R.string.QuXiao, buttonOnClick).show();
+		if(jsSerino == null) {
+			IniActivyMemor();
+			finish();
+		}
+		else{
 			AlertDialog.Builder bulider =
 					new AlertDialog.Builder(this).setTitle(R.string.XunWen).setMessage("数据未保存是否退出");
 			bulider.setNegativeButton(R.string.QuXiao, null);
@@ -1999,6 +2025,7 @@ public class PurStockIn extends Activity {
 					finish();
 				}
 			}).create().show();
+		}
 	}
 
     

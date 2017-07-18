@@ -25,6 +25,7 @@ import com.techscan.dvq.R.id;
 import com.techscan.dvq.common.Utils;
 import com.techscan.dvq.module.materialOut.MaterialOutAct;
 import com.techscan.dvq.module.productOut.ProductOutAct;
+import com.techscan.dvq.module.query.Query;
 import com.techscan.dvq.module.statusChange.StatusChangeAct;
 
 import java.io.File;
@@ -131,7 +132,7 @@ public class MainMenu extends Activity {
         RadioGroupType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                switch (i){
+                switch (i) {
                     case id.radioButton1:
                         setMenuItem(1);
                         break;
@@ -284,12 +285,12 @@ public class MainMenu extends Activity {
 
     }
 
-    private  void setMenuItem(int irbType){
+    private void setMenuItem(int irbType) {
         ArrayList<HashMap<String, Object>> lstImageItem = new ArrayList<HashMap<String, Object>>();
 
         HashMap<String, Object> map;
 
-        switch(irbType){
+        switch (irbType) {
             case 1:
                 map = new HashMap<String, Object>();
                 map.put("ItemImage", R.drawable.icon_rk_cg);
@@ -315,9 +316,6 @@ public class MainMenu extends Activity {
                 map = new HashMap<String, Object>();
                 map.put("ItemImage", R.drawable.icon_ck_xs);
                 map.put("ItemText", "销售出库");
-                lstImageItem.add(map);
-
-                map = new HashMap<String, Object>();
                 lstImageItem.add(map);
 
                 map = new HashMap<String, Object>();
@@ -353,6 +351,14 @@ public class MainMenu extends Activity {
                 map = new HashMap<String, Object>();
                 map.put("ItemImage", R.drawable.icon_xt_zh);
                 map.put("ItemText", "形态转换");
+                lstImageItem.add(map);
+                //*********************************************************************
+
+                //*********************************************************************
+                // by liuya 时间07.17
+                map = new HashMap<String, Object>();
+                map.put("ItemImage", R.drawable.ic_launcher);
+                map.put("ItemText", "查询");
                 lstImageItem.add(map);
                 //*********************************************************************
 
@@ -459,18 +465,16 @@ public class MainMenu extends Activity {
 //                    break;
 //				ShowSearchBillActivity();
 //				break;
-                    if(RadioGroupType.getCheckedRadioButtonId() == id.radioButton1){
+                    if (RadioGroupType.getCheckedRadioButtonId() == id.radioButton1) {
                         //采购入库
                         ShowPurIn();
-                    }
-                    else if(RadioGroupType.getCheckedRadioButtonId() == id.radioButton2){
+                    } else if (RadioGroupType.getCheckedRadioButtonId() == id.radioButton2) {
                         //采购退库
                         Utils.showToast(MainMenu.this, "采购退库待加");
-                    }
-                    else if(RadioGroupType.getCheckedRadioButtonId() == id.radioButton3){
+                    } else if (RadioGroupType.getCheckedRadioButtonId() == id.radioButton3) {
                         //*********************************************************************
                         //形态转换模块  时间06.28  by liuya
-                            ShowStatusChange();
+                        ShowStatusChange();
                         //*********************************************************************
                     }
                     break;
@@ -488,31 +492,27 @@ public class MainMenu extends Activity {
 //                    break;
 //				ShowSearchMain();
 //				break;
-                    if(RadioGroupType.getCheckedRadioButtonId() == id.radioButton1){
+                    if (RadioGroupType.getCheckedRadioButtonId() == id.radioButton1) {
                         //*********************************************************************
                         //材料出库模块  时间06.19  by liuya
                         ShowMaterialIn();
                         //*********************************************************************
-                    }
-                    else if(RadioGroupType.getCheckedRadioButtonId() == id.radioButton2){
+                    } else if (RadioGroupType.getCheckedRadioButtonId() == id.radioButton2) {
                         //材料退
                         Utils.showToast(MainMenu.this, "材料退库待加");
-                    }
-                    else if(RadioGroupType.getCheckedRadioButtonId() == id.radioButton3){
-
+                    } else if (RadioGroupType.getCheckedRadioButtonId() == id.radioButton3) {
+                        ShowQuery();
                     }
                     break;
                 case 2:
-                    if(RadioGroupType.getCheckedRadioButtonId() == id.radioButton1){
+                    if (RadioGroupType.getCheckedRadioButtonId() == id.radioButton1) {
                         //*********************************************************************
                         //成品入库模块  时间06.27  by liuya
                         ShowProductOut();
                         //*********************************************************************
-                    }
-                    else if(RadioGroupType.getCheckedRadioButtonId() == id.radioButton2){
+                    } else if (RadioGroupType.getCheckedRadioButtonId() == id.radioButton2) {
 
-                    }
-                    else if(RadioGroupType.getCheckedRadioButtonId() == id.radioButton3){
+                    } else if (RadioGroupType.getCheckedRadioButtonId() == id.radioButton3) {
                     }
                     break;
 //                    ShowMaterialIn();
@@ -529,14 +529,12 @@ public class MainMenu extends Activity {
                 case 3:
 //                    Utils.showToast(MainMenu.this, "待加");
 //                    break;
-                    if(RadioGroupType.getCheckedRadioButtonId() == id.radioButton1){
+                    if (RadioGroupType.getCheckedRadioButtonId() == id.radioButton1) {
                         //销售出库
                         ShowSaleOut();
-                    }
-                    else if(RadioGroupType.getCheckedRadioButtonId() == id.radioButton2){
+                    } else if (RadioGroupType.getCheckedRadioButtonId() == id.radioButton2) {
 
-                    }
-                    else if(RadioGroupType.getCheckedRadioButtonId() == id.radioButton3){
+                    } else if (RadioGroupType.getCheckedRadioButtonId() == id.radioButton3) {
                     }
                     break;
 
@@ -666,13 +664,13 @@ public class MainMenu extends Activity {
         return true;
     }
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.menu_exit) {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.menu_exit) {
             //
             AlertDialog.Builder bulider = new AlertDialog.Builder(MainMenu.this).setTitle(R.string.XunWen).setMessage("是否确定退出系统");
             bulider.setNegativeButton(R.string.QuXiao, null);
@@ -688,10 +686,10 @@ public class MainMenu extends Activity {
                 }
             }).create().show();
             return true;
-		}
+        }
 
-		return super.onOptionsItemSelected(item);
-	}
+        return super.onOptionsItemSelected(item);
+    }
 
     private void Changeline() {
 
@@ -833,6 +831,14 @@ public class MainMenu extends Activity {
         ShowLoading();
         Intent MaterialOut = new Intent(this, MaterialOutAct.class);
         startActivity(MaterialOut);
+        cancelLoading();
+    }
+
+    // 显示材料出库画面
+    private void ShowQuery() {
+        ShowLoading();
+        Intent query = new Intent(this, Query.class);
+        startActivity(query);
         cancelLoading();
     }
 

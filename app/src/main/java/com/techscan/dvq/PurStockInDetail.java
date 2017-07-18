@@ -523,7 +523,8 @@ public class PurStockInDetail extends Activity {
                     if(!temp.getString("nconfirmnum").isEmpty() &&
                             !temp.getString("nconfirmnum").toLowerCase().equals("null")) {
                         doneqty = temp.getDouble("nconfirmnum");
-                        if (doneqty  >= temp.getInt("nordernum")) {
+//                        if (doneqty  >= temp.getInt("nordernum")) {
+                        if (doneqty  >= temp.getInt("tasknum")) {
                             Toast.makeText(this, "这个存货已经超过应收数量了,不允许收!",
                                     Toast.LENGTH_LONG).show();
                             // ADD CAIXY TEST START
@@ -587,8 +588,9 @@ public class PurStockInDetail extends Activity {
             ishouldinnum = 0.0;
             iinnum = 0.0;
             for (int i = 0; i < arrays.length(); i++) {
-                String sshouldinnum = ((JSONObject) (arrays.get(i)))
-                        .getString("nordernum");
+//                String sshouldinnum = ((JSONObject) (arrays.get(i)))
+//                        .getString("nordernum");
+                String sshouldinnum = ((JSONObject) (arrays.get(i))).getString("tasknum");
                 String sinnum = ((JSONObject) (arrays.get(i)))
                         .getString("nconfirmnum");
 
@@ -1303,8 +1305,9 @@ public class PurStockInDetail extends Activity {
                             ishouldinnum = 0.0;
                             iinnum = 0.0;
                             for (int i = 0; i < arraysCount.length(); i++) {
-                                String sshouldinnum = ((JSONObject) (arraysCount
-                                        .get(i))).getString("nordernum");
+//                                String sshouldinnum = ((JSONObject) (arraysCount
+//                                        .get(i))).getString("nordernum");
+                                String sshouldinnum = ((JSONObject) (arraysCount.get(i))).getString("tasknum");
                                 String sinnum = ((JSONObject) (arraysCount
                                         .get(i))).getString("nconfirmnum");
 
@@ -1372,8 +1375,10 @@ public class PurStockInDetail extends Activity {
             String sinnum = ((JSONObject) (arrays.get(i))).getString("nconfirmnum");
             if(sinnum.toLowerCase().equals("null") || sinnum.isEmpty())
                 sinnum = "0.0";
+//            map.put("InvNum",
+//                    sinnum + " / " + Double.valueOf(((JSONObject) (arrays.get(i))).getString("nordernum")));
             map.put("InvNum",
-                    sinnum + " / " + Double.valueOf(((JSONObject) (arrays.get(i))).getString("nordernum")));
+                   sinnum + " / " + Double.valueOf(((JSONObject) (arrays.get(i))).getString("tasknum")));
             // map.put("DoneQty", )
             lstTaskBody.add(map);
         }
@@ -1590,8 +1595,9 @@ public class PurStockInDetail extends Activity {
             }
             arrays = jsBody.getJSONArray("PurBody");
             for (int i = 0; i < arrays.length(); i++) {
-                String sshouldinnum = ((JSONObject) (arrays.get(i)))
-                        .getString("nordernum");
+//                String sshouldinnum = ((JSONObject) (arrays.get(i)))
+//                        .getString("nordernum");
+                String sshouldinnum = ((JSONObject) (arrays.get(i))).getString("tasknum");
                 String sinnum = ((JSONObject) (arrays.get(i)))
                         .getString("nconfirmnum");
 
