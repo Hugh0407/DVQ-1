@@ -252,7 +252,7 @@ public class SalesDeliveryDetail extends Activity {
 //                    break;
                 case R.id.txtSaleNumber:
                     if (TextUtils.isEmpty(txtSaleNumber.getText())) {
-//                        txtSaleNumber.setText("");
+                        txtSaleTotal.setText("");
                         return;
                     }
                     if (!isNumber(txtSaleNumber.getText().toString())) {
