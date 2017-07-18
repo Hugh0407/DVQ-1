@@ -91,6 +91,7 @@ public class Query extends Activity {
                 case 1:
                     JSONObject json = (JSONObject) msg.obj;
                     if (json != null) {
+                        Log.d("TAG", "'json: ");
                         try {
                             setInvBaseToUI(json);
                         } catch (JSONException e) {
@@ -194,8 +195,6 @@ public class Query extends Activity {
      * @param json
      * @throws JSONException
      */
-    String pk_invbasdoc = "";
-    String pk_invmandoc = "";
 
     private void setInvBaseToUI(JSONObject json) throws JSONException {
         Log.d("TAG", "setInvBaseToUI: " + json);
@@ -205,22 +204,30 @@ public class Query extends Activity {
             for (int i = 0; i < val.length(); i++) {
                 JSONObject tempJso = val.getJSONObject(i);
                 map = new HashMap<String, Object>();
-                map.put("invname", tempJso.getString("invname"));   //橡胶填充油
-                map.put("invcode", tempJso.getString("invcode"));   //00179
-                map.put("measname", tempJso.getString("measname"));   //千克
-                map.put("pk_invbasdoc", tempJso.getString("pk_invbasdoc"));
-                pk_invbasdoc = tempJso.getString("pk_invbasdoc");
-                map.put("pk_invmandoc", tempJso.getString("pk_invmandoc"));
-                pk_invmandoc = tempJso.getString("pk_invmandoc");
+                map.put("invcode", tempJso.getString("invcode"));
+                map.put("invname", tempJso.getString("invname"));
+                map.put("pk_cubasdoc", tempJso.getString("pk_cubasdoc"));
+                map.put("vuserdef4", tempJso.getString("vuserdef4"));   //海关手册号
                 map.put("invtype", tempJso.getString("invtype"));   //型号
                 map.put("invspec", tempJso.getString("invspec"));   //规格
-                map.put("oppdimen", tempJso.getString("oppdimen"));   //重量
-                map.put("createtime", tempJso.getString("createtime"));
+                map.put("dbilldate", tempJso.getString("dbilldate"));
+                map.put("pk_cumandoc", tempJso.getString("pk_cumandoc"));
+                map.put("vbatchcode", tempJso.getString("vbatchcode")); //批次
+                map.put("custname", tempJso.getString("custname"));
             }
             if (map != null) {
                 mEdName.setText(map.get("invname").toString());
                 mEdSpec.setText(map.get("invspec").toString());
-                mEdInTime.setText(map.get("createtime").toString());
+                mEdLot.setText(map.get("vbatchcode").toString());
+//                mEdSupplier.setText(map.get("createtime").toString());
+//                mEdShelfLife.setText(map.get("createtime").toString());
+                String s = map.get("vuserdef4").toString();
+                if (s.equals("null")) {
+                    mEdManual.setText("");
+                } else {
+                    mEdManual.setText(s);
+                }
+                mEdInTime.setText(map.get("dbilldate").toString());
             }
         }
     }

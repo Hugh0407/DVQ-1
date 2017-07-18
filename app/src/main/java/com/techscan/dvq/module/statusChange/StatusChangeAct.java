@@ -111,7 +111,7 @@ public class StatusChangeAct extends Activity {
                     return;
                 }
 
-                if (taskList.size() < 0 || null == taskList) {
+                if (null == taskList || taskList.size() < 0) {
                     Utils.showToast(activity, "没有需要保存的数据");
                     return;
                 }
@@ -347,8 +347,8 @@ public class StatusChangeAct extends Activity {
         // 回传数据<----OtherStockInDetail.class，从ShowScanDetail(); 中跳过去
         if (requestCode == 93 && resultCode == 7) {
             taskList = data.getParcelableArrayListExtra("taskList");
-            Log.d(TAG, "onActivityResult: "+taskList);
-            Log.d(TAG, "onActivityResult: "+taskList.toArray());
+            Log.d(TAG, "onActivityResult: " + taskList);
+            Log.d(TAG, "onActivityResult: " + taskList.toArray());
         }
     }
 
