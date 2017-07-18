@@ -1633,7 +1633,7 @@ public class PurStockIn extends Activity {
 							txtDepartment.requestFocus();
 							return;
 						}
-						if(jsSerino == null) {
+						if(jsSerino == null || jsSerino.length() < 1) {
 							Toast.makeText(PurStockIn.this, "没有扫描详细不能保存" ,Toast.LENGTH_LONG).show();
 							MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
 							return;
@@ -2009,7 +2009,8 @@ public class PurStockIn extends Activity {
 //		SelectButton=new AlertDialog.Builder(this).setTitle(R.string.QueRenTuiChu).setSingleChoiceItems(
 //				ExitNameList, -1, buttonOnClick).setPositiveButton(R.string.QueRen,
 //				buttonOnClick).setNegativeButton(R.string.QuXiao, buttonOnClick).show();
-		if(jsSerino == null) {
+		Log.d("TAG", "Exit: " + jsSerino);
+		if(jsSerino == null || jsSerino.length() < 1) {
 			IniActivyMemor();
 			finish();
 		}

@@ -321,6 +321,9 @@ public class MainMenu extends Activity {
                 map = new HashMap<String, Object>();
                 lstImageItem.add(map);
 
+                map = new HashMap<String, Object>();
+                lstImageItem.add(map);
+
                 break;
 
             case 2:
@@ -357,7 +360,7 @@ public class MainMenu extends Activity {
                 //*********************************************************************
                 // by liuya  ±º‰07.17
                 map = new HashMap<String, Object>();
-                map.put("ItemImage", R.drawable.ic_launcher);
+                map.put("ItemImage", R.drawable.icon_cx_all);
                 map.put("ItemText", "≤È—Ø");
                 lstImageItem.add(map);
                 //*********************************************************************
@@ -365,8 +368,6 @@ public class MainMenu extends Activity {
                 map = new HashMap<String, Object>();
                 lstImageItem.add(map);
 
-                map = new HashMap<String, Object>();
-                lstImageItem.add(map);
                 break;
 
         }
