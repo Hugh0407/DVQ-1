@@ -15,6 +15,6 @@ public class MyApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        soundHelper = SoundHelper.getInstance(this);
+        soundHelper = SoundHelper.getInstance(getApplicationContext());
     }
 }
