@@ -1281,11 +1281,12 @@ public class PurStockInDetail extends Activity {
 
                                 String invcodeold = ((JSONObject) (bodys.get(i)))
                                         .getString("invcode");
-                                String batchcodeold = ((JSONObject) (bodys
-                                        .get(i))).getString("vbatchcode");
+//                                String batchcodeold = ((JSONObject) (bodys
+//                                        .get(i))).getString("vbatchcode");
 
-                                if (invcodeold.equals(invcode)
-                                        && batchcodeold.equals(batch)) {
+//                                if (invcodeold.equals(invcode)
+//                                        && batchcodeold.equals(batch)) {
+                                if (invcodeold.equals(invcode)) {
                                     Double doneqty = temp.getDouble("nconfirmnum");
                                     temp.put("nconfirmnum", doneqty - ScanedTotal);
                                 }

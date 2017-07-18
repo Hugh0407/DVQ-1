@@ -124,7 +124,7 @@ public class SettingActivity extends Activity implements OnClickListener {
 		
 		if(address.getText().toString().equals(""))
 		{
-			address.setText("http://58.211.61.69:80/service/nihao");
+			address.setText("http://192.168.67.116:80/service/nihao");
 		}
 		
 		//if(address2.getText().toString().equals(""))
