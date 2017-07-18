@@ -677,7 +677,7 @@ public class PurStockIn extends Activity {
 								obj.put("NPRICE", "0.00");
 								obj.put("VSOURCEBILLCODE", m_BillNo);
 								obj.put("VSOURCEBILLROWNO", bodys.getJSONObject(i).getString("crowno"));
-								obj.put("VFREE4", bodys.getJSONObject(i).getString("vfree4"));
+								obj.put("VFREE5", bodys.getJSONObject(i).getString("vfree4"));
 								//jsDBBody.put(y + "", obj);
 								arraySaveBody.put(obj);
 								y++;
