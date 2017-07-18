@@ -31,7 +31,8 @@ public class Utils {
         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
     }
 
-    /**++++++++++++++
+    /**
+     * ++++++++++++++
      * 格式化小数，一律格式为两位小数
      *
      * @param num 必须为float类型
@@ -39,11 +40,14 @@ public class Utils {
      */
     public static String formatDecimal(float num) {
         DecimalFormat decimalFormat = new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
-        return decimalFormat.format(num);
+        String s = decimalFormat.format(num);
+        return s;
     }
 
     public static String formatDecimal(double num) {
-        return formatDecimal(num);
+        DecimalFormat decimalFormat = new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
+        String s = decimalFormat.format(num);
+        return s;
     }
 
     public static String formatDecimal(String num) {
