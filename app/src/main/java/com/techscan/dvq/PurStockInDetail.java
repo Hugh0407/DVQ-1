@@ -548,7 +548,8 @@ public class PurStockInDetail extends Activity {
                         return false;
                     }
                     ScanedBarcode.add(bar.FinishBarCode);
-                    MainLogin.sp.play(MainLogin.music2, 1, 1, 0, 0, 1);
+                    //MainLogin.sp.play(MainLogin.music2, 1, 1, 0, 0, 1);
+//                    Log.d("TAG", "ScanedToGet: music2_1");
                     //SaveScanedBody();//写入本地
 
                     // 判断判断箱子是否装满。
@@ -609,7 +610,8 @@ public class PurStockInDetail extends Activity {
         }
         tvPurcount.setText("总量" + ishouldinnum + " | " + "已扫" + iinnum
                 + " | " + "未扫" + (ishouldinnum - iinnum) );
-
+        MainLogin.sp.play(MainLogin.music2, 1, 1, 0, 0, 1);
+//        Log.d("TAG", "ScanedToGet: music2_2");
         txtBarcode.requestFocus();
         txtBarcode.setText("");
         txtBarcode.setSelectAllOnFocus(true);
@@ -1198,12 +1200,17 @@ public class PurStockInDetail extends Activity {
                     if (ScanedBarcode != null || ScanedBarcode.size() > 0) {
                         for (int si = 0; si < ScanedBarcode.size(); si++) {
                             String RemoveBarCode = ScanedBarcode.get(si).toString();
-                            int iBarlenth = RemoveBarCode.length() - 6;
-                            String RemoveBarCodeF = RemoveBarCode.substring(0, iBarlenth);
-                            if (RemoveBarCodeF.equals(serino)) {
+                            if (RemoveBarCode.equals(serino)) {
                                 ScanedBarcode.remove(si);
-                                si--;
+                                break;
+                                //si--;
                             }
+//                            int iBarlenth = RemoveBarCode.length() - 6;
+//                            String RemoveBarCodeF = RemoveBarCode.substring(0, iBarlenth);
+//                            if (RemoveBarCodeF.equals(serino)) {
+//                                ScanedBarcode.remove(si);
+//                                si--;
+//                            }
                         }
                     }
 

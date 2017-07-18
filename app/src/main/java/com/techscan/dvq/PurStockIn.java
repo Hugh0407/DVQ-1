@@ -976,6 +976,7 @@ public class PurStockIn extends Activity {
 		Common.ShowLoading(MyContext);
 		if (SavePurOrder() == true) {
 			//SaveOk();
+			MainLogin.sp.play(MainLogin.music2, 1, 1, 0, 0, 1);
 			Toast.makeText(this, "采购入库单保存成功", Toast.LENGTH_LONG).show();
 
 			IniActivyMemor();
