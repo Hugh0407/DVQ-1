@@ -279,7 +279,7 @@
         </activity>
         <activity android:name=".module.materialOut.DepartmentListAct">
         </activity>
-        <activity android:name=".module.materialOut.StorgListACt">
+        <activity android:name=".module.materialOut.StorgListAct">
         </activity>
         <activity android:name=".module.productOut.ProductOutAct">
         </activity>

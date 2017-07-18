@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".module.materialOut.StorgListACt">
+    tools:context=".module.materialOut.StorgListAct">
 
     <ListView
         android:id="@+id/listwarehouse"

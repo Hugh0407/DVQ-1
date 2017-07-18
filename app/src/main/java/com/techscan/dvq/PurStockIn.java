@@ -27,7 +27,7 @@ import android.widget.Toast;
 import com.techscan.dvq.R.id;
 import com.techscan.dvq.common.RequestThread;
 import com.techscan.dvq.module.materialOut.DepartmentListAct;
-import com.techscan.dvq.module.materialOut.StorgListACt;
+import com.techscan.dvq.module.materialOut.StorgListAct;
 
 import org.apache.http.ParseException;
 import org.apache.http.util.EncodingUtils;
@@ -1475,7 +1475,7 @@ public class PurStockIn extends Activity {
 							JSONArray val = storg.getJSONArray("STOrg");
 							JSONObject temp = new JSONObject();
 							temp.put("STOrg", val);
-							Intent StorgList = new Intent(PurStockIn.this, StorgListACt.class);
+							Intent StorgList = new Intent(PurStockIn.this, StorgListAct.class);
 							StorgList.putExtra("STOrg", temp.toString());
 							startActivityForResult(StorgList, 94);
 						}

@@ -117,7 +117,7 @@ public class MaterialOutScanAct extends Activity {
                     in.putExtras(bundle);
                     mActivity.setResult(5, in);
                 } else {
-                    showToast(mActivity,"没有扫描单据");
+                    showToast(mActivity, "没有扫描单据");
                 }
                 finish();
                 break;
@@ -153,6 +153,7 @@ public class MaterialOutScanAct extends Activity {
                     if (json != null) {
                         try {
                             setInvBaseToUI(json);
+                            addDataToDetailList();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -497,17 +498,19 @@ public class MaterialOutScanAct extends Activity {
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
                 switch (v.getId()) {
                     case R.id.ed_bar_code:
-                        if (!TextUtils.isEmpty(mEdBarCode.getText().toString())) {
-                            if (isAllEdNotNull()) {
-                                addDataToDetailList();
-                                mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
-                                changeAllEdTextToEmpty();
-                            } else {
-                                barAnalysis();
-                            }
-                        } else {
+                        if (TextUtils.isEmpty(mEdBarCode.getText().toString())) {
                             showToast(mActivity, "请输入条码");
+                            return true;
                         }
+
+                        if (isAllEdNotNull()) {
+//                            addDataToDetailList();
+                            mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
+                            changeAllEdTextToEmpty();
+                        } else {
+                            barAnalysis();
+                        }
+
                         return true;
                     case R.id.ed_lot:
                         if (TextUtils.isEmpty(mEdLot.getText().toString())) {
