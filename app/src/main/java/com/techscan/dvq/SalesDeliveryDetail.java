@@ -732,7 +732,6 @@ public class SalesDeliveryDetail extends Activity {
                 }
                 break;
             case R.id.btnReturn:
-                Log.d(TAG, "OOO: " + jsSerino.toString());
                 if (jsSerino != null) {
                     try {
                         Intent intent = new Intent();
