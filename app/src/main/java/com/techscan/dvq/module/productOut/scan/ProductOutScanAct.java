@@ -321,7 +321,6 @@ public class ProductOutScanAct extends Activity {
         detailList.add(goods);
         addDataToOvList();
         SoundHelper.playOK();
-
         return true;
     }
 
