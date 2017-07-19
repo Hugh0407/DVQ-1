@@ -29,8 +29,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.techscan.dvq.common.SoundHelper;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
@@ -644,12 +642,6 @@ public class MainLogin extends Activity {
             }// 子函数，获取版本号
         }
 
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        SoundHelper.release();
     }
 
     public static boolean getwifiinfo() {

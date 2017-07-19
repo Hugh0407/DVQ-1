@@ -218,7 +218,7 @@ public class ProductOutScanAct extends Activity {
         mEdBarCode.selectAll();
         String[] barCode = Bar.split("\\|");
 
-        if (barCode.length == 8 && barCode[0].equals("P")) {// 包码 P|SKU|LOT|WW|TAX|QTY|CW_ONLY|SN    8位
+        if (barCode.length == 8 && barCode[0].equals("P")) {// 包码 P|SKU|LOT|WW|TAX|QTY|CW_ONLY|SN 8位
             mEdNum.setEnabled(true);
             mEdManual.setEnabled(true);
             mEdNum.setFocusable(true);
@@ -236,6 +236,7 @@ public class ProductOutScanAct extends Activity {
             for (int i = 0; i < detailList.size(); i++) {
                 if (detailList.get(i).getBarcode().equals(Bar)) {
                     showToast(mActivity, "该托盘已扫描");
+                    SoundHelper.playWarning();
                     return false;
                 }
             }
@@ -255,6 +256,7 @@ public class ProductOutScanAct extends Activity {
             return true;
         } else {
             showToast(mActivity, "条码有误重新输入");
+            SoundHelper.playWarning();
             return false;
         }
     }
@@ -340,7 +342,7 @@ public class ProductOutScanAct extends Activity {
      * 判断所有的edtext是否为空
      *
      * @return true---->所有的ed都不为空,false---->所有的ed都为空
-     *  海关手册号 没有做校验
+     * 海关手册号 没有做校验
      */
     private boolean isAllEdNotNull() {
         return (!TextUtils.isEmpty(mEdBarCode.getText())

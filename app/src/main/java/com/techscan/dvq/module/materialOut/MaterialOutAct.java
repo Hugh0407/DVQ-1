@@ -494,6 +494,7 @@ public class MaterialOutAct extends Activity {
             object.put("PK_BODYCALBODY", PK_CALBODY);
             object.put("PK_CORP", MainLogin.objLog.STOrgCode);
             object.put("VBATCHCODE", c.getLot());
+            object.put("VFREE4", c.getManual());    //∫£πÿ ÷≤·∫≈
             bodyArray.put(object);
         }
         tableBody.put("ScanDetails", bodyArray);
