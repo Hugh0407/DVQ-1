@@ -347,7 +347,7 @@ public class SalesDeliveryDetail extends Activity {
                 }
             }
         } else {
-            Toast.makeText(this, "条码类型不匹配", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "扫描的条码类型不匹配", Toast.LENGTH_LONG).show();
             //ADD CAIXY TEST START
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             //ADD CAIXY TEST END
@@ -510,7 +510,7 @@ public class SalesDeliveryDetail extends Activity {
 
 
         } catch (Exception ex) {
-            Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "请检查扫描的数据是否正确", Toast.LENGTH_LONG).show();
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             return false;
         }
@@ -533,7 +533,7 @@ public class SalesDeliveryDetail extends Activity {
             // TODO Auto-generated catch block
             e1.printStackTrace();
 
-            Toast.makeText(this, e1.getMessage(), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "无法获取表体信息", Toast.LENGTH_LONG).show();
             // ADD CAIXY TEST START
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             // ADD CAIXY TEST END
@@ -547,7 +547,7 @@ public class SalesDeliveryDetail extends Activity {
 
         return true;
     }
-
+//保存扫描明细
     private boolean ScanSerial(String serino, String Free1, String TotalBox)
             throws JSONException {
         if (jsSerino == null) {
@@ -616,7 +616,7 @@ public class SalesDeliveryDetail extends Activity {
                 Log.d(TAG, "GetBillBodyDetailInfo: " + BillCode);
             } catch (JSONException e) {
                 e.printStackTrace();
-                Toast.makeText(SalesDeliveryDetail.this, e.getMessage(),
+                Toast.makeText(SalesDeliveryDetail.this, "无法获取表体信息",
                         Toast.LENGTH_LONG).show();
                 // ADD CAIXY TEST START
                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
