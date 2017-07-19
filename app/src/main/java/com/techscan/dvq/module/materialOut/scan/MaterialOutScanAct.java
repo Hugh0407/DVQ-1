@@ -26,6 +26,7 @@ import com.techscan.dvq.MainLogin;
 import com.techscan.dvq.R;
 import com.techscan.dvq.bean.Goods;
 import com.techscan.dvq.common.RequestThread;
+import com.techscan.dvq.common.SoundHelper;
 import com.techscan.dvq.module.materialOut.MyBaseAdapter;
 
 import org.json.JSONArray;
@@ -82,6 +83,7 @@ public class MaterialOutScanAct extends Activity {
     public static List<Goods> detailList = new ArrayList<Goods>();
     public static List<Goods> ovList = new ArrayList<Goods>();
     Activity mActivity;
+    boolean isBaoBarCode = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,7 +155,10 @@ public class MaterialOutScanAct extends Activity {
                     if (json != null) {
                         try {
                             setInvBaseToUI(json);
-                            addDataToDetailList();
+                            if (isBaoBarCode) {
+                                addDataToDetailList();
+                                isBaoBarCode = false;
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -212,22 +217,6 @@ public class MaterialOutScanAct extends Activity {
         mEdBarCode.setSelection(mEdBarCode.length());   //将光标移动到最后的位置
         mEdBarCode.selectAll();
         String[] barCode = Bar.split("\\|");
-//        /*********************************************************************/
-//        //判断每一段的条码是否正确
-//        for (int i = 0; i < barCode.length; i++) {
-//            if (i == 0) {
-//                continue;
-//            }
-//            if (TextUtils.isEmpty(barCode[i])) {
-//                showToast(mActivity, "条码错误");
-//                return false;
-//            }
-//            if (!isNumber(barCode[i])) {
-//                showToast(mActivity, "条码中存在非数字字符");
-//                return false;
-//            }
-//        }
-//        /*********************************************************************/
         if (barCode.length == 2 && barCode[0].equals("Y")) {          //Y|SKU
             //如果是液体的话需要输入液体总量，将数量设置不可编辑
             mEdNum.setEnabled(false);
@@ -276,6 +265,7 @@ public class MaterialOutScanAct extends Activity {
             float qty = Float.valueOf(barCode[4]);
             float num = Float.valueOf(barCode[5]);
             mEdQty.setText(formatDecimal(qty * num));
+            isBaoBarCode = true;
             return true;
         } else {
             showToast(mActivity, "条码有误重新输入");
@@ -335,6 +325,7 @@ public class MaterialOutScanAct extends Activity {
         goods.setPk_invmandoc(pk_invmandoc);
         detailList.add(goods);
         addDataToOvList();
+        SoundHelper.playOK();
     }
 
     /**

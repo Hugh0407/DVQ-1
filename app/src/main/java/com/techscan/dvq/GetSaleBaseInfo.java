@@ -28,7 +28,6 @@ public class GetSaleBaseInfo {
         mapSaleBaseInfo.put("barcodetype",cSplitBarcode.BarcodeType);
         mapSaleBaseInfo.put("batch",cSplitBarcode.cBatch);
         mapSaleBaseInfo.put("serino",cSplitBarcode.cSerino);
-        mapSaleBaseInfo.put("cinvcode",cSplitBarcode.cInvCode);
         mapSaleBaseInfo.put("quantity",cSplitBarcode.dQuantity);
         mapSaleBaseInfo.put("number",cSplitBarcode.iNumber);
         mapSaleBaseInfo.put("cwflag",cSplitBarcode.CWFlag);
@@ -46,6 +45,21 @@ public class GetSaleBaseInfo {
         td.start();
     }
 
+    public GetSaleBaseInfo(SplitBarcode cSplitBarcode, Handler mHandler,String pk_corp,String warehouseid,String calbodyid,String cinvbasid,String inventoryid) {
+        HashMap<String, String> para = new HashMap<String, String>();
+        para.put("FunctionName", "GetInvFreeByInvCodeAndLot");
+        para.put("CORP", pk_corp);
+        para.put("BATCH", cSplitBarcode.cBatch);
+        para.put("WAREHOUSEID", warehouseid);
+        para.put("CALBODYID", calbodyid);
+        para.put("CINVBASID", cinvbasid);
+        para.put("INVENTORYID", inventoryid);
+        para.put("TableName", "customs");
+        RequestThread rstThread = new RequestThread(para, mHandler, 2);
+        Thread tds = new Thread(rstThread);
+        tds.start();
+
+    }
     /**
      * 通过获取到的json 解析得到物料信息,并设置到UI上
      *
@@ -72,6 +86,18 @@ public class GetSaleBaseInfo {
                 //pk_invmandoc = tempJso.getString("pk_invmandoc");
                 mapSaleBaseInfo.put("invtype", tempJso.getString("invtype"));   //型号
                 mapSaleBaseInfo.put("invspec", tempJso.getString("invspec"));   //规格
+            }
+
+        }
+    }
+
+    public void SetCustomsParam(JSONObject json) throws JSONException {
+        //Log.d(TAG, "SetInvBaseToUI: " + json);
+        if (json.getBoolean("Status")) {
+            JSONArray val = json.getJSONArray("customs");
+            for (int i = 0; i < val.length(); i++) {
+                JSONObject tempJso = val.getJSONObject(i);
+                mapSaleBaseInfo.put("vfree4", tempJso.getString("vfree4"));   //物料名称
             }
 
         }

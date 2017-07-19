@@ -44,6 +44,11 @@ import static android.content.ContentValues.TAG;
 
 public class SalesDeliveryDetail extends Activity {
 
+    String CALBODYID ="";
+    String CINVBASID = "";
+    String INVENTORYID = "";
+    String CORP =MainLogin.objLog.STOrgCode;
+    String WAREHOUSEID = "";
     String ScanType = "";
     String BillCode = "";
     String CSALEID = "";
@@ -96,7 +101,8 @@ public class SalesDeliveryDetail extends Activity {
     private AlertDialog DeleteButton = null;
     private AlertDialog SelectButton = null;
     private ButtonOnClick buttonDelOnClick = new ButtonOnClick(0);
-
+    SimpleAdapter listItemAdapter=null;
+    SimpleAdapter listTaskAdapter=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,6 +123,8 @@ public class SalesDeliveryDetail extends Activity {
             PK_CORP = intent.getStringExtra("PK_CORP");
             CSALEID = intent.getStringExtra("CSALEID");
             ScanType = intent.getStringExtra("ScanType");
+            WAREHOUSEID = intent.getStringExtra("CWAREHOUSEID");
+
             String temp = "";
             temp = intent.getStringExtra("jsbody");
             jsBody = new JSONObject(temp);
@@ -349,14 +357,13 @@ public class SalesDeliveryDetail extends Activity {
 
         IniDetail();
         try {
-            //currentObj = new Inventory(bar.cInvCode, "BADV", bar.AccID);
+
+
+            objSaleBaseInfo = new GetSaleBaseInfo(bar, mHandler, CORP,WAREHOUSEID,CALBODYID,CINVBASID,INVENTORYID);
             objSaleBaseInfo = new GetSaleBaseInfo(bar, mHandler, PK_CORP);
-//            objSaleBaseInfo = new GetSaleBaseInfo(bar, mHandler,PK_CORP);
         } catch (Exception ex) {
             Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
-            // ADD CAIXY TEST START
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            // ADD CAIXY TEST END
             return false;
         }
         return true;
@@ -375,18 +382,34 @@ public class SalesDeliveryDetail extends Activity {
                     JSONObject json = (JSONObject) msg.obj;
                     if (json != null) {
                         try {
-
-                            Log.d("TAG", "handleMessage: TEST");
-                            Log.d("TAG", "json: " + json);
+                            Log.d(TAG, "handleMessage1: "+json.toString());
                             objSaleBaseInfo.SetSaleBaseToParam(json);
                             m_mapSaleBaseInfo = objSaleBaseInfo.mapSaleBaseInfo;
+                            Log.d(TAG, "handleMessage: "+m_mapSaleBaseInfo.size());
                             SetInvBaseToUI();
 
-                        } catch (JSONException e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     } else {
-                        Log.d("TAG", "handleMessage: NULL");
+                        Log.d("TAG", "handleMessage2: "+"NULL");
+                        return;
+                    }
+                    break;
+                case 2:
+                    JSONObject jsons = (JSONObject) msg.obj;
+                    if (jsons != null) {
+                        try {
+                            Log.d(TAG, "handleMessage3: "+jsons.toString());
+                            objSaleBaseInfo.SetCustomsParam(jsons);
+//                            m_mapSaleBaseInfo = objSaleBaseInfo.mapSaleBaseInfo;
+//                            SetInvBaseToUI();
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        Log.d("TAG", "handleMessage4: "+"NULL");
                         return;
                     }
                     break;
@@ -481,10 +504,7 @@ public class SalesDeliveryDetail extends Activity {
             if (isFind == false) {
                 IniDetail();
                 Toast.makeText(this, "这个存货不在本次扫描任务中", Toast.LENGTH_LONG).show();
-
-                // ADD CAIXY TEST START
                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                // ADD CAIXY TEST END
                 return false;
             }
 
@@ -544,6 +564,7 @@ public class SalesDeliveryDetail extends Activity {
             temp.put("sno", m_mapSaleBaseInfo.get("serino").toString());
             temp.put("invtype", m_mapSaleBaseInfo.get("invtype").toString());
             temp.put("invspec", m_mapSaleBaseInfo.get("invspec").toString());
+            temp.put("vfree4", m_mapSaleBaseInfo.get("vfree4").toString());
             serinos.put(temp);
             jsSerino.put("Serino", serinos);
         } else {
@@ -565,6 +586,7 @@ public class SalesDeliveryDetail extends Activity {
             temp.put("sno", m_mapSaleBaseInfo.get("serino").toString());
             temp.put("invtype", m_mapSaleBaseInfo.get("invtype").toString());
             temp.put("invspec", m_mapSaleBaseInfo.get("invspec").toString());
+            temp.put("vfree4", m_mapSaleBaseInfo.get("vfree4").toString());
             serinos.put(temp);
             jsSerino.put("Serino", serinos);
 
@@ -643,6 +665,17 @@ public class SalesDeliveryDetail extends Activity {
                     MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                     //ADD CAIXY TEST END
                     return;
+                }
+
+                JSONArray jsarray = jsBody.getJSONArray("dbBody");
+                for (int i = 0; i < jsarray.length(); i++) {
+                    JSONObject tempJso = jsarray.getJSONObject(i);
+                   CALBODYID =tempJso.getString("cadvisecalbodyid");
+                    Log.d(TAG, "LoadSaleOutBody: "+CALBODYID);
+                    CINVBASID = tempJso.getString("cinvbasdocid");
+                    Log.d(TAG, "LoadSaleOutBody: "+CINVBASID);
+                   INVENTORYID = tempJso.getString("cinventoryid");
+                    Log.d(TAG, "LoadSaleOutBody: "+INVENTORYID);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -788,7 +821,7 @@ public class SalesDeliveryDetail extends Activity {
             lstTaskBody.add(map);
         }
 
-        SimpleAdapter listItemAdapter = new SimpleAdapter(
+        listTaskAdapter = new SimpleAdapter(
                 SalesDeliveryDetail.this, lstTaskBody,
                 R.layout.sale_out_task_detail,
                 new String[]{"InvName", "InvNum", "InvCode", "Invspec", "Invtype"},
@@ -796,7 +829,7 @@ public class SalesDeliveryDetail extends Activity {
                         R.id.txtTranstaskInvCode, R.id.txtSpec,
                         R.id.txtType});
         new AlertDialog.Builder(SalesDeliveryDetail.this).setTitle("源单信息")
-                .setAdapter(listItemAdapter, null)
+                .setAdapter(listTaskAdapter, null)
                 .setPositiveButton(R.string.QueRen, null).show();
 
     }
@@ -834,7 +867,7 @@ public class SalesDeliveryDetail extends Activity {
             lstTaskBody.add(map);
         }
         Log.d("TAG", "lstTaskBody: " + lstTaskBody);
-        SimpleAdapter listItemAdapter = new SimpleAdapter(
+         listItemAdapter = new SimpleAdapter(
                 SalesDeliveryDetail.this, lstTaskBody,// 数据源
                 R.layout.item_sale_out_details,// ListItem的XML实现
                 // 动态数组与ImageItem对应的子项
@@ -858,6 +891,7 @@ public class SalesDeliveryDetail extends Activity {
                         // When clicked, show a toast with the TextView text
 
                         ConfirmDelItem(position);
+                        listItemAdapter.notifyDataSetChanged();
                         IniDetail();
                         return false;
                     }
