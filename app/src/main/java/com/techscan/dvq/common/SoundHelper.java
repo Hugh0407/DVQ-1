@@ -9,7 +9,8 @@ import com.techscan.dvq.R;
 import java.util.HashMap;
 
 /**
- * Created by cloverss on 2017/7/18.
+ * Created by cloverss on 2017/7/18
+ * …˘“ÙÃ· æ µ•¿˝
  */
 
 public class SoundHelper {
@@ -22,12 +23,11 @@ public class SoundHelper {
     private static HashMap<Integer, Integer> soundPoolMap;
     private static SoundHelper instance = null;
 
-    public static synchronized SoundHelper getInstance(Context context) {
-        mContext = context;
+    public static SoundHelper getInstance(Context context) {
         if (instance == null) {
             synchronized (SoundHelper.class) {
                 if (instance == null) {
-                    instance = new SoundHelper(mContext);
+                    instance = new SoundHelper(context);
                 }
             }
         }
