@@ -56,6 +56,7 @@ public class SalesDelivery extends Activity {
     String  VDEF1 = "";
     String VDEF2 = "";
     String VDEF5 = "";
+    String VDEF4 = "";
     String NOTOTALNUMBER = "";
     String CWAREHOUSEID = "";    //库存组织
     String CSENDWAREID = "";
@@ -1046,6 +1047,7 @@ public class SalesDelivery extends Activity {
                     CSALECORPID = tempJso.getString("csalecorpid").toString();
                     PK_CORP = tempJso.getString("pk_corp").toString();
                     VDEF1 = tempJso.getString("vdef1").toString();
+                    VDEF4 = tempJso.getString("vdef1").toString();
                     VDEF2 = tempJso.getString("vdef2").toString();
                     VDEF5 = tempJso.getString("vdef5").toString();
                     if (!TextUtils.isEmpty(VDEF5)){
@@ -1379,7 +1381,8 @@ public class SalesDelivery extends Activity {
                             // ADD CAIXY TEST END
                             return;
                         }
-                        saveInfo();
+//                        saveInfo();
+                        SaveSaleOrder();
                         showProgressDialog();
                     }catch (Exception e){
                         e.printStackTrace();
@@ -1466,27 +1469,23 @@ public class SalesDelivery extends Activity {
             }
         }).start();
     }
-    private  void saveInfo(){
+    private  void deleteInfo() {
         try {
-            if (SaveSaleOrder() == true) {
-                jsTotal = null;
-                jsSerino = null;
-                jsBody = null;
-                jsonSaveHead = null;
-                jsonBillHead = null;
-                changeAllEdToEmpty();
-                txtSalesDelPDOrder.requestFocus();
-                //SaveOk();
-                //            IniActivyMemor();// TODO: 2017/7/10 XUHU
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+            jsTotal = null;
+            jsSerino = null;
+            jsBody = null;
+            jsonSaveHead = null;
+            jsonBillHead = null;
+            changeAllEdToEmpty();
+            txtSalesDelPDOrder.requestFocus();
+            //SaveOk();
+            //            IniActivyMemor();// TODO: 2017/7/10 XUHU
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
     //保存数据
-    private boolean SaveSaleOrder() throws JSONException,
+    private void SaveSaleOrder() throws JSONException,
             ParseException, IOException {
         table = new JSONObject();
         JSONArray arrayss = null;
@@ -1542,6 +1541,7 @@ public class SalesDelivery extends Activity {
                     String totalBox = decimalFormat.format(box);//format 返回的是字符串
                     JSONObject object = new JSONObject();
                     object.put("CROWNO", bodys.getJSONObject(i).getString("crowno"));
+                    object.put("VFREE4",arraysSerino.getJSONObject(j).getString("vfree4"));//海关手册号
                     object.put("VSOURCEROWNO", bodys.getJSONObject(i).getString("crowno"));
                     object.put("VSOURCERECEIVECODE", tmpBillCode);
                     object.put("VRECEIVEPOINTID", bodys.getJSONObject(i).getString("crecaddrnode"));
@@ -1571,44 +1571,15 @@ public class SalesDelivery extends Activity {
         tableBody.put("ScanDetails", bodyArray);
         table.put("Body", tableBody);
         table.put("GUIDS", UUID.randomUUID().toString());
-        Log.d(TAG, "SaveSaleOrder: "+"98");
         Log.d(TAG, "XXXXXX: " + table.toString());
-        Log.d(TAG, "SaveSaleOrder: "+"99");
         if (!MainLogin.getwifiinfo()) {
             Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            return false;
+            return;
         }
         SaveThread saveThread = new SaveThread(table, "SaveSaleReceive", mHandler, HANDER_SAVE_RESULT);
         Thread thread = new Thread(saveThread);
         thread.start();
-//            new Thread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    try {
-//                        JSONObject jas = Common.DoHttpQuery(table, "SaveSaleReceive", "A");
-//                        if (jas != null) {
-//                            Log.d(TAG, "保存" + jas.toString());
-//                        } else {
-//                            showResultDialog(SalesDelivery.this,"");
-//////                            Toast.makeText(SalesDelivery.this, "单据保存过程中出现了问题," +
-//////                                    "请尝试再次提交或!", Toast.LENGTH_LONG).show();
-////                            //ADD CAIXY TEST START
-////                            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-////
-////                            //ADD CAIXY TEST END
-////                            return;
-//                        }
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }).start();
-
-
-        return true;
     }
 
     /**
@@ -1627,14 +1598,16 @@ public class SalesDelivery extends Activity {
                             if (saveResult.getBoolean("Status")) {
                                 Log.d(TAG, "保存" + saveResult.toString());
                                 showResultDialog(SalesDelivery.this, saveResult.getString("ErrMsg"));
-//                                MaterialOutScanAct.ovList.clear();
-//                                MaterialOutScanAct.detailList.clear();
-
+                                deleteInfo();
+                                Log.d(TAG, "messageTrue" + saveResult.getString("ErrMsg"));
                             } else {
                                 showResultDialog(SalesDelivery.this, saveResult.getString("ErrMsg"));
+                                Log.d(TAG, "messageFALSE" + saveResult.getString("ErrMsg"));
                             }
                         } else {
                             showResultDialog(SalesDelivery.this, "数据提交失败!");
+                            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+                            return;
                         }
                         progressDialogDismiss();
                     } catch (JSONException e) {
@@ -1771,6 +1744,7 @@ public class SalesDelivery extends Activity {
         intDeliveryScan.putExtra("BillCode", tmpBillCode);
         intDeliveryScan.putExtra("PK_CORP", PK_CORP);
         intDeliveryScan.putExtra("CSALEID", csaleid);
+        intDeliveryScan.putExtra("CWAREHOUSEID", CWAREHOUSEID);
         intDeliveryScan.putExtra("ScanType", tvSaleOutSelect.getText().toString());
         if (jsBody!=null){
             intDeliveryScan.putExtra("jsbody",jsBody.toString());
@@ -2207,6 +2181,7 @@ public class SalesDelivery extends Activity {
                         String invtype = newJsonObjectI.get("invtype").toString();
                         String invspec = newJsonObjectI.get("invspec").toString();
                         String serino = newJsonObjectI.get("serino").toString();
+                        String vfree4 = newJsonObjectI.get("vfree4").toString();
 
                         String invcodeJ = newJsonObjectJ.get("invcode").toString();
                         String batchJ = newJsonObjectJ.get("batch").toString();
@@ -2223,6 +2198,7 @@ public class SalesDelivery extends Activity {
                             newObject.put("sno", sno);
                             newObject.put("invtype", invtype);
                             newObject.put("invspec", invspec);
+                            newObject.put("vfree4", vfree4);
                             newObject.put("box", String.valueOf(newValue));
                             arrayTemp.put(newObject);
                             break;
