@@ -1,6 +1,7 @@
 package com.techscan.dvq;
 
 import android.os.Handler;
+import android.util.Log;
 
 import com.techscan.dvq.common.RequestThread;
 
@@ -9,6 +10,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by Xuhu on 2017/7/8.
@@ -97,9 +100,13 @@ public class GetSaleBaseInfo {
             JSONArray val = json.getJSONArray("customs");
             for (int i = 0; i < val.length(); i++) {
                 JSONObject tempJso = val.getJSONObject(i);
-                mapSaleBaseInfo.put("vfree4", tempJso.getString("vfree4"));   //物料名称
+                Log.d(TAG, "SetCustomsParam: "+tempJso.getString("vfree4"));
+                mapSaleBaseInfo.put("vfree4", tempJso.getString("vfree4"));   //海关手册号
             }
 
+        }else{
+            Log.d(TAG, "SetCustomsParam: "+"99");
+            mapSaleBaseInfo.put("vfree4", "");   //海关手册号
         }
     }
 }

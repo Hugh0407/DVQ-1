@@ -280,8 +280,6 @@ public class SalesDeliveryDetail extends Activity {
                         num = "0";
                     }
                     weight = txtSaleWeight.getText().toString();
-                    Log.d(TAG, "afterTextChanged: " + number);
-                    Log.d(TAG, "afterTextChanged: " + weight);
                     float a = Float.valueOf(num);
                     float b = Float.valueOf(weight);
                     Log.d(TAG, "afterTextChanged: " + "");
@@ -347,7 +345,7 @@ public class SalesDeliveryDetail extends Activity {
                 }
             }
         } else {
-            Toast.makeText(this, "条码类型不匹配", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "扫描的条码类型不匹配", Toast.LENGTH_LONG).show();
             //ADD CAIXY TEST START
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             //ADD CAIXY TEST END
@@ -428,8 +426,16 @@ public class SalesDeliveryDetail extends Activity {
         txtBarcode.setText(m_mapSaleBaseInfo.get("barcode").toString());
         txtSaleWeight.setText(m_mapSaleBaseInfo.get("quantity").toString());
         txtSaleNumber.setText(m_mapSaleBaseInfo.get("number").toString());
-
-        Double ldTotal = (Double) m_mapSaleBaseInfo.get("quantity") * (Integer) m_mapSaleBaseInfo.get("number");
+//        Double ldTotal =0.0;
+//        Double weight = 0.0;
+//        Log.d(TAG, "SetInvBaseToUI: "+bar.BarcodeType);
+//        if (bar.BarcodeType.equals("P")) {
+//            ldTotal = (Double) m_mapSaleBaseInfo.get("quantity") * (Integer) m_mapSaleBaseInfo.get("number");
+//
+//        }else if (bar.BarcodeType.equals("TP")){
+//            ldTotal = (Double) m_mapSaleBaseInfo.get("quantity");
+//        }
+        Double ldTotal =(Double) m_mapSaleBaseInfo.get("quantity") * (Integer) m_mapSaleBaseInfo.get("number");
         txtSaleTotal.setText(ldTotal.toString());
         m_mapSaleBaseInfo.put("total", ldTotal);
         if (m_mapSaleBaseInfo.get("barcodetype").toString().equals("TP")) {
@@ -468,18 +474,21 @@ public class SalesDeliveryDetail extends Activity {
                     Double doneqty = 0.0;
                     if (!temp.getString("ntotaloutinvnum").isEmpty() && !temp.getString("ntotaloutinvnum").toLowerCase().equals("null")) {
                         doneqty = temp.getDouble("ntotaloutinvnum");
-                        if (bar.BarcodeType.equals("P") || bar.BarcodeType.equals("TP")) {
-                            Double ldTotal = (Double) m_mapSaleBaseInfo.get("quantity") * (Integer) m_mapSaleBaseInfo.get("number");
-                            txtSaleTotal.setText(ldTotal.toString());
-                        }
+//                        Log.d(TAG, "ScanedToGet: "+bar.BarcodeType);
+//                        if (bar.BarcodeType.equals("P")) {
+//                            Double ldTotal = (Double) m_mapSaleBaseInfo.get("quantity") * (Integer) m_mapSaleBaseInfo.get("number");
+//                            txtSaleTotal.setText(ldTotal.toString());
+//                        }
+//                        if ( bar.BarcodeType.equals("TP")){
+//                            Double ldTotal = (Double) m_mapSaleBaseInfo.get("quantity");
+//                            txtSaleTotal.setText(ldTotal.toString());
+//                        }
                         doneqty = doneqty + Double.parseDouble(txtSaleTotal.getText().toString());
                         Log.d(TAG, "ScanedToGet: " + doneqty.toString());
                         if (doneqty > temp.getInt("nnumber")) {
                             Toast.makeText(this, "这个存货已经超过应发数量了,不允出库!",
                                     Toast.LENGTH_LONG).show();
-                            // ADD CAIXY TEST START
                             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                            // ADD CAIXY TEST END
                             IniDetail();
                             txtBarcode.setText("");
                             txtBarcode.requestFocus();
@@ -510,7 +519,7 @@ public class SalesDeliveryDetail extends Activity {
 
 
         } catch (Exception ex) {
-            Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "请检查扫描的数据是否正确", Toast.LENGTH_LONG).show();
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             return false;
         }
@@ -533,7 +542,7 @@ public class SalesDeliveryDetail extends Activity {
             // TODO Auto-generated catch block
             e1.printStackTrace();
 
-            Toast.makeText(this, e1.getMessage(), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "无法获取表体信息", Toast.LENGTH_LONG).show();
             // ADD CAIXY TEST START
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             // ADD CAIXY TEST END
@@ -547,7 +556,7 @@ public class SalesDeliveryDetail extends Activity {
 
         return true;
     }
-
+//保存扫描明细
     private boolean ScanSerial(String serino, String Free1, String TotalBox)
             throws JSONException {
         if (jsSerino == null) {
@@ -564,6 +573,7 @@ public class SalesDeliveryDetail extends Activity {
             temp.put("sno", m_mapSaleBaseInfo.get("serino").toString());
             temp.put("invtype", m_mapSaleBaseInfo.get("invtype").toString());
             temp.put("invspec", m_mapSaleBaseInfo.get("invspec").toString());
+            Log.d(TAG, "ScanSerial: "+m_mapSaleBaseInfo.get("vfree4").toString());
             temp.put("vfree4", m_mapSaleBaseInfo.get("vfree4").toString());
             serinos.put(temp);
             jsSerino.put("Serino", serinos);
@@ -586,6 +596,7 @@ public class SalesDeliveryDetail extends Activity {
             temp.put("sno", m_mapSaleBaseInfo.get("serino").toString());
             temp.put("invtype", m_mapSaleBaseInfo.get("invtype").toString());
             temp.put("invspec", m_mapSaleBaseInfo.get("invspec").toString());
+            Log.d(TAG, "ScanSerial: "+m_mapSaleBaseInfo.get("vfree4").toString());
             temp.put("vfree4", m_mapSaleBaseInfo.get("vfree4").toString());
             serinos.put(temp);
             jsSerino.put("Serino", serinos);
@@ -616,7 +627,7 @@ public class SalesDeliveryDetail extends Activity {
                 Log.d(TAG, "GetBillBodyDetailInfo: " + BillCode);
             } catch (JSONException e) {
                 e.printStackTrace();
-                Toast.makeText(SalesDeliveryDetail.this, e.getMessage(),
+                Toast.makeText(SalesDeliveryDetail.this, "无法获取表体信息",
                         Toast.LENGTH_LONG).show();
                 // ADD CAIXY TEST START
                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
@@ -836,13 +847,10 @@ public class SalesDeliveryDetail extends Activity {
 
     private void ShowDetailDig() throws JSONException {
         lstTaskBody = new ArrayList<Map<String, Object>>();
-//        Log.d("TAG", "jsSerino: " + jsSerino.toString());
         Map<String, Object> map;
         if (jsSerino == null || !jsSerino.has("Serino")) {
             Toast.makeText(this, "还没有扫描到的记录", Toast.LENGTH_SHORT).show();
-            // ADD CAIXY TEST START
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            // ADD CAIXY TEST END
             return;
         }
         JSONArray arrays = jsSerino.getJSONArray("Serino");
