@@ -77,13 +77,15 @@ public class MaterialOutScanAct extends Activity {
     EditText mEdWeight;
     @InjectView(R.id.ed_cost_object)
     EditText mEdCostObject;
-
+    @InjectView(R.id.ed_manual)
+    EditText mEdManual;
 
     String TAG = "MaterialOutScanAct";
     public static List<Goods> detailList = new ArrayList<Goods>();
     public static List<Goods> ovList = new ArrayList<Goods>();
     Activity mActivity;
     boolean isBaoBarCode = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -311,6 +313,7 @@ public class MaterialOutScanAct extends Activity {
      * @return
      */
     private void addDataToDetailList() {
+        SoundHelper.playOK();
         Goods goods = new Goods();
         goods.setBarcode(mEdBarCode.getText().toString());
         goods.setEncoding(mEdEncoding.getText().toString());
@@ -321,11 +324,11 @@ public class MaterialOutScanAct extends Activity {
         goods.setLot(mEdLot.getText().toString());
         goods.setQty(Float.valueOf(mEdQty.getText().toString()));
         goods.setCostObject(mEdCostObject.getText().toString());
+        goods.setManual(mEdManual.getText().toString());
         goods.setPk_invbasdoc(pk_invbasdoc);
         goods.setPk_invmandoc(pk_invmandoc);
         detailList.add(goods);
         addDataToOvList();
-        SoundHelper.playOK();
     }
 
     /**
