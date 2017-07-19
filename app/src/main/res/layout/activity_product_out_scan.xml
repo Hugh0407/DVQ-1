@@ -63,7 +63,6 @@
                 android:background="@drawable/edittext_style"
                 android:ems="10"
                 android:enabled="false"
-                android:focusable="false"
                 android:maxLines="1"
                 android:singleLine="true"
                 android:textAllCaps="true"
@@ -94,7 +93,6 @@
                 android:background="@drawable/edittext_style"
                 android:ems="10"
                 android:enabled="false"
-                android:focusable="false"
                 android:maxLines="1"
                 android:singleLine="true"
                 android:textAllCaps="true"
@@ -123,7 +121,6 @@
                 android:background="@drawable/edittext_style"
                 android:ems="10"
                 android:enabled="false"
-                android:focusable="false"
                 android:maxLines="1"
                 android:singleLine="true"
                 android:textAllCaps="true"
@@ -152,7 +149,6 @@
                 android:background="@drawable/edittext_style"
                 android:ems="10"
                 android:enabled="false"
-                android:focusable="false"
                 android:maxLines="1"
                 android:singleLine="true"
                 android:textAllCaps="true"
@@ -272,12 +268,12 @@
                     android:layout_height="30dp"
                     android:layout_weight="1"
                     android:background="@drawable/edittext_style"
-                    android:editable="false"
                     android:ems="10"
-                    android:focusable="false"
+                    android:enabled="false"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:textAllCaps="true"/>
+                    android:textAllCaps="true"
+                    android:textColor="@color/black"/>
 
             </LinearLayout>
         </LinearLayout>
@@ -337,12 +333,12 @@
                     android:layout_height="30dp"
                     android:layout_weight="1"
                     android:background="@drawable/edittext_style"
-                    android:editable="false"
                     android:ems="10"
-                    android:focusable="false"
+                    android:enabled="false"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:textAllCaps="true"/>
+                    android:textAllCaps="true"
+                    android:textColor="@color/black"/>
 
             </LinearLayout>
         </LinearLayout>

@@ -156,10 +156,10 @@ public class ProductOutScanAct extends Activity {
                     if (json != null) {
                         try {
                             setInvBaseToUI(json);
-                            if (isBaoBarCode) {
-                                addDataToDetailList();
-                                isBaoBarCode = false;
-                            }
+//                            if (isBaoBarCode) {
+//                                addDataToDetailList();
+//                                isBaoBarCode = false;
+//                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -218,9 +218,7 @@ public class ProductOutScanAct extends Activity {
         mEdBarCode.selectAll();
         String[] barCode = Bar.split("\\|");
 
-        if (barCode.length == 9 && barCode[0].equals("P")) {// 包码 P|SKU|LOT|WW|TAX|QTY|CW|ONLY|SN    9位
-            mEdLot.setEnabled(false);
-            mEdQty.setEnabled(false);
+        if (barCode.length == 8 && barCode[0].equals("P")) {// 包码 P|SKU|LOT|WW|TAX|QTY|CW_ONLY|SN    8位
             mEdNum.setEnabled(true);
             mEdManual.setEnabled(true);
             mEdNum.setFocusable(true);
@@ -234,7 +232,7 @@ public class ProductOutScanAct extends Activity {
             mEdNum.setSelection(mEdNum.length());   //将光标移动到最后的位置
             getInvBaseInfo(encoding);
             return true;
-        } else if (barCode.length == 10 && barCode[0].equals("TP")) {//盘码TP|SKU|LOT|WW|TAX|QTY|NUM|CW|ONLY|SN
+        } else if (barCode.length == 9 && barCode[0].equals("TP")) {//盘码TP|SKU|LOT|WW|TAX|QTY|NUM|CW_ONLY|SN 9位
             for (int i = 0; i < detailList.size(); i++) {
                 if (detailList.get(i).getBarcode().equals(Bar)) {
                     showToast(mActivity, "该托盘已扫描");
@@ -244,12 +242,6 @@ public class ProductOutScanAct extends Activity {
             //如果是盘码，全都设置为不可编辑，默认这三个是可编辑的
             mEdManual.setEnabled(true);
             mEdManual.requestFocus();
-            mEdLot.setEnabled(false);
-            mEdQty.setEnabled(false);
-            mEdNum.setEnabled(false);
-            mEdManual.setEnabled(true);
-            mEdNum.setFocusable(false);
-            mEdQty.setFocusable(false);
             String encoding = barCode[1];
             mEdEncoding.setText(encoding);
             mEdLot.setText(barCode[2]);
@@ -302,6 +294,7 @@ public class ProductOutScanAct extends Activity {
      * @return
      */
     private boolean addDataToDetailList() {
+        SoundHelper.playOK();
         Goods goods = new Goods();
         goods.setBarcode(mEdBarCode.getText().toString());
         goods.setEncoding(mEdEncoding.getText().toString());
@@ -311,6 +304,7 @@ public class ProductOutScanAct extends Activity {
         goods.setUnit(mEdUnit.getText().toString());
         goods.setLot(mEdLot.getText().toString());
         goods.setQty(Float.valueOf(mEdQty.getText().toString()));
+        goods.setManual(mEdManual.getText().toString());
         goods.setCostObject("");    // 默认没有
         goods.setPk_invbasdoc(pk_invbasdoc);
         goods.setPk_invmandoc(pk_invmandoc);
@@ -320,7 +314,6 @@ public class ProductOutScanAct extends Activity {
         goods.setManual(mEdManual.getText().toString());
         detailList.add(goods);
         addDataToOvList();
-        SoundHelper.playOK();
         return true;
     }
 
@@ -339,9 +332,7 @@ public class ProductOutScanAct extends Activity {
         mEdWeight.setText("");
         mEdSpectype.setText("");
         mEdManual.setText("");
-        mEdLot.setEnabled(false);
         mEdNum.setEnabled(false);
-        mEdQty.setEnabled(false);
         mEdManual.setEnabled(false);
     }
 
@@ -349,6 +340,7 @@ public class ProductOutScanAct extends Activity {
      * 判断所有的edtext是否为空
      *
      * @return true---->所有的ed都不为空,false---->所有的ed都为空
+     *  海关手册号 没有做校验
      */
     private boolean isAllEdNotNull() {
         return (!TextUtils.isEmpty(mEdBarCode.getText())
@@ -488,50 +480,19 @@ public class ProductOutScanAct extends Activity {
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
                 switch (v.getId()) {
                     case R.id.ed_bar_code:
-                        if (!TextUtils.isEmpty(mEdBarCode.getText().toString())) {
-                            if (isAllEdNotNull()) {
-                                addDataToDetailList();
-                                mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
-                                changeAllEdTextToEmpty();
-                            } else {
-                                barAnalysis();
-                            }
-                        } else {
+                        if (TextUtils.isEmpty(mEdBarCode.getText().toString())) {
                             showToast(mActivity, "请输入条码");
-                        }
-                        return true;
-                    case R.id.ed_lot:
-                        if (TextUtils.isEmpty(mEdLot.getText())) {
-                            showToast(mActivity, "请输入批次号");
                             return true;
-                        } else {
-                            mEdQty.requestFocus();  //输入完批次后讲焦点跳到“总量（mEdQty）”
                         }
-                        return true;
-                    case R.id.ed_qty:
+//                        if (isAllEdNotNull()) {
+////                                addDataToDetailList();
+//                            mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
+//                            changeAllEdTextToEmpty();
+//                        } else {
+//                            barAnalysis();
+//                        }
 
-                        if (TextUtils.isEmpty(mEdQty.getText())) {
-                            showToast(mActivity, "请输入总量");
-                        } else {
-                            String qty_s = mEdQty.getText().toString();
-                            if (!isNumber(qty_s)) {
-                                showToast(mActivity, "总量不正确");
-                                mEdQty.setText("");
-                                return true;
-                            }
-                            float qty_f = Float.valueOf(qty_s);
-                            if (qty_f <= 0) {
-                                showToast(mActivity, "总量不正确");
-                                mEdQty.setText("");
-                                return true;
-                            }
-
-                            if (addDataToDetailList()) {
-                                mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
-                                changeAllEdTextToEmpty();
-                            }
-
-                        }
+                        barAnalysis();
                         return true;
                     case ed_num:
                         if (TextUtils.isEmpty(mEdNum.getText().toString())) {
