@@ -313,6 +313,7 @@ public class MaterialOutScanAct extends Activity {
      * @return
      */
     private void addDataToDetailList() {
+        SoundHelper.playOK();
         Goods goods = new Goods();
         goods.setBarcode(mEdBarCode.getText().toString());
         goods.setEncoding(mEdEncoding.getText().toString());
@@ -328,7 +329,6 @@ public class MaterialOutScanAct extends Activity {
         goods.setPk_invmandoc(pk_invmandoc);
         detailList.add(goods);
         addDataToOvList();
-        SoundHelper.playOK();
     }
 
     /**
