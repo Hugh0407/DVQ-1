@@ -152,6 +152,8 @@ public class MaterialOutAct extends Activity {
             case R.id.btnPurInScan:
                 if (isAllEdNotEmpty()) {
                     Intent in = new Intent(mActivity, MaterialOutScanAct.class);
+                    in.putExtra("CWAREHOUSEID",CWAREHOUSEID);
+                    in.putExtra("PK_CALBODY",PK_CALBODY);
                     startActivityForResult(in, 95);
                     if (tempList != null) {
                         tempList.clear();

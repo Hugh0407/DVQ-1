@@ -85,6 +85,9 @@ public class MaterialOutScanAct extends Activity {
     public static List<Goods> ovList = new ArrayList<Goods>();
     Activity mActivity;
     boolean isBaoBarCode = false;
+    String CWAREHOUSEID = "";
+    String PK_CALBODY = "";
+    String BATCH = "";
 
 
     @Override
@@ -133,6 +136,8 @@ public class MaterialOutScanAct extends Activity {
     }
 
     private void init() {
+        CWAREHOUSEID = getIntent().getStringExtra("CWAREHOUSEID");
+        PK_CALBODY = getIntent().getStringExtra("PK_CALBODY");
         ActionBar actionBar = this.getActionBar();
         actionBar.setTitle("物品扫描");
         mEdBarCode.setOnKeyListener(mOnKeyListener);
@@ -157,12 +162,33 @@ public class MaterialOutScanAct extends Activity {
                     JSONObject json = (JSONObject) msg.obj;
                     if (json != null) {
                         try {
+                            Log.d(TAG, "json: " + json.toString());
                             setInvBaseToUI(json);
+                            getInvBaseVFree4();// 获取海关手册号
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                    } else {
-                        return;
+                    }
+                    break;
+                case 2:
+                    //设置海关手册号
+                    JSONObject jsonObject = (JSONObject) msg.obj;
+                    try {
+                        if (jsonObject != null && jsonObject.getBoolean("Status")) {
+                            JSONArray jsonArray = jsonObject.getJSONArray("vfree4");
+                            if (jsonArray.length() > 0) {
+                                JSONObject j = jsonArray.getJSONObject(0);
+                                String vfree4 = j.getString("vfree4");
+                                if (vfree4.equals("null")) {
+                                    mEdManual.setText("");
+                                } else {
+                                    mEdManual.setText(vfree4);
+                                    mEdManual.setEnabled(false);
+                                }
+                            }
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
                     break;
             }
@@ -230,9 +256,11 @@ public class MaterialOutScanAct extends Activity {
             return true;
         } else if (barCode.length == 6 && barCode[0].equals("C")) {   //C|SKU|LOT|TAX|QTY|SN
             //如果是包码，批次和总重都改变为不可编辑，数量由员工输入，焦点跳到“数量”
+            BATCH = String.valueOf(barCode[2]);
             mEdLot.setEnabled(false);
             mEdQty.setEnabled(false);
             mEdNum.setEnabled(true);
+            mEdManual.setEnabled(true);
             mEdNum.requestFocus();  //包码扫描后光标跳到“数量”,输入数量,添加到列表
             String encoding = barCode[1];
             mEdEncoding.setText(encoding);
@@ -253,6 +281,7 @@ public class MaterialOutScanAct extends Activity {
                 }
             }
             //如果是盘码，全都设置为不可编辑
+            BATCH = String.valueOf(barCode[2]);
             mEdLot.setEnabled(false);
             mEdQty.setEnabled(false);
             mEdNum.setEnabled(false);
@@ -353,6 +382,7 @@ public class MaterialOutScanAct extends Activity {
         mEdLot.setEnabled(false);
         mEdNum.setEnabled(false);
         mEdQty.setEnabled(false);
+        mEdManual.setEnabled(false);
     }
 
     /**
@@ -383,6 +413,24 @@ public class MaterialOutScanAct extends Activity {
         parameter.put("InvCode", sku);
         parameter.put("TableName", "baseInfo");
         RequestThread requestThread = new RequestThread(parameter, mHandler, 1);
+        Thread td = new Thread(requestThread);
+        td.start();
+    }
+
+    /**
+     * 获取存货基本信息 海关手册号
+     */
+    private void getInvBaseVFree4() {
+        HashMap<String, String> para = new HashMap<String, String>();
+        para.put("FunctionName", "GetInvFreeByInvCodeAndLot");
+        para.put("CORP", MainLogin.objLog.STOrgCode);
+        para.put("BATCH", BATCH);
+        para.put("WAREHOUSEID", CWAREHOUSEID);
+        para.put("CALBODYID", PK_CALBODY);
+        para.put("CINVBASID", pk_invbasdoc);
+        para.put("INVENTORYID", pk_invmandoc);
+        para.put("TableName", "vfree4");
+        RequestThread requestThread = new RequestThread(para, mHandler, 2);
         Thread td = new Thread(requestThread);
         td.start();
     }
