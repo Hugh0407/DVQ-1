@@ -121,6 +121,11 @@ public class SettingActivity extends Activity implements OnClickListener {
 		//EditText address2=(EditText)findViewById(R.id.eTAddress2);
 		address.setText(mySharedPreferences.getString("Address", ""));
 		//address2.setText(mySharedPreferences.getString("Address2", ""));
+
+//		if(address.getText().toString().equals(""))
+//		{
+//			address.setText("http://58.211.61.69:80/service/nihao");
+//		}
 		
 		if(address.getText().toString().equals(""))
 		{
