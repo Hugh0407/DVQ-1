@@ -444,7 +444,7 @@ public class SalesDeliveryDetail extends Activity {
                             }
                             else{
 //                                txtSaleCustoms.setEnabled(true);
-                                txtSaleCustoms.setText("0");
+//                                txtSaleCustoms.setText("0");
                                 txtSaleCustoms.requestFocus();
                             }
 //                            m_mapSaleBaseInfo = objSaleBaseInfo.mapSaleBaseInfo;
