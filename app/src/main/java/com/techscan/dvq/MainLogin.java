@@ -29,6 +29,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.techscan.dvq.common.Base64Encoder;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
@@ -140,8 +142,6 @@ public class MainLogin extends Activity {
             bulider.setPositiveButton(R.string.QueDing, null).create().show();
             return;
         }
-        user.setText("a1");
-        pwds.setText("123456aS!");
         String userName = user.getText().toString().replace("\n", "");
         String password = pwds.getText().toString().replace("\n", "");
         if (userName.equals("") || password.equals("")) {
@@ -178,10 +178,12 @@ public class MainLogin extends Activity {
 //		}	
 
         // 调用服务
+        String user_name = Base64Encoder.encode(userName.getBytes("gb2312"));
+
         HttpPost httpPost = new HttpPost(lsUrl);
         httpPost.addHeader("Self-Test", "V");
-        httpPost.addHeader("User-Code", user.getText().toString().replace("\n", ""));
-        httpPost.addHeader("User-Pwd", pwds.getText().toString().replace("\n", ""));
+        httpPost.addHeader("User-Code", user_name);
+        httpPost.addHeader("User-Pwd", password);
         httpPost.addHeader("User-Company", CompanyCode);
         httpPost.addHeader("Data-Source", "A");
         httpPost.addHeader("Org-Code", OrgCode);
@@ -543,7 +545,7 @@ public class MainLogin extends Activity {
             // ADD CAIXY TEST END
             return false;
         }
-//        del walter todo 20170614 鏆傛椂鍒犻櫎 <<<<<----
+////        del walter
         return true;
 
     }
