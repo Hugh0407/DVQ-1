@@ -142,6 +142,8 @@ public class MainLogin extends Activity {
             bulider.setPositiveButton(R.string.QueDing, null).create().show();
             return;
         }
+        user.setText("a1");
+        pwds.setText("123456aS!");
         String userName = user.getText().toString().replace("\n", "");
         String password = pwds.getText().toString().replace("\n", "");
         if (userName.equals("") || password.equals("")) {
@@ -177,8 +179,8 @@ public class MainLogin extends Activity {
 //			}
 //		}	
 
-        // 调用服务
         String user_name = Base64Encoder.encode(userName.getBytes("gb2312"));
+        // 调用服务
 
         HttpPost httpPost = new HttpPost(lsUrl);
         httpPost.addHeader("Self-Test", "V");
