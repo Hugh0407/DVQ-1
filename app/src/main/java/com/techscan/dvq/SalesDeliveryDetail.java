@@ -440,6 +440,8 @@ public class SalesDeliveryDetail extends Activity {
                                     txtSaleCustoms.setText(tempJso.getString("vfree4"));
 //                                    txtSaleCustoms.setEnabled(false);
                                     txtSaleCustoms.requestFocus();
+//                                    txtSaleCustoms.setFocusableInTouchMode(true);
+//                                    txtSaleCustoms.setFocusable(true);
                                 }
                             }
                             else{

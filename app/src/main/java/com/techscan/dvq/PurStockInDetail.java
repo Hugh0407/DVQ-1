@@ -284,6 +284,7 @@ public class PurStockInDetail extends Activity {
             serinos.put(temp);
         }
 
+
         return true;
     }
 
