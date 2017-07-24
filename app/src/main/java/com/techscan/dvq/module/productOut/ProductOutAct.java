@@ -26,6 +26,7 @@ import com.techscan.dvq.MainLogin;
 import com.techscan.dvq.R;
 import com.techscan.dvq.VlistRdcl;
 import com.techscan.dvq.bean.Goods;
+import com.techscan.dvq.common.Base64Encoder;
 import com.techscan.dvq.common.RequestThread;
 import com.techscan.dvq.common.SaveThread;
 import com.techscan.dvq.common.Utils;
@@ -39,6 +40,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -167,6 +169,8 @@ public class ProductOutAct extends Activity {
                             saveInfo(tempList);
                             showProgressDialog();
                         } catch (JSONException e) {
+                            e.printStackTrace();
+                        } catch (UnsupportedEncodingException e) {
                             e.printStackTrace();
                         }
                     } else {
@@ -372,17 +376,17 @@ public class ProductOutAct extends Activity {
                         if (saveResult != null) {
                             if (saveResult.getBoolean("Status")) {
                                 Log.d(TAG, "保存" + saveResult.toString());
-                                showResultDialog(mActivity,saveResult.getString("ErrMsg"));
+                                showResultDialog(mActivity, saveResult.getString("ErrMsg"));
                                 tempList.clear();
                                 ProductOutScanAct.ovList.clear();
                                 ProductOutScanAct.detailList.clear();
                                 changeAllEdToEmpty();
                                 mBillNum.requestFocus();
                             } else {
-                                showResultDialog(mActivity,saveResult.getString("ErrMsg"));
+                                showResultDialog(mActivity, saveResult.getString("ErrMsg"));
                             }
                         } else {
-                            showResultDialog(mActivity,"数据提交失败!");
+                            showResultDialog(mActivity, "数据提交失败!");
                         }
                         progressDialogDismiss();
                     } catch (JSONException e) {
@@ -402,7 +406,7 @@ public class ProductOutAct extends Activity {
      * @param goodsList
      * @throws JSONException
      */
-    private void saveInfo(List<Goods> goodsList) throws JSONException {
+    private void saveInfo(List<Goods> goodsList) throws JSONException, UnsupportedEncodingException {
         final JSONObject table = new JSONObject();
         JSONObject tableHead = new JSONObject();
         tableHead.put("CDISPATCHERID", CDISPATCHERID);
@@ -412,7 +416,9 @@ public class ProductOutAct extends Activity {
         tableHead.put("PK_CALBODY", PK_CALBODY);
         tableHead.put("PK_CORP", MainLogin.objLog.STOrgCode);
         tableHead.put("VBILLCODE", mBillNum.getText().toString());
-        tableHead.put("CUSERNAME", MainLogin.objLog.LoginUser);
+        String login_user = MainLogin.objLog.LoginUser.toString();
+        String cuserName = Base64Encoder.encode(login_user.getBytes("gb2312"));
+        tableHead.put("CUSERNAME", cuserName);
         if (mRemark.getText().toString().isEmpty()) {
             mRemark.setText("");
         }

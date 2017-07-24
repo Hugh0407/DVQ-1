@@ -183,7 +183,6 @@ public class MaterialOutScanAct extends Activity {
                                     mEdManual.setText("");
                                 } else {
                                     mEdManual.setText(vfree4);
-                                    mEdManual.setEnabled(false);
                                 }
                             }
                         }
@@ -260,7 +259,6 @@ public class MaterialOutScanAct extends Activity {
             mEdLot.setEnabled(false);
             mEdQty.setEnabled(false);
             mEdNum.setEnabled(true);
-            mEdManual.setEnabled(true);
             mEdNum.requestFocus();  //包码扫描后光标跳到“数量”,输入数量,添加到列表
             String encoding = barCode[1];
             mEdEncoding.setText(encoding);
@@ -285,7 +283,6 @@ public class MaterialOutScanAct extends Activity {
             mEdLot.setEnabled(false);
             mEdQty.setEnabled(false);
             mEdNum.setEnabled(false);
-            mEdManual.setEnabled(true);
             mEdManual.requestFocus();
             String encoding = barCode[1];
             mEdEncoding.setText(encoding);
@@ -382,7 +379,6 @@ public class MaterialOutScanAct extends Activity {
         mEdLot.setEnabled(false);
         mEdNum.setEnabled(false);
         mEdQty.setEnabled(false);
-        mEdManual.setEnabled(false);
     }
 
     /**
