@@ -83,7 +83,7 @@ public class SplitBarcode {
                 CheckBarCode = CheckBarCode + "|" + cBatch;
                 break;
             case P:
-                if (lsSplitArray.length != 9) {
+                if (lsSplitArray.length != 8) {
                     creatorOk = false;
                     return;
                 }
@@ -98,7 +98,7 @@ public class SplitBarcode {
                 CheckBarCode = CheckBarCode + "|" + cBatch;
                 break;
             case TP:
-                if (lsSplitArray.length != 10) {
+                if (lsSplitArray.length != 9) {
                     creatorOk = false;
                     return;
                 }
@@ -108,8 +108,8 @@ public class SplitBarcode {
                 dQuantity = Double.parseDouble(lsSplitArray[5]);
                 iNumber = Integer.parseInt(lsSplitArray[6]);
                 CWFlag = lsSplitArray[7];
-                OnlyFlag = lsSplitArray[8];
-                cSerino = lsSplitArray[9];
+                OnlyFlag = lsSplitArray[7];
+                cSerino = lsSplitArray[8];
                 CheckBarCode = CheckBarCode + "|" + cBatch;
                 break;
             default:
