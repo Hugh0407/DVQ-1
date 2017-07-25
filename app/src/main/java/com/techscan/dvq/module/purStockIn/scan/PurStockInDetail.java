@@ -1,4 +1,4 @@
-package com.techscan.dvq;
+package com.techscan.dvq.module.purStockIn.scan;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -24,7 +24,14 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.techscan.dvq.Common;
+import com.techscan.dvq.GetInvBaseInfo;
+import com.techscan.dvq.Inventory;
+import com.techscan.dvq.login.MainLogin;
+import com.techscan.dvq.R;
 import com.techscan.dvq.R.id;
+import com.techscan.dvq.SplitBarcode;
+import com.techscan.dvq.writeTxt;
 
 import org.apache.http.ParseException;
 import org.apache.http.util.EncodingUtils;
@@ -47,15 +54,15 @@ import static android.content.ContentValues.TAG;
 
 public class PurStockInDetail extends Activity {
 
-    private GetInvBaseInfo objInvBaseInfo = null;
+    private GetInvBaseInfo          objInvBaseInfo   = null;
     private HashMap<String, Object> m_mapInvBaseInfo = null;
-    private SplitBarcode m_cSplitBarcode = null;
+    private SplitBarcode            m_cSplitBarcode  = null;
     String fileNameScan = null;
     String ScanedFileName = null;
     String UserID = null;
     File fileScan = null;
     String ReScanBody = "1";
-    private writeTxt writeTxt;        //保存LOG文件
+    private com.techscan.dvq.writeTxt writeTxt;        //保存LOG文件
 
     String m_BillNo = "";
     String m_BillID = "";

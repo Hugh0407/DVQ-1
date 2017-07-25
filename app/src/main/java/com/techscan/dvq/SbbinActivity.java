@@ -35,6 +35,7 @@ import android.widget.Toast;
 
 import com.techscan.dvq.R.id;
 import com.techscan.dvq.WarehouseMultilist.MyAdapter;
+import com.techscan.dvq.login.MainLogin;
 
 public class SbbinActivity extends Activity {
 	
@@ -615,8 +616,8 @@ private void GetInvImg(String InvCode) throws JSONException
 //		try
 //		{
 ////		String lgUser = MainLogin.objLog.LoginUser;
-////		String lgPwd = MainLogin.objLog.Password;		
-////		String LoginString =  MainLogin.objLog.LoginString;	
+////		String lgPwd = MainLogin.objLog.Password;
+////		String LoginString =  MainLogin.objLog.LoginString;
 //		
 //		JSONObject para = new JSONObject();
 //		

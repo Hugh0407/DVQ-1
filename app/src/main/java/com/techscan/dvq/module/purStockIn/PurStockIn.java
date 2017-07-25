@@ -1,4 +1,4 @@
-package com.techscan.dvq;
+package com.techscan.dvq.module.purStockIn;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -24,10 +24,19 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.techscan.dvq.Common;
+import com.techscan.dvq.ListWarehouse;
+import com.techscan.dvq.PurOrderList;
+import com.techscan.dvq.R;
 import com.techscan.dvq.R.id;
+import com.techscan.dvq.VlistRdcl;
 import com.techscan.dvq.common.RequestThread;
+import com.techscan.dvq.login.MainLogin;
+import com.techscan.dvq.login.MainMenu;
 import com.techscan.dvq.module.materialOut.DepartmentListAct;
 import com.techscan.dvq.module.materialOut.StorgListAct;
+import com.techscan.dvq.module.purStockIn.scan.PurStockInDetail;
+import com.techscan.dvq.writeTxt;
 
 import org.apache.http.ParseException;
 import org.apache.http.util.EncodingUtils;
@@ -47,9 +56,9 @@ import java.util.Map;
 import java.util.UUID;
 
 import static com.techscan.dvq.common.Utils.HANDER_DEPARTMENT;
-import static com.techscan.dvq.common.Utils.HANDER_STORG;
-import static com.techscan.dvq.common.Utils.HANDER_POORDER_HEAD;
 import static com.techscan.dvq.common.Utils.HANDER_POORDER_BODY;
+import static com.techscan.dvq.common.Utils.HANDER_POORDER_HEAD;
+import static com.techscan.dvq.common.Utils.HANDER_STORG;
 
 public class PurStockIn extends Activity {
     private ButtonOnClick buttonOnClick = new ButtonOnClick(0);
@@ -139,8 +148,7 @@ public class PurStockIn extends Activity {
 //	private SoundPool sp;//声明一个SoundPool
 //	private int MainLogin.music;//定义一个int来设置suondID
 //	private int MainLogin.music2;//定义一个int来设置suondID
-    private writeTxt writeTxt;        //保存LOG文件
-
+    writeTxt writeTxt;
     //GUID
     UUID uploadGuid = null;
 

@@ -18,6 +18,8 @@ import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import com.techscan.dvq.R.id;
+import com.techscan.dvq.login.MainLogin;
+import com.techscan.dvq.login.MainMenu;
 
 import org.apache.http.ParseException;
 import org.apache.http.util.EncodingUtils;
@@ -1146,7 +1148,7 @@ public class StockMove extends Activity {
 
 							if (x > 10) {
 								MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0,
-										1);
+                                                  1);
 								Common.ReScanErr = true;
 								ReScanErr();
 								return;

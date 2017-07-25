@@ -22,7 +22,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import com.techscan.dvq.MainLogin;
+import com.techscan.dvq.login.MainLogin;
 import com.techscan.dvq.R;
 import com.techscan.dvq.bean.Goods;
 import com.techscan.dvq.common.RequestThread;
@@ -66,11 +66,11 @@ public class MaterialOutScanAct extends Activity {
     @InjectView(R.id.ed_qty)
     EditText mEdQty;
     @InjectView(R.id.btn_overview)
-    Button mBtnOverview;
+    Button   mBtnOverview;
     @InjectView(R.id.btn_detail)
-    Button mBtnDetail;
+    Button   mBtnDetail;
     @InjectView(R.id.btn_back)
-    Button mBtnBack;
+    Button   mBtnBack;
     @InjectView(R.id.ed_num)
     EditText mEdNum;
     @InjectView(R.id.ed_weight)
@@ -82,12 +82,12 @@ public class MaterialOutScanAct extends Activity {
 
     String TAG = "MaterialOutScanAct";
     public static List<Goods> detailList = new ArrayList<Goods>();
-    public static List<Goods> ovList = new ArrayList<Goods>();
+    public static List<Goods> ovList     = new ArrayList<Goods>();
     Activity mActivity;
     boolean isBaoBarCode = false;
-    String CWAREHOUSEID = "";
-    String PK_CALBODY = "";
-    String BATCH = "";
+    String  CWAREHOUSEID = "";
+    String  PK_CALBODY   = "";
+    String  BATCH        = "";
 
 
     @Override
@@ -118,7 +118,7 @@ public class MaterialOutScanAct extends Activity {
                 break;
             case R.id.btn_back:
                 if (ovList.size() > 0) {
-                    Intent in = new Intent();
+                    Intent in     = new Intent();
                     Bundle bundle = new Bundle();
                     bundle.putParcelableArrayList("overViewList", (ArrayList<? extends Parcelable>) ovList);
                     in.putExtras(bundle);
@@ -145,6 +145,7 @@ public class MaterialOutScanAct extends Activity {
         mEdQty.setOnKeyListener(mOnKeyListener);
         mEdNum.setOnKeyListener(mOnKeyListener);
         mEdManual.setOnKeyListener(mOnKeyListener);
+        mEdCostObject.setOnKeyListener(mOnKeyListener);
         mEdNum.addTextChangedListener(new CustomTextWatcher(mEdNum));
         mEdBarCode.addTextChangedListener(new CustomTextWatcher(mEdBarCode));
     }
@@ -162,9 +163,8 @@ public class MaterialOutScanAct extends Activity {
                     JSONObject json = (JSONObject) msg.obj;
                     if (json != null) {
                         try {
-                            Log.d(TAG, "json: " + json.toString());
+                            Log.d(TAG, "InvBaseInfo: " + json.toString());
                             setInvBaseToUI(json);
-                            getInvBaseVFree4();// 获取海关手册号
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -175,16 +175,19 @@ public class MaterialOutScanAct extends Activity {
                     JSONObject jsonObject = (JSONObject) msg.obj;
                     try {
                         if (jsonObject != null && jsonObject.getBoolean("Status")) {
+                            Log.d(TAG, "vfree4: " + jsonObject);
                             JSONArray jsonArray = jsonObject.getJSONArray("vfree4");
                             if (jsonArray.length() > 0) {
-                                JSONObject j = jsonArray.getJSONObject(0);
-                                String vfree4 = j.getString("vfree4");
+                                JSONObject j      = jsonArray.getJSONObject(0);
+                                String     vfree4 = j.getString("vfree4");
                                 if (vfree4.equals("null")) {
                                     mEdManual.setText("");
                                 } else {
                                     mEdManual.setText(vfree4);
                                 }
                             }
+                        } else {
+                            Log.d(TAG, "vfree4: null");
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -198,8 +201,8 @@ public class MaterialOutScanAct extends Activity {
         AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
         builder.setTitle(title);
         if (list.size() > 0) {
-            View view = LayoutInflater.from(mActivity).inflate(R.layout.dialog_scan_details, null);
-            ListView lv = (ListView) view.findViewById(R.id.lv);
+            View     view = LayoutInflater.from(mActivity).inflate(R.layout.dialog_scan_details, null);
+            ListView lv   = (ListView) view.findViewById(R.id.lv);
             if (title.equals("扫描明细")) { //只有明细的页面是可点击的，总览页面是不可点击的
                 lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
@@ -283,7 +286,6 @@ public class MaterialOutScanAct extends Activity {
             mEdLot.setEnabled(false);
             mEdQty.setEnabled(false);
             mEdNum.setEnabled(false);
-            mEdManual.requestFocus();
             String encoding = barCode[1];
             mEdEncoding.setText(encoding);
             getInvBaseInfo(encoding);
@@ -312,7 +314,7 @@ public class MaterialOutScanAct extends Activity {
         for (int i = 0; i < detailSize; i++) {
             Goods dtGood = detailList.get(i);
             if (ovList.contains(dtGood)) {
-                int j = ovList.indexOf(dtGood);
+                int   j      = ovList.indexOf(dtGood);
                 Goods ovGood = ovList.get(j);
                 ovGood.setQty(ovGood.getQty() + dtGood.getQty());
             } else {
@@ -337,8 +339,6 @@ public class MaterialOutScanAct extends Activity {
 
     /**
      * 添加信息到 集合中
-     *
-     * @return
      */
     private void addDataToDetailList() {
         SoundHelper.playOK();
@@ -379,6 +379,7 @@ public class MaterialOutScanAct extends Activity {
         mEdLot.setEnabled(false);
         mEdNum.setEnabled(false);
         mEdQty.setEnabled(false);
+        mEdManual.setEnabled(false);
     }
 
     /**
@@ -387,14 +388,26 @@ public class MaterialOutScanAct extends Activity {
      * @return true---->所有的ed都不为空,false---->所有的ed都为空
      */
     private boolean isAllEdNotNull() {
-        return (!TextUtils.isEmpty(mEdBarCode.getText())
+        if (mEdManual.isEnabled()) {
+            if (TextUtils.isEmpty(mEdManual.getText())) {
+                showToast(mActivity, "海关手册号不可为空");
+                return false;
+            }
+        }
+        if (!TextUtils.isEmpty(mEdBarCode.getText())
                 && !TextUtils.isEmpty(mEdEncoding.getText())
                 && !TextUtils.isEmpty(mEdName.getText())
                 && !TextUtils.isEmpty(mEdType.getText())
                 && !TextUtils.isEmpty(mEdSpectype.getText())
                 && !TextUtils.isEmpty(mEdUnit.getText())
                 && !TextUtils.isEmpty(mEdLot.getText())
-                && !TextUtils.isEmpty(mEdQty.getText()));
+                && !TextUtils.isEmpty(mEdCostObject.getText())
+                && !TextUtils.isEmpty(mEdQty.getText())) {
+            return true;
+        } else {
+            showToast(mActivity, "信息不完整，请核对");
+            return false;
+        }
     }
 
     /**
@@ -409,7 +422,7 @@ public class MaterialOutScanAct extends Activity {
         parameter.put("InvCode", sku);
         parameter.put("TableName", "baseInfo");
         RequestThread requestThread = new RequestThread(parameter, mHandler, 1);
-        Thread td = new Thread(requestThread);
+        Thread        td            = new Thread(requestThread);
         td.start();
     }
 
@@ -427,7 +440,7 @@ public class MaterialOutScanAct extends Activity {
         para.put("INVENTORYID", pk_invmandoc);
         para.put("TableName", "vfree4");
         RequestThread requestThread = new RequestThread(para, mHandler, 2);
-        Thread td = new Thread(requestThread);
+        Thread        td            = new Thread(requestThread);
         td.start();
     }
 
@@ -444,7 +457,7 @@ public class MaterialOutScanAct extends Activity {
     private void setInvBaseToUI(JSONObject json) throws JSONException {
         Log.d(TAG, "setInvBaseToUI: " + json);
         if (json.getBoolean("Status")) {
-            JSONArray val = json.getJSONArray("baseInfo");
+            JSONArray               val = json.getJSONArray("baseInfo");
             HashMap<String, Object> map = null;
             for (int i = 0; i < val.length(); i++) {
                 JSONObject tempJso = val.getJSONObject(i);
@@ -459,13 +472,19 @@ public class MaterialOutScanAct extends Activity {
                 map.put("invtype", tempJso.getString("invtype"));   //型号
                 map.put("invspec", tempJso.getString("invspec"));   //规格
                 map.put("oppdimen", tempJso.getString("oppdimen"));   //重量
+                map.put("isfree4", tempJso.getString("isfree4"));   //重量
             }
             if (map != null) {
                 mEdName.setText(map.get("invname").toString());
                 mEdUnit.setText(map.get("measname").toString());
                 mEdType.setText(map.get("invtype").toString());
                 mEdSpectype.setText(map.get("invspec").toString());
-                mEdCostObject.setText(map.get("invname").toString());
+                String vFree4 = map.get("isfree4").toString();
+                if (vFree4.equals("Y")) {   //只有Y,两种值
+                    mEdManual.setEnabled(true);
+                } else {
+                    mEdManual.setEnabled(false);
+                }
             }
         }
     }
@@ -544,14 +563,13 @@ public class MaterialOutScanAct extends Activity {
                             showToast(mActivity, "请输入条码");
                             return true;
                         }
-
-                        if (isAllEdNotNull()) {
-//                            addDataToDetailList();
-                            mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
-                            changeAllEdTextToEmpty();
-                        } else {
-                            barAnalysis();
-                        }
+                        barAnalysis();
+//                        if (isAllEdNotNull()) {
+////                            addDataToDetailList();
+//                            mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
+//                            changeAllEdTextToEmpty();
+//                        } else {
+//                        }
 
                         return true;
                     case R.id.ed_lot:
@@ -559,6 +577,8 @@ public class MaterialOutScanAct extends Activity {
                             showToast(mActivity, "请输入批次号");
                             return true;
                         } else {
+                            BATCH = mEdLot.getText().toString();
+                            getInvBaseVFree4();// 获取海关手册号
                             mEdQty.requestFocus();  //输入完批次后讲焦点跳到“总量（mEdQty）”
                         }
                         return true;
@@ -609,12 +629,13 @@ public class MaterialOutScanAct extends Activity {
                         changeAllEdTextToEmpty();
                         return true;
                     case R.id.ed_manual:
+                        mEdCostObject.requestFocus();
+                        return true;
+                    case R.id.ed_cost_object:
                         if (isAllEdNotNull()) {
                             addDataToDetailList();
                             mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
                             changeAllEdTextToEmpty();
-                        } else {
-                            showToast(mActivity, "信息不完整，请核对");
                         }
                         return true;
                 }

@@ -1,22 +1,24 @@
 package com.techscan.dvq.common;
 
+import java.io.UnsupportedEncodingException;
+
 /**
  * Created by cloverss on 2017/7/20.
  */
 
 public class Base64Encoder {
 
-    private static final char last2byte = (char) Integer
+    private static final char   last2byte   = (char) Integer
             .parseInt("00000011", 2);
-    private static final char last4byte = (char) Integer
+    private static final char   last4byte   = (char) Integer
             .parseInt("00001111", 2);
-    private static final char last6byte = (char) Integer
+    private static final char   last6byte   = (char) Integer
             .parseInt("00111111", 2);
-    private static final char lead6byte = (char) Integer
+    private static final char   lead6byte   = (char) Integer
             .parseInt("11111100", 2);
-    private static final char lead4byte = (char) Integer
+    private static final char   lead4byte   = (char) Integer
             .parseInt("11110000", 2);
-    private static final char lead2byte = (char) Integer
+    private static final char   lead2byte   = (char) Integer
             .parseInt("11000000", 2);
     private static final char[] encodeTable = new char[]{'A', 'B', 'C', 'D',
             'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q',
@@ -32,9 +34,9 @@ public class Base64Encoder {
      * @return
      */
     public static String encode(byte[] from) {
-        StringBuffer to = new StringBuffer((int) (from.length * 1.34) + 3);
-        int num = 0;
-        char currentByte = 0;
+        StringBuffer to          = new StringBuffer((int) (from.length * 1.34) + 3);
+        int          num         = 0;
+        char         currentByte = 0;
         for (int i = 0; i < from.length; i++) {
             num = num % 8;
             while (num < 8) {
@@ -71,5 +73,14 @@ public class Base64Encoder {
             }
         }
         return to.toString();
+    }
+
+    public static String encode(String to) {
+        try {
+            return encode(to.getBytes("gb2312"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 }

@@ -14,7 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.techscan.dvq.MainLogin;
+import com.techscan.dvq.login.MainLogin;
 import com.techscan.dvq.R;
 import com.techscan.dvq.common.RequestThread;
 import com.techscan.dvq.common.SoundHelper;

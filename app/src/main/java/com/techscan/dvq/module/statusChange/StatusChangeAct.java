@@ -16,7 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
-import com.techscan.dvq.MainLogin;
+import com.techscan.dvq.login.MainLogin;
 import com.techscan.dvq.OtherOrderList;
 import com.techscan.dvq.R;
 import com.techscan.dvq.bean.PurGood;

@@ -1,4 +1,4 @@
-package com.techscan.dvq;
+package com.techscan.dvq.login;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -21,10 +21,18 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.techscan.dvq.Common;
+import com.techscan.dvq.R;
 import com.techscan.dvq.R.id;
+import com.techscan.dvq.Sample_stocking;
+import com.techscan.dvq.SearchmainActivity;
+import com.techscan.dvq.StockBack;
+import com.techscan.dvq.StockTransContent;
+import com.techscan.dvq.StockTransContentIn;
 import com.techscan.dvq.common.Utils;
 import com.techscan.dvq.module.materialOut.MaterialOutAct;
-import com.techscan.dvq.module.productOut.ProductOutAct;
+import com.techscan.dvq.module.productIn.ProductInAct;
+import com.techscan.dvq.module.purStockIn.PurStockIn;
 import com.techscan.dvq.module.query.Query;
 import com.techscan.dvq.module.statusChange.StatusChangeAct;
 
@@ -33,8 +41,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import butterknife.ButterKnife;
-
-import static com.techscan.dvq.MainLogin.objLog;
 
 public class MainMenu extends Activity {
 
@@ -82,13 +88,13 @@ public class MainMenu extends Activity {
     // ADD CAIXY START
     private void ShowStockInventory() {
         // SearchmainActivity search= new SearchmainActivity
-        Intent StockInventory = new Intent(this, StockInventory.class);
+        Intent StockInventory = new Intent(this, com.techscan.dvq.StockInventory.class);
         startActivity(StockInventory);
     }
 
     private void ShowSearchBillActivity() {
         // SearchmainActivity search= new SearchmainActivity
-        Intent SearchBillActivity = new Intent(this, SearchBillActivity.class);
+        Intent SearchBillActivity = new Intent(this, com.techscan.dvq.SearchBillActivity.class);
         startActivity(SearchBillActivity);
     }
 
@@ -103,7 +109,7 @@ public class MainMenu extends Activity {
 
     private void ShowStockMove() {
         ShowLoading();
-        Intent StockMove = new Intent(this, StockMove.class);
+        Intent StockMove = new Intent(this, com.techscan.dvq.StockMove.class);
         startActivity(StockMove);
     }
 
@@ -152,7 +158,7 @@ public class MainMenu extends Activity {
         radioButton1.setSelected(true);
 
         tvLoginCompanyName = (TextView) findViewById(id.tvLoginCompanyName);
-        String sCompanyName = objLog.CompanyName;
+        String sCompanyName = MainLogin.objLog.CompanyName;
         tvLoginCompanyName.setText(" " + sCompanyName);
         gridview = (GridView) findViewById(id.gvMainMenu);
         //btnLogOut = (Button) findViewById(id.btnLogOut);
@@ -678,7 +684,7 @@ public class MainMenu extends Activity {
             bulider.setPositiveButton(R.string.QueRen, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    Common.lsUrl = objLog.LoginString;
+                    Common.lsUrl = MainLogin.objLog.LoginString;
                     MainLogin.objLog.UserID = "";
                     MainLogin.objLog.UserName = "";
                     MainLogin.objLog.LoginUser = "";
@@ -695,7 +701,7 @@ public class MainMenu extends Activity {
     private void Changeline() {
 
         int lsindex = 0;
-        if (Common.lsUrl.equals(objLog.LoginString2)) {
+        if (Common.lsUrl.equals(MainLogin.objLog.LoginString2)) {
             lsindex = 1;
         }
 
@@ -738,11 +744,11 @@ public class MainMenu extends Activity {
                     if (whichButton == DialogInterface.BUTTON_POSITIVE) {
                         if (index == 0) {
 
-                            Common.lsUrl = objLog.LoginString;
+                            Common.lsUrl = MainLogin.objLog.LoginString;
                             ShowLineChange(LNameList[0]);
                             System.gc();
                         } else if (index == 1) {
-                            Common.lsUrl = objLog.LoginString2;
+                            Common.lsUrl = MainLogin.objLog.LoginString2;
                             ShowLineChange(LNameList[1]);
                             System.gc();
                         }
@@ -774,7 +780,7 @@ public class MainMenu extends Activity {
 
                         String BillName = BillTypeNameList[index].toString();
 
-                        UserID = objLog.UserID;
+                        UserID = MainLogin.objLog.UserID;
 
                         fileName = "/sdcard/DVQ/" + BillType + UserID + ".txt";
                         fileNameScan = "/sdcard/DVQ/" + BillType + "Scan"
@@ -847,7 +853,7 @@ public class MainMenu extends Activity {
     // 显示成品入库画面
     private void ShowProductOut() {
         ShowLoading();
-        Intent ProductOut = new Intent(this, ProductOutAct.class);
+        Intent ProductOut = new Intent(this, ProductInAct.class);
         startActivity(ProductOut);
         cancelLoading();
     }
@@ -887,14 +893,14 @@ public class MainMenu extends Activity {
     // ADD WUQ START
     private void ShowSaleOut() {
         // SearchmainActivity search= new SearchmainActivity
-        Intent SalesDelivery = new Intent(this, SalesDelivery.class);
+        Intent SalesDelivery = new Intent(this, com.techscan.dvq.SalesDelivery.class);
         startActivity(SalesDelivery);
     }
 
     // ADD WUQ START
     private void ShowOther() {
         // SearchmainActivity search= new SearchmainActivity
-        Intent OtherStockInOut = new Intent(this, OtherStockInOut.class);
+        Intent OtherStockInOut = new Intent(this, com.techscan.dvq.OtherStockInOut.class);
         startActivity(OtherStockInOut);
     }
 

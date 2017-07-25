@@ -1,8 +1,9 @@
-package com.techscan.dvq;
+package com.techscan.dvq.login;
 
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -19,17 +20,23 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.StrictMode;
+import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.techscan.dvq.Common;
+import com.techscan.dvq.MyHttpClient;
+import com.techscan.dvq.R;
 import com.techscan.dvq.common.Base64Encoder;
+import com.techscan.dvq.common.Utils;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -49,8 +56,12 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -63,7 +74,7 @@ public class MainLogin extends Activity {
     Button btnLogin, btnExit;
     String LoginString, LoginString2, CompanyCode, OrgCode, WhCode, WhCodeB;
     public static String      tempFilePath = "";
-    public static String      ScanBarCode  = "";
+    public static String      appTime      = "";
     //static JSONArray arysUserRole = new JSONArray();
     //static AlertDialog LGalertDialog = null;
     static        WifiManager wifi_service = null;
@@ -88,6 +99,8 @@ public class MainLogin extends Activity {
     // ADD CAIXY TEST END
 
     public static Common objLog = new Common();
+    @InjectView(R.id.ed_time)
+    EditText edTime;
 
     //objLog.LoginString = LoginString;
     // 打开设置画面
@@ -126,7 +139,7 @@ public class MainLogin extends Activity {
     private void Login() throws ParseException, IOException, JSONException {
 
         SharedPreferences mySharedPreferences = getSharedPreferences(
-                SettingActivity.PREFERENCE_SETTING, Activity.MODE_PRIVATE);
+                SettingActivity.PREFERENCE_SETTING, Context.MODE_PRIVATE);
 
         LoginString = mySharedPreferences.getString("Address", "");        //主地址
         LoginString2 = mySharedPreferences.getString("Address2", "");    //副地址
@@ -206,7 +219,9 @@ public class MainLogin extends Activity {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                Log.d("OkHttp", "onResponse: " + response.body().string());
+                Log.d("OkHttp", "body: " + response.body().toString());
+                Log.d("OkHttp", "headers: " + response.headers());
+                Log.d("OkHttp", "message: " + response.message());
             }
         });
         /*********************************************************************/
@@ -615,6 +630,15 @@ public class MainLogin extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_login);
+        ButterKnife.inject(this);
+        //设置时间为当前系统时间
+        mycalendar = Calendar.getInstance();//初始化Calendar日历对象
+        year = mycalendar.get(Calendar.YEAR); //获取Calendar对象中的年
+        month = mycalendar.get(Calendar.MONTH);//获取Calendar对象中的月
+        day = mycalendar.get(Calendar.DAY_OF_MONTH);//获取这个月的第几天
+        edTime.setText(Utils.formatTime(System.currentTimeMillis()));
+        edTime.setOnFocusChangeListener(myFocusListener);
+        edTime.setInputType(InputType.TYPE_NULL);
 
         btnLogin = (Button) findViewById(R.id.btnLogin);
         btnExit = (Button) findViewById(R.id.btnExit);
@@ -682,14 +706,21 @@ public class MainLogin extends Activity {
 
     }
 
+    int      year;
+    int      month;
+    int      day;
+    Calendar mycalendar;
+
+    @OnClick(R.id.ed_time)
+    public void onViewClicked() {
+        DatePickerDialog dpd = new DatePickerDialog(MainLogin.this, Datelistener, year, month, day);
+        dpd.show();//显示DatePickerDialog组件
+    }
+
     public static boolean getwifiinfo() {
-
-
         WifiInfo wifiInfo = wifi_service.getConnectionInfo();
-
-
-        int iWIFIMin = 30;
-        int iWIFIMax = 85;
+        int      iWIFIMin = 30;
+        int      iWIFIMax = 85;
 
         if (sWIFIMin != null && !sWIFIMin.equals("")) {
             iWIFIMin = Integer.valueOf(sWIFIMin).intValue();
@@ -1012,24 +1043,56 @@ public class MainLogin extends Activity {
     private void Login111() {
         try {
             Login();
-//            //mod walte todo 20170615 杩炴帴涓嶅彲鐢紝鏆傛椂娣诲姞 ----->>>>>
+//            //mod walte
 //            //Login();
 //            Intent MenuForm1 = new Intent(this, MainMenu.class);
 //            startActivity(MenuForm1);
 //            //return;
-//            //mod walte todo 20170615 杩炴帴涓嶅彲鐢紝鏆傛椂娣诲姞 <<<<<-----
+//            //mod walte
         } catch (ParseException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (JSONException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
     }
+
+    private DatePickerDialog.OnDateSetListener Datelistener = new DatePickerDialog.OnDateSetListener() {
+        /**params：view：该事件关联的组件
+         * params：myyear：当前选择的年
+         * params：monthOfYear：当前选择的月
+         * params：dayOfMonth：当前选择的日
+         */
+        @Override
+        public void onDateSet(DatePicker view, int myyear, int monthOfYear, int dayOfMonth) {
+            //修改year、month、day的变量值，以便以后单击按钮时，DatePickerDialog上显示上一次修改后的值
+            year = myyear;
+            month = monthOfYear;
+            day = dayOfMonth;
+            updateDate();
+        }
+
+        //当DatePickerDialog关闭时，更新日期显示
+        private void updateDate() {
+            appTime = year + "-" + (month + 1) + "-" + day;
+            //在TextView上显示日期
+            edTime.setText(appTime);
+        }
+    };
+
+    private View.OnFocusChangeListener myFocusListener = new View.OnFocusChangeListener() {
+        @Override
+        public void onFocusChange(View view, boolean hasFocus) {
+            if (hasFocus) {
+                DatePickerDialog dpd = new DatePickerDialog(MainLogin.this, Datelistener, year, month, day);
+                dpd.show();//显示DatePickerDialog组件
+            }
+        }
+    };
+
+
 
 	/*
      * ArrayList<HashMap<String,String>> am=new

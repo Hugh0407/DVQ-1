@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.techscan.dvq.R.id;
+import com.techscan.dvq.login.MainLogin;
 
 import org.apache.http.ParseException;
 import org.json.JSONArray;
@@ -1065,9 +1066,9 @@ public class StockInventoryScan extends Activity {
 				ScanDetail.put("GUIDS", uploadGuid.toString());
 				
 				
-				ScanDetail.put("UserIDA",MainLogin.objLog.UserID);
+				ScanDetail.put("UserIDA", MainLogin.objLog.UserID);
 				
-				ScanDetail.put("UserIDB",MainLogin.objLog.UserIDB);
+				ScanDetail.put("UserIDB", MainLogin.objLog.UserIDB);
 				
 				JSONObject jasA = null;
 				JSONObject jasB = null;

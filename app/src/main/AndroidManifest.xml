@@ -27,7 +27,7 @@
         android:icon="@drawable/autoscanlogo"
         android:theme="@style/AppBaseTheme">
         <activity
-            android:name=".MainLogin"
+            android:name=".login.MainLogin"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -41,7 +41,7 @@
             android:windowSoftInputMode="adjustPan">
         </activity>
         <activity
-            android:name=".SettingActivity"
+            android:name=".login.SettingActivity"
             android:label="@string/title_activity_setting"
             android:windowSoftInputMode="adjustPan">
         </activity>
@@ -54,7 +54,7 @@
         <!-- android:label="@string/title_activity_move_stock" > -->
         <!-- </activity> -->
         <activity
-            android:name=".MainMenu"
+            android:name=".login.MainMenu"
             android:label="@string/title_activity_main_menu"
             android:windowSoftInputMode="adjustPan">
         </activity>
@@ -129,12 +129,12 @@
             android:windowSoftInputMode="adjustPan">
         </activity>
         <activity
-            android:name=".PurStockInDetail"
+            android:name=".module.purStockIn.scan.PurStockInDetail"
             android:label="@string/title_activity_pur_stock_in_detail"
             android:windowSoftInputMode="adjustPan">
         </activity>
         <activity
-            android:name=".PurStockIn"
+            android:name=".module.purStockIn.PurStockIn"
             android:label="@string/title_activity_pur_stock_in"
             android:windowSoftInputMode="adjustPan">
         </activity>
@@ -199,7 +199,7 @@
             android:windowSoftInputMode="adjustPan">
         </activity>
         <activity
-            android:name=".SaleBillInfoOrderList"
+            android:name=".GetInvBaseInfo$SaleBillInfoOrderList"
             android:label="@string/title_activity_sale_bill_info_order_list"
             android:windowSoftInputMode="adjustPan">
         </activity>
@@ -282,13 +282,13 @@
         </activity>
         <activity android:name=".module.materialOut.StorgListAct">
         </activity>
-        <activity android:name=".module.productOut.ProductOutAct">
+        <activity android:name=".module.productIn.ProductInAct">
         </activity>
         <activity android:name=".module.statusChange.StatusChangeAct">
         </activity>
         <activity android:name=".module.statusChange.scan.SCScanAct">
         </activity>
-        <activity android:name=".module.productOut.scan.ProductOutScanAct">
+        <activity android:name=".module.productIn.scan.ProductInScanAct">
         </activity>
 
         <activity android:name=".module.query.Query">

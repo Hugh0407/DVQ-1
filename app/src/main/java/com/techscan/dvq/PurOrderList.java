@@ -2,7 +2,6 @@ package com.techscan.dvq;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
@@ -20,6 +19,7 @@ import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import com.techscan.dvq.R.id;
+import com.techscan.dvq.login.MainLogin;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,8 +29,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import android.graphics.drawable.ColorDrawable;
 
 public class PurOrderList extends Activity {
 

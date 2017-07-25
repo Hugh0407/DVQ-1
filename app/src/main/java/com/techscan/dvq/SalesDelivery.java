@@ -23,8 +23,8 @@ import android.widget.Toast;
 
 import com.techscan.dvq.R.id;
 import com.techscan.dvq.bean.SaleOutGoods;
-import com.techscan.dvq.common.Base64Encoder;
 import com.techscan.dvq.common.SaveThread;
+import com.techscan.dvq.login.MainLogin;
 
 import org.apache.http.ParseException;
 import org.json.JSONArray;
@@ -1048,7 +1048,7 @@ public class SalesDelivery extends Activity {
                     CSALECORPID = tempJso.getString("csalecorpid").toString();
                     PK_CORP = tempJso.getString("pk_corp").toString();
                     VDEF1 = tempJso.getString("vdef1").toString();
-//                    VDEF4 = tempJso.getString("vdef1").toString();
+                    VDEF4 = tempJso.getString("vdef1").toString();
                     VDEF2 = tempJso.getString("vdef2").toString();
                     VDEF5 = tempJso.getString("vdef5").toString();
                     if (!TextUtils.isEmpty(VDEF5)){
@@ -1508,24 +1508,19 @@ public class SalesDelivery extends Activity {
 //                map.put("NNUMBER",notnum);
             NTOTALNUMBER = decimalFormat.format(notnum);
         }
+
         Log.d(TAG, "GGGG: "+map.toString());
         JSONObject tableHead = new JSONObject();
         tableHead.put("RECEIVECODE",tmpBillCode);
         tableHead.put("CBIZTYPE", CBIZTYPE);
         tableHead.put("COPERATORID", MainLogin.objLog.UserID);
-        String login_user = MainLogin.objLog.LoginUser.toString();
-        String userName = Base64Encoder.encode(login_user.getBytes("gb2312"));
-        tableHead.put("USERNAME", userName);
         tableHead.put("CRECEIPTTYE", "4331");
         tableHead.put("CSALECORPID", CSALECORPID);
         tableHead.put("PK_CORP", MainLogin.objLog.STOrgCode);
         tableHead.put("VBILLCODE", "");
-        String vd1 = Base64Encoder.encode(VDEF1.getBytes("gb2312"));
-        String vd2 = Base64Encoder.encode(VDEF2.getBytes("gb2312"));
-        String vd5 = Base64Encoder.encode(VDEF5.getBytes("gb2312"));
-        tableHead.put("VDEF1", vd1);
-        tableHead.put("VDEF2", vd2);
-        tableHead.put("VDEF5", vd5);
+        tableHead.put("VDEF1", VDEF1);
+        tableHead.put("VDEF2", VDEF2);
+        tableHead.put("VDEF5", VDEF5);
         tableHead.put("NTOTALNUMBER",NTOTALNUMBER);
         tableHead.put("NOTOTALNUMBER","200.00");// TODO: 2017/7/4
         table.put("Head", tableHead);
@@ -1567,9 +1562,7 @@ public class SalesDelivery extends Activity {
                     object.put("NNUMBER", totalBox);
                     object.put("PK_SENDCORP", bodys.getJSONObject(i).getString("pk_corp"));
                     object.put("VBATCHCODE", arraysSerino.getJSONObject(j).getString("batch"));
-                    String address = bodys.getJSONObject(i).getString("vreceiveaddress");
-                    String caddress = Base64Encoder.encode(address.getBytes("gb2312"));
-                    object.put("VRECEIVEADDRESS",caddress);
+                    object.put("VRECEIVEADDRESS",bodys.getJSONObject(i).getString("vreceiveaddress"));
                     object.put("VRECEIVEPERSON",MainLogin.objLog.LoginUser);
                     bodyArray.put(object);
                     y++;
@@ -1660,6 +1653,7 @@ public class SalesDelivery extends Activity {
         String LoginString = MainLogin.objLog.LoginString;
 
         JSONObject para = new JSONObject();
+
         para.put("FunctionName", "GetWareHouseList");
         para.put("CompanyCode", MainLogin.objLog.CompanyCode);
         para.put("STOrgCode", MainLogin.objLog.STOrgCode);
@@ -1736,7 +1730,7 @@ public class SalesDelivery extends Activity {
             return;
         }
         if (tvSaleOutSelect.getText().toString().equals("销售出库")) {
-            Intent ViewGrid = new Intent(this, SaleBillInfoOrderList.class);
+            Intent ViewGrid = new Intent(this, GetInvBaseInfo.SaleBillInfoOrderList.class);
             ViewGrid.putExtra("FunctionName", "销售出库");//GetSalereceiveHead
             ViewGrid.putExtra("sBeginDate", sBeginDate);
             ViewGrid.putExtra("sBillCodes", sBillCodes);
