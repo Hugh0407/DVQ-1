@@ -164,7 +164,7 @@ public class SalesDeliveryDetail extends Activity {
             arrays = jsBody.getJSONArray("dbBody");
             for (int i = 0; i < arrays.length(); i++) {
                 String totalNumber = ((JSONObject) (arrays.get(i)))
-                        .getString("nnumber");
+                        .getString("doneqty");
                 String ntotalnum = ((JSONObject) (arrays.get(i)))
                         .getString("ntotaloutinvnum");
                 number = number + Double.valueOf(totalNumber);
@@ -193,18 +193,18 @@ public class SalesDeliveryDetail extends Activity {
                         txtBarcode.requestFocus();
                         txtBarcode.setText("");
                         return true;
-                    case R.id.txtSaleCustoms:
+//                    case R.id.txtSaleCustoms:
 //                        if (TextUtils.isEmpty(txtSaleNumber.getText())){
 //                            Utils.showToast(SalesDeliveryDetail.this, "请输入海关手册号");
 //                            txtSaleCustoms.requestFocus();
 //                            return false;
 //                        }
-                        m_mapSaleBaseInfo.put("vfree4",txtSaleCustoms.getText().toString());
-                        ScanedToGet();
-                        IniDetail();
-                        txtBarcode.setText("");
-                        txtBarcode.requestFocus();
-                        return true;
+//                        m_mapSaleBaseInfo.put("vfree4",txtSaleCustoms.getText().toString());
+//                        ScanedToGet();
+//                        IniDetail();
+//                        txtBarcode.setText("");
+//                        txtBarcode.requestFocus();
+//                        return true;
 
                     case R.id.txtSaleNumber:
                         if (TextUtils.isEmpty(txtSaleNumber.getText())) {
@@ -224,12 +224,12 @@ public class SalesDeliveryDetail extends Activity {
                             return true;
                         }
                         m_mapSaleBaseInfo.put("number", Integer.valueOf(txtSaleNumber.getText().toString()));
-                        txtSaleCustoms.requestFocus();
-//                        ScanedToGet();
-//                        IniDetail();
-//                        txtBarcode.setText("");
-//                        txtBarcode.requestFocus();
-//                        return true;
+
+                        ScanedToGet();
+                        IniDetail();
+                        txtBarcode.setText("");
+                        txtBarcode.requestFocus();
+                        return true;
                 }
             }
 
@@ -303,7 +303,6 @@ public class SalesDeliveryDetail extends Activity {
                     Log.d(TAG, "afterTextChanged: " + "");
                     txtSaleTotal.setText(String.valueOf(a * b));
                     m_mapSaleBaseInfo.put("number", Integer.valueOf(txtSaleNumber.getText().toString()));
-//                    ScanedToGet();
                     break;
             }
         }
@@ -399,8 +398,7 @@ public class SalesDeliveryDetail extends Activity {
                             Log.d(TAG, "handleMessage1: "+json.toString());
                             objSaleBaseInfo.SetSaleBaseToParam(json);
                             m_mapSaleBaseInfo = objSaleBaseInfo.mapSaleBaseInfo;
-                            Log.d(TAG, "handleMessage: "+m_mapSaleBaseInfo.size());
-                            SetInvBaseToUI();
+//                            SetInvBaseToUI();
                             getInvBaseVFree4();
 
 
@@ -438,20 +436,18 @@ public class SalesDeliveryDetail extends Activity {
                                     JSONObject tempJso = jsonArray.getJSONObject(i);
                                     Log.d(TAG, "vfree4: "+tempJso.getString("vfree4"));
                                     txtSaleCustoms.setText(tempJso.getString("vfree4"));
-//                                    txtSaleCustoms.setEnabled(false);
-                                    txtSaleCustoms.requestFocus();
+                                    m_mapSaleBaseInfo.put("vfree4",txtSaleCustoms.getText().toString());
+                                    SetInvBaseToUI();
+//                                    txtSaleCustoms.requestFocus();
 //                                    txtSaleCustoms.setFocusableInTouchMode(true);
 //                                    txtSaleCustoms.setFocusable(true);
                                 }
                             }
                             else{
-//                                txtSaleCustoms.setEnabled(true);
-//                                txtSaleCustoms.setText("0");
-                                txtSaleCustoms.requestFocus();
+//                                txtSaleCustoms.requestFocus();
+                                m_mapSaleBaseInfo.put("vfree4",txtSaleCustoms.getText().toString());
+                                SetInvBaseToUI();
                             }
-//                            m_mapSaleBaseInfo = objSaleBaseInfo.mapSaleBaseInfo;
-//                            SetInvBaseToUI();
-
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -482,20 +478,20 @@ public class SalesDeliveryDetail extends Activity {
             txtSaleNumber.setFocusable(false);
             txtSaleTotal.setFocusableInTouchMode(false);
             txtSaleTotal.setFocusable(false);
-            txtSaleCustoms.requestFocus();
-            txtSaleCustoms.selectAll();
-            txtSaleCustoms.setFocusableInTouchMode(true);
-            txtSaleCustoms.setFocusable(true);
-            txtSaleCustoms.setEnabled(true);
-//            ScanedToGet();
+//            txtSaleCustoms.requestFocus();
+//            txtSaleCustoms.selectAll();
+//            txtSaleCustoms.setFocusableInTouchMode(true);
+//            txtSaleCustoms.setFocusable(true);
+//            txtSaleCustoms.setEnabled(true);
+            ScanedToGet();
         } else if (m_mapSaleBaseInfo.get("barcodetype").toString().equals("P")) {
             txtSaleBatch.setFocusableInTouchMode(false);
             txtSaleBatch.setFocusable(false);
-            txtSaleCustoms.requestFocus();
-            txtSaleCustoms.selectAll();
-            txtSaleCustoms.setFocusableInTouchMode(true);
-            txtSaleCustoms.setFocusable(true);
-            txtSaleCustoms.setEnabled(true);
+//            txtSaleCustoms.requestFocus();
+//            txtSaleCustoms.selectAll();
+//            txtSaleCustoms.setFocusableInTouchMode(true);
+//            txtSaleCustoms.setFocusable(true);
+//            txtSaleCustoms.setEnabled(true);
             txtSaleNumber.setFocusableInTouchMode(true);
             txtSaleNumber.setFocusable(true);
             txtSaleNumber.setEnabled(true);
@@ -523,7 +519,7 @@ public class SalesDeliveryDetail extends Activity {
                         doneqty = temp.getDouble("ntotaloutinvnum");
                         doneqty = doneqty + Double.parseDouble(txtSaleTotal.getText().toString());
                         Log.d(TAG, "ScanedToGet: " + doneqty.toString());
-                        if (doneqty > temp.getInt("nnumber")) {
+                        if (doneqty > temp.getInt("doneqty")) {
                             Toast.makeText(this, "这个存货已经超过应发数量了,不允出库!",
                                     Toast.LENGTH_LONG).show();
                             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
@@ -569,7 +565,7 @@ public class SalesDeliveryDetail extends Activity {
             ntotaloutinvnum = 0.0;
             for (int i = 0; i < arrays.length(); i++) {
                 String sshouldinnum = ((JSONObject) (arrays.get(i)))
-                        .getString("nnumber");
+                        .getString("doneqty");
                 String sinnum = ((JSONObject) (arrays.get(i)))
                         .getString("ntotaloutinvnum");
                 number = number + Double.valueOf(sshouldinnum);
@@ -888,8 +884,8 @@ public class SalesDeliveryDetail extends Activity {
             if (sinnum.toLowerCase().equals("null") || sinnum.isEmpty())
                 sinnum = "0.0";
             map.put("InvNum",
-                    sinnum + " / " + Double.valueOf(((JSONObject) (arrays.get(i))).getString("nnumber")));
-            // map.put("DoneQty", )
+                    sinnum + " / " + Double.valueOf(((JSONObject) (arrays.get(i))).getString("doneqty")));
+            // map.put("doneqty", )
             lstTaskBody.add(map);
         }
 
@@ -961,8 +957,8 @@ public class SalesDeliveryDetail extends Activity {
 
                         ConfirmDelItem(position);
 //                        jsSerino.remove("Serino");
-                        jsSerino.remove(String.valueOf(position));
-                        listItemAdapter.notifyDataSetChanged();
+//                        jsSerino.remove(String.valueOf(position));
+//                        listItemAdapter.notifyDataSetChanged();
                         IniDetail();
                         return false;
                     }
@@ -1077,7 +1073,7 @@ public class SalesDeliveryDetail extends Activity {
 //                                ntotaloutinvnum = 0.0;
 //                                for (int i = 0; i < arraysCount.length(); i++) {
 //                                    String sshouldinnum = ((JSONObject) (arraysCount
-//                                            .get(i))).getString("nnumber");
+//                                            .get(i))).getString("doneqty");
 //                                    String sinnum = ((JSONObject) (arraysCount
 //                                            .get(i))).getString("ntotaloutinvnum");
 //
@@ -1143,7 +1139,7 @@ public class SalesDeliveryDetail extends Activity {
                             String RemoveBarCode = ScanedBarcode.get(si).toString();
                             if (RemoveBarCode.equals(serino)) {
                                 ScanedBarcode.remove(si);
-//                                si--;
+                                si--;
                             }
                         }
                     }
@@ -1199,7 +1195,7 @@ public class SalesDeliveryDetail extends Activity {
                             ntotaloutinvnum = 0.0;
                             for (int i = 0; i < arraysCount.length(); i++) {
                                 String sshouldinnum = ((JSONObject) (arraysCount
-                                        .get(i))).getString("nnumber");
+                                        .get(i))).getString("doneqty");
                                 String sinnum = ((JSONObject) (arraysCount
                                         .get(i))).getString("ntotaloutinvnum");
 
