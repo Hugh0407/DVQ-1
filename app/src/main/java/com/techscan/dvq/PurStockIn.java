@@ -89,11 +89,11 @@ public class PurStockIn extends Activity {
     ImageButton btnWarehouse;
     ImageButton btnOrganization;
     //ImageButton btnCategory;
-    ImageButton btnDepartment;
+    //ImageButton btnDepartment;
     EditText txtWareHouse;
     EditText txtOrganization;
     //EditText txtCategory;
-    EditText txtDepartment;
+    //EditText txtDepartment;
     EditText txtStartDate;
     EditText txtEndDate;
     EditText txtPurInBillCode;
@@ -540,7 +540,8 @@ public class PurStockIn extends Activity {
         saveHeadJons.put("PK_CORP", MainLogin.objLog.CompanyCode);
         saveHeadJons.put("CDISPATCHERID", CDISPATCHERID);             //收发类别code
         saveHeadJons.put("PK_CALBODY", PK_CALBODY);                    //库存组织
-        saveHeadJons.put("CDPTID", CDPTID);                    //部门
+        //saveHeadJons.put("CDPTID", CDPTID);                    //部门
+		saveHeadJons.put("CDPTID", heads.getJSONObject(0).getString("cdeptid"));   //部门
         saveHeadJons.put("CBIZTYPE", heads.getJSONObject(0).getString("cbiztype"));//业务类型
         saveHeadJons.put("VNOTE", txtReMark.getText().toString());//备注
         saveHeadJons.put("FREPLENISHFLAG", m_FrePlenishFlag);//退货标志
@@ -1701,9 +1702,9 @@ public class PurStockIn extends Activity {
 //						e.printStackTrace();
 //					}
 //					break;
-                        case R.id.refer_department:
-                            btnReferDepartment();
-                            break;
+//                        case R.id.refer_department:
+//                            btnReferDepartment();
+//                            break;
                     }
                 }
             };
@@ -1750,13 +1751,13 @@ public class PurStockIn extends Activity {
         btnOrganization.setOnClickListener(myListner);
         //btnCategory = (ImageButton)findViewById(id.refer_lei_bie);
         //btnCategory.setOnClickListener(myListner);
-        btnDepartment = (ImageButton) findViewById(id.refer_department);
-        btnDepartment.setOnClickListener(myListner);
+//        btnDepartment = (ImageButton) findViewById(id.refer_department);
+//        btnDepartment.setOnClickListener(myListner);
 
         txtWareHouse = (EditText) findViewById(R.id.wh);
         txtOrganization = (EditText) findViewById(R.id.organization);
         //txtCategory = (EditText)findViewById(R.id.lei_bie);
-        txtDepartment = (EditText) findViewById(R.id.department);
+//        txtDepartment = (EditText) findViewById(R.id.department);
 
         txtStartDate = (EditText) findViewById(id.txtStartDate);
         txtEndDate = (EditText) findViewById(id.txtEndDate);
@@ -2020,7 +2021,7 @@ public class PurStockIn extends Activity {
         txtWareHouse.setText("");
         txtOrganization.setText("");
         //txtCategory.setText("");
-        txtDepartment.setText("");
+//        txtDepartment.setText("");
         txtReMark.setText("");
 
         m_WarehouseID = "";
@@ -2461,8 +2462,8 @@ public class PurStockIn extends Activity {
             String pk_deptdoc = data.getStringExtra("pk_deptdoc");
             String deptcode = data.getStringExtra("deptcode");
             CDPTID = pk_deptdoc;
-            txtDepartment.requestFocus();
-            txtDepartment.setText(deptname);
+//            txtDepartment.requestFocus();
+//            txtDepartment.setText(deptname);
         }
 
         //库存组织
