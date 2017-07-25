@@ -24,7 +24,6 @@ import android.widget.Toast;
 import com.techscan.dvq.R.id;
 import com.techscan.dvq.bean.SaleOutGoods;
 import com.techscan.dvq.common.SaveThread;
-import com.techscan.dvq.login.MainLogin;
 
 import org.apache.http.ParseException;
 import org.json.JSONArray;
@@ -1563,7 +1562,7 @@ public class SalesDelivery extends Activity {
                     object.put("PK_SENDCORP", bodys.getJSONObject(i).getString("pk_corp"));
                     object.put("VBATCHCODE", arraysSerino.getJSONObject(j).getString("batch"));
                     object.put("VRECEIVEADDRESS",bodys.getJSONObject(i).getString("vreceiveaddress"));
-                    object.put("VRECEIVEPERSON", MainLogin.objLog.LoginUser);
+                    object.put("VRECEIVEPERSON",MainLogin.objLog.LoginUser);
                     bodyArray.put(object);
                     y++;
                 }
@@ -1730,7 +1729,7 @@ public class SalesDelivery extends Activity {
             return;
         }
         if (tvSaleOutSelect.getText().toString().equals("销售出库")) {
-            Intent ViewGrid = new Intent(this, GetInvBaseInfo.SaleBillInfoOrderList.class);
+            Intent ViewGrid = new Intent(this, SaleBillInfoOrderList.class);
             ViewGrid.putExtra("FunctionName", "销售出库");//GetSalereceiveHead
             ViewGrid.putExtra("sBeginDate", sBeginDate);
             ViewGrid.putExtra("sBillCodes", sBillCodes);

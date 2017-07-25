@@ -1,7 +1,5 @@
 package com.techscan.dvq;
 
-import com.techscan.dvq.login.MainLogin;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
@@ -21,6 +19,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 import java.util.Set;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 
 public class Common {
 
