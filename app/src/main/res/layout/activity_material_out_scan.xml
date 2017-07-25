@@ -188,6 +188,34 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="4dp"
+                android:gravity="center_vertical"
+                android:text="海关手册号"/>
+
+            <EditText
+                android:id="@+id/ed_manual"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:background="@drawable/edittext_style"
+                android:ems="10"
+                android:enabled="false"
+                android:inputType="text"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textAllCaps="true"
+                android:textColor="@color/black"/>
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -209,7 +237,6 @@
                 android:layout_weight="1"
                 android:background="@drawable/edittext_style"
                 android:ems="10"
-                android:enabled="false"
                 android:maxLines="1"
                 android:singleLine="true"
                 android:textAllCaps="true"
@@ -217,33 +244,6 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="2dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginRight="4dp"
-                android:gravity="center_vertical"
-                android:text="海关手册号"/>
-
-            <EditText
-                android:id="@+id/ed_manual"
-                android:layout_width="0dp"
-                android:layout_height="30dp"
-                android:layout_weight="1"
-                android:background="@drawable/edittext_style"
-                android:ems="10"
-                android:inputType="text"
-                android:maxLines="1"
-                android:singleLine="true"
-                android:textAllCaps="true"
-                android:textColor="@color/black"/>
-
-        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

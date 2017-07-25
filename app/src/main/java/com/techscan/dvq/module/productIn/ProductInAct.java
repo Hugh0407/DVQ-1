@@ -1,4 +1,4 @@
-package com.techscan.dvq.module.productOut;
+package com.techscan.dvq.module.productIn;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -22,7 +22,7 @@ import android.widget.Toast;
 
 import com.techscan.dvq.Common;
 import com.techscan.dvq.ListWarehouse;
-import com.techscan.dvq.MainLogin;
+import com.techscan.dvq.login.MainLogin;
 import com.techscan.dvq.R;
 import com.techscan.dvq.VlistRdcl;
 import com.techscan.dvq.bean.Goods;
@@ -32,7 +32,7 @@ import com.techscan.dvq.common.SaveThread;
 import com.techscan.dvq.common.Utils;
 import com.techscan.dvq.module.materialOut.DepartmentListAct;
 import com.techscan.dvq.module.materialOut.StorgListAct;
-import com.techscan.dvq.module.productOut.scan.ProductOutScanAct;
+import com.techscan.dvq.module.productIn.scan.ProductInScanAct;
 
 import org.apache.http.ParseException;
 import org.json.JSONArray;
@@ -56,7 +56,7 @@ import static com.techscan.dvq.common.Utils.HANDER_STORG;
 import static com.techscan.dvq.common.Utils.showResultDialog;
 import static com.techscan.dvq.common.Utils.showToast;
 
-public class ProductOutAct extends Activity {
+public class ProductInAct extends Activity {
 
 
     @InjectView(R.id.bill_num)
@@ -153,7 +153,7 @@ public class ProductOutAct extends Activity {
                 break;
             case R.id.btnPurInScan:
                 if (isAllEdNotEmpty()) {
-                    Intent in = new Intent(mActivity, ProductOutScanAct.class);
+                    Intent in = new Intent(mActivity, ProductInScanAct.class);
                     startActivityForResult(in, 95);
                     if (tempList != null) {
                         tempList.clear();
@@ -186,15 +186,15 @@ public class ProductOutAct extends Activity {
                     bulider.setPositiveButton(R.string.QueRen, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            ProductOutScanAct.ovList.clear();
-                            ProductOutScanAct.detailList.clear();
+                            ProductInScanAct.ovList.clear();
+                            ProductInScanAct.detailList.clear();
                             dialog.dismiss();
                             finish();
                         }
                     }).create().show();
                 } else {
-                    ProductOutScanAct.ovList.clear();
-                    ProductOutScanAct.detailList.clear();
+                    ProductInScanAct.ovList.clear();
+                    ProductInScanAct.detailList.clear();
                     finish();
                 }
                 break;
@@ -378,8 +378,8 @@ public class ProductOutAct extends Activity {
                                 Log.d(TAG, "±£´æ" + saveResult.toString());
                                 showResultDialog(mActivity, saveResult.getString("ErrMsg"));
                                 tempList.clear();
-                                ProductOutScanAct.ovList.clear();
-                                ProductOutScanAct.detailList.clear();
+                                ProductInScanAct.ovList.clear();
+                                ProductInScanAct.detailList.clear();
                                 changeAllEdToEmpty();
                                 mBillNum.requestFocus();
                             } else {

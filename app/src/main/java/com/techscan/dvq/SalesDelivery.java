@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.techscan.dvq.R.id;
 import com.techscan.dvq.bean.SaleOutGoods;
 import com.techscan.dvq.common.SaveThread;
+import com.techscan.dvq.login.MainLogin;
 
 import org.apache.http.ParseException;
 import org.json.JSONArray;
@@ -1729,7 +1730,7 @@ public class SalesDelivery extends Activity {
             return;
         }
         if (tvSaleOutSelect.getText().toString().equals("销售出库")) {
-            Intent ViewGrid = new Intent(this, SaleBillInfoOrderList.class);
+            Intent ViewGrid = new Intent(this, GetInvBaseInfo.SaleBillInfoOrderList.class);
             ViewGrid.putExtra("FunctionName", "销售出库");//GetSalereceiveHead
             ViewGrid.putExtra("sBeginDate", sBeginDate);
             ViewGrid.putExtra("sBillCodes", sBillCodes);

@@ -1,13 +1,10 @@
 package com.techscan.dvq;
 
 import java.io.IOException;
-import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import org.apache.http.ParseException;
 import org.json.JSONArray;
@@ -15,13 +12,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.techscan.dvq.R.id;
+import com.techscan.dvq.login.MainLogin;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.media.AudioManager;
-import android.media.SoundPool;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -33,8 +29,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class StockInventory extends Activity {

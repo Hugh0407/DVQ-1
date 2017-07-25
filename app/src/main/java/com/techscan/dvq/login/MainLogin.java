@@ -1,4 +1,4 @@
-package com.techscan.dvq;
+package com.techscan.dvq.login;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -29,6 +29,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.techscan.dvq.Common;
+import com.techscan.dvq.MyHttpClient;
+import com.techscan.dvq.R;
+import com.techscan.dvq.SettingActivity;
 import com.techscan.dvq.common.Base64Encoder;
 
 import org.apache.http.HttpEntity;
@@ -206,7 +210,9 @@ public class MainLogin extends Activity {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                Log.d("OkHttp", "onResponse: " + response.body().string());
+                Log.d("OkHttp", "body: " + response.body().toString());
+                Log.d("OkHttp", "headers: " + response.headers());
+                Log.d("OkHttp", "message: " + response.message());
             }
         });
         /*********************************************************************/

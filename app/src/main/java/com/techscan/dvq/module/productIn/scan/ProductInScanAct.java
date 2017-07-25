@@ -1,4 +1,4 @@
-package com.techscan.dvq.module.productOut.scan;
+package com.techscan.dvq.module.productIn.scan;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -22,7 +22,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import com.techscan.dvq.MainLogin;
+import com.techscan.dvq.login.MainLogin;
 import com.techscan.dvq.R;
 import com.techscan.dvq.bean.Goods;
 import com.techscan.dvq.common.RequestThread;
@@ -47,7 +47,7 @@ import static com.techscan.dvq.common.Utils.isNumber;
 import static com.techscan.dvq.common.Utils.showToast;
 
 
-public class ProductOutScanAct extends Activity {
+public class ProductInScanAct extends Activity {
 
     @InjectView(R.id.ed_bar_code)
     EditText mEdBarCode;    //条码
@@ -66,11 +66,11 @@ public class ProductOutScanAct extends Activity {
     @InjectView(R.id.ed_qty)
     EditText mEdQty;
     @InjectView(R.id.btn_overview)
-    Button mBtnOverview;
+    Button   mBtnOverview;
     @InjectView(R.id.btn_detail)
-    Button mBtnDetail;
+    Button   mBtnDetail;
     @InjectView(R.id.btn_back)
-    Button mBtnBack;
+    Button   mBtnBack;
     @InjectView(R.id.ed_weight)
     EditText mEdWeight;
     @InjectView(R.id.ed_manual)
@@ -80,7 +80,7 @@ public class ProductOutScanAct extends Activity {
 
     String TAG = "MaterialOutScanAct";
     public static List<Goods> detailList = new ArrayList<Goods>();
-    public static List<Goods> ovList = new ArrayList<Goods>();
+    public static List<Goods> ovList     = new ArrayList<Goods>();
     Activity mActivity;
     boolean isBaoBarCode = false;
 
@@ -112,7 +112,7 @@ public class ProductOutScanAct extends Activity {
                 break;
             case R.id.btn_back:
                 if (ovList.size() > 0) {
-                    Intent in = new Intent();
+                    Intent in     = new Intent();
                     Bundle bundle = new Bundle();
                     bundle.putParcelableArrayList("overViewList", (ArrayList<? extends Parcelable>) ovList);
                     in.putExtras(bundle);
@@ -175,8 +175,8 @@ public class ProductOutScanAct extends Activity {
         AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
         builder.setTitle(title);
         if (list.size() > 0) {
-            View view = LayoutInflater.from(mActivity).inflate(R.layout.dialog_scan_details, null);
-            ListView lv = (ListView) view.findViewById(R.id.lv);
+            View     view = LayoutInflater.from(mActivity).inflate(R.layout.dialog_scan_details, null);
+            ListView lv   = (ListView) view.findViewById(R.id.lv);
             if (title.equals("扫描明细")) { //只有明细的页面是可点击的，总览页面是不可点击的
                 lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
@@ -267,7 +267,7 @@ public class ProductOutScanAct extends Activity {
         for (int i = 0; i < detailSize; i++) {
             Goods dtGood = detailList.get(i);
             if (ovList.contains(dtGood)) {
-                int j = ovList.indexOf(dtGood);
+                int   j      = ovList.indexOf(dtGood);
                 Goods ovGood = ovList.get(j);
                 ovGood.setQty(ovGood.getQty() + dtGood.getQty());
             } else {
@@ -345,14 +345,19 @@ public class ProductOutScanAct extends Activity {
      * 海关手册号 没有做校验
      */
     private boolean isAllEdNotNull() {
-        return (!TextUtils.isEmpty(mEdBarCode.getText())
+        if (!TextUtils.isEmpty(mEdBarCode.getText())
                 && !TextUtils.isEmpty(mEdEncoding.getText())
                 && !TextUtils.isEmpty(mEdName.getText())
                 && !TextUtils.isEmpty(mEdType.getText())
                 && !TextUtils.isEmpty(mEdSpectype.getText())
                 && !TextUtils.isEmpty(mEdUnit.getText())
                 && !TextUtils.isEmpty(mEdLot.getText())
-                && !TextUtils.isEmpty(mEdQty.getText()));
+                && !TextUtils.isEmpty(mEdQty.getText())) {
+            return true;
+        } else {
+            showToast(mActivity, "信息不完整，请核对");
+            return false;
+        }
     }
 
     /**
@@ -367,7 +372,7 @@ public class ProductOutScanAct extends Activity {
         parameter.put("InvCode", sku);
         parameter.put("TableName", "baseInfo");
         RequestThread requestThread = new RequestThread(parameter, mHandler, 1);
-        Thread td = new Thread(requestThread);
+        Thread        td            = new Thread(requestThread);
         td.start();
     }
 
@@ -384,7 +389,7 @@ public class ProductOutScanAct extends Activity {
     private void setInvBaseToUI(JSONObject json) throws JSONException {
         Log.d(TAG, "setInvBaseToUI: " + json);
         if (json.getBoolean("Status")) {
-            JSONArray val = json.getJSONArray("baseInfo");
+            JSONArray               val = json.getJSONArray("baseInfo");
             HashMap<String, Object> map = null;
             for (int i = 0; i < val.length(); i++) {
                 JSONObject tempJso = val.getJSONObject(i);
@@ -525,8 +530,6 @@ public class ProductOutScanAct extends Activity {
                             addDataToDetailList();
                             mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
                             changeAllEdTextToEmpty();
-                        } else {
-                            showToast(mActivity, "信息不完整，请核对");
                         }
                         return true;
                 }

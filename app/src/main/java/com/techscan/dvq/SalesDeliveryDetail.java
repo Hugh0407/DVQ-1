@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.techscan.dvq.common.RequestThread;
 import com.techscan.dvq.common.Utils;
+import com.techscan.dvq.login.MainLogin;
 
 import org.apache.http.ParseException;
 import org.json.JSONArray;
@@ -48,7 +49,7 @@ public class SalesDeliveryDetail extends Activity {
     String CALBODYID ="";
     String CINVBASID = "";
     String INVENTORYID = "";
-    String CORP =MainLogin.objLog.STOrgCode;
+    String CORP = MainLogin.objLog.STOrgCode;
     String WAREHOUSEID = "";
     String ScanType = "";
     String BillCode = "";
