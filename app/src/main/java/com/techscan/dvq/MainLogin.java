@@ -51,23 +51,29 @@ import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
 public class MainLogin extends Activity {
     // protected static final Context context = null;
     // 控件的定义
     Button btnLogin, btnExit;
     String LoginString, LoginString2, CompanyCode, OrgCode, WhCode, WhCodeB;
-    public static String tempFilePath = "";
-    public static String ScanBarCode = "";
+    public static String      tempFilePath = "";
+    public static String      ScanBarCode  = "";
     //static JSONArray arysUserRole = new JSONArray();
     //static AlertDialog LGalertDialog = null;
-    static WifiManager wifi_service = null;
-    static String sWIFIMin = null;
-    static String sWIFIMax = null;
+    static        WifiManager wifi_service = null;
+    static        String      sWIFIMin     = null;
+    static        String      sWIFIMax     = null;
 
-    String newVerName = "";// 新版本名称
-    int newVerCode = -1;// 新版本号
-    ProgressDialog pd = null;
-    String UPDATE_SERVERAPK = "dvq.apk";
+    String         newVerName       = "";// 新版本名称
+    int            newVerCode       = -1;// 新版本号
+    ProgressDialog pd               = null;
+    String         UPDATE_SERVERAPK = "dvq.apk";
 
     EditText user = null;
     EditText pwds = null;
@@ -77,8 +83,8 @@ public class MainLogin extends Activity {
     // ADD CAIXY END 15/04/15
     // ADD CAIXY TEST START
     public static SoundPool sp;// 声明一个SoundPool
-    public static int music;// 定义一个int来设置suondID
-    public static int music2;// 定义一个int来设置suondID
+    public static int       music;// 定义一个int来设置suondID
+    public static int       music2;// 定义一个int来设置suondID
     // ADD CAIXY TEST END
 
     public static Common objLog = new Common();
@@ -181,6 +187,29 @@ public class MainLogin extends Activity {
 
         String user_name = Base64Encoder.encode(userName.getBytes("gb2312"));
         // 调用服务
+        /*********************************************************************/
+        Request.Builder builder = new Request.Builder().url(lsUrl);
+        builder.addHeader("Self-Test", "V");
+        builder.addHeader("User-Code", user_name);
+        builder.addHeader("User-Pwd", password);
+        builder.addHeader("User-Company", CompanyCode);
+        builder.addHeader("Data-Source", "A");
+        builder.addHeader("Org-Code", OrgCode);
+        builder.addHeader("Self-Test", Version);
+        Request      request = builder.build();
+        OkHttpClient client  = new OkHttpClient();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.d("OkHttp", "call: " + e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                Log.d("OkHttp", "onResponse: " + response.body().string());
+            }
+        });
+        /*********************************************************************/
 
         HttpPost httpPost = new HttpPost(lsUrl);
         httpPost.addHeader("Self-Test", "V");
@@ -190,9 +219,14 @@ public class MainLogin extends Activity {
         httpPost.addHeader("Data-Source", "A");
         httpPost.addHeader("Org-Code", OrgCode);
         httpPost.addHeader("Version-Code", Version);
+
+        Log.d("TAG", "CompanyCode: " + CompanyCode);
+        Log.d("TAG", "user_name: " + user_name);
+        Log.d("TAG", "OrgCode: " + OrgCode);
+        Log.d("TAG", "Version: " + Version);
         // WhCodeB
         HttpResponse httpResponse = null;
-        HttpClient defaults = null;
+        HttpClient   defaults     = null;
 
         try {
             defaults = MyHttpClient.getSaveHttpClient();
@@ -285,8 +319,8 @@ public class MainLogin extends Activity {
                 //增加 设置页面
 
 
-                SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
-                Date date = new Date();
+                SimpleDateFormat f    = new SimpleDateFormat("yyyy-MM-dd");
+                Date             date = new Date();
                 objLog.LoginDate = f.format(date);
 
                 if (!GetInfo()) {
@@ -374,7 +408,7 @@ public class MainLogin extends Activity {
         if (!LoginInfo.getBoolean("Status")) {
 
             Toast.makeText(this, "基础设置中的公司Code设置不正确,请检查",
-                    Toast.LENGTH_LONG).show();
+                           Toast.LENGTH_LONG).show();
             // ADD CAIXY TEST START
             sp.play(music, 1, 1, 0, 0, 1);
             // ADD CAIXY TEST END
@@ -414,14 +448,14 @@ public class MainLogin extends Activity {
 
         if (!LoginInfo.getBoolean("Status")) {
             Toast.makeText(this, "基础设置中的库存组织设置不正确,请检查！",
-                    Toast.LENGTH_LONG).show();
+                           Toast.LENGTH_LONG).show();
             // ADD CAIXY TEST START
             sp.play(music, 1, 1, 0, 0, 1);
             // ADD CAIXY TEST END
             return false;
         }
 
-        String GetSTOrg = "";
+        String GetSTOrg    = "";
         String GetSTOrgFlg = "N";
 
         JSONArray arys2 = LoginInfo.getJSONArray("LoginInfo");
@@ -435,7 +469,7 @@ public class MainLogin extends Activity {
         if (GetSTOrgFlg.equals("N")) {
 
             Toast.makeText(this, "基础设置中的库存组织设置不正确,请检查！",
-                    Toast.LENGTH_LONG).show();
+                           Toast.LENGTH_LONG).show();
             // ADD CAIXY TEST START
             sp.play(music, 1, 1, 0, 0, 1);
             // ADD CAIXY TEST END
@@ -472,7 +506,7 @@ public class MainLogin extends Activity {
         if (!UserRole.getBoolean("Status")) {
 
             Toast.makeText(this, "取得用户权限失败",
-                    Toast.LENGTH_LONG).show();
+                           Toast.LENGTH_LONG).show();
             // ADD CAIXY TEST START
             sp.play(music, 1, 1, 0, 0, 1);
             // ADD CAIXY TEST END
@@ -517,7 +551,7 @@ public class MainLogin extends Activity {
                     MainLogin.objLog.arysUserWHRole = null;
                 } else {
                     Toast.makeText(this, "取得用户仓库权限失败",
-                            Toast.LENGTH_LONG).show();
+                                   Toast.LENGTH_LONG).show();
                     // ADD CAIXY TEST START
                     sp.play(music, 1, 1, 0, 0, 1);
                     // ADD CAIXY TEST END
@@ -530,7 +564,7 @@ public class MainLogin extends Activity {
                 } catch (JSONException e) {
                     // TODO Auto-generated catch block
                     Toast.makeText(this, "取得权限失败",
-                            Toast.LENGTH_LONG).show();
+                                   Toast.LENGTH_LONG).show();
                     // ADD CAIXY TEST START
                     sp.play(music, 1, 1, 0, 0, 1);
                     // ADD CAIXY TEST END
@@ -541,7 +575,7 @@ public class MainLogin extends Activity {
             // TODO Auto-generated catch block
             e.printStackTrace();
             Toast.makeText(this, "取得权限失败",
-                    Toast.LENGTH_LONG).show();
+                           Toast.LENGTH_LONG).show();
             // ADD CAIXY TEST START
             sp.play(music, 1, 1, 0, 0, 1);
             // ADD CAIXY TEST END
@@ -612,12 +646,12 @@ public class MainLogin extends Activity {
         // ADD CAIXY TEST
 
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
-                .detectDiskReads().detectDiskWrites().detectNetwork()
-                .penaltyLog().build());
+                                           .detectDiskReads().detectDiskWrites().detectNetwork()
+                                           .penaltyLog().build());
 
         StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
-                .detectLeakedSqlLiteObjects().detectLeakedClosableObjects()
-                .penaltyLog().penaltyDeath().build());
+                                       .detectLeakedSqlLiteObjects().detectLeakedClosableObjects()
+                                       .penaltyLog().penaltyDeath().build());
 
         // doNewVersionUpdate(this.LoginString);
 
@@ -724,7 +758,7 @@ public class MainLogin extends Activity {
 
             httpget.setURI(uri);
             HttpResponse httpResponse = null;
-            HttpClient defaults = null;
+            HttpClient   defaults     = null;
             try {
                 // DefaultHttpClient defaults=new DefaultHttpClient();
                 // HttpConnectionParams.setConnectionTimeout(defaults.getParams(),
@@ -787,9 +821,9 @@ public class MainLogin extends Activity {
      * 不更新版本
      */
     public void notNewVersionUpdate() {
-        int verCode = this.getVerCode(this);
-        String verName = this.getVerName(this);
-        StringBuffer sb = new StringBuffer();
+        int          verCode = this.getVerCode(this);
+        String       verName = this.getVerName(this);
+        StringBuffer sb      = new StringBuffer();
         sb.append("当前版本：");
         sb.append(verName);
         sb.append(" Code:");
@@ -812,9 +846,9 @@ public class MainLogin extends Activity {
      * 更新版本
      */
     public void doNewVersionUpdate(final String DownStr) {
-        int verCode = this.getVerCode(this);
-        String verName = this.getVerName(this);
-        StringBuffer sb = new StringBuffer();
+        int          verCode = this.getVerCode(this);
+        String       verName = this.getVerName(this);
+        StringBuffer sb      = new StringBuffer();
         sb.append("当前版本：");
         sb.append(verName);
         sb.append(" Code:");
@@ -837,22 +871,22 @@ public class MainLogin extends Activity {
                         pd.setMessage("请稍中...");
                         pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                         String downfile = DownStr.substring(0,
-                                DownStr.length() - 13);
+                                                            DownStr.length() - 13);
                         downfile = downfile + "DVQ/" + UPDATE_SERVERAPK;
                         downFile(downfile);
 
                     }
                 })
                 .setNegativeButton("暂不更新",
-                        new DialogInterface.OnClickListener() {
+                                   new DialogInterface.OnClickListener() {
 
-                            @Override
-                            public void onClick(DialogInterface dialog,
-                                                int which) {
-                                // TODO Auto-generated method stub
-                                finish();
-                            }
-                        }).create();
+                                       @Override
+                                       public void onClick(DialogInterface dialog,
+                                                           int which) {
+                                           // TODO Auto-generated method stub
+                                           finish();
+                                       }
+                                   }).create();
         // 显示更新框
         dialog.show();
     }
@@ -868,7 +902,7 @@ public class MainLogin extends Activity {
 
                 // HttpClient client = MyHttpClient.getSaveHttpClient();
 
-                HttpGet get = new HttpGet(url);
+                HttpGet      get = new HttpGet(url);
                 HttpResponse response;
                 try {
                     response = client.execute(get);
@@ -880,7 +914,7 @@ public class MainLogin extends Activity {
                 } catch (Exception e) {
                     // TODO Auto-generated catch block
                     Toast.makeText(MainLogin.this, e.getMessage(),
-                            Toast.LENGTH_LONG).show();
+                                   Toast.LENGTH_LONG).show();
                     // ADD CAIXY TEST START
                     sp.play(music, 1, 1, 0, 0, 1);
                     // ADD CAIXY TEST END
@@ -916,8 +950,8 @@ public class MainLogin extends Activity {
      * 安装应用
      */
     public void update() {
-        File file = new File(tempFilePath);
-        long ab = file.length();
+        File   file   = new File(tempFilePath);
+        long   ab     = file.length();
         Intent intent = new Intent(Intent.ACTION_VIEW);
 
         // intent.setDataAndType(Uri.fromFile(new

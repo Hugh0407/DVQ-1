@@ -60,31 +60,31 @@ public class ProductOutAct extends Activity {
 
 
     @InjectView(R.id.bill_num)
-    EditText mBillNum;
+    EditText    mBillNum;
     @InjectView(R.id.bill_date)
-    EditText mBillDate;
+    EditText    mBillDate;
     @InjectView(R.id.wh)
-    EditText mWh;
+    EditText    mWh;
     @InjectView(R.id.refer_wh)
     ImageButton mReferWh;
     @InjectView(R.id.organization)
-    EditText mOrganization;
+    EditText    mOrganization;
     @InjectView(R.id.refer_organization)
     ImageButton mReferOrganization;
     @InjectView(R.id.lei_bie)
-    EditText mLeiBie;
+    EditText    mLeiBie;
     @InjectView(R.id.refer_lei_bie)
     ImageButton mReferLeiBie;
     @InjectView(R.id.department)
-    EditText mDepartment;
+    EditText    mDepartment;
     @InjectView(R.id.remark)
-    EditText mRemark;
+    EditText    mRemark;
     @InjectView(R.id.btnPurInScan)
-    Button mBtnPurInScan;
+    Button      mBtnPurInScan;
     @InjectView(R.id.btnPurinSave)
-    Button mBtnPurinSave;
+    Button      mBtnPurinSave;
     @InjectView(R.id.btnBack)
-    Button mBtnBack;
+    Button      mBtnBack;
     @InjectView(R.id.refer_department)
     ImageButton mReferDepartment;
 
@@ -94,18 +94,18 @@ public class ProductOutAct extends Activity {
     String CDPTID = "";  //部门id
     String CUSER;   //登录员工id
     String CWAREHOUSEID = "";    //库存组织
-    String PK_CALBODY = "";      //仓库id
+    String PK_CALBODY   = "";      //仓库id
     String PK_CORP;         //公司
     String VBILLCOD;        //单据号
-    int year;
+    int    year;
 
-    int month;
-    int day;
-    Calendar mycalendar;
-    List<Goods> tempList;
+    int                     month;
+    int                     day;
+    Calendar                mycalendar;
+    List<Goods>             tempList;
     HashMap<String, String> checkInfo;
-    ProgressDialog progressDialog;
-    Activity mActivity;
+    ProgressDialog          progressDialog;
+    Activity                mActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -259,7 +259,7 @@ public class ProductOutAct extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
         //仓库的回传数据 <----ListWarehouse.class
         if (requestCode == 97 && resultCode == 13) {
-            String warehousePK1 = data.getStringExtra("result1");
+            String warehousePK1  = data.getStringExtra("result1");
             String warehousecode = data.getStringExtra("result2");
             String warehouseName = data.getStringExtra("result3");
             CWAREHOUSEID = warehousePK1;
@@ -270,8 +270,8 @@ public class ProductOutAct extends Activity {
         }
         //材料出库库存组织的回传数据 <----StorgListAct.class
         if (requestCode == 94 && resultCode == 6) {
-            String pk_areacl = data.getStringExtra("pk_areacl");
-            String bodyname = data.getStringExtra("bodyname");
+            String pk_areacl  = data.getStringExtra("pk_areacl");
+            String bodyname   = data.getStringExtra("bodyname");
             String pk_calbody = data.getStringExtra("pk_calbody");
             mOrganization.requestFocus();
             mOrganization.setText(bodyname);
@@ -281,8 +281,8 @@ public class ProductOutAct extends Activity {
         }
         // 收发类别的回传数据 <----VlistRdcl.class
         if (requestCode == 98 && resultCode == 2) {
-            String code = data.getStringExtra("Code");
-            String name = data.getStringExtra("Name");
+            String code  = data.getStringExtra("Code");
+            String name  = data.getStringExtra("Name");
             String AccID = data.getStringExtra("AccID");
             String RdIDA = data.getStringExtra("RdIDA");    //需要回传的id
             String RdIDB = data.getStringExtra("RdIDB");
@@ -294,9 +294,9 @@ public class ProductOutAct extends Activity {
         }
         //部门信息的回传数据 <----DepartmentListAct.class
         if (requestCode == 96 && resultCode == 4) {
-            String deptname = data.getStringExtra("deptname");
+            String deptname   = data.getStringExtra("deptname");
             String pk_deptdoc = data.getStringExtra("pk_deptdoc");
-            String deptcode = data.getStringExtra("deptcode");
+            String deptcode   = data.getStringExtra("deptcode");
             CDPTID = pk_deptdoc;
             mDepartment.requestFocus();
             mDepartment.setText(deptname);
@@ -344,7 +344,7 @@ public class ProductOutAct extends Activity {
                     JSONObject json = (JSONObject) msg.obj;
                     try {
                         if (json != null && json.getBoolean("Status")) {
-                            JSONArray val = json.getJSONArray("department");
+                            JSONArray  val  = json.getJSONArray("department");
                             JSONObject temp = new JSONObject();
                             temp.put("department", val);
                             Intent ViewGrid = new Intent(mActivity, DepartmentListAct.class);
@@ -359,7 +359,7 @@ public class ProductOutAct extends Activity {
                     JSONObject storg = (JSONObject) msg.obj;
                     try {
                         if (storg != null && storg.getBoolean("Status")) {
-                            JSONArray val = storg.getJSONArray("STOrg");
+                            JSONArray  val  = storg.getJSONArray("STOrg");
                             JSONObject temp = new JSONObject();
                             temp.put("STOrg", val);
                             Intent StorgList = new Intent(mActivity, StorgListAct.class);
@@ -407,8 +407,8 @@ public class ProductOutAct extends Activity {
      * @throws JSONException
      */
     private void saveInfo(List<Goods> goodsList) throws JSONException, UnsupportedEncodingException {
-        final JSONObject table = new JSONObject();
-        JSONObject tableHead = new JSONObject();
+        final JSONObject table     = new JSONObject();
+        JSONObject       tableHead = new JSONObject();
         tableHead.put("CDISPATCHERID", CDISPATCHERID);
         tableHead.put("CDPTID", CDPTID);
         tableHead.put("CUSER", MainLogin.objLog.UserID);
@@ -417,7 +417,7 @@ public class ProductOutAct extends Activity {
         tableHead.put("PK_CORP", MainLogin.objLog.STOrgCode);
         tableHead.put("VBILLCODE", mBillNum.getText().toString());
         String login_user = MainLogin.objLog.LoginUser.toString();
-        String cuserName = Base64Encoder.encode(login_user.getBytes("gb2312"));
+        String cuserName  = Base64Encoder.encode(login_user.getBytes("gb2312"));
         tableHead.put("CUSERNAME", cuserName);
         if (mRemark.getText().toString().isEmpty()) {
             mRemark.setText("");
@@ -426,7 +426,7 @@ public class ProductOutAct extends Activity {
         tableHead.put("FREPLENISHFLAG", "N");    //N不退，Y退
         table.put("Head", tableHead);
         JSONObject tableBody = new JSONObject();
-        JSONArray bodyArray = new JSONArray();
+        JSONArray  bodyArray = new JSONArray();
         for (Goods c : goodsList) {
             JSONObject object = new JSONObject();
             object.put("CINVBASID", c.getPk_invbasdoc());
@@ -447,7 +447,7 @@ public class ProductOutAct extends Activity {
         Log.d(TAG, "saveInfo: " + table.toString());
 
         SaveThread saveThread = new SaveThread(table, "SavePrdStockIn", mHandler, HANDER_SAVE_RESULT);
-        Thread thread = new Thread(saveThread);
+        Thread     thread     = new Thread(saveThread);
         thread.start();
     }
 
@@ -470,8 +470,8 @@ public class ProductOutAct extends Activity {
      * @throws JSONException
      */
     private void btnWarehouseClick() throws JSONException {
-        String lgUser = MainLogin.objLog.LoginUser;
-        String lgPwd = MainLogin.objLog.Password;
+        String lgUser      = MainLogin.objLog.LoginUser;
+        String lgPwd       = MainLogin.objLog.Password;
         String LoginString = MainLogin.objLog.LoginString;
 
         JSONObject para = new JSONObject();
@@ -534,7 +534,7 @@ public class ProductOutAct extends Activity {
         parameter.put("CompanyCode", MainLogin.objLog.CompanyCode);
         parameter.put("TableName", "STOrg");
         RequestThread requestThread = new RequestThread(parameter, mHandler, HANDER_STORG);
-        Thread td = new Thread(requestThread);
+        Thread        td            = new Thread(requestThread);
         td.start();
     }
 
@@ -547,7 +547,7 @@ public class ProductOutAct extends Activity {
         parameter.put("CompanyCode", MainLogin.objLog.CompanyCode);
         parameter.put("TableName", "department");
         RequestThread requestThread = new RequestThread(parameter, mHandler, HANDER_DEPARTMENT);
-        Thread td = new Thread(requestThread);
+        Thread        td            = new Thread(requestThread);
         td.start();
     }
 
