@@ -20,27 +20,30 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+
 public class Common {
 
     public String ScanBarCode = "";
 
-    public String LoginString = "";
-    public String LoginString2 = "";
-    public static String lsUrl = "";
+    public        String LoginString  = "";
+    public        String LoginString2 = "";
+    public static String lsUrl        = "";
     //public static String lsUrl = "";
     private static writeTxt writeTxt;
     public String LoginUser = "";
     public String LoginDate;
-    public String Password = "";
-    public String CompanyCode = "";
-    public static boolean ReScanErr = false;
-    public static JSONArray arysUserRole = new JSONArray();
-    public static JSONArray arysUserWHRole = new JSONArray();
-    public static JSONObject jsonBodyTask = new JSONObject();
+    public        String     Password        = "";
+    public        String     CompanyCode     = "";
+    public static boolean    ReScanErr       = false;
+    public static JSONArray  arysUserRole    = new JSONArray();
+    public static JSONArray  arysUserWHRole  = new JSONArray();
+    public static JSONObject jsonBodyTask    = new JSONObject();
     public static JSONObject JsonModTaskData = new JSONObject();
 
-    public String UserID = ""; // A帐套对应的用户ID
-    public String UserName = "";
+    public String UserID    = ""; // A帐套对应的用户ID
+    public String UserName  = "";
     public String CompanyID = "";
     public String STOrgCode = ""; // 库存组织编码
 
@@ -70,6 +73,9 @@ public class Common {
 
     public static JSONObject DoHttpQuery(JSONObject para, String funcationName,
                                          String AccID) throws JSONException, ParseException, IOException {
+
+
+
         // String ErrMsg="{\"Status\":false,\"ErrMsg\":'执行数据处理错误'}";
         JSONObject resultJos = new JSONObject();
         //lsUrl = MainLogin.objLog.LoginString;
@@ -94,7 +100,7 @@ public class Common {
 
 
         String lgUser = MainLogin.objLog.LoginUser;
-        String lgPwd = MainLogin.objLog.Password;
+        String lgPwd  = MainLogin.objLog.Password;
         // String LoginString = MainLogin.objLog.LoginString;
         String LoginString = lsUrl;
 
@@ -107,7 +113,7 @@ public class Common {
         httpPost.addHeader("Org-Code", MainLogin.objLog.STOrgCode);
         httpPost.addHeader("Version-Code", MainLogin.objLog.VersionCode);
 
-        HttpEntity entity = null;
+        HttpEntity   entity       = null;
         HttpResponse httpResponse = null;
         try {
             entity = new StringEntity(para.toString(), "gb2312");
@@ -243,7 +249,7 @@ public class Common {
     // Map转JSONObject
     public static JSONObject MapTOJSONOBject(Map<String, Object> map)
             throws JSONException {
-        JSONObject jsonResult = new JSONObject();
+        JSONObject                     jsonResult = new JSONObject();
         Set<Map.Entry<String, Object>> entryseSet = map.entrySet();
         for (Map.Entry<String, Object> entry : entryseSet) {
             jsonResult.put(entry.getKey(), entry.getValue());
@@ -301,7 +307,7 @@ public class Common {
         String isFind_Corp = "";
         for (int i = 0; i < arysUserWHRole.length(); i++) {
             try {
-                String lsAccID = (String) arysUserWHRole.getJSONObject(i).get("AccID");
+                String lsAccID   = (String) arysUserWHRole.getJSONObject(i).get("AccID");
                 String lspk_Corp = (String) arysUserWHRole.getJSONObject(i).get("pk_corp");
 
                 if (lsAccID.equals(AccID) && lspk_Corp.equals(Pk_Corp)) {
@@ -319,8 +325,8 @@ public class Common {
         } else {
             for (int i = 0; i < arysUserWHRole.length(); i++) {
                 try {
-                    String lsAccID = (String) arysUserWHRole.getJSONObject(i).get("AccID");
-                    String lspk_Corp = (String) arysUserWHRole.getJSONObject(i).get("pk_corp");
+                    String lsAccID      = (String) arysUserWHRole.getJSONObject(i).get("AccID");
+                    String lspk_Corp    = (String) arysUserWHRole.getJSONObject(i).get("pk_corp");
                     String lspk_stordoc = (String) arysUserWHRole.getJSONObject(i).get("pk_stordoc");
                     //String isorgcontrolpower = (String) arysUserWHRole.getJSONObject(i).get("isorgcontrolpower");
 
@@ -355,18 +361,16 @@ public class Common {
     }
 
     //日期比较
-    public static Boolean CompareDate(String sStartDate, String sEndDate){
+    public static Boolean CompareDate(String sStartDate, String sEndDate) {
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            Date dStartDate = sdf.parse(sStartDate);
-            Date dEndDate = sdf.parse(sEndDate);
-            if(dStartDate.getTime() <= dEndDate.getTime())
+            SimpleDateFormat sdf        = new SimpleDateFormat("yyyy-MM-dd");
+            Date             dStartDate = sdf.parse(sStartDate);
+            Date             dEndDate   = sdf.parse(sEndDate);
+            if (dStartDate.getTime() <= dEndDate.getTime())
                 return true;
             else
                 return false;
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
             return false;
         }
     }

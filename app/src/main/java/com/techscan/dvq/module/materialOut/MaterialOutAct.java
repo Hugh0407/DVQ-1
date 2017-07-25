@@ -26,6 +26,7 @@ import com.techscan.dvq.MainLogin;
 import com.techscan.dvq.R;
 import com.techscan.dvq.VlistRdcl;
 import com.techscan.dvq.bean.Goods;
+import com.techscan.dvq.common.Base64Encoder;
 import com.techscan.dvq.common.RequestThread;
 import com.techscan.dvq.common.SaveThread;
 import com.techscan.dvq.common.Utils;
@@ -37,6 +38,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -152,6 +154,8 @@ public class MaterialOutAct extends Activity {
             case R.id.btnPurInScan:
                 if (isAllEdNotEmpty()) {
                     Intent in = new Intent(mActivity, MaterialOutScanAct.class);
+                    in.putExtra("CWAREHOUSEID",CWAREHOUSEID);
+                    in.putExtra("PK_CALBODY",PK_CALBODY);
                     startActivityForResult(in, 95);
                     if (tempList != null) {
                         tempList.clear();
@@ -167,6 +171,8 @@ public class MaterialOutAct extends Activity {
                             saveInfo(tempList);
                             showProgressDialog();
                         } catch (JSONException e) {
+                            e.printStackTrace();
+                        } catch (UnsupportedEncodingException e) {
                             e.printStackTrace();
                         }
                     } else {
@@ -464,7 +470,7 @@ public class MaterialOutAct extends Activity {
      * @param goodsList
      * @throws JSONException
      */
-    private void saveInfo(List<Goods> goodsList) throws JSONException {
+    private void saveInfo(List<Goods> goodsList) throws JSONException, UnsupportedEncodingException {
         final JSONObject table = new JSONObject();
         JSONObject tableHead = new JSONObject();
         tableHead.put("VBILLCODE", mBillNum.getText().toString());  //单据号
@@ -474,7 +480,9 @@ public class MaterialOutAct extends Activity {
         tableHead.put("CWAREHOUSEID", CWAREHOUSEID);                //库存组织
         tableHead.put("PK_CALBODY", PK_CALBODY);                    //仓库id
         tableHead.put("PK_CORP", MainLogin.objLog.STOrgCode);       //组织编号
-        tableHead.put("CUSERNAME", MainLogin.objLog.LoginUser);     //用户名称
+        String login_user = MainLogin.objLog.LoginUser.toString();
+        String cuserName = Base64Encoder.encode(login_user.getBytes("gb2312"));
+        tableHead.put("CUSERNAME", cuserName);     //用户名称
         if (mRemark.getText().toString().isEmpty()) {
             mRemark.setText("");
         }

@@ -91,7 +91,7 @@ public class SplitBarcode {
                 Outsourcing = lsSplitArray[3];
                 TaxFlag = lsSplitArray[4];
                 dQuantity = Double.parseDouble(lsSplitArray[5]);
-                CWFlag = lsSplitArray[6];
+//                CWFlag = lsSplitArray[6];
                 OnlyFlag = lsSplitArray[6];
                 cSerino = lsSplitArray[7];
                 iNumber = 1;
@@ -107,7 +107,7 @@ public class SplitBarcode {
                 TaxFlag = lsSplitArray[4];
                 dQuantity = Double.parseDouble(lsSplitArray[5]);
                 iNumber = Integer.parseInt(lsSplitArray[6]);
-                CWFlag = lsSplitArray[7];
+//                CWFlag = lsSplitArray[7];
                 OnlyFlag = lsSplitArray[7];
                 cSerino = lsSplitArray[8];
                 CheckBarCode = CheckBarCode + "|" + cBatch;

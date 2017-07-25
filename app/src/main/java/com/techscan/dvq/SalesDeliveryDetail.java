@@ -21,6 +21,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.techscan.dvq.common.RequestThread;
 import com.techscan.dvq.common.Utils;
 
 import org.apache.http.ParseException;
@@ -93,6 +94,9 @@ public class SalesDeliveryDetail extends Activity {
     Button btnDetail;
     @InjectView(R.id.btnReturn)
     Button btnReturn;
+    @InjectView(R.id.txtSaleCustoms)
+    EditText txtSaleCustoms;
+
     private GetSaleBaseInfo objSaleBaseInfo = null;
     private HashMap<String, Object> m_mapSaleBaseInfo = null;
     private SplitBarcode m_cSplitBarcode = null;
@@ -189,6 +193,19 @@ public class SalesDeliveryDetail extends Activity {
                         txtBarcode.requestFocus();
                         txtBarcode.setText("");
                         return true;
+                    case R.id.txtSaleCustoms:
+//                        if (TextUtils.isEmpty(txtSaleNumber.getText())){
+//                            Utils.showToast(SalesDeliveryDetail.this, "请输入海关手册号");
+//                            txtSaleCustoms.requestFocus();
+//                            return false;
+//                        }
+                        m_mapSaleBaseInfo.put("vfree4",txtSaleCustoms.getText().toString());
+                        ScanedToGet();
+                        IniDetail();
+                        txtBarcode.setText("");
+                        txtBarcode.requestFocus();
+                        return true;
+
                     case R.id.txtSaleNumber:
                         if (TextUtils.isEmpty(txtSaleNumber.getText())) {
                             Utils.showToast(SalesDeliveryDetail.this, "数量不能为空");
@@ -207,11 +224,12 @@ public class SalesDeliveryDetail extends Activity {
                             return true;
                         }
                         m_mapSaleBaseInfo.put("number", Integer.valueOf(txtSaleNumber.getText().toString()));
-                        ScanedToGet();
-                        IniDetail();
-                        txtBarcode.setText("");
-                        txtBarcode.requestFocus();
-                        return true;
+                        txtSaleCustoms.requestFocus();
+//                        ScanedToGet();
+//                        IniDetail();
+//                        txtBarcode.setText("");
+//                        txtBarcode.requestFocus();
+//                        return true;
                 }
             }
 
@@ -327,18 +345,17 @@ public class SalesDeliveryDetail extends Activity {
 
         //判断条码类型是否正确
         if (bar.BarcodeType.equals("P") || bar.BarcodeType.equals("TP")) {
+//            txtSaleCustoms.setEnabled(true);
+//            txtSaleCustoms.requestFocus();
             String FinishBarCode = bar.FinishBarCode;
             if (bar.BarcodeType.equals("TP")) {
                 if (ScanedBarcode != null || ScanedBarcode.size() > 0) {
                     for (int si = 0; si < ScanedBarcode.size(); si++) {
                         String BarCode = ScanedBarcode.get(si).toString();
-                        Log.d(TAG, "BBBB: " + BarCode);
                         if (BarCode.equals(FinishBarCode)) {
                             Toast.makeText(this, "该条码已经被扫描过了,不能再次扫描", Toast.LENGTH_SHORT)
                                     .show();
-                            // ADD CAIXY TEST START
                             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                            // ADD CAIXY TEST END
                             return false;
                         }
                     }
@@ -355,15 +372,14 @@ public class SalesDeliveryDetail extends Activity {
 
         IniDetail();
         try {
-
-
-            objSaleBaseInfo = new GetSaleBaseInfo(bar, mHandler, CORP,WAREHOUSEID,CALBODYID,CINVBASID,INVENTORYID);
-            objSaleBaseInfo = new GetSaleBaseInfo(bar, mHandler, PK_CORP);
+            objSaleBaseInfo = new GetSaleBaseInfo(m_cSplitBarcode, mHandler, PK_CORP);
+//            objSaleBaseInfo = new GetSaleBaseInfo(bar, mHandler, CORP,WAREHOUSEID,CALBODYID,CINVBASID,INVENTORYID);
         } catch (Exception ex) {
             Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             return false;
         }
+
         return true;
     }
 
@@ -385,6 +401,8 @@ public class SalesDeliveryDetail extends Activity {
                             m_mapSaleBaseInfo = objSaleBaseInfo.mapSaleBaseInfo;
                             Log.d(TAG, "handleMessage: "+m_mapSaleBaseInfo.size());
                             SetInvBaseToUI();
+                            getInvBaseVFree4();
+
 
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -396,20 +414,47 @@ public class SalesDeliveryDetail extends Activity {
                     break;
                 case 2:
                     JSONObject jsons = (JSONObject) msg.obj;
-                    if (jsons != null) {
+                    Log.d(TAG, "vfree4: "+jsons.toString());
                         try {
-                            Log.d(TAG, "handleMessage3: "+jsons.toString());
-                            objSaleBaseInfo.SetCustomsParam(jsons);
+//                            if (jsons != null && jsons.getBoolean("Status")) {
+//                                JSONArray jsonArray = jsons.getJSONArray("vfree4");
+//                                if (jsonArray.length() > 0) {
+//                                    JSONObject j = jsonArray.getJSONObject(0);
+//                                    String vfree4 = j.getString("vfree4");
+//                                    Log.d(TAG, "vfree4: "+vfree4);
+//                                    if (vfree4.equals("null")) {
+//                                        txtSaleCustoms.setText("");
+////                                        SetInvBaseToUI();
+//                                    } else {
+//                                        txtSaleCustoms.setText(vfree4);
+//                                        txtSaleCustoms.setEnabled(false);
+////                                        SetInvBaseToUI();
+//                                    }
+//                                }
+//                            }
+                            if (jsons.getBoolean("Status")) {
+                                JSONArray jsonArray = jsons.getJSONArray("customs");
+                                for (int i=0;i<jsonArray.length();i++) {
+                                    JSONObject tempJso = jsonArray.getJSONObject(i);
+                                    Log.d(TAG, "vfree4: "+tempJso.getString("vfree4"));
+                                    txtSaleCustoms.setText(tempJso.getString("vfree4"));
+//                                    txtSaleCustoms.setEnabled(false);
+                                    txtSaleCustoms.requestFocus();
+//                                    txtSaleCustoms.setFocusableInTouchMode(true);
+//                                    txtSaleCustoms.setFocusable(true);
+                                }
+                            }
+                            else{
+//                                txtSaleCustoms.setEnabled(true);
+//                                txtSaleCustoms.setText("0");
+                                txtSaleCustoms.requestFocus();
+                            }
 //                            m_mapSaleBaseInfo = objSaleBaseInfo.mapSaleBaseInfo;
 //                            SetInvBaseToUI();
 
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                    } else {
-                        Log.d("TAG", "handleMessage4: "+"NULL");
-                        return;
-                    }
                     break;
             }
         }
@@ -426,18 +471,10 @@ public class SalesDeliveryDetail extends Activity {
         txtBarcode.setText(m_mapSaleBaseInfo.get("barcode").toString());
         txtSaleWeight.setText(m_mapSaleBaseInfo.get("quantity").toString());
         txtSaleNumber.setText(m_mapSaleBaseInfo.get("number").toString());
-//        Double ldTotal =0.0;
-//        Double weight = 0.0;
-//        Log.d(TAG, "SetInvBaseToUI: "+bar.BarcodeType);
-//        if (bar.BarcodeType.equals("P")) {
-//            ldTotal = (Double) m_mapSaleBaseInfo.get("quantity") * (Integer) m_mapSaleBaseInfo.get("number");
-//
-//        }else if (bar.BarcodeType.equals("TP")){
-//            ldTotal = (Double) m_mapSaleBaseInfo.get("quantity");
-//        }
         Double ldTotal =(Double) m_mapSaleBaseInfo.get("quantity") * (Integer) m_mapSaleBaseInfo.get("number");
         txtSaleTotal.setText(ldTotal.toString());
         m_mapSaleBaseInfo.put("total", ldTotal);
+//        m_mapSaleBaseInfo.put("vfree4", txtSaleCustoms.getText().toString());
         if (m_mapSaleBaseInfo.get("barcodetype").toString().equals("TP")) {
             txtSaleBatch.setFocusableInTouchMode(false);
             txtSaleBatch.setFocusable(false);
@@ -445,10 +482,20 @@ public class SalesDeliveryDetail extends Activity {
             txtSaleNumber.setFocusable(false);
             txtSaleTotal.setFocusableInTouchMode(false);
             txtSaleTotal.setFocusable(false);
-            ScanedToGet();
+            txtSaleCustoms.requestFocus();
+            txtSaleCustoms.selectAll();
+            txtSaleCustoms.setFocusableInTouchMode(true);
+            txtSaleCustoms.setFocusable(true);
+            txtSaleCustoms.setEnabled(true);
+//            ScanedToGet();
         } else if (m_mapSaleBaseInfo.get("barcodetype").toString().equals("P")) {
             txtSaleBatch.setFocusableInTouchMode(false);
             txtSaleBatch.setFocusable(false);
+            txtSaleCustoms.requestFocus();
+            txtSaleCustoms.selectAll();
+            txtSaleCustoms.setFocusableInTouchMode(true);
+            txtSaleCustoms.setFocusable(true);
+            txtSaleCustoms.setEnabled(true);
             txtSaleNumber.setFocusableInTouchMode(true);
             txtSaleNumber.setFocusable(true);
             txtSaleNumber.setEnabled(true);
@@ -474,15 +521,6 @@ public class SalesDeliveryDetail extends Activity {
                     Double doneqty = 0.0;
                     if (!temp.getString("ntotaloutinvnum").isEmpty() && !temp.getString("ntotaloutinvnum").toLowerCase().equals("null")) {
                         doneqty = temp.getDouble("ntotaloutinvnum");
-//                        Log.d(TAG, "ScanedToGet: "+bar.BarcodeType);
-//                        if (bar.BarcodeType.equals("P")) {
-//                            Double ldTotal = (Double) m_mapSaleBaseInfo.get("quantity") * (Integer) m_mapSaleBaseInfo.get("number");
-//                            txtSaleTotal.setText(ldTotal.toString());
-//                        }
-//                        if ( bar.BarcodeType.equals("TP")){
-//                            Double ldTotal = (Double) m_mapSaleBaseInfo.get("quantity");
-//                            txtSaleTotal.setText(ldTotal.toString());
-//                        }
                         doneqty = doneqty + Double.parseDouble(txtSaleTotal.getText().toString());
                         Log.d(TAG, "ScanedToGet: " + doneqty.toString());
                         if (doneqty > temp.getInt("nnumber")) {
@@ -519,7 +557,7 @@ public class SalesDeliveryDetail extends Activity {
 
 
         } catch (Exception ex) {
-            Toast.makeText(this, "请检查扫描的数据是否正确", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "数据无法添加到明细", Toast.LENGTH_LONG).show();
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             return false;
         }
@@ -573,10 +611,11 @@ public class SalesDeliveryDetail extends Activity {
             temp.put("sno", m_mapSaleBaseInfo.get("serino").toString());
             temp.put("invtype", m_mapSaleBaseInfo.get("invtype").toString());
             temp.put("invspec", m_mapSaleBaseInfo.get("invspec").toString());
-            Log.d(TAG, "ScanSerial: "+m_mapSaleBaseInfo.get("vfree4").toString());
+//            Log.d(TAG, "ScanSerial: "+m_mapSaleBaseInfo.get("vfree4").toString());
             temp.put("vfree4", m_mapSaleBaseInfo.get("vfree4").toString());
             serinos.put(temp);
             jsSerino.put("Serino", serinos);
+
         } else {
             JSONArray serinos = jsSerino.getJSONArray("Serino");
 
@@ -596,14 +635,32 @@ public class SalesDeliveryDetail extends Activity {
             temp.put("sno", m_mapSaleBaseInfo.get("serino").toString());
             temp.put("invtype", m_mapSaleBaseInfo.get("invtype").toString());
             temp.put("invspec", m_mapSaleBaseInfo.get("invspec").toString());
-            Log.d(TAG, "ScanSerial: "+m_mapSaleBaseInfo.get("vfree4").toString());
+//            Log.d(TAG, "ScanSerial: "+m_mapSaleBaseInfo.get("vfree4").toString());
             temp.put("vfree4", m_mapSaleBaseInfo.get("vfree4").toString());
             serinos.put(temp);
             jsSerino.put("Serino", serinos);
-
         }
         return true;
     }
+
+    /**
+     * 获取存货基本信息 海关手册号CORP,WAREHOUSEID,CALBODYID,CINVBASID,INVENTORYID
+     */
+    private void getInvBaseVFree4() {
+        HashMap<String, String> para = new HashMap<String, String>();
+        para.put("FunctionName", "GetInvFreeByInvCodeAndLot");
+        para.put("CORP", CORP);
+        para.put("BATCH", m_cSplitBarcode.cBatch);
+        para.put("WAREHOUSEID", WAREHOUSEID);
+        para.put("CALBODYID", CALBODYID);
+        para.put("CINVBASID", CINVBASID);
+        para.put("INVENTORYID", INVENTORYID);
+        para.put("TableName", "customs");
+        RequestThread rstThread = new RequestThread(para, mHandler, 2);
+        Thread tds = new Thread(rstThread);
+        tds.start();
+    }
+
 
     private void LoadSaleOutBody() throws ParseException, IOException {
         if (BillCode == null || BillCode.equals("") || CSALEID == null || CSALEID.equals("")) {
@@ -729,10 +786,11 @@ public class SalesDeliveryDetail extends Activity {
                 }
             };
 
-
+//注册监听
     private void initView() {
         txtBarcode.setOnKeyListener(myTxtListener);
         txtSaleNumber.setOnKeyListener(myTxtListener);
+        txtSaleCustoms.setOnKeyListener(myTxtListener);
         txtBarcode.addTextChangedListener(new CustomTextWatcher(txtBarcode));
         txtSaleNumber.addTextChangedListener(new CustomTextWatcher(txtSaleNumber));
 //        this.txtBarcode.addTextChangedListener(watchers);
@@ -751,6 +809,8 @@ public class SalesDeliveryDetail extends Activity {
         txtBarcode.setText("");
         txtBarcode.setFocusable(true);
         txtSaleWeight.setText("");
+        txtSaleCustoms.setText("");
+        txtSaleCustoms.setEnabled(false);
         txtSaleNumber.setEnabled(false);
         txtSaleTotal.setEnabled(false);
         txtSaleWeight.setEnabled(false);
@@ -899,6 +959,8 @@ public class SalesDeliveryDetail extends Activity {
                         // When clicked, show a toast with the TextView text
 
                         ConfirmDelItem(position);
+//                        jsSerino.remove("Serino");
+//                        jsSerino.remove(String.valueOf(position));
                         listItemAdapter.notifyDataSetChanged();
                         IniDetail();
                         return false;
