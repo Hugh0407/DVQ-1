@@ -1,5 +1,7 @@
 package com.techscan.dvq;
 
+import android.util.Log;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
@@ -20,8 +22,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
+import static android.content.ContentValues.TAG;
 
 public class Common {
 
@@ -100,6 +101,7 @@ public class Common {
 
 
         String lgUser = MainLogin.objLog.LoginUser;
+        Log.d(TAG, "DoHttpQuery: "+lgUser);
         String lgPwd  = MainLogin.objLog.Password;
         // String LoginString = MainLogin.objLog.LoginString;
         String LoginString = lsUrl;
