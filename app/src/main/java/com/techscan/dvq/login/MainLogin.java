@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.StrictMode;
+import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -99,7 +100,7 @@ public class MainLogin extends Activity {
 
     public static Common objLog = new Common();
     @InjectView(R.id.ed_time)
-    TextView edTime;
+    EditText edTime;
 
     //objLog.LoginString = LoginString;
     // 打开设置画面
@@ -631,7 +632,13 @@ public class MainLogin extends Activity {
         setContentView(R.layout.activity_main_login);
         ButterKnife.inject(this);
         //设置时间为当前系统时间
+        mycalendar = Calendar.getInstance();//初始化Calendar日历对象
+        year = mycalendar.get(Calendar.YEAR); //获取Calendar对象中的年
+        month = mycalendar.get(Calendar.MONTH);//获取Calendar对象中的月
+        day = mycalendar.get(Calendar.DAY_OF_MONTH);//获取这个月的第几天
         edTime.setText(Utils.formatTime(System.currentTimeMillis()));
+        edTime.setOnFocusChangeListener(myFocusListener);
+        edTime.setInputType(InputType.TYPE_NULL);
 
         btnLogin = (Button) findViewById(R.id.btnLogin);
         btnExit = (Button) findViewById(R.id.btnExit);
@@ -706,10 +713,6 @@ public class MainLogin extends Activity {
 
     @OnClick(R.id.ed_time)
     public void onViewClicked() {
-        mycalendar = Calendar.getInstance();//初始化Calendar日历对象
-        year = mycalendar.get(Calendar.YEAR); //获取Calendar对象中的年
-        month = mycalendar.get(Calendar.MONTH);//获取Calendar对象中的月
-        day = mycalendar.get(Calendar.DAY_OF_MONTH);//获取这个月的第几天
         DatePickerDialog dpd = new DatePickerDialog(MainLogin.this, Datelistener, year, month, day);
         dpd.show();//显示DatePickerDialog组件
     }
@@ -1076,6 +1079,16 @@ public class MainLogin extends Activity {
             appTime = year + "-" + (month + 1) + "-" + day;
             //在TextView上显示日期
             edTime.setText(appTime);
+        }
+    };
+
+    private View.OnFocusChangeListener myFocusListener = new View.OnFocusChangeListener() {
+        @Override
+        public void onFocusChange(View view, boolean hasFocus) {
+            if (hasFocus) {
+                DatePickerDialog dpd = new DatePickerDialog(MainLogin.this, Datelistener, year, month, day);
+                dpd.show();//显示DatePickerDialog组件
+            }
         }
     };
 

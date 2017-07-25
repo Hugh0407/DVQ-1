@@ -22,7 +22,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.techscan.dvq.Common;
-import com.techscan.dvq.PurStockIn;
 import com.techscan.dvq.R;
 import com.techscan.dvq.R.id;
 import com.techscan.dvq.Sample_stocking;
@@ -33,6 +32,7 @@ import com.techscan.dvq.StockTransContentIn;
 import com.techscan.dvq.common.Utils;
 import com.techscan.dvq.module.materialOut.MaterialOutAct;
 import com.techscan.dvq.module.productIn.ProductInAct;
+import com.techscan.dvq.module.purStockIn.PurStockIn;
 import com.techscan.dvq.module.query.Query;
 import com.techscan.dvq.module.statusChange.StatusChangeAct;
 
