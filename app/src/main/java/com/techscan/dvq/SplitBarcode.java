@@ -101,6 +101,7 @@ public class SplitBarcode {
                 if (lsSplitArray.length != 9) {
                     creatorOk = false;
                     return;
+                    //test
                 }
                 cBatch = lsSplitArray[2];
                 Outsourcing = lsSplitArray[3];
