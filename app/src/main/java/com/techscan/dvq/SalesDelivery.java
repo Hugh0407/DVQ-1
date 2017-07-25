@@ -1757,13 +1757,31 @@ public class SalesDelivery extends Activity {
 
     //退出按钮
     private void Exit() {
-        if (jsBody!=null) {
-            AlertDialog.Builder bulider =
-                    new AlertDialog.Builder(this).setTitle(R.string.XunWen).setMessage("扫描单据未保存，确认退出吗?");
-            bulider.setNegativeButton(R.string.QuXiao, null);
-            bulider.setPositiveButton(R.string.QueRen, listenExit).create().show();
-        } else {
+
+
+//        if (jsBody!=null) {
+//            AlertDialog.Builder bulider =
+//                    new AlertDialog.Builder(this).setTitle(R.string.XunWen).setMessage("扫描单据未保存，确认退出吗?");
+//            bulider.setNegativeButton(R.string.QuXiao, null);
+//            bulider.setPositiveButton(R.string.QueRen, listenExit).create().show();
+//        } else {
+//            finish();
+//        }
+        if (jsSerino == null || jsSerino.length() < 1) {
+            deleteInfo();
             finish();
+        } else {
+            AlertDialog.Builder bulider =
+                    new AlertDialog.Builder(this).setTitle(R.string.XunWen).setMessage("数据未保存是否退出");
+            bulider.setNegativeButton(R.string.QuXiao, null);
+            bulider.setPositiveButton(R.string.QueRen, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    deleteInfo();
+                    finish();
+                }
+            }).create().show();
         }
 
     }
