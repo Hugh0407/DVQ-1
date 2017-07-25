@@ -538,7 +538,6 @@ public class SalesDeliveryDetail extends Activity {
                     }
                     ScanedBarcode.add(bar.FinishBarCode);
                     MainLogin.sp.play(MainLogin.music2, 1, 1, 0, 0, 1);
-                    Log.d(TAG, "ScanedToGet: " + doneqty.toString());
                     temp.put("ntotaloutinvnum", doneqty);
                     break;
                 }
@@ -886,7 +885,6 @@ public class SalesDeliveryDetail extends Activity {
                 sinnum = "0.0";
             map.put("InvNum",
                     sinnum + " / " + Double.valueOf(((JSONObject) (arrays.get(i))).getString("doneqty")));
-            // map.put("doneqty", )
             lstTaskBody.add(map);
         }
 

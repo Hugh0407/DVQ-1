@@ -1572,6 +1572,7 @@ public class SalesDelivery extends Activity {
         tableBody.put("ScanDetails", bodyArray);
         table.put("Body", tableBody);
         table.put("GUIDS", UUID.randomUUID().toString());
+        table.put("OPDATE", MainLogin.appTime);
         Log.d(TAG, "XXXXXX: " + table.toString());
         if (!MainLogin.getwifiinfo()) {
             Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
