@@ -604,6 +604,7 @@ public class SalesDeliveryDetail extends Activity {
         if (!jsSerino.has("Serino")) {
             JSONArray serinos = new JSONArray();
             JSONObject temp = new JSONObject();
+            jsSerino.put("Serino", serinos);
             temp.put("serino", serino);
             temp.put("box", TotalBox);
             temp.put("invcode", m_mapSaleBaseInfo.get("invcode").toString());
@@ -615,7 +616,7 @@ public class SalesDeliveryDetail extends Activity {
 //            Log.d(TAG, "ScanSerial: "+m_mapSaleBaseInfo.get("vfree4").toString());
             temp.put("vfree4", m_mapSaleBaseInfo.get("vfree4").toString());
             serinos.put(temp);
-            jsSerino.put("Serino", serinos);
+
 
         } else {
             JSONArray serinos = jsSerino.getJSONArray("Serino");
@@ -639,7 +640,7 @@ public class SalesDeliveryDetail extends Activity {
 //            Log.d(TAG, "ScanSerial: "+m_mapSaleBaseInfo.get("vfree4").toString());
             temp.put("vfree4", m_mapSaleBaseInfo.get("vfree4").toString());
             serinos.put(temp);
-            jsSerino.put("Serino", serinos);
+//            jsSerino.put("Serino", serinos);
         }
         return true;
     }
@@ -961,7 +962,7 @@ public class SalesDeliveryDetail extends Activity {
 
                         ConfirmDelItem(position);
 //                        jsSerino.remove("Serino");
-//                        jsSerino.remove(String.valueOf(position));
+                        jsSerino.remove(String.valueOf(position));
                         listItemAdapter.notifyDataSetChanged();
                         IniDetail();
                         return false;
@@ -1003,112 +1004,113 @@ public class SalesDeliveryDetail extends Activity {
         ButtonOnClickDelconfirm buttondel = new ButtonOnClickDelconfirm(index);
         SelectButton = new AlertDialog.Builder(this).setTitle(R.string.QueRenShanChu)
                 .setMessage(R.string.NiQueRenShanChuGaiXingWeiJiLuMa)
-                .setPositiveButton(R.string.QueRen, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Map<String, Object> mapTemp = (Map<String, Object>) lstTaskBody
-                                .get(index);
-                        String invcode = (String) mapTemp.get("invcode");
-                        String batch = (String) mapTemp.get("batch");
-                        String sno = (String) mapTemp.get("sno");
-                        String serino = (String) mapTemp.get("serino");
-                        String totals = (String) mapTemp.get("total");
-                        Double ScanedTotal = Double.parseDouble(mapTemp.get("total").toString());
-
-                        if (ScanedBarcode != null || ScanedBarcode.size() > 0) {
-                            for (int si = 0; si < ScanedBarcode.size(); si++) {
-                                String RemoveBarCode = ScanedBarcode.get(si).toString();
-                                if (RemoveBarCode.equals(serino)) {
-                                    ScanedBarcode.remove(si);
-                                    si--;
-                                }
-                            }
-                        }
-
-                        JSONArray arrays;
-                        try {
-                            arrays = jsSerino.getJSONArray("Serino");
-
-                            HashMap<String, Object> Temp = new HashMap<String, Object>();
-                            JSONArray serinos = new JSONArray();
-
-                            for (int i = 0; i < arrays.length(); i++) {
-                                String serino1 = ((JSONObject) (arrays.get(i)))
-                                        .getString("serino");
-                                if (!serino1.equals(serino)) {
-                                    JSONObject temp = new JSONObject();
-                                    temp = arrays.getJSONObject(i);
-                                    serinos.put(temp);
-                                }
-                            }
-
-                            jsSerino = new JSONObject();
-
-                            if (serinos.length() > 0) {
-                                jsSerino.put("Serino", serinos);
-                            }
-                            JSONArray bodys = jsBody.getJSONArray("dbBody");
-                            JSONArray bodynews = new JSONArray();
-                            // JSONArray serinos = new JSONArray();
-                            for (int i = 0; i < bodys.length(); i++) {
-                                JSONObject temp = bodys.getJSONObject(i);
-
-                                String invcodeold = ((JSONObject) (bodys.get(i)))
-                                        .getString("invcode");
-                                if (invcodeold.equals(invcode)) {
-                                    Double doneqty = temp.getDouble("ntotaloutinvnum");
-                                    temp.put("ntotaloutinvnum", doneqty - ScanedTotal);
-                                }
-
-                                bodynews.put(temp);
-                            }
-
-                            jsBody = new JSONObject();
-                            jsBody.put("Status", "true");
-                            jsBody.put("dbBody", bodynews);
-
-                            //}
-
-                            JSONArray arraysCount;
-                            try {
-                                arraysCount = jsBody.getJSONArray("dbBody");
-                                number = 0.0;
-                                ntotaloutinvnum = 0.0;
-                                for (int i = 0; i < arraysCount.length(); i++) {
-                                    String sshouldinnum = ((JSONObject) (arraysCount
-                                            .get(i))).getString("nnumber");
-                                    String sinnum = ((JSONObject) (arraysCount
-                                            .get(i))).getString("ntotaloutinvnum");
-
-                                    number = number
-                                            + Double.valueOf(sshouldinnum);
-                                    if (!sinnum.toLowerCase().equals("null") && !sinnum.isEmpty())
-                                        ntotaloutinvnum = ntotaloutinvnum + Double.valueOf(sinnum);
-                                }
-                            } catch (JSONException e1) {
-                                // TODO Auto-generated catch block
-                                e1.printStackTrace();
-                            }
-                            tvSalecount.setText("总量" + number + " | " + "已扫"
-                                    + ntotaloutinvnum + " | " + "未扫"
-                                    + (number - ntotaloutinvnum));
-                            //SaveScanedBody();//写入本地
-                            IniDetail();
-
-                        } catch (JSONException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
-                            Toast.makeText(SalesDeliveryDetail.this, e.getMessage(),
-                                    Toast.LENGTH_LONG).show();
-                            // ADD CAIXY TEST START
-                            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                            // ADD CAIXY TEST END
-                        }
-
-                        DeleteButton.cancel();
-
-                    }
-                })
+                .setPositiveButton(R.string.QueRen,buttondel)
+//                        new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        Map<String, Object> mapTemp = (Map<String, Object>) lstTaskBody
+//                                .get(index);
+//                        String invcode = (String) mapTemp.get("invcode");
+//                        String batch = (String) mapTemp.get("batch");
+//                        String sno = (String) mapTemp.get("sno");
+//                        String serino = (String) mapTemp.get("serino");
+//                        String totals = (String) mapTemp.get("total");
+//                        Double ScanedTotal = Double.parseDouble(mapTemp.get("total").toString());
+//
+//                        if (ScanedBarcode != null || ScanedBarcode.size() > 0) {
+//                            for (int si = 0; si < ScanedBarcode.size(); si++) {
+//                                String RemoveBarCode = ScanedBarcode.get(si).toString();
+//                                if (RemoveBarCode.equals(serino)) {
+//                                    ScanedBarcode.remove(si);
+////                                    si--;
+//                                }
+//                            }
+//                        }
+//
+//                        JSONArray arrays;
+//                        try {
+//                            arrays = jsSerino.getJSONArray("Serino");
+//
+//                            HashMap<String, Object> Temp = new HashMap<String, Object>();
+//                            JSONArray serinos = new JSONArray();
+//
+//                            for (int i = 0; i < arrays.length(); i++) {
+//                                String serino1 = ((JSONObject) (arrays.get(i)))
+//                                        .getString("serino");
+//                                if (!serino1.equals(serino)) {
+//                                    JSONObject temp = new JSONObject();
+//                                    temp = arrays.getJSONObject(i);
+//                                    serinos.put(temp);
+//                                }
+//                            }
+//
+//                            jsSerino = new JSONObject();
+//
+//                            if (serinos.length() > 0) {
+//                                jsSerino.put("Serino", serinos);
+//                            }
+//                            JSONArray bodys = jsBody.getJSONArray("dbBody");
+//                            JSONArray bodynews = new JSONArray();
+//                            // JSONArray serinos = new JSONArray();
+//                            for (int i = 0; i < bodys.length(); i++) {
+//                                JSONObject temp = bodys.getJSONObject(i);
+//
+//                                String invcodeold = ((JSONObject) (bodys.get(i)))
+//                                        .getString("invcode");
+//                                if (invcodeold.equals(invcode)) {
+//                                    Double doneqty = temp.getDouble("ntotaloutinvnum");
+//                                    temp.put("ntotaloutinvnum", doneqty - ScanedTotal);
+//                                }
+//
+//                                bodynews.put(temp);
+//                            }
+//
+//                            jsBody = new JSONObject();
+//                            jsBody.put("Status", "true");
+//                            jsBody.put("dbBody", bodynews);
+//
+//                            //}
+//
+//                            JSONArray arraysCount;
+//                            try {
+//                                arraysCount = jsBody.getJSONArray("dbBody");
+//                                number = 0.0;
+//                                ntotaloutinvnum = 0.0;
+//                                for (int i = 0; i < arraysCount.length(); i++) {
+//                                    String sshouldinnum = ((JSONObject) (arraysCount
+//                                            .get(i))).getString("nnumber");
+//                                    String sinnum = ((JSONObject) (arraysCount
+//                                            .get(i))).getString("ntotaloutinvnum");
+//
+//                                    number = number
+//                                            + Double.valueOf(sshouldinnum);
+//                                    if (!sinnum.toLowerCase().equals("null") && !sinnum.isEmpty())
+//                                        ntotaloutinvnum = ntotaloutinvnum + Double.valueOf(sinnum);
+//                                }
+//                            } catch (JSONException e1) {
+//                                // TODO Auto-generated catch block
+//                                e1.printStackTrace();
+//                            }
+//                            tvSalecount.setText("总量" + number + " | " + "已扫"
+//                                    + ntotaloutinvnum + " | " + "未扫"
+//                                    + (number - ntotaloutinvnum));
+//                            //SaveScanedBody();//写入本地
+//                            IniDetail();
+//
+//                        } catch (JSONException e) {
+//                            // TODO Auto-generated catch block
+//                            e.printStackTrace();
+//                            Toast.makeText(SalesDeliveryDetail.this, e.getMessage(),
+//                                    Toast.LENGTH_LONG).show();
+//                            // ADD CAIXY TEST START
+//                            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                            // ADD CAIXY TEST END
+//                        }
+//
+//                        DeleteButton.cancel();
+//
+//                    }
+//                })
                 .setNegativeButton(R.string.QuXiao, null).show();
     }
 
@@ -1123,7 +1125,7 @@ public class SalesDeliveryDetail extends Activity {
         @Override
         public void onClick(DialogInterface dialog, int whichButton) {
             if (whichButton >= 0) {
-//                index = whichButton;
+                index = whichButton;
             } else {
 
                 if (whichButton == DialogInterface.BUTTON_POSITIVE) {
@@ -1142,7 +1144,7 @@ public class SalesDeliveryDetail extends Activity {
                             String RemoveBarCode = ScanedBarcode.get(si).toString();
                             if (RemoveBarCode.equals(serino)) {
                                 ScanedBarcode.remove(si);
-                                si--;
+//                                si--;
                             }
                         }
                     }

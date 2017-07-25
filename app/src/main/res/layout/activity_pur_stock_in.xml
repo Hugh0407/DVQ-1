@@ -2,12 +2,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.techscan.dvq.module.purStockIn.PurStockIn"
+    tools:context="com.techscan.dvq.PurStockIn"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_weight="1">
 
@@ -16,15 +16,36 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingLeft="3dp"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
             android:layout_margin="3dp"
             android:background="@color/white">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:paddingBottom="5dp">
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:textSize="18sp"
+                    android:textColor="@color/darkgray"
+                    android:textStyle="bold"
+                    android:text="来源单据：" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp">
                 <EditText
                     android:id="@+id/txtStartDate"
                     android:layout_width="wrap_content"
@@ -64,8 +85,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:paddingTop="3dp"
-                android:paddingBottom="3dp">
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp">
 
                 <TextView
                     android:id="@+id/tvsearchInvUnitName"
@@ -94,8 +115,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingTop="3dp"
-                android:paddingBottom="3dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
                 android:gravity="center_vertical">
                 <TextView
                     android:id="@+id/tvPurVen"
@@ -109,6 +130,24 @@
                     android:layout_alignParentRight="true"
                     android:text="----"/>
             </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding ="5dp">
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:textSize="18sp"
+                android:textColor="@color/darkgray"
+                android:textStyle="bold"
+                android:text="入库信息：" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -236,42 +275,6 @@
 
         <!--</LinearLayout>-->
 
-
-        <LinearLayout
-            android:visibility="gone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
-
-            <TextView
-                android:layout_width="68dp"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="部门"/>
-
-            <EditText
-                android:id="@+id/department"
-                android:layout_width="0dp"
-                android:layout_height="30dp"
-                android:layout_weight="3"
-                android:background="@drawable/edittext_style"
-                android:ems="10"
-                android:maxLines="1"
-                android:singleLine="true"
-                android:textAllCaps="true"/>
-
-            <ImageButton
-                android:id="@+id/refer_department"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="3dp"
-                android:background="@drawable/browse"/>
-
-        </LinearLayout>
-
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -303,7 +306,7 @@
         android:layout_alignParentLeft="true"
         android:layout_marginBottom="0dp"
         android:background="#d7d6d6"
-        android:orientation="horizontal">
+        android:orientation="horizontal" >
 
         <Button
             android:id="@+id/btnPurInScan"
@@ -311,18 +314,18 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/button_normal_style"
-            android:text="扫描"
-            android:textColor="@color/white"/>
+            android:textColor="@color/white"
+            android:text="扫描" />
 
 
         <!--<Button-->
-        <!--android:id="@+id/btnPurinUpdate"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_weight="1"-->
-        <!--android:background="@drawable/button_normal_style"-->
-        <!--android:textColor="@color/white"-->
-        <!--android:text="暂存" />-->
+            <!--android:id="@+id/btnPurinUpdate"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:background="@drawable/button_normal_style"-->
+            <!--android:textColor="@color/white"-->
+            <!--android:text="暂存" />-->
 
         <Button
             android:id="@+id/btnPurinSave"
@@ -330,8 +333,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/button_normal_style"
-            android:text="保存"
-            android:textColor="@color/white"/>
+            android:textColor="@color/white"
+            android:text="保存" />
 
         <Button
             android:id="@+id/btnPurInExit"
@@ -339,7 +342,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/button_normal_style"
-            android:text="退出"
-            android:textColor="@color/white"/>
+            android:textColor="@color/white"
+            android:text="退出" />
     </LinearLayout>
 </LinearLayout>
