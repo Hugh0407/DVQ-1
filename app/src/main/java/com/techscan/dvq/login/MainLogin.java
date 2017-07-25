@@ -161,8 +161,8 @@ public class MainLogin extends Activity {
             bulider.setPositiveButton(R.string.QueDing, null).create().show();
             return;
         }
-//        user.setText("a1");
-//        pwds.setText("123456aS!");
+        user.setText("a1");
+        pwds.setText("123456aS!");
         String userName = user.getText().toString().replace("\n", "");
         String password = pwds.getText().toString().replace("\n", "");
         if (userName.equals("") || password.equals("")) {
@@ -636,6 +636,7 @@ public class MainLogin extends Activity {
         year = mycalendar.get(Calendar.YEAR); //获取Calendar对象中的年
         month = mycalendar.get(Calendar.MONTH);//获取Calendar对象中的月
         day = mycalendar.get(Calendar.DAY_OF_MONTH);//获取这个月的第几天
+        appTime = year + "-" + (month + 1) + "-" + day;
         edTime.setText(Utils.formatTime(System.currentTimeMillis()));
         edTime.setOnFocusChangeListener(myFocusListener);
         edTime.setInputType(InputType.TYPE_NULL);

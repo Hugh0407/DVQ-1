@@ -165,6 +165,7 @@ public class MaterialOutScanAct extends Activity {
                         try {
                             Log.d(TAG, "InvBaseInfo: " + json.toString());
                             setInvBaseToUI(json);
+                            getInvBaseVFree4();// 获取海关手册号
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

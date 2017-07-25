@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -22,7 +23,6 @@ import android.widget.Toast;
 
 import com.techscan.dvq.Common;
 import com.techscan.dvq.ListWarehouse;
-import com.techscan.dvq.login.MainLogin;
 import com.techscan.dvq.R;
 import com.techscan.dvq.VlistRdcl;
 import com.techscan.dvq.bean.Goods;
@@ -30,6 +30,7 @@ import com.techscan.dvq.common.Base64Encoder;
 import com.techscan.dvq.common.RequestThread;
 import com.techscan.dvq.common.SaveThread;
 import com.techscan.dvq.common.Utils;
+import com.techscan.dvq.login.MainLogin;
 import com.techscan.dvq.module.materialOut.DepartmentListAct;
 import com.techscan.dvq.module.materialOut.StorgListAct;
 import com.techscan.dvq.module.productIn.scan.ProductInScanAct;
@@ -324,6 +325,7 @@ public class ProductInAct extends Activity {
         day = mycalendar.get(Calendar.DAY_OF_MONTH);//获取这个月的第几天
         mBillDate.setOnFocusChangeListener(myFocusListener);
         mBillDate.setOnKeyListener(mOnKeyListener);
+        mBillDate.setInputType(InputType.TYPE_NULL);
         mWh.setOnKeyListener(mOnKeyListener);
         mOrganization.setOnKeyListener(mOnKeyListener);
         mLeiBie.setOnKeyListener(mOnKeyListener);
@@ -444,6 +446,7 @@ public class ProductInAct extends Activity {
         tableBody.put("ScanDetails", bodyArray);
         table.put("Body", tableBody);
         table.put("GUIDS", UUID.randomUUID().toString());
+        table.put("OPDATE", MainLogin.appTime);
         Log.d(TAG, "saveInfo: " + table.toString());
 
         SaveThread saveThread = new SaveThread(table, "SavePrdStockIn", mHandler, HANDER_SAVE_RESULT);

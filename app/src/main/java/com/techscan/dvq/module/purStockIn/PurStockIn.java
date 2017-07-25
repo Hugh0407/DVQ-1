@@ -638,6 +638,7 @@ public class PurStockIn extends Activity {
             uploadGuid = UUID.randomUUID();
         }
         saveJons.put("GUIDS", uploadGuid.toString());
+        saveJons.put("OPDATE", MainLogin.appTime);
 
         JSONArray arraySaveBody = new JSONArray();
         if (NoScanSave == false) {
