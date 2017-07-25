@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.techscan.dvq.login.MainLogin;
+import com.techscan.dvq.login.SettingActivity;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
@@ -97,7 +98,7 @@ public class MainActivity extends Activity implements OnClickListener,OnKeyListe
 	private void BtnSettingOK()
 	{
 		SharedPreferences mySharedPreferences = getSharedPreferences(
-				SettingActivity.PREFERENCE_SETTING, Activity.MODE_PRIVATE);
+                SettingActivity.PREFERENCE_SETTING, Activity.MODE_PRIVATE);
 		
 		MainActivity.LoginString =mySharedPreferences.getString("Address", "");
 		MainActivity.CompanyCode=mySharedPreferences.getString("CompanyCode", "");

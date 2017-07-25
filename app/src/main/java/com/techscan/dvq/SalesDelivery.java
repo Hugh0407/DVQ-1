@@ -1563,7 +1563,7 @@ public class SalesDelivery extends Activity {
                     object.put("PK_SENDCORP", bodys.getJSONObject(i).getString("pk_corp"));
                     object.put("VBATCHCODE", arraysSerino.getJSONObject(j).getString("batch"));
                     object.put("VRECEIVEADDRESS",bodys.getJSONObject(i).getString("vreceiveaddress"));
-                    object.put("VRECEIVEPERSON",MainLogin.objLog.LoginUser);
+                    object.put("VRECEIVEPERSON", MainLogin.objLog.LoginUser);
                     bodyArray.put(object);
                     y++;
                 }

@@ -1148,7 +1148,7 @@ public class StockMove extends Activity {
 
 							if (x > 10) {
 								MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0,
-										1);
+                                                  1);
 								Common.ReScanErr = true;
 								ReScanErr();
 								return;

@@ -1,119 +1,120 @@
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/LoginImageBar"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#eeeeee"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.07"
+        android:src="@drawable/tclogo_blue"/>
 
     <LinearLayout
-        android:id="@+id/LoginImageBar"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:background="#eeeeee"
+        android:id="@+id/LoginEditTextBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginTop="10dp"
         android:gravity="center"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=" "
-            android:layout_weight="0.03"/>
+        <EditText
+            android:id="@+id/txtUserName"
+            android:layout_width="260dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/edittext_username_style"
+            android:ems="10"
+            android:hint="请输入用户名"
+            android:paddingLeft="5dp"
+            android:paddingRight="10dp"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:text="a1"/>
 
-        <ImageView
-            android:id="@+id/imageView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/tclogo_blue"
-            android:layout_weight="0.07" />
+        <EditText
+            android:id="@+id/txtPassword"
+            android:layout_width="260dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/edittext_password_style"
+            android:ems="10"
+            android:hint="请输入密码"
+            android:inputType="textPassword"
+            android:paddingLeft="5dp"
+            android:paddingRight="10dp"
+            android:text="123456aS!"/>
 
         <LinearLayout
-            android:id="@+id/LoginEditTextBar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:layout_height="35dp"
+            android:orientation="horizontal">
 
-
-            <EditText
-                android:id="@+id/txtUserName"
-                android:layout_width="260dp"
-                android:layout_height="35dp"
-                android:layout_marginTop="30dp"
-                android:ems="10"
-                android:hint="请输入用户名"
-                android:paddingLeft="5dp"
-                android:paddingRight="10dp"
-                android:singleLine="true"
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="16dp"
+                android:layout_weight="1"
+                android:background="@null"
+                android:clickable="true"
+                android:gravity="center_vertical"
                 android:selectAllOnFocus="true"
-                android:text="a1"
-                android:background="@drawable/edittext_username_style">
-
-                <requestFocus/>
-            </EditText>
-
-            <EditText
-                android:id="@+id/txtPassword"
-                android:layout_width="260dp"
-                android:layout_height="35dp"
-                android:layout_alignLeft="@+id/txtUserName"
-                android:layout_centerVertical="true"
-                android:layout_marginTop="5dp"
-                android:ems="10"
-                android:hint="请输入密码"
-                android:inputType="textPassword"
-                android:paddingLeft="5dp"
-                android:paddingRight="10dp"
-                android:text="123456aS!"
-                android:background="@drawable/edittext_password_style"/>
+                android:singleLine="true"
+                android:text="登录时间:"
+                android:textColor="@color/black"/>
 
             <TextView
-                android:id="@+id/textView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=" "/>
-
-            <Button
-                android:id="@+id/btnLogin"
-                android:layout_width="260dp"
-                android:layout_height="55dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/button_blue_style"
-                android:text="登录"
-                android:textColor="@color/white"/>
-
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="10dp"
-                android:text="   "/>
-
-            <Button
-                android:id="@+id/btnExit"
-                android:layout_width="260dp"
-                android:layout_height="35dp"
-                android:layout_marginBottom="20dp"
-                android:layout_marginTop="2dp"
-                android:background="@drawable/button_gray_style"
-                android:text="退出"
-                android:textColor="@color/white"/>
-
-
+                android:id="@+id/ed_time"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="16dp"
+                android:layout_weight="1"
+                android:background="@null"
+                android:clickable="true"
+                android:gravity="center_vertical"
+                android:hint="请选择日期"
+                android:selectAllOnFocus="true"
+                android:singleLine="true"
+                android:textColor="@color/black"/>
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/tvVer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_weight="0.04"
-            android:text="Ver : X.X.X"
-            android:textColor="#4988eb"
-            android:textSize="12sp"/>
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_width="260dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/button_blue_style"
+            android:text="登录"
+            android:textColor="@color/white"/>
+
+        <Button
+            android:id="@+id/btnExit"
+            android:layout_width="260dp"
+            android:layout_height="35dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="2dp"
+            android:background="@drawable/button_gray_style"
+            android:text="退出"
+            android:textColor="@color/white"/>
 
     </LinearLayout>
 
-</RelativeLayout>
+    <TextView
+        android:id="@+id/tvVer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_weight="0.04"
+        android:text="Ver : X.X.X"
+        android:textColor="#4988eb"
+        android:textSize="12sp"/>
+
+</LinearLayout>
+

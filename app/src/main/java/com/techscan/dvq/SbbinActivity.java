@@ -616,8 +616,8 @@ private void GetInvImg(String InvCode) throws JSONException
 //		try
 //		{
 ////		String lgUser = MainLogin.objLog.LoginUser;
-////		String lgPwd = MainLogin.objLog.Password;		
-////		String LoginString =  MainLogin.objLog.LoginString;	
+////		String lgPwd = MainLogin.objLog.Password;
+////		String LoginString =  MainLogin.objLog.LoginString;
 //		
 //		JSONObject para = new JSONObject();
 //		

@@ -932,8 +932,8 @@ public class StockBack extends Activity {
 
 					ScanDetail.put("GUIDS", uploadGuid.toString());
 
-					ScanDetail.put("UserIDA",MainLogin.objLog.UserID);
-					ScanDetail.put("UserIDB",MainLogin.objLog.UserIDB);
+					ScanDetail.put("UserIDA", MainLogin.objLog.UserID);
+					ScanDetail.put("UserIDB", MainLogin.objLog.UserIDB);
 					
 					ScanDetail.put("HWFrom", this.tmpStockBackWHFrom);
 					ScanDetail.put("HWTo", this.tmpStockBackWHTo);
@@ -961,7 +961,7 @@ public class StockBack extends Activity {
 					{
 						//saveJonsA.put("Body", JArrayA);
 						try {
-							if(!MainLogin.getwifiinfo()) 
+							if(!MainLogin.getwifiinfo())
 							{
 					            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
 					            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);

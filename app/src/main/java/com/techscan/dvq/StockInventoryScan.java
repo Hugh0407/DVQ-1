@@ -1066,9 +1066,9 @@ public class StockInventoryScan extends Activity {
 				ScanDetail.put("GUIDS", uploadGuid.toString());
 				
 				
-				ScanDetail.put("UserIDA",MainLogin.objLog.UserID);
+				ScanDetail.put("UserIDA", MainLogin.objLog.UserID);
 				
-				ScanDetail.put("UserIDB",MainLogin.objLog.UserIDB);
+				ScanDetail.put("UserIDB", MainLogin.objLog.UserIDB);
 				
 				JSONObject jasA = null;
 				JSONObject jasB = null;
