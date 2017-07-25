@@ -377,7 +377,7 @@ public class MainLogin extends Activity {
                 case R.id.btnLogin: {
                     //ShowLoading();
                     Login111();
-                    pwds.setText("");
+//                    pwds.setText("");
                     break;
                 }
                 case R.id.btnExit: {
