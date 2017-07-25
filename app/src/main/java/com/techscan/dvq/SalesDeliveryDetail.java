@@ -959,6 +959,8 @@ public class SalesDeliveryDetail extends Activity {
                         // When clicked, show a toast with the TextView text
 
                         ConfirmDelItem(position);
+//                        jsSerino.remove("Serino");
+//                        jsSerino.remove(String.valueOf(position));
                         listItemAdapter.notifyDataSetChanged();
                         IniDetail();
                         return false;

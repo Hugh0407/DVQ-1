@@ -28,6 +28,9 @@ public class SaleOutGoods implements Parcelable {
     String pk_invbasdoc;
     String pk_invmandoc;
     String vreceiveaddress;
+    String vfree4;  // 海关手册号
+    String vsourcerowno;//来源单据行号
+
 
     public SaleOutGoods() {
     }
@@ -100,16 +103,16 @@ public class SaleOutGoods implements Parcelable {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        SaleOutGoods other = (SaleOutGoods) obj;
+        Goods other = (Goods) obj;
         if (pk_invbasdoc == null) {
             if (other.pk_invbasdoc != null)
                 return false;
         } else if (!pk_invbasdoc.equals(other.pk_invbasdoc))
             return false;
-        if (invCode == null) {
-            if (other.invCode != null)
+        if (batch == null) {
+            if (other.lot != null)
                 return false;
-        } else if (!invCode.equals(other.invCode))
+        } else if (!batch.equals(other.lot))
             return false;
         return true;
     }
@@ -118,11 +121,10 @@ public class SaleOutGoods implements Parcelable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((invCode == null) ? 0 : invCode.hashCode());
+        result = prime * result + ((batch == null) ? 0 : batch.hashCode());
         result = prime * result + ((pk_invbasdoc == null) ? 0 : pk_invbasdoc.hashCode());
         return result;
     }
-
     public void setQty(float qty) {
         this.qty = qty;
     }

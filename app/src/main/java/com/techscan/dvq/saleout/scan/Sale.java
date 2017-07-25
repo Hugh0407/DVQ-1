@@ -399,7 +399,7 @@ public class Sale extends Activity {
         txtBarcode.setSelection(txtBarcode.length());   //将光标移动到最后的位置
         txtBarcode.selectAll();
         String[] barCode = Bar.split("\\|");
-        if (barCode.length == 9 && barCode[0].equals("P")) {
+        if (barCode.length == 8 && barCode[0].equals("P")) {
 
             /*********************************************************************/
             //判断该条码在“任务” 列表中是否存在
@@ -426,7 +426,7 @@ public class Sale extends Activity {
             txtSaleNumber.setSelection(txtSaleNumber.length());   //将光标移动到最后的位置
             getInvBaseInfo(invcode);
             return true;
-        } else if (barCode.length == 10 && barCode[0].equals("TP")) {//盘码TP|SKU|LOT|WW|TAX|QTY|NUM|CW|ONLY|SN
+        } else if (barCode.length == 9 && barCode[0].equals("TP")) {//盘码TP|SKU|LOT|WW|TAX|QTY|NUM|CW|ONLY|SN
             /*********************************************************************/
             //判断该条码在“任务” 列表中是否存在
             for (PurSaleOutGoods pur : taskList) {
@@ -498,9 +498,6 @@ public class Sale extends Activity {
             goods.setQty(Float.valueOf(txtSaleTotal.getText().toString()));
             goods.setPk_invbasdoc(pk_invbasdoc);
             goods.setPk_invmandoc(pk_invmandoc);
-            Log.d(TAG, "MMM: "+ "9" );
-            Log.d(TAG, "MMM: "+  txtSaleBatch.getText().toString());
-            Log.d(TAG, "MMM: "+ "10" );
             goods.setNumber(jsonBody.getString("nnumber").toString());
             goods.setCadvisecalbodyid(jsonBody.getString("cadvisecalbodyid").toString());
             goods.setCinvbasdocid(jsonBody.getString("cinvbasdocid").toString());

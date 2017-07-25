@@ -1160,7 +1160,6 @@ public class PurStockInDetail extends Activity {
                         // When clicked, show a toast with the TextView text
 
                         ConfirmDelItem(arg2);
-
                         return false;
                     }
                 });
