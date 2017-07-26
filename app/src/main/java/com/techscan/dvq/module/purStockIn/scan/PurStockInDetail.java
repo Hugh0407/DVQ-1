@@ -539,7 +539,7 @@ public class PurStockInDetail extends Activity {
                     }
                     doneqty = doneqty + Double.parseDouble(m_mapInvBaseInfo.get("total").toString());
 //                  if (doneqty  >= temp.getInt("nordernum")) {
-                    if (doneqty  >= temp.getInt("tasknum")) {
+                    if (doneqty  > temp.getInt("tasknum")) {
                         Toast.makeText(this, "这个存货已经超过应收数量了,不允许收!",
                                 Toast.LENGTH_LONG).show();
                         // ADD CAIXY TEST START
