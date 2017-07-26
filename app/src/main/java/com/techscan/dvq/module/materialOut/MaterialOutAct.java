@@ -79,21 +79,23 @@ public class MaterialOutAct extends Activity {
     ImageButton referDepartment;
     @InjectView(R.id.remark)
     EditText    remark;
-    @InjectView(R.id.btnPurinSave)
-    Button      btnPurinSave;
-    @InjectView(R.id.btnBack)
+    @InjectView(R.id.btn_scan)
+    Button      btnScan;
+    @InjectView(R.id.btn_save)
+    Button      btnSave;
+    @InjectView(R.id.btn_back)
     Button      btnBack;
-    private String TAG = this.getClass().getSimpleName();
 
+    private String TAG = this.getClass().getSimpleName();
 
     List<Goods>             tempList;
     HashMap<String, String> checkInfo;
 
     String CDISPATCHERID = "";//收发类别code
     String CDPTID        = "";  //部门id
+    String CWAREHOUSEID  = "";    //库存组织
+    String PK_CALBODY    = "";      //仓库id
     String CUSER;   //登录员工id
-    String CWAREHOUSEID = "";    //库存组织
-    String PK_CALBODY   = "";      //仓库id
     String PK_CORP;         //公司
     String VBILLCOD;        //单据号
 
@@ -120,7 +122,7 @@ public class MaterialOutAct extends Activity {
      *
      * @param view
      */
-    @OnClick({R.id.bill_date, R.id.refer_wh, R.id.refer_organization, R.id.refer_lei_bie, R.id.refer_department, R.id.btnPurinSave, R.id.btnBack})
+    @OnClick({R.id.bill_date, R.id.btn_scan, R.id.refer_wh, R.id.refer_organization, R.id.refer_lei_bie, R.id.refer_department, R.id.btn_save, R.id.btn_back})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.refer_wh:
@@ -132,7 +134,7 @@ public class MaterialOutAct extends Activity {
             case R.id.refer_lei_bie:
                 btnRdclClick("");
                 break;
-            case R.id.btnPurInScan:
+            case R.id.btn_scan:
                 if (isAllEdNotEmpty()) {
                     Intent in = new Intent(mActivity, MaterialOutScanAct.class);
                     in.putExtra("CWAREHOUSEID", CWAREHOUSEID);
@@ -145,7 +147,7 @@ public class MaterialOutAct extends Activity {
                     showToast(mActivity, "请先核对信息，再进行扫描");
                 }
                 break;
-            case R.id.btnPurinSave:
+            case R.id.btn_save:
                 if (checkSaveInfo()) {
                     if (tempList != null && tempList.size() > 0) {
                         saveInfo(tempList);
@@ -155,7 +157,7 @@ public class MaterialOutAct extends Activity {
                     }
                 }
                 break;
-            case R.id.btnBack:
+            case R.id.btn_back:
                 if (tempList != null && tempList.size() > 0) {
                     AlertDialog.Builder bulider =
                             new AlertDialog.Builder(this).setTitle(R.string.XunWen).setMessage("数据未保存是否退出");
