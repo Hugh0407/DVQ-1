@@ -18,7 +18,6 @@ public class GetSaleBaseInfo {
 
     public HashMap<String,Object> mapSaleBaseInfo = null;
     String InvCode = "";
-    String Batch = "";
 
     /**
      * 获取存货基本信息
@@ -31,20 +30,12 @@ public class GetSaleBaseInfo {
         if (InvCode.contains(",")){
             String[] invCodeArray = InvCode.split("\\,");
             InvCode = invCodeArray[1];
-        }else{
+        }else {
             InvCode = cSplitBarcode.cInvCode;
-        }
-        //判断batch是否有逗号。如果有逗号就分割，拿逗号后面的batch；否则就拿原来的batch
-        Batch = cSplitBarcode.cBatch;
-        if (Batch.contains(",")){
-            String[] batchArray = Batch.split("\\,");
-            Batch = batchArray[1];
-        }else{
-            Batch = cSplitBarcode.cBatch;
         }
         mapSaleBaseInfo = new HashMap<String, Object>();
         mapSaleBaseInfo.put("barcodetype",cSplitBarcode.BarcodeType);
-        mapSaleBaseInfo.put("batch",Batch);
+        mapSaleBaseInfo.put("batch",cSplitBarcode.cBatch);
         mapSaleBaseInfo.put("serino",cSplitBarcode.cSerino);
         mapSaleBaseInfo.put("quantity",cSplitBarcode.dQuantity);
         mapSaleBaseInfo.put("number",cSplitBarcode.iNumber);

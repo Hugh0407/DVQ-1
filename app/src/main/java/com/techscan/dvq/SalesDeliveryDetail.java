@@ -647,7 +647,7 @@ public class SalesDeliveryDetail extends Activity {
         HashMap<String, String> para = new HashMap<String, String>();
         para.put("FunctionName", "GetInvFreeByInvCodeAndLot");
         para.put("CORP", CORP);
-        para.put("BATCH", objSaleBaseInfo.Batch);
+        para.put("BATCH", m_cSplitBarcode.cBatch);
         para.put("WAREHOUSEID", WAREHOUSEID);
         para.put("CALBODYID", CALBODYID);
         para.put("CINVBASID", CINVBASID);
