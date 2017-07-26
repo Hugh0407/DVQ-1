@@ -1,5 +1,6 @@
-package com.techscan.dvq;
+package com.techscan.dvq.common;
 
+import com.techscan.dvq.MyHttpClient;
 import com.techscan.dvq.login.MainLogin;
 
 import org.apache.http.HttpEntity;
@@ -30,7 +31,7 @@ public class Common {
     public        String LoginString2 = "";
     public static String lsUrl        = "";
     //public static String lsUrl = "";
-    private static writeTxt writeTxt;
+    private static com.techscan.dvq.writeTxt writeTxt;
     public String LoginUser = "";
     public String LoginDate;
     public        String     Password        = "";

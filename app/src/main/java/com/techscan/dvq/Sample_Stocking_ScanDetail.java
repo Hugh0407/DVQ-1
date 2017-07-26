@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.techscan.dvq.common.Common;
 import com.techscan.dvq.login.MainLogin;
 
 public class Sample_Stocking_ScanDetail extends Activity {

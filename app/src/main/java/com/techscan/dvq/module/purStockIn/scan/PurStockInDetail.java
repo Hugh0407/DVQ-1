@@ -24,7 +24,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.techscan.dvq.Common;
+import com.techscan.dvq.common.Common;
 import com.techscan.dvq.GetInvBaseInfo;
 import com.techscan.dvq.Inventory;
 import com.techscan.dvq.login.MainLogin;

@@ -21,7 +21,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.techscan.dvq.Common;
+import com.techscan.dvq.common.Common;
 import com.techscan.dvq.ListWarehouse;
 import com.techscan.dvq.R;
 import com.techscan.dvq.VlistRdcl;
