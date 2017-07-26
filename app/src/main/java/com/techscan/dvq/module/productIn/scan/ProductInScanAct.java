@@ -22,11 +22,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import com.techscan.dvq.login.MainLogin;
 import com.techscan.dvq.R;
 import com.techscan.dvq.bean.Goods;
 import com.techscan.dvq.common.RequestThread;
 import com.techscan.dvq.common.SoundHelper;
+import com.techscan.dvq.common.SplitBarcode;
+import com.techscan.dvq.login.MainLogin;
 import com.techscan.dvq.module.materialOut.MyBaseAdapter;
 
 import org.json.JSONArray;
@@ -209,49 +210,65 @@ public class ProductInScanAct extends Activity {
      * 条码解析
      */
     private boolean barAnalysis() {
-        String Bar = mEdBarCode.getText().toString().trim();
-        if (Bar.contains("\n")) {
-            Bar = Bar.replace("\n", "");
+        String bar = mEdBarCode.getText().toString().trim();
+        if (bar.contains("\n")) {
+            bar = bar.replace("\n", "");
         }
-        mEdBarCode.setText(Bar);
-        mEdBarCode.setSelection(mEdBarCode.length());   //将光标移动到最后的位置
+        mEdBarCode.setText(bar);
+        mEdBarCode.setSelection(mEdBarCode.length());//将光标移动到最后的位置
         mEdBarCode.selectAll();
-        String[] barCode = Bar.split("\\|");
-
-        if (barCode.length == 8 && barCode[0].equals("P")) {// 包码 P|SKU|LOT|WW|TAX|QTY|CW_ONLY|SN 8位
+        SplitBarcode barDecoder = new SplitBarcode(bar);
+        if (!barDecoder.creatorOk) {
+            showToast(mActivity, "条码有误");
+            return false;
+        }
+        if (barDecoder.BarcodeType.equals("P")) {
             mEdNum.setEnabled(true);
             mEdManual.setEnabled(true);
             mEdNum.setFocusable(true);
-            String encoding = barCode[1];
-            mEdEncoding.setText(encoding);
-            mEdLot.setText(barCode[2]);
-            mEdWeight.setText(barCode[5]);
+            String invCode = barDecoder.cInvCode;
+            if (invCode.contains(",")) {
+                invCode = invCode.split(",")[0];
+            }
+            mEdEncoding.setText(invCode);
+            getInvBaseInfo(invCode);
+            String batch = barDecoder.cBatch;
+            if (batch.contains(",")) {
+                batch = batch.split(",")[0];
+            }
+            mEdLot.setText(batch);
+            mEdWeight.setText(String.valueOf(barDecoder.dQuantity));
             mEdQty.setText("");
             mEdNum.setText("1");
             mEdNum.requestFocus();  //包码扫描后光标跳到“数量”,输入数量,添加到列表
             mEdNum.setSelection(mEdNum.length());   //将光标移动到最后的位置
-            getInvBaseInfo(encoding);
             return true;
-        } else if (barCode.length == 9 && barCode[0].equals("TP")) {//盘码TP|SKU|LOT|WW|TAX|QTY|NUM|CW_ONLY|SN 9位
+        } else if (barDecoder.BarcodeType.equals("TP")) {
             for (int i = 0; i < detailList.size(); i++) {
-                if (detailList.get(i).getBarcode().equals(Bar)) {
+                if (detailList.get(i).getBarcode().equals(bar)) {
                     showToast(mActivity, "该托盘已扫描");
                     SoundHelper.playWarning();
                     return false;
                 }
             }
-            //如果是盘码，全都设置为不可编辑，默认这三个是可编辑的
             mEdManual.setEnabled(true);
             mEdManual.requestFocus();
-            String encoding = barCode[1];
+            String encoding = barDecoder.cInvCode;
+            if (encoding.contains(",")) {
+                encoding = encoding.split(",")[0];
+            }
             mEdEncoding.setText(encoding);
-            mEdLot.setText(barCode[2]);
-            mEdWeight.setText(barCode[5]);
-            mEdNum.setText(barCode[6]);
-            double weight = Double.valueOf(barCode[5]);
-            double mEdNum = Double.valueOf(barCode[6]);
-            mEdQty.setText(formatDecimal(weight * mEdNum));
             getInvBaseInfo(encoding);
+            String batch = barDecoder.cBatch;
+            if (batch.contains(",")) {
+                batch = batch.split(",")[0];
+            }
+            mEdLot.setText(batch);
+            mEdWeight.setText(String.valueOf(barDecoder.dQuantity));
+            mEdNum.setText(String.valueOf(barDecoder.iNumber));
+            double weight = barDecoder.dQuantity;
+            double mEdNum = Double.valueOf(barDecoder.iNumber);
+            mEdQty.setText(formatDecimal(weight * mEdNum));
             isBaoBarCode = true;
             return true;
         } else {
@@ -259,6 +276,63 @@ public class ProductInScanAct extends Activity {
             SoundHelper.playWarning();
             return false;
         }
+
+//        String[] barCode = bar.split("\\|");
+//
+//        if (barCode.length == 8 && barCode[0].equals("P")) {// 包码 P|SKU|LOT|WW|TAX|QTY|CW_ONLY|SN 8位
+//            mEdNum.setEnabled(true);
+//            mEdManual.setEnabled(true);
+//            mEdNum.setFocusable(true);
+//            String encoding = barCode[1];
+//            if (encoding.contains(",")) {
+//                encoding = encoding.split(",")[0];
+//            }
+//            mEdEncoding.setText(encoding);
+//            getInvBaseInfo(encoding);
+//            String lot = barCode[2];
+//            if (lot.contains(",")) {
+//                lot = lot.split(",")[0];
+//            }
+//            mEdLot.setText(lot);
+//            mEdWeight.setText(barCode[5]);
+//            mEdQty.setText("");
+//            mEdNum.setText("1");
+//            mEdNum.requestFocus();  //包码扫描后光标跳到“数量”,输入数量,添加到列表
+//            mEdNum.setSelection(mEdNum.length());   //将光标移动到最后的位置
+//            return true;
+//        } else if (barCode.length == 9 && barCode[0].equals("TP")) {//盘码TP|SKU|LOT|WW|TAX|QTY|NUM|CW_ONLY|SN 9位
+//            for (int i = 0; i < detailList.size(); i++) {
+//                if (detailList.get(i).getBarcode().equals(bar)) {
+//                    showToast(mActivity, "该托盘已扫描");
+//                    SoundHelper.playWarning();
+//                    return false;
+//                }
+//            }
+//            mEdManual.setEnabled(true);
+//            mEdManual.requestFocus();
+//            String encoding = barCode[1];
+//            if (encoding.contains(",")) {
+//                encoding = encoding.split(",")[0];
+//            }
+//            mEdEncoding.setText(encoding);
+//            getInvBaseInfo(encoding);
+//            String lot = barCode[2];
+//            if (lot.contains(",")) {
+//                lot = lot.split(",")[0];
+//            }
+//            mEdLot.setText(lot);
+//            mEdWeight.setText(barCode[5]);
+//            mEdNum.setText(barCode[6]);
+//            double weight = Double.valueOf(barCode[5]);
+//            double mEdNum = Double.valueOf(barCode[6]);
+//            mEdQty.setText(formatDecimal(weight * mEdNum));
+//            isBaoBarCode = true;
+//            return true;
+//        } else {
+//            showToast(mActivity, "条码有误重新输入");
+//            SoundHelper.playWarning();
+//            return false;
+//        }
     }
 
     private void addDataToOvList() {
@@ -293,7 +367,7 @@ public class ProductInScanAct extends Activity {
     /**
      * 添加信息到 集合中
      *
-     * @return
+     * @return 是否添加完成
      */
     private boolean addDataToDetailList() {
         SoundHelper.playOK();

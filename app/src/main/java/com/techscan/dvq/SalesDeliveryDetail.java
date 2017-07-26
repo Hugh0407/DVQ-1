@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.techscan.dvq.common.RequestThread;
+import com.techscan.dvq.common.SplitBarcode;
 import com.techscan.dvq.common.Utils;
 import com.techscan.dvq.login.MainLogin;
 
@@ -98,10 +99,10 @@ public class SalesDeliveryDetail extends Activity {
     @InjectView(R.id.txtSaleCustoms)
     EditText txtSaleCustoms;
 
-    private GetSaleBaseInfo objSaleBaseInfo = null;
+    private GetSaleBaseInfo         objSaleBaseInfo   = null;
     private HashMap<String, Object> m_mapSaleBaseInfo = null;
-    private SplitBarcode m_cSplitBarcode = null;
-    private ArrayList<String> ScanedBarcode = new ArrayList<String>();
+    private SplitBarcode            m_cSplitBarcode   = null;
+    private ArrayList<String>       ScanedBarcode     = new ArrayList<String>();
     List<Map<String, Object>> lstTaskBody = null;
     private AlertDialog DeleteButton = null;
     private AlertDialog SelectButton = null;

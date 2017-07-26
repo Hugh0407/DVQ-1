@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.techscan.dvq.R.id;
+import com.techscan.dvq.common.SplitBarcode;
 import com.techscan.dvq.login.MainLogin;
 
 import org.apache.http.ParseException;
@@ -87,13 +88,13 @@ public class StockMoveScan extends Activity {
 
 	private ButtonOnClick buttonOnClick = new ButtonOnClick(0);
 
-	private ButtonOnClick buttonDelOnClick = new ButtonOnClick(0);
-	private String[] warehouseList = null;
-	private String[] warehouseNameList = null;
-	private String[] vFree1List = null;
-	private String[] OrgList = null;
-	private String[] companyIdList = null;
-	private SplitBarcode bar = null;
+	private ButtonOnClick buttonDelOnClick  = new ButtonOnClick(0);
+	private String[]      warehouseList     = null;
+	private String[]      warehouseNameList = null;
+	private String[]      vFree1List        = null;
+	private String[]      OrgList           = null;
+	private String[]      companyIdList     = null;
+	private SplitBarcode  bar               = null;
 
 	private Hashtable SerialValues = null;
 

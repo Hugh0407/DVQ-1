@@ -30,7 +30,7 @@ import com.techscan.dvq.Inventory;
 import com.techscan.dvq.login.MainLogin;
 import com.techscan.dvq.R;
 import com.techscan.dvq.R.id;
-import com.techscan.dvq.SplitBarcode;
+import com.techscan.dvq.common.SplitBarcode;
 import com.techscan.dvq.writeTxt;
 
 import org.apache.http.ParseException;

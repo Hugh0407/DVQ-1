@@ -326,6 +326,7 @@ public class ProductInAct extends Activity {
         mBillDate.setOnFocusChangeListener(myFocusListener);
         mBillDate.setOnKeyListener(mOnKeyListener);
         mBillDate.setInputType(InputType.TYPE_NULL);
+        mBillDate.setText(MainLogin.appTime);
         mWh.setOnKeyListener(mOnKeyListener);
         mOrganization.setOnKeyListener(mOnKeyListener);
         mLeiBie.setOnKeyListener(mOnKeyListener);

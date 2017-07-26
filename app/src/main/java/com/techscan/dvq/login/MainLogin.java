@@ -161,8 +161,8 @@ public class MainLogin extends Activity {
             bulider.setPositiveButton(R.string.QueDing, null).create().show();
             return;
         }
-        user.setText("a1");
-        pwds.setText("123456aS!");
+        user.setText("≤‚ ‘");
+        pwds.setText("1234aS~");
         String userName = user.getText().toString().replace("\n", "");
         String password = pwds.getText().toString().replace("\n", "");
         if (userName.equals("") || password.equals("")) {

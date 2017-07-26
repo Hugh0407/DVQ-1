@@ -1,26 +1,26 @@
-package com.techscan.dvq;
+package com.techscan.dvq.common;
 
 public class SplitBarcode {
-    public String AccID = "A";
-    public String cInvCode = "";//物料号
-    public String cBatch = "";//批次
-    public String cInvName = "";
-    public String cSerino = "";//序列号
-    public String cBatchStatus = "";
-    public String currentBox = "";
-    public String TotalBox = "";
-    public String CheckNo = "";
+    public String AccID         = "A";
+    public String cInvCode      = "";//物料号
+    public String cBatch        = "";//批次
+    public String cInvName      = "";
+    public String cSerino       = "";//序列号
+    public String cBatchStatus  = "";
+    public String currentBox    = "";
+    public String TotalBox      = "";
+    public String CheckNo       = "";
     public String FinishBarCode = "";
-    public String CheckBarCode = "";
+    public String CheckBarCode  = "";
 
     public boolean creatorOk = false;
-    public String Barcode = ""; //去掉 \n的 条码
+    public String  Barcode   = ""; //去掉 \n的 条码
     public String BarcodeType;//条码类型（Y：液态原材料；C：固态单包原材料；TC：固态托盘原材料；P：单包成品；TP托盘成品）
     //private String m_sInventoryCode;//物料号
     //private String m_sLotCode;//批次
     public String TaxFlag;//完税、保税标志
-    public Double dQuantity = 0.00;//重量
-    public Integer iNumber = 0;//件数
+    public Double  dQuantity = 0.00;//重量
+    public Integer iNumber   = 0;//件数
     public String Outsourcing;//委外
     //public String SeriNo;//序列号
     public String CWFlag;//成品财务标志
@@ -114,7 +114,7 @@ public class SplitBarcode {
                 break;
             default:
                 creatorOk = false;
-                return;
+                break;
         }
 
     }
@@ -126,5 +126,4 @@ public class SplitBarcode {
             return valueOf(sType.toUpperCase());
         }
     }
-
 }

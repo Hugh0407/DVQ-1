@@ -28,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.techscan.dvq.R.id;
+import com.techscan.dvq.common.SplitBarcode;
 import com.techscan.dvq.login.MainLogin;
 
 import org.apache.http.ParseException;
@@ -68,8 +69,8 @@ public class StockTransScanIn extends Activity {
     String ScanInvOK = "0";
     private ArrayList<String> ScanedBarcode = new ArrayList<String>();
 
-    private SplitBarcode bar = null;            //当前扫描条码解析
-    private Inventory currentObj = null;        //当前扫描到的存货信息
+    private SplitBarcode bar        = null;            //当前扫描条码解析
+    private Inventory    currentObj = null;        //当前扫描到的存货信息
 
     private String tmpAccIDA = "";
     private String tmpAccIDB = "";

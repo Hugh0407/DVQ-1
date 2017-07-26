@@ -4,6 +4,7 @@ import android.os.Handler;
 import android.util.Log;
 
 import com.techscan.dvq.common.RequestThread;
+import com.techscan.dvq.common.SplitBarcode;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,7 +27,7 @@ public class GetSaleBaseInfo {
      *
      *
      */
-    public GetSaleBaseInfo(SplitBarcode cSplitBarcode, Handler mHandler,String PK_CORP) {
+    public GetSaleBaseInfo(SplitBarcode cSplitBarcode, Handler mHandler, String PK_CORP) {
         mapSaleBaseInfo = new HashMap<String, Object>();
         mapSaleBaseInfo.put("barcodetype",cSplitBarcode.BarcodeType);
         mapSaleBaseInfo.put("batch",cSplitBarcode.cBatch);

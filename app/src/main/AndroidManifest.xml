@@ -270,8 +270,7 @@
         <!-- </intent-filter> -->
         <!--  -->
         <!-- </activity> -->
-        <activity android:name=".SaleChooseTime"
-            />
+        <activity android:name=".SaleChooseTime"/>
         <activity android:name=".SalesDeliveryDetail">
         </activity>
         <activity android:name=".module.materialOut.MaterialOutAct">
@@ -290,8 +289,15 @@
         </activity>
         <activity android:name=".module.productIn.scan.ProductInScanAct">
         </activity>
-
         <activity android:name=".module.query.Query">
+        </activity>
+        <activity android:name=".module.otherIn.OtherInAct">
+        </activity>
+        <activity android:name=".module.otherOut.OtherOutAct">
+        </activity>
+        <activity android:name=".module.otherIn.OtherInScanAct">
+        </activity>
+        <activity android:name=".module.otherOut.OtherOutScanAct">
         </activity>
     </application>
 

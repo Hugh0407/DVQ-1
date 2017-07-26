@@ -12,6 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.techscan.dvq.R.id;
+import com.techscan.dvq.common.SplitBarcode;
 import com.techscan.dvq.login.MainLogin;
 
 import android.app.Activity;
@@ -1241,11 +1242,11 @@ public class StockInventory extends Activity {
 				}
 				 if(isfinish.equals("0"))
 				 {
-					 String cinventoryInfo=details.getJSONObject(i).get("cBarcode").toString();
-					 String ErrMsg=cinventoryInfo +"还有分包数据没有扫描完毕";
-					 SplitBarcode sb=new SplitBarcode(cinventoryInfo);
-					 String total=sb.TotalBox.replaceFirst("^0*", "");
-					 ArrayList arrays =new ArrayList();
+					 String       cinventoryInfo =details.getJSONObject(i).get("cBarcode").toString();
+					 String       ErrMsg         =cinventoryInfo +"还有分包数据没有扫描完毕";
+					 SplitBarcode sb             =new SplitBarcode(cinventoryInfo);
+					 String       total          =sb.TotalBox.replaceFirst("^0*", "");
+					 ArrayList    arrays         =new ArrayList();
 					 for(int s=0;s<details.length();s++)
 					 {
 						 if(details.getJSONObject(s).get("identity").toString().equals(details.getJSONObject(i).get("identity").toString()))

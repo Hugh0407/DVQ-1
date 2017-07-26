@@ -18,6 +18,7 @@ import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import com.techscan.dvq.R.id;
+import com.techscan.dvq.common.SplitBarcode;
 import com.techscan.dvq.login.MainLogin;
 import com.techscan.dvq.login.MainMenu;
 
@@ -1022,10 +1023,10 @@ public class StockMove extends Activity {
 			if (isfinish.equals("分包未完")) {
 				String cinventoryInfo = details.getJSONObject(i)
 						.get("cBarcode").toString();
-				String ErrMsg = "还有分包数据没有扫描完毕";
-				SplitBarcode sb = new SplitBarcode(cinventoryInfo);
-				String total = sb.TotalBox.replaceFirst("^0*", "");
-				ArrayList arrays = new ArrayList();
+				String       ErrMsg = "还有分包数据没有扫描完毕";
+				SplitBarcode sb     = new SplitBarcode(cinventoryInfo);
+				String       total  = sb.TotalBox.replaceFirst("^0*", "");
+				ArrayList    arrays = new ArrayList();
 				// for(int s=0;s<details.length();s++)
 				// {
 				// if(details.getJSONObject(s).get("identity").toString().equals(details.getJSONObject(i).get("identity").toString()))

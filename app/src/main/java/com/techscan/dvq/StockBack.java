@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.techscan.dvq.R.id;
+import com.techscan.dvq.common.SplitBarcode;
 import com.techscan.dvq.login.MainLogin;
 import com.techscan.dvq.login.MainMenu;
 
@@ -96,8 +97,8 @@ public class StockBack extends Activity {
     private AlertDialog WHSelectButtonF=null;
     private AlertDialog WHSelectButtonT=null;
 
-	private SplitBarcode bar = null; // 当前扫描条码解析
-	private Hashtable SerialValues = null;
+	private SplitBarcode bar          = null; // 当前扫描条码解析
+	private Hashtable    SerialValues = null;
 	List<Map<String, String>> jonsScan = null;
 	List<Map<String, String>> m_mData = null;
 	private AlertDialog DeleteButton = null;

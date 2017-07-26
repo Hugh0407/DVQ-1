@@ -17,9 +17,9 @@ public class Goods implements Parcelable {
     String type;        //类型
     String unit;        //单位
     String lot;         //批次
-    String spec;         //规格
-    float qty;          //总量
-    int num;            //数目
+    String spec;        //规格
+    float  qty;         //总量
+    int    num;         //数目
     String pk_invbasdoc;
     String pk_invmandoc;
     String costObject;
@@ -80,12 +80,13 @@ public class Goods implements Parcelable {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
+        final int prime  = 31;
+        int       result = 1;
         result = prime * result + ((lot == null) ? 0 : lot.hashCode());
         result = prime * result + ((pk_invbasdoc == null) ? 0 : pk_invbasdoc.hashCode());
         return result;
     }
+
     public String getBarcode() {
         return barcode;
     }

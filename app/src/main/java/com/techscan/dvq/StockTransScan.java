@@ -28,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.techscan.dvq.R.id;
+import com.techscan.dvq.common.SplitBarcode;
 import com.techscan.dvq.login.MainLogin;
 
 import org.apache.http.ParseException;
@@ -102,13 +103,13 @@ public class StockTransScan extends Activity {
 	private JSONObject jonsBody; // 源头单据表体
 	private List<Map<String, Object>> lstTaskBody = null;
 
-	private List<Map<String, Object>> lstSaveBody = new ArrayList<Map<String, Object>>();
-	private JSONArray jsonArrSaveBody = new JSONArray();
-	private JSONObject jsonSaveBody = new JSONObject();
-	private int iScanedNum = 0;
-	private SplitBarcode bar = null; // 当前扫描条码解析
-	private Inventory currentObj = null; // 当前扫描到的存货信息
-	private Hashtable SerialValues = null;
+	private List<Map<String, Object>> lstSaveBody     = new ArrayList<Map<String, Object>>();
+	private JSONArray                 jsonArrSaveBody = new JSONArray();
+	private JSONObject                jsonSaveBody    = new JSONObject();
+	private int                       iScanedNum      = 0;
+	private SplitBarcode              bar             = null; // 当前扫描条码解析
+	private Inventory                 currentObj      = null; // 当前扫描到的存货信息
+	private Hashtable                 SerialValues    = null;
 	List<Map<String, String>> jonsScan;
 	List<Map<String, String>> jonsSerialNo;
 	// private String[] warehouseList = null;
