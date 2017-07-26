@@ -608,7 +608,6 @@ public class SalesDeliveryDetail extends Activity {
             temp.put("sno", m_mapSaleBaseInfo.get("serino").toString());
             temp.put("invtype", m_mapSaleBaseInfo.get("invtype").toString());
             temp.put("invspec", m_mapSaleBaseInfo.get("invspec").toString());
-//            Log.d(TAG, "ScanSerial: "+m_mapSaleBaseInfo.get("vfree4").toString());
             temp.put("vfree4", m_mapSaleBaseInfo.get("vfree4").toString());
             serinos.put(temp);
 
@@ -637,6 +636,7 @@ public class SalesDeliveryDetail extends Activity {
             serinos.put(temp);
 //            jsSerino.put("Serino", serinos);
         }
+        Log.d(TAG, "ScanSerial: "+jsSerino.toString());
         return true;
     }
 
@@ -647,7 +647,7 @@ public class SalesDeliveryDetail extends Activity {
         HashMap<String, String> para = new HashMap<String, String>();
         para.put("FunctionName", "GetInvFreeByInvCodeAndLot");
         para.put("CORP", CORP);
-        para.put("BATCH", m_cSplitBarcode.cBatch);
+        para.put("BATCH", objSaleBaseInfo.Batch);
         para.put("WAREHOUSEID", WAREHOUSEID);
         para.put("CALBODYID", CALBODYID);
         para.put("CINVBASID", CINVBASID);
