@@ -85,7 +85,6 @@ public class MaterialOutScanAct extends Activity {
     public static List<Goods> detailList = new ArrayList<Goods>();
     public static List<Goods> ovList     = new ArrayList<Goods>();
     Activity mActivity;
-    boolean isBaoBarCode = false;
     String  CWAREHOUSEID = "";
     String  PK_CALBODY   = "";
     String  BATCH        = "";
@@ -302,7 +301,6 @@ public class MaterialOutScanAct extends Activity {
             double qty = barDecoder.dQuantity;
             double num = barDecoder.iNumber;
             mEdQty.setText(formatDecimal(qty * num));
-            isBaoBarCode = true;
             return true;
         }else {
             showToast(mActivity, "Ãı¬Î”–ŒÛ");
