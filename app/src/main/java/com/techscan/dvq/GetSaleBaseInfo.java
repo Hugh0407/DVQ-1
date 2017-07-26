@@ -1,7 +1,6 @@
 package com.techscan.dvq;
 
 import android.os.Handler;
-import android.util.Log;
 
 import com.techscan.dvq.common.RequestThread;
 import com.techscan.dvq.common.SplitBarcode;
@@ -12,8 +11,6 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-import static android.content.ContentValues.TAG;
-
 /**
  * Created by Xuhu on 2017/7/8.
  */
@@ -21,6 +18,7 @@ import static android.content.ContentValues.TAG;
 public class GetSaleBaseInfo {
 
     public HashMap<String,Object> mapSaleBaseInfo = null;
+    String InvCode = "";
 
     /**
      * 获取存货基本信息
@@ -28,6 +26,13 @@ public class GetSaleBaseInfo {
      *
      */
     public GetSaleBaseInfo(SplitBarcode cSplitBarcode, Handler mHandler, String PK_CORP) {
+        InvCode = cSplitBarcode.cInvCode;
+        if (InvCode.contains(",")){
+            String[] incCodeArray = InvCode.split("\\,");
+            InvCode = incCodeArray[1];
+        }else{
+            InvCode = cSplitBarcode.cInvCode;
+        }
         mapSaleBaseInfo = new HashMap<String, Object>();
         mapSaleBaseInfo.put("barcodetype",cSplitBarcode.BarcodeType);
         mapSaleBaseInfo.put("batch",cSplitBarcode.cBatch);
@@ -42,28 +47,14 @@ public class GetSaleBaseInfo {
         HashMap<String, String> parameter = new HashMap<String, String>();
         parameter.put("FunctionName", "GetInvBaseInfo");
         parameter.put("CompanyCode", PK_CORP);
-        parameter.put("InvCode", cSplitBarcode.cInvCode);
+        parameter.put("InvCode",InvCode);
         parameter.put("TableName", "baseInfo");
         RequestThread requestThread = new RequestThread(parameter, mHandler, 1);
         Thread td = new Thread(requestThread);
         td.start();
     }
 
-    public GetSaleBaseInfo(SplitBarcode cSplitBarcode, Handler mHandler,String pk_corp,String warehouseid,String calbodyid,String cinvbasid,String inventoryid) {
-        HashMap<String, String> para = new HashMap<String, String>();
-        para.put("FunctionName", "GetInvFreeByInvCodeAndLot");
-        para.put("CORP", pk_corp);
-        para.put("BATCH", cSplitBarcode.cBatch);
-        para.put("WAREHOUSEID", warehouseid);
-        para.put("CALBODYID", calbodyid);
-        para.put("CINVBASID", cinvbasid);
-        para.put("INVENTORYID", inventoryid);
-        para.put("TableName", "customs");
-        RequestThread rstThread = new RequestThread(para, mHandler, 2);
-        Thread tds = new Thread(rstThread);
-        tds.start();
 
-    }
     /**
      * 通过获取到的json 解析得到物料信息,并设置到UI上
      *
@@ -95,19 +86,5 @@ public class GetSaleBaseInfo {
         }
     }
 
-    public void SetCustomsParam(JSONObject json) throws JSONException {
-        //Log.d(TAG, "SetInvBaseToUI: " + json);
-        if (json.getBoolean("Status")) {
-            JSONArray val = json.getJSONArray("customs");
-            for (int i = 0; i < val.length(); i++) {
-                JSONObject tempJso = val.getJSONObject(i);
-                Log.d(TAG, "SetCustomsParam: "+tempJso.getString("vfree4"));
-                mapSaleBaseInfo.put("vfree4", tempJso.getString("vfree4"));   //海关手册号
-            }
 
-        }else{
-            Log.d(TAG, "SetCustomsParam: "+"99");
-            mapSaleBaseInfo.put("vfree4", "");   //海关手册号
-        }
-    }
 }
