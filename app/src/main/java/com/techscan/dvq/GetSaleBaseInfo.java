@@ -26,6 +26,7 @@ public class GetSaleBaseInfo {
      *
      */
     public GetSaleBaseInfo(SplitBarcode cSplitBarcode, Handler mHandler, String PK_CORP) {
+        //判断invcode是否有逗号。如果有逗号就分割，拿逗号后面的invcode；否则就拿原来的invcode。
         InvCode = cSplitBarcode.cInvCode;
         if (InvCode.contains(",")){
             String[] incCodeArray = InvCode.split("\\,");
