@@ -676,7 +676,6 @@ public class MainLogin extends Activity {
             if (data != null) {
                 Bundle bundle = data.getExtras();
                 if (bundle != null) {
-
                     String BarCode = bundle.getString("BarCode");
                     user.setText(BarCode);
                 }
