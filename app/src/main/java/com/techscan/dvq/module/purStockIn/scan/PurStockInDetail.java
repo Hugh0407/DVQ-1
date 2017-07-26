@@ -392,17 +392,19 @@ public class PurStockInDetail extends Activity {
 
         String FinishBarCode = bar.FinishBarCode;
 
-        if (ScanedBarcode != null || ScanedBarcode.size() > 0) {
-            for (int si = 0; si < ScanedBarcode.size(); si++) {
-                String BarCode = ScanedBarcode.get(si).toString();
+        if(bar.BarcodeType.equals("TC")) {
+            if (ScanedBarcode != null || ScanedBarcode.size() > 0) {
+                for (int si = 0; si < ScanedBarcode.size(); si++) {
+                    String BarCode = ScanedBarcode.get(si).toString();
 
-                if (BarCode.equals(FinishBarCode)) {
-                    Toast.makeText(this, "该条码已经被扫描过了,不能再次扫描", Toast.LENGTH_LONG)
-                            .show();
-                    // ADD CAIXY TEST START
-                    MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                    // ADD CAIXY TEST END
-                    return false;
+                    if (BarCode.equals(FinishBarCode)) {
+                        Toast.makeText(this, "该条码已经被扫描过了,不能再次扫描", Toast.LENGTH_LONG)
+                                .show();
+                        // ADD CAIXY TEST START
+                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+                        // ADD CAIXY TEST END
+                        return false;
+                    }
                 }
             }
         }
