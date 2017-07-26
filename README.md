@@ -10,3 +10,5 @@ SoundHelper.playOK();
 ```
 SoundHelper.playWarning();
 ```
+
+> version 1.01
