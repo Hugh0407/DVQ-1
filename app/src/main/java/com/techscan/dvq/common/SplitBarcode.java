@@ -33,7 +33,6 @@ public class SplitBarcode {
             creatorOk = false;
             return;
         }
-
         if (!sBarcode.contains("|")) {
             creatorOk = false;
             return;
