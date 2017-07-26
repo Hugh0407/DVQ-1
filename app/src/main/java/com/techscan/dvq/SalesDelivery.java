@@ -1660,9 +1660,9 @@ public class SalesDelivery extends Activity {
      * @throws JSONException
      */
     private void btnWarehouseClick() throws JSONException {
-        String lgUser = MainLogin.objLog.LoginUser;
-        String lgPwd = MainLogin.objLog.Password;
-        String LoginString = MainLogin.objLog.LoginString;
+//        String lgUser = MainLogin.objLog.LoginUser;
+//        String lgPwd = MainLogin.objLog.Password;
+//        String LoginString = MainLogin.objLog.LoginString;
 
         JSONObject para = new JSONObject();
 

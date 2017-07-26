@@ -275,20 +275,23 @@ public class PurStockInDetail extends Activity {
                     // MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                     // //ADD CAIXY TEST END
                     // return false;
-                    return true;
+                    //return true;
+                    TotalBox = String.valueOf(Double.parseDouble(temp.getString("box").toString())
+                                                + Double.parseDouble(TotalBox));
+                    temp.put("box", TotalBox);
                 }
             }
-            JSONObject temp = new JSONObject();
-            temp.put("serino", serino);
-            temp.put("box", TotalBox);
-            temp.put("invcode", m_mapInvBaseInfo.get("invcode").toString());
-            temp.put("invname", m_mapInvBaseInfo.get("invname").toString());
-            temp.put("batch", m_mapInvBaseInfo.get("batch").toString());
-            temp.put("sno", m_mapInvBaseInfo.get("serino").toString());
-            // caixy 需要增加产地
-            temp.put("vfree1", Free1);
-
-            serinos.put(temp);
+//            JSONObject temp = new JSONObject();
+//            temp.put("serino", serino);
+//            temp.put("box", TotalBox);
+//            temp.put("invcode", m_mapInvBaseInfo.get("invcode").toString());
+//            temp.put("invname", m_mapInvBaseInfo.get("invname").toString());
+//            temp.put("batch", m_mapInvBaseInfo.get("batch").toString());
+//            temp.put("sno", m_mapInvBaseInfo.get("serino").toString());
+//            // caixy 需要增加产地
+//            temp.put("vfree1", Free1);
+//
+//            serinos.put(temp);
         }
 
 
@@ -392,17 +395,19 @@ public class PurStockInDetail extends Activity {
 
         String FinishBarCode = bar.FinishBarCode;
 
-        if (ScanedBarcode != null || ScanedBarcode.size() > 0) {
-            for (int si = 0; si < ScanedBarcode.size(); si++) {
-                String BarCode = ScanedBarcode.get(si).toString();
+        if(bar.BarcodeType.equals("TC")) {
+            if (ScanedBarcode != null || ScanedBarcode.size() > 0) {
+                for (int si = 0; si < ScanedBarcode.size(); si++) {
+                    String BarCode = ScanedBarcode.get(si).toString();
 
-                if (BarCode.equals(FinishBarCode)) {
-                    Toast.makeText(this, "该条码已经被扫描过了,不能再次扫描", Toast.LENGTH_LONG)
-                            .show();
-                    // ADD CAIXY TEST START
-                    MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                    // ADD CAIXY TEST END
-                    return false;
+                    if (BarCode.equals(FinishBarCode)) {
+                        Toast.makeText(this, "该条码已经被扫描过了,不能再次扫描", Toast.LENGTH_LONG)
+                                .show();
+                        // ADD CAIXY TEST START
+                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+                        // ADD CAIXY TEST END
+                        return false;
+                    }
                 }
             }
         }
@@ -531,18 +536,19 @@ public class PurStockInDetail extends Activity {
                     if(!temp.getString("nconfirmnum").isEmpty() &&
                             !temp.getString("nconfirmnum").toLowerCase().equals("null")) {
                         doneqty = temp.getDouble("nconfirmnum");
-//                        if (doneqty  >= temp.getInt("nordernum")) {
-                        if (doneqty  >= temp.getInt("tasknum")) {
-                            Toast.makeText(this, "这个存货已经超过应收数量了,不允许收!",
-                                    Toast.LENGTH_LONG).show();
-                            // ADD CAIXY TEST START
-                            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                            // ADD CAIXY TEST END
-
-                            txtBarcode.setText("");
-                            txtBarcode.requestFocus();
-                            return false;
-                        }
+                    }
+                    doneqty = doneqty + Double.parseDouble(m_mapInvBaseInfo.get("total").toString());
+//                  if (doneqty  >= temp.getInt("nordernum")) {
+                    if (doneqty  > temp.getInt("tasknum")) {
+                        Toast.makeText(this, "这个存货已经超过应收数量了,不允许收!",
+                                Toast.LENGTH_LONG).show();
+                        // ADD CAIXY TEST START
+                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+                        // ADD CAIXY TEST END
+                        IniDetail();
+                        txtBarcode.setText("");
+                        txtBarcode.requestFocus();
+                        return false;
                     }
 //                    Double ldTotal = 0.0;
 //                    if(bar.BarcodeType.equals("TC") ) {
@@ -577,7 +583,8 @@ public class PurStockInDetail extends Activity {
 
                     //Double doneqty = temp.getDouble("doneqty");
                     //temp.put("doneqty", doneqty + Double.parseDouble(txtPurTotal.getText().toString()));
-                    temp.put("nconfirmnum", doneqty + Double.parseDouble(txtPurTotal.getText().toString()));
+                    //temp.put("nconfirmnum", doneqty + Double.parseDouble(txtPurTotal.getText().toString()));
+                    temp.put("nconfirmnum", doneqty);
                     break;
                 }
             }
@@ -1453,6 +1460,9 @@ public class PurStockInDetail extends Activity {
                 case id.txtPurNumber:
                     if (arg1 == 66 && arg2.getAction() == KeyEvent.ACTION_UP) {
                         m_mapInvBaseInfo.put("number",Integer.valueOf(txtPurNumber.getText().toString()));
+                        m_mapInvBaseInfo.put("total",Integer.valueOf(txtPurNumber.getText().toString())
+                                                        * Double.valueOf(txtPurWeight.getText().toString()));
+                        txtPurTotal.setText(m_mapInvBaseInfo.get("total").toString());
                         ScanedToGet();
                         return true;
                     }
