@@ -328,12 +328,12 @@ public class MainMenu extends Activity {
 
                 map = new HashMap<String, Object>();
                 map.put("ItemImage", R.drawable.icon_ck_xs);
-                map.put("ItemText", "其他出库");
+                map.put("ItemText", "其他入库");
                 lstImageItem.add(map);
 
                 map = new HashMap<String, Object>();
                 map.put("ItemImage", R.drawable.icon_ck_xs);
-                map.put("ItemText", "其他入库");
+                map.put("ItemText", "其他出库");
                 lstImageItem.add(map);
 
                 break;
@@ -554,7 +554,7 @@ public class MainMenu extends Activity {
                 case 4:
                     if (RadioGroupType.getCheckedRadioButtonId() == id.radioButton1) {
                         //其他入库
-                        ShowOtherOut();
+                        ShowOtherIn();
                     } else if (RadioGroupType.getCheckedRadioButtonId() == id.radioButton2) {
 
                     } else if (RadioGroupType.getCheckedRadioButtonId() == id.radioButton3) {
@@ -563,7 +563,7 @@ public class MainMenu extends Activity {
                 case 5:
                     if (RadioGroupType.getCheckedRadioButtonId() == id.radioButton1) {
                         //其他出库
-                        ShowOtherIn();
+                        ShowOtherOut();
                     } else if (RadioGroupType.getCheckedRadioButtonId() == id.radioButton2) {
 
                     } else if (RadioGroupType.getCheckedRadioButtonId() == id.radioButton3) {
