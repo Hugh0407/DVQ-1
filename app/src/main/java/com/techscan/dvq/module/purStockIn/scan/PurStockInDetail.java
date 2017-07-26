@@ -279,19 +279,20 @@ public class PurStockInDetail extends Activity {
                     TotalBox = String.valueOf(Double.parseDouble(temp.getString("box").toString())
                                                 + Double.parseDouble(TotalBox));
                     temp.put("box", TotalBox);
+                    return true;
                 }
             }
-//            JSONObject temp = new JSONObject();
-//            temp.put("serino", serino);
-//            temp.put("box", TotalBox);
-//            temp.put("invcode", m_mapInvBaseInfo.get("invcode").toString());
-//            temp.put("invname", m_mapInvBaseInfo.get("invname").toString());
-//            temp.put("batch", m_mapInvBaseInfo.get("batch").toString());
-//            temp.put("sno", m_mapInvBaseInfo.get("serino").toString());
-//            // caixy 需要增加产地
-//            temp.put("vfree1", Free1);
-//
-//            serinos.put(temp);
+            JSONObject temp = new JSONObject();
+            temp.put("serino", serino);
+            temp.put("box", TotalBox);
+            temp.put("invcode", m_mapInvBaseInfo.get("invcode").toString());
+            temp.put("invname", m_mapInvBaseInfo.get("invname").toString());
+            temp.put("batch", m_mapInvBaseInfo.get("batch").toString());
+            temp.put("sno", m_mapInvBaseInfo.get("serino").toString());
+            // caixy 需要增加产地
+            temp.put("vfree1", Free1);
+
+            serinos.put(temp);
         }
 
 
@@ -1459,12 +1460,23 @@ public class PurStockInDetail extends Activity {
                     }
                 case id.txtPurNumber:
                     if (arg1 == 66 && arg2.getAction() == KeyEvent.ACTION_UP) {
-                        m_mapInvBaseInfo.put("number",Integer.valueOf(txtPurNumber.getText().toString()));
-                        m_mapInvBaseInfo.put("total",Integer.valueOf(txtPurNumber.getText().toString())
-                                                        * Double.valueOf(txtPurWeight.getText().toString()));
-                        txtPurTotal.setText(m_mapInvBaseInfo.get("total").toString());
-                        ScanedToGet();
-                        return true;
+                        try {
+                            Integer.parseInt(txtPurNumber.getText().toString());
+                            m_mapInvBaseInfo.put("number", Integer.valueOf(txtPurNumber.getText().toString()));
+                            m_mapInvBaseInfo.put("total", Integer.valueOf(txtPurNumber.getText().toString())
+                                    * Double.valueOf(txtPurWeight.getText().toString()));
+                            txtPurTotal.setText(m_mapInvBaseInfo.get("total").toString());
+                            ScanedToGet();
+                            return true;
+                        }
+                        catch (Exception ex){
+                            txtPurNumber.setText("");
+                            txtPurNumber.requestFocus();
+
+                            Toast.makeText(PurStockInDetail.this, "输入的数值不正确", Toast.LENGTH_LONG).show();
+                            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+                            return false;
+                        }
                     }
                 case id.txtPurBatch:
                     if (arg1 == 66 && arg2.getAction() == KeyEvent.ACTION_UP) {
@@ -1477,8 +1489,19 @@ public class PurStockInDetail extends Activity {
                     }
                 case id.txtPurTotal:
                     if (arg1 == 66 && arg2.getAction() == KeyEvent.ACTION_UP) {
-                        ScanedToGet();
-                        return true;
+                        try
+                        {
+                            Double.parseDouble(txtPurTotal.getText().toString());
+                            ScanedToGet();
+                            return true;
+                        }
+                        catch(Exception ex){
+                            txtPurTotal.setText("");
+                            txtPurTotal.requestFocus();
+                            Toast.makeText(PurStockInDetail.this, "输入的数值不正确", Toast.LENGTH_LONG).show();
+                            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+                            return false;
+                        }
                     }
 
             }
