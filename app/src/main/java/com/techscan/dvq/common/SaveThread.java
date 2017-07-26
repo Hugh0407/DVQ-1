@@ -3,8 +3,6 @@ package com.techscan.dvq.common;
 import android.os.Handler;
 import android.os.Message;
 
-import com.techscan.dvq.Common;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 

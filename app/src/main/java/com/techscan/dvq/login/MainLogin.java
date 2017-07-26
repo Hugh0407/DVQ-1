@@ -32,10 +32,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.techscan.dvq.Common;
 import com.techscan.dvq.MyHttpClient;
 import com.techscan.dvq.R;
 import com.techscan.dvq.common.Base64Encoder;
+import com.techscan.dvq.common.Common;
+import com.techscan.dvq.common.SoundHelper;
 import com.techscan.dvq.common.Utils;
 
 import org.apache.http.HttpEntity;
@@ -44,7 +45,6 @@ import org.apache.http.ParseException;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EncodingUtils;
 import org.apache.http.util.EntityUtils;
@@ -62,11 +62,19 @@ import java.util.Date;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import okhttp3.Call;
-import okhttp3.Callback;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
+
+import static com.techscan.dvq.MainActivity.LoginUser;
 
 public class MainLogin extends Activity {
     // protected static final Context context = null;
@@ -161,8 +169,6 @@ public class MainLogin extends Activity {
             bulider.setPositiveButton(R.string.QueDing, null).create().show();
             return;
         }
-        user.setText("测试");
-        pwds.setText("1234aS~");
         String userName = user.getText().toString().replace("\n", "");
         String password = pwds.getText().toString().replace("\n", "");
         if (userName.equals("") || password.equals("")) {
@@ -179,7 +185,7 @@ public class MainLogin extends Activity {
         // LoginString ="http://192.168.0.203:5556/mb/nihao";
         // LoginString = "http://192.168.0.203:5556/service/nihao";
         // LoginString = "http://192.168.93.121/service/nihao";
-        String Version = "" + this.getVerCode(this);
+        final String Version = "" + this.getVerCode(this);
 
 
         if (lsUrl.equals("")) {
@@ -201,161 +207,216 @@ public class MainLogin extends Activity {
         String user_name = Base64Encoder.encode(userName.getBytes("gb2312"));
         // 调用服务
         /*********************************************************************/
-        Request.Builder builder = new Request.Builder().url(lsUrl);
-        builder.addHeader("Self-Test", "V");
-        builder.addHeader("User-Code", user_name);
-        builder.addHeader("User-Pwd", password);
-        builder.addHeader("User-Company", CompanyCode);
-        builder.addHeader("Data-Source", "A");
-        builder.addHeader("Org-Code", OrgCode);
-        builder.addHeader("Self-Test", Version);
-        Request      request = builder.build();
-        OkHttpClient client  = new OkHttpClient();
-        client.newCall(request).enqueue(new Callback() {
+        // 表单提交
+        RequestBody        formBody = new FormBody.Builder().build();
+        final OkHttpClient client   = new OkHttpClient();
+        final Request request = new Request.Builder()
+                .url(lsUrl)
+                .header("cookie", "JSESSIONID=7FC8F73EB963562072B6CFE916982678")
+                .addHeader("content-type", "text/html;charset:utf-8")
+                .addHeader("Self-Test", "V")
+                .addHeader("User-Code", user_name)
+                .addHeader("User-Pwd", password)
+                .addHeader("User-Company", CompanyCode)
+                .addHeader("Data-Source", "A")
+                .addHeader("Org-Code", OrgCode)
+                .addHeader("Version-Code", Version)
+                .post(formBody)
+                .build();
+        Observable.create(new ObservableOnSubscribe<Response>() {
             @Override
-            public void onFailure(Call call, IOException e) {
-                Log.d("OkHttp", "call: " + e);
+            public void subscribe(ObservableEmitter<Response> e) throws Exception {
+                Response response = client.newCall(request).execute();
+                e.onNext(response);
+                e.onComplete();
             }
+        })
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Response>() {
+                    @Override
+                    public void accept(Response response) throws Exception {
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                Log.d("OkHttp", "body: " + response.body().toString());
-                Log.d("OkHttp", "headers: " + response.headers());
-                Log.d("OkHttp", "message: " + response.message());
-            }
-        });
-        /*********************************************************************/
+                        if (response.code() == 200) {
+//                            String     result = EntityUtils.toString(httpResponse.getEntity());
+                            String     res = response.body().string();
+                            JSONObject jas = new JSONObject(res);
 
-        HttpPost httpPost = new HttpPost(lsUrl);
-        httpPost.addHeader("Self-Test", "V");
-        httpPost.addHeader("User-Code", user_name);
-        httpPost.addHeader("User-Pwd", password);
-        httpPost.addHeader("User-Company", CompanyCode);
-        httpPost.addHeader("Data-Source", "A");
-        httpPost.addHeader("Org-Code", OrgCode);
-        httpPost.addHeader("Version-Code", Version);
+                            if (!jas.has("Status")) {
+                                Utils.showToast(MainLogin.this, R.string.WangLuoChuXianWenTi);
+                                SoundHelper.playWarning();
+                                return;
+                            }
 
-        Log.d("TAG", "CompanyCode: " + CompanyCode);
-        Log.d("TAG", "user_name: " + user_name);
-        Log.d("TAG", "OrgCode: " + OrgCode);
-        Log.d("TAG", "Version: " + Version);
-        // WhCodeB
-        HttpResponse httpResponse = null;
-        HttpClient   defaults     = null;
+                            boolean loginStatus = jas.getBoolean("Status");
+                            if (loginStatus == true) {
 
-        try {
-            defaults = MyHttpClient.getSaveHttpClient();
-            // DefaultHttpClient defaults = new DefaultHttpClient();
-            // HttpConnectionParams.setConnectionTimeout(defaults.getParams(),
-            // 30000);
-            // HttpConnectionParams.setSoTimeout(defaults.getParams(),30000);
-            httpResponse = defaults.execute(httpPost);
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
-            // ADD CAIXY TEST START
-            sp.play(music, 1, 1, 0, 0, 1);
+                                objLog = new Common();
+                                objLog.LoginString = LoginString;
+                                objLog.LoginString2 = LoginString2;
+                                objLog.LoginUser = user.getText().toString().replace("\n", "");
+                                objLog.Password = pwds.getText().toString().replace("\n", "");
+                                objLog.CompanyCode = CompanyCode;
 
-            // ADD CAIXY TEST END
+                                objLog.UserID = jas.getString("userid");
+                                objLog.UserName = LoginUser;
+                                objLog.STOrgCode = OrgCode;
+                                objLog.WhCodeA = WhCode;
+                                objLog.WhCodeB = WhCodeB;
 
-            return;
-        } catch (IOException e) {
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
-            sp.play(music, 1, 1, 0, 0, 1);
-            return;
-//			//增加切换备用地址
-//			if(UrlErr>2)
-//			{
-//				UrlErr = 0;
-//				e.printStackTrace();
-//				Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
-//				// ADD CAIXY TEST START
-//				
-//				sp.play(music, 1, 1, 0, 0, 1);
-//				// ADD CAIXY TEST END
-//				return;
-//			}
-//			else
-//			{
-//				UrlErr++;
-//				Login();
-//			}
+                                objLog.UserIDB = jas.getString("useridb");
+                                objLog.VersionCode = Version;
+                                //增加 设置页面
+                                SimpleDateFormat f    = new SimpleDateFormat("yyyy-MM-dd");
+                                Date             date = new Date();
+                                objLog.LoginDate = f.format(date);
+                                if (!GetInfo()) {
+                                    return;
+                                }
+                                Intent MenuForm = new Intent(MainLogin.this, MainMenu.class);
+                                startActivity(MenuForm);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-
-            Toast.makeText(this, R.string.WangLuoChuXianWenTi, Toast.LENGTH_LONG).show();
-            // ADD CAIXY TEST START
-            sp.play(music, 1, 1, 0, 0, 1);
-            // ADD CAIXY TEST END
-            return;
-        }
-
-        // 完成身份验证，进入主画面
-        int v = 0;
-        if (httpResponse != null) {
-            v = httpResponse.getStatusLine().getStatusCode();
-        }
-
-        if (v == 200) {
-            // Toast.makeText(this,"身份验证通过，准备进入", Toast.LENGTH_SHORT).show();
-            String result = EntityUtils.toString(httpResponse.getEntity());
-            String jasstr = EncodingUtils.getString(EncodingUtils.getBytes(result, "ISO8859-1"), "gb2312");
-
-            JSONObject jas = new JSONObject(jasstr);
-
-            if (!jas.has("Status")) {
-                Toast.makeText(this, R.string.WangLuoChuXianWenTi, Toast.LENGTH_LONG)
-                        .show();
-                sp.play(music, 1, 1, 0, 0, 1);
-
-                return;
-            }
-
-            boolean loginStatus = jas.getBoolean("Status");
-            if (loginStatus == true) {
-
-                objLog = new Common();
-                objLog.LoginString = LoginString;
-                objLog.LoginString2 = LoginString2;
-                objLog.LoginUser = user.getText().toString().replace("\n", "");
-                objLog.Password = pwds.getText().toString().replace("\n", "");
-                objLog.CompanyCode = CompanyCode;
-
-                objLog.UserID = jas.getString("userid");
-                objLog.UserName = jas.getString("username");
-                Log.d("tag", "Login: " + objLog.UserName);
-                objLog.STOrgCode = OrgCode;
-                objLog.WhCodeA = WhCode;
-                objLog.WhCodeB = WhCodeB;
-
-                objLog.UserIDB = jas.getString("useridb");
-                objLog.VersionCode = Version;
-                //增加 设置页面
-
-
-                SimpleDateFormat f    = new SimpleDateFormat("yyyy-MM-dd");
-                Date             date = new Date();
-                objLog.LoginDate = f.format(date);
-
-                if (!GetInfo()) {
-                    return;
-                }
-
-
-                Intent MenuForm = new Intent(this, MainMenu.class);
-                startActivity(MenuForm);
-
-            } else {
-                String ErrMsg = jas.getString("ErrMsg");
-                Toast.makeText(this, ErrMsg, Toast.LENGTH_LONG).show();
-                // ADD CAIXY TEST START
-
-                sp.play(music, 1, 1, 0, 0, 1);
-                // ADD CAIXY TEST END
-                return;
-            }
-        }
+                            } else {
+                                String ErrMsg = jas.getString("ErrMsg");
+                                Utils.showToast(MainLogin.this, ErrMsg);
+                                SoundHelper.playWarning();
+                            }
+                        }
+                    }
+                });
+//
+//        /*********************************************************************/
+//
+//        HttpPost httpPost = new HttpPost(lsUrl);
+//        httpPost.addHeader("Self-Test", "V");
+//        httpPost.addHeader("User-Code", user_name);
+//        httpPost.addHeader("User-Pwd", password);
+//        httpPost.addHeader("User-Company", CompanyCode);
+//        httpPost.addHeader("Data-Source", "A");
+//        httpPost.addHeader("Org-Code", OrgCode);
+//        httpPost.addHeader("Version-Code", Version);
+//
+////        Log.d("TAG", "CompanyCode: " + CompanyCode);
+////        Log.d("TAG", "user_name: " + user_name);
+////        Log.d("TAG", "OrgCode: " + OrgCode);
+////        Log.d("TAG", "Version: " + Version);
+//        // WhCodeB
+//        HttpResponse httpResponse = null;
+//        HttpClient   defaults     = null;
+//
+//        try {
+//            defaults = MyHttpClient.getSaveHttpClient();
+//            // DefaultHttpClient defaults = new DefaultHttpClient();
+//            // HttpConnectionParams.setConnectionTimeout(defaults.getParams(),
+//            // 30000);
+//            // HttpConnectionParams.setSoTimeout(defaults.getParams(),30000);
+//            httpResponse = defaults.execute(httpPost);
+//        } catch (ClientProtocolException e) {
+//            e.printStackTrace();
+//            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+//            // ADD CAIXY TEST START
+//            sp.play(music, 1, 1, 0, 0, 1);
+//
+//            // ADD CAIXY TEST END
+//
+//            return;
+//        } catch (IOException e) {
+//            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+//            sp.play(music, 1, 1, 0, 0, 1);
+//            return;
+////			//增加切换备用地址
+////			if(UrlErr>2)
+////			{
+////				UrlErr = 0;
+////				e.printStackTrace();
+////				Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+////				// ADD CAIXY TEST START
+////
+////				sp.play(music, 1, 1, 0, 0, 1);
+////				// ADD CAIXY TEST END
+////				return;
+////			}
+////			else
+////			{
+////				UrlErr++;
+////				Login();
+////			}
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//
+//            Toast.makeText(this, R.string.WangLuoChuXianWenTi, Toast.LENGTH_LONG).show();
+//            // ADD CAIXY TEST START
+//            sp.play(music, 1, 1, 0, 0, 1);
+//            // ADD CAIXY TEST END
+//            return;
+//        }
+//
+//        // 完成身份验证，进入主画面
+//        int v = 0;
+//        if (httpResponse != null) {
+//            v = httpResponse.getStatusLine().getStatusCode();
+//        }
+//
+//        if (v == 200) {
+//            // Toast.makeText(this,"身份验证通过，准备进入", Toast.LENGTH_SHORT).show();
+//            String result = EntityUtils.toString(httpResponse.getEntity());
+//            String jasstr = EncodingUtils.getString(EncodingUtils.getBytes(result, "ISO8859-1"), "gb2312");
+//
+//            JSONObject jas = new JSONObject(jasstr);
+//
+//            if (!jas.has("Status")) {
+//                Toast.makeText(this, R.string.WangLuoChuXianWenTi, Toast.LENGTH_LONG)
+//                        .show();
+//                sp.play(music, 1, 1, 0, 0, 1);
+//
+//                return;
+//            }
+//
+//            boolean loginStatus = jas.getBoolean("Status");
+//            if (loginStatus == true) {
+//
+//                objLog = new Common();
+//                objLog.LoginString = LoginString;
+//                objLog.LoginString2 = LoginString2;
+//                objLog.LoginUser = user.getText().toString().replace("\n", "");
+//                objLog.Password = pwds.getText().toString().replace("\n", "");
+//                objLog.CompanyCode = CompanyCode;
+//
+//                objLog.UserID = jas.getString("userid");
+//                objLog.UserName = jas.getString("username");
+//                Log.d("tag", "Login: " + objLog.UserName);
+//                objLog.STOrgCode = OrgCode;
+//                objLog.WhCodeA = WhCode;
+//                objLog.WhCodeB = WhCodeB;
+//
+//                objLog.UserIDB = jas.getString("useridb");
+//                objLog.VersionCode = Version;
+//                //增加 设置页面
+//
+//
+//                SimpleDateFormat f    = new SimpleDateFormat("yyyy-MM-dd");
+//                Date             date = new Date();
+//                objLog.LoginDate = f.format(date);
+//
+//                if (!GetInfo()) {
+//                    return;
+//                }
+//
+//
+//                Intent MenuForm = new Intent(this, MainMenu.class);
+//                startActivity(MenuForm);
+//
+//            } else {
+//                String ErrMsg = jas.getString("ErrMsg");
+//                Toast.makeText(this, ErrMsg, Toast.LENGTH_LONG).show();
+//                // ADD CAIXY TEST START
+//
+//                sp.play(music, 1, 1, 0, 0, 1);
+//                // ADD CAIXY TEST END
+//                return;
+//            }
+//        }
 //		else {
 //			Toast.makeText(this, "访问错误", Toast.LENGTH_LONG).show();
 //			// ADD CAIXY TEST START
@@ -615,7 +676,6 @@ public class MainLogin extends Activity {
             if (data != null) {
                 Bundle bundle = data.getExtras();
                 if (bundle != null) {
-
                     String BarCode = bundle.getString("BarCode");
                     user.setText(BarCode);
                 }
@@ -803,18 +863,14 @@ public class MainLogin extends Activity {
 
             } catch (ClientProtocolException e) {
                 Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
-                // ADD CAIXY TEST START
                 sp.play(music, 1, 1, 0, 0, 1);
-                // ADD CAIXY TEST END
                 return false;
             } catch (Exception e) {
 
 
                 Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG)
                         .show();
-                // ADD CAIXY TEST START
                 sp.play(music, 1, 1, 0, 0, 1);
-                // ADD CAIXY TEST END
                 return false;
 
 
@@ -827,23 +883,20 @@ public class MainLogin extends Activity {
                         EncodingUtils.getBytes(result, "ISO8859-1"), "gb2312");
 
                 String json = jasstr;// bReader.readLine();
-                //mod walter todo 鏆傛椂鍒犻櫎 ----->>>>>
+                //mod walter
                 //JSONArray array = new JSONArray(json);
                 //JSONObject jsonObj = array.getJSONObject(0);
                 //newVerCode = Integer.parseInt(jsonObj.getString("verCode"));
                 //newVerName = jsonObj.getString("verName");
                 newVerCode = 1;
                 newVerName = "1.0.00";
-                //mod walter todo 鏆傛椂鍒犻櫎 <<<<<-----
+                //mod walter
             }
 
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
-            // ADD CAIXY TEST START
             sp.play(music, 1, 1, 0, 0, 1);
-            // ADD CAIXY TEST END
             return false;
         }
         return true;

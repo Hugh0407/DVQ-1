@@ -19,7 +19,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.techscan.dvq.Common;
+import com.techscan.dvq.common.Common;
 import com.techscan.dvq.ListWarehouse;
 import com.techscan.dvq.R;
 import com.techscan.dvq.VlistRdcl;
@@ -215,6 +215,7 @@ public class OtherOutAct extends Activity {
                 btnRdclClick("");
                 break;
             case R.id.btn_refer_dep:
+                btnReferDepartment();
                 break;
             case R.id.btn_scan:
                 if (isAllEdNotEmpty()) {
@@ -364,6 +365,19 @@ public class OtherOutAct extends Activity {
             showToast(this, e.getMessage());
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
         }
+    }
+
+    /**
+     * 获取部门列表信息的网络请求
+     */
+    private void btnReferDepartment() {
+        HashMap<String, String> parameter = new HashMap<String, String>();
+        parameter.put("FunctionName", "GetDeptList");
+        parameter.put("CompanyCode", MainLogin.objLog.CompanyCode);
+        parameter.put("TableName", "department");
+        RequestThread requestThread = new RequestThread(parameter, mHandler, HANDER_DEPARTMENT);
+        Thread        td            = new Thread(requestThread);
+        td.start();
     }
 
     /**

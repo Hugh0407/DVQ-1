@@ -21,6 +21,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.techscan.dvq.common.Common;
 import com.techscan.dvq.common.RequestThread;
 import com.techscan.dvq.common.SplitBarcode;
 import com.techscan.dvq.common.Utils;

@@ -16,6 +16,7 @@ import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import com.techscan.dvq.R.id;
+import com.techscan.dvq.common.Common;
 import com.techscan.dvq.login.MainLogin;
 
 import org.json.JSONArray;
@@ -135,7 +136,7 @@ public class OtherOrderList extends Activity {
 			}
 
 			if (!Common.CheckUserRole(accid, map.get("pk_corp").toString(),
-					lsBilltype)) {
+                                      lsBilltype)) {
 				MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
 				Toast.makeText(OtherOrderList.this, R.string.MeiYouShiYongGaiDanJuDeQuanXian,
 						Toast.LENGTH_LONG).show();

@@ -12,6 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.techscan.dvq.R.id;
+import com.techscan.dvq.common.Common;
 import com.techscan.dvq.common.SplitBarcode;
 import com.techscan.dvq.login.MainLogin;
 

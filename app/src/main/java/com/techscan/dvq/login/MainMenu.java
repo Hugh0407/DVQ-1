@@ -21,7 +21,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.techscan.dvq.Common;
+import com.techscan.dvq.common.Common;
 import com.techscan.dvq.R;
 import com.techscan.dvq.R.id;
 import com.techscan.dvq.Sample_stocking;
@@ -554,7 +554,8 @@ public class MainMenu extends Activity {
                 case 4:
                     if (RadioGroupType.getCheckedRadioButtonId() == id.radioButton1) {
                         //其他入库
-                        ShowOtherIn();
+//                        ShowOtherIn();
+                        Utils.showToast(MainMenu.this, "待加");
                     } else if (RadioGroupType.getCheckedRadioButtonId() == id.radioButton2) {
 
                     } else if (RadioGroupType.getCheckedRadioButtonId() == id.radioButton3) {
@@ -563,7 +564,8 @@ public class MainMenu extends Activity {
                 case 5:
                     if (RadioGroupType.getCheckedRadioButtonId() == id.radioButton1) {
                         //其他出库
-                        ShowOtherOut();
+//                        ShowOtherOut();
+                        Utils.showToast(MainMenu.this, "待加");
                     } else if (RadioGroupType.getCheckedRadioButtonId() == id.radioButton2) {
 
                     } else if (RadioGroupType.getCheckedRadioButtonId() == id.radioButton3) {

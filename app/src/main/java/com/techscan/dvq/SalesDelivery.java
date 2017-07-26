@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.techscan.dvq.R.id;
 import com.techscan.dvq.bean.SaleOutGoods;
 import com.techscan.dvq.common.Base64Encoder;
+import com.techscan.dvq.common.Common;
 import com.techscan.dvq.common.SaveThread;
 import com.techscan.dvq.login.MainLogin;
 
