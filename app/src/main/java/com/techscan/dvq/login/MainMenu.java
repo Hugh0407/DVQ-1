@@ -327,12 +327,12 @@ public class MainMenu extends Activity {
                 lstImageItem.add(map);
 
                 map = new HashMap<String, Object>();
-                map.put("ItemImage", R.drawable.icon_ck_xs);
+                map.put("ItemImage", R.drawable.icon_rk_qt);
                 map.put("ItemText", "其他入库");
                 lstImageItem.add(map);
 
                 map = new HashMap<String, Object>();
-                map.put("ItemImage", R.drawable.icon_ck_xs);
+                map.put("ItemImage", R.drawable.icon_ck_qt);
                 map.put("ItemText", "其他出库");
                 lstImageItem.add(map);
 
