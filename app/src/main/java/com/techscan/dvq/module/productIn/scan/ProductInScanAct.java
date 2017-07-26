@@ -83,7 +83,7 @@ public class ProductInScanAct extends Activity {
     public static List<Goods> detailList = new ArrayList<Goods>();
     public static List<Goods> ovList     = new ArrayList<Goods>();
     Activity mActivity;
-    boolean isBaoBarCode = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -269,7 +269,6 @@ public class ProductInScanAct extends Activity {
             double weight = barDecoder.dQuantity;
             double mEdNum = Double.valueOf(barDecoder.iNumber);
             mEdQty.setText(formatDecimal(weight * mEdNum));
-            isBaoBarCode = true;
             return true;
         } else {
             showToast(mActivity, "条码有误重新输入");

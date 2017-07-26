@@ -31,6 +31,8 @@ import com.techscan.dvq.StockTransContent;
 import com.techscan.dvq.StockTransContentIn;
 import com.techscan.dvq.common.Utils;
 import com.techscan.dvq.module.materialOut.MaterialOutAct;
+import com.techscan.dvq.module.otherIn.OtherInAct;
+import com.techscan.dvq.module.otherOut.OtherOutAct;
 import com.techscan.dvq.module.productIn.ProductInAct;
 import com.techscan.dvq.module.purStockIn.PurStockIn;
 import com.techscan.dvq.module.query.Query;
@@ -52,29 +54,29 @@ public class MainMenu extends Activity {
     private String[] BillTypeNameList = null;
     private String[] BillTypeCodeList = null;
 
-    String fileName = null;
-    String fileNameScan = null;
+    String fileName       = null;
+    String fileNameScan   = null;
     String ScanedFileName = null;
     String isReturn;//是否退货的标志位，N 不退货，Y退货
-    String UserID = null;
-    File file = null;
-    File fileScan = null;
+    String UserID   = null;
+    File   file     = null;
+    File   fileScan = null;
 
-    private static AlertDialog SelectLine = null;
-    private buttonOnClickC buttonOnClickC = new buttonOnClickC(0);
-    private buttonOnClickD buttonOnClickD = new buttonOnClickD(0);
-    private AlertDialog SelectButton = null;
-    static String[] LNameList = new String[2];
-    GridView gridview = null;
+    private static AlertDialog    SelectLine     = null;
+    private        buttonOnClickC buttonOnClickC = new buttonOnClickC(0);
+    private        buttonOnClickD buttonOnClickD = new buttonOnClickD(0);
+    private        AlertDialog    SelectButton   = null;
+    static         String[]       LNameList      = new String[2];
+    GridView gridview           = null;
     TextView tvLoginCompanyName = null;
 
-    static AlertDialog alertDialog = null;
-    static ProgressDialog PD = null;
+    static AlertDialog    alertDialog = null;
+    static ProgressDialog PD          = null;
 
     private RadioButton radioButton1;
     private RadioButton radioButton2;
     private RadioButton radioButton3;
-    private RadioGroup RadioGroupType;
+    private RadioGroup  RadioGroupType;
 
     // private SoundPool sp;// 声明一个SoundPool
     // private int MainLogin.music;// 定义一个int来设置suondID
@@ -325,9 +327,13 @@ public class MainMenu extends Activity {
                 lstImageItem.add(map);
 
                 map = new HashMap<String, Object>();
+                map.put("ItemImage", R.drawable.icon_ck_xs);
+                map.put("ItemText", "其他出库");
                 lstImageItem.add(map);
 
                 map = new HashMap<String, Object>();
+                map.put("ItemImage", R.drawable.icon_ck_xs);
+                map.put("ItemText", "其他入库");
                 lstImageItem.add(map);
 
                 break;
@@ -378,9 +384,9 @@ public class MainMenu extends Activity {
 
         }
         SimpleAdapter saImageItems = new SimpleAdapter(this,
-                lstImageItem,// 数据来源
-                R.layout.girdviewitem,
-                new String[]{"ItemImage", "ItemText"}, new int[]{
+                                                       lstImageItem,// 数据来源
+                                                       R.layout.girdviewitem,
+                                                       new String[]{"ItemImage", "ItemText"}, new int[]{
                 id.gvimgItem, id.gvtvItem});
         gridview.setAdapter(saImageItems);
         gridview.setOnItemClickListener(new ItemClickListener());
@@ -545,15 +551,29 @@ public class MainMenu extends Activity {
                     }
                     break;
 
-
                 case 4:
-                    //ShowProductOut();
+                    if (RadioGroupType.getCheckedRadioButtonId() == id.radioButton1) {
+                        //其他入库
+                        ShowOtherOut();
+                    } else if (RadioGroupType.getCheckedRadioButtonId() == id.radioButton2) {
+
+                    } else if (RadioGroupType.getCheckedRadioButtonId() == id.radioButton3) {
+                    }
+                    break;
+                case 5:
+                    if (RadioGroupType.getCheckedRadioButtonId() == id.radioButton1) {
+                        //其他出库
+                        ShowOtherIn();
+                    } else if (RadioGroupType.getCheckedRadioButtonId() == id.radioButton2) {
+
+                    } else if (RadioGroupType.getCheckedRadioButtonId() == id.radioButton3) {
+                    }
                     break;
                 case 11:
                     if (!Common.CheckUserRole("", "", "40080820")) {
                         MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                         Toast.makeText(MainMenu.this, "没有使用该模块的权限",
-                                Toast.LENGTH_LONG).show();
+                                       Toast.LENGTH_LONG).show();
                         break;
                     }
                     ShowStockTransOut();
@@ -562,7 +582,7 @@ public class MainMenu extends Activity {
                     if (!Common.CheckUserRole("", "", "40080618")) {
                         MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                         Toast.makeText(MainMenu.this, "没有使用该模块的权限",
-                                Toast.LENGTH_LONG).show();
+                                       Toast.LENGTH_LONG).show();
                         break;
                     }
                     ShowStockTransIn();
@@ -571,16 +591,16 @@ public class MainMenu extends Activity {
                     if (!Common.CheckUserRole("", "", "40080602")) {
                         MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                         Toast.makeText(MainMenu.this, "没有使用该模块的权限",
-                                Toast.LENGTH_LONG).show();
+                                       Toast.LENGTH_LONG).show();
                         break;
                     }
                     ShowPurIn();
                     break;
-                case 6:
+                case 14:
                     if (!Common.CheckUserRole("", "", "40080802")) {
                         MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                         Toast.makeText(MainMenu.this, "没有使用该模块的权限",
-                                Toast.LENGTH_LONG).show();
+                                       Toast.LENGTH_LONG).show();
                         break;
                     }
                     ShowSaleOut();
@@ -601,7 +621,7 @@ public class MainMenu extends Activity {
                             && !Common.CheckUserRole("", "", "40081008")) {
                         MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                         Toast.makeText(MainMenu.this, "没有使用该模块的权限",
-                                Toast.LENGTH_LONG).show();
+                                       Toast.LENGTH_LONG).show();
                         break;
                     }
                     ShowOther();
@@ -841,7 +861,6 @@ public class MainMenu extends Activity {
         cancelLoading();
     }
 
-    // 显示材料出库画面
     private void ShowQuery() {
         ShowLoading();
         Intent query = new Intent(this, Query.class);
@@ -895,6 +914,18 @@ public class MainMenu extends Activity {
         // SearchmainActivity search= new SearchmainActivity
         Intent SalesDelivery = new Intent(this, com.techscan.dvq.SalesDelivery.class);
         startActivity(SalesDelivery);
+    }
+
+    private void ShowOtherOut() {
+        // SearchmainActivity search= new SearchmainActivity
+        Intent otherOut = new Intent(this, OtherOutAct.class);
+        startActivity(otherOut);
+    }
+
+    private void ShowOtherIn() {
+        // SearchmainActivity search= new SearchmainActivity
+        Intent otherIn = new Intent(this, OtherInAct.class);
+        startActivity(otherIn);
     }
 
     // ADD WUQ START

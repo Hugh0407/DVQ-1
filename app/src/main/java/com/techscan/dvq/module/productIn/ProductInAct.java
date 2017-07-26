@@ -29,13 +29,13 @@ import com.techscan.dvq.bean.Goods;
 import com.techscan.dvq.common.Base64Encoder;
 import com.techscan.dvq.common.RequestThread;
 import com.techscan.dvq.common.SaveThread;
+import com.techscan.dvq.common.SoundHelper;
 import com.techscan.dvq.common.Utils;
 import com.techscan.dvq.login.MainLogin;
 import com.techscan.dvq.module.materialOut.DepartmentListAct;
 import com.techscan.dvq.module.materialOut.StorgListAct;
 import com.techscan.dvq.module.productIn.scan.ProductInScanAct;
 
-import org.apache.http.ParseException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -134,23 +134,13 @@ public class ProductInAct extends Activity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.refer_wh:
-                try {
-                    btnWarehouseClick();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                btnWarehouseClick();
                 break;
             case R.id.refer_organization:
                 btnReferSTOrgList();
                 break;
             case R.id.refer_lei_bie:
-                try {
-                    btnRdclClick("");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                btnRdclClick("");
                 break;
             case R.id.btnPurInScan:
                 if (isAllEdNotEmpty()) {
@@ -456,7 +446,7 @@ public class ProductInAct extends Activity {
     }
 
     // 打开收发类别画面
-    private void btnRdclClick(String Code) throws ParseException, IOException, JSONException {
+    private void btnRdclClick(String Code) {
         Intent ViewGrid = new Intent(this, VlistRdcl.class);
         ViewGrid.putExtra("FunctionName", "GetRdcl");
         // ViewGrid.putExtra("AccID", "A");
@@ -473,19 +463,18 @@ public class ProductInAct extends Activity {
      *
      * @throws JSONException
      */
-    private void btnWarehouseClick() throws JSONException {
+    private void btnWarehouseClick() {
         String lgUser      = MainLogin.objLog.LoginUser;
         String lgPwd       = MainLogin.objLog.Password;
         String LoginString = MainLogin.objLog.LoginString;
 
         JSONObject para = new JSONObject();
 
-        para.put("FunctionName", "GetWareHouseList");
-        para.put("CompanyCode", MainLogin.objLog.CompanyCode);
-        para.put("STOrgCode", MainLogin.objLog.STOrgCode);
-        para.put("TableName", "warehouse");
-
         try {
+            para.put("FunctionName", "GetWareHouseList");
+            para.put("CompanyCode", MainLogin.objLog.CompanyCode);
+            para.put("STOrgCode", MainLogin.objLog.STOrgCode);
+            para.put("TableName", "warehouse");
             if (!MainLogin.getwifiinfo()) {
                 Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
@@ -513,19 +502,19 @@ public class ProductInAct extends Activity {
                 startActivityForResult(ViewGrid, 97);
             } else {
                 String Errmsg = rev.getString("ErrMsg");
-                Toast.makeText(this, Errmsg, Toast.LENGTH_LONG).show();
-                // ADD CAIXY TEST START
-                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                // ADD CAIXY TEST END
+                showToast(mActivity,Errmsg);
+                SoundHelper.playWarning();
             }
 
-        } catch (Exception e) {
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
-            // ADD CAIXY TEST START
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            // ADD CAIXY TEST END
+        } catch (JSONException e) {
+            e.printStackTrace();
+            showToast(mActivity, e.getMessage());
+            SoundHelper.playWarning();
+        } catch (IOException e) {
+            e.printStackTrace();
+            showToast(mActivity, e.getMessage());
+            SoundHelper.playWarning();
         }
-
     }
 
 

@@ -33,7 +33,6 @@ import com.techscan.dvq.common.Utils;
 import com.techscan.dvq.login.MainLogin;
 import com.techscan.dvq.module.materialOut.scan.MaterialOutScanAct;
 
-import org.apache.http.ParseException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -59,44 +58,44 @@ public class MaterialOutAct extends Activity {
 
 
     @InjectView(R.id.bill_num)
-    EditText    mBillNum;
+    EditText    billNum;
     @InjectView(R.id.bill_date)
-    EditText    mBillDate;
+    EditText    billDate;
     @InjectView(R.id.wh)
-    EditText    mWh;
+    EditText    wh;
     @InjectView(R.id.refer_wh)
-    ImageButton mReferWh;
+    ImageButton referWh;
     @InjectView(R.id.organization)
-    EditText    mOrganization;
+    EditText    organization;
     @InjectView(R.id.refer_organization)
-    ImageButton mReferOrganization;
+    ImageButton referOrganization;
     @InjectView(R.id.lei_bie)
-    EditText    mLeiBie;
+    EditText    leiBie;
     @InjectView(R.id.refer_lei_bie)
-    ImageButton mReferLeiBie;
+    ImageButton referLeiBie;
     @InjectView(R.id.department)
-    EditText    mDepartment;
-    @InjectView(R.id.remark)
-    EditText    mRemark;
-    @InjectView(R.id.btnPurInScan)
-    Button      mBtnPurInScan;
-    @InjectView(R.id.btnPurinSave)
-    Button      mBtnPurinSave;
-    @InjectView(R.id.btnBack)
-    Button      mBtnBack;
+    EditText    department;
     @InjectView(R.id.refer_department)
-    ImageButton mReferDepartment;
-    private String TAG = this.getClass().getSimpleName();
+    ImageButton referDepartment;
+    @InjectView(R.id.remark)
+    EditText    remark;
+    @InjectView(R.id.btn_scan)
+    Button      btnScan;
+    @InjectView(R.id.btn_save)
+    Button      btnSave;
+    @InjectView(R.id.btn_back)
+    Button      btnBack;
 
+    private String TAG = this.getClass().getSimpleName();
 
     List<Goods>             tempList;
     HashMap<String, String> checkInfo;
 
     String CDISPATCHERID = "";//收发类别code
     String CDPTID        = "";  //部门id
+    String CWAREHOUSEID  = "";    //库存组织
+    String PK_CALBODY    = "";      //仓库id
     String CUSER;   //登录员工id
-    String CWAREHOUSEID = "";    //库存组织
-    String PK_CALBODY   = "";      //仓库id
     String PK_CORP;         //公司
     String VBILLCOD;        //单据号
 
@@ -111,48 +110,31 @@ public class MaterialOutAct extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_material_in);
+        setContentView(R.layout.activity_material_out);
         ButterKnife.inject(this);
         mActivity = this;
-        initView();
+        init();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mActivity = null;
-    }
 
     /**
      * 所有的点击事件
      *
      * @param view
      */
-    @OnClick({R.id.refer_wh, R.id.refer_organization,
-            R.id.refer_lei_bie, R.id.btnPurInScan, R.id.btnPurinSave,
-            R.id.btnBack, R.id.refer_department, R.id.bill_date})
+    @OnClick({R.id.bill_date, R.id.btn_scan, R.id.refer_wh, R.id.refer_organization, R.id.refer_lei_bie, R.id.refer_department, R.id.btn_save, R.id.btn_back})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.refer_wh:
-                try {
-                    btnWarehouseClick();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                btnWarehouseClick();
                 break;
             case R.id.refer_organization:
                 btnReferSTOrgList();
                 break;
             case R.id.refer_lei_bie:
-                try {
-                    btnRdclClick("");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                btnRdclClick("");
                 break;
-            case R.id.btnPurInScan:
+            case R.id.btn_scan:
                 if (isAllEdNotEmpty()) {
                     Intent in = new Intent(mActivity, MaterialOutScanAct.class);
                     in.putExtra("CWAREHOUSEID", CWAREHOUSEID);
@@ -165,23 +147,17 @@ public class MaterialOutAct extends Activity {
                     showToast(mActivity, "请先核对信息，再进行扫描");
                 }
                 break;
-            case R.id.btnPurinSave:
+            case R.id.btn_save:
                 if (checkSaveInfo()) {
                     if (tempList != null && tempList.size() > 0) {
-                        try {
-                            saveInfo(tempList);
-                            showProgressDialog();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        } catch (UnsupportedEncodingException e) {
-                            e.printStackTrace();
-                        }
+                        saveInfo(tempList);
+                        showProgressDialog();
                     } else {
                         showToast(mActivity, "没有需要保存的数据");
                     }
                 }
                 break;
-            case R.id.btnBack:
+            case R.id.btn_back:
                 if (tempList != null && tempList.size() > 0) {
                     AlertDialog.Builder bulider =
                             new AlertDialog.Builder(this).setTitle(R.string.XunWen).setMessage("数据未保存是否退出");
@@ -214,6 +190,12 @@ public class MaterialOutAct extends Activity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mActivity = null;
+    }
+
     /**
      * 检查表头信息是否正确
      */
@@ -222,34 +204,34 @@ public class MaterialOutAct extends Activity {
             showToast(mActivity, "单据信息不正确请核对");
             return false;
         }
-        if (TextUtils.isEmpty(mBillNum.getText().toString())) {
+        if (TextUtils.isEmpty(billNum.getText().toString())) {
             showToast(mActivity, "单据号不能为空");
-            mBillNum.requestFocus();
+            billNum.requestFocus();
             return false;
         }
-        if (TextUtils.isEmpty(mBillDate.getText().toString())) {
+        if (TextUtils.isEmpty(billDate.getText().toString())) {
             showToast(mActivity, "日期不能为空");
-            mBillDate.requestFocus();
+            billDate.requestFocus();
             return false;
         }
-        if (!mWh.getText().toString().equals(checkInfo.get("Warehouse"))) {
+        if (!wh.getText().toString().equals(checkInfo.get("Warehouse"))) {
             showToast(mActivity, "仓库信息不正确");
-            mWh.requestFocus();
+            wh.requestFocus();
             return false;
         }
-        if (!mOrganization.getText().toString().equals(checkInfo.get("Organization"))) {
+        if (!organization.getText().toString().equals(checkInfo.get("Organization"))) {
             showToast(mActivity, "组织信息不正确");
-            mOrganization.requestFocus();
+            organization.requestFocus();
             return false;
         }
-        if (!mLeiBie.getText().toString().equals(checkInfo.get("LeiBie"))) {
+        if (!leiBie.getText().toString().equals(checkInfo.get("LeiBie"))) {
             showToast(mActivity, "收发类别信息不正确");
-            mLeiBie.requestFocus();
+            leiBie.requestFocus();
             return false;
         }
-        if (!mDepartment.getText().toString().equals(checkInfo.get("Department"))) {
+        if (!department.getText().toString().equals(checkInfo.get("Department"))) {
             showToast(mActivity, "部门信息不正确");
-            mDepartment.requestFocus();
+            department.requestFocus();
             return false;
         }
         return true;
@@ -264,9 +246,9 @@ public class MaterialOutAct extends Activity {
             String warehousecode = data.getStringExtra("result2");
             String warehouseName = data.getStringExtra("result3");
             CWAREHOUSEID = warehousePK1;
-            mWh.requestFocus();
-            mWh.setText(warehouseName);
-            mOrganization.requestFocus();
+            wh.requestFocus();
+            wh.setText(warehouseName);
+            organization.requestFocus();
             checkInfo.put("Warehouse", warehouseName);
         }
         //材料出库库存组织的回传数据 <----StorgListAct.class
@@ -274,9 +256,9 @@ public class MaterialOutAct extends Activity {
             String pk_areacl  = data.getStringExtra("pk_areacl");
             String bodyname   = data.getStringExtra("bodyname");
             String pk_calbody = data.getStringExtra("pk_calbody");
-            mOrganization.requestFocus();
-            mOrganization.setText(bodyname);
-            mLeiBie.requestFocus();
+            organization.requestFocus();
+            organization.setText(bodyname);
+            leiBie.requestFocus();
             PK_CALBODY = pk_calbody;
             checkInfo.put("Organization", bodyname);
         }
@@ -288,9 +270,9 @@ public class MaterialOutAct extends Activity {
             String RdIDA = data.getStringExtra("RdIDA");    //需要回传的id
             String RdIDB = data.getStringExtra("RdIDB");
             CDISPATCHERID = RdIDA;
-            mLeiBie.requestFocus();
-            mLeiBie.setText(name);
-            mDepartment.requestFocus();
+            leiBie.requestFocus();
+            leiBie.setText(name);
+            department.requestFocus();
             checkInfo.put("LeiBie", name);
         }
         //部门信息的回传数据 <----DepartmentListAct.class
@@ -299,8 +281,8 @@ public class MaterialOutAct extends Activity {
             String pk_deptdoc = data.getStringExtra("pk_deptdoc");
             String deptcode   = data.getStringExtra("deptcode");
             CDPTID = pk_deptdoc;
-            mDepartment.requestFocus();
-            mDepartment.setText(deptname);
+            department.requestFocus();
+            department.setText(deptname);
             checkInfo.put("Department", deptname);
         }
 
@@ -321,21 +303,21 @@ public class MaterialOutAct extends Activity {
      * 初始化界面
      * 初始化原始数据
      */
-    private void initView() {
+    private void init() {
         ActionBar actionBar = this.getActionBar();
         actionBar.setTitle("材料出库");
         mycalendar = Calendar.getInstance();//初始化Calendar日历对象
         year = mycalendar.get(Calendar.YEAR); //获取Calendar对象中的年
         month = mycalendar.get(Calendar.MONTH);//获取Calendar对象中的月
         day = mycalendar.get(Calendar.DAY_OF_MONTH);//获取这个月的第几天
-        mBillDate.setText(MainLogin.appTime);
-        mBillDate.setInputType(InputType.TYPE_NULL);
-        mBillDate.setOnFocusChangeListener(myFocusListener);
-        mBillDate.setOnKeyListener(mOnKeyListener);
-        mWh.setOnKeyListener(mOnKeyListener);
-        mOrganization.setOnKeyListener(mOnKeyListener);
-        mLeiBie.setOnKeyListener(mOnKeyListener);
-        mDepartment.setOnKeyListener(mOnKeyListener);
+        billDate.setText(MainLogin.appTime);
+        billDate.setInputType(InputType.TYPE_NULL);
+        billDate.setOnFocusChangeListener(myFocusListener);
+        billDate.setOnKeyListener(mOnKeyListener);
+        wh.setOnKeyListener(mOnKeyListener);
+        organization.setOnKeyListener(mOnKeyListener);
+        leiBie.setOnKeyListener(mOnKeyListener);
+        department.setOnKeyListener(mOnKeyListener);
         checkInfo = new HashMap<String, String>();
     }
 
@@ -389,7 +371,7 @@ public class MaterialOutAct extends Activity {
                                 MaterialOutScanAct.detailList.clear();
                                 tempList.clear();
                                 changeAllEdToEmpty();
-                                mBillNum.requestFocus();
+                                billNum.requestFocus();
                             } else {
                                 showResultDialog(mActivity, saveResult.getString("ErrMsg"));
                             }
@@ -408,13 +390,13 @@ public class MaterialOutAct extends Activity {
     };
 
     private void changeAllEdToEmpty() {
-        mBillNum.setText("");
-        mBillDate.setText("");
-        mWh.setText("");
-        mOrganization.setText("");
-        mLeiBie.setText("");
-        mDepartment.setText("");
-        mRemark.setText("");
+        billNum.setText("");
+        billDate.setText("");
+        wh.setText("");
+        organization.setText("");
+        leiBie.setText("");
+        department.setText("");
+        remark.setText("");
     }
 
     /**
@@ -459,68 +441,73 @@ public class MaterialOutAct extends Activity {
     }
 
     private boolean isAllEdNotEmpty() {
-        return (!TextUtils.isEmpty(mBillNum.getText().toString())
-                && !TextUtils.isEmpty(mBillDate.getText().toString())
-                && !TextUtils.isEmpty(mWh.getText().toString())
-                && !TextUtils.isEmpty(mOrganization.getText().toString())
-                && !TextUtils.isEmpty(mLeiBie.getText().toString())
-                && !TextUtils.isEmpty(mDepartment.getText().toString()));
+        return (!TextUtils.isEmpty(billNum.getText().toString())
+                && !TextUtils.isEmpty(billDate.getText().toString())
+                && !TextUtils.isEmpty(wh.getText().toString())
+                && !TextUtils.isEmpty(organization.getText().toString())
+                && !TextUtils.isEmpty(leiBie.getText().toString())
+                && !TextUtils.isEmpty(department.getText().toString()));
     }
 
     /**
      * 保存单据信息
      *
      * @param goodsList
-     * @throws JSONException
      */
-    private void saveInfo(List<Goods> goodsList) throws JSONException, UnsupportedEncodingException {
-        final JSONObject table     = new JSONObject();
-        JSONObject       tableHead = new JSONObject();
-        tableHead.put("VBILLCODE", mBillNum.getText().toString());  //单据号
-        tableHead.put("CDISPATCHERID", CDISPATCHERID);              //收发类别code
-        tableHead.put("CDPTID", CDPTID);                            //部门id
-        tableHead.put("CUSER", MainLogin.objLog.UserID);            //用户id
-        tableHead.put("CWAREHOUSEID", CWAREHOUSEID);                //库存组织
-        tableHead.put("PK_CALBODY", PK_CALBODY);                    //仓库id
-        tableHead.put("PK_CORP", MainLogin.objLog.STOrgCode);       //组织编号
-        String login_user = MainLogin.objLog.LoginUser.toString();
-        String cuserName  = Base64Encoder.encode(login_user.getBytes("gb2312"));
-        tableHead.put("CUSERNAME", cuserName);     //用户名称
-        if (mRemark.getText().toString().isEmpty()) {
-            mRemark.setText("");
-        }
-        tableHead.put("VNOTE", mRemark.getText().toString());
-        tableHead.put("FREPLENISHFLAG", "N");    //N不退,是否退货标志位
-        table.put("Head", tableHead);
-        JSONObject tableBody = new JSONObject();
-        JSONArray  bodyArray = new JSONArray();
-        for (Goods c : goodsList) {
-            JSONObject object = new JSONObject();
-            object.put("CINVBASID", c.getPk_invbasdoc());
-            object.put("CINVENTORYID", c.getPk_invmandoc());
-            object.put("NOUTNUM", Utils.formatDecimal(c.getQty()));
-            object.put("CINVCODE", c.getEncoding());
-            object.put("BLOTMGT", "1");
-            object.put("COSTOBJECT", c.getPk_invmandoc());
-            object.put("PK_BODYCALBODY", PK_CALBODY);
-            object.put("PK_CORP", MainLogin.objLog.STOrgCode);
-            object.put("VBATCHCODE", c.getLot());
-            object.put("VFREE4", c.getManual());    //海关手册号
-            bodyArray.put(object);
-        }
-        tableBody.put("ScanDetails", bodyArray);
-        table.put("Body", tableBody);
-        table.put("GUIDS", UUID.randomUUID().toString());
-        table.put("OPDATE", MainLogin.appTime);
-        Log.d(TAG, "saveInfo: " + table.toString());
-        SaveThread saveThread = new SaveThread(table, "SaveMaterialOut", mHandler, HANDER_SAVE_RESULT);
-        Thread     thread     = new Thread(saveThread);
-        thread.start();
+    private void saveInfo(List<Goods> goodsList) {
 
+        try {
+            final JSONObject table     = new JSONObject();
+            JSONObject       tableHead = new JSONObject();
+            tableHead.put("VBILLCODE", billNum.getText().toString());  //单据号
+            tableHead.put("CDISPATCHERID", CDISPATCHERID);              //收发类别code
+            tableHead.put("CDPTID", CDPTID);                            //部门id
+            tableHead.put("CUSER", MainLogin.objLog.UserID);            //用户id
+            tableHead.put("CWAREHOUSEID", CWAREHOUSEID);                //库存组织
+            tableHead.put("PK_CALBODY", PK_CALBODY);                    //仓库id
+            tableHead.put("PK_CORP", MainLogin.objLog.STOrgCode);       //组织编号
+            String login_user = MainLogin.objLog.LoginUser.toString();
+            String cuserName  = Base64Encoder.encode(login_user.getBytes("gb2312"));
+            tableHead.put("CUSERNAME", cuserName);     //用户名称
+            if (remark.getText().toString().isEmpty()) {
+                remark.setText("");
+            }
+            tableHead.put("VNOTE", remark.getText().toString());
+            tableHead.put("FREPLENISHFLAG", "N");    //N不退,是否退货标志位
+            table.put("Head", tableHead);
+            JSONObject tableBody = new JSONObject();
+            JSONArray  bodyArray = new JSONArray();
+            for (Goods c : goodsList) {
+                JSONObject object = new JSONObject();
+                object.put("CINVBASID", c.getPk_invbasdoc());
+                object.put("CINVENTORYID", c.getPk_invmandoc());
+                object.put("NOUTNUM", Utils.formatDecimal(c.getQty()));
+                object.put("CINVCODE", c.getEncoding());
+                object.put("BLOTMGT", "1");
+                object.put("COSTOBJECT", c.getPk_invmandoc());
+                object.put("PK_BODYCALBODY", PK_CALBODY);
+                object.put("PK_CORP", MainLogin.objLog.STOrgCode);
+                object.put("VBATCHCODE", c.getLot());
+                object.put("VFREE4", c.getManual());    //海关手册号
+                bodyArray.put(object);
+            }
+            tableBody.put("ScanDetails", bodyArray);
+            table.put("Body", tableBody);
+            table.put("GUIDS", UUID.randomUUID().toString());
+            table.put("OPDATE", MainLogin.appTime);
+            Log.d(TAG, "saveInfo: " + table.toString());
+            SaveThread saveThread = new SaveThread(table, "SaveMaterialOut", mHandler, HANDER_SAVE_RESULT);
+            Thread     thread     = new Thread(saveThread);
+            thread.start();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 
     // 打开收发类别画面
-    private void btnRdclClick(String Code) throws ParseException, IOException, JSONException {
+    private void btnRdclClick(String Code) {
         Intent ViewGrid = new Intent(this, VlistRdcl.class);
         ViewGrid.putExtra("FunctionName", "GetRdcl");
         // ViewGrid.putExtra("AccID", "A");
@@ -537,19 +524,18 @@ public class MaterialOutAct extends Activity {
      *
      * @throws JSONException
      */
-    private void btnWarehouseClick() throws JSONException {
+    private void btnWarehouseClick() {
         String lgUser      = MainLogin.objLog.LoginUser;
         String lgPwd       = MainLogin.objLog.Password;
         String LoginString = MainLogin.objLog.LoginString;
 
         JSONObject para = new JSONObject();
 
-        para.put("FunctionName", "GetWareHouseList");
-        para.put("CompanyCode", MainLogin.objLog.CompanyCode);
-        para.put("STOrgCode", MainLogin.objLog.STOrgCode);
-        para.put("TableName", "warehouse");
-
         try {
+            para.put("FunctionName", "GetWareHouseList");
+            para.put("CompanyCode", MainLogin.objLog.CompanyCode);
+            para.put("STOrgCode", MainLogin.objLog.STOrgCode);
+            para.put("TableName", "warehouse");
             if (!MainLogin.getwifiinfo()) {
                 Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
@@ -575,12 +561,15 @@ public class MaterialOutAct extends Activity {
                 Toast.makeText(this, Errmsg, Toast.LENGTH_LONG).show();
                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             }
-
-        } catch (Exception e) {
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Utils.showToast(this, e.getMessage());
+            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+        } catch (IOException e) {
+            e.printStackTrace();
             Utils.showToast(this, e.getMessage());
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
         }
-
     }
 
 
@@ -624,13 +613,13 @@ public class MaterialOutAct extends Activity {
             month = monthOfYear;
             day = dayOfMonth;
             updateDate();
-            mWh.requestFocus();//选择日期后将焦点跳到“仓库的EdText”
+            wh.requestFocus();//选择日期后将焦点跳到“仓库的EdText”
         }
 
         //当DatePickerDialog关闭时，更新日期显示
         private void updateDate() {
             //在TextView上显示日期
-            mBillDate.setText(year + "-" + (month + 1) + "-" + day);
+            billDate.setText(year + "-" + (month + 1) + "-" + day);
         }
 
     };
@@ -654,20 +643,21 @@ public class MaterialOutAct extends Activity {
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
                 switch (v.getId()) {
                     case R.id.bill_num:
-                        mBillDate.requestFocus();
+                        billDate.requestFocus();
                         return true;
                     case R.id.wh:
-                        mOrganization.requestFocus();
+                        organization.requestFocus();
                         return true;
                     case R.id.organization:
-                        mLeiBie.requestFocus();
+                        leiBie.requestFocus();
                         return true;
                     case R.id.lei_bie:
-                        mDepartment.requestFocus();
+                        department.requestFocus();
                         return true;
                 }
             }
             return false;
         }
     };
+
 }
