@@ -169,8 +169,6 @@ public class MainLogin extends Activity {
             bulider.setPositiveButton(R.string.QueDing, null).create().show();
             return;
         }
-        user.setText("≤‚ ‘");
-        pwds.setText("1234aS~");
         String userName = user.getText().toString().replace("\n", "");
         String password = pwds.getText().toString().replace("\n", "");
         if (userName.equals("") || password.equals("")) {
@@ -280,12 +278,10 @@ public class MainLogin extends Activity {
 
                             } else {
                                 String ErrMsg = jas.getString("ErrMsg");
-                                Toast.makeText(MainLogin.this, ErrMsg, Toast.LENGTH_LONG).show();
                                 Utils.showToast(MainLogin.this, ErrMsg);
                                 SoundHelper.playWarning();
                             }
                         }
-
                     }
                 });
 //
