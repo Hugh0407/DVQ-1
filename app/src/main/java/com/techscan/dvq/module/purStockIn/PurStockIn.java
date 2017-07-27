@@ -682,7 +682,7 @@ public class PurStockIn extends Activity {
                             obj.put("SOURCCEBILLBID", bodys.getJSONObject(i).getString("corder_bid"));
                             obj.put("VENDORID", heads.getJSONObject(0).getString("cvendormangid"));
                             obj.put("VENDORBASID", heads.getJSONObject(0).getString("cvendorbaseid"));
-                            obj.put("NPRICE", "0.00");
+                            obj.put("NPRICE", bodys.getJSONObject(i).getString("NORIGINALCURPRICE"));
                             obj.put("VSOURCEBILLCODE", m_BillNo);
                             obj.put("VSOURCEBILLROWNO", bodys.getJSONObject(i).getString("crowno"));
                             obj.put("VFREE4", bodys.getJSONObject(i).getString("vfree4"));
