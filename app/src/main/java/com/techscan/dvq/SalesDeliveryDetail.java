@@ -617,13 +617,16 @@ public class SalesDeliveryDetail extends Activity {
         } else {
             JSONArray serinos = jsSerino.getJSONArray("Serino");
 
-//            for (int i = 0; i < serinos.length(); i++) {
-//                JSONObject temp = new JSONObject();
-//                temp = serinos.getJSONObject(i);
-////                if (temp.getString("serino").equals(serino)) {
-////                    return true;
-////                }
-//            }
+            for (int i = 0; i < serinos.length(); i++) {
+                JSONObject temp = new JSONObject();
+                temp = serinos.getJSONObject(i);
+                if (temp.getString("serino").equals(serino)) {
+                    TotalBox = String.valueOf(Double.parseDouble(temp.getString("box").toString())
+                            + Double.parseDouble(TotalBox));
+                    temp.put("box", TotalBox);
+                    return true;
+                }
+            }
             JSONObject temp = new JSONObject();
             temp.put("serino", serino);
             temp.put("box", TotalBox);
