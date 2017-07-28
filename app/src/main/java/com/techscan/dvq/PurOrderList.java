@@ -199,16 +199,16 @@ public class PurOrderList extends Activity {
 		JSONObject jas;
 		try 
 		{
-	        if(!MainLogin.getwifiinfo()) {
-	            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
-	            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-	            if(!BillHead.equals(""))
-	            {
-	            	this.finish();
-	            }
-				Common.cancelLoading();
-	            return ;
-	        }
+//	        if(!MainLogin.getwifiinfo()) {
+//	            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
+//	            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//	            if(!BillHead.equals(""))
+//	            {
+//	            	this.finish();
+//	            }
+//				Common.cancelLoading();
+//	            return ;
+//	        }
 			jas = Common.DoHttpQuery(para, FunctionName, "");
 			Log.d("TAG", "GetPOList: " + jas);
 		} catch (Exception ex)

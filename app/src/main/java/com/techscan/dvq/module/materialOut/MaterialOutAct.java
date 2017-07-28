@@ -391,12 +391,13 @@ public class MaterialOutAct extends Activity {
 
     private void changeAllEdToEmpty() {
         billNum.setText("");
-        billDate.setText("");
-        wh.setText("");
-        organization.setText("");
-        leiBie.setText("");
-        department.setText("");
-        remark.setText("");
+        //
+//        billDate.setText("");
+//        wh.setText("");
+//        organization.setText("");
+//        leiBie.setText("");
+//        department.setText("");
+//        remark.setText("");
     }
 
     /**

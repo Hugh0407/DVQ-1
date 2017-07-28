@@ -186,8 +186,8 @@ public class MainLogin extends Activity {
         // LoginString = "http://192.168.0.203:5556/service/nihao";
         // LoginString = "http://192.168.93.121/service/nihao";
         final String Version = "" + this.getVerCode(this);
-
-
+        //
+        // LoginString = "http://192.168.66.231:8180/service/nihao";
         if (lsUrl.equals("")) {
             lsUrl = LoginString;
         }

@@ -152,12 +152,12 @@ public class PurStockInDetail extends Activity {
             // ADD CAIXY TEST END
         }
         try {
-            if (!MainLogin.getwifiinfo()) {
-                Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG)
-                        .show();
-                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                return;
-            }
+//            if (!MainLogin.getwifiinfo()) {
+//                Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG)
+//                        .show();
+//                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                return;
+//            }
             jsHead = Common.DoHttpQuery(para, FunctionName, "");
         } catch (Exception ex) {
             Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
@@ -174,12 +174,12 @@ public class PurStockInDetail extends Activity {
             para.put("accId", "A");
             para.put("FunctionName", "GetInBoundBillDetail");
             para.put("TableName", "PurBody");
-            if (!MainLogin.getwifiinfo()) {
-                Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG)
-                        .show();
-                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                return;
-            }
+//            if (!MainLogin.getwifiinfo()) {
+//                Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG)
+//                        .show();
+//                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                return;
+//            }
             jsBody = Common.DoHttpQuery(para, FunctionName, "");
             Log.d(TAG, "AAA: "+jsBody.toString());
         } catch (JSONException e2) {
@@ -373,11 +373,11 @@ public class PurStockInDetail extends Activity {
         if (Scanbarcode == null || Scanbarcode.equals(""))
             return false;
 
-        if (!MainLogin.getwifiinfo()) {
-            Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            return false;
-        }
+//        if (!MainLogin.getwifiinfo()) {
+//            Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
+//            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//            return false;
+//        }
 
         SplitBarcode bar = new SplitBarcode(Scanbarcode);
         if (bar.creatorOk == false) {
@@ -651,11 +651,11 @@ public class PurStockInDetail extends Activity {
 
         para.put("LotB", this.currentObj.GetBatch());
         para.put("TableName", "Stock");
-        if (!MainLogin.getwifiinfo()) {
-            Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            return false;
-        }
+//        if (!MainLogin.getwifiinfo()) {
+//            Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
+//            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//            return false;
+//        }
         JSONObject StockInfo = Common.DoHttpQuery(para, "CommonQuery", "A");
 
         if (StockInfo == null) {
@@ -730,11 +730,11 @@ public class PurStockInDetail extends Activity {
 
         // para.put("LotB", this.currentObj.GetBatch());
         // para.put("TableName", "Stock");
-        if (!MainLogin.getwifiinfo()) {
-            Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            return false;
-        }
+//        if (!MainLogin.getwifiinfo()) {
+//            Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
+//            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//            return false;
+//        }
         JSONObject StockInfo = Common.DoHttpQuery(para, "CommonQuery", "A");
 
         if (StockInfo == null) {
@@ -865,11 +865,11 @@ public class PurStockInDetail extends Activity {
         para.put("CLOT", bar.cBatch);
         para.put("TableName", "SERINO");
 
-        if (!MainLogin.getwifiinfo()) {
-            Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            return false;
-        }
+//        if (!MainLogin.getwifiinfo()) {
+//            Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
+//            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//            return false;
+//        }
         SERINOList = Common.DoHttpQuery(para, "CommonQuery", bar.AccID);
         Log.d("TAG", "ConformGetSERINO: " + SERINOList);
 
@@ -1619,21 +1619,15 @@ public class PurStockInDetail extends Activity {
             if (jsHead == null && jsBody == null)
                 LoadPurOrder();
         } catch (ParseException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             Toast.makeText(PurStockInDetail.this, e.getMessage(),
                     Toast.LENGTH_LONG).show();
-            // ADD CAIXY TEST START
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            // ADD CAIXY TEST END
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             Toast.makeText(PurStockInDetail.this, e.getMessage(),
                     Toast.LENGTH_LONG).show();
-            // ADD CAIXY TEST START
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            // ADD CAIXY TEST END
         }
 
         JSONArray arrays;

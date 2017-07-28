@@ -219,11 +219,11 @@ public class PurStockIn extends Activity {
 
         saveJons.put("cgeneralhid", this.m_BillID);//²É¹ºÈë¿âµ¥ID
 
-        if (!MainLogin.getwifiinfo()) {
-            Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            return false;
-        }
+//        if (!MainLogin.getwifiinfo()) {
+//            Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
+//            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//            return false;
+//        }
 
         JSONObject jas = Common.DoHttpQuery(saveJons, "SaveToBill", "A");
 
@@ -444,11 +444,11 @@ public class PurStockIn extends Activity {
         saveJons.put("tmpBillStatus", tmpBillStatus);
 
 
-        if (!MainLogin.getwifiinfo()) {
-            Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            return false;
-        }
+//        if (!MainLogin.getwifiinfo()) {
+//            Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
+//            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//            return false;
+//        }
 
         JSONObject jas = Common.DoHttpQuery(saveJons, "UpdateInBound", "A");
 
@@ -700,11 +700,11 @@ public class PurStockIn extends Activity {
         jsDBBody.put("ScanDetails", arraySaveBody);
         saveJons.put("Body", jsDBBody);
 
-        if (!MainLogin.getwifiinfo()) {
-            Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            return false;
-        }
+//        if (!MainLogin.getwifiinfo()) {
+//            Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
+//            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//            return false;
+//        }
         Log.d("TAG", "SavePurOrder: " + saveJons);
         JSONObject jas = Common.DoHttpQuery(saveJons, "SavePurStockIn", "A");
 
@@ -718,7 +718,7 @@ public class PurStockIn extends Activity {
         }
 
         if (!jas.getBoolean("Status")) {
-            String errMsg = "";
+            String errMsg;
             if (jas.has("ErrMsg")) {
                 errMsg = jas.getString("ErrMsg");
             } else {
@@ -1110,11 +1110,11 @@ public class PurStockIn extends Activity {
             para.put("WareHouse", this.m_WarehouseID);
             para.put("BinCode", posCode);
             para.put("TableName", "position");
-            if (!MainLogin.getwifiinfo()) {
-                Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
-                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                return;
-            }
+//            if (!MainLogin.getwifiinfo()) {
+//                Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
+//                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                return;
+//            }
             JSONObject rev = Common.DoHttpQuery(para,
                     "CommonQuery", m_AccID);
 
@@ -1206,11 +1206,11 @@ public class PurStockIn extends Activity {
         para.put("FunctionName", "GetWHPosStatus");
         para.put("WareHouse", m_WarehouseID);
 
-        if (!MainLogin.getwifiinfo()) {
-            Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            return;
-        }
+//        if (!MainLogin.getwifiinfo()) {
+//            Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
+//            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//            return;
+//        }
         JSONObject rev = null;
         try {
             rev = Common.DoHttpQuery(para, "CommonQuery", "A");
@@ -1376,11 +1376,11 @@ public class PurStockIn extends Activity {
         para.put("TableName", "warehouse");
 
         try {
-            if (!MainLogin.getwifiinfo()) {
-                Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
-                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                return;
-            }
+//            if (!MainLogin.getwifiinfo()) {
+//                Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
+//                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                return;
+//            }
 
             JSONObject rev = Common.DoHttpQuery(para, "CommonQuery", "");
             if (rev == null) {

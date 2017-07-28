@@ -555,12 +555,12 @@ public class ProductInAct extends Activity {
 
     private void changeAllEdToEmpty() {
         mBillNum.setText("");
-        mBillDate.setText("");
-        mWh.setText("");
-        mOrganization.setText("");
-        mLeiBie.setText("");
-        mDepartment.setText("");
-        mRemark.setText("");
+//        mBillDate.setText("");
+//        mWh.setText("");
+//        mOrganization.setText("");
+//        mLeiBie.setText("");
+//        mDepartment.setText("");
+//        mRemark.setText("");
     }
 
     /**
