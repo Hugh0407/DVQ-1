@@ -159,6 +159,7 @@ public class PurStockInDetail extends Activity {
 //                return;
 //            }
             jsHead = Common.DoHttpQuery(para, FunctionName, "");
+            Log.d(TAG, "HEAD: "+jsHead.toString());
         } catch (Exception ex) {
             Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
             // ADD CAIXY TEST START
