@@ -91,10 +91,10 @@ public class MaterialOutAct extends Activity {
     List<Goods>             tempList;
     HashMap<String, String> checkInfo;
 
-    String CDISPATCHERID = "";//收发类别code
-    String CDPTID        = "";  //部门id
-    String CWAREHOUSEID  = "";    //库存组织
-    String PK_CALBODY    = "";      //仓库id
+    String CDISPATCHERID     = "";//收发类别code
+    String CDPTID            = "";  //部门id
+    String CWAREHOUSEID      = "";    //库存组织
+    String PK_CALBODY        = "";      //仓库id
     String CUSER;   //登录员工id
     String PK_CORP;         //公司
     String VBILLCOD;        //单据号
@@ -485,7 +485,7 @@ public class MaterialOutAct extends Activity {
                 object.put("NOUTNUM", Utils.formatDecimal(c.getQty()));
                 object.put("CINVCODE", c.getEncoding());
                 object.put("BLOTMGT", "1");
-                object.put("COSTOBJECT", c.getPk_invmandoc());
+                object.put("COSTOBJECT", c.getPk_invmandoc_cost());
                 object.put("PK_BODYCALBODY", PK_CALBODY);
                 object.put("PK_CORP", MainLogin.objLog.STOrgCode);
                 object.put("VBATCHCODE", c.getLot());

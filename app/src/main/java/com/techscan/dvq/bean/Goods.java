@@ -22,6 +22,7 @@ public class Goods implements Parcelable {
     int    num;         //数目
     String pk_invbasdoc;
     String pk_invmandoc;
+    String pk_invmandoc_cost;
     String costObject;
     String manual;  // 海关手册号
 
@@ -40,6 +41,7 @@ public class Goods implements Parcelable {
         num = in.readInt();
         pk_invbasdoc = in.readString();
         pk_invmandoc = in.readString();
+        pk_invmandoc_cost = in.readString();
         costObject = in.readString();
         manual = in.readString();
     }
@@ -175,6 +177,14 @@ public class Goods implements Parcelable {
         this.pk_invmandoc = pk_invmandoc;
     }
 
+    public String getPk_invmandoc_cost() {
+        return pk_invmandoc_cost;
+    }
+
+    public void setPk_invmandoc_cost(String pk_invmandoc_cost) {
+        this.pk_invmandoc_cost = pk_invmandoc_cost;
+    }
+
     public String getCostObject() {
         return costObject;
     }
@@ -209,6 +219,7 @@ public class Goods implements Parcelable {
         dest.writeInt(num);
         dest.writeString(pk_invbasdoc);
         dest.writeString(pk_invmandoc);
+        dest.writeString(pk_invmandoc_cost);
         dest.writeString(costObject);
         dest.writeString(manual);
     }
