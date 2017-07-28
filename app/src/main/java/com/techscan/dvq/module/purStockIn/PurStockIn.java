@@ -55,6 +55,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import static android.content.ContentValues.TAG;
 import static com.techscan.dvq.common.Utils.HANDER_DEPARTMENT;
 import static com.techscan.dvq.common.Utils.HANDER_POORDER_BODY;
 import static com.techscan.dvq.common.Utils.HANDER_POORDER_HEAD;
@@ -682,7 +683,9 @@ public class PurStockIn extends Activity {
                             obj.put("SOURCCEBILLBID", bodys.getJSONObject(i).getString("corder_bid"));
                             obj.put("VENDORID", heads.getJSONObject(0).getString("cvendormangid"));
                             obj.put("VENDORBASID", heads.getJSONObject(0).getString("cvendorbaseid"));
-                            obj.put("NPRICE", bodys.getJSONObject(i).getString("NORIGINALCURPRICE"));
+                            Log.d(TAG, "PRICE: "+"888");
+                            Log.d(TAG, "PRICE: "+bodys.getJSONObject(i).getString("noriginalcurprice"));
+                            obj.put("NPRICE", bodys.getJSONObject(i).getString("noriginalcurprice"));
                             obj.put("VSOURCEBILLCODE", m_BillNo);
                             obj.put("VSOURCEBILLROWNO", bodys.getJSONObject(i).getString("crowno"));
                             obj.put("VFREE4", bodys.getJSONObject(i).getString("vfree4"));
@@ -958,17 +961,18 @@ public class PurStockIn extends Activity {
                     Toast.LENGTH_LONG).show();
             // TODO Auto-generated catch block
             e.printStackTrace();
-        } catch (JSONException e) {
-            Toast.makeText(PurStockIn.this, R.string.WangLuoChuXianWenTi,
-                    Toast.LENGTH_LONG).show();
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            Toast.makeText(PurStockIn.this, R.string.WangLuoChuXianWenTi,
-                    Toast.LENGTH_LONG).show();
-            // TODO Auto-generated catch block
-            e.printStackTrace();
         }
+// catch (JSONException e) {
+//            Toast.makeText(PurStockIn.this, R.string.WangLuoChuXianWenTi,
+//                    Toast.LENGTH_LONG).show();
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            Toast.makeText(PurStockIn.this, R.string.WangLuoChuXianWenTi,
+//                    Toast.LENGTH_LONG).show();
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
     }
 
 
@@ -1649,7 +1653,8 @@ public class PurStockIn extends Activity {
                                 //ADD CAIXY TEST START
                                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                                 //ADD CAIXY TEST END
-                            } catch (ParseException e) {
+                            }
+                            catch (ParseException e) {
                                 // TODO Auto-generated catch block
                                 e.printStackTrace();
                                 Toast.makeText(PurStockIn.this, R.string.WangLuoChuXianWenTi,
