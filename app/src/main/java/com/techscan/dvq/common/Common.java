@@ -71,10 +71,8 @@ public class Common {
 
     //static int UrlErr = 0;   //暂时关闭
 
-    public static JSONObject DoHttpQuery(JSONObject para, String funcationName,
-                                         String AccID) throws JSONException, ParseException, IOException {
-
-
+    public static JSONObject DoHttpQuery(JSONObject para, String funcationName, String AccID)
+            throws JSONException, ParseException, IOException {
 
         // String ErrMsg="{\"Status\":false,\"ErrMsg\":'执行数据处理错误'}";
         JSONObject resultJos = new JSONObject();

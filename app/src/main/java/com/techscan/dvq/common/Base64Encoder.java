@@ -80,7 +80,8 @@ public class Base64Encoder {
             return encode(to.getBytes("gb2312"));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
+        } finally {
+            return "";
         }
-        return "";
     }
 }

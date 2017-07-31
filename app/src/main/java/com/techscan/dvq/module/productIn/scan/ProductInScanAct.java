@@ -88,7 +88,7 @@ public class ProductInScanAct extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_product_out_scan);
+        setContentView(R.layout.activity_product_in_scan);
         ButterKnife.inject(this);
         mActivity = this;
         initView();

@@ -111,7 +111,7 @@ public class ProductInAct extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_product_out);
+        setContentView(R.layout.activity_product_in);
         ButterKnife.inject(this);
         mActivity = this;
         initView();
@@ -200,49 +200,6 @@ public class ProductInAct extends Activity {
                 dpd.show();//显示DatePickerDialog组件
                 break;
         }
-    }
-
-    /**
-     * 检查表头信息是否正确
-     */
-    private boolean checkSaveInfo() {
-
-        if (checkInfo.size() == 0) {
-            showToast(mActivity, "单据信息不正确请核对");
-            return false;
-        }
-
-        if (TextUtils.isEmpty(mBillNum.getText().toString())) {
-            showToast(mActivity, "单据号不能为空");
-            mBillNum.requestFocus();
-            return false;
-        }
-        if (TextUtils.isEmpty(mBillDate.getText().toString())) {
-            showToast(mActivity, "日期不能为空");
-            mBillDate.requestFocus();
-            return false;
-        }
-        if (!mWh.getText().toString().equals(checkInfo.get("Warehouse"))) {
-            showToast(mActivity, "仓库信息不正确");
-            mWh.requestFocus();
-            return false;
-        }
-        if (!mOrganization.getText().toString().equals(checkInfo.get("Organization"))) {
-            showToast(mActivity, "组织信息不正确");
-            mOrganization.requestFocus();
-            return false;
-        }
-        if (!mLeiBie.getText().toString().equals(checkInfo.get("LeiBie"))) {
-            showToast(mActivity, "收发类别信息不正确");
-            mLeiBie.requestFocus();
-            return false;
-        }
-        if (!mDepartment.getText().toString().equals(checkInfo.get("Department"))) {
-            showToast(mActivity, "部门信息不正确");
-            mDepartment.requestFocus();
-            return false;
-        }
-        return true;
     }
 
     @Override
@@ -391,6 +348,49 @@ public class ProductInAct extends Activity {
             }
         }
     };
+
+    /**
+     * 检查表头信息是否正确
+     */
+    private boolean checkSaveInfo() {
+
+        if (checkInfo.size() == 0) {
+            showToast(mActivity, "单据信息不正确请核对");
+            return false;
+        }
+
+        if (TextUtils.isEmpty(mBillNum.getText().toString())) {
+            showToast(mActivity, "单据号不能为空");
+            mBillNum.requestFocus();
+            return false;
+        }
+        if (TextUtils.isEmpty(mBillDate.getText().toString())) {
+            showToast(mActivity, "日期不能为空");
+            mBillDate.requestFocus();
+            return false;
+        }
+        if (!mWh.getText().toString().equals(checkInfo.get("Warehouse"))) {
+            showToast(mActivity, "仓库信息不正确");
+            mWh.requestFocus();
+            return false;
+        }
+        if (!mOrganization.getText().toString().equals(checkInfo.get("Organization"))) {
+            showToast(mActivity, "组织信息不正确");
+            mOrganization.requestFocus();
+            return false;
+        }
+        if (!mLeiBie.getText().toString().equals(checkInfo.get("LeiBie"))) {
+            showToast(mActivity, "收发类别信息不正确");
+            mLeiBie.requestFocus();
+            return false;
+        }
+        if (!mDepartment.getText().toString().equals(checkInfo.get("Department"))) {
+            showToast(mActivity, "部门信息不正确");
+            mDepartment.requestFocus();
+            return false;
+        }
+        return true;
+    }
 
 
     /**
