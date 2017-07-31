@@ -714,7 +714,8 @@ public class MainLogin extends Activity {
         actionBar.setTitle(R.string.title);
 //        actionBar.setBackgroundDrawable(TitleBar);
         actionBar.show();
-
+//        user.setText("≤‚ ‘");
+//        pwds.setText("1234aS~");
         btnLogin.setOnClickListener(myListner);
         btnExit.setOnClickListener(myListner);
         // btnSet.setOnClickListener(myListner);

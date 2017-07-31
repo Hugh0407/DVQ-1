@@ -335,6 +335,11 @@ public class MainMenu extends Activity {
                 map.put("ItemImage", R.drawable.icon_ck_qt);
                 map.put("ItemText", "其他出库");
                 lstImageItem.add(map);
+                // TODO: 2017/7/31 XUHU
+                map = new HashMap<String, Object>();
+                map.put("ItemImage", R.drawable.icon_ck_qt);
+                map.put("ItemText", "多角贸易");
+                lstImageItem.add(map);
 
                 break;
 
@@ -566,6 +571,15 @@ public class MainMenu extends Activity {
                         //其他出库
 //                        ShowOtherOut();
                         Utils.showToast(MainMenu.this, "待加");
+                    } else if (RadioGroupType.getCheckedRadioButtonId() == id.radioButton2) {
+
+                    } else if (RadioGroupType.getCheckedRadioButtonId() == id.radioButton3) {
+                    }
+                    break;
+                case 6:
+                    if (RadioGroupType.getCheckedRadioButtonId() == id.radioButton1) {
+                        ShowMultilateralTrade();
+//                        Utils.showToast(MainMenu.this, "待加");
                     } else if (RadioGroupType.getCheckedRadioButtonId() == id.radioButton2) {
 
                     } else if (RadioGroupType.getCheckedRadioButtonId() == id.radioButton3) {
@@ -916,6 +930,13 @@ public class MainMenu extends Activity {
         // SearchmainActivity search= new SearchmainActivity
         Intent SalesDelivery = new Intent(this, com.techscan.dvq.SalesDelivery.class);
         startActivity(SalesDelivery);
+    }
+
+    //ADD 多角贸易 // TODO: 2017/7/31
+
+    private void ShowMultilateralTrade() {
+        Intent MultilateralTrade = new Intent(this, com.techscan.dvq.module.multilateraltrade.MultilateralTrade.class);
+        startActivity(MultilateralTrade);
     }
 
     private void ShowOtherOut() {

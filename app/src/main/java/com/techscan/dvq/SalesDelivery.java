@@ -74,7 +74,7 @@ public class SalesDelivery extends Activity {
     List<SaleOutGoods> saleOutGoodsLists = null;
     String tmpWHStatus = "";//仓库是否启用货位
     EditText txtSalesDelPDOrder;
-    private writeTxt writeTxt;
+    private com.techscan.dvq.writeTxt writeTxt;
     EditText txtSalesDelRdcl;//单据日期
     EditText txtSalesDelCD;
     TextView tvCustomer;
@@ -82,7 +82,6 @@ public class SalesDelivery extends Activity {
     Button btnSalesDelExit;
     Button btnSalesDelScan;
     Button btnSalesDelSave;
-    boolean NoScanSave = false;
     HashMap<String, String> checkInfo = new HashMap<String, String>();
     private ArrayList<String> ScanedBarcode = new ArrayList<String>();
     ProgressDialog progressDialog;
@@ -92,8 +91,6 @@ public class SalesDelivery extends Activity {
     String SaleFlg = "";
     String csaleid = "";
 
-    TextView tvSalesDelWare;
-    TextView tvSalesDelWH;
     EditText txtSalesDelWH;
     ImageButton btnSalesDelWH;
 
@@ -108,8 +105,6 @@ public class SalesDelivery extends Activity {
     String tmpCdTypeID;
     String WhNameA = "";
     String WhNameB = "";
-//	String sCompanyCode="";
-//	String sOrgCode="";
 
     TextView tvSaleOutSelect;
     ImageButton btnSaleOutSelect;
@@ -117,7 +112,6 @@ public class SalesDelivery extends Activity {
     private String[] BillTypeNameList = null;
 
     private String[] WHNameList = null;
-    //	private String[] WHCodeList = null;
     private String[] WHIDList = null;
     private String[] CDIDList = null;
     private String[] CDNameList = null;
@@ -165,70 +159,70 @@ public class SalesDelivery extends Activity {
         jsonSaveHead = new JSONObject();
     }
 
-    private void GetWHPosStatus() throws JSONException {
-        JSONObject para = new JSONObject();
-        para.put("FunctionName", "GetWHPosStatus");
-        para.put("WareHouse", tmpWarehousePK);
-
-        if (!MainLogin.getwifiinfo()) {
-            Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            return;
-        }
-        JSONObject rev = null;
-        try {
-            rev = Common.DoHttpQuery(para, "CommonQuery", tmpAccID);
-        } catch (ParseException e) {
-
-            Toast.makeText(this, "获取仓库状态失败", Toast.LENGTH_LONG).show();
-            //ADD CAIXY TEST START
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            //ADD CAIXY TEST END
-            return;
-        } catch (IOException e) {
-
-            Toast.makeText(this, "获取仓库状态失败", Toast.LENGTH_LONG).show();
-            //ADD CAIXY TEST START
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            //ADD CAIXY TEST END
-            return;
-        }
-
-        if (rev == null) {
-            Toast.makeText(this, R.string.WangLuoChuXianWenTi, Toast.LENGTH_LONG).show();
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            return;
-        }
-
-
-        if (rev.getBoolean("Status")) {
-            JSONArray val = rev.getJSONArray("position");
-            if (val.length() < 1) {
-                Toast.makeText(this, "获取仓库状态失败", Toast.LENGTH_LONG).show();
-                //ADD CAIXY TEST START
-                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                //ADD CAIXY TEST END
-                return;
-            }
-
-            String WHStatus;
-            JSONObject temp = val.getJSONObject(0);
-
-            WHStatus = temp.getString("csflag");
-
-            tmpWHStatus = WHStatus;
-            return;
-        } else {
-            Toast.makeText(this, "获取仓库状态失败", Toast.LENGTH_LONG).show();
-            //ADD CAIXY TEST START
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            //ADD CAIXY TEST END
-            return;
-
-        }
-
-
-    }
+//    private void GetWHPosStatus() throws JSONException {
+//        JSONObject para = new JSONObject();
+//        para.put("FunctionName", "GetWHPosStatus");
+//        para.put("WareHouse", tmpWarehousePK);
+//
+//        if (!MainLogin.getwifiinfo()) {
+//            Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
+//            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//            return;
+//        }
+//        JSONObject rev = null;
+//        try {
+//            rev = Common.DoHttpQuery(para, "CommonQuery", tmpAccID);
+//        } catch (ParseException e) {
+//
+//            Toast.makeText(this, "获取仓库状态失败", Toast.LENGTH_LONG).show();
+//            //ADD CAIXY TEST START
+//            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//            //ADD CAIXY TEST END
+//            return;
+//        } catch (IOException e) {
+//
+//            Toast.makeText(this, "获取仓库状态失败", Toast.LENGTH_LONG).show();
+//            //ADD CAIXY TEST START
+//            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//            //ADD CAIXY TEST END
+//            return;
+//        }
+//
+//        if (rev == null) {
+//            Toast.makeText(this, R.string.WangLuoChuXianWenTi, Toast.LENGTH_LONG).show();
+//            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//            return;
+//        }
+//
+//
+//        if (rev.getBoolean("Status")) {
+//            JSONArray val = rev.getJSONArray("position");
+//            if (val.length() < 1) {
+//                Toast.makeText(this, "获取仓库状态失败", Toast.LENGTH_LONG).show();
+//                //ADD CAIXY TEST START
+//                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                //ADD CAIXY TEST END
+//                return;
+//            }
+//
+//            String WHStatus;
+//            JSONObject temp = val.getJSONObject(0);
+//
+//            WHStatus = temp.getString("csflag");
+//
+//            tmpWHStatus = WHStatus;
+//            return;
+//        } else {
+//            Toast.makeText(this, "获取仓库状态失败", Toast.LENGTH_LONG).show();
+//            //ADD CAIXY TEST START
+//            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//            //ADD CAIXY TEST END
+//            return;
+//
+//        }
+//
+//
+//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -251,14 +245,11 @@ public class SalesDelivery extends Activity {
                             } catch (JSONException e) {
                                 Toast.makeText(SalesDelivery.this, e.getMessage(), Toast.LENGTH_LONG).show();
                                 e.printStackTrace();
-                                //ADD CAIXY TEST START
                                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                                //ADD CAIXY TEST END
                             }
                             try {
                                 CheckBillCode = jsonSaveHead.getString("BillCode");
                                 checkInfo.put("BillCode",CheckBillCode);
-                                Log.d(TAG, "Check: " +checkInfo.toString());
                                 SaleFlg = jsonSaveHead.getString("saleflg");
                             } catch (JSONException e2) {
                                 // TODO Auto-generated catch block
@@ -277,11 +268,8 @@ public class SalesDelivery extends Activity {
                             } catch (Exception e1) {
                                 e1.printStackTrace();
                             }
-
-//
                         }
                     }
-                    //ADD BY WUQIONG 2015/04/27
                     break;
                 default:
                     break;
@@ -320,27 +308,18 @@ public class SalesDelivery extends Activity {
                         Log.d(TAG, "AAAAAA: "+jsBody.toString());
                         this.jsSerino = new JSONObject(saleSerinno);
                         Log.d(TAG, "AAAAAA: "+jsSerino.toString());
-//				this.jsBoxTotal = new JSONObject(saleTotalBox);
                         this.jsBoxTotal = null;
 
                     } catch (JSONException e)
                     {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
-
                         Toast.makeText(SalesDelivery.this, e.getMessage() ,
                                 Toast.LENGTH_LONG).show();
-                        //ADD CAIXY TEST START
                         MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                        //ADD CAIXY TEST END
                     }
                 }
-
-
-
-
             }
-
         }
 
         //仓库列表信息
@@ -359,242 +338,242 @@ public class SalesDelivery extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private Map<String, Object> GetBillDetailInfoByBillCode(String sAccID, String sCorpPK, String sBillCode, String sSaleFlg) {
-        SaleFlg = sSaleFlg;
-        JSONObject para = new JSONObject();
-        Map<String, Object> mapBillInfo = new HashMap<String, Object>();
-
-        try {
-            if (tvSaleOutSelect.getText().toString().equals("销售出库")) {
-                para.put("FunctionName", "GetSalereceiveHead");
-                para.put("CorpPK", sCorpPK);
-                para.put("BillCode", sBillCode);
-            }
-
-        } catch (JSONException e2) {
-            // TODO Auto-generated catch block
-            Toast.makeText(this, e2.getMessage(), Toast.LENGTH_LONG).show();
-            //ADD CAIXY TEST START
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            //ADD CAIXY TEST END
-            e2.printStackTrace();
-            return null;
-        }
-        try {
-            para.put("TableName", "dbHead");
-        } catch (JSONException e2) {
-            // TODO Auto-generated catch block
-            Toast.makeText(this, e2.getMessage(), Toast.LENGTH_LONG).show();
-            //ADD CAIXY TEST START
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            //ADD CAIXY TEST END
-            return null;
-        }
-
-        JSONObject jas;
-        try {
-            if (!MainLogin.getwifiinfo()) {
-                Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
-                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                return null;
-            }
-            jas = Common.DoHttpQuery(para, "CommonQuery", sAccID);
-        } catch (Exception ex) {
-            Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
-            //ADD CAIXY TEST START
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            //ADD CAIXY TEST END
-            return null;
-        }
-
-        //把取得的单据信息绑定到ListView上
-        try {
-            if (jas == null) {
-                Toast.makeText(this, R.string.WangLuoChuXianWenTi, Toast.LENGTH_LONG).show();
-                //ADD CAIXY TEST START
-                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                //ADD CAIXY TEST END
-                return null;
-            }
-
-            if (!jas.getBoolean("Status")) {
-                String errMsg = "";
-                if (jas.has("ErrMsg")) {
-                    errMsg = jas.getString("ErrMsg");
-                } else {
-                    errMsg = getString(R.string.WangLuoChuXianWenTi);
-                }
-                Toast.makeText(this, errMsg, Toast.LENGTH_LONG).show();
-                //ADD CAIXY TEST START
-                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                //ADD CAIXY TEST END
-                return null;
-            }
-
-            //绑定到map
-            mapBillInfo = new HashMap<String, Object>();
-            JSONArray jsarray = jas.getJSONArray("dbHead");
-
-            jas = jsarray.getJSONObject(0);
-
-            if (tvSaleOutSelect.getText().toString().equals("销售出库")) {
-                //mapBillInfo.put("pk_corp", jas.getString("pk_corp"));//公司PK
-                mapBillInfo.put("pk_corp", jas.getString("pk_corp"));
-                mapBillInfo.put("custname", jas.getString("custname"));
-                mapBillInfo.put("pk_cubasdoc", jas.getString("pk_cubasdoc"));
-                mapBillInfo.put("pk_cumandoc", jas.getString("pk_cumandoc"));
-                mapBillInfo.put("billID", jas.getString("csalereceiveid"));
-                mapBillInfo.put("billCode", jas.getString("vreceivecode"));
-                mapBillInfo.put("AccID", sAccID);
-                mapBillInfo.put("vdef11", jas.getString("vdef11"));
-                mapBillInfo.put("vdef12", jas.getString("vdef12"));
-                mapBillInfo.put("vdef13", jas.getString("vdef13"));
-                mapBillInfo.put("saleflg", "");
-                if (sAccID.equals("A"))
-                    mapBillInfo.put("coperatorid", MainLogin.objLog.UserID);//操作者
-                else
-                    mapBillInfo.put("coperatorid", MainLogin.objLog.UserIDB);//操作者
-                mapBillInfo.put("ctransporttypeid", jas.getString("ctransporttypeid"));//运输方式ID
-                mapBillInfo.put("cbiztype", jas.getString("cbiztype"));
-            }
-
-//            if(tvSaleOutSelect.getText().toString().equals("退回再送"))
-//            {
-//                //mapBillInfo.put("pk_corp", jas.getString("pk_corp"));
+//    private Map<String, Object> GetBillDetailInfoByBillCode(String sAccID, String sCorpPK, String sBillCode, String sSaleFlg) {
+//        SaleFlg = sSaleFlg;
+//        JSONObject para = new JSONObject();
+//        Map<String, Object> mapBillInfo = new HashMap<String, Object>();
+//
+//        try {
+//            if (tvSaleOutSelect.getText().toString().equals("销售出库")) {
+//                para.put("FunctionName", "GetSalereceiveHead");
+//                para.put("CorpPK", sCorpPK);
+//                para.put("BillCode", sBillCode);
+//            }
+//
+//        } catch (JSONException e2) {
+//            // TODO Auto-generated catch block
+//            Toast.makeText(this, e2.getMessage(), Toast.LENGTH_LONG).show();
+//            //ADD CAIXY TEST START
+//            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//            //ADD CAIXY TEST END
+//            e2.printStackTrace();
+//            return null;
+//        }
+//        try {
+//            para.put("TableName", "dbHead");
+//        } catch (JSONException e2) {
+//            // TODO Auto-generated catch block
+//            Toast.makeText(this, e2.getMessage(), Toast.LENGTH_LONG).show();
+//            //ADD CAIXY TEST START
+//            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//            //ADD CAIXY TEST END
+//            return null;
+//        }
+//
+//        JSONObject jas;
+//        try {
+//            if (!MainLogin.getwifiinfo()) {
+//                Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
+//                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                return null;
+//            }
+//            jas = Common.DoHttpQuery(para, "CommonQuery", sAccID);
+//        } catch (Exception ex) {
+//            Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
+//            //ADD CAIXY TEST START
+//            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//            //ADD CAIXY TEST END
+//            return null;
+//        }
+//
+//        //把取得的单据信息绑定到ListView上
+//        try {
+//            if (jas == null) {
+//                Toast.makeText(this, R.string.WangLuoChuXianWenTi, Toast.LENGTH_LONG).show();
+//                //ADD CAIXY TEST START
+//                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                //ADD CAIXY TEST END
+//                return null;
+//            }
+//
+//            if (!jas.getBoolean("Status")) {
+//                String errMsg = "";
+//                if (jas.has("ErrMsg")) {
+//                    errMsg = jas.getString("ErrMsg");
+//                } else {
+//                    errMsg = getString(R.string.WangLuoChuXianWenTi);
+//                }
+//                Toast.makeText(this, errMsg, Toast.LENGTH_LONG).show();
+//                //ADD CAIXY TEST START
+//                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                //ADD CAIXY TEST END
+//                return null;
+//            }
+//
+//            //绑定到map
+//            mapBillInfo = new HashMap<String, Object>();
+//            JSONArray jsarray = jas.getJSONArray("dbHead");
+//
+//            jas = jsarray.getJSONObject(0);
+//
+//            if (tvSaleOutSelect.getText().toString().equals("销售出库")) {
+//                //mapBillInfo.put("pk_corp", jas.getString("pk_corp"));//公司PK
 //                mapBillInfo.put("pk_corp", jas.getString("pk_corp"));
 //                mapBillInfo.put("custname", jas.getString("custname"));
-//                mapBillInfo.put("pk_cubasdoc", jas.getString("pk_cubasdocc"));
-//                mapBillInfo.put("pk_cumandoc", jas.getString("ccustomerid"));
-//                mapBillInfo.put("billID", jas.getString("cgeneralhid"));
-//                mapBillInfo.put("billCode", jas.getString("vbillcode"));
+//                mapBillInfo.put("pk_cubasdoc", jas.getString("pk_cubasdoc"));
+//                mapBillInfo.put("pk_cumandoc", jas.getString("pk_cumandoc"));
+//                mapBillInfo.put("billID", jas.getString("csalereceiveid"));
+//                mapBillInfo.put("billCode", jas.getString("vreceivecode"));
 //                mapBillInfo.put("AccID", sAccID);
-//                mapBillInfo.put("vdef11", jas.getString("vuserdef11"));
-//                mapBillInfo.put("vdef12", jas.getString("vuserdef12"));
-//                mapBillInfo.put("vdef13", jas.getString("vuserdef13"));
+//                mapBillInfo.put("vdef11", jas.getString("vdef11"));
+//                mapBillInfo.put("vdef12", jas.getString("vdef12"));
+//                mapBillInfo.put("vdef13", jas.getString("vdef13"));
 //                mapBillInfo.put("saleflg", "");
-//                if(sAccID.equals("A"))
-//                {
+//                if (sAccID.equals("A"))
 //                    mapBillInfo.put("coperatorid", MainLogin.objLog.UserID);//操作者
-//                    mapBillInfo.put("ctransporttypeid", "0001AA100000000003U7");//运输方式ID
-//                }
 //                else
-//                {
 //                    mapBillInfo.put("coperatorid", MainLogin.objLog.UserIDB);//操作者
-//                    mapBillInfo.put("ctransporttypeid", "0001DD10000000000XQT");//运输方式ID
-//                }
+//                mapBillInfo.put("ctransporttypeid", jas.getString("ctransporttypeid"));//运输方式ID
 //                mapBillInfo.put("cbiztype", jas.getString("cbiztype"));
 //            }
-
-//            if(tvSaleOutSelect.getText().toString().equals("退回不送"))
-//            {
-//                if(sSaleFlg.equals("T"))
-//                {
-//                    mapBillInfo.put("pk_corp", jas.getString("pk_corp"));
-//                    mapBillInfo.put("custname", jas.getString("custname"));
-//                    mapBillInfo.put("pk_cubasdoc", jas.getString("pk_cubasdoc"));
-//                    mapBillInfo.put("pk_cumandoc", jas.getString("pk_cumandoc"));
-//                    mapBillInfo.put("billID", jas.getString("pk_take"));
-//                    mapBillInfo.put("billCode", jas.getString("vreceiptcode"));
-//                    mapBillInfo.put("AccID", sAccID);
-//                    mapBillInfo.put("vdef11", jas.getString("vdef11"));
-//                    mapBillInfo.put("vdef12", jas.getString("vdef12"));
-//                    mapBillInfo.put("vdef13", jas.getString("vdef13"));
-//                    mapBillInfo.put("saleflg", "T");
 //
-//                    if(sAccID.equals("A"))
-//                    {
-//                        mapBillInfo.put("coperatorid", MainLogin.objLog.UserID);//操作者
-//                        mapBillInfo.put("ctransporttypeid", "0001AA100000000003U7");//运输方式ID
-//                    }
-//                    else
-//                    {
-//                        mapBillInfo.put("coperatorid", MainLogin.objLog.UserIDB);//操作者
-//                        mapBillInfo.put("ctransporttypeid", "0001DD10000000000XQT");//运输方式ID
-//                    }
-//                    mapBillInfo.put("cbiztype", jas.getString("cbiztype"));
-//                }
-//                else if (sSaleFlg.equals("D"))
-//                {
-//                    mapBillInfo.put("pk_corp", jas.getString("pk_corp"));
-//                    mapBillInfo.put("custname", jas.getString("custname"));
-//                    mapBillInfo.put("pk_cubasdoc", jas.getString("pk_cubasdoc"));
-//                    mapBillInfo.put("pk_cumandoc", jas.getString("ccustomerid"));
-//                    mapBillInfo.put("billID", jas.getString("csaleid"));
-//                    mapBillInfo.put("billCode", jas.getString("vreceiptcode"));
-//                    mapBillInfo.put("AccID", sAccID);
-//                    mapBillInfo.put("vdef11", jas.getString("vdef11"));
-//                    mapBillInfo.put("vdef12", jas.getString("vdef12"));
-//                    mapBillInfo.put("vdef13", jas.getString("vdef13"));
-//                    mapBillInfo.put("saleflg", "D");
+////            if(tvSaleOutSelect.getText().toString().equals("退回再送"))
+////            {
+////                //mapBillInfo.put("pk_corp", jas.getString("pk_corp"));
+////                mapBillInfo.put("pk_corp", jas.getString("pk_corp"));
+////                mapBillInfo.put("custname", jas.getString("custname"));
+////                mapBillInfo.put("pk_cubasdoc", jas.getString("pk_cubasdocc"));
+////                mapBillInfo.put("pk_cumandoc", jas.getString("ccustomerid"));
+////                mapBillInfo.put("billID", jas.getString("cgeneralhid"));
+////                mapBillInfo.put("billCode", jas.getString("vbillcode"));
+////                mapBillInfo.put("AccID", sAccID);
+////                mapBillInfo.put("vdef11", jas.getString("vuserdef11"));
+////                mapBillInfo.put("vdef12", jas.getString("vuserdef12"));
+////                mapBillInfo.put("vdef13", jas.getString("vuserdef13"));
+////                mapBillInfo.put("saleflg", "");
+////                if(sAccID.equals("A"))
+////                {
+////                    mapBillInfo.put("coperatorid", MainLogin.objLog.UserID);//操作者
+////                    mapBillInfo.put("ctransporttypeid", "0001AA100000000003U7");//运输方式ID
+////                }
+////                else
+////                {
+////                    mapBillInfo.put("coperatorid", MainLogin.objLog.UserIDB);//操作者
+////                    mapBillInfo.put("ctransporttypeid", "0001DD10000000000XQT");//运输方式ID
+////                }
+////                mapBillInfo.put("cbiztype", jas.getString("cbiztype"));
+////            }
 //
-//                    if(sAccID.equals("A"))
-//                    {
-//                        mapBillInfo.put("coperatorid", MainLogin.objLog.UserID);//操作者
-//                        mapBillInfo.put("ctransporttypeid", "0001AA100000000003U7");//运输方式ID
-//                    }
-//                    else
-//                    {
-//                        mapBillInfo.put("coperatorid", MainLogin.objLog.UserIDB);//操作者
-//                        mapBillInfo.put("ctransporttypeid", "0001DD10000000000XQT");//运输方式ID
-//                    }
-//                    mapBillInfo.put("cbiztype", jas.getString("cbiztype"));
-//                }
-//            }
-
-            //保存用表头JSONObject设置---结束
-            return mapBillInfo;
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
-            //ADD CAIXY TEST START
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            //ADD CAIXY TEST END
-            return null;
-        } catch (Exception ex) {
-            Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
-            //ADD CAIXY TEST START
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            //ADD CAIXY TEST END
-            return null;
-        }
-    }
-
-    private void SetRDCL() {
-        if (tvSaleOutSelect.getText().toString().equals("销售出库")) {
-            tmprdCode = "202";
-            if (tmpAccID.equals("A")) {
-                tmprdID = "0001AA100000000003VD";    //
-            } else if (tmpAccID.equals("B")) {
-                tmprdID = "0001DD10000000000XR8";    //
-            }
-//			tmprdName = "销售出库";
-//			txtSalesDelRdcl.setText(tmprdName);
-        }
-
-//        if(tvSaleOutSelect.getText().toString().equals("退回再送"))
-//        {
-//            tmprdCode = "210";
-//            if (tmpAccID.equals("A")) {
-//                tmprdID = "0001AA100000000003VL";        //
-//            } else if (tmpAccID.equals("B")) {
-//                tmprdID = "0001DD10000000000XRG";    //
-//            }
-//            tmprdName = "销售退货";
-//            txtSalesDelRdcl.setText(tmprdName);
+////            if(tvSaleOutSelect.getText().toString().equals("退回不送"))
+////            {
+////                if(sSaleFlg.equals("T"))
+////                {
+////                    mapBillInfo.put("pk_corp", jas.getString("pk_corp"));
+////                    mapBillInfo.put("custname", jas.getString("custname"));
+////                    mapBillInfo.put("pk_cubasdoc", jas.getString("pk_cubasdoc"));
+////                    mapBillInfo.put("pk_cumandoc", jas.getString("pk_cumandoc"));
+////                    mapBillInfo.put("billID", jas.getString("pk_take"));
+////                    mapBillInfo.put("billCode", jas.getString("vreceiptcode"));
+////                    mapBillInfo.put("AccID", sAccID);
+////                    mapBillInfo.put("vdef11", jas.getString("vdef11"));
+////                    mapBillInfo.put("vdef12", jas.getString("vdef12"));
+////                    mapBillInfo.put("vdef13", jas.getString("vdef13"));
+////                    mapBillInfo.put("saleflg", "T");
+////
+////                    if(sAccID.equals("A"))
+////                    {
+////                        mapBillInfo.put("coperatorid", MainLogin.objLog.UserID);//操作者
+////                        mapBillInfo.put("ctransporttypeid", "0001AA100000000003U7");//运输方式ID
+////                    }
+////                    else
+////                    {
+////                        mapBillInfo.put("coperatorid", MainLogin.objLog.UserIDB);//操作者
+////                        mapBillInfo.put("ctransporttypeid", "0001DD10000000000XQT");//运输方式ID
+////                    }
+////                    mapBillInfo.put("cbiztype", jas.getString("cbiztype"));
+////                }
+////                else if (sSaleFlg.equals("D"))
+////                {
+////                    mapBillInfo.put("pk_corp", jas.getString("pk_corp"));
+////                    mapBillInfo.put("custname", jas.getString("custname"));
+////                    mapBillInfo.put("pk_cubasdoc", jas.getString("pk_cubasdoc"));
+////                    mapBillInfo.put("pk_cumandoc", jas.getString("ccustomerid"));
+////                    mapBillInfo.put("billID", jas.getString("csaleid"));
+////                    mapBillInfo.put("billCode", jas.getString("vreceiptcode"));
+////                    mapBillInfo.put("AccID", sAccID);
+////                    mapBillInfo.put("vdef11", jas.getString("vdef11"));
+////                    mapBillInfo.put("vdef12", jas.getString("vdef12"));
+////                    mapBillInfo.put("vdef13", jas.getString("vdef13"));
+////                    mapBillInfo.put("saleflg", "D");
+////
+////                    if(sAccID.equals("A"))
+////                    {
+////                        mapBillInfo.put("coperatorid", MainLogin.objLog.UserID);//操作者
+////                        mapBillInfo.put("ctransporttypeid", "0001AA100000000003U7");//运输方式ID
+////                    }
+////                    else
+////                    {
+////                        mapBillInfo.put("coperatorid", MainLogin.objLog.UserIDB);//操作者
+////                        mapBillInfo.put("ctransporttypeid", "0001DD10000000000XQT");//运输方式ID
+////                    }
+////                    mapBillInfo.put("cbiztype", jas.getString("cbiztype"));
+////                }
+////            }
+//
+//            //保存用表头JSONObject设置---结束
+//            return mapBillInfo;
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+//            //ADD CAIXY TEST START
+//            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//            //ADD CAIXY TEST END
+//            return null;
+//        } catch (Exception ex) {
+//            Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
+//            //ADD CAIXY TEST START
+//            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//            //ADD CAIXY TEST END
+//            return null;
 //        }
+//    }
 
-//        if(tvSaleOutSelect.getText().toString().equals("退回不送"))
-//        {
-//            tmprdCode = "210";
+//    private void SetRDCL() {
+//        if (tvSaleOutSelect.getText().toString().equals("销售出库")) {
+//            tmprdCode = "202";
 //            if (tmpAccID.equals("A")) {
-//                tmprdID = "0001AA100000000003VL";        //
+//                tmprdID = "0001AA100000000003VD";    //
 //            } else if (tmpAccID.equals("B")) {
-//                tmprdID = "0001DD10000000000XRG";    //
+//                tmprdID = "0001DD10000000000XR8";    //
 //            }
-//            tmprdName = "销售退货";
-//            txtSalesDelRdcl.setText(tmprdName);
+////			tmprdName = "销售出库";
+////			txtSalesDelRdcl.setText(tmprdName);
 //        }
-    }
+//
+////        if(tvSaleOutSelect.getText().toString().equals("退回再送"))
+////        {
+////            tmprdCode = "210";
+////            if (tmpAccID.equals("A")) {
+////                tmprdID = "0001AA100000000003VL";        //
+////            } else if (tmpAccID.equals("B")) {
+////                tmprdID = "0001DD10000000000XRG";    //
+////            }
+////            tmprdName = "销售退货";
+////            txtSalesDelRdcl.setText(tmprdName);
+////        }
+//
+////        if(tvSaleOutSelect.getText().toString().equals("退回不送"))
+////        {
+////            tmprdCode = "210";
+////            if (tmpAccID.equals("A")) {
+////                tmprdID = "0001AA100000000003VL";        //
+////            } else if (tmpAccID.equals("B")) {
+////                tmprdID = "0001DD10000000000XRG";    //
+////            }
+////            tmprdName = "销售退货";
+////            txtSalesDelRdcl.setText(tmprdName);
+////        }
+//    }
 
 
     //根据订单表头得到表体详细
@@ -935,8 +914,6 @@ public class SalesDelivery extends Activity {
     //获取订单表头信息
     private void GetBillHeadDetailInfo(String sSaleFlg) {
         GetBillBFlg = "0";
-//        if(tmpAccID==null || tmpAccID.equals(""))
-//            return;
 
         JSONObject para = new JSONObject();
         //Map<String,Object> mapBillBody = new HashMap<String,Object>();
@@ -949,6 +926,13 @@ public class SalesDelivery extends Activity {
                 para.put("CorpPK", "4100");
                 Log.d(TAG, "GetBillHeadDetailInfo: " + csaleid);
             }
+            //多角贸易 // TODO: 2017/7/31
+//            if (tvSaleOutSelect.getText().toString().equals("多角贸易")) {
+//                para.put("FunctionName", "GetSaleOutHeadNew");
+//                para.put("CSALEID", csaleid);
+//                para.put("BillCode", tmpBillCode);
+//                para.put("CorpPK", "4100");
+//            }
 
         } catch (JSONException e2) {
             Toast.makeText(this, e2.getMessage(), Toast.LENGTH_LONG).show();
@@ -1059,6 +1043,41 @@ public class SalesDelivery extends Activity {
                     CCUSTOMERID  = tempJso.getString("ccustomerid").toString();
                     CCUSTBASDOCID = tempJso.getString("ccustbasdocid").toString();
                 }
+                //多角贸易标表头 // TODO: 2017/7/31  
+//                if (tvSaleOutSelect.getText().toString().equals("多角贸易")) {
+//                newHeadJSON.put("VDEF1", tempJso.getString("vdef1"));
+//                newHeadJSON.put("VDEF2", tempJso.getString("vdef2"));
+//                newHeadJSON.put("VDEF5", tempJso.getString("vdef5"));
+//                newHeadJSON.put("cbiztype", tempJso.getString("cbiztype"));
+//                newHeadJSON.put("CSALECORPID", tempJso.getString("csalecorpid"));
+//                newHeadJSON.put("PK_CORP", tempJso.getString("pk_corp"));
+//                newHeadJSON.put("cdeptid", tempJso.getString("cdeptid"));
+//                newHeadJSON.put("ccalbodyid", tempJso.getString("ccalbodyid"));
+//                newHeadJSON.put("coperatorid", tempJso.getString("coperatorid"));
+//                newHeadJSON.put("ccustomerid", tempJso.getString("ccustomerid"));
+//                newHeadJSON.put("vreceiveaddress", tempJso.getString("vreceiveaddress"));
+//                newHeadJSON.put("creceiptcorpid", tempJso.getString("creceiptcorpid"));
+//                newHeadJSON.put("csaleid", tempJso.getString("csaleid"));
+//                newHeadJSON.put("billcode", tmpBillCode);
+//                newHeadJSON.put("cdeptid", tempJso.getString("cdeptid"));
+//                newHeadJSON.put("capproveid", tempJso.getString("capproveid"));
+//                newHeadJSON.put("ccalbodyid", tempJso.getString("ccalbodyid"));
+//                newHeadJSON.put("creceiptcustomerid", tempJso.getString("creceiptcustomerid"));
+//                newHeadJSON.put("nheadsummny", tempJso.getString("nheadsummny"));
+//                newHeadJSON.put("creceipttype", tempJso.getString("creceipttype"));
+//                CBIZTYPE = tempJso.getString("cbiztype").toString();
+//                CSALECORPID = tempJso.getString("csalecorpid").toString();
+//                PK_CORP = tempJso.getString("pk_corp").toString();
+//                VDEF1 = tempJso.getString("vdef1").toString();
+//                VDEF4 = tempJso.getString("vdef1").toString();
+//                VDEF2 = tempJso.getString("vdef2").toString();
+//                VDEF5 = tempJso.getString("vdef5").toString();
+//                if (!TextUtils.isEmpty(VDEF5)){
+//                    VDEF5 = "";
+//                }
+//                CCUSTOMERID  = tempJso.getString("ccustomerid").toString();
+//                CCUSTBASDOCID = tempJso.getString("ccustbasdocid").toString();
+//            }
                 newHeadArray.put(newHeadJSON);
             }
             jsonBillHead.put("Status", true);
@@ -1084,15 +1103,6 @@ public class SalesDelivery extends Activity {
 
     //绑定订单表头信息
     private boolean BindingBillDetailInfo(Map<String, Object> mapBillInfo) {
-//		String CompanyCode = "";
-//		if (tmpAccID.equals("A")) {
-//			CompanyCode = sCompanyCode;
-//		} else if (tmpAccID.equals("B")) {
-//			CompanyCode = "1";
-//		}
-//        tmpAccID = mapBillInfo.get("AccID").toString();
-//        //tmpWarehousePK = mapBillInfo.get("pk_stordoc").toString();
-//        tmpCorpPK = mapBillInfo.get("pk_corp").toString();
         csaleid = mapBillInfo.get("Csaleid").toString();
         tmpBillCode = mapBillInfo.get("BillCode").toString();
         tmpCustName = mapBillInfo.get("CustName").toString();
@@ -1279,28 +1289,8 @@ public class SalesDelivery extends Activity {
                 case id.btnSalesDelPDOrder:
                     try {
                         Intent intent = new Intent(SalesDelivery.this, SaleChooseTime.class);
-//                        String sBeginDate ="";
-//                        String sEndDate ="";
-//                        String sBillCode = "";
-//                        intent.putExtra("sBeginDate",sBeginDate);
-//                        intent.putExtra("sBeginDate",sEndDate);
-//                        intent.putExtra("sBillCode",sBillCode);
                         startActivityForResult(intent, 44);
                         txtSalesDelWH.requestFocus();
-
-//						if(tvSaleOutSelect.getText().toString().equals("退回再送"))
-//						{
-//							BillCodeKey= tvSaleOutSelecttvSaleOutSelect.getText().toString();
-//							if(BillCodeKey.length()<5)
-//							{
-//								Toast.makeText(SalesDelivery.this, "必须输入5位关键字", Toast.LENGTH_LONG).show();
-//								//ADD CAIXY TEST START
-//								MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-//								//ADD CAIXY TEST END
-//								txtSalesDelPDOrder.setText("");
-//								break;
-//							}
-//						}
 
                     } catch (ParseException e) {
                         Toast.makeText(SalesDelivery.this, e.getMessage(), Toast.LENGTH_LONG).show();
@@ -1315,7 +1305,6 @@ public class SalesDelivery extends Activity {
 
 
                 case id.btnSalesDelScan:
-
 
                     if (tvSaleOutSelect.getText().toString() == null || tvSaleOutSelect.getText().toString().equals("")) {
                         Toast.makeText(SalesDelivery.this, "请输入来源单据",
@@ -1490,109 +1479,217 @@ public class SalesDelivery extends Activity {
     //保存数据
     private void SaveSaleOrder() throws JSONException,
             ParseException, IOException {
-        table = new JSONObject();
-        JSONArray arrayss = null;
-        JSONArray arrayMerge = null;
-        arrayss = jsSerino.getJSONArray("Serino");
-        arrayMerge = merge(arrayss);
-        jsTotal = new JSONObject();
-        jsTotal.put("Serino",arrayMerge);
-        JSONObject map = new JSONObject();
-        Double notnum = 0.0;
-        JSONArray arrays = jsTotal.getJSONArray("Serino");
-        for (int i = 0; i < arrays.length(); i++) {
+        if (tvSaleOutSelect.getText().toString().equals("销售出库")) {
+            table = new JSONObject();
+            JSONArray arrayss = null;
+            JSONArray arrayMerge = null;
+            arrayss = jsSerino.getJSONArray("Serino");
+            arrayMerge = merge(arrayss);
+            jsTotal = new JSONObject();
+            jsTotal.put("Serino", arrayMerge);
+            JSONObject map = new JSONObject();
+            Double notnum = 0.0;
+            JSONArray arrays = jsTotal.getJSONArray("Serino");
+            for (int i = 0; i < arrays.length(); i++) {
 //                String totalnum = ((JSONObject) (arrays.get(i))).getString("box");
 //                totalnum = Double.valueOf(totalnum).toString();
-            Double box = arrays.getJSONObject(i).getDouble("box");
-            DecimalFormat decimalFormat = new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
-            String totalBox = decimalFormat.format(box);
-            notnum +=Double.valueOf(totalBox);
+                Double box = arrays.getJSONObject(i).getDouble("box");
+                DecimalFormat decimalFormat = new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
+                String totalBox = decimalFormat.format(box);
+                notnum += Double.valueOf(totalBox);
 //                map.put("NNUMBER",notnum);
-            NTOTALNUMBER = decimalFormat.format(notnum);
-        }
+                NTOTALNUMBER = decimalFormat.format(notnum);
+            }
 
-        Log.d(TAG, "GGGG: "+map.toString());
-        JSONObject tableHead = new JSONObject();
-        tableHead.put("RECEIVECODE",tmpBillCode);
-        tableHead.put("CBIZTYPE", CBIZTYPE);
-        tableHead.put("COPERATORID", MainLogin.objLog.UserID);
-        tableHead.put("CRECEIPTTYE", "4331");
-        tableHead.put("CSALECORPID", CSALECORPID);
-        tableHead.put("PK_CORP", MainLogin.objLog.STOrgCode);
-        tableHead.put("VBILLCODE", "");
-        String login_user = MainLogin.objLog.LoginUser.toString();
-        String cuserName  = Base64Encoder.encode(login_user.getBytes("gb2312"));
-        tableHead.put("USERNAME", cuserName);
-        String vd1 =  Base64Encoder.encode(VDEF1.getBytes("gb2312"));
-        String vd2 =  Base64Encoder.encode(VDEF2.getBytes("gb2312"));
-        String vd3 =  Base64Encoder.encode(VDEF5.getBytes("gb2312"));
-        tableHead.put("VDEF1", vd1);
-        tableHead.put("VDEF2", vd2);
-        tableHead.put("VDEF5", vd3);
-        tableHead.put("NTOTALNUMBER",NTOTALNUMBER);
-        tableHead.put("NOTOTALNUMBER","200.00");// TODO: 2017/7/4
-        table.put("Head", tableHead);
-        JSONObject tableBody = new JSONObject();
-        JSONArray bodyArray = new JSONArray();
+            Log.d(TAG, "GGGG: " + map.toString());
+            JSONObject tableHead = new JSONObject();
+            tableHead.put("RECEIVECODE", tmpBillCode);
+            tableHead.put("CBIZTYPE", CBIZTYPE);
+            tableHead.put("COPERATORID", MainLogin.objLog.UserID);
+            tableHead.put("CRECEIPTTYE", "4331");
+            tableHead.put("CSALECORPID", CSALECORPID);
+            tableHead.put("PK_CORP", MainLogin.objLog.STOrgCode);
+            tableHead.put("VBILLCODE", "");
+            String login_user = MainLogin.objLog.LoginUser.toString();
+            String cuserName = Base64Encoder.encode(login_user.getBytes("gb2312"));
+            tableHead.put("USERNAME", cuserName);
+            String vd1 = Base64Encoder.encode(VDEF1.getBytes("gb2312"));
+            String vd2 = Base64Encoder.encode(VDEF2.getBytes("gb2312"));
+            String vd3 = Base64Encoder.encode(VDEF5.getBytes("gb2312"));
+            tableHead.put("VDEF1", vd1);
+            tableHead.put("VDEF2", vd2);
+            tableHead.put("VDEF5", vd3);
+            tableHead.put("NTOTALNUMBER", NTOTALNUMBER);
+            tableHead.put("NOTOTALNUMBER", "200.00");// TODO: 2017/7/4
+            table.put("Head", tableHead);
+            JSONObject tableBody = new JSONObject();
+            JSONArray bodyArray = new JSONArray();
 
-        JSONArray bodys = jsBody.getJSONArray("dbBody");
-        JSONArray arraysSerino = jsTotal.getJSONArray("Serino");
-        int y = 0;
-        for (int j=0; j<arraysSerino.length(); j++) {
+            JSONArray bodys = jsBody.getJSONArray("dbBody");
+            JSONArray arraysSerino = jsTotal.getJSONArray("Serino");
+            int y = 0;
+            for (int j = 0; j < arraysSerino.length(); j++) {
 
-            for (int i = 0; i < bodys.length(); i++) {
+                for (int i = 0; i < bodys.length(); i++) {
 
-                if(arraysSerino.getJSONObject(j).getString("invcode").toLowerCase().equals(
-                        bodys.getJSONObject(i).getString("invcode")))
-                {
-                    Double box = arraysSerino.getJSONObject(j).getDouble("box");
-                    DecimalFormat decimalFormat = new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
-                    String totalBox = decimalFormat.format(box);//format 返回的是字符串
-                    JSONObject object = new JSONObject();
-                    object.put("CROWNO", bodys.getJSONObject(i).getString("crowno"));
-                    object.put("VFREE4",arraysSerino.getJSONObject(j).getString("vfree4"));//海关手册号
-                    object.put("VSOURCEROWNO", bodys.getJSONObject(i).getString("crowno"));
-                    object.put("VSOURCERECEIVECODE", tmpBillCode);
-                    object.put("VRECEIVEPOINTID", bodys.getJSONObject(i).getString("crecaddrnode"));
-                    object.put("CRECEIVECUSTID", bodys.getJSONObject(i).getString("creceiptcorpid"));
-                    object.put("CRECEIVEAREAID", bodys.getJSONObject(i).getString("creceiptareaid"));
+                    if (arraysSerino.getJSONObject(j).getString("invcode").toLowerCase().equals(
+                            bodys.getJSONObject(i).getString("invcode"))) {
+                        Double box = arraysSerino.getJSONObject(j).getDouble("box");
+                        DecimalFormat decimalFormat = new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
+                        String totalBox = decimalFormat.format(box);//format 返回的是字符串
+                        JSONObject object = new JSONObject();
+                        object.put("CROWNO", bodys.getJSONObject(i).getString("crowno"));
+                        object.put("VFREE4", arraysSerino.getJSONObject(j).getString("vfree4"));//海关手册号
+                        object.put("VSOURCEROWNO", bodys.getJSONObject(i).getString("crowno"));
+                        object.put("VSOURCERECEIVECODE", tmpBillCode);
+                        object.put("VRECEIVEPOINTID", bodys.getJSONObject(i).getString("crecaddrnode"));
+                        object.put("CRECEIVECUSTID", bodys.getJSONObject(i).getString("creceiptcorpid"));
+                        object.put("CRECEIVEAREAID", bodys.getJSONObject(i).getString("creceiptareaid"));
 //                        object.put("DDELIVERDATE", bodys.getJSONObject(i).getString("ddeliverdate"));
-                    object.put("CBIZTYPE", CBIZTYPE);//表头
-                    object.put("CCUSTBASDOCID", CCUSTBASDOCID);
-                    object.put("CCUSTMANDOCID", CCUSTOMERID);//表头customerID
-                    object.put("CINVBASDOCID",bodys.getJSONObject(i).getString("cinvbasdocid"));
-                    object.put("CINVMANDOCID", bodys.getJSONObject(i).getString("cinventoryid"));
-                    object.put("CRECEIVECUSTBASID",CCUSTBASDOCID);//自己获取
-                    object.put("CSENDCALBODYID",bodys.getJSONObject(i).getString("cadvisecalbodyid"));
-                    object.put("CSENDWAREID", CWAREHOUSEID);//仓库
-                    object.put("CSOURCEBILLBODYID", bodys.getJSONObject(i).getString("corder_bid"));
-                    object.put("CSOURCEBILLID",bodys.getJSONObject(i).getString("csaleid"));
-                    object.put("NNUMBER", totalBox);
-                    object.put("PK_SENDCORP", bodys.getJSONObject(i).getString("pk_corp"));
-                    object.put("VBATCHCODE", arraysSerino.getJSONObject(j).getString("batch"));
-                    String add = bodys.getJSONObject(i).getString("vreceiveaddress");
-                    String adds  = Base64Encoder.encode(add.getBytes("gb2312"));
-                    object.put("VRECEIVEADDRESS",adds);
-                    object.put("VRECEIVEPERSON",MainLogin.objLog.LoginUser);
-                    bodyArray.put(object);
-                    y++;
+                        object.put("CBIZTYPE", CBIZTYPE);//表头
+                        object.put("CCUSTBASDOCID", CCUSTBASDOCID);
+                        object.put("CCUSTMANDOCID", CCUSTOMERID);//表头customerID
+                        object.put("CINVBASDOCID", bodys.getJSONObject(i).getString("cinvbasdocid"));
+                        object.put("CINVMANDOCID", bodys.getJSONObject(i).getString("cinventoryid"));
+                        object.put("CRECEIVECUSTBASID", CCUSTBASDOCID);//自己获取
+                        object.put("CSENDCALBODYID", bodys.getJSONObject(i).getString("cadvisecalbodyid"));
+                        object.put("CSENDWAREID", CWAREHOUSEID);//仓库
+                        object.put("CSOURCEBILLBODYID", bodys.getJSONObject(i).getString("corder_bid"));
+                        object.put("CSOURCEBILLID", bodys.getJSONObject(i).getString("csaleid"));
+                        object.put("NNUMBER", totalBox);
+                        object.put("PK_SENDCORP", bodys.getJSONObject(i).getString("pk_corp"));
+                        object.put("VBATCHCODE", arraysSerino.getJSONObject(j).getString("batch"));
+                        String add = bodys.getJSONObject(i).getString("vreceiveaddress");
+                        String adds = Base64Encoder.encode(add.getBytes("gb2312"));
+                        object.put("VRECEIVEADDRESS", adds);
+                        object.put("VRECEIVEPERSON", MainLogin.objLog.LoginUser);
+                        bodyArray.put(object);
+                        y++;
+                    }
                 }
             }
+            tableBody.put("ScanDetails", bodyArray);
+            table.put("Body", tableBody);
+            table.put("GUIDS", UUID.randomUUID().toString());
+            Log.d(TAG, "SaveSaleOrder: " + MainLogin.appTime);
+            table.put("OPDATE", MainLogin.appTime);
+            Log.d(TAG, "XXXXXX: " + table.toString());
+            if (!MainLogin.getwifiinfo()) {
+                Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
+                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+                return;
+            }
+            SaveThread saveThread = new SaveThread(table, "SaveSaleReceive", mHandler, HANDER_SAVE_RESULT);
+            Thread thread = new Thread(saveThread);
+            thread.start();
         }
-        tableBody.put("ScanDetails", bodyArray);
-        table.put("Body", tableBody);
-        table.put("GUIDS", UUID.randomUUID().toString());
-        Log.d(TAG, "SaveSaleOrder: "+MainLogin.appTime);
-        table.put("OPDATE", MainLogin.appTime);
-        Log.d(TAG, "XXXXXX: " + table.toString());
-        if (!MainLogin.getwifiinfo()) {
-            Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            return;
-        }
-        SaveThread saveThread = new SaveThread(table, "SaveSaleReceive", mHandler, HANDER_SAVE_RESULT);
-        Thread thread = new Thread(saveThread);
-        thread.start();
+        //多角贸易保存接口 // TODO: 2017/7/31
+//        if (tvSaleOutSelect.getText().toString().equals("多角贸易")){
+//                table = new JSONObject();
+//                JSONArray arrayss = null;
+//                JSONArray arrayMerge = null;
+//                arrayss = jsSerino.getJSONArray("Serino");
+//                arrayMerge = merge(arrayss);
+//                jsTotal = new JSONObject();
+//                jsTotal.put("Serino",arrayMerge);
+//                JSONObject map = new JSONObject();
+//                Double notnum = 0.0;
+//                JSONArray arrays = jsTotal.getJSONArray("Serino");
+//                for (int i = 0; i < arrays.length(); i++) {
+////                String totalnum = ((JSONObject) (arrays.get(i))).getString("box");
+////                totalnum = Double.valueOf(totalnum).toString();
+//                    Double box = arrays.getJSONObject(i).getDouble("box");
+//                    DecimalFormat decimalFormat = new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
+//                    String totalBox = decimalFormat.format(box);
+//                    notnum +=Double.valueOf(totalBox);
+////                map.put("NNUMBER",notnum);
+//                    NTOTALNUMBER = decimalFormat.format(notnum);
+//                }
+//
+//                Log.d(TAG, "GGGG: "+map.toString());
+//                JSONObject tableHead = new JSONObject();
+//                tableHead.put("RECEIVECODE",tmpBillCode);
+//                tableHead.put("CBIZTYPE", CBIZTYPE);
+//                tableHead.put("COPERATORID", MainLogin.objLog.UserID);
+//                tableHead.put("CRECEIPTTYE", "4331");
+//                tableHead.put("CSALECORPID", CSALECORPID);
+//                tableHead.put("PK_CORP", MainLogin.objLog.STOrgCode);
+//                tableHead.put("VBILLCODE", "");
+//                String login_user = MainLogin.objLog.LoginUser.toString();
+//                String cuserName  = Base64Encoder.encode(login_user.getBytes("gb2312"));
+//                tableHead.put("USERNAME", cuserName);
+//                String vd1 =  Base64Encoder.encode(VDEF1.getBytes("gb2312"));
+//                String vd2 =  Base64Encoder.encode(VDEF2.getBytes("gb2312"));
+//                String vd3 =  Base64Encoder.encode(VDEF5.getBytes("gb2312"));
+//                tableHead.put("VDEF1", vd1);
+//                tableHead.put("VDEF2", vd2);
+//                tableHead.put("VDEF5", vd3);
+//                tableHead.put("NTOTALNUMBER",NTOTALNUMBER);
+//                tableHead.put("NOTOTALNUMBER","200.00");// TODO: 2017/7/4
+//                table.put("Head", tableHead);
+//                JSONObject tableBody = new JSONObject();
+//                JSONArray bodyArray = new JSONArray();
+//
+//                JSONArray bodys = jsBody.getJSONArray("dbBody");
+//                JSONArray arraysSerino = jsTotal.getJSONArray("Serino");
+//                int y = 0;
+//                for (int j=0; j<arraysSerino.length(); j++) {
+//
+//                    for (int i = 0; i < bodys.length(); i++) {
+//
+//                        if(arraysSerino.getJSONObject(j).getString("invcode").toLowerCase().equals(
+//                                bodys.getJSONObject(i).getString("invcode")))
+//                        {
+//                            Double box = arraysSerino.getJSONObject(j).getDouble("box");
+//                            DecimalFormat decimalFormat = new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
+//                            String totalBox = decimalFormat.format(box);//format 返回的是字符串
+//                            JSONObject object = new JSONObject();
+//                            object.put("CROWNO", bodys.getJSONObject(i).getString("crowno"));
+//                            object.put("VFREE4",arraysSerino.getJSONObject(j).getString("vfree4"));//海关手册号
+//                            object.put("VSOURCEROWNO", bodys.getJSONObject(i).getString("crowno"));
+//                            object.put("VSOURCERECEIVECODE", tmpBillCode);
+//                            object.put("VRECEIVEPOINTID", bodys.getJSONObject(i).getString("crecaddrnode"));
+//                            object.put("CRECEIVECUSTID", bodys.getJSONObject(i).getString("creceiptcorpid"));
+//                            object.put("CRECEIVEAREAID", bodys.getJSONObject(i).getString("creceiptareaid"));
+////                        object.put("DDELIVERDATE", bodys.getJSONObject(i).getString("ddeliverdate"));
+//                            object.put("CBIZTYPE", CBIZTYPE);//表头
+//                            object.put("CCUSTBASDOCID", CCUSTBASDOCID);
+//                            object.put("CCUSTMANDOCID", CCUSTOMERID);//表头customerID
+//                            object.put("CINVBASDOCID",bodys.getJSONObject(i).getString("cinvbasdocid"));
+//                            object.put("CINVMANDOCID", bodys.getJSONObject(i).getString("cinventoryid"));
+//                            object.put("CRECEIVECUSTBASID",CCUSTBASDOCID);//自己获取
+//                            object.put("CSENDCALBODYID",bodys.getJSONObject(i).getString("cadvisecalbodyid"));
+//                            object.put("CSENDWAREID", CWAREHOUSEID);//仓库
+//                            object.put("CSOURCEBILLBODYID", bodys.getJSONObject(i).getString("corder_bid"));
+//                            object.put("CSOURCEBILLID",bodys.getJSONObject(i).getString("csaleid"));
+//                            object.put("NNUMBER", totalBox);
+//                            object.put("PK_SENDCORP", bodys.getJSONObject(i).getString("pk_corp"));
+//                            object.put("VBATCHCODE", arraysSerino.getJSONObject(j).getString("batch"));
+//                            String add = bodys.getJSONObject(i).getString("vreceiveaddress");
+//                            String adds  = Base64Encoder.encode(add.getBytes("gb2312"));
+//                            object.put("VRECEIVEADDRESS",adds);
+//                            object.put("VRECEIVEPERSON",MainLogin.objLog.LoginUser);
+//                            bodyArray.put(object);
+//                            y++;
+//                        }
+//                    }
+//                }
+//                tableBody.put("ScanDetails", bodyArray);
+//                table.put("Body", tableBody);
+//                table.put("GUIDS", UUID.randomUUID().toString());
+//                Log.d(TAG, "SaveSaleOrder: "+MainLogin.appTime);
+//                table.put("OPDATE", MainLogin.appTime);
+//                Log.d(TAG, "XXXXXX: " + table.toString());
+//                if (!MainLogin.getwifiinfo()) {
+//                    Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
+//                    MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                    return;
+//                }
+//                SaveThread saveThread = new SaveThread(table, "SaveSaleReceive", mHandler, HANDER_SAVE_RESULT);
+//                Thread thread = new Thread(saveThread);
+//                thread.start();
+//
+//        }
     }
 
     /**
@@ -1753,6 +1850,7 @@ public class SalesDelivery extends Activity {
     }
 
     private void SaleScan(){
+//        if (tvSaleOutSelect.getText().toString().equals("销售出库")){
         Intent intDeliveryScan = new Intent(SalesDelivery.this, SalesDeliveryDetail.class);
         intDeliveryScan.putExtra("BillCode", tmpBillCode);
         intDeliveryScan.putExtra("PK_CORP", PK_CORP);
@@ -1766,6 +1864,24 @@ public class SalesDelivery extends Activity {
         }
         intDeliveryScan.putStringArrayListExtra("ScanedBarcode", ScanedBarcode);
         startActivityForResult(intDeliveryScan, 42);
+//        }
+         //多角贸易扫描按钮 // TODO: 2017/7/31
+//        if (tvSaleOutSelect.getText().toString().equals("多角贸易")){
+//            Intent intDeliveryScan = new Intent(SalesDelivery.this, SalesDeliveryDetail.class);
+//            intDeliveryScan.putExtra("BillCode", tmpBillCode);
+//            intDeliveryScan.putExtra("PK_CORP", PK_CORP);
+//            intDeliveryScan.putExtra("CSALEID", csaleid);
+//            intDeliveryScan.putExtra("CWAREHOUSEID", CWAREHOUSEID);
+//            intDeliveryScan.putExtra("ScanType", tvSaleOutSelect.getText().toString());
+//            if (jsBody!=null){
+//                intDeliveryScan.putExtra("jsbody",jsBody.toString());
+//            }  if (jsSerino!=null){
+//                intDeliveryScan.putExtra("jsserino",jsSerino.toString());
+//            }
+//            intDeliveryScan.putStringArrayListExtra("ScanedBarcode", ScanedBarcode);
+//            startActivityForResult(intDeliveryScan, 42);
+//        }
+
     }
 
     //退出按钮

@@ -690,7 +690,7 @@ public class PurStockIn extends Activity {
                             obj.put("VSOURCEBILLROWNO", bodys.getJSONObject(i).getString("crowno"));
                             obj.put("VFREE4", bodys.getJSONObject(i).getString("vfree4"));
                             //jsDBBody.put(y + "", obj);
-                            arraySaveBody.put(obj);
+                            arraySaveBody.put(obj) ;
                             y++;
                         } else
                             arraysSerino.getJSONObject(j).put("NINNUM", ldDoneQty);

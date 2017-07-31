@@ -1,4 +1,4 @@
-package com.techscan.dvq;
+package com.techscan.dvq.module.multilateraltrade.scan;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -21,11 +21,13 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.techscan.dvq.R;
 import com.techscan.dvq.common.Common;
 import com.techscan.dvq.common.RequestThread;
 import com.techscan.dvq.common.SplitBarcode;
 import com.techscan.dvq.common.Utils;
 import com.techscan.dvq.login.MainLogin;
+import com.techscan.dvq.module.multilateraltrade.GetMultilateralTradeBaseInfo;
 
 import org.apache.http.ParseException;
 import org.json.JSONArray;
@@ -46,7 +48,7 @@ import butterknife.OnClick;
 
 import static android.content.ContentValues.TAG;
 
-public class SalesDeliveryDetail extends Activity {
+public class MultilateralTradeDetail extends Activity {
 
     String CALBODYID ="";
     String CINVBASID = "";
@@ -100,7 +102,7 @@ public class SalesDeliveryDetail extends Activity {
     @InjectView(R.id.txtSaleCustoms)
     EditText txtSaleCustoms;
 
-    private GetSaleBaseInfo         objSaleBaseInfo   = null;
+    private GetMultilateralTradeBaseInfo objSaleBaseInfo   = null;
     private HashMap<String, Object> m_mapSaleBaseInfo = null;
     private SplitBarcode            m_cSplitBarcode   = null;
     private ArrayList<String>       ScanedBarcode     = new ArrayList<String>();
@@ -114,10 +116,10 @@ public class SalesDeliveryDetail extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.sale_out_scan_detail);
+        setContentView(R.layout.activity_multilateral_trade_detail);
         ButterKnife.inject(this);
         ActionBar actionBar = this.getActionBar();
-        actionBar.setTitle("销售出库扫描明细");
+        actionBar.setTitle("多角贸易扫描界面");
         initView();
         Intent intent = this.getIntent();
 //        BillCode = intent.getStringExtra("BillCode");
@@ -149,7 +151,7 @@ public class SalesDeliveryDetail extends Activity {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            Toast.makeText(SalesDeliveryDetail.this, e.getMessage(), Toast.LENGTH_LONG).show();
+            Toast.makeText(MultilateralTradeDetail.this, e.getMessage(), Toast.LENGTH_LONG).show();
             // ADD CAIXY TEST START
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             e.printStackTrace();
@@ -211,18 +213,18 @@ public class SalesDeliveryDetail extends Activity {
 
                     case R.id.txtSaleNumber:
                         if (TextUtils.isEmpty(txtSaleNumber.getText())) {
-                            Utils.showToast(SalesDeliveryDetail.this, "数量不能为空");
+                            Utils.showToast(MultilateralTradeDetail.this, "数量不能为空");
 //                            txtSaleNumber.requestFocus();
                             return true;
                         }
                         if (!isNumber(txtSaleNumber.getText().toString())) {
-                            Utils.showToast(SalesDeliveryDetail.this, "数量不正确");
+                            Utils.showToast(MultilateralTradeDetail.this, "数量不正确");
                             txtSaleNumber.setText("");
 //                            txtSaleNumber.requestFocus();
                             return true;
                         }
                         if (Float.valueOf(txtSaleNumber.getText().toString()) <= 0) {
-                            Utils.showToast(SalesDeliveryDetail.this, "数量不正确");
+                            Utils.showToast(MultilateralTradeDetail.this, "数量不正确");
 //                            txtSaleNumber.requestFocus();
                             return true;
                         }
@@ -285,12 +287,12 @@ public class SalesDeliveryDetail extends Activity {
                         return;
                     }
                     if (!isNumber(txtSaleNumber.getText().toString())) {
-                        Utils.showToast(SalesDeliveryDetail.this, "数量不正确");
+                        Utils.showToast(MultilateralTradeDetail.this, "数量不正确");
                         txtSaleNumber.requestFocus();
                         return;
                     }
                     if (Float.valueOf(txtSaleNumber.getText().toString()) < 0) {
-                        Utils.showToast(SalesDeliveryDetail.this, "数量不正确");
+                        Utils.showToast(MultilateralTradeDetail.this, "数量不正确");
                         txtSaleNumber.requestFocus();
                         return;
                     }
@@ -374,7 +376,7 @@ public class SalesDeliveryDetail extends Activity {
 
         IniDetail();
         try {
-            objSaleBaseInfo = new GetSaleBaseInfo(m_cSplitBarcode, mHandler, PK_CORP);
+            objSaleBaseInfo = new GetMultilateralTradeBaseInfo(m_cSplitBarcode, mHandler, PK_CORP);
 //            objSaleBaseInfo = new GetSaleBaseInfo(bar, mHandler, CORP,WAREHOUSEID,CALBODYID,CINVBASID,INVENTORYID);
         } catch (Exception ex) {
             Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
@@ -416,7 +418,7 @@ public class SalesDeliveryDetail extends Activity {
                 case 2:
                     JSONObject jsons = (JSONObject) msg.obj;
                     Log.d(TAG, "vfree4: "+jsons.toString());
-                        try {
+                    try {
 //                            if (jsons != null && jsons.getBoolean("Status")) {
 //                                JSONArray jsonArray = jsons.getJSONArray("vfree4");
 //                                if (jsonArray.length() > 0) {
@@ -433,27 +435,27 @@ public class SalesDeliveryDetail extends Activity {
 //                                    }
 //                                }
 //                            }
-                            if (jsons.getBoolean("Status")) {
-                                JSONArray jsonArray = jsons.getJSONArray("customs");
-                                for (int i=0;i<jsonArray.length();i++) {
-                                    JSONObject tempJso = jsonArray.getJSONObject(i);
-                                    Log.d(TAG, "vfree4: "+tempJso.getString("vfree4"));
-                                    txtSaleCustoms.setText(tempJso.getString("vfree4"));
-                                    m_mapSaleBaseInfo.put("vfree4",txtSaleCustoms.getText().toString());
-                                    SetInvBaseToUI();
+                        if (jsons.getBoolean("Status")) {
+                            JSONArray jsonArray = jsons.getJSONArray("customs");
+                            for (int i=0;i<jsonArray.length();i++) {
+                                JSONObject tempJso = jsonArray.getJSONObject(i);
+                                Log.d(TAG, "vfree4: "+tempJso.getString("vfree4"));
+                                txtSaleCustoms.setText(tempJso.getString("vfree4"));
+                                m_mapSaleBaseInfo.put("vfree4",txtSaleCustoms.getText().toString());
+                                SetInvBaseToUI();
 //                                    txtSaleCustoms.requestFocus();
 //                                    txtSaleCustoms.setFocusableInTouchMode(true);
 //                                    txtSaleCustoms.setFocusable(true);
-                                }
                             }
-                            else{
-//                                txtSaleCustoms.requestFocus();
-                                m_mapSaleBaseInfo.put("vfree4",txtSaleCustoms.getText().toString());
-                                SetInvBaseToUI();
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
                         }
+                        else{
+//                                txtSaleCustoms.requestFocus();
+                            m_mapSaleBaseInfo.put("vfree4",txtSaleCustoms.getText().toString());
+                            SetInvBaseToUI();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     break;
             }
         }
@@ -592,7 +594,7 @@ public class SalesDeliveryDetail extends Activity {
 
         return true;
     }
-//保存扫描明细
+    //保存扫描明细
     private boolean ScanSerial(String serino, String Free1, String TotalBox)
             throws JSONException {
         if (jsSerino == null) {
@@ -663,6 +665,9 @@ public class SalesDeliveryDetail extends Activity {
         tds.start();
     }
 
+/**
+ * 获得表体数据
+ */
 
     private void LoadSaleOutBody() throws ParseException, IOException {
         if (BillCode == null || BillCode.equals("") || CSALEID == null || CSALEID.equals("")) {
@@ -676,7 +681,7 @@ public class SalesDeliveryDetail extends Activity {
         JSONObject para = new JSONObject();
         String FunctionName = "";
         FunctionName = "CommonQuery";
-        if (ScanType.equals("销售出库")) {
+        if (ScanType.equals("多角贸易")) {
             try {
                 para.put("FunctionName", "GetSaleOutBodyNew");
                 para.put("BillCode", BillCode);
@@ -686,7 +691,7 @@ public class SalesDeliveryDetail extends Activity {
                 Log.d(TAG, "GetBillBodyDetailInfo: " + BillCode);
             } catch (JSONException e) {
                 e.printStackTrace();
-                Toast.makeText(SalesDeliveryDetail.this, "无法获取表体信息",
+                Toast.makeText(MultilateralTradeDetail.this, "无法获取表体信息",
                         Toast.LENGTH_LONG).show();
                 // ADD CAIXY TEST START
                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
@@ -740,17 +745,16 @@ public class SalesDeliveryDetail extends Activity {
                 JSONArray jsarray = jsBody.getJSONArray("dbBody");
                 for (int i = 0; i < jsarray.length(); i++) {
                     JSONObject tempJso = jsarray.getJSONObject(i);
-                   CALBODYID =tempJso.getString("cadvisecalbodyid");
+                    CALBODYID =tempJso.getString("cadvisecalbodyid");
                     Log.d(TAG, "LoadSaleOutBody: "+CALBODYID);
                     CINVBASID = tempJso.getString("cinvbasdocid");
                     Log.d(TAG, "LoadSaleOutBody: "+CINVBASID);
-                   INVENTORYID = tempJso.getString("cinventoryid");
+                    INVENTORYID = tempJso.getString("cinventoryid");
                     Log.d(TAG, "LoadSaleOutBody: "+INVENTORYID);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
                 Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
-                //ADD CAIXY TEST START
                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                 //ADD CAIXY TEST END
                 return;
@@ -788,7 +792,7 @@ public class SalesDeliveryDetail extends Activity {
                 }
             };
 
-//注册监听
+    //注册监听
     private void initView() {
         txtBarcode.setOnKeyListener(myTxtListener);
         txtSaleNumber.setOnKeyListener(myTxtListener);
@@ -846,7 +850,7 @@ public class SalesDeliveryDetail extends Activity {
                         intent.putExtra("serino", jsSerino.toString());
                         Log.d(TAG, "Return: " + jsSerino.toString());
                         intent.putStringArrayListExtra("ScanedBarcode", ScanedBarcode);
-                        SalesDeliveryDetail.this.setResult(24, intent);
+                        MultilateralTradeDetail.this.setResult(24, intent);
 //                        SalesDeliveryDetail.this.finish();
 
                     } catch (Exception e) {
@@ -854,7 +858,7 @@ public class SalesDeliveryDetail extends Activity {
                     }
 
                 } else {
-//                    Toast.makeText(SalesDeliveryDetail.this, "没有扫描到数据", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MultilateralTradeDetail.this, "没有扫描到数据", Toast.LENGTH_SHORT).show();
                 }
                 finish();
                 break;
@@ -894,13 +898,13 @@ public class SalesDeliveryDetail extends Activity {
         }
 
         listTaskAdapter = new SimpleAdapter(
-                SalesDeliveryDetail.this, lstTaskBody,
+                MultilateralTradeDetail.this, lstTaskBody,
                 R.layout.sale_out_task_detail,
                 new String[]{"InvName", "InvNum", "InvCode", "Invspec", "Invtype"},
                 new int[]{R.id.txtTranstaskInvName, R.id.txtTranstaskInvNum,
                         R.id.txtTranstaskInvCode, R.id.txtSpec,
                         R.id.txtType});
-        new AlertDialog.Builder(SalesDeliveryDetail.this).setTitle("源单信息")
+        new AlertDialog.Builder(MultilateralTradeDetail.this).setTitle("源单信息")
                 .setAdapter(listTaskAdapter, null)
                 .setPositiveButton(R.string.QueRen, null).show();
 
@@ -936,8 +940,8 @@ public class SalesDeliveryDetail extends Activity {
             lstTaskBody.add(map);
         }
         Log.d("TAG", "lstTaskBody: " + lstTaskBody);
-         listItemAdapter = new SimpleAdapter(
-                SalesDeliveryDetail.this, lstTaskBody,// 数据源
+        listItemAdapter = new SimpleAdapter(
+                MultilateralTradeDetail.this, lstTaskBody,// 数据源
                 R.layout.item_sale_out_details,// ListItem的XML实现
                 // 动态数组与ImageItem对应的子项
                 new String[]{"invname", "invcode", "invspec", "invtype", "batch", "total"},
@@ -1221,7 +1225,7 @@ public class SalesDeliveryDetail extends Activity {
                     } catch (JSONException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
-                        Toast.makeText(SalesDeliveryDetail.this, e.getMessage(),
+                        Toast.makeText(MultilateralTradeDetail.this, e.getMessage(),
                                 Toast.LENGTH_LONG).show();
                         // ADD CAIXY TEST START
                         MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);

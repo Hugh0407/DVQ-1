@@ -210,10 +210,12 @@ public class GetInvBaseInfo {
             int x = 1;
 
             if (fsFunctionName.equals("销售出库")) {
-    //			fsFunctionName = "GetSalereceiveHead";
                 fsFunctionName = "GetSaleOrderList";
             }
-    //
+            //多角贸易 TODO: 2017/7/31
+            if (fsFunctionName.equals("多角贸易")) {
+                fsFunctionName = "GetSaleOrderList";
+            }
 
             for (int i = 0; i < x; i++) {
 
@@ -233,10 +235,6 @@ public class GetInvBaseInfo {
                     para.put("BillCode", sBillCodes);
                     para.put("sDate", sDate);
                     para.put("sEndDate", sEndDate);
-    //				Log.d(TAG, "onCreate: "+fsFunctionName+" ;"+sBillCodes+" ;"+sDate+" ;"+sEndDate+";"+ MainLogin.objLog.STOrgCode);
-
-                    //para.put("Wh-CodeA", MainLogin.objLog.WhCodeA);
-                    //para.put("Wh-CodeB", MainLogin.objLog.WhCodeB);
 
 
                 } catch (JSONException e2) {
@@ -267,9 +265,6 @@ public class GetInvBaseInfo {
                         return;
                     }
                     jas = Common.DoHttpQuery(para, "CommonQuery", "");
-                    //
-    //				Log.d(TAG, "ListHead:"+"AAA");
-    //				Log.d(TAG, "ListHead:"+jas.toString());
                 } catch (Exception ex) {
                     Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
                     //ADD CAIXY TEST START
