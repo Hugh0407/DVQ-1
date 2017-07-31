@@ -81,14 +81,13 @@ public class MainLogin extends Activity {
     // 控件的定义
     Button btnLogin, btnExit;
     String LoginString, LoginString2, CompanyCode, OrgCode, WhCode, WhCodeB;
-    public static String       tempFilePath = "";
-    public static String       appTime      = "";
-    public static OkHttpClient client       = new OkHttpClient();
+    public static String      tempFilePath = "";
+    public static String      appTime      = "";
     //static JSONArray arysUserRole = new JSONArray();
     //static AlertDialog LGalertDialog = null;
-    static        WifiManager  wifi_service = null;
-    static        String       sWIFIMin     = null;
-    static        String       sWIFIMax     = null;
+    static        WifiManager wifi_service = null;
+    static        String      sWIFIMin     = null;
+    static        String      sWIFIMax     = null;
 
     String         newVerName       = "";// 新版本名称
     int            newVerCode       = -1;// 新版本号
@@ -209,8 +208,8 @@ public class MainLogin extends Activity {
         // 调用服务
         /*********************************************************************/
         // 表单提交
-        RequestBody formBody = new FormBody.Builder().build();
-
+        RequestBody        formBody = new FormBody.Builder().build();
+        final OkHttpClient client   = new OkHttpClient();
         final Request request = new Request.Builder()
                 .url(lsUrl)
                 .header("cookie", "JSESSIONID=7FC8F73EB963562072B6CFE916982678")
@@ -279,10 +278,6 @@ public class MainLogin extends Activity {
 
                             } else {
                                 String ErrMsg = jas.getString("ErrMsg");
-//                                BASE64Decoder decoder = new BASE64Decoder();
-//                                String        jasstr  = EncodingUtils.getString(EncodingUtils.getBytes(ErrMsg, "ISO8859-1"), "gb2312");
-//
-//                                Log.d("TAG", "decoder: " + new String(ErrMsg.getBytes("ISO8859-1")));
                                 Utils.showToast(MainLogin.this, ErrMsg);
                                 SoundHelper.playWarning();
                             }
