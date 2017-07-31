@@ -46,8 +46,6 @@ import static com.techscan.dvq.R.id.ed_num;
 import static com.techscan.dvq.common.Utils.formatDecimal;
 import static com.techscan.dvq.common.Utils.isNumber;
 import static com.techscan.dvq.common.Utils.showToast;
-import static com.techscan.dvq.module.materialOut.scan.MaterialOutScanAct.detailList;
-import static com.techscan.dvq.module.materialOut.scan.MaterialOutScanAct.ovList;
 
 public class OtherOutScanAct extends Activity {
 
@@ -81,6 +79,9 @@ public class OtherOutScanAct extends Activity {
     Button   btnDetail;
     @InjectView(R.id.btn_back)
     Button   btnBack;
+
+    public static List<Goods> detailList = new ArrayList<Goods>();
+    public static List<Goods> ovList     = new ArrayList<Goods>();
 
     Activity activity;
     String CWAREHOUSEID = "";
@@ -237,7 +238,7 @@ public class OtherOutScanAct extends Activity {
         edBarCode.setText(bar);
         edBarCode.setSelection(edBarCode.length());   //将光标移动到最后的位置
         edBarCode.selectAll();
-        SplitBarcode barDecoder = new SplitBarcode(bar);
+        SplitBarcode barDecoder = new SplitBarcode(bar);    //条码解析器
 
         if (!barDecoder.creatorOk) {
             showToast(activity, "条码有误");
@@ -476,7 +477,7 @@ public class OtherOutScanAct extends Activity {
                 edType.setText(map.get("invtype").toString());
                 edSpectype.setText(map.get("invspec").toString());
                 String vFree4 = map.get("isfree4").toString();
-                if (vFree4.equals("Y")) {   //只有Y,两种值
+                if (vFree4.equals("Y")) {   //只有Y,N两种值
                     edManual.setEnabled(true);
                 } else {
                     edManual.setEnabled(false);

@@ -17,21 +17,20 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
-import com.techscan.dvq.common.Common;
 import com.techscan.dvq.ListWarehouse;
 import com.techscan.dvq.R;
 import com.techscan.dvq.VlistRdcl;
 import com.techscan.dvq.bean.Goods;
 import com.techscan.dvq.common.Base64Encoder;
+import com.techscan.dvq.common.Common;
 import com.techscan.dvq.common.RequestThread;
 import com.techscan.dvq.common.SaveThread;
+import com.techscan.dvq.common.SoundHelper;
 import com.techscan.dvq.common.Utils;
 import com.techscan.dvq.login.MainLogin;
 import com.techscan.dvq.module.materialOut.DepartmentListAct;
 import com.techscan.dvq.module.materialOut.StorgListAct;
-import com.techscan.dvq.module.materialOut.scan.MaterialOutScanAct;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -194,7 +193,7 @@ public class OtherOutAct extends Activity {
             checkInfo.put("Department", deptname);
         }
 
-        //扫描明细的回传数据 <----MaterialOutScanAct.class
+        //扫描明细的回传数据 <----OtherOutScanAct.class
         if (requestCode == 95 && resultCode == 5) {
             Bundle bundle = data.getExtras();
             tempList = bundle.getParcelableArrayList("overViewList");
@@ -219,7 +218,7 @@ public class OtherOutAct extends Activity {
                 break;
             case R.id.btn_scan:
                 if (isAllEdNotEmpty()) {
-                    Intent in = new Intent(activity, MaterialOutScanAct.class);
+                    Intent in = new Intent(activity, OtherOutScanAct.class);
                     in.putExtra("CWAREHOUSEID", CWAREHOUSEID);
                     in.putExtra("PK_CALBODY", PK_CALBODY);
                     startActivityForResult(in, 95);
@@ -292,8 +291,8 @@ public class OtherOutAct extends Activity {
                             if (saveResult.getBoolean("Status")) {
                                 Log.d(TAG, "保存" + saveResult.toString());
                                 showResultDialog(activity, saveResult.getString("ErrMsg"));
-                                MaterialOutScanAct.ovList.clear();
-                                MaterialOutScanAct.detailList.clear();
+                                OtherOutScanAct.ovList.clear();
+                                OtherOutScanAct.detailList.clear();
                                 tempList.clear();
                                 changeAllEdToEmpty();
                                 edBillNum.requestFocus();
@@ -331,17 +330,12 @@ public class OtherOutAct extends Activity {
             para.put("CompanyCode", MainLogin.objLog.CompanyCode);
             para.put("STOrgCode", MainLogin.objLog.STOrgCode);
             para.put("TableName", "warehouse");
-            if (!MainLogin.getwifiinfo()) {
-                Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
-                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                return;
-            }
 
             JSONObject rev = Common.DoHttpQuery(para, "CommonQuery", "");
             if (rev == null) {
                 // 网络通讯错误
                 showToast(this, "错误！网络通讯错误");
-                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+                SoundHelper.playWarning();
                 return;
             }
             if (rev.getBoolean("Status")) {
@@ -353,17 +347,17 @@ public class OtherOutAct extends Activity {
                 startActivityForResult(ViewGrid, 97);
             } else {
                 String Errmsg = rev.getString("ErrMsg");
-                Toast.makeText(this, Errmsg, Toast.LENGTH_LONG).show();
-                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+                showToast(this, Errmsg);
+                SoundHelper.playWarning();
             }
         } catch (JSONException e) {
             e.printStackTrace();
             showToast(this, e.getMessage());
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+            SoundHelper.playWarning();
         } catch (IOException e) {
             e.printStackTrace();
             showToast(this, e.getMessage());
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+            SoundHelper.playWarning();
         }
     }
 
@@ -418,12 +412,12 @@ public class OtherOutAct extends Activity {
 
     private void changeAllEdToEmpty() {
         edBillNum.setText("");
-        edBillDate.setText("");
-        edWh.setText("");
-        edOrg.setText("");
-        edLeiBie.setText("");
-        edDep.setText("");
-        edRemark.setText("");
+//        edBillDate.setText("");
+//        edWh.setText("");
+//        edOrg.setText("");
+//        edLeiBie.setText("");
+//        edDep.setText("");
+//        edRemark.setText("");
     }
 
     /**
@@ -515,7 +509,6 @@ public class OtherOutAct extends Activity {
      * @param goodsList
      */
     private void saveInfo(List<Goods> goodsList) {
-
         try {
             final JSONObject table     = new JSONObject();
             JSONObject       tableHead = new JSONObject();
@@ -556,7 +549,7 @@ public class OtherOutAct extends Activity {
             table.put("GUIDS", UUID.randomUUID().toString());
             table.put("OPDATE", MainLogin.appTime);
             Log.d(TAG, "saveInfo: " + table.toString());
-            SaveThread saveThread = new SaveThread(table, "SaveMaterialOut", mHandler, HANDER_SAVE_RESULT);
+            SaveThread saveThread = new SaveThread(table, "SaveOtherOut", mHandler, HANDER_SAVE_RESULT);
             Thread     thread     = new Thread(saveThread);
             thread.start();
         } catch (JSONException e) {

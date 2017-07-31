@@ -167,7 +167,7 @@ public class MaterialOutScanAct extends Activity {
                         if (json != null && json.getBoolean("Status")) {
                             Log.d(TAG, "InvBaseInfo: " + json.toString());
                             setInvBaseToUI(json);
-                            getInvBaseVFree4();// 获取海关手册号
+                            getInvBaseVFree4(BATCH);// 获取海关手册号
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -269,12 +269,11 @@ public class MaterialOutScanAct extends Activity {
             mEdNum.setEnabled(false);
             mEdLot.setEnabled(true);
             mEdQty.setEnabled(true);
-            mEdLot.requestFocus();  //如果是液体需要手动输入“批次”和“总量”,这里将光标跳到“批次（lot）”
-            String invCode = barDecoder.cInvCode;
-            mEdEncoding.setText(invCode);
-            getInvBaseInfo(invCode);
+            mEdEncoding.setText(barDecoder.cInvCode);
             mEdLot.setText("");
             mEdQty.setText("");
+            getInvBaseInfo(barDecoder.cInvCode);
+            mEdLot.requestFocus();  //如果是液体需要手动输入“批次”和“总量”,这里将光标跳到“批次（lot）”
             return true;
         } else if (barDecoder.BarcodeType.equals("C")) {
             //如果是包码，批次和总重都改变为不可编辑，数量由员工输入，焦点跳到“数量”
@@ -282,16 +281,15 @@ public class MaterialOutScanAct extends Activity {
             mEdLot.setEnabled(false);
             mEdQty.setEnabled(false);
             mEdNum.setEnabled(true);
-            mEdNum.requestFocus();  //包码扫描后光标跳到“数量”,输入数量,添加到列表
-            String invCode = barDecoder.cInvCode;
-            mEdEncoding.setText(invCode);
-            getInvBaseInfo(invCode);
+            mEdEncoding.setText(barDecoder.cInvCode);
             mEdLot.setText(barDecoder.cBatch);
             mEdWeight.setText(String.valueOf(barDecoder.dQuantity));
             mEdQty.setText("");
             mEdNum.setText("1");
             mEdNum.selectAll();
             mEdNum.setSelection(mEdNum.length());   //将光标移动到最后的位置
+            getInvBaseInfo(barDecoder.cInvCode);
+            mEdNum.requestFocus();  //包码扫描后光标跳到“数量”,输入数量,添加到列表
             return true;
         } else if (barDecoder.BarcodeType.equals("TC")) {
             for (int i = 0; i < detailList.size(); i++) {
@@ -306,15 +304,14 @@ public class MaterialOutScanAct extends Activity {
             mEdLot.setEnabled(false);
             mEdQty.setEnabled(false);
             mEdNum.setEnabled(false);
-            String invCode = barDecoder.cInvCode;
-            mEdEncoding.setText(invCode);
-            getInvBaseInfo(invCode);
+            mEdEncoding.setText(barDecoder.cInvCode);
             mEdLot.setText(barDecoder.cBatch);
             mEdWeight.setText(String.valueOf(barDecoder.dQuantity));
             mEdNum.setText(String.valueOf(barDecoder.iNumber));
             double qty = barDecoder.dQuantity;
             double num = barDecoder.iNumber;
             mEdQty.setText(formatDecimal(qty * num));
+            getInvBaseInfo(barDecoder.cInvCode);
             mEdCostObject.requestFocus();
             return true;
         } else {
@@ -322,67 +319,6 @@ public class MaterialOutScanAct extends Activity {
             SoundHelper.playWarning();
             return false;
         }
-
-//
-//        String[]     barCode    = bar.split("\\|");
-//        if (barCode.length == 2 && barCode[0].equals("Y")) {          //Y|SKU
-//            //如果是液体的话需要输入液体总量，将数量设置不可编辑
-//            mEdNum.setEnabled(false);
-//            mEdLot.setEnabled(true);
-//            mEdQty.setEnabled(true);
-//            mEdLot.requestFocus();  //如果是液体需要手动输入“批次”和“总量”,这里将光标跳到“批次（lot）”
-//            String encoding = barCode[1];
-//            mEdEncoding.setText(encoding);
-//            getInvBaseInfo(encoding);
-//            mEdLot.setText("");
-//            mEdQty.setText("");
-//            return true;
-//        } else if (barCode.length == 6 && barCode[0].equals("C")) {   //C|SKU|LOT|TAX|QTY|SN
-//            //如果是包码，批次和总重都改变为不可编辑，数量由员工输入，焦点跳到“数量”
-//            BATCH = String.valueOf(barCode[2]);
-//            mEdLot.setEnabled(false);
-//            mEdQty.setEnabled(false);
-//            mEdNum.setEnabled(true);
-//            mEdNum.requestFocus();  //包码扫描后光标跳到“数量”,输入数量,添加到列表
-//            String encoding = barCode[1];
-//            mEdEncoding.setText(encoding);
-//            getInvBaseInfo(encoding);
-//            mEdLot.setText(barCode[2]);
-//            mEdWeight.setText(barCode[4]);
-//            mEdQty.setText("");
-//            mEdNum.setText("1");
-//            mEdNum.selectAll();
-//            mEdNum.setSelection(mEdNum.length());   //将光标移动到最后的位置
-//            return true;
-//        } else if (barCode.length == 7 && barCode[0].equals("TC")) {    //TC|SKU|LOT|TAX|QTY|NUM|SN
-//            for (int i = 0; i < detailList.size(); i++) {
-//                if (detailList.get(i).getBarcode().equals(bar)) {
-//                    showToast(mActivity, "该托盘已扫描");
-//                    SoundHelper.playWarning();
-//                    return false;
-//                }
-//            }
-//            //如果是盘码，全都设置为不可编辑
-//            BATCH = String.valueOf(barCode[2]);
-//            mEdLot.setEnabled(false);
-//            mEdQty.setEnabled(false);
-//            mEdNum.setEnabled(false);
-//            String encoding = barCode[1];
-//            mEdEncoding.setText(encoding);
-//            getInvBaseInfo(encoding);
-//            mEdLot.setText(barCode[2]);
-//            mEdWeight.setText(barCode[4]);
-//            mEdNum.setText(barCode[5]);
-//            float qty = Float.valueOf(barCode[4]);
-//            float num = Float.valueOf(barCode[5]);
-//            mEdQty.setText(formatDecimal(qty * num));
-//            isBaoBarCode = true;
-//            return true;
-//        } else {
-//            showToast(mActivity, "条码有误重新输入");
-//            SoundHelper.playWarning();
-//            return false;
-//        }
     }
 
 
@@ -513,11 +449,14 @@ public class MaterialOutScanAct extends Activity {
     /**
      * 获取存货基本信息 海关手册号
      */
-    private void getInvBaseVFree4() {
+    private void getInvBaseVFree4(String batch) {
+        if (TextUtils.isEmpty(batch)) {
+            return;
+        }
         HashMap<String, String> para = new HashMap<String, String>();
         para.put("FunctionName", "GetInvFreeByInvCodeAndLot");
         para.put("CORP", MainLogin.objLog.STOrgCode);
-        para.put("BATCH", BATCH);
+        para.put("BATCH", batch);
         para.put("WAREHOUSEID", CWAREHOUSEID);
         para.put("CALBODYID", PK_CALBODY);
         para.put("CINVBASID", pk_invbasdoc);
@@ -711,10 +650,10 @@ public class MaterialOutScanAct extends Activity {
                             return true;
                         } else {
                             BATCH = mEdLot.getText().toString();
-                            getInvBaseVFree4();// 获取海关手册号
+                            getInvBaseVFree4(BATCH);// 获取海关手册号
                             mEdQty.requestFocus();  //输入完批次后讲焦点跳到“总量（mEdQty）”
+                            return true;
                         }
-                        return true;
                     case R.id.ed_qty:
                         if (TextUtils.isEmpty(mEdQty.getText().toString())) {
                             showToast(mActivity, "请输入数量");
@@ -756,7 +695,6 @@ public class MaterialOutScanAct extends Activity {
 
                         float weight = Float.valueOf(mEdWeight.getText().toString());
                         mEdQty.setText(String.valueOf(num * weight));
-//                            if (isAllEdNotNull() && ) {
                         addDataToDetailList();
                         mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
                         changeAllEdTextToEmpty();
