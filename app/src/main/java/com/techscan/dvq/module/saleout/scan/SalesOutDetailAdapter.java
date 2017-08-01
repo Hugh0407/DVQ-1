@@ -1,4 +1,4 @@
-package com.techscan.dvq.saleout.scan;
+package com.techscan.dvq.module.saleout.scan;
 
 import android.text.TextUtils;
 import android.view.LayoutInflater;

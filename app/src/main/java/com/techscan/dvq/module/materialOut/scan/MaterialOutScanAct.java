@@ -83,7 +83,7 @@ public class MaterialOutScanAct extends Activity {
     @InjectView(R.id.ed_cost_name)
     EditText edCostName;
 
-    String TAG = "MaterialOutScanAct";
+    String TAG = this.getClass().getSimpleName();
     public static List<Goods> detailList = new ArrayList<Goods>();
     public static List<Goods> ovList     = new ArrayList<Goods>();
     Activity mActivity;

@@ -1,4 +1,4 @@
-package com.techscan.dvq.saleout;
+package com.techscan.dvq.module.saleout;
 
 /**
  * Created by Hugh on 2017/7/16.
