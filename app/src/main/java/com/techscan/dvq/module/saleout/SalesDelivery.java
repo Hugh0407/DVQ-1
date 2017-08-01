@@ -1,4 +1,4 @@
-package com.techscan.dvq;
+package com.techscan.dvq.module.saleout;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -21,12 +21,18 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.techscan.dvq.GetInvBaseInfo;
+import com.techscan.dvq.ListWarehouse;
+import com.techscan.dvq.R;
 import com.techscan.dvq.R.id;
+import com.techscan.dvq.module.saleout.scan.SalesDeliveryDetail;
+import com.techscan.dvq.SerializableMap;
 import com.techscan.dvq.bean.SaleOutGoods;
 import com.techscan.dvq.common.Base64Encoder;
 import com.techscan.dvq.common.Common;
 import com.techscan.dvq.common.SaveThread;
 import com.techscan.dvq.login.MainLogin;
+import com.techscan.dvq.writeTxt;
 
 import org.apache.http.ParseException;
 import org.json.JSONArray;

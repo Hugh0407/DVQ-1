@@ -1,4 +1,4 @@
-package com.techscan.dvq;
+package com.techscan.dvq.module.saleout.scan;
 
 import android.os.Handler;
 

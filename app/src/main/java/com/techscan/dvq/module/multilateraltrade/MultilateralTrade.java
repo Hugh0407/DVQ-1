@@ -19,8 +19,7 @@ import android.widget.Toast;
 import com.techscan.dvq.GetInvBaseInfo;
 import com.techscan.dvq.ListWarehouse;
 import com.techscan.dvq.R;
-import com.techscan.dvq.SaleChooseTime;
-import com.techscan.dvq.SalesDelivery;
+import com.techscan.dvq.module.saleout.SaleChooseTime;
 import com.techscan.dvq.SerializableMap;
 import com.techscan.dvq.common.Base64Encoder;
 import com.techscan.dvq.common.Common;
@@ -45,11 +44,6 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 
 import static android.content.ContentValues.TAG;
-import static com.techscan.dvq.R.id.tvSaleOutSelect;
-import static com.techscan.dvq.R.id.txtSalesDelCD;
-import static com.techscan.dvq.R.id.txtSalesDelPDOrder;
-import static com.techscan.dvq.R.id.txtSalesDelRdcl;
-import static com.techscan.dvq.R.id.txtSalesDelWH;
 import static com.techscan.dvq.R.string.WangLuoChuXiangWenTi;
 import static com.techscan.dvq.common.Utils.HANDER_SAVE_RESULT;
 import static com.techscan.dvq.common.Utils.showResultDialog;
@@ -113,6 +107,10 @@ public class MultilateralTrade extends Activity {
         this.setTitle("多角贸易");
 //        initView();
         ButterKnife.inject(this);
+//        txtCustomer.setFocusable(false);
+//        txtCustomer.setFocusableInTouchMode(false);
+//        txtBillDate.setFocusable(false);
+//        txtBillDate.setFocusableInTouchMode(false);
     }
 
     @Override
@@ -335,16 +333,6 @@ public class MultilateralTrade extends Activity {
 
     //退出按钮
     private void Exit() {
-
-
-//        if (jsBody!=null) {
-//            AlertDialog.Builder bulider =
-//                    new AlertDialog.Builder(this).setTitle(R.string.XunWen).setMessage("扫描单据未保存，确认退出吗?");
-//            bulider.setNegativeButton(R.string.QuXiao, null);
-//            bulider.setPositiveButton(R.string.QueRen, listenExit).create().show();
-//        } else {
-//            finish();
-//        }
         if (jsSerino == null || jsSerino.length() < 1) {
             deleteInfo();
             finish();

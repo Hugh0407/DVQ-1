@@ -1,4 +1,4 @@
-package com.techscan.dvq;
+package com.techscan.dvq.module.saleout;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -10,6 +10,9 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.techscan.dvq.DateCompare;
+import com.techscan.dvq.R;
 
 import java.util.Calendar;
 

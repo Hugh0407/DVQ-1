@@ -1,4 +1,4 @@
-package com.techscan.dvq;
+package com.techscan.dvq.module.saleout.scan;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -21,6 +21,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.techscan.dvq.R;
 import com.techscan.dvq.common.Common;
 import com.techscan.dvq.common.RequestThread;
 import com.techscan.dvq.common.SplitBarcode;
@@ -100,7 +101,7 @@ public class SalesDeliveryDetail extends Activity {
     @InjectView(R.id.txtSaleCustoms)
     EditText txtSaleCustoms;
 
-    private GetSaleBaseInfo         objSaleBaseInfo   = null;
+    private GetSaleBaseInfo objSaleBaseInfo   = null;
     private HashMap<String, Object> m_mapSaleBaseInfo = null;
     private SplitBarcode            m_cSplitBarcode   = null;
     private ArrayList<String>       ScanedBarcode     = new ArrayList<String>();
@@ -416,7 +417,7 @@ public class SalesDeliveryDetail extends Activity {
                 case 2:
                     JSONObject jsons = (JSONObject) msg.obj;
                     Log.d(TAG, "vfree4: "+jsons.toString());
-                        try {
+                    try {
 //                            if (jsons != null && jsons.getBoolean("Status")) {
 //                                JSONArray jsonArray = jsons.getJSONArray("vfree4");
 //                                if (jsonArray.length() > 0) {
@@ -433,27 +434,27 @@ public class SalesDeliveryDetail extends Activity {
 //                                    }
 //                                }
 //                            }
-                            if (jsons.getBoolean("Status")) {
-                                JSONArray jsonArray = jsons.getJSONArray("customs");
-                                for (int i=0;i<jsonArray.length();i++) {
-                                    JSONObject tempJso = jsonArray.getJSONObject(i);
-                                    Log.d(TAG, "vfree4: "+tempJso.getString("vfree4"));
-                                    txtSaleCustoms.setText(tempJso.getString("vfree4"));
-                                    m_mapSaleBaseInfo.put("vfree4",txtSaleCustoms.getText().toString());
-                                    SetInvBaseToUI();
+                        if (jsons.getBoolean("Status")) {
+                            JSONArray jsonArray = jsons.getJSONArray("customs");
+                            for (int i=0;i<jsonArray.length();i++) {
+                                JSONObject tempJso = jsonArray.getJSONObject(i);
+                                Log.d(TAG, "vfree4: "+tempJso.getString("vfree4"));
+                                txtSaleCustoms.setText(tempJso.getString("vfree4"));
+                                m_mapSaleBaseInfo.put("vfree4",txtSaleCustoms.getText().toString());
+                                SetInvBaseToUI();
 //                                    txtSaleCustoms.requestFocus();
 //                                    txtSaleCustoms.setFocusableInTouchMode(true);
 //                                    txtSaleCustoms.setFocusable(true);
-                                }
                             }
-                            else{
-//                                txtSaleCustoms.requestFocus();
-                                m_mapSaleBaseInfo.put("vfree4",txtSaleCustoms.getText().toString());
-                                SetInvBaseToUI();
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
                         }
+                        else{
+//                                txtSaleCustoms.requestFocus();
+                            m_mapSaleBaseInfo.put("vfree4",txtSaleCustoms.getText().toString());
+                            SetInvBaseToUI();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     break;
             }
         }
@@ -592,7 +593,7 @@ public class SalesDeliveryDetail extends Activity {
 
         return true;
     }
-//保存扫描明细
+    //保存扫描明细
     private boolean ScanSerial(String serino, String Free1, String TotalBox)
             throws JSONException {
         if (jsSerino == null) {
@@ -740,11 +741,11 @@ public class SalesDeliveryDetail extends Activity {
                 JSONArray jsarray = jsBody.getJSONArray("dbBody");
                 for (int i = 0; i < jsarray.length(); i++) {
                     JSONObject tempJso = jsarray.getJSONObject(i);
-                   CALBODYID =tempJso.getString("cadvisecalbodyid");
+                    CALBODYID =tempJso.getString("cadvisecalbodyid");
                     Log.d(TAG, "LoadSaleOutBody: "+CALBODYID);
                     CINVBASID = tempJso.getString("cinvbasdocid");
                     Log.d(TAG, "LoadSaleOutBody: "+CINVBASID);
-                   INVENTORYID = tempJso.getString("cinventoryid");
+                    INVENTORYID = tempJso.getString("cinventoryid");
                     Log.d(TAG, "LoadSaleOutBody: "+INVENTORYID);
                 }
             } catch (JSONException e) {
@@ -788,7 +789,7 @@ public class SalesDeliveryDetail extends Activity {
                 }
             };
 
-//注册监听
+    //注册监听
     private void initView() {
         txtBarcode.setOnKeyListener(myTxtListener);
         txtSaleNumber.setOnKeyListener(myTxtListener);
@@ -936,7 +937,7 @@ public class SalesDeliveryDetail extends Activity {
             lstTaskBody.add(map);
         }
         Log.d("TAG", "lstTaskBody: " + lstTaskBody);
-         listItemAdapter = new SimpleAdapter(
+        listItemAdapter = new SimpleAdapter(
                 SalesDeliveryDetail.this, lstTaskBody,// 数据源
                 R.layout.item_sale_out_details,// ListItem的XML实现
                 // 动态数组与ImageItem对应的子项

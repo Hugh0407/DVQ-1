@@ -162,7 +162,7 @@
             android:label="@string/title_activity_search_bill"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".SalesDelivery"
+            android:name=".module.saleout.SalesDelivery"
             android:label="@string/title_activity_sales_delivery"
             android:windowSoftInputMode="adjustPan" />
         <activity
@@ -230,8 +230,8 @@
         <!-- </intent-filter> -->
         <!--  -->
         <!-- </activity> -->
-        <activity android:name=".SaleChooseTime" />
-        <activity android:name=".SalesDeliveryDetail" />
+        <activity android:name=".module.saleout.SaleChooseTime" />
+        <activity android:name=".module.saleout.scan.SalesDeliveryDetail" />
         <activity android:name=".module.materialOut.MaterialOutAct" />
         <activity android:name=".module.materialOut.scan.MaterialOutScanAct" />
         <activity android:name=".module.materialOut.DepartmentListAct" />
