@@ -304,6 +304,7 @@ public class MaterialOutScanAct extends Activity {
             mEdLot.setEnabled(false);
             mEdQty.setEnabled(false);
             mEdNum.setEnabled(false);
+            mEdManual.setEnabled(true);
             mEdEncoding.setText(barDecoder.cInvCode);
             mEdLot.setText(barDecoder.cBatch);
             mEdWeight.setText(String.valueOf(barDecoder.dQuantity));
@@ -410,6 +411,7 @@ public class MaterialOutScanAct extends Activity {
         if (mEdManual.isEnabled()) {
             if (TextUtils.isEmpty(mEdManual.getText())) {
                 showToast(mActivity, "海关手册号不可为空");
+                mEdManual.requestFocus();
                 return false;
             }
         }
