@@ -212,8 +212,6 @@ public class MainLogin extends Activity {
         final OkHttpClient client   = new OkHttpClient();
         final Request request = new Request.Builder()
                 .url(lsUrl)
-                .header("cookie", "JSESSIONID=7FC8F73EB963562072B6CFE916982678")
-                .addHeader("content-type", "text/html;charset:utf-8")
                 .addHeader("Self-Test", "V")
                 .addHeader("User-Code", user_name)
                 .addHeader("User-Pwd", password)
