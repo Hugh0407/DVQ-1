@@ -64,6 +64,8 @@ public class MultilateralTrade extends Activity {
     EditText txtCustomer;
     @InjectView(R.id.txtBillDate)
     EditText txtBillDate;
+    @InjectView(R.id.txtDepartment)
+    EditText txtDepartment;
     @InjectView(R.id.btnScan)
     Button btnScan;
     @InjectView(R.id.btnSave)

@@ -578,8 +578,8 @@ public class MainMenu extends Activity {
                     break;
                 case 6:
                     if (RadioGroupType.getCheckedRadioButtonId() == id.radioButton1) {
-//                        ShowMultilateralTrade();
-                        Utils.showToast(MainMenu.this, "´ý¼Ó");
+                        ShowMultilateralTrade();
+//                        Utils.showToast(MainMenu.this, "´ý¼Ó");
                     } else if (RadioGroupType.getCheckedRadioButtonId() == id.radioButton2) {
 
                     } else if (RadioGroupType.getCheckedRadioButtonId() == id.radioButton3) {
