@@ -116,6 +116,12 @@ public class MaterialOutAct extends Activity {
         init();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mActivity = null;
+    }
+
 
     /**
      * 所有的点击事件
@@ -188,53 +194,6 @@ public class MaterialOutAct extends Activity {
                 dpd.show();//显示DatePickerDialog组件
                 break;
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mActivity = null;
-    }
-
-    /**
-     * 检查表头信息是否正确
-     */
-    private boolean checkSaveInfo() {
-        if (checkInfo.size() == 0) {
-            showToast(mActivity, "单据信息不正确请核对");
-            return false;
-        }
-        if (TextUtils.isEmpty(billNum.getText().toString())) {
-            showToast(mActivity, "单据号不能为空");
-            billNum.requestFocus();
-            return false;
-        }
-        if (TextUtils.isEmpty(billDate.getText().toString())) {
-            showToast(mActivity, "日期不能为空");
-            billDate.requestFocus();
-            return false;
-        }
-        if (!wh.getText().toString().equals(checkInfo.get("Warehouse"))) {
-            showToast(mActivity, "仓库信息不正确");
-            wh.requestFocus();
-            return false;
-        }
-        if (!organization.getText().toString().equals(checkInfo.get("Organization"))) {
-            showToast(mActivity, "组织信息不正确");
-            organization.requestFocus();
-            return false;
-        }
-        if (!leiBie.getText().toString().equals(checkInfo.get("LeiBie"))) {
-            showToast(mActivity, "收发类别信息不正确");
-            leiBie.requestFocus();
-            return false;
-        }
-        if (!department.getText().toString().equals(checkInfo.get("Department"))) {
-            showToast(mActivity, "部门信息不正确");
-            department.requestFocus();
-            return false;
-        }
-        return true;
     }
 
     @Override
@@ -388,6 +347,47 @@ public class MaterialOutAct extends Activity {
             }
         }
     };
+
+    /**
+     * 检查表头信息是否正确
+     */
+    private boolean checkSaveInfo() {
+        if (checkInfo.size() == 0) {
+            showToast(mActivity, "单据信息不正确请核对");
+            return false;
+        }
+        if (TextUtils.isEmpty(billNum.getText().toString())) {
+            showToast(mActivity, "单据号不能为空");
+            billNum.requestFocus();
+            return false;
+        }
+        if (TextUtils.isEmpty(billDate.getText().toString())) {
+            showToast(mActivity, "日期不能为空");
+            billDate.requestFocus();
+            return false;
+        }
+        if (!wh.getText().toString().equals(checkInfo.get("Warehouse"))) {
+            showToast(mActivity, "仓库信息不正确");
+            wh.requestFocus();
+            return false;
+        }
+        if (!organization.getText().toString().equals(checkInfo.get("Organization"))) {
+            showToast(mActivity, "组织信息不正确");
+            organization.requestFocus();
+            return false;
+        }
+        if (!leiBie.getText().toString().equals(checkInfo.get("LeiBie"))) {
+            showToast(mActivity, "收发类别信息不正确");
+            leiBie.requestFocus();
+            return false;
+        }
+        if (!department.getText().toString().equals(checkInfo.get("Department"))) {
+            showToast(mActivity, "部门信息不正确");
+            department.requestFocus();
+            return false;
+        }
+        return true;
+    }
 
     private void changeAllEdToEmpty() {
         billNum.setText("");
