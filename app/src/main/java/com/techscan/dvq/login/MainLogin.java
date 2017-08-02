@@ -370,6 +370,12 @@ public class MainLogin extends Activity {
 //
 //                return;
 //            }
+//        })
+//                .subscribeOn(Schedulers.newThread())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Consumer<Response>() {
+//                    @Override
+//                    public void accept(Response response) throws Exception {
 //
 //            boolean loginStatus = jas.getBoolean("Status");
 //            if (loginStatus == true) {
@@ -392,6 +398,11 @@ public class MainLogin extends Activity {
 //                objLog.VersionCode = Version;
 //                //增加 设置页面
 //
+//                                objLog.UserID = jas.getString("userid");
+//                                objLog.UserName = LoginUser;
+//                                objLog.STOrgCode = OrgCode;
+//                                objLog.WhCodeA = WhCode;
+//                                objLog.WhCodeB = WhCodeB;
 //
 //                SimpleDateFormat f    = new SimpleDateFormat("yyyy-MM-dd");
 //                Date             date = new Date();
@@ -401,6 +412,7 @@ public class MainLogin extends Activity {
 //                    return;
 //                }
 //
+//        /*********************************************************************/
 //
 //                Intent MenuForm = new Intent(this, MainMenu.class);
 //                startActivity(MenuForm);

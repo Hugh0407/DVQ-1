@@ -1493,6 +1493,8 @@ public class PurStockInDetail extends Activity {
                         try
                         {
                             Double.parseDouble(txtPurTotal.getText().toString());
+                            m_mapInvBaseInfo.put("number", Integer.valueOf(txtPurNumber.getText().toString()));
+                            m_mapInvBaseInfo.put("total", Double.valueOf(txtPurTotal.getText().toString()));
                             ScanedToGet();
                             return true;
                         }
