@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,6 +30,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by walter on 2017/6/29.
@@ -105,6 +108,7 @@ public class GetInvBaseInfo {
         private String sDate;
         private String sEndDate;
         private String sBillCodes;
+        private String whID;
         List<Map<String, Object>> list                          = new ArrayList<Map<String, Object>>();
         Button                    btSaleBillInfoOrderListReturn = null;
 
@@ -148,6 +152,8 @@ public class GetInvBaseInfo {
                 sEndDate = myIntent.getStringExtra("sEndDate");
             if (myIntent.hasExtra("sBillCodes"))
                 sBillCodes = myIntent.getStringExtra("sBillCodes");
+            if (myIntent.hasExtra("whId"))
+                whID = myIntent.getStringExtra("whId");
 
 
             //取得控件
@@ -207,35 +213,43 @@ public class GetInvBaseInfo {
                 return;
             }
 
-            int x = 1;
+//            int x = 1;
 
-            if (fsFunctionName.equals("销售出库")) {
-                fsFunctionName = "GetSaleOrderList";
-            }
-            //多角贸易 TODO: 2017/7/31
-            if (fsFunctionName.equals("多角贸易")) {
-                fsFunctionName = "GetSaleOrderList";
-            }
 
-            for (int i = 0; i < x; i++) {
+//            GetAdjustOrderBillHead(String CompanyCode,String BillCode, String OrgId, String WhID, String TableName)
 
-                if (x == 2) {
-                    if (i == 0) {
-                        fsFunctionName = "GetSaleTakeHead";
-                    } else {
-                        fsFunctionName = "GetSaleOutHead";
-                    }
-                }
+//            for (int i = 0; i < x; i++) {
+//
+//                if (x == 2) {
+//                    if (i == 0) {
+//                        fsFunctionName = "GetSaleTakeHead";
+//                    } else {
+//                        fsFunctionName = "GetSaleOutHead";
+//                    }
+//                }
 
                 JSONObject para = new JSONObject();
                 try {
-                    para.put("FunctionName", fsFunctionName);
-                    para.put("CorpPK", "4100");
-                    para.put("STOrgCode", MainLogin.objLog.STOrgCode);
-                    para.put("BillCode", sBillCodes);
-                    para.put("sDate", sDate);
-                    para.put("sEndDate", sEndDate);
-
+                    if (fsFunctionName.equals("销售出库")) {
+                        fsFunctionName = "GetSaleOrderList";
+                        para.put("FunctionName", fsFunctionName);
+                        para.put("CorpPK", MainLogin.objLog.CompanyCode);
+                        para.put("STOrgCode", MainLogin.objLog.STOrgCode);
+                        para.put("BillCode", sBillCodes);
+                        para.put("sDate", sDate);
+                        para.put("sEndDate", sEndDate);
+                    }
+                    //多角贸易获取list TODO: 2017/7/31
+                    else if (fsFunctionName.equals("多角贸易")) {
+                        fsFunctionName = "GetAdjListOrder";
+                        para.put("FunctionName", fsFunctionName);
+                        para.put("COMPANYCODE", MainLogin.objLog.CompanyCode);
+                        para.put("WHID",whID);
+                        para.put("VBILLCODE", sBillCodes);
+                        para.put("STORGCODE", MainLogin.objLog.STOrgCode);
+                        para.put("SDATE", sDate);
+                        para.put("EDATE", sEndDate);
+                    }
 
                 } catch (JSONException e2) {
                     // TODO Auto-generated catch block
@@ -265,6 +279,8 @@ public class GetInvBaseInfo {
                         return;
                     }
                     jas = Common.DoHttpQuery(para, "CommonQuery", "");
+                    Log.d(TAG, "JAS: " + jas.toString());
+
                 } catch (Exception ex) {
                     Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
                     //ADD CAIXY TEST START
@@ -319,7 +335,7 @@ public class GetInvBaseInfo {
                     //ADD CAIXY TEST END
                     return;
                 }
-            }
+//            }
 
         }
 
@@ -363,42 +379,53 @@ public class GetInvBaseInfo {
                     map.put("Csaleid", tempJso.getString("csaleid"));
                     map.put("saleflg", "");
 
-    //				map.put("pk_corp", tempJso.getString("pk_corp"));
-    //				map.put("custname", tempJso.getString("custname"));
-    //				map.put("pk_cubasdoc", tempJso.getString("pk_cubasdoc"));
-    //				map.put("pk_cumandoc", tempJso.getString("pk_cumandoc"));
-    //				map.put("billID", tempJso.getString("csalereceiveid"));
-    //				map.put("billCode", tempJso.getString("vreceivecode"));
-    //				map.put("dmakedate",tempJso.getString("dmakedate"));
-    //				map.put("AccID", tempJso.getString("AccID"));
-    //				map.put("vdef11", tempJso.getString("vdef11"));
-    //				map.put("vdef12", tempJso.getString("vdef12"));
-    //				map.put("vdef13", tempJso.getString("vdef13"));
-    //				map.put("saleflg", "");
-    //				if(tempJso.getString("AccID").equals("A"))
-    //					map.put("coperatorid", MainLogin.objLog.UserID);//操作者
-    //				else
-    //					map.put("coperatorid", MainLogin.objLog.UserIDB);//操作者
-    //				map.put("ctransporttypeid", tempJso.getString("ctransporttypeid"));//运输方式ID
-    //
-    //				map.put("cbiztype", tempJso.getString("cbiztype"));
+                }
+
+                if (fsFunctionName.equals("GetAdjListOrder"))//多角贸易
+                {
+                    map.put("BillDate", "2017-08-09" );
+//                    map.put("BillCode", tempJso.getString("vreceiptcode"));
+                    map.put("OutCompany", tempJso.getString("coutcompanyname"));
+                    map.put("InCompany", tempJso.getString("coincompanycode"));
+                    map.put("cbillid", tempJso.getString("cbillid"));
+                    map.put("coutcompanyid", tempJso.getString("coutcompanyid"));
+                    map.put("coincompanyid", tempJso.getString("coincompanyid"));
+                    map.put("vbillcode", tempJso.getString("vbillcode"));
+                    map.put("saleflg", "");
+
                 }
 
                 list.add(map);
             }
             SimpleAdapter listItemAdapter = null;
+            if(fsFunctionName.equals("GetSaleOrderList")){
+                listItemAdapter = new SimpleAdapter(this, list,
+                        R.layout.vlistsaledel,
+                        new String[]{"BillCode", "CustName", "BillDate"},
+                        new int[]{R.id.tvBillCode,
+                                R.id.tvCustomer,
+                                R.id.tvBillDate});
 
-            listItemAdapter = new SimpleAdapter(this, list,
-                                                R.layout.vlistsaledel,
-                                                new String[]{"BillCode", "CustName", "BillDate"},
-                                                new int[]{R.id.tvBillCode,
-                                                        R.id.tvCustomer,
-                                                        R.id.tvBillDate});
+                if (listItemAdapter == null)
+                    return;
+                lvSaleBillInfoOrderList.setAdapter(listItemAdapter);
+                lvSaleBillInfoOrderList.setOnItemClickListener(itemListener);
+            }
+             else if (fsFunctionName.equals("GetAdjListOrder")){
+                listItemAdapter = new SimpleAdapter(this, list,
+                        R.layout.multilateral_trade,
+                        new String[]{"vbillcode", "BillDate","OutCompany","InCompany"},
+                        new int[]{R.id.tvBillCode,
+                                R.id.tvBillDate,
+                                R.id.tvCOutCompany,
+                                R.id.tvCInCompany,});
 
-            if (listItemAdapter == null)
-                return;
-            lvSaleBillInfoOrderList.setAdapter(listItemAdapter);
-            lvSaleBillInfoOrderList.setOnItemClickListener(itemListener);
+                if (listItemAdapter == null)
+                    return;
+                lvSaleBillInfoOrderList.setAdapter(listItemAdapter);
+                lvSaleBillInfoOrderList.setOnItemClickListener(itemListener);
+            }
+
 
         }
 
@@ -410,26 +437,36 @@ public class GetInvBaseInfo {
                     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
                                             long arg3) {
 
-                        Adapter             adapter = arg0.getAdapter();
-                        Map<String, Object> map     = (Map<String, Object>) adapter.getItem(arg2);
+                        if (fsFunctionName.equals("GetSaleOrderList"))//多角贸易
+                        {
 
-                        SerializableMap ResultMap = new SerializableMap();
-                        ResultMap.setMap(map);
-    //					String lsAccID = map.get("AccID").toString();
-    //					String lsPk_Corp = map.get("pk_corp").toString();
+                            Adapter             adapter = arg0.getAdapter();
+                            Map<String, Object> map     = (Map<String, Object>) adapter.getItem(arg2);
 
+                            SerializableMap ResultMap = new SerializableMap();
+                            ResultMap.setMap(map);
+                            Intent intent = new Intent();
+                            intent.putExtra("ResultBillInfo", ResultMap);
 
-    //					if(!Common.CheckUserRole(lsAccID, lsPk_Corp, "40080802"))
-    //					{
-    //						MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-    //						Toast.makeText(SaleBillInfoOrderList.this, "没有使用该单据的权限", Toast.LENGTH_LONG).show();
-    //						return;
-    //					}
-                        Intent intent = new Intent();
-                        intent.putExtra("ResultBillInfo", ResultMap);
+                            SaleBillInfoOrderList.this.setResult(1, intent);
+                            SaleBillInfoOrderList.this.finish();
+                        }
 
-                        SaleBillInfoOrderList.this.setResult(1, intent);
-                        SaleBillInfoOrderList.this.finish();
+                        if (fsFunctionName.equals("GetAdjListOrder"))//多角贸易
+                        {
+
+                            Adapter             adapter = arg0.getAdapter();
+                            Map<String, Object> map     = (Map<String, Object>) adapter.getItem(arg2);
+
+                            SerializableMap ResultMap = new SerializableMap();
+                            ResultMap.setMap(map);
+                            Intent intent = new Intent();
+                            intent.putExtra("ResultBillInfo", ResultMap);
+
+                            SaleBillInfoOrderList.this.setResult(1, intent);
+                            SaleBillInfoOrderList.this.finish();
+                        }
+
 
                     }
 

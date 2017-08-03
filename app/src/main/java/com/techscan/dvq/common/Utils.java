@@ -4,8 +4,12 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+
+import java.lang.reflect.Field;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -83,5 +87,18 @@ public class Utils {
         dialog.setMessage(message);
         dialog.setPositiveButton("关闭", null);
         dialog.show();
+    }
+/**
+ * JSONArray 实现兼容老版本API的remove方法
+ */
+    public static void removeJsonArray(int index, JSONArray array) throws Exception{
+        if(index < 0)
+            return;
+        Field valuesField=JSONArray.class.getDeclaredField("values");
+        valuesField.setAccessible(true);
+        List<Object> values=(List<Object>)valuesField.get(array);
+        if(index >= values.size())
+            return;
+        values.remove(index);
     }
 }
