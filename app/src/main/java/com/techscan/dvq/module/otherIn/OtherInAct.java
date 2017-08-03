@@ -409,18 +409,19 @@ public class OtherInAct extends Activity {
         table.put("Head", tableHead);
         JSONObject tableBody = new JSONObject();
         JSONArray  bodyArray = new JSONArray();
-        for (Goods c : goodsList) {
+        for (Goods good : goodsList) {
             JSONObject object = new JSONObject();
-            object.put("CINVBASID", c.getPk_invbasdoc());
-            object.put("CINVENTORYID", c.getPk_invmandoc());
+            object.put("CINVBASID", good.getPk_invbasdoc());
+            object.put("CINVENTORYID", good.getPk_invmandoc());
             object.put("WGDATE", edBillDate.getText().toString());    //LEO要求，将时间添加到表体上
-            object.put("NINNUM", Utils.formatDecimal(c.getQty()));
-            object.put("CINVCODE", c.getEncoding());
+            object.put("NINNUM", Utils.formatDecimal(good.getQty()));
+            object.put("CINVCODE", good.getEncoding());
+            object.put("COSTOBJECT", good.getPk_invmandoc_cost());
             object.put("BLOTMGT", "1");
             object.put("PK_BODYCALBODY", PK_CALBODY);
             object.put("PK_CORP", MainLogin.objLog.STOrgCode);
-            object.put("VBATCHCODE", c.getLot());
-            object.put("VFREE4", c.getManual());    //海关手册号
+            object.put("VBATCHCODE", good.getLot());
+            object.put("VFREE4", good.getManual());    //海关手册号
             bodyArray.put(object);
         }
         tableBody.put("ScanDetails", bodyArray);

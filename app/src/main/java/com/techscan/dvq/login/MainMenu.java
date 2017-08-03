@@ -559,8 +559,8 @@ public class MainMenu extends Activity {
                 case 4:
                     if (RadioGroupType.getCheckedRadioButtonId() == id.radioButton1) {
                         //其他入库
-//                        ShowOtherIn();
-                        Utils.showToast(MainMenu.this, "待加");
+                        ShowOtherIn();
+//                        Utils.showToast(MainMenu.this, "待加");
                     } else if (RadioGroupType.getCheckedRadioButtonId() == id.radioButton2) {
 
                     } else if (RadioGroupType.getCheckedRadioButtonId() == id.radioButton3) {

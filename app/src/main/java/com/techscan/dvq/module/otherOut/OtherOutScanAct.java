@@ -4,9 +4,11 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -26,6 +28,7 @@ import com.techscan.dvq.common.RequestThread;
 import com.techscan.dvq.common.SoundHelper;
 import com.techscan.dvq.common.SplitBarcode;
 import com.techscan.dvq.login.MainLogin;
+import com.techscan.dvq.module.materialOut.MyBaseAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -82,11 +85,12 @@ public class OtherOutScanAct extends Activity {
     String TAG = this.getClass().getSimpleName();
     public static List<Goods> detailList = new ArrayList<Goods>();
     public static List<Goods> ovList     = new ArrayList<Goods>();
+    ArrayList<EditText> edList;
 
     Activity activity;
     String CWAREHOUSEID = "";
     String PK_CALBODY   = "";
-    String BATCH        = "";
+    String vFree4       = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,20 +120,67 @@ public class OtherOutScanAct extends Activity {
         edLot.setOnKeyListener(mOnKeyListener);
         edQty.setOnKeyListener(mOnKeyListener);
         edNum.setOnKeyListener(mOnKeyListener);
-        edManual.setOnKeyListener(mOnKeyListener);
+//        edManual.setOnKeyListener(mOnKeyListener);
         edCostObject.setOnKeyListener(mOnKeyListener);
         edNum.addTextChangedListener(new CustomTextWatcher(edName));
         edBarCode.addTextChangedListener(new CustomTextWatcher(edBarCode));
+        addEdToList();
+    }
+
+    /**
+     * 按照顺序将所有的输入框加入到集合中
+     */
+    private void addEdToList() {
+        edList = new ArrayList<EditText>();
+        edList.add(edBarCode);
+        edList.add(edEncoding);
+        edList.add(edName);
+        edList.add(edType);
+        edList.add(edSpectype);
+        edList.add(edLot);
+        edList.add(edCostObject);
+        edList.add(edCostName);
+        edList.add(edManual);
+        edList.add(edNum);
+        edList.add(edWeight);
+        edList.add(edQty);
+        edList.add(edUnit);
+    }
+
+    /**
+     *遍历集合，如果edtext是 enabled 并且 为空，则该edtext获取焦点
+     */
+    private void nextUIGetFocus() {
+        for (EditText ed : edList) {
+            if (ed.isEnabled() && TextUtils.isEmpty(ed.getText().toString())) {
+                ed.requestFocus();
+                break;
+            }
+        }
     }
 
     @OnClick({R.id.btn_overview, R.id.btn_detail, R.id.btn_back})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_overview:
+                MyBaseAdapter ovAdapter = new MyBaseAdapter(ovList);
+                showDialog(ovList, ovAdapter, "扫描总览");
                 break;
             case R.id.btn_detail:
+                MyBaseAdapter myBaseAdapter = new MyBaseAdapter(detailList);
+                showDialog(detailList, myBaseAdapter, "扫描明细");
                 break;
             case R.id.btn_back:
+                if (ovList.size() > 0) {
+                    Intent in     = new Intent();
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelableArrayList("overViewList", (ArrayList<? extends Parcelable>) ovList);
+                    in.putExtras(bundle);
+                    activity.setResult(5, in);
+                } else {
+                    showToast(activity, "没有扫描单据");
+                }
+                finish();
                 break;
         }
     }
@@ -144,55 +195,45 @@ public class OtherOutScanAct extends Activity {
             super.handleMessage(msg);
             switch (msg.what) {
                 case 1:
-                    JSONObject json = (JSONObject) msg.obj;
-                    try {
-                        if (json != null && json.getBoolean("Status")) {
-                            Log.d(TAG, "InvBaseInfo: " + json.toString());
-                            setInvBaseToUI(json);
-                            getInvBaseVFree4(BATCH);// 获取海关手册号
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    //获取货物基本信息
+                    setInvBaseToUI((JSONObject) msg.obj);
+                    nextUIGetFocus();
+                    // 获取海关手册号
+                    getInvBaseVFree4(edLot.getText().toString());
                     break;
                 case 2:
                     //设置海关手册号
-                    JSONObject jsonObject = (JSONObject) msg.obj;
-                    try {
-                        if (jsonObject != null && jsonObject.getBoolean("Status")) {
-                            Log.d("TAG", "vfree4: " + jsonObject);
-                            JSONArray jsonArray = jsonObject.getJSONArray("vfree4");
-                            if (jsonArray.length() > 0) {
-                                JSONObject j      = jsonArray.getJSONObject(0);
-                                String     vfree4 = j.getString("vfree4");
-                                if (vfree4.equals("null")) {
-                                    edManual.setText("");
-                                } else {
-                                    edManual.setText(vfree4);
-                                }
-                            }
-                        } else {
-                            Log.d("TAG", "vfree4: null");
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    setManualToUI((JSONObject) msg.obj);
                     break;
                 case 3:
-                    JSONObject costObj = (JSONObject) msg.obj;
-                    try {
-                        if (costObj != null && costObj.getBoolean("Status")) {
-                            Log.d(TAG, "InvBaseInfo: " + costObj.toString());
-                            setInvBaseCostObjToUI(costObj);
-                            edManual.requestFocus();
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    //设置成本对象
+                    setInvBaseCostObjToUI((JSONObject) msg.obj);
                     break;
             }
         }
     };
+
+    private void setManualToUI(JSONObject jsonObject) {
+        try {
+            if (jsonObject != null && jsonObject.getBoolean("Status")) {
+                Log.d("TAG", "vfree4: " + jsonObject);
+                JSONArray jsonArray = jsonObject.getJSONArray("vfree4");
+                if (jsonArray.length() > 0) {
+                    JSONObject j      = jsonArray.getJSONObject(0);
+                    String     vfree4 = j.getString("vfree4");
+                    if (vfree4.equals("null")) {
+                        edManual.setText("");
+                    } else {
+                        edManual.setText(vfree4);
+                    }
+                }
+            } else {
+                Log.d("TAG", "vfree4: null");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     private void showDialog(final List list, final BaseAdapter adapter, String title) {
@@ -260,7 +301,6 @@ public class OtherOutScanAct extends Activity {
             return true;
         } else if (barDecoder.BarcodeType.equals("C")) {
             //如果是包码，批次和总重都改变为不可编辑，数量由员工输入，焦点跳到“数量”
-            BATCH = barDecoder.cBatch;
             edLot.setEnabled(false);
             edQty.setEnabled(false);
             edNum.setEnabled(true);
@@ -272,7 +312,7 @@ public class OtherOutScanAct extends Activity {
             edNum.selectAll();
             edNum.setSelection(edNum.length());   //将光标移动到最后的位置
             getInvBaseInfo(barDecoder.cInvCode);
-            edNum.requestFocus();  //包码扫描后光标跳到“数量”,输入数量,添加到列表
+            edNum.requestFocus();  //包码扫描后光标跳到“数量”,输入数量(指多少包),添加到列表
             return true;
         } else if (barDecoder.BarcodeType.equals("TC")) {
             for (int i = 0; i < detailList.size(); i++) {
@@ -283,11 +323,10 @@ public class OtherOutScanAct extends Activity {
                 }
             }
             //如果是盘码，全都设置为不可编辑
-            BATCH = barDecoder.cBatch;
             edLot.setEnabled(false);
             edQty.setEnabled(false);
             edNum.setEnabled(false);
-            edManual.setEnabled(true);
+//            edManual.setEnabled(true);
             edEncoding.setText(barDecoder.cInvCode);
             edLot.setText(barDecoder.cBatch);
             edWeight.setText(String.valueOf(barDecoder.dQuantity));
@@ -296,7 +335,55 @@ public class OtherOutScanAct extends Activity {
             double num = barDecoder.iNumber;
             edQty.setText(formatDecimal(qty * num));
             getInvBaseInfo(barDecoder.cInvCode);
-            edCostObject.requestFocus();
+//            edCostObject.requestFocus();
+            return true;
+        } else if (barDecoder.BarcodeType.equals("P")) {
+            edNum.setEnabled(true);
+//            edManual.setEnabled(true);
+            edNum.setFocusable(true);
+            String invCode = barDecoder.cInvCode;
+            if (invCode.contains(",")) {
+                invCode = invCode.split(",")[0];
+            }
+            edEncoding.setText(invCode);
+            getInvBaseInfo(invCode);
+            String batch = barDecoder.cBatch;
+            if (batch.contains(",")) {
+                batch = batch.split(",")[0];
+            }
+            edLot.setText(batch);
+            edWeight.setText(String.valueOf(barDecoder.dQuantity));
+            edQty.setText("");
+            edNum.setText("1");
+            edNum.setSelection(edNum.length());   //将光标移动到最后的位置
+            edNum.requestFocus();  //包码扫描后光标跳到“数量”,输入数量,添加到列表
+            return true;
+        } else if (barDecoder.BarcodeType.equals("TP")) {
+            for (int i = 0; i < detailList.size(); i++) {
+                if (detailList.get(i).getBarcode().equals(bar)) {
+                    showToast(activity, "该托盘已扫描");
+                    SoundHelper.playWarning();
+                    return false;
+                }
+            }
+//            edManual.setEnabled(true);
+//            edManual.requestFocus();
+            String encoding = barDecoder.cInvCode;
+            if (encoding.contains(",")) {
+                encoding = encoding.split(",")[0];
+            }
+            edEncoding.setText(encoding);
+            getInvBaseInfo(encoding);
+            String batch = barDecoder.cBatch;
+            if (batch.contains(",")) {
+                batch = batch.split(",")[0];
+            }
+            edLot.setText(batch);
+            edWeight.setText(String.valueOf(barDecoder.dQuantity));
+            edNum.setText(String.valueOf(barDecoder.iNumber));
+            double weight = barDecoder.dQuantity;
+            double mEdNum = Double.valueOf(barDecoder.iNumber);
+            edQty.setText(formatDecimal(weight * mEdNum));
             return true;
         } else {
             showToast(activity, "条码有误");
@@ -356,7 +443,6 @@ public class OtherOutScanAct extends Activity {
         goods.setManual(edManual.getText().toString());
         goods.setPk_invbasdoc(pk_invbasdoc);
         goods.setPk_invmandoc(pk_invmandoc);
-        goods.setManual(edManual.getText().toString());
         goods.setPk_invmandoc_cost(pk_invmandoc_cost);
         detailList.add(goods);
         addDataToOvList();
@@ -367,22 +453,10 @@ public class OtherOutScanAct extends Activity {
      * 清空所有的Edtext
      */
     private void changeAllEdTextToEmpty() {
-        edNum.setText("");
-        edBarCode.setText("");
-        edEncoding.setText("");
-        edName.setText("");
-        edType.setText("");
-        edUnit.setText("");
-        edLot.setText("");
-        edQty.setText("");
-        edWeight.setText("");
-        edSpectype.setText("");
-        edCostObject.setText("");
-        edManual.setText("");
+        edBarCode.setText("");  // edBarCode 有一个监听，在那里将全部ed清空
         edLot.setEnabled(false);
         edNum.setEnabled(false);
         edQty.setEnabled(false);
-        edManual.setEnabled(false);
     }
 
     /**
@@ -391,12 +465,6 @@ public class OtherOutScanAct extends Activity {
      * @return true---->所有的ed都不为空,false---->所有的ed都为空
      */
     private boolean isAllEdNotNull() {
-        if (edManual.isEnabled()) {
-            if (TextUtils.isEmpty(edManual.getText())) {
-                showToast(activity, "海关手册号不可为空");
-                return false;
-            }
-        }
         if (!TextUtils.isEmpty(edBarCode.getText())
                 && !TextUtils.isEmpty(edEncoding.getText())
                 && !TextUtils.isEmpty(edName.getText())
@@ -478,9 +546,9 @@ public class OtherOutScanAct extends Activity {
     String pk_invmandoc = "";
 
     private void setInvBaseToUI(JSONObject json) {
-        Log.d(TAG, "setInvBaseToUI: " + json);
         try {
-            if (json.getBoolean("Status")) {
+            if (json != null && json.getBoolean("Status")) {
+                Log.d(TAG, "setInvBaseToUI: " + json);
                 JSONArray               val = json.getJSONArray("baseInfo");
                 HashMap<String, Object> map = null;
                 for (int i = 0; i < val.length(); i++) {
@@ -503,12 +571,7 @@ public class OtherOutScanAct extends Activity {
                     edUnit.setText(map.get("measname").toString());
                     edType.setText(map.get("invtype").toString());
                     edSpectype.setText(map.get("invspec").toString());
-                    String vFree4 = map.get("isfree4").toString();
-                    if (vFree4.equals("Y")) {   //只有Y,两种值
-                        edManual.setEnabled(true);
-                    } else {
-                        edManual.setEnabled(false);
-                    }
+                    vFree4 = map.get("isfree4").toString(); //只有Y,两种值
                 }
             }
         } catch (JSONException e) {
@@ -525,9 +588,9 @@ public class OtherOutScanAct extends Activity {
     String pk_invmandoc_cost = "";
 
     private void setInvBaseCostObjToUI(JSONObject json) {
-        Log.d(TAG, "setInvBaseCostObjToUI: " + json);
         try {
-            if (json.getBoolean("Status")) {
+            if (json != null && json.getBoolean("Status")) {
+                Log.d(TAG, "setInvBaseCostObjToUI: " + json);
                 JSONArray               val = json.getJSONArray("baseInfo");
                 HashMap<String, Object> map = null;
                 for (int i = 0; i < val.length(); i++) {
@@ -580,6 +643,8 @@ public class OtherOutScanAct extends Activity {
                         edWeight.setText("");
                         edSpectype.setText("");
                         edCostObject.setText("");
+                        edCostName.setText("");
+                        edManual.setText("");
                     }
                     break;
                 case ed_num:
@@ -603,6 +668,7 @@ public class OtherOutScanAct extends Activity {
                     break;
             }
         }
+
     }
 
     /**
@@ -633,8 +699,7 @@ public class OtherOutScanAct extends Activity {
                             showToast(activity, "请输入批次号");
                             return true;
                         } else {
-                            BATCH = edLot.getText().toString();
-                            getInvBaseVFree4(BATCH);// 获取海关手册号
+                            getInvBaseVFree4(edLot.getText().toString());// 获取海关手册号
                             edQty.requestFocus();  //输入完批次后讲焦点跳到“总量（edQty）”
                             return true;
                         }
@@ -665,32 +730,62 @@ public class OtherOutScanAct extends Activity {
                             showToast(activity, "请输入数量");
                             return true;
                         }
-                        if (!isNumber(edNum.getText().toString())) {
+                        String num_s = edNum.getText().toString();
+                        if (!isNumber(num_s)) {
                             showToast(activity, "数量不正确");
                             return true;
                         }
                         //包码需要输入 有多少包，并计算出总数量
-                        float num = Float.valueOf(edNum.getText().toString());
-                        if (num <= 0) {
+                        float num_f = Float.valueOf(num_s);
+                        if (num_f <= 0) {
                             edNum.setText("");
                             showToast(activity, "数量不正确");
                             return true;
                         }
 
                         float weight = Float.valueOf(edWeight.getText().toString());
-                        edQty.setText(String.valueOf(num * weight));
+                        edQty.setText(String.valueOf(num_f * weight));
+
                         addDataToDetailList();
                         edBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
                         changeAllEdTextToEmpty();
                         return true;
-                    case R.id.ed_manual:
-                        if (isAllEdNotNull()) {
-                            addDataToDetailList();
-                            edBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
-                            changeAllEdTextToEmpty();
-                        }
-                        return true;
+//                    case R.id.ed_manual:
+//                        if (vFree4.equals("Y") && TextUtils.isEmpty(edManual.getText().toString())) {
+//                            showToast(activity, "海关手册号不可为空");
+//                            return true;
+//                        }
+//                        if (vFree4.equals("N") && !TextUtils.isEmpty(edManual.getText().toString())) {
+//                            showToast(activity, "此项应该为空值");
+//                            return true;
+//                        }
+//                        if (isAllEdNotNull()) {
+//                            addDataToDetailList();
+////                            edBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
+//                            changeAllEdTextToEmpty();
+//                            nextUIGetFocus();
+//                        }
+//                        return true;
                     case R.id.ed_cost_object:
+//                        edManual.requestFocus();
+                        // 成本对象为空，说明此项没有，直接入
+                        if (TextUtils.isEmpty(edCostObject.getText())) {
+                            if (isAllEdNotNull()) {
+                                addDataToDetailList();
+                                edBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
+                                changeAllEdTextToEmpty();
+                                return true;
+                            }
+                        }
+                        // 成本对象有，名字也有 ，说明可以此项有值，直接入
+                        if (!TextUtils.isEmpty(edCostName.getText()) && !TextUtils.isEmpty(edCostObject.getText())) {
+                            if (isAllEdNotNull()) {
+                                addDataToDetailList();
+                                edBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
+                                changeAllEdTextToEmpty();
+                                return true;
+                            }
+                        }
                         String invCode = edCostObject.getText().toString();
                         getInvCostObj(invCode);
                         return true;

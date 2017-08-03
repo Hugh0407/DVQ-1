@@ -1,6 +1,9 @@
 package com.techscan.dvq.common;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+
+import Decoder.BASE64Decoder;
 
 /**
  * Created by cloverss on 2017/7/20.
@@ -82,6 +85,17 @@ public class Base64Encoder {
             e.printStackTrace();
         } finally {
             return "";
+        }
+    }
+
+    public static String decoder(String s) {
+        BASE64Decoder decoder = new BASE64Decoder();
+        try {
+            byte[] b = decoder.decodeBuffer(s);
+            return new String(b, "GB2312");
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }

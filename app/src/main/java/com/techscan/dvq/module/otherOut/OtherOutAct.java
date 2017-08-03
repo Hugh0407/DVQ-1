@@ -115,6 +115,57 @@ public class OtherOutAct extends Activity {
         init();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        activity = null;
+    }
+
+    @OnClick({R.id.btn_refer_wh, R.id.btn_refer_org, R.id.btn_refer_lei_bie,
+            R.id.btn_refer_dep, R.id.btn_scan, R.id.btn_save, R.id.btn_back})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.btn_refer_wh:
+                btnWarehouseClick();
+                break;
+            case R.id.btn_refer_org:
+                btnReferSTOrgList();
+                break;
+            case R.id.btn_refer_lei_bie:
+                btnRdclClick("");
+                break;
+            case R.id.btn_refer_dep:
+                btnReferDepartment();
+                break;
+            case R.id.btn_scan:
+                if (isAllEdNotEmpty()) {
+                    Intent in = new Intent(activity, OtherOutScanAct.class);
+                    in.putExtra("CWAREHOUSEID", CWAREHOUSEID);
+                    in.putExtra("PK_CALBODY", PK_CALBODY);
+                    startActivityForResult(in, 95);
+                    if (tempList != null) {
+                        tempList.clear();
+                    }
+                } else {
+                    showToast(activity, "请先核对信息，再进行扫描");
+                }
+                break;
+            case R.id.btn_save:
+                if (checkSaveInfo()) {
+                    if (tempList != null && tempList.size() > 0) {
+                        saveInfo(tempList);
+                        showProgressDialog();
+                    } else {
+                        showToast(activity, "没有需要保存的数据");
+                    }
+                }
+                break;
+            case R.id.btn_back:
+                finish();
+                break;
+        }
+    }
+
     private void init() {
         ActionBar actionBar = this.getActionBar();
         actionBar.setTitle("其他出库");
@@ -136,12 +187,6 @@ public class OtherOutAct extends Activity {
     @Override
     public void onBackPressed() {
 
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        activity = null;
     }
 
     @Override
@@ -197,51 +242,6 @@ public class OtherOutAct extends Activity {
         if (requestCode == 95 && resultCode == 5) {
             Bundle bundle = data.getExtras();
             tempList = bundle.getParcelableArrayList("overViewList");
-        }
-    }
-
-    @OnClick({R.id.btn_refer_wh, R.id.btn_refer_org, R.id.btn_refer_lei_bie,
-            R.id.btn_refer_dep, R.id.btn_scan, R.id.btn_save, R.id.btn_back})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.btn_refer_wh:
-                btnWarehouseClick();
-                break;
-            case R.id.btn_refer_org:
-                btnReferSTOrgList();
-                break;
-            case R.id.btn_refer_lei_bie:
-                btnRdclClick("");
-                break;
-            case R.id.btn_refer_dep:
-                btnReferDepartment();
-                break;
-            case R.id.btn_scan:
-                if (isAllEdNotEmpty()) {
-                    Intent in = new Intent(activity, OtherOutScanAct.class);
-                    in.putExtra("CWAREHOUSEID", CWAREHOUSEID);
-                    in.putExtra("PK_CALBODY", PK_CALBODY);
-                    startActivityForResult(in, 95);
-                    if (tempList != null) {
-                        tempList.clear();
-                    }
-                } else {
-                    showToast(activity, "请先核对信息，再进行扫描");
-                }
-                break;
-            case R.id.btn_save:
-                if (checkSaveInfo()) {
-                    if (tempList != null && tempList.size() > 0) {
-                        saveInfo(tempList);
-                        showProgressDialog();
-                    } else {
-                        showToast(activity, "没有需要保存的数据");
-                    }
-                }
-                break;
-            case R.id.btn_back:
-                finish();
-                break;
         }
     }
 

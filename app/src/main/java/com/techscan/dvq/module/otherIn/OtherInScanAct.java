@@ -61,9 +61,13 @@ public class OtherInScanAct extends Activity {
     EditText edSpectype;
     @InjectView(R.id.ed_batch)
     EditText edBatch;
+    @InjectView(R.id.ed_cost_object)
+    EditText edCostObject;
+    @InjectView(R.id.ed_cost_name)
+    EditText edCostName;
     @InjectView(R.id.ed_manual)
     EditText edManual;
-    @InjectView(ed_num)
+    @InjectView(R.id.ed_num)
     EditText edNum;
     @InjectView(R.id.ed_weight)
     EditText edWeight;
@@ -85,6 +89,7 @@ public class OtherInScanAct extends Activity {
     String PK_CALBODY   = "";
     String BATCH        = "";
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,6 +110,7 @@ public class OtherInScanAct extends Activity {
         edBatch.setOnKeyListener(mOnKeyListener);
         edQty.setOnKeyListener(mOnKeyListener);
         edNum.setOnKeyListener(mOnKeyListener);
+        edCostObject.setOnKeyListener(mOnKeyListener);
         edManual.setOnKeyListener(mOnKeyListener);
         edNum.addTextChangedListener(new CustomTextWatcher(edNum));
         edBarCode.addTextChangedListener(new CustomTextWatcher(edBarCode));
@@ -152,20 +158,11 @@ public class OtherInScanAct extends Activity {
             super.handleMessage(msg);
             switch (msg.what) {
                 case 1:
-                    JSONObject json = (JSONObject) msg.obj;
-                    if (json != null) {
-                        try {
-                            setInvBaseToUI(json);
-//                            if (isBaoBarCode) {
-//                                addDataToDetailList();
-//                                isBaoBarCode = false;
-//                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    } else {
-                        return;
-                    }
+                    setInvBaseToUI((JSONObject) msg.obj);
+                    break;
+                case 3:
+                    //设置成本对象
+                    setInvBaseCostObjToUI((JSONObject) msg.obj);
                     break;
             }
         }
@@ -224,7 +221,6 @@ public class OtherInScanAct extends Activity {
         if (barDecoder.BarcodeType.equals("P")) {
             edNum.setEnabled(true);
             edManual.setEnabled(true);
-            edNum.setFocusable(true);
             String invCode = barDecoder.cInvCode;
             if (invCode.contains(",")) {
                 invCode = invCode.split(",")[0];
@@ -311,6 +307,7 @@ public class OtherInScanAct extends Activity {
             edQty.setEnabled(false);
             edQty.setEnabled(false);
             edNum.setEnabled(false);
+            edManual.setEnabled(true);
             String invCode = barDecoder.cInvCode;
             edInvcode.setText(invCode);
             getInvBaseInfo(invCode);
@@ -320,7 +317,7 @@ public class OtherInScanAct extends Activity {
             double qty = barDecoder.dQuantity;
             double num = barDecoder.iNumber;
             edQty.setText(formatDecimal(qty * num));
-//            edc.requestFocus();
+            edManual.requestFocus();
             return true;
         } else {
             showToast(mActivity, "条码有误重新输入");
@@ -410,6 +407,7 @@ public class OtherInScanAct extends Activity {
                 good.setPk_invmandoc(dtGood.getPk_invmandoc());
                 good.setCostObject(dtGood.getCostObject());
                 good.setManual(dtGood.getManual());
+                good.setPk_invmandoc_cost(dtGood.getPk_invmandoc_cost());
                 ovList.add(good);
             }
         }
@@ -433,6 +431,7 @@ public class OtherInScanAct extends Activity {
         goods.setQty(Float.valueOf(edQty.getText().toString()));
         goods.setManual(edManual.getText().toString());
         goods.setCostObject("");    // 默认没有
+        goods.setPk_invmandoc_cost(pk_invmandoc_cost);
         goods.setPk_invbasdoc(pk_invbasdoc);
         goods.setPk_invmandoc(pk_invmandoc);
         if (edManual.getText().toString().isEmpty()) {
@@ -459,8 +458,9 @@ public class OtherInScanAct extends Activity {
         edWeight.setText("");
         edSpectype.setText("");
         edManual.setText("");
+        edCostName.setText("");
+        edCostObject.setText("");
         edNum.setEnabled(false);
-        edManual.setEnabled(false);
     }
 
     /**
@@ -522,6 +522,22 @@ public class OtherInScanAct extends Activity {
         td.start();
     }
 
+    /**
+     * 获取成品对象
+     *
+     * @param invCode 物料编码
+     */
+    private void getInvCostObj(String invCode) {
+        HashMap<String, String> parameter = new HashMap<String, String>();
+        parameter.put("FunctionName", "GetInvBaseInfo");
+        parameter.put("CompanyCode", MainLogin.objLog.CompanyCode);
+        parameter.put("InvCode", invCode);
+        parameter.put("TableName", "baseInfo");
+        RequestThread requestThread = new RequestThread(parameter, mHandler, 3);
+        Thread        td            = new Thread(requestThread);
+        td.start();
+    }
+
 
     /**
      * 通过获取到的json 解析得到物料信息,并设置到UI上
@@ -532,32 +548,65 @@ public class OtherInScanAct extends Activity {
     String pk_invbasdoc = "";
     String pk_invmandoc = "";
 
-    private void setInvBaseToUI(JSONObject json) throws JSONException {
+    private void setInvBaseToUI(JSONObject json) {
         Log.d("TAG", "setInvBaseToUI: " + json);
-        if (json.getBoolean("Status")) {
-            JSONArray               val = json.getJSONArray("baseInfo");
-            HashMap<String, Object> map = null;
-            for (int i = 0; i < val.length(); i++) {
-                JSONObject tempJso = val.getJSONObject(i);
-                map = new HashMap<String, Object>();
-                map.put("invname", tempJso.getString("invname"));   //橡胶填充油
-                map.put("invcode", tempJso.getString("invcode"));   //00179
-                map.put("measname", tempJso.getString("measname"));   //千克
-                map.put("pk_invbasdoc", tempJso.getString("pk_invbasdoc"));
-                pk_invbasdoc = tempJso.getString("pk_invbasdoc");
-                map.put("pk_invmandoc", tempJso.getString("pk_invmandoc"));
-                pk_invmandoc = tempJso.getString("pk_invmandoc");
-                map.put("invtype", tempJso.getString("invtype"));   //型号
-                map.put("invspec", tempJso.getString("invspec"));   //规格
-                map.put("oppdimen", tempJso.getString("oppdimen"));   //重量
-            }
-            if (map != null) {
-                edName.setText(map.get("invname").toString());
-                edUnit.setText(map.get("measname").toString());
-                edType.setText(map.get("invtype").toString());
-                edSpectype.setText(map.get("invspec").toString());
-            }
+        try {
+            if (json != null && json.getBoolean("Status")) {
+                JSONArray               val = json.getJSONArray("baseInfo");
+                HashMap<String, Object> map = null;
+                for (int i = 0; i < val.length(); i++) {
+                    JSONObject tempJso = val.getJSONObject(i);
+                    map = new HashMap<String, Object>();
+                    map.put("invname", tempJso.getString("invname"));   //橡胶填充油
+                    map.put("invcode", tempJso.getString("invcode"));   //00179
+                    map.put("measname", tempJso.getString("measname"));   //千克
+                    map.put("pk_invbasdoc", tempJso.getString("pk_invbasdoc"));
+                    pk_invbasdoc = tempJso.getString("pk_invbasdoc");
+                    map.put("pk_invmandoc", tempJso.getString("pk_invmandoc"));
+                    pk_invmandoc = tempJso.getString("pk_invmandoc");
+                    map.put("invtype", tempJso.getString("invtype"));   //型号
+                    map.put("invspec", tempJso.getString("invspec"));   //规格
+                    map.put("oppdimen", tempJso.getString("oppdimen"));   //重量
+                }
+                if (map != null) {
+                    edName.setText(map.get("invname").toString());
+                    edUnit.setText(map.get("measname").toString());
+                    edType.setText(map.get("invtype").toString());
+                    edSpectype.setText(map.get("invspec").toString());
+                }
 
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 获取成本对象
+     *
+     * @param json
+     * @throws JSONException
+     */
+    String pk_invmandoc_cost = "";
+
+    private void setInvBaseCostObjToUI(JSONObject json) {
+        try {
+            if (json != null && json.getBoolean("Status")) {
+                Log.d("", "setInvBaseCostObjToUI: " + json);
+                JSONArray               val = json.getJSONArray("baseInfo");
+                HashMap<String, Object> map = null;
+                for (int i = 0; i < val.length(); i++) {
+                    JSONObject tempJso = val.getJSONObject(i);
+                    map = new HashMap<String, Object>();
+                    map.put("invname", tempJso.getString("invname"));   //橡胶填充油
+                    pk_invmandoc_cost = tempJso.getString("pk_invmandoc");
+                }
+                if (map != null) {
+                    edCostName.setText(map.get("invname").toString());
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
@@ -637,14 +686,6 @@ public class OtherInScanAct extends Activity {
                             showToast(mActivity, "请输入条码");
                             return true;
                         }
-//                        if (isAllEdNotNull()) {
-////                                addDataToDetailList();
-//                            edBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
-//                            changeAllEdTextToEmpty();
-//                        } else {
-//                            barAnalysis();
-//                        }
-
                         barAnalysis();
                         return true;
                     case ed_num:
@@ -670,6 +711,38 @@ public class OtherInScanAct extends Activity {
                         edBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
                         changeAllEdTextToEmpty();
                         return true;
+                    case R.id.ed_batch:
+                        //液体需要根据批次号获取海关手册号
+                        if (TextUtils.isEmpty(edBatch.getText().toString())) {
+                            showToast(mActivity, "请输入批次号");
+                        } else {
+                            BATCH = edBatch.getText().toString();
+                            getInvBaseVFree4(BATCH);// 获取海关手册号
+                            edQty.requestFocus();  //输入完批次后讲焦点跳到“总量（mEdQty）”
+                        }
+                        return true;
+                    case R.id.ed_qty:
+                        if (TextUtils.isEmpty(edQty.getText().toString())) {
+                            showToast(mActivity, "请输入数量");
+                            return true;
+                        }
+                        String qty_s = edQty.getText().toString();
+                        if (!isNumber(qty_s)) {
+                            showToast(mActivity, "总量不正确");
+                            edQty.setText("");
+                            return true;
+                        }
+                        float qty_f = Float.valueOf(qty_s);
+                        if (qty_f <= 0) {
+                            showToast(mActivity, "总量不正确");
+                            edQty.setText("");
+                            return true;
+                        }
+
+                        addDataToDetailList();
+                        edBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
+                        changeAllEdTextToEmpty();
+                        return true;
                     case R.id.ed_manual:
                         if (isAllEdNotNull()) {
                             addDataToDetailList();
@@ -677,16 +750,12 @@ public class OtherInScanAct extends Activity {
                             changeAllEdTextToEmpty();
                         }
                         return true;
-                    case R.id.ed_batch:
-                        if (TextUtils.isEmpty(edBatch.getText().toString())) {
-                            showToast(mActivity, "请输入批次号");
-                            return true;
-                        } else {
-                            BATCH = edBatch.getText().toString();
-                            getInvBaseVFree4(BATCH);// 获取海关手册号
-                            edQty.requestFocus();  //输入完批次后讲焦点跳到“总量（mEdQty）”
-                            return true;
-                        }
+                    case R.id.ed_cost_object:
+                        String invCode = edCostObject.getText().toString();
+                        getInvCostObj(invCode);
+                        edManual.requestFocus();
+//                        nextUIGetFocus();
+                        return true;
                 }
             }
             return false;

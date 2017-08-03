@@ -9,6 +9,7 @@
     android:orientation="vertical"
     tools:context=".module.materialOut.scan.MaterialOutScanAct">
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -242,6 +243,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/edittext_style"
                     android:ems="10"
+                    android:enabled="false"
                     android:maxLines="1"
                     android:singleLine="true"
                     android:textAllCaps="true"
@@ -271,6 +273,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/edittext_style"
                 android:ems="10"
+                android:enabled="false"
                 android:inputType="text"
                 android:maxLines="1"
                 android:singleLine="true"
@@ -408,6 +411,35 @@
                     android:textAllCaps="true"/>
 
             </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="4dp"
+                android:gravity="center_vertical"
+                android:text="是否拆拖"
+                android:textSize="16sp"/>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+
+            <Switch
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:thumb="@drawable/switch_thumb"
+                android:track="@drawable/switch_track"/>
         </LinearLayout>
 
 

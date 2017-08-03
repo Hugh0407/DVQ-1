@@ -1,4 +1,4 @@
-package com.techscan.dvq.module.productIn.scan;
+package com.techscan.dvq.module.productIn;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -153,20 +153,7 @@ public class ProductInScanAct extends Activity {
             super.handleMessage(msg);
             switch (msg.what) {
                 case 1:
-                    JSONObject json = (JSONObject) msg.obj;
-                    if (json != null) {
-                        try {
-                            setInvBaseToUI(json);
-//                            if (isBaoBarCode) {
-//                                addDataToDetailList();
-//                                isBaoBarCode = false;
-//                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    } else {
-                        return;
-                    }
+                    setInvBaseToUI((JSONObject) msg.obj);
                     break;
             }
         }
@@ -225,7 +212,6 @@ public class ProductInScanAct extends Activity {
         if (barDecoder.BarcodeType.equals("P")) {
             mEdNum.setEnabled(true);
             mEdManual.setEnabled(true);
-            mEdNum.setFocusable(true);
             String invCode = barDecoder.cInvCode;
             if (invCode.contains(",")) {
                 invCode = invCode.split(",")[0];
@@ -459,32 +445,36 @@ public class ProductInScanAct extends Activity {
     String pk_invbasdoc = "";
     String pk_invmandoc = "";
 
-    private void setInvBaseToUI(JSONObject json) throws JSONException {
-        Log.d(TAG, "setInvBaseToUI: " + json);
-        if (json.getBoolean("Status")) {
-            JSONArray               val = json.getJSONArray("baseInfo");
-            HashMap<String, Object> map = null;
-            for (int i = 0; i < val.length(); i++) {
-                JSONObject tempJso = val.getJSONObject(i);
-                map = new HashMap<String, Object>();
-                map.put("invname", tempJso.getString("invname"));   //橡胶填充油
-                map.put("invcode", tempJso.getString("invcode"));   //00179
-                map.put("measname", tempJso.getString("measname"));   //千克
-                map.put("pk_invbasdoc", tempJso.getString("pk_invbasdoc"));
-                pk_invbasdoc = tempJso.getString("pk_invbasdoc");
-                map.put("pk_invmandoc", tempJso.getString("pk_invmandoc"));
-                pk_invmandoc = tempJso.getString("pk_invmandoc");
-                map.put("invtype", tempJso.getString("invtype"));   //型号
-                map.put("invspec", tempJso.getString("invspec"));   //规格
-                map.put("oppdimen", tempJso.getString("oppdimen"));   //重量
-            }
-            if (map != null) {
-                mEdName.setText(map.get("invname").toString());
-                mEdUnit.setText(map.get("measname").toString());
-                mEdType.setText(map.get("invtype").toString());
-                mEdSpectype.setText(map.get("invspec").toString());
-            }
+    private void setInvBaseToUI(JSONObject json) {
+        try {
+            if (json != null && json.getBoolean("Status")) {
+                Log.d(TAG, "setInvBaseToUI: " + json);
+                JSONArray               val = json.getJSONArray("baseInfo");
+                HashMap<String, Object> map = null;
+                for (int i = 0; i < val.length(); i++) {
+                    JSONObject tempJso = val.getJSONObject(i);
+                    map = new HashMap<String, Object>();
+                    map.put("invname", tempJso.getString("invname"));   //橡胶填充油
+                    map.put("invcode", tempJso.getString("invcode"));   //00179
+                    map.put("measname", tempJso.getString("measname"));   //千克
+                    map.put("pk_invbasdoc", tempJso.getString("pk_invbasdoc"));
+                    pk_invbasdoc = tempJso.getString("pk_invbasdoc");
+                    map.put("pk_invmandoc", tempJso.getString("pk_invmandoc"));
+                    pk_invmandoc = tempJso.getString("pk_invmandoc");
+                    map.put("invtype", tempJso.getString("invtype"));   //型号
+                    map.put("invspec", tempJso.getString("invspec"));   //规格
+                    map.put("oppdimen", tempJso.getString("oppdimen"));   //重量
+                }
+                if (map != null) {
+                    mEdName.setText(map.get("invname").toString());
+                    mEdUnit.setText(map.get("measname").toString());
+                    mEdType.setText(map.get("invtype").toString());
+                    mEdSpectype.setText(map.get("invspec").toString());
+                }
 
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
@@ -564,14 +554,6 @@ public class ProductInScanAct extends Activity {
                             showToast(mActivity, "请输入条码");
                             return true;
                         }
-//                        if (isAllEdNotNull()) {
-////                                addDataToDetailList();
-//                            mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
-//                            changeAllEdTextToEmpty();
-//                        } else {
-//                            barAnalysis();
-//                        }
-
                         barAnalysis();
                         return true;
                     case ed_num:
@@ -593,7 +575,6 @@ public class ProductInScanAct extends Activity {
 
                         float weight = Float.valueOf(mEdWeight.getText().toString());
                         mEdQty.setText(String.valueOf(num * weight));
-//                            if (isAllEdNotNull() && ) {
                         addDataToDetailList();
                         mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
                         changeAllEdTextToEmpty();
