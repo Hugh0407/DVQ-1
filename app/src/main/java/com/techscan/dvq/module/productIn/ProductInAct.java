@@ -34,7 +34,6 @@ import com.techscan.dvq.common.Utils;
 import com.techscan.dvq.login.MainLogin;
 import com.techscan.dvq.module.materialOut.DepartmentListAct;
 import com.techscan.dvq.module.materialOut.StorgListAct;
-import com.techscan.dvq.module.productIn.scan.ProductInScanAct;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -156,14 +155,8 @@ public class ProductInAct extends Activity {
             case R.id.btnPurinSave:
                 if (checkSaveInfo()) {
                     if (tempList != null && tempList.size() > 0) {
-                        try {
-                            saveInfo(tempList);
-                            showProgressDialog();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        } catch (UnsupportedEncodingException e) {
-                            e.printStackTrace();
-                        }
+                        saveInfo(tempList);
+                        showProgressDialog();
                     } else {
                         showToast(mActivity, "没有需要保存的数据");
                     }
@@ -399,50 +392,56 @@ public class ProductInAct extends Activity {
      * @param goodsList
      * @throws JSONException
      */
-    private void saveInfo(List<Goods> goodsList) throws JSONException, UnsupportedEncodingException {
+    private void saveInfo(List<Goods> goodsList) {
         final JSONObject table     = new JSONObject();
         JSONObject       tableHead = new JSONObject();
-        tableHead.put("CDISPATCHERID", CDISPATCHERID);
-        tableHead.put("CDPTID", CDPTID);
-        tableHead.put("CUSER", MainLogin.objLog.UserID);
-        tableHead.put("CWAREHOUSEID", CWAREHOUSEID);
-        tableHead.put("PK_CALBODY", PK_CALBODY);
-        tableHead.put("PK_CORP", MainLogin.objLog.STOrgCode);
-        tableHead.put("VBILLCODE", mBillNum.getText().toString());
-        String login_user = MainLogin.objLog.LoginUser.toString();
-        String cuserName  = Base64Encoder.encode(login_user.getBytes("gb2312"));
-        tableHead.put("CUSERNAME", cuserName);
-        if (mRemark.getText().toString().isEmpty()) {
-            mRemark.setText("");
-        }
-        tableHead.put("VNOTE", mRemark.getText().toString());
-        tableHead.put("FREPLENISHFLAG", "N");    //N不退，Y退
-        table.put("Head", tableHead);
-        JSONObject tableBody = new JSONObject();
-        JSONArray  bodyArray = new JSONArray();
-        for (Goods c : goodsList) {
-            JSONObject object = new JSONObject();
-            object.put("CINVBASID", c.getPk_invbasdoc());
-            object.put("CINVENTORYID", c.getPk_invmandoc());
-            object.put("WGDATE", mBillDate.getText().toString());    //LEO要求，将时间添加到表体上
-            object.put("NINNUM", Utils.formatDecimal(c.getQty()));
-            object.put("CINVCODE", c.getEncoding());
-            object.put("BLOTMGT", "1");
-            object.put("PK_BODYCALBODY", PK_CALBODY);
-            object.put("PK_CORP", MainLogin.objLog.STOrgCode);
-            object.put("VBATCHCODE", c.getLot());
-            object.put("VFREE4", c.getManual());    //海关手册号
-            bodyArray.put(object);
-        }
-        tableBody.put("ScanDetails", bodyArray);
-        table.put("Body", tableBody);
-        table.put("GUIDS", UUID.randomUUID().toString());
-        table.put("OPDATE", MainLogin.appTime);
-        Log.d(TAG, "saveInfo: " + table.toString());
+        try {
+            tableHead.put("CDISPATCHERID", CDISPATCHERID);
+            tableHead.put("CDPTID", CDPTID);
+            tableHead.put("CUSER", MainLogin.objLog.UserID);
+            tableHead.put("CWAREHOUSEID", CWAREHOUSEID);
+            tableHead.put("PK_CALBODY", PK_CALBODY);
+            tableHead.put("PK_CORP", MainLogin.objLog.STOrgCode);
+            tableHead.put("VBILLCODE", mBillNum.getText().toString());
+            String login_user = MainLogin.objLog.LoginUser.toString();
+            String cuserName  = Base64Encoder.encode(login_user.getBytes("gb2312"));
+            tableHead.put("CUSERNAME", cuserName);
+            if (mRemark.getText().toString().isEmpty()) {
+                mRemark.setText("");
+            }
+            tableHead.put("VNOTE", mRemark.getText().toString());
+            tableHead.put("FREPLENISHFLAG", "N");    //N不退，Y退
+            table.put("Head", tableHead);
+            JSONObject tableBody = new JSONObject();
+            JSONArray  bodyArray = new JSONArray();
+            for (Goods c : goodsList) {
+                JSONObject object = new JSONObject();
+                object.put("CINVBASID", c.getPk_invbasdoc());
+                object.put("CINVENTORYID", c.getPk_invmandoc());
+                object.put("WGDATE", mBillDate.getText().toString());    //LEO要求，将时间添加到表体上
+                object.put("NINNUM", Utils.formatDecimal(c.getQty()));
+                object.put("CINVCODE", c.getEncoding());
+                object.put("BLOTMGT", "1");
+                object.put("PK_BODYCALBODY", PK_CALBODY);
+                object.put("PK_CORP", MainLogin.objLog.STOrgCode);
+                object.put("VBATCHCODE", c.getLot());
+                object.put("VFREE4", c.getManual());    //海关手册号
+                bodyArray.put(object);
+            }
+            tableBody.put("ScanDetails", bodyArray);
+            table.put("Body", tableBody);
+            table.put("GUIDS", UUID.randomUUID().toString());
+            table.put("OPDATE", MainLogin.appTime);
+            Log.d(TAG, "saveInfo: " + table.toString());
 
-        SaveThread saveThread = new SaveThread(table, "SavePrdStockIn", mHandler, HANDER_SAVE_RESULT);
-        Thread     thread     = new Thread(saveThread);
-        thread.start();
+            SaveThread saveThread = new SaveThread(table, "SavePrdStockIn", mHandler, HANDER_SAVE_RESULT);
+            Thread     thread     = new Thread(saveThread);
+            thread.start();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 
     // 打开收发类别画面
@@ -485,9 +484,7 @@ public class ProductInAct extends Activity {
             if (rev == null) {
                 // 网络通讯错误
                 Toast.makeText(this, "错误！网络通讯错误", Toast.LENGTH_LONG).show();
-                // ADD CAIXY TEST START
                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                // ADD CAIXY TEST END
                 return;
             }
             if (rev.getBoolean("Status")) {

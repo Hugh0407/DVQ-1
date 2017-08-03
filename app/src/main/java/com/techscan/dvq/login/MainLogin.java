@@ -276,6 +276,7 @@ public class MainLogin extends Activity {
 
                             } else {
                                 String ErrMsg = jas.getString("ErrMsg");
+                                Log.d("TAG", "accept: " + ErrMsg);
                                 Utils.showToast(MainLogin.this, ErrMsg);
                                 SoundHelper.playWarning();
                             }

@@ -1,4 +1,4 @@
-package com.techscan.dvq.module.productIn.scan;
+package com.techscan.dvq.module.productIn;
 
 import android.app.ActionBar;
 import android.app.Activity;
