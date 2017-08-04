@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -51,26 +53,43 @@ public class MainMenu extends Activity {
 //    Button mBtnXun;
 //    @InjectView(id.btn_hu)
 //    Button mBtnHu;
+    @Nullable
     private String[] BillTypeNameList = null;
+    @Nullable
     private String[] BillTypeCodeList = null;
 
+    @Nullable
     String fileName       = null;
+    @Nullable
     String fileNameScan   = null;
+    @Nullable
     String ScanedFileName = null;
     String isReturn;//是否退货的标志位，N 不退货，Y退货
+    @Nullable
     String UserID   = null;
+    @Nullable
     File   file     = null;
+    @Nullable
     File   fileScan = null;
 
-    private static AlertDialog    SelectLine     = null;
-    private        buttonOnClickC buttonOnClickC = new buttonOnClickC(0);
-    private        buttonOnClickD buttonOnClickD = new buttonOnClickD(0);
-    private        AlertDialog    SelectButton   = null;
-    static         String[]       LNameList      = new String[2];
-    GridView gridview           = null;
-    TextView tvLoginCompanyName = null;
+    @Nullable
+    private static AlertDialog    SelectLine         = null;
+    @NonNull
+    private        buttonOnClickC buttonOnClickC     = new buttonOnClickC(0);
+    @NonNull
+    private        buttonOnClickD buttonOnClickD     = new buttonOnClickD(0);
+    @Nullable
+    private        AlertDialog    SelectButton       = null;
+    @NonNull
+    static         String[]       LNameList          = new String[2];
+    @Nullable
+                   GridView       gridview           = null;
+    @Nullable
+                   TextView       tvLoginCompanyName = null;
 
+    @Nullable
     static AlertDialog    alertDialog = null;
+    @Nullable
     static ProgressDialog PD          = null;
 
     private RadioButton radioButton1;
@@ -694,10 +713,7 @@ public class MainMenu extends Activity {
         if (keyCode == KeyEvent.KEYCODE_MENU) {// 拦截meu键事件 //do something...
             return false;
         }
-        if (keyCode == KeyEvent.KEYCODE_BACK) {// 拦截返回按钮事件 //do something...
-            return false;
-        }
-        return true;
+        return keyCode != KeyEvent.KEYCODE_BACK;
     }
 
     @Override
@@ -708,7 +724,7 @@ public class MainMenu extends Activity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
@@ -771,7 +787,7 @@ public class MainMenu extends Activity {
         }
 
         @Override
-        public void onClick(DialogInterface dialog, int whichButton) {
+        public void onClick(@NonNull DialogInterface dialog, int whichButton) {
             if (whichButton >= 0) {
                 index = whichButton;
             } else {
@@ -805,7 +821,7 @@ public class MainMenu extends Activity {
         }
 
         @Override
-        public void onClick(DialogInterface dialog, int whichButton) {
+        public void onClick(@NonNull DialogInterface dialog, int whichButton) {
             if (whichButton >= 0) {
                 index = whichButton;
             } else {
@@ -896,7 +912,7 @@ public class MainMenu extends Activity {
     /**
      * 是否退货的dialog
      */
-    private void showIsReturnDialog(final Intent intent) {
+    private void showIsReturnDialog(@NonNull final Intent intent) {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainMenu.this);
         builder.setTitle("是否退货");
         builder.setItems(new String[]{"退货", "不退货"}, new DialogInterface.OnClickListener() {

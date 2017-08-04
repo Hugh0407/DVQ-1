@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -46,20 +48,27 @@ public class Sample_stokcing_detail extends Activity {
 	Button btnDetail;
 	Button btnCheckBox;
 	Button btnReturn;
+	@Nullable
 	private AlertDialog DeleteButton = null;
 
-	ArrayList<HashMap<String, String>> array1 = null;
-	SimpleAdapter listItemAdapter = null;
-	List<Map<String, Object>> lstTaskBody = null;
-	List<Map<String, Object>> lstTaskBody1 = null;
+	@Nullable
+	ArrayList<HashMap<String, String>> array1          = null;
+	@Nullable
+	SimpleAdapter                      listItemAdapter = null;
+	@Nullable
+	List<Map<String, Object>>          lstTaskBody     = null;
+	@Nullable
+	List<Map<String, Object>>          lstTaskBody1    = null;
 
 	public List<Map<String, Object>> mData;
 //	private SoundPool sp;// 声明一个SoundPool
 //	private int MainLogin.music;// 定义一个int来设置suondID
 //	private int MainLogin.music2;// 定义一个int来设置suondID
 	boolean m_AvToPD = false; // 是否允许盘点
+	@NonNull
 	private ButtonOnClick buttonDelOnClick = new ButtonOnClick(0);
-	private AlertDialog SelectButton = null;
+	@Nullable
+	private AlertDialog   SelectButton     = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -127,7 +136,7 @@ public class Sample_stokcing_detail extends Activity {
 		}
 
 		@Override
-		public void onClick(DialogInterface dialog, int whichButton) {
+		public void onClick(@NonNull DialogInterface dialog, int whichButton) {
 			if (whichButton >= 0) {
 				index = whichButton;
 				// dialog.cancel();
@@ -146,7 +155,7 @@ public class Sample_stokcing_detail extends Activity {
 
 	}
 
-	private boolean InserScanDetail(SplitBarcode bar) throws JSONException,
+	private boolean InserScanDetail(@NonNull SplitBarcode bar) throws JSONException,
 			ParseException, IOException {
 		JSONObject result = null;
 		JSONObject para = new JSONObject();
@@ -384,7 +393,7 @@ public class Sample_stokcing_detail extends Activity {
 
 	private void DeleteItem(int index) throws JSONException, ParseException,
 			IOException {
-		Map<String, Object> mapTemp = (Map<String, Object>) lstTaskBody1
+		Map<String, Object> mapTemp = lstTaskBody1
 				.get(index);
 		String barcode = (String) mapTemp.get("barcode");
 		// String createuser = (String) mapTemp.get("createuser");
@@ -604,6 +613,7 @@ public class Sample_stokcing_detail extends Activity {
 	}
 
 	// 取消按钮对话框事件
+	@NonNull
 	private DialogInterface.OnClickListener listenExit = new DialogInterface.OnClickListener() {
 		public void onClick(DialogInterface dialog, int whichButton) {
 			Return();
@@ -735,7 +745,7 @@ public class Sample_stokcing_detail extends Activity {
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) 
+	public boolean onOptionsItemSelected(@NonNull MenuItem item)
 	{
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
@@ -749,9 +759,12 @@ public class Sample_stokcing_detail extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	private static AlertDialog SelectLine = null;
-	private buttonOnClickC buttonOnClickC = new buttonOnClickC(0);
-	static String[] LNameList = new String[2];
+	@Nullable
+	private static AlertDialog    SelectLine     = null;
+	@NonNull
+	private        buttonOnClickC buttonOnClickC = new buttonOnClickC(0);
+	@NonNull
+	static         String[]       LNameList      = new String[2];
 	
 	private void Changeline() {
 
@@ -790,7 +803,7 @@ public class Sample_stokcing_detail extends Activity {
 		}
 
 		@Override
-		public void onClick(DialogInterface dialog, int whichButton) {
+		public void onClick(@NonNull DialogInterface dialog, int whichButton) {
 			if (whichButton >= 0) {
 				index = whichButton;
 			} else {
@@ -816,9 +829,10 @@ public class Sample_stokcing_detail extends Activity {
 		}
 	}
 
-	private OnKeyListener myTxtListener = new OnKeyListener() {
+	@NonNull
+	private OnKeyListener          myTxtListener = new OnKeyListener() {
 		@Override
-		public boolean onKey(View v, int arg1, KeyEvent arg2) {
+		public boolean onKey(@NonNull View v, int arg1, @NonNull KeyEvent arg2) {
 			switch (v.getId()) {
 			case R.id.txtsampleBarcode:
 				if (arg1 == arg2.KEYCODE_ENTER
@@ -831,9 +845,10 @@ public class Sample_stokcing_detail extends Activity {
 			return true;
 		}
 	};
-	private Button.OnClickListener myListner = new Button.OnClickListener() {
+	@NonNull
+	private Button.OnClickListener myListner     = new Button.OnClickListener() {
 		@Override
-		public void onClick(View v) {
+		public void onClick(@NonNull View v) {
 			switch (v.getId()) {
 			case R.id.btnSampreturn:
 				try {

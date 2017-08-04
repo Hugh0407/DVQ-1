@@ -6,6 +6,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -55,11 +57,14 @@ public class OtherStockInDetail extends Activity {
     String m_PosCode;
     String m_PosID;
 
+    @Nullable
     JSONObject jsHead;
+    @Nullable
     JSONObject jsBody;
 
     Switch swhOthPos;
 
+    @Nullable
     private SplitBarcode bar = null;            //当前扫描条码解析
 
     //ADD CAIXY TEST START
@@ -68,6 +73,7 @@ public class OtherStockInDetail extends Activity {
 //	private int MainLogin.music2;//定义一个int来设置suondID
     //ADD CAIXY TEST END
 
+    @Nullable
     Inventory currentObj;        //当前扫描到的存货信息
 
     JSONObject jsBoxTotal;
@@ -91,21 +97,22 @@ public class OtherStockInDetail extends Activity {
     int ishouldinnum = 0;
     int iinnum = 0;
 
+    @Nullable
     List<Map<String, Object>> lstTaskBody = null;
 
-    private AlertDialog DeleteButton = null;
+    @Nullable
+    private AlertDialog   DeleteButton     = null;
+    @NonNull
     private ButtonOnClick buttonDelOnClick = new ButtonOnClick(0);
-    private AlertDialog SelectButton = null;
+    @Nullable
+    private AlertDialog   SelectButton     = null;
 
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_MENU) {//拦截meu键事件			//do something...
             return false;
         }
-        if (keyCode == KeyEvent.KEYCODE_BACK) {//拦截返回按钮事件			//do something...
-            return false;
-        }
-        return true;
+        return keyCode != KeyEvent.KEYCODE_BACK;
     }
 
     private void LoadOtherOrder() throws ParseException, IOException {
@@ -353,7 +360,7 @@ public class OtherStockInDetail extends Activity {
     }
 
 
-    private boolean ScanSerial(String serino, String Free1, String rowNo, String fbillrowflag, String CheckFlg) throws JSONException, ParseException, IOException
+    private boolean ScanSerial(String serino, @NonNull String Free1, String rowNo, @NonNull String fbillrowflag, @NonNull String CheckFlg) throws JSONException, ParseException, IOException
     //private boolean ScanSerial(String serino,String Free1,String fbillrowflag,String CheckFlg) throws JSONException, ParseException, IOException
 
     {
@@ -474,10 +481,7 @@ public class OtherStockInDetail extends Activity {
             temp.put("batch", currentObj.GetBatch());
             boxs.put(temp);
 
-            if (stotal == 1)
-                return true;
-            else
-                return false;
+            return stotal == 1;
         }
         JSONArray boxs = jsBoxTotal.getJSONArray("BoxList");
         for (int i = 0; i < boxs.length(); i++) {
@@ -517,13 +521,10 @@ public class OtherStockInDetail extends Activity {
         temp.put("current", 1);
         boxs.put(temp);
 
-        if (stotal == 1)
-            return true;
-        else
-            return false;
+        return stotal == 1;
     }
 
-    private boolean ScanDetail(String barcode) {
+    private boolean ScanDetail(@Nullable String barcode) {
         if (barcode == null || barcode.equals(""))
             return false;
 
@@ -741,7 +742,7 @@ public class OtherStockInDetail extends Activity {
         }
 
         @Override
-        public void onClick(DialogInterface dialog, int whichButton) {
+        public void onClick(@NonNull DialogInterface dialog, int whichButton) {
             if (whichButton >= 0) {
                 index = whichButton;
                 // dialog.cancel();
@@ -785,10 +786,11 @@ public class OtherStockInDetail extends Activity {
 //		this.m_PosCode = "";
     }
 
+    @NonNull
     private Button.OnClickListener myButtonListner1 = new
             Button.OnClickListener() {
                 @Override
-                public void onClick(View v) {
+                public void onClick(@NonNull View v) {
                     switch (v.getId()) {
                         case id.btnOthTask:
                             try {
@@ -818,7 +820,7 @@ public class OtherStockInDetail extends Activity {
                 }
             };
 
-    private void FindPositionByCode(String posCode, String type) throws JSONException {
+    private void FindPositionByCode(@NonNull String posCode, String type) throws JSONException {
 
         try {
             if (m_AccID == null || m_AccID.equals("")) {
@@ -1048,7 +1050,7 @@ public class OtherStockInDetail extends Activity {
                 if (whichButton == DialogInterface.BUTTON_POSITIVE) {
 
 
-                    Map<String, Object> mapTemp = (Map<String, Object>) lstTaskBody.get(index);
+                    Map<String, Object> mapTemp = lstTaskBody.get(index);
 //						
 //						//new String[] {"invname","invcode","batch","sno","okflg"}, 
                     String invcode = (String) mapTemp.get("invcode");
@@ -1225,7 +1227,8 @@ public class OtherStockInDetail extends Activity {
 
     }
 
-    private TextWatcher watchers = new TextWatcher() {
+    @NonNull
+    private TextWatcher   watchers      = new TextWatcher() {
 
         @Override
         public void afterTextChanged(Editable s) {
@@ -1246,10 +1249,11 @@ public class OtherStockInDetail extends Activity {
         }
 
     };
+    @NonNull
     private OnKeyListener myTxtListener = new
             OnKeyListener() {
                 @Override
-                public boolean onKey(View v, int arg1, KeyEvent arg2) {
+                public boolean onKey(@NonNull View v, int arg1, @NonNull KeyEvent arg2) {
                     switch (v.getId()) {
                         case id.txtOthBarcode:
                             if (arg1 == KeyEvent.KEYCODE_ENTER && arg2.getAction()== KeyEvent.ACTION_UP) {
@@ -1446,7 +1450,7 @@ public class OtherStockInDetail extends Activity {
         return true;
     }
 
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
@@ -1459,9 +1463,12 @@ public class OtherStockInDetail extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    private static AlertDialog SelectLine = null;
-    private buttonOnClickC buttonOnClickC = new buttonOnClickC(0);
-    static String[] LNameList = new String[2];
+    @Nullable
+    private static AlertDialog    SelectLine     = null;
+    @NonNull
+    private        buttonOnClickC buttonOnClickC = new buttonOnClickC(0);
+    @NonNull
+    static         String[]       LNameList      = new String[2];
 
     private void Changeline() {
 
@@ -1500,7 +1507,7 @@ public class OtherStockInDetail extends Activity {
         }
 
         @Override
-        public void onClick(DialogInterface dialog, int whichButton) {
+        public void onClick(@NonNull DialogInterface dialog, int whichButton) {
             if (whichButton >= 0) {
                 index = whichButton;
             } else {

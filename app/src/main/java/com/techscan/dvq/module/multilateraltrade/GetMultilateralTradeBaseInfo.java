@@ -1,6 +1,8 @@
 package com.techscan.dvq.module.multilateraltrade;
 
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.techscan.dvq.common.RequestThread;
 import com.techscan.dvq.common.SplitBarcode;
@@ -17,6 +19,7 @@ import java.util.HashMap;
 
 public class GetMultilateralTradeBaseInfo {
 
+    @Nullable
     public HashMap<String,Object> mapSaleBaseInfo = null;
     String InvCode = "";
 
@@ -25,7 +28,7 @@ public class GetMultilateralTradeBaseInfo {
      *
      *
      */
-    public GetMultilateralTradeBaseInfo(SplitBarcode cSplitBarcode, Handler mHandler, String PK_CORP) {
+    public GetMultilateralTradeBaseInfo(@NonNull SplitBarcode cSplitBarcode, Handler mHandler, String PK_CORP) {
         //判断invcode是否有逗号。如果有逗号就分割，拿逗号后面的invcode；否则就拿原来的invcode。
         InvCode = cSplitBarcode.cInvCode;
         if (InvCode.contains(",")){
@@ -62,10 +65,12 @@ public class GetMultilateralTradeBaseInfo {
      * @param json
      * @throws JSONException
      */
+    @NonNull
     String pk_invbasdoc = "";
+    @NonNull
     String pk_invmandoc = "";
 
-    public void SetSaleBaseToParam(JSONObject json) throws JSONException {
+    public void SetSaleBaseToParam(@NonNull JSONObject json) throws JSONException {
         //Log.d(TAG, "SetInvBaseToUI: " + json);
         if (json.getBoolean("Status")) {
             JSONArray val = json.getJSONArray("baseInfo");

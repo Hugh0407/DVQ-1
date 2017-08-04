@@ -2,6 +2,7 @@ package com.techscan.dvq.common;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.widget.Toast;
 
 import java.text.DecimalFormat;
@@ -66,7 +67,7 @@ public class Utils {
      * @param str 待匹配的字符串
      * @return 匹配结果, 是数字返回true, 不是数字返回false
      */
-    public static boolean isNumber(String str) {
+    public static boolean isNumber(@NonNull String str) {
         Pattern pattern = Pattern.compile("[0-9]*");
         Matcher isNum   = pattern.matcher(str);
         return isNum.matches();

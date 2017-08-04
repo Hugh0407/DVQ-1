@@ -3,6 +3,7 @@ package com.techscan.dvq.common;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.support.annotation.Nullable;
 
 import com.techscan.dvq.R;
 
@@ -21,8 +22,10 @@ public class SoundHelper {
     private static final int STREAM_TYPE = AudioManager.STREAM_SYSTEM;
     private static final int SRC_QUALITY = 1;
     private static HashMap<Integer, Integer> soundPoolMap;
+    @Nullable
     private static SoundHelper instance = null;
 
+    @Nullable
     public static SoundHelper getInstance(Context context) {
         if (instance == null) {
             synchronized (SoundHelper.class) {

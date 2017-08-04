@@ -1,5 +1,7 @@
 package com.techscan.dvq;
 
+import android.support.annotation.Nullable;
+
 import org.apache.http.HttpVersion;
 import org.apache.http.client.HttpClient;
 import org.apache.http.conn.ClientConnectionManager;
@@ -19,19 +21,22 @@ import org.apache.http.protocol.HTTP;
 
 public class MyHttpClient 
 {
-	private static HttpClient mHttpClient = null;  
-    private static final String CHARSET = HTTP.UTF_8;  
+    @Nullable
+    private static       HttpClient mHttpClient = null;
+    private static final String     CHARSET     = HTTP.UTF_8;
     //将构造函数封掉，只能通过对外接口来获取HttpClient实例  
     private MyHttpClient(){  
   
     }  
-    public static HttpClient getHttpClient(){  
+    @Nullable
+    public static HttpClient getHttpClient(){
         if(mHttpClient == null){  
             mHttpClient = new DefaultHttpClient();  
         }  
         return mHttpClient;  
     }  
-    public static synchronized HttpClient getSaveHttpClient(){  
+    @Nullable
+    public static synchronized HttpClient getSaveHttpClient(){
         if(mHttpClient == null){  
             HttpParams params = new BasicHttpParams();  
             //设置基本参数  

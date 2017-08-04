@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -34,27 +36,38 @@ import static com.techscan.dvq.common.Utils.showToast;
 
 public class Query extends Activity {
 
+    @Nullable
     @InjectView(R.id.ed_bar_code)
     EditText mEdBarCode;
+    @Nullable
     @InjectView(R.id.ed_name)
     EditText mEdName;
+    @Nullable
     @InjectView(R.id.ed_spec)
     EditText mEdSpec;
+    @Nullable
     @InjectView(R.id.ed_lot)
     EditText mEdLot;
+    @Nullable
     @InjectView(R.id.ed_supplier)
     EditText mEdSupplier;
+    @Nullable
     @InjectView(R.id.ed_shelf_life)
     EditText mEdShelfLife;
+    @Nullable
     @InjectView(R.id.ed_manual)
     EditText mEdManual;
+    @Nullable
     @InjectView(R.id.ed_in_time)
     EditText mEdInTime;
+    @Nullable
     @InjectView(R.id.ed_total_num)
     EditText mEdTotalNum;
+    @Nullable
     @InjectView(R.id.btn_back)
     Button mBtnBack;
 
+    @Nullable
     Activity mActivity;
 
     @Override
@@ -88,9 +101,10 @@ public class Query extends Activity {
         mEdBarCode.addTextChangedListener(new CustomTextWatcher(mEdBarCode));
     }
 
+    @Nullable
     Handler mHandler = new Handler() {
         @Override
-        public void handleMessage(Message msg) {
+        public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
                 case 1:
@@ -217,7 +231,7 @@ public class Query extends Activity {
      * @throws JSONException
      */
 
-    private void setInvBaseToUI(JSONObject json) throws JSONException {
+    private void setInvBaseToUI(@NonNull JSONObject json) throws JSONException {
         Log.d("TAG", "setInvBaseToUI: " + json);
         if (json.getBoolean("Status")) {
             JSONArray val = json.getJSONArray("baseInfo");
@@ -260,7 +274,7 @@ public class Query extends Activity {
         }
 
         @Override
-        public boolean onKey(View v, int keyCode, KeyEvent event) {
+        public boolean onKey(@NonNull View v, int keyCode, @NonNull KeyEvent event) {
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
                 switch (v.getId()) {
                     case R.id.ed_bar_code:

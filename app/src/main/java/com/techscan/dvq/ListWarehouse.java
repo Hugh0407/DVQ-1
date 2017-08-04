@@ -4,6 +4,8 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,6 +34,7 @@ public class ListWarehouse extends Activity {
 //	private SoundPool sp;//声明一个SoundPool
 //	private int MainLogin.music;//定义一个int来设置suondID
     //ADD CAIXY TEST END
+    @Nullable
     Button btlist_warehouseReturn = null;
 
     @Override
@@ -75,10 +78,11 @@ public class ListWarehouse extends Activity {
         }
     }
 
+    @NonNull
     private OnClickListener ButtonOnClickListener = new OnClickListener() {
 
         @Override
-        public void onClick(View v) {
+        public void onClick(@NonNull View v) {
             switch (v.getId()) {            //btnSDScanReturn
                 case id.btlist_warehouseReturn:
                     finish();
@@ -95,7 +99,7 @@ public class ListWarehouse extends Activity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
@@ -106,9 +110,10 @@ public class ListWarehouse extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Nullable
     public List<Map<String, Object>> mData;
 
-    private List<Map<String, Object>> getData(JSONObject jas) throws JSONException {
+    private List<Map<String, Object>> getData(@NonNull JSONObject jas) throws JSONException {
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
         Map<String, Object> map;
 
@@ -141,10 +146,11 @@ public class ListWarehouse extends Activity {
         return list;
     }
 
+    @NonNull
     private ListView.OnItemClickListener itemListener = new
             ListView.OnItemClickListener() {
                 @Override
-                public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+                public void onItemClick(@NonNull AdapterView<?> arg0, View arg1, int arg2,
                                         long arg3) {
                     // TODO Auto-generated method stub
                     Adapter adapter = arg0.getAdapter();

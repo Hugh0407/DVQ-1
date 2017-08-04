@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -54,32 +56,46 @@ import static com.techscan.dvq.common.Utils.showToast;
 
 public class Sale extends Activity {
 
-   @InjectView(R.id.txtBarcode)
+    @Nullable
+    @InjectView(R.id.txtBarcode)
     EditText txtBarcode;
+    @Nullable
     @InjectView(R.id.txtSaleInvCode)
     EditText txtSaleInvCode;
+    @Nullable
     @InjectView(R.id.txtSaleInvName)
     EditText txtSaleInvName;
+    @Nullable
     @InjectView(R.id.txtSaleType)
     EditText txtSaleType;
+    @Nullable
     @InjectView(R.id.txtSaleSpec)
     EditText txtSaleSpec;
+    @Nullable
     @InjectView(R.id.txtSaleBatch)
     EditText txtSaleBatch;
+    @Nullable
     @InjectView(R.id.txtSaleNumber)
     EditText txtSaleNumber;
+    @Nullable
     @InjectView(R.id.txtSaleWeight)
     EditText txtSaleWeight;
+    @Nullable
     @InjectView(R.id.txtSaleTotal)
     EditText txtSaleTotal;
+    @Nullable
     @InjectView(R.id.txtSaleUnit)
     EditText txtSaleUnit;
+    @Nullable
     @InjectView(R.id.btnTask)
     Button btnTask;
+    @Nullable
     @InjectView(R.id.btnDetail)
     Button btnDetail;
+    @Nullable
     @InjectView(R.id.btnReturn)
     Button btnReturn;
+    @Nullable
     @InjectView(R.id.tvSalecount)
     TextView tvSalecount;
 
@@ -87,11 +103,15 @@ public class Sale extends Activity {
     String BillCode;
     String CSALEID;
     ProgressDialog progressDialog;
+    @Nullable
     Activity activity;
     JSONObject jsonBody;
-    public static List<PurSaleOutGoods> taskList = new ArrayList<PurSaleOutGoods>();
-    public static List<SaleOutGoods> detailList = new ArrayList<SaleOutGoods>();
-    public static List<SaleOutGoods> ovList = new ArrayList<SaleOutGoods>();
+    @NonNull
+    public static List<PurSaleOutGoods> taskList   = new ArrayList<PurSaleOutGoods>();
+    @NonNull
+    public static List<SaleOutGoods>    detailList = new ArrayList<SaleOutGoods>();
+    @NonNull
+    public static List<SaleOutGoods>    ovList     = new ArrayList<SaleOutGoods>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,7 +148,7 @@ public class Sale extends Activity {
         }
     }
     @OnClick({R.id.btnTask, R.id.btnDetail, R.id.btnReturn})
-    public void onViewClicked(View view) {
+    public void onViewClicked(@NonNull View view) {
         switch (view.getId()) {
             case R.id.btnTask:
                 SaleOutTaskAdapter scAdapter = new SaleOutTaskAdapter(taskList);
@@ -164,9 +184,10 @@ public class Sale extends Activity {
      * 网络请求后的线程通信
      * msg.obj 是从子线程传递过来的数据
      */
+    @Nullable
     Handler mHandler = new Handler() {
         @Override
-        public void handleMessage(Message msg) {
+        public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
                 case 1:
@@ -227,7 +248,7 @@ public class Sale extends Activity {
     String pk_invbasdoc = "";
     String pk_invmandoc = "";
 
-    private void setInvBaseToUI(JSONObject json) throws JSONException {
+    private void setInvBaseToUI(@NonNull JSONObject json) throws JSONException {
         Log.d("TAG", "setInvBaseToUI: " + json);
         if (json.getBoolean("Status")) {
             JSONArray val = json.getJSONArray("baseInfo");
@@ -257,7 +278,7 @@ public class Sale extends Activity {
     }
 
 
-    private void showDialog(final List list, final BaseAdapter adapter, String title) {
+    private void showDialog(@NonNull final List list, @NonNull final BaseAdapter adapter, @NonNull String title) {
         AlertDialog.Builder builder = new AlertDialog.Builder(Sale.this);
         builder.setTitle(title);
         if (list.size() > 0) {
@@ -653,10 +674,11 @@ public class Sale extends Activity {
     /**
      * 回车键的点击事件
      */
+    @NonNull
     View.OnKeyListener mOnKeyListener = new View.OnKeyListener() {
 
         @Override
-        public boolean onKey(View v, int keyCode, KeyEvent event) {
+        public boolean onKey(@NonNull View v, int keyCode, @NonNull KeyEvent event) {
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
                 switch (v.getId()) {
                     case R.id.txtBarcode:

@@ -5,6 +5,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,21 +40,31 @@ import java.util.Map;
 
 public class SbinvActivity extends Activity {
 
-	EditText edtBarcode=null;
-	EditText edtInv=null;
-	EditText edtBatch=null;
-	Button btSearch=null;
-	TextView tvInvName=null;
-	private SplitBarcode bar = null;
-	SimpleAdapter listItemAdapter=null;
-	ArrayList<HashMap<String,String>> array=null;
-	ListView lvlist=null;
+    @Nullable
+            EditText                          edtBarcode      =null;
+    @Nullable
+            EditText                          edtInv          =null;
+    @Nullable
+            EditText                          edtBatch        =null;
+    @Nullable
+            Button                            btSearch        =null;
+    @Nullable
+            TextView                          tvInvName       =null;
+    @Nullable
+    private SplitBarcode                      bar             = null;
+    @Nullable
+            SimpleAdapter                     listItemAdapter =null;
+    @Nullable
+            ArrayList<HashMap<String,String>> array           =null;
+    @Nullable
+            ListView                          lvlist          =null;
 	//ADD CAIXY TEST START
 //	private SoundPool sp;//声明一个SoundPool
 //	private int MainLogin.music;//定义一个int来设置suondID
 	//private writeTxt writeTxt ;	
 	//ADD CAIXY TEST END 
-	Button btnsbinvReturn = null;
+    @Nullable
+            Button                            btnsbinvReturn  = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -85,12 +97,13 @@ public class SbinvActivity extends Activity {
 		btSearch.setFocusable(false);
 		btnsbinvReturn.setFocusable(false);
 	}
-	
-	
-	private OnClickListener myClickListten =new OnClickListener()
+
+
+    @NonNull
+    private OnClickListener myClickListten =new OnClickListener()
 	{
 		@Override
-		public void onClick(View v) 
+		public void onClick(@NonNull View v)
 		{
 			switch(v.getId())
 			{
@@ -139,11 +152,12 @@ public class SbinvActivity extends Activity {
 			
 		}
 	};
-	private OnKeyListener myTxtListener = new 
+    @NonNull
+    private OnKeyListener   myTxtListener  = new
     		OnKeyListener()
     {
 		@Override
-		public boolean onKey(View v, int arg1, KeyEvent arg2) {
+		public boolean onKey(@NonNull View v, int arg1, @NonNull KeyEvent arg2) {
 			{
 				switch(v.getId())
 				{
@@ -199,8 +213,9 @@ public class SbinvActivity extends Activity {
 		}
      }
     };
-    
-	private OnItemClickListener myListItemListener = 
+
+    @NonNull
+    private OnItemClickListener myListItemListener =
     		new OnItemClickListener()
     {
 
@@ -305,7 +320,7 @@ private void GetInvImg(String InvCode) throws JSONException
     
     
     
-    private void ScanBarcode(String barcode) throws JSONException, ParseException, IOException
+    private void ScanBarcode(@NonNull String barcode) throws JSONException, ParseException, IOException
 	{
     	
 //    	writeTxt.writeTxtToFile("log.txt","1：");
@@ -340,7 +355,7 @@ private void GetInvImg(String InvCode) throws JSONException
 		
 	}
     
-    private boolean GetStockInfo(String InvCode,String Batch,String AccID) throws JSONException, ParseException, IOException
+    private boolean GetStockInfo(@NonNull String InvCode, @NonNull String Batch, @Nullable String AccID) throws JSONException, ParseException, IOException
     {
 		edtInv.setText(InvCode);
 		edtBatch.setText(Batch);
@@ -500,7 +515,7 @@ private void GetInvImg(String InvCode) throws JSONException
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) 
+	public boolean onOptionsItemSelected(@NonNull MenuItem item)
 	{
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
@@ -514,9 +529,12 @@ private void GetInvImg(String InvCode) throws JSONException
 		return super.onOptionsItemSelected(item);
 	}
 
-	private static AlertDialog SelectLine = null;
-	private buttonOnClickC buttonOnClickC = new buttonOnClickC(0);
-	static String[] LNameList = new String[2];
+    @Nullable
+    private static AlertDialog    SelectLine     = null;
+    @NonNull
+    private        buttonOnClickC buttonOnClickC = new buttonOnClickC(0);
+    @NonNull
+    static         String[]       LNameList      = new String[2];
 	
 	private void Changeline() {
 
@@ -555,7 +573,7 @@ private void GetInvImg(String InvCode) throws JSONException
 		}
 
 		@Override
-		public void onClick(DialogInterface dialog, int whichButton) {
+		public void onClick(@NonNull DialogInterface dialog, int whichButton) {
 			if (whichButton >= 0) {
 				index = whichButton;
 			} else {

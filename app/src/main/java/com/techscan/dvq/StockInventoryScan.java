@@ -7,6 +7,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -50,7 +52,8 @@ public class StockInventoryScan extends Activity {
 	
 	Button btnStockInventoryScanReturn;
 	Button btnSIScanCheck;
-	private UUID uploadGuid=null;
+    @Nullable
+    private UUID uploadGuid =null;
 	
 	EditText tvSIScanInvName;
 	EditText tvSIScanBatch;
@@ -63,7 +66,8 @@ public class StockInventoryScan extends Activity {
 
 //	private String[] productAddressList = null;
 //	private String[] productAddressNameList = null;
-	private AlertDialog SelectButton = null;
+@Nullable
+private AlertDialog SelectButton = null;
 
 
 	//private JSONObject JsonAdds = new JSONObject();
@@ -74,8 +78,10 @@ public class StockInventoryScan extends Activity {
 
 	//Switch swhSIWH;
 	EditText txtSIWH;
-	List<Map<String, String>> m_mData = null;
-	private AlertDialog DeleteButton = null;
+    @Nullable
+            List<Map<String, String>> m_mData      = null;
+    @Nullable
+    private AlertDialog               DeleteButton = null;
 
 	String tmpposNameA = "";
 	String tmpposCodeA = "";
@@ -89,8 +95,10 @@ public class StockInventoryScan extends Activity {
 	String tmpAccIDB = "";
 	
 	String ScanMode = "";
-	private ButtonOnClick buttonOnClick = new ButtonOnClick(0);
-	private ButtonOnClick buttonDelOnClick = new ButtonOnClick(0);
+    @NonNull
+    private ButtonOnClick buttonOnClick    = new ButtonOnClick(0);
+    @NonNull
+    private ButtonOnClick buttonDelOnClick = new ButtonOnClick(0);
 	//String ChoiceAddress = "0";
 
 	EditText txtSIScanBarcode;
@@ -100,17 +108,21 @@ public class StockInventoryScan extends Activity {
 	String SameCount = "0";
 
 
-	private SplitBarcode bar = null; // 当前扫描条码解析
+    @Nullable
+    private SplitBarcode bar = null; // 当前扫描条码解析
 
-	private Hashtable SerialValues = null;
-	List<Map<String, String>> jonsScan = null;
+    @Nullable
+    private Hashtable                 SerialValues = null;
+    @Nullable
+            List<Map<String, String>> jonsScan     = null;
 	private ListView lvScanDetail;
 
 //	private SoundPool sp;// 声明一个SoundPool
 //	private int MainLogin.music;// 定义一个int来设置suondID
 //	private int MainLogin.music2;//定义一个int来设置suondID
 
-	private List<Map<String, Object>> lstSaveBody = new ArrayList<Map<String, Object>>();
+    @NonNull
+    private List<Map<String, Object>> lstSaveBody = new ArrayList<Map<String, Object>>();
 	String warehouseIDA = "";
 	String warehouseIDB = "";
 	String warehouseCodeA = "";
@@ -122,12 +134,14 @@ public class StockInventoryScan extends Activity {
 	String CompanyIDA = "";
 	String CompanyIDB = "";
 	// 扫描保存分包
-	private List<Map<String, Object>> lstScanBoxNum = new ArrayList<Map<String, Object>>();
+    @NonNull
+    private List<Map<String, Object>> lstScanBoxNum     = new ArrayList<Map<String, Object>>();
 	// 定义是否删除Dialog
-	private AlertDialog DeleteAlertDialog = null;
+    @Nullable
+    private AlertDialog               DeleteAlertDialog = null;
 
 	// 判断该扫描是否数据本次扫描任务的帐套
-	private String CheckGetAccID(SplitBarcode bar) {
+	private String CheckGetAccID(@NonNull SplitBarcode bar) {
 		String lsBarAccID = bar.AccID;
 
 		if (tmpAccIDA.equals(lsBarAccID)) {
@@ -253,7 +267,7 @@ public class StockInventoryScan extends Activity {
 	}
 
 	// 扫描二维码解析功能函数
-	private void ScanBarcode(String barcode) throws JSONException,ParseException, IOException {
+	private void ScanBarcode(@NonNull String barcode) throws JSONException,ParseException, IOException {
 		if (barcode.equals("")) 
 		{
 			Toast.makeText(this, "请扫描条码", Toast.LENGTH_LONG).show();
@@ -321,7 +335,7 @@ public class StockInventoryScan extends Activity {
 
 	}
 
-	public boolean onOptionsItemSelected(MenuItem item) 
+	public boolean onOptionsItemSelected(@NonNull MenuItem item)
 	{
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
@@ -335,9 +349,12 @@ public class StockInventoryScan extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	private static AlertDialog SelectLine = null;
-	private buttonOnClickC buttonOnClickC = new buttonOnClickC(0);
-	static String[] LNameList = new String[2];
+    @Nullable
+    private static AlertDialog    SelectLine     = null;
+    @NonNull
+    private        buttonOnClickC buttonOnClickC = new buttonOnClickC(0);
+    @NonNull
+    static         String[]       LNameList      = new String[2];
 	
 	private void Changeline() {
 
@@ -376,7 +393,7 @@ public class StockInventoryScan extends Activity {
 		}
 
 		@Override
-		public void onClick(DialogInterface dialog, int whichButton) {
+		public void onClick(@NonNull DialogInterface dialog, int whichButton) {
 			if (whichButton >= 0) {
 				index = whichButton;
 			} else {
@@ -402,9 +419,10 @@ public class StockInventoryScan extends Activity {
 		}
 	}
 
-	private Button.OnClickListener myListner = new Button.OnClickListener() {
+    @NonNull
+    private Button.OnClickListener myListner = new Button.OnClickListener() {
 		@Override
-		public void onClick(View v) {
+		public void onClick(@NonNull View v) {
 			switch (v.getId()) {
 			case id.btnSIScanReturn:
 				Done();
@@ -552,10 +570,10 @@ public class StockInventoryScan extends Activity {
 				if (whichButton == DialogInterface.BUTTON_POSITIVE) {
 
 					Map<String, String> map = m_mData.get(index);
-					String barcode = (String) map.get("BarCode");
+					String barcode = map.get("BarCode");
 					
-					String identity = (String) map.get("AccID")+(String) map.get("InvCode")+
-							(String) map.get("Batch")+(String) map.get("SeriNo");
+					String identity = map.get("AccID") + map.get("InvCode") +
+                            map.get("Batch") + map.get("SeriNo");
 					for (int i = 0; i < jonsScan.size(); i++) 
 					{
 						if(barcode.equals(jonsScan.get(i).get("BarCode").toString()))
@@ -591,7 +609,7 @@ public class StockInventoryScan extends Activity {
 		}
 
 		@Override
-		public void onClick(DialogInterface dialog, int whichButton) {
+		public void onClick(@NonNull DialogInterface dialog, int whichButton) {
 			if (whichButton >= 0) {
 				index = whichButton;
 				// dialog.cancel();
@@ -750,7 +768,7 @@ public class StockInventoryScan extends Activity {
 		
 	}
 	
-	private boolean CheckHasScaned(SplitBarcode bar)
+	private boolean CheckHasScaned(@NonNull SplitBarcode bar)
 	{
 		String Identity =bar.AccID+bar.cInvCode+bar.cBatch+bar.cSerino;
 		if(SerialValues!=null)
@@ -1005,13 +1023,9 @@ public class StockInventoryScan extends Activity {
 	 {		if (keyCode == KeyEvent.KEYCODE_MENU) 
 		 	{//拦截meu键事件			//do something...	
 		       return false;
-			 }		
-	 if (keyCode == KeyEvent.KEYCODE_BACK) 
-	 {//拦截返回按钮事件			//do something...	
-		 return false;
-	 }		
-	 return true;
-	 }
+			 }
+         return keyCode != KeyEvent.KEYCODE_BACK;
+     }
 
 	private void SIScanCheck() {
 //		saveJonsA =new JSONObject();
@@ -1299,9 +1313,10 @@ public class StockInventoryScan extends Activity {
 		}
 		
 	}
-	
-	
-	private DialogInterface.OnClickListener listenExit = new 
+
+
+    @NonNull
+    private DialogInterface.OnClickListener listenExit = new
   			DialogInterface.OnClickListener()
   	{
   		public void onClick(DialogInterface dialog,
@@ -1347,15 +1362,20 @@ public class StockInventoryScan extends Activity {
 
 	// 为listview自定义适配器内部类
 	public static class MyListAdapterSI extends BaseAdapter {
-		private Context context = null;
-		private LayoutInflater inflater = null;
-		private List<Map<String, Object>> list = null;
-		private String keyString[] = null;
+        @Nullable
+        private Context                   context     = null;
+        @Nullable
+        private LayoutInflater            inflater    = null;
+        @Nullable
+        private List<Map<String, Object>> list        = null;
+        @Nullable
+        private String                    keyString[] = null;
 
-		private int idValue[] = null;// id值
+        @Nullable
+        private int idValue[] = null;// id值
 
 		public MyListAdapterSI(Context context, List<Map<String, Object>> list,
-				int resource, String[] from, int[] to) {
+                               int resource, @NonNull String[] from, @NonNull int[] to) {
 			this.context = context;
 			this.list = list;
 			keyString = new String[from.length];
@@ -1380,8 +1400,9 @@ public class StockInventoryScan extends Activity {
 			return 0;
 		}
 
-		@Override
-		public View getView(int arg0, View arg1, ViewGroup arg2) {
+		@Nullable
+        @Override
+		public View getView(int arg0, @Nullable View arg1, ViewGroup arg2) {
 			// TODO Auto-generated method stub
 			// Map<String,Object> map = (Map<String,Object>)getItem(arg0);
 			// if(!map.get("ScanedNum").toString().equals(map.get("TotalNum").toString()))
@@ -1408,9 +1429,10 @@ public class StockInventoryScan extends Activity {
 
 	}
 
-	private OnKeyListener myTxtListener = new OnKeyListener() {
+    @NonNull
+    private OnKeyListener myTxtListener = new OnKeyListener() {
 		@Override
-		public boolean onKey(View v, int arg1, KeyEvent arg2) {
+		public boolean onKey(@NonNull View v, int arg1, @NonNull KeyEvent arg2) {
 			{
 				switch (v.getId()) {
 				case id.txtSIBarcode:

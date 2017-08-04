@@ -2,6 +2,7 @@ package com.techscan.dvq.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 /**
  * Created by Hugh on 2017/7/16.
@@ -66,7 +67,7 @@ public class PurSaleOutGoods implements Parcelable{
         this.num_task = num_task;
     }
 
-    protected PurSaleOutGoods(Parcel in) {
+    protected PurSaleOutGoods(@NonNull Parcel in) {
         invCode = in.readString();
         spec = in.readString();
         type = in.readString();
@@ -76,11 +77,13 @@ public class PurSaleOutGoods implements Parcelable{
     }
 
     public static final Creator<PurSaleOutGoods> CREATOR = new Creator<PurSaleOutGoods>() {
+        @NonNull
         @Override
-        public PurSaleOutGoods createFromParcel(Parcel in) {
+        public PurSaleOutGoods createFromParcel(@NonNull Parcel in) {
             return new PurSaleOutGoods(in);
         }
 
+        @NonNull
         @Override
         public PurSaleOutGoods[] newArray(int size) {
             return new PurSaleOutGoods[size];
@@ -93,7 +96,7 @@ public class PurSaleOutGoods implements Parcelable{
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeString(invCode);
         dest.writeString(spec);
         dest.writeString(type);

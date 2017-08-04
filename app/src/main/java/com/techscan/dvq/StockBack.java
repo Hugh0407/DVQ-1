@@ -5,6 +5,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -47,23 +49,36 @@ import java.util.UUID;
 
 
 public class StockBack extends Activity {
-	
-	private String[] ExitNameList = null;
+
+	@Nullable
+	private String[]      ExitNameList  = null;
+	@NonNull
 	private ButtonOnClick buttonOnClick = new ButtonOnClick(0);
-	String fileNameScan  = null;
-	
-	String tmpPosCode  = "";
-	
-	
-	String fileName = null;
-	String ScanedHFileName  = null;
-	String ScanedBFileName  = null;
-	String UserID = null;
-	File file = null;
-	File fileScan = null;
-	String ReScanBody = "1";
-	String ReScanHead = "1";
-	private ArrayList<String> ScanedBarcode = new ArrayList<String>();
+	@Nullable
+			String        fileNameScan  = null;
+
+	@NonNull
+	String tmpPosCode = "";
+
+
+	@Nullable
+			String            fileName        = null;
+	@Nullable
+			String            ScanedHFileName = null;
+	@Nullable
+			String            ScanedBFileName = null;
+	@Nullable
+			String            UserID          = null;
+	@Nullable
+			File              file            = null;
+	@Nullable
+			File              fileScan        = null;
+	@NonNull
+			String            ReScanBody      = "1";
+	@NonNull
+			String            ReScanHead      = "1";
+	@NonNull
+	private ArrayList<String> ScanedBarcode   = new ArrayList<String>();
 	
 	ImageButton btnStockBackWHFrom;
 	ImageButton btnStockBackWHTo;
@@ -91,26 +106,40 @@ public class StockBack extends Activity {
 //	private int MainLogin.music2;// 定义一个int来设置suondID
 	int ScanCount = 0;
 
-	public final static String PREFERENCE_SETTING = "Setting";
-	private String[] WHNameList = null;
-	private String[] WHCodeList = null;
-	
-    private AlertDialog WHSelectButtonF=null;
-    private AlertDialog WHSelectButtonT=null;
+	public final static String   PREFERENCE_SETTING = "Setting";
+	@Nullable
+	private             String[] WHNameList         = null;
+	@Nullable
+	private             String[] WHCodeList         = null;
 
-	private SplitBarcode bar          = null; // 当前扫描条码解析
-	private Hashtable    SerialValues = null;
-	List<Map<String, String>> jonsScan = null;
-	List<Map<String, String>> m_mData = null;
-	private AlertDialog DeleteButton = null;
-    private ButtonOnClickWH ButtonOnClickWH = new ButtonOnClickWH(0);
-	private ButtonOnClickD ButtonOnClickD = new ButtonOnClickD(0);
-	String WhName = "";
+	@Nullable
+	private AlertDialog WHSelectButtonF =null;
+	@Nullable
+	private AlertDialog WHSelectButtonT =null;
+
+	@Nullable
+	private SplitBarcode              bar             = null; // 当前扫描条码解析
+	@Nullable
+	private Hashtable                 SerialValues    = null;
+	@Nullable
+			List<Map<String, String>> jonsScan        = null;
+	@Nullable
+			List<Map<String, String>> m_mData         = null;
+	@Nullable
+	private AlertDialog               DeleteButton    = null;
+	@NonNull
+	private ButtonOnClickWH           ButtonOnClickWH = new ButtonOnClickWH(0);
+	@NonNull
+	private ButtonOnClickD            ButtonOnClickD  = new ButtonOnClickD(0);
+	@Nullable
+			String                    WhName          = "";
 	String tmpStockBackWHFrom = "";
 	String tmpStockBackWHCode = "";
 	String tmpStockBackWHTo = "";
+	@Nullable
 	private AlertDialog SelectButton = null;
-	private UUID uploadGuid=null;
+	@Nullable
+	private UUID        uploadGuid   =null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -201,7 +230,7 @@ public class StockBack extends Activity {
 
 	android.view.View.OnClickListener {
 
-		public void onClick(View v) {
+		public void onClick(@NonNull View v) {
 
 			switch (v.getId()) {
 			
@@ -238,7 +267,7 @@ public class StockBack extends Activity {
 		}
 
 		@Override
-		public void onClick(DialogInterface dialog, int whichButton)
+		public void onClick(@NonNull DialogInterface dialog, int whichButton)
 		{
 			if (whichButton >=0)
 			{
@@ -284,7 +313,7 @@ public class StockBack extends Activity {
 		}
 
 		
-		public void onClick(DialogInterface dialog, int whichButton)
+		public void onClick(@NonNull DialogInterface dialog, int whichButton)
 		{
 			if (whichButton >= 0)
 			{
@@ -343,7 +372,7 @@ public class StockBack extends Activity {
 		}
 	}
 	
-	private void GetSalesDelWH(String WHFlg) throws JSONException
+	private void GetSalesDelWH(@NonNull String WHFlg) throws JSONException
     {
 		try
 		{	
@@ -430,7 +459,7 @@ public class StockBack extends Activity {
 			//ADD CAIXY TEST END
 		}
     }
-	private void ScanPos(String PosCode) throws JSONException,ParseException, IOException {
+	private void ScanPos(@NonNull String PosCode) throws JSONException,ParseException, IOException {
 		if(PosCode.length()>=10)
 		{
 			Toast.makeText(this, "输入的货位号不正确", Toast.LENGTH_LONG).show();
@@ -445,7 +474,7 @@ public class StockBack extends Activity {
 	}
 	
 	// 扫描二维码解析功能函数
-		private void ScanBarcode(String barcode) throws JSONException,ParseException, IOException {
+		private void ScanBarcode(@NonNull String barcode) throws JSONException,ParseException, IOException {
 			
 			if (tmpPosCode.equals("")) 
 			{
@@ -653,7 +682,7 @@ public class StockBack extends Activity {
 
 		}
 		
-		private boolean CheckHasScaned(SplitBarcode bar)
+		private boolean CheckHasScaned(@NonNull SplitBarcode bar)
 		{
 			String Identity =bar.AccID+bar.cInvCode+bar.cBatch+bar.cSerino;
 			if(SerialValues!=null)
@@ -685,10 +714,11 @@ public class StockBack extends Activity {
 		WHSelectButtonT=new AlertDialog.Builder(this).setTitle("选择调入仓库").setSingleChoiceItems(
 				WHNameList, -1, ButtonOnClickWH).setNegativeButton(R.string.QuXiao, ButtonOnClickWH).show();
 	}
-	
+
+	@NonNull
 	private OnKeyListener myTxtListener = new OnKeyListener() {
 		@Override
-		public boolean onKey(View v, int arg1, KeyEvent arg2) {
+		public boolean onKey(@NonNull View v, int arg1, @NonNull KeyEvent arg2) {
 			{
 				switch (v.getId()) {
 				case id.txtStockBackBar:
@@ -747,9 +777,10 @@ public class StockBack extends Activity {
 //	Button btnStkBckSave;
 //	Button btnStkBckDetail;
 //	Button btnStkBckReturn;
-	private Button.OnClickListener myListner = new Button.OnClickListener() {
+@NonNull
+private Button.OnClickListener myListner = new Button.OnClickListener() {
 		@Override
-		public void onClick(View v) {
+		public void onClick(@NonNull View v) {
 			switch (v.getId()) {
 			case id.btnStkBckSave:
 				Save();
@@ -836,10 +867,10 @@ public class StockBack extends Activity {
 			if (whichButton == DialogInterface.BUTTON_POSITIVE) 
 			{
 				Map<String, String> map = m_mData.get(index);
-				String barcode = (String) map.get("BarCode");
-				String Key = (String) map.get("BarCode")+"!"+(String) map.get("PosCode");
-				String identity = (String) map.get("AccID")+(String) map.get("InvCode")+
-						(String) map.get("Batch")+(String) map.get("SeriNo");
+				String barcode = map.get("BarCode");
+				String Key = map.get("BarCode") +"!"+ map.get("PosCode");
+				String identity = map.get("AccID") + map.get("InvCode") +
+                        map.get("Batch") + map.get("SeriNo");
 				for (int i = 0; i < jonsScan.size(); i++) 
 				{
 					if(barcode.equals(jonsScan.get(i).get("BarCode").toString()))
@@ -1273,7 +1304,7 @@ private class ButtonOnClickD implements DialogInterface.OnClickListener {
 	}
 
 	@Override
-	public void onClick(DialogInterface dialog, int whichButton) {
+	public void onClick(@NonNull DialogInterface dialog, int whichButton) {
 		if (whichButton >= 0) {
 			index = whichButton;
 			// dialog.cancel();
@@ -1640,7 +1671,8 @@ private class ButtonOnClickD implements DialogInterface.OnClickListener {
   	}
   	
   	//退出按钮对话框事件
-  	private DialogInterface.OnClickListener listenExit = new 
+	@NonNull
+	private DialogInterface.OnClickListener listenExit = new
   			DialogInterface.OnClickListener()
   	{
   		public void onClick(DialogInterface dialog,
@@ -1662,7 +1694,7 @@ private class ButtonOnClickD implements DialogInterface.OnClickListener {
 	
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) 
+	public boolean onOptionsItemSelected(@NonNull MenuItem item)
 	{
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
@@ -1676,9 +1708,12 @@ private class ButtonOnClickD implements DialogInterface.OnClickListener {
 		return super.onOptionsItemSelected(item);
 	}
 
-	private static AlertDialog SelectLine = null;
-	private buttonOnClickC buttonOnClickC = new buttonOnClickC(0);
-	static String[] LNameList = new String[2];
+	@Nullable
+	private static AlertDialog    SelectLine     = null;
+	@NonNull
+	private        buttonOnClickC buttonOnClickC = new buttonOnClickC(0);
+	@NonNull
+	static         String[]       LNameList      = new String[2];
 	
 	private void Changeline() {
 
@@ -1717,7 +1752,7 @@ private class ButtonOnClickD implements DialogInterface.OnClickListener {
 		}
 
 		@Override
-		public void onClick(DialogInterface dialog, int whichButton) {
+		public void onClick(@NonNull DialogInterface dialog, int whichButton) {
 			if (whichButton >= 0) {
 				index = whichButton;
 			} else {
@@ -1747,11 +1782,7 @@ private class ButtonOnClickD implements DialogInterface.OnClickListener {
 	 {		if (keyCode == KeyEvent.KEYCODE_MENU) 
 		 	{//拦截meu键事件			//do something...	
 		       return false;
-			 }		
-	 if (keyCode == KeyEvent.KEYCODE_BACK) 
-	 {//拦截返回按钮事件			//do something...	
-		 return false;
-	 }		
-	 return true;
-	 }
+			 }
+         return keyCode != KeyEvent.KEYCODE_BACK;
+     }
 }

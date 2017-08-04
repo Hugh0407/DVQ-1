@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.util.ArrayMap;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -43,36 +45,54 @@ import java.util.Map;
 
 public class WarehouseMultilist extends Activity {
 
-	protected static final String PREFERENCE_SETTING = null;
-	static TextView tvMulCount = null;
-	static ListView WHmultilist = null;
-	Button btnWHMListClear = null;
-	Button btnWHMListOK = null;
+    @Nullable
+    protected static final String   PREFERENCE_SETTING = null;
+    @Nullable
+    static                 TextView tvMulCount         = null;
+    @Nullable
+    static                 ListView WHmultilist        = null;
+    @Nullable
+                           Button   btnWHMListClear    = null;
+    @Nullable
+                           Button   btnWHMListOK       = null;
 	int localid = 0;
-	ArrayList<String> listStr = null;
-	ArrayList<HashMap<String, String>> array = null;
-	ArrayList<String> listCode = null;
+    @Nullable
+    ArrayList<String>                  listStr  = null;
+    @Nullable
+    ArrayList<HashMap<String, String>> array    = null;
+    @Nullable
+    ArrayList<String>                  listCode = null;
 	private List<Map<String, Object>> mData;
-	private Handler handler = null;
-	private List<HashMap<String, Object>> MultiList = null;
+    @Nullable
+    private Handler                       handler   = null;
+    @Nullable
+    private List<HashMap<String, Object>> MultiList = null;
 	private MyAdapter adapter;
-	private static Adapter ItemAdapter = null;
-	private Map<String, Object> ItemMap = null;
-	private static Map<String, Object> ItemMap2 = null;
+    @Nullable
+    private static Adapter             ItemAdapter = null;
+    @Nullable
+    private        Map<String, Object> ItemMap     = null;
+    @Nullable
+    private static Map<String, Object> ItemMap2    = null;
 
-	private Map<String, Object> ResultMap = new ArrayMap<String, Object>();
+    @NonNull
+    private Map<String, Object> ResultMap = new ArrayMap<String, Object>();
 
-	private List<Map<String, Object>> ResultList = new ArrayList<Map<String, Object>>();
-	private static List<Map<String, Object>> ResultListSave = new ArrayList<Map<String, Object>>();
+    @NonNull
+    private        List<Map<String, Object>> ResultList     = new ArrayList<Map<String, Object>>();
+    @NonNull
+    private static List<Map<String, Object>> ResultListSave = new ArrayList<Map<String, Object>>();
 
 	// ADD CAIXY TEST START
 //	private SoundPool sp;// 声明一个SoundPool
 //	private int MainLogin.music;// 定义一个int来设置suondID
 	// ADD CAIXY TEST END
-	Button btWarehouseMultilistReturn = null;
+    @Nullable
+    Button btWarehouseMultilistReturn = null;
 
-	private String sWhCode2 = "";
-	private HashSet<String> itemSelected = new HashSet<String>();
+    private String          sWhCode2     = "";
+    @NonNull
+    private HashSet<String> itemSelected = new HashSet<String>();
 
 	// ArrayList<HashMap<String,Integer>> localidList =null
 	// ArrayList<Integer> localidList = new ArrayList<Integer>();
@@ -254,7 +274,7 @@ public class WarehouseMultilist extends Activity {
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
+	public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
@@ -265,10 +285,11 @@ public class WarehouseMultilist extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	private OnClickListener ButtonOnClickListener = new OnClickListener() {
+    @NonNull
+    private OnClickListener ButtonOnClickListener = new OnClickListener() {
 
 		@Override
-		public void onClick(View v) {
+		public void onClick(@NonNull View v) {
 			switch (v.getId()) { // btnSDScanReturn
 			case id.btWarehouseMultilistReturn:
 				finish();
@@ -425,9 +446,9 @@ public class WarehouseMultilist extends Activity {
 
 						Map<String, Object> tmpmap = list.get(y);
 						JSONObject json = Common.MapTOJSONOBject(tmpmap);
-						String HWCodeA = ((JSONObject) json).getString(
+						String HWCodeA = json.getString(
 								"storcode").toString();
-						String HWNameA = ((JSONObject) json).getString(
+						String HWNameA = json.getString(
 								"storname").toString();
 
 						if (HWCodeB.equals(HWCodeA) && HWNameB.equals(HWNameA)) {
@@ -494,11 +515,12 @@ public class WarehouseMultilist extends Activity {
 
 		WHmultilist.setOnItemClickListener(new OnItemClickListener() {
 
-			Integer listid = null;
+			@Nullable
+            Integer listid = null;
 
 			@Override
-			public void onItemClick(AdapterView<?> arg0, View view,
-					int position, long arg3) {
+			public void onItemClick(@NonNull AdapterView<?> arg0, @NonNull View view,
+                                    int position, long arg3) {
 				ViewHolder holder = (ViewHolder) view.getTag();
 				ItemAdapter = arg0.getAdapter();
 				ItemMap = (Map<String, Object>) ItemAdapter.getItem(position);
@@ -588,9 +610,11 @@ public class WarehouseMultilist extends Activity {
 
 	// 全局变量赋值
 	public static class Data {
-		private static ListAdapter SelListAdapter = null;
+        @Nullable
+        private static ListAdapter SelListAdapter = null;
 
-		public static ListAdapter getSelListAdapter() {
+		@Nullable
+        public static ListAdapter getSelListAdapter() {
 			return SelListAdapter;
 		}
 
@@ -602,18 +626,26 @@ public class WarehouseMultilist extends Activity {
 	// 为listview自定义适配器内部类
 	public static class MyAdapter extends BaseAdapter {
 		public static HashMap<Integer, Boolean> isSelected;
-		private Context context = null;
-		private LayoutInflater inflater = null;
-		private List<Map<String, Object>> list = null;
-		private String keyString[] = null;
-		private String itemString0 = null; // 记录每个item中textview的值
-		private String itemString1 = null;
-		private String itemString2 = null;
+        @Nullable
+        private Context                   context     = null;
+        @Nullable
+        private LayoutInflater            inflater    = null;
+        @Nullable
+        private List<Map<String, Object>> list        = null;
+        @Nullable
+        private String                    keyString[] = null;
+        @Nullable
+        private String                    itemString0 = null; // 记录每个item中textview的值
+        @Nullable
+        private String                    itemString1 = null;
+        @Nullable
+        private String                    itemString2 = null;
 		// private String itemString2 = null;
-		private int idValue[] = null;// id值
+        @Nullable
+        private int                       idValue[]   = null;// id值
 
 		public MyAdapter(Context context, List<Map<String, Object>> list,
-				int resource, String[] from, int[] to) {
+                         int resource, @NonNull String[] from, @NonNull int[] to) {
 			this.context = context;
 			this.list = list;
 			keyString = new String[from.length];
@@ -650,7 +682,7 @@ public class WarehouseMultilist extends Activity {
 			}
 		}
 
-		public void initSelect(List<Integer> localidList) {
+		public void initSelect(@NonNull List<Integer> localidList) {
 
 			for (int t = 0; t < localidList.size(); t++) {
 				int A = localidList.get(t);
@@ -684,8 +716,9 @@ public class WarehouseMultilist extends Activity {
 			return 0;
 		}
 
-		@Override
-		public View getView(int position, View view, ViewGroup arg2) {
+		@Nullable
+        @Override
+		public View getView(int position, @Nullable View view, ViewGroup arg2) {
 			ViewHolder holder = null;
 			if (holder == null) {
 				holder = new ViewHolder();

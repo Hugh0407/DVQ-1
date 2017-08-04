@@ -10,6 +10,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -62,20 +64,31 @@ import static com.techscan.dvq.common.Utils.HANDER_POORDER_HEAD;
 import static com.techscan.dvq.common.Utils.HANDER_STORG;
 
 public class PurStockIn extends Activity {
+    @NonNull
     private ButtonOnClick buttonOnClick = new ButtonOnClick(0);
     boolean NoScanSave = false;
 
     String PurBillCode = "";
     String DBBillCode = "";
-    private String[] ExitNameList = null;
-    String fileName = null;
-    String fileNameScan = null;
-    String ScanedFileName = null;
-    String UserID = null;
-    File file = null;
-    File fileScan = null;
-    String ReScanHead = "1";
-    private AlertDialog SelectButton = null;
+    @Nullable
+    private String[]    ExitNameList       = null;
+    @Nullable
+            String      fileName           = null;
+    @Nullable
+            String      fileNameScan       = null;
+    @Nullable
+            String      ScanedFileName     = null;
+    @Nullable
+            String      UserID             = null;
+    @Nullable
+            File        file               = null;
+    @Nullable
+            File        fileScan           = null;
+    @NonNull
+            String      ReScanHead         = "1";
+    @Nullable
+    private AlertDialog SelectButton       = null;
+    @Nullable
     private AlertDialog SelectButtonNoScan = null;
 
     int year;
@@ -83,6 +96,7 @@ public class PurStockIn extends Activity {
     int day;
     Calendar mycalendar;
 
+    @Nullable
     private ArrayList<String> ScanedBarcode = new ArrayList<String>();
     Button btnSave;
     //Button btnUpdate;
@@ -117,23 +131,32 @@ public class PurStockIn extends Activity {
     String PK_CORP;         //公司
     String VBILLCOD;        //单据号
 
+    @Nullable
     Intent scanDetail = null;
+    @Nullable
     JSONObject jsDBBody;
+    @Nullable
     JSONObject jsDBHead;
+    @Nullable
     JSONObject jsHead;
+    @Nullable
     JSONObject jsBody;
+    @Nullable
     JSONObject jsBoxTotal;
+    @Nullable
     JSONObject jsSerino;
 
     String m_FrePlenishFlag = "N";
     String m_WarehouseID = "";
     String pk_purcorp = "";
     String pk_calbody = "";
+    @NonNull
     String m_AccID = "A";
 
     String m_BillID = "";
     String m_BillNo = "";
 
+    @NonNull
     String m_companyCode = "1001";
 
     String m_PosCode = "";
@@ -151,8 +174,10 @@ public class PurStockIn extends Activity {
 //	private int MainLogin.music2;//定义一个int来设置suondID
     writeTxt writeTxt;
     //GUID
+    @Nullable
     UUID uploadGuid = null;
 
+    @NonNull
     private Context MyContext = this;
 
     private boolean SaveDBOrder() throws JSONException, ParseException, IOException {
@@ -794,6 +819,7 @@ public class PurStockIn extends Activity {
         return true;
     }
 
+    @NonNull
     private DialogInterface.OnClickListener listenUpdate = new
             DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog,
@@ -826,6 +852,7 @@ public class PurStockIn extends Activity {
             };
 
 
+    @NonNull
     private DialogInterface.OnClickListener listenSave2 = new
             DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog,
@@ -854,6 +881,7 @@ public class PurStockIn extends Activity {
             };
 
 
+    @NonNull
     private DialogInterface.OnClickListener listenSave = new
             DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog,
@@ -897,6 +925,7 @@ public class PurStockIn extends Activity {
                 }
             };
 
+    @NonNull
     private DialogInterface.OnClickListener listenExit = new
             DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog,
@@ -1456,9 +1485,10 @@ public class PurStockIn extends Activity {
         td.start();
     }
 
-    Handler mHandler = new Handler() {
+    @NonNull
+            Handler                mHandler  = new Handler() {
         @Override
-        public void handleMessage(Message msg) {
+        public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
                 case HANDER_DEPARTMENT:
@@ -1530,10 +1560,11 @@ public class PurStockIn extends Activity {
         }
     };
     //创建对话框的按钮事件侦听
+    @Nullable
     private Button.OnClickListener myListner = new
             Button.OnClickListener() {
                 @Override
-                public void onClick(View v) {
+                public void onClick(@NonNull View v) {
                     switch (v.getId()) {
                         case R.id.txtStartDate: {
                             year = Integer.valueOf(txtStartDate.getText().toString().split("-")[0]);
@@ -1826,6 +1857,7 @@ public class PurStockIn extends Activity {
         MainMenu.cancelLoading();
     }
 
+    @NonNull
     private DatePickerDialog.OnDateSetListener SDatelistener = new DatePickerDialog.OnDateSetListener() {
         /**params：view：该事件关联的组件
          * params：myyear：当前选择的年
@@ -1857,6 +1889,7 @@ public class PurStockIn extends Activity {
 
     };
 
+    @NonNull
     private DatePickerDialog.OnDateSetListener EDatelistener = new DatePickerDialog.OnDateSetListener() {
         /**params：view：该事件关联的组件
          * params：myyear：当前选择的年
@@ -1888,9 +1921,10 @@ public class PurStockIn extends Activity {
 
     };
 
+    @NonNull
     private View.OnFocusChangeListener myFocusListener = new View.OnFocusChangeListener() {
         @Override
-        public void onFocusChange(View view, boolean hasFocus) {
+        public void onFocusChange(@NonNull View view, boolean hasFocus) {
             if (hasFocus) {
                 switch (view.getId()) {
                     case R.id.txtStartDate: {
@@ -2005,7 +2039,7 @@ public class PurStockIn extends Activity {
             bulider.setNegativeButton(R.string.QuXiao, null);
             bulider.setPositiveButton(R.string.QueRen, new DialogInterface.OnClickListener() {
                 @Override
-                public void onClick(DialogInterface dialog, int which) {
+                public void onClick(@NonNull DialogInterface dialog, int which) {
                     dialog.dismiss();
                     IniActivyMemor();
                     finish();
@@ -2077,7 +2111,7 @@ public class PurStockIn extends Activity {
         }
 
         @Override
-        public void onClick(DialogInterface dialog, int whichButton) {
+        public void onClick(@NonNull DialogInterface dialog, int whichButton) {
             if (whichButton >= 0) {
                 index = whichButton + 3;
                 // dialog.cancel();
@@ -2232,9 +2266,10 @@ public class PurStockIn extends Activity {
 
     }
 
+    @NonNull
     private View.OnLongClickListener myTxtLongClick = new View.OnLongClickListener() {
         @Override
-        public boolean onLongClick(View view) {
+        public boolean onLongClick(@NonNull View view) {
             switch (view.getId()) {
 
                 case R.id.txtPurOrderNo:
@@ -2256,10 +2291,11 @@ public class PurStockIn extends Activity {
         }
     };
 
+    @Nullable
     private OnKeyListener myTxtListener = new
             OnKeyListener() {
                 @Override
-                public boolean onKey(View v, int arg1, KeyEvent arg2) {
+                public boolean onKey(@NonNull View v, int arg1, @NonNull KeyEvent arg2) {
                     {
                         if (arg1 == 66 && arg2.getAction()
                                 == KeyEvent.ACTION_UP) {
@@ -2353,14 +2389,11 @@ public class PurStockIn extends Activity {
         if (keyCode == KeyEvent.KEYCODE_MENU) {//拦截meu键事件			//do something...
             return false;
         }
-        if (keyCode == KeyEvent.KEYCODE_BACK) {//拦截返回按钮事件			//do something...
-            return false;
-        }
-        return true;
+        return keyCode != KeyEvent.KEYCODE_BACK;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
@@ -2373,9 +2406,12 @@ public class PurStockIn extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    private static AlertDialog SelectLine = null;
-    private buttonOnClickC buttonOnClickC = new buttonOnClickC(0);
-    static String[] LNameList = new String[2];
+    @Nullable
+    private static AlertDialog    SelectLine     = null;
+    @NonNull
+    private        buttonOnClickC buttonOnClickC = new buttonOnClickC(0);
+    @NonNull
+    static         String[]       LNameList      = new String[2];
 
     private void Changeline() {
 
@@ -2414,7 +2450,7 @@ public class PurStockIn extends Activity {
         }
 
         @Override
-        public void onClick(DialogInterface dialog, int whichButton) {
+        public void onClick(@NonNull DialogInterface dialog, int whichButton) {
             if (whichButton >= 0) {
                 index = whichButton;
             } else {
@@ -2441,7 +2477,7 @@ public class PurStockIn extends Activity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, @NonNull Intent data) {
 
         if (Common.ReScanErr == true) {
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);

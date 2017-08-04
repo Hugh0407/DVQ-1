@@ -1,16 +1,25 @@
 package com.techscan.dvq.common;
 
+import android.support.annotation.NonNull;
+
 public class SplitBarcode {
+    @NonNull
     public String AccID         = "A";
     public String cInvCode      = "";//物料号
     public String cBatch        = "";//批次
+    @NonNull
     public String cInvName      = "";
     public String cSerino       = "";//序列号
+    @NonNull
     public String cBatchStatus  = "";
+    @NonNull
     public String currentBox    = "";
+    @NonNull
     public String TotalBox      = "";
+    @NonNull
     public String CheckNo       = "";
     public String FinishBarCode = "";
+    @NonNull
     public String CheckBarCode  = "";
 
     public boolean creatorOk = false;
@@ -26,7 +35,7 @@ public class SplitBarcode {
     public String CWFlag;//成品财务标志
     public String OnlyFlag;//成品唯一标识
 
-    public SplitBarcode(String sBarcode) {
+    public SplitBarcode(@NonNull String sBarcode) {
         creatorOk = true;
 
         if (sBarcode.equals("")) {
@@ -121,7 +130,7 @@ public class SplitBarcode {
     private enum eBarcodeType {
         Y, C, TC, P, TP;
 
-        private static eBarcodeType getBarcodeType(String sType) {
+        private static eBarcodeType getBarcodeType(@NonNull String sType) {
             return valueOf(sType.toUpperCase());
         }
     }

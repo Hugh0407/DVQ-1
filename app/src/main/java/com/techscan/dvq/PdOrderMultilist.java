@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.util.ArrayMap;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -44,25 +46,41 @@ public class PdOrderMultilist extends Activity {
 //	private SoundPool sp;//声明一个SoundPool
 //	private int MainLogin.music;//定义一个int来设置suondID
 	//ADD CAIXY TEST END 
-	
-	String InOutFlag = null;
-	TextView tvMSelCount = null;
-	ListView lvPDMultiList = null;
-	Button btnMListAll = null;
-	Button btnMListClear = null;
-	Button btnMListOK = null;
+
+    @Nullable
+    String            InOutFlag     = null;
+    @Nullable
+    TextView          tvMSelCount   = null;
+    @Nullable
+    ListView          lvPDMultiList = null;
+    @Nullable
+    Button            btnMListAll   = null;
+    @Nullable
+    Button            btnMListClear = null;
+    @Nullable
+    Button            btnMListOK    = null;
 	//Button btnMListReturn = null;
-	ArrayList<String> listStr = null;  
-	private List<Map<String, Object>> mData;
-	private Handler handler = null;
-	private List<HashMap<String, Object>> MultiList = null;  
+    @Nullable
+    ArrayList<String> listStr       = null;
+    @Nullable
+    private List<Map<String, Object>> mData;
+    @Nullable
+    private Handler                       handler   = null;
+    @Nullable
+    private List<HashMap<String, Object>> MultiList = null;
+    @Nullable
     private MyAdapter adapter;
-    private Adapter ItemAdapter = null;
-    private Map<String,Object> ItemMap = null;
-    private Map<String,Object> ResultMap = new ArrayMap<String, Object>();
-    private List<Map<String, Object>> ResultList = new ArrayList<Map<String, Object>>();
-    private String fsAccIDFlag = "";
-    Button btPdOrderMultilistReturn =null;
+    @Nullable
+    private Adapter                   ItemAdapter              = null;
+    @Nullable
+    private Map<String,Object>        ItemMap                  = null;
+    @NonNull
+    private Map<String,Object>        ResultMap                = new ArrayMap<String, Object>();
+    @NonNull
+    private List<Map<String, Object>> ResultList               = new ArrayList<Map<String, Object>>();
+    private String                    fsAccIDFlag              = "";
+    @Nullable
+            Button                    btPdOrderMultilistReturn =null;
         
 
 	
@@ -164,12 +182,13 @@ public class PdOrderMultilist extends Activity {
 		
 	}
 
-	
-	private OnClickListener ButtonOnClickListener = new OnClickListener()
+
+    @NonNull
+    private OnClickListener ButtonOnClickListener = new OnClickListener()
     {
   		
 		@Override
-		public void onClick(View v) 
+		public void onClick(@NonNull View v)
 		{
 			switch(v.getId())
   			{			//btnSDScanReturn
@@ -189,7 +208,7 @@ public class PdOrderMultilist extends Activity {
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
+	public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
@@ -206,7 +225,7 @@ public class PdOrderMultilist extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 	
-	private List<Map<String, Object>> getData(JSONObject jas) throws JSONException 
+	private List<Map<String, Object>> getData(@NonNull JSONObject jas) throws JSONException
 	{
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		Map<String, Object> map;
@@ -536,8 +555,8 @@ public class PdOrderMultilist extends Activity {
         lvPDMultiList.setOnItemClickListener(new OnItemClickListener() {  
 
             @Override  
-            public void onItemClick(AdapterView<?> arg0, View view,  
-                    int position, long arg3) 
+            public void onItemClick(@NonNull AdapterView<?> arg0, @NonNull View view,
+                                    int position, long arg3)
             {            	
             	ViewHolder holder = (ViewHolder) view.getTag();                
                 ItemAdapter=arg0.getAdapter();
@@ -590,7 +609,7 @@ public class PdOrderMultilist extends Activity {
             	//比较数据的出库仓库和入库仓库是否和之前的数据一致，一致才可以被选择
             	if(ResultList.size() > 0)
             	{
-            		Map<String,Object> SelectedItemMap = (Map<String,Object>)ResultList.get(0);
+            		Map<String,Object> SelectedItemMap = ResultList.get(0);
             		if(!SelectedItemMap.get("From").toString().equals(ItemMap.get("From").toString())
             				|| !SelectedItemMap.get("To").toString().equals(ItemMap.get("To").toString()))
             		{
@@ -719,10 +738,12 @@ public class PdOrderMultilist extends Activity {
     }
     
   //全局变量赋值
-  	public static class Data{  
-  		private static ListAdapter SelListAdapter = null;
+  	public static class Data{
+      @Nullable
+      private static ListAdapter SelListAdapter = null;
   	      
-  	    public static ListAdapter getSelListAdapter() {  
+  	    @Nullable
+        public static ListAdapter getSelListAdapter() {
   	        return SelListAdapter;  
   	    }  
   	      
@@ -733,23 +754,34 @@ public class PdOrderMultilist extends Activity {
     
 	//为listview自定义适配器内部类  
     public static class MyAdapter extends BaseAdapter {  
-        public static HashMap<Integer, Boolean> isSelected;  
-        private Context context = null;  
-        private LayoutInflater inflater = null;  
-        private List<Map<String, Object>> list = null;  
-        private String keyString[] = null;  
-        private String itemString0 = null; // 记录每个item中textview的值  
-        private String itemString1 = null;
-        private String itemString2 = null;
-        private String itemString3 = null;
-        private String itemString4 = null;
+        public static HashMap<Integer, Boolean> isSelected;
+        @Nullable
+        private Context                   context     = null;
+        @Nullable
+        private LayoutInflater            inflater    = null;
+        @Nullable
+        private List<Map<String, Object>> list        = null;
+        @Nullable
+        private String                    keyString[] = null;
+        @Nullable
+        private String                    itemString0 = null; // 记录每个item中textview的值
+        @Nullable
+        private String                    itemString1 = null;
+        @Nullable
+        private String                    itemString2 = null;
+        @Nullable
+        private String                    itemString3 = null;
+        @Nullable
+        private String                    itemString4 = null;
         //增加退
-        private String itemString5 = null;
-        
-        private int idValue[] = null;// id值  
+        @Nullable
+        private String                    itemString5 = null;
+
+        @Nullable
+        private int idValue[] = null;// id值
   
-        public MyAdapter(Context context, List<Map<String, Object>> list,  
-                int resource, String[] Key, int[] Id) {  
+        public MyAdapter(Context context, List<Map<String, Object>> list,
+                         int resource, @NonNull String[] Key, @NonNull int[] Id) {
             this.context = context;  
             this.list = list;  
             keyString = new String[Key.length];  
@@ -783,8 +815,9 @@ public class PdOrderMultilist extends Activity {
             return 0;  
         }  
   
-        @Override  
-        public View getView(int position, View view, ViewGroup arg2) {  
+        @Nullable
+        @Override
+        public View getView(int position, @Nullable View view, ViewGroup arg2) {
             ViewHolder holder = null;  
             if (holder == null) 
             {  

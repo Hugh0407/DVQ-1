@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -42,23 +44,32 @@ import static com.techscan.dvq.common.Utils.showToast;
 
 public class StatusChangeAct extends Activity {
 
+    @Nullable
     @InjectView(R.id.ed_bill_type)
     EditText mEdBillType;
+    @Nullable
     @InjectView(R.id.btn_bill_type)
     ImageButton mBtnBillType;
+    @Nullable
     @InjectView(R.id.ed_source_bill)
     EditText mEdSourceBill;
+    @Nullable
     @InjectView(R.id.btn_source_bill)
     ImageButton mBtnSourceBill;
+    @Nullable
     @InjectView(R.id.ed_select_wh)
     EditText mEdSelectWh;
+    @Nullable
     @InjectView(R.id.btn_select_wh)
     ImageButton mBtnSelectWh;
 
+    @Nullable
     @InjectView(R.id.sacn)
     Button mSacn;
+    @Nullable
     @InjectView(R.id.save)
     Button mSave;
+    @Nullable
     @InjectView(R.id.back)
     Button mBack;
 
@@ -70,8 +81,10 @@ public class StatusChangeAct extends Activity {
     String AccID = "";
     String pk_corp = "";
     List<PurGood> taskList;
+    @Nullable
     ProgressDialog progressDialog;
-    Activity activity;
+    @Nullable
+    Activity       activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +106,7 @@ public class StatusChangeAct extends Activity {
 
     @OnClick({R.id.btn_bill_type, R.id.btn_source_bill, R.id.btn_select_wh,
             R.id.sacn, R.id.save, R.id.back})
-    public void onViewClicked(View view) {
+    public void onViewClicked(@NonNull View view) {
         switch (view.getId()) {
             case R.id.btn_bill_type:
                 break;
@@ -130,7 +143,7 @@ public class StatusChangeAct extends Activity {
                     bulider.setNegativeButton(R.string.QuXiao, null);
                     bulider.setPositiveButton(R.string.QueRen, new DialogInterface.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
+                        public void onClick(@NonNull DialogInterface dialog, int which) {
                             SCScanAct.taskList.clear();
                             SCScanAct.detailList.clear();
                             dialog.dismiss();
@@ -150,9 +163,10 @@ public class StatusChangeAct extends Activity {
      * 网络请求后的线程通信
      * msg.obj 是从子线程传递过来的数据
      */
+    @Nullable
     Handler mHandler = new Handler() {
         @Override
-        public void handleMessage(Message msg) {
+        public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
                 case 1:
@@ -323,7 +337,7 @@ public class StatusChangeAct extends Activity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, @NonNull Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         // 回传数据<----OtherOrderList.class，从ShowOrderList(); 中跳过去
         if (requestCode == 99 && resultCode == 1) {

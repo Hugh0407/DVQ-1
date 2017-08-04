@@ -1,17 +1,27 @@
 package com.techscan.dvq;
 
-import android.widget.CheckBox;  
+import android.support.annotation.Nullable;
+import android.widget.CheckBox;
 import android.widget.TextView;  
   
-public class ViewHolder {  
-    public TextView tvpdorder = null;
-    public TextView tvfromware = null;
-    public TextView tvtoware = null;
-    public TextView tvaccid = null;
-    public TextView dcorp = null;
-    public TextView statuse = null;
-    public CheckBox cb = null;
+public class ViewHolder {
+    @Nullable
+    public TextView tvpdorder       = null;
+    @Nullable
+    public TextView tvfromware      = null;
+    @Nullable
+    public TextView tvtoware        = null;
+    @Nullable
+    public TextView tvaccid         = null;
+    @Nullable
+    public TextView dcorp           = null;
+    @Nullable
+    public TextView statuse         = null;
+    @Nullable
+    public CheckBox cb              = null;
+    @Nullable
     public TextView tvwarehousecode = null;
+    @Nullable
     public TextView tvwarehousename = null;
     
     

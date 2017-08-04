@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -50,26 +52,37 @@ import static com.techscan.dvq.common.Utils.showResultDialog;
 
 public class MultilateralTrade extends Activity {
 
+    @Nullable
     @InjectView(R.id.txtMultilateralTrade)
     EditText txtMultilateralTrade;
+    @Nullable
     @InjectView(R.id.txtDocumentNumber)
     EditText txtDocumentNumber;
+    @Nullable
     @InjectView(R.id.imageDocumentNumber)
     ImageButton imageDocumentNumber;
+    @Nullable
     @InjectView(R.id.txtWareHouse)
     EditText txtWareHouse;
+    @Nullable
     @InjectView(R.id.imageWareHouse)
     ImageButton imageWareHouse;
+    @Nullable
     @InjectView(R.id.txtCustomer)
     EditText txtCustomer;
+    @Nullable
     @InjectView(R.id.txtBillDate)
     EditText txtBillDate;
+    @Nullable
     @InjectView(R.id.txtDepartment)
     EditText txtDepartment;
+    @Nullable
     @InjectView(R.id.btnScan)
     Button btnScan;
+    @Nullable
     @InjectView(R.id.btnSave)
     Button btnSave;
+    @Nullable
     @InjectView(R.id.btnExit)
     Button btnExit;
 
@@ -82,25 +95,42 @@ public class MultilateralTrade extends Activity {
     private String tmpCustName = "";
     private String tmpBillDate = "";
     String csaleid = "";
-    String CBIZTYPE = "";
-    String  CSALECORPID = "";
-    String PK_CORP = "";
-    String  VDEF1 = "";
-    String VDEF2 = "";
-    String VDEF5 = "";
-    String  CCUSTBASDOCID ="";
-    String  CRECEIVECUSTBASID ="";
-    String CCUSTOMERID = "";
+    @NonNull
+    String CBIZTYPE          = "";
+    @NonNull
+    String CSALECORPID       = "";
+    @NonNull
+    String PK_CORP           = "";
+    @NonNull
+    String VDEF1             = "";
+    @NonNull
+    String VDEF2             = "";
+    @NonNull
+    String VDEF5             = "";
+    @NonNull
+    String CCUSTBASDOCID     ="";
+    @NonNull
+    String CRECEIVECUSTBASID ="";
+    @NonNull
+    String CCUSTOMERID       = "";
     String CWAREHOUSEID = "";//仓库id
     String NTOTALNUMBER = "";
-    HashMap<String, String> checkInfo = new HashMap<String, String>();
-    private ArrayList<String> ScanedBarcode = new ArrayList<String>();
-    private JSONObject jsonSaveHead = null;
-    private JSONObject jsonBillHead = null;
-    JSONObject table = null;
-    JSONObject jsBody = null;
-    JSONObject jsSerino = null;
-    private JSONObject jsTotal=null;
+    @NonNull
+            HashMap<String, String> checkInfo     = new HashMap<String, String>();
+    @Nullable
+    private ArrayList<String>       ScanedBarcode = new ArrayList<String>();
+    @Nullable
+    private JSONObject              jsonSaveHead  = null;
+    @Nullable
+    private JSONObject              jsonBillHead  = null;
+    @Nullable
+            JSONObject              table         = null;
+    @Nullable
+            JSONObject              jsBody        = null;
+    @Nullable
+            JSONObject              jsSerino      = null;
+    @Nullable
+    private JSONObject              jsTotal       =null;
     ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,7 +146,7 @@ public class MultilateralTrade extends Activity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == 44) {
             if (resultCode == 4) {
                 if (data != null) {
@@ -209,7 +239,7 @@ public class MultilateralTrade extends Activity {
     }
 
     @OnClick({R.id.imageDocumentNumber, R.id.imageWareHouse, R.id.btnScan, R.id.btnSave, R.id.btnExit})
-    public void onViewClicked(View view) {
+    public void onViewClicked(@NonNull View view) {
         switch (view.getId()) {
             case R.id.imageDocumentNumber:
                 try{
@@ -344,7 +374,7 @@ public class MultilateralTrade extends Activity {
             bulider.setNegativeButton(R.string.QuXiao, null);
             bulider.setPositiveButton(R.string.QueRen, new DialogInterface.OnClickListener() {
                 @Override
-                public void onClick(DialogInterface dialog, int which) {
+                public void onClick(@NonNull DialogInterface dialog, int which) {
                     dialog.dismiss();
                     deleteInfo();
                     finish();
@@ -378,7 +408,7 @@ public class MultilateralTrade extends Activity {
     /**
      * 绑定订单表头信息
      */
-    private boolean BindingBillDetailInfo(Map<String, Object> mapBillInfo) {
+    private boolean BindingBillDetailInfo(@NonNull Map<String, Object> mapBillInfo) {
         csaleid = mapBillInfo.get("Csaleid").toString();
         tmpBillCode = mapBillInfo.get("BillCode").toString();
         tmpCustName = mapBillInfo.get("CustName").toString();
@@ -684,9 +714,10 @@ public class MultilateralTrade extends Activity {
      * 网络请求后的线程通信
      * msg.obj 是从子线程传递过来的数据
      */
+    @NonNull
     Handler mHandler = new Handler() {
         @Override
-        public void handleMessage(Message msg) {
+        public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
                 case HANDER_SAVE_RESULT:
@@ -741,7 +772,8 @@ public class MultilateralTrade extends Activity {
     /**
      * 根据批次sku相同合并数量
      */
-    public  JSONArray merge(JSONArray array) {
+    @NonNull
+    public  JSONArray merge(@NonNull JSONArray array) {
 
         JSONArray arrayTemp = new JSONArray();
         int num = 0;

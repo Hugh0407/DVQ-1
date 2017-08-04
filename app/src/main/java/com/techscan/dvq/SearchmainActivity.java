@@ -1,14 +1,10 @@
 package com.techscan.dvq;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import com.techscan.dvq.R.id;
-
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,10 +15,17 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.SimpleAdapter;
 
+import com.techscan.dvq.R.id;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class SearchmainActivity extends Activity {
 
-	GridView gridview = null;
-	Button btnSearchMainReturn = null;
+    @Nullable
+    GridView gridview            = null;
+    @Nullable
+    Button   btnSearchMainReturn = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -77,14 +80,15 @@ public class SearchmainActivity extends Activity {
 			
 		}  
 		 
-	} 
-	
-	
-	private OnClickListener ButtonOnClickListener = new OnClickListener()
+	}
+
+
+    @NonNull
+    private OnClickListener ButtonOnClickListener = new OnClickListener()
     {
   		
 		@Override
-		public void onClick(View v) 
+		public void onClick(@NonNull View v)
 		{
 			switch(v.getId())
   			{			//btnSDScanReturn
@@ -103,7 +107,7 @@ public class SearchmainActivity extends Activity {
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
+	public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.

@@ -1,20 +1,26 @@
 package com.techscan.dvq;
 
+import android.support.annotation.NonNull;
+
 public class SplitSaleBarcode
 {
-	public String P = "";
-	public String TP = "";
-	public String cInvCode = "";
-	public String cBatch = "";
-	public String WW = "";
-	public String TAX = "";
-	public String QTY = "";
-	public String CW = "";
-	public String ONLY = "";
-    public String cSerino = "";
-	public boolean creatorOk=false;
+    public String  P         = "";
+    public String  TP        = "";
+    public String  cInvCode  = "";
+    public String  cBatch    = "";
+    @NonNull
+    public String  WW        = "";
+    @NonNull
+    public String  TAX       = "";
+    public String  QTY       = "";
+    @NonNull
+    public String  CW        = "";
+    @NonNull
+    public String  ONLY      = "";
+    public String  cSerino   = "";
+    public boolean creatorOk =false;
 
-	public SplitSaleBarcode(String barcode) {
+	public SplitSaleBarcode(@NonNull String barcode) {
 		String[] val;
 
 		if (barcode.contains("|")) {

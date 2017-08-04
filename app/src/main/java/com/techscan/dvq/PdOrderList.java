@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -42,9 +44,10 @@ public class PdOrderList extends Activity{
 //	private SoundPool sp;//声明一个SoundPool
 //	private int MainLogin.music;//定义一个int来设置suondID
 	//ADD CAIXY TEST END 
-	Button btPdOrderListReturn =null;
+    @Nullable
+    Button btPdOrderListReturn =null;
 	
-	private List<Map<String, Object>> getData(JSONObject jas) 
+	private List<Map<String, Object>> getData(@NonNull JSONObject jas)
 			throws JSONException 
 	{
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
@@ -123,8 +126,10 @@ public class PdOrderList extends Activity{
 		}
 		return list;
 	}
-	public List<Map<String, Object>> mData;
-	private Handler handler=null;
+    @Nullable
+    public List<Map<String, Object>> mData;
+    @Nullable
+    private Handler handler =null;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -313,13 +318,13 @@ public class PdOrderList extends Activity{
         
         //list.addHeaderView()
         
-        list.setOnItemClickListener((OnItemClickListener) itemListener);		
+        list.setOnItemClickListener(itemListener);
         list.setAdapter(listItemAdapter);  
         
         
         if(!BillCode.equals(""))
         {
- 			Map<String,Object> map=(Map<String, Object>) mData.get(0);
+ 			Map<String,Object> map= mData.get(0);
             String orderNo = map.get("No").toString();
             String billId=map.get("BillId").toString();
             String AccId=map.get("AccID").toString();
@@ -369,13 +374,14 @@ public class PdOrderList extends Activity{
 		return true;
 	}
 
-	
-	
-	private OnClickListener ButtonOnClickListener = new OnClickListener()
+
+
+    @NonNull
+    private OnClickListener ButtonOnClickListener = new OnClickListener()
     {
   		
 		@Override
-		public void onClick(View v) 
+		public void onClick(@NonNull View v)
 		{
 			switch(v.getId())
   			{			//btnSDScanReturn
@@ -388,7 +394,7 @@ public class PdOrderList extends Activity{
     
     
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
+	public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
 			return true;
@@ -398,13 +404,14 @@ public class PdOrderList extends Activity{
 
 //	private List.. itemListener = new 
 //			DialogInterface.OnClickListener()
-	
-	private ListView.OnItemClickListener itemListener = new
+
+    @NonNull
+    private ListView.OnItemClickListener itemListener = new
 			ListView.OnItemClickListener()
 	{
 		@Override
-		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-				long arg3) 
+		public void onItemClick(@NonNull AdapterView<?> arg0, View arg1, int arg2,
+                                long arg3)
 		{
 			// TODO Auto-generated method stub
 			 Adapter adapter=arg0.getAdapter();

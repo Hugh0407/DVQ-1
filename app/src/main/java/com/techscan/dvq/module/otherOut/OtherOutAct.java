@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
@@ -57,39 +59,55 @@ import static com.techscan.dvq.common.Utils.showToast;
 
 public class OtherOutAct extends Activity {
 
+    @Nullable
     @InjectView(R.id.ed_bill_num)
     EditText    edBillNum;
+    @Nullable
     @InjectView(R.id.ed_bill_date)
     EditText    edBillDate;
+    @Nullable
     @InjectView(R.id.ed_wh)
     EditText    edWh;
+    @Nullable
     @InjectView(R.id.btn_refer_wh)
     ImageButton btnReferWh;
+    @Nullable
     @InjectView(R.id.ed_org)
     EditText    edOrg;
+    @Nullable
     @InjectView(R.id.btn_refer_org)
     ImageButton btnReferOrg;
+    @Nullable
     @InjectView(R.id.ed_lei_bie)
     EditText    edLeiBie;
+    @Nullable
     @InjectView(R.id.btn_refer_lei_bie)
     ImageButton btnReferLeiBie;
+    @Nullable
     @InjectView(R.id.ed_dep)
     EditText    edDep;
+    @Nullable
     @InjectView(R.id.btn_refer_dep)
     ImageButton btnReferDep;
+    @Nullable
     @InjectView(R.id.ed_remark)
     EditText    edRemark;
+    @Nullable
     @InjectView(R.id.btn_scan)
     Button      btnScan;
+    @Nullable
     @InjectView(R.id.btn_save)
     Button      btnSave;
+    @Nullable
     @InjectView(R.id.btn_back)
     Button      btnBack;
 
+    @Nullable
     Activity activity;
     private String TAG = this.getClass().getSimpleName();
 
-    List<Goods>             tempList;
+    @Nullable
+    List<Goods> tempList;
     HashMap<String, String> checkInfo;
 
     String CDISPATCHERID = "";//收发类别code
@@ -104,6 +122,7 @@ public class OtherOutAct extends Activity {
     int            month;
     int            day;
     Calendar       mycalendar;
+    @Nullable
     ProgressDialog progressDialog;
 
     @Override
@@ -123,7 +142,7 @@ public class OtherOutAct extends Activity {
 
     @OnClick({R.id.btn_refer_wh, R.id.btn_refer_org, R.id.btn_refer_lei_bie,
             R.id.btn_refer_dep, R.id.btn_scan, R.id.btn_save, R.id.btn_back})
-    public void onViewClicked(View view) {
+    public void onViewClicked(@NonNull View view) {
         switch (view.getId()) {
             case R.id.btn_refer_wh:
                 btnWarehouseClick();
@@ -190,7 +209,7 @@ public class OtherOutAct extends Activity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, @NonNull Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         //仓库的回传数据 <----ListWarehouse.class
         if (requestCode == 97 && resultCode == 13) {
@@ -249,9 +268,10 @@ public class OtherOutAct extends Activity {
      * 网络请求后的线程通信
      * msg.obj 是从子线程传递过来的数据
      */
+    @NonNull
     Handler mHandler = new Handler() {
         @Override
-        public void handleMessage(Message msg) {
+        public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
                 case HANDER_DEPARTMENT:
@@ -508,7 +528,7 @@ public class OtherOutAct extends Activity {
      *
      * @param goodsList
      */
-    private void saveInfo(List<Goods> goodsList) {
+    private void saveInfo(@NonNull List<Goods> goodsList) {
         try {
             final JSONObject table     = new JSONObject();
             JSONObject       tableHead = new JSONObject();
@@ -559,6 +579,7 @@ public class OtherOutAct extends Activity {
         }
     }
 
+    @NonNull
     private DatePickerDialog.OnDateSetListener Datelistener    = new DatePickerDialog.OnDateSetListener() {
         /**params：view：该事件关联的组件
          * params：myyear：当前选择的年
@@ -582,6 +603,7 @@ public class OtherOutAct extends Activity {
         }
 
     };
+    @NonNull
     private View.OnFocusChangeListener         myFocusListener = new View.OnFocusChangeListener() {
         @Override
         public void onFocusChange(View view, boolean hasFocus) {
@@ -595,10 +617,11 @@ public class OtherOutAct extends Activity {
     /**
      * 回车键的点击事件
      */
+    @NonNull
     View.OnKeyListener mOnKeyListener = new View.OnKeyListener() {
 
         @Override
-        public boolean onKey(View v, int keyCode, KeyEvent event) {
+        public boolean onKey(@NonNull View v, int keyCode, @NonNull KeyEvent event) {
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
                 switch (v.getId()) {
                     case R.id.bill_num:

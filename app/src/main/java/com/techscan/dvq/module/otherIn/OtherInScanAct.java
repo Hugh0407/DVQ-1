@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Parcelable;
+import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -49,45 +50,66 @@ import static com.techscan.dvq.common.Utils.showToast;
 
 public class OtherInScanAct extends Activity {
 
+    @Nullable
     @InjectView(R.id.ed_bar_code)
     EditText edBarCode;
+    @Nullable
     @InjectView(R.id.ed_invcode)
     EditText edInvcode;
+    @Nullable
     @InjectView(R.id.ed_name)
     EditText edName;
+    @Nullable
     @InjectView(R.id.ed_type)
     EditText edType;
+    @Nullable
     @InjectView(R.id.ed_spectype)
     EditText edSpectype;
+    @Nullable
     @InjectView(R.id.ed_batch)
     EditText edBatch;
+    @Nullable
     @InjectView(R.id.ed_cost_object)
     EditText edCostObject;
+    @Nullable
     @InjectView(R.id.ed_cost_name)
     EditText edCostName;
+    @Nullable
     @InjectView(R.id.ed_manual)
     EditText edManual;
+    @Nullable
     @InjectView(R.id.ed_num)
     EditText edNum;
+    @Nullable
     @InjectView(R.id.ed_weight)
     EditText edWeight;
+    @Nullable
     @InjectView(R.id.ed_qty)
     EditText edQty;
+    @Nullable
     @InjectView(R.id.ed_unit)
     EditText edUnit;
+    @Nullable
     @InjectView(R.id.btn_overview)
     Button   btnOverview;
+    @Nullable
     @InjectView(R.id.btn_detail)
     Button   btnDetail;
+    @Nullable
     @InjectView(R.id.btn_back)
     Button   btnBack;
 
+
     public static List<Goods> detailList = new ArrayList<Goods>();
-    public static List<Goods> ovList     = new ArrayList<Goods>();
+
+    public static List<Goods> ovList = new ArrayList<Goods>();
+    @Nullable
     Activity mActivity;
+
     String CWAREHOUSEID = "";
-    String PK_CALBODY   = "";
-    String BATCH        = "";
+
+    String PK_CALBODY = "";
+    String BATCH      = "";
 
 
     @Override
@@ -152,6 +174,7 @@ public class OtherInScanAct extends Activity {
      * 网络请求后的线程通信
      * msg.obj 是从子线程传递过来的数据
      */
+
     Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -548,7 +571,7 @@ public class OtherInScanAct extends Activity {
     String pk_invbasdoc = "";
     String pk_invmandoc = "";
 
-    private void setInvBaseToUI(JSONObject json) {
+    private void setInvBaseToUI(@Nullable JSONObject json) {
         Log.d("TAG", "setInvBaseToUI: " + json);
         try {
             if (json != null && json.getBoolean("Status")) {
@@ -589,7 +612,7 @@ public class OtherInScanAct extends Activity {
      */
     String pk_invmandoc_cost = "";
 
-    private void setInvBaseCostObjToUI(JSONObject json) {
+    private void setInvBaseCostObjToUI(@Nullable JSONObject json) {
         try {
             if (json != null && json.getBoolean("Status")) {
                 Log.d("", "setInvBaseCostObjToUI: " + json);
@@ -675,6 +698,7 @@ public class OtherInScanAct extends Activity {
     /**
      * 回车键的点击事件
      */
+
     View.OnKeyListener mOnKeyListener = new View.OnKeyListener() {
 
         @Override

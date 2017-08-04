@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -26,7 +28,7 @@ public class Sample_Stocking_ScanDetail extends Activity {
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) 
+	public boolean onOptionsItemSelected(@NonNull MenuItem item)
 	{
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
@@ -40,9 +42,12 @@ public class Sample_Stocking_ScanDetail extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	private static AlertDialog SelectLine = null;
-	private buttonOnClickC buttonOnClickC = new buttonOnClickC(0);
-	static String[] LNameList = new String[2];
+    @Nullable
+    private static AlertDialog    SelectLine     = null;
+    @NonNull
+    private        buttonOnClickC buttonOnClickC = new buttonOnClickC(0);
+    @NonNull
+    static         String[]       LNameList      = new String[2];
 	
 	private void Changeline() {
 
@@ -81,7 +86,7 @@ public class Sample_Stocking_ScanDetail extends Activity {
 		}
 
 		@Override
-		public void onClick(DialogInterface dialog, int whichButton) {
+		public void onClick(@NonNull DialogInterface dialog, int whichButton) {
 			if (whichButton >= 0) {
 				index = whichButton;
 			} else {

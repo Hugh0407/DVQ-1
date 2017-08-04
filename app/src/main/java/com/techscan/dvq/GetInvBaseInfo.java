@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,6 +38,7 @@ import java.util.Map;
 
 public class GetInvBaseInfo {
 
+    @Nullable
     public HashMap<String,Object> mapInvBaseInfo = null;
 
     /**
@@ -43,7 +46,7 @@ public class GetInvBaseInfo {
      *
      *
      */
-    public GetInvBaseInfo(SplitBarcode cSplitBarcode, Handler mHandler) {
+    public GetInvBaseInfo(@NonNull SplitBarcode cSplitBarcode, Handler mHandler) {
         mapInvBaseInfo = new HashMap<String, Object>();
         mapInvBaseInfo.put("barcodetype",cSplitBarcode.BarcodeType);
         mapInvBaseInfo.put("batch",cSplitBarcode.cBatch);
@@ -69,10 +72,12 @@ public class GetInvBaseInfo {
      * @param json
      * @throws JSONException
      */
+    @NonNull
     String pk_invbasdoc = "";
+    @NonNull
     String pk_invmandoc = "";
 
-    public void SetInvBaseToParam(JSONObject json) throws JSONException {
+    public void SetInvBaseToParam(@NonNull JSONObject json) throws JSONException {
         //Log.d(TAG, "SetInvBaseToUI: " + json);
         if (json.getBoolean("Status")) {
             JSONArray val = json.getJSONArray("baseInfo");
@@ -105,7 +110,9 @@ public class GetInvBaseInfo {
         private String sDate;
         private String sEndDate;
         private String sBillCodes;
+        @Nullable
         List<Map<String, Object>> list                          = new ArrayList<Map<String, Object>>();
+        @Nullable
         Button                    btSaleBillInfoOrderListReturn = null;
 
         //ADD CAIXY TEST START
@@ -165,10 +172,11 @@ public class GetInvBaseInfo {
 
         }
 
+        @NonNull
         private View.OnClickListener ButtonOnClickListener = new View.OnClickListener() {
 
             @Override
-            public void onClick(View v) {
+            public void onClick(@NonNull View v) {
                 switch (v.getId()) {            //btnSDScanReturn
                     case R.id.btSaleBillInfoOrderListReturn:
                         finish();
@@ -185,7 +193,7 @@ public class GetInvBaseInfo {
         }
 
         @Override
-        public boolean onOptionsItemSelected(MenuItem item) {
+        public boolean onOptionsItemSelected(@NonNull MenuItem item) {
             // Handle action bar item clicks here. The action bar will
             // automatically handle clicks on the Home/Up button, so long
             // as you specify a parent activity in AndroidManifest.xml.
@@ -324,7 +332,7 @@ public class GetInvBaseInfo {
         }
 
         //绑定到ListView
-        private void BindingBillInfoData(JSONObject jsonBillInfo) throws JSONException {
+        private void BindingBillInfoData(@NonNull JSONObject jsonBillInfo) throws JSONException {
 
             Map<String, Object> map;
 
@@ -403,11 +411,12 @@ public class GetInvBaseInfo {
         }
 
         //ListView的Item点击监听事件
+        @NonNull
         private ListView.OnItemClickListener itemListener = new
                 ListView.OnItemClickListener() {
 
                     @Override
-                    public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+                    public void onItemClick(@NonNull AdapterView<?> arg0, View arg1, int arg2,
                                             long arg3) {
 
                         Adapter             adapter = arg0.getAdapter();
@@ -436,11 +445,12 @@ public class GetInvBaseInfo {
                 };
 
         //button按钮的监听事件
+        @NonNull
         private Button.OnClickListener ButtonClickListener = new
                 Button.OnClickListener() {
 
                     @Override
-                    public void onClick(View v) {
+                    public void onClick(@NonNull View v) {
                         switch (v.getId()) {
     //				case R.id.btnSaleBillInfoReturn:
     //					SaleBillInfoOrderList.this.finish();
