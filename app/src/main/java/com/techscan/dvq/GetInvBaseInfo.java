@@ -383,8 +383,8 @@ public class GetInvBaseInfo {
 
                 if (fsFunctionName.equals("GetAdjListOrder"))//¶à½ÇÃ³Ò×
                 {
-                    map.put("BillDate", "2017-08-09" );
-//                    map.put("BillCode", tempJso.getString("vreceiptcode"));
+//                    map.put("BillDate", "2017-08-09" );
+                    map.put("BillDate", tempJso.getString("dbilldate"));
                     map.put("OutCompany", tempJso.getString("coutcompanyname"));
                     map.put("InCompany", tempJso.getString("coincompanycode"));
                     map.put("cbillid", tempJso.getString("cbillid"));
