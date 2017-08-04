@@ -702,7 +702,7 @@ public class MultilateralTrade extends Activity {
 
             JSONArray bodys = jsBody.getJSONArray("dbBody");
             JSONArray arraysSerino = jsTotal.getJSONArray("Serino");
-            int y = 0;
+//            int y = 0;
             for (int j = 0; j < arraysSerino.length(); j++) {
 
                 for (int i = 0; i < bodys.length(); i++) {
@@ -766,7 +766,7 @@ public class MultilateralTrade extends Activity {
                         object.put("VRECEIVEADDRESS", adds);
                         object.put("VRECEIVEPERSON", MainLogin.objLog.LoginUser);
                         bodyArray.put(object);
-                        y++;
+//                        y++;
                     }
                 }
             }
