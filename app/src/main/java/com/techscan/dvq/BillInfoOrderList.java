@@ -7,6 +7,8 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -104,7 +106,7 @@ public class BillInfoOrderList extends Activity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
@@ -215,7 +217,7 @@ public class BillInfoOrderList extends Activity {
     }
 
     //绑定到ListView
-    private void BindingBillInfoData(JSONObject jsonBillInfo) throws JSONException
+    private void BindingBillInfoData(@Nullable JSONObject jsonBillInfo) throws JSONException
     {
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
         Map<String, Object> map;
@@ -304,12 +306,13 @@ public class BillInfoOrderList extends Activity {
     }
 
     //ListView的Item点击监听事件
+    @NonNull
     private ListView.OnItemClickListener itemListener = new
             ListView.OnItemClickListener()
             {
 
                 @Override
-                public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+                public void onItemClick(@NonNull AdapterView<?> arg0, View arg1, int arg2,
                                         long arg3) {
 
                     Adapter adapter=arg0.getAdapter();
@@ -329,12 +332,13 @@ public class BillInfoOrderList extends Activity {
             };
 
     //button按钮的监听事件
+    @NonNull
     private Button.OnClickListener ButtonClickListener = new
             Button.OnClickListener()
             {
 
                 @Override
-                public void onClick(View v) {
+                public void onClick(@NonNull View v) {
                     switch(v.getId())
                     {
                         case R.id.btnBillInfoReturn:

@@ -17,6 +17,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -45,39 +47,56 @@ public class SbbinActivity extends Activity {
 //	private int MainLogin.music;//定义一个int来设置suondID
 	//ADD CAIXY TEST END 
 
-	EditText etWhCode=null;
-	EditText etBinCode=null;
-	ListView lvListView=null;
-	Button btSearch=null;
-	Button btnsbbinReturn = null;
-public final static String PREFERENCE_SETTING = "Setting";
+    @Nullable
+                        EditText etWhCode           =null;
+    @Nullable
+                        EditText etBinCode          =null;
+    @Nullable
+                        ListView lvListView         =null;
+    @Nullable
+                        Button   btSearch           =null;
+    @Nullable
+                        Button   btnsbbinReturn     = null;
+    public final static String   PREFERENCE_SETTING = "Setting";
 
-	ImageButton btnWhcode=null;    //仓库选择按钮
-    String fsAccIDFlag = "";
+    @Nullable
+    ImageButton btnWhcode   =null;    //仓库选择按钮
+    @NonNull
+    String      fsAccIDFlag = "";
     private MyAdapter adapter;
 	//ADD BY WUQIONG 2015/04/15
 	//ADD BY WUQIONG 2015/04/14
 	int searchCount=0;
-	TextView tvCount=null;
+    @Nullable
+    TextView tvCount  =null;
 	//ADD BY WUQIONG 2015/04/14
 	//ADD BY WUQIONG
-	String sWhCode = "";
-	String sWhName = "";
+    @NonNull
+    String   sWhCode  = "";
+    @Nullable
+    String   sWhName  = "";
 	//String CompanyCode = ""; 
 	//String OrgCode = ""; 
 	//String companyCode="";
 	//String CompanyId ="";
 	//String OrgId="";
-	String WhNameA = "";
-	String WhNameB = "";
-	String sWhCode2 = "";
+    @Nullable
+    String   WhNameA  = "";
+    @Nullable
+    String   WhNameB  = "";
+    @NonNull
+    String   sWhCode2 = "";
 	//ADD BY WUQIONG
-	
-	ArrayList IDList = null;
+
+    @Nullable
+    ArrayList                         IDList          = null;
     //仓库号
-    String whhouseCode = "";
-	SimpleAdapter listItemAdapter =null;
-	ArrayList<HashMap<String,String>> array=null;
+    @NonNull
+    String                            whhouseCode     = "";
+    @Nullable
+    SimpleAdapter                     listItemAdapter =null;
+    @Nullable
+    ArrayList<HashMap<String,String>> array           =null;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -126,9 +145,10 @@ public final static String PREFERENCE_SETTING = "Setting";
 		//ADD BY WUQIONG
 	}
 
-	
-	
-	private OnItemClickListener myListItemListener = 
+
+
+    @NonNull
+    private OnItemClickListener myListItemListener =
     		new OnItemClickListener()
     {
 
@@ -230,12 +250,13 @@ private void GetInvImg(String InvCode) throws JSONException
 		return;
 	}
 }
-	
-	
-	private OnClickListener myClickListten =new OnClickListener()
+
+
+    @NonNull
+    private OnClickListener myClickListten =new OnClickListener()
 	{
 		@Override
-		public void onClick(View v) 
+		public void onClick(@NonNull View v)
 		{
 			switch(v.getId())
 			{
@@ -434,7 +455,7 @@ private void GetInvImg(String InvCode) throws JSONException
 		
 	}
 	
-	protected void onActivityResult(int requestCode, int resultCode, Intent data)  
+	protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
 	{     
 		if(requestCode==98)
 		{
@@ -467,13 +488,13 @@ private void GetInvImg(String InvCode) throws JSONException
 						
 						if (sWhCode.equals(""))
 						{
-							sWhCode = sWhCode + "'"+(String)((resultList).get(i)).get("storcode")+"'";
-							sWhCode2 = sWhCode2 + (String)((resultList).get(i)).get("storcode");
+							sWhCode = sWhCode + "'"+ ((resultList).get(i)).get("storcode") +"'";
+							sWhCode2 = sWhCode2 + ((resultList).get(i)).get("storcode");
 						}
 						else 
 						{
-							sWhCode = sWhCode + ",'"+(String)((resultList).get(i)).get("storcode")+"'";
-							sWhCode2 = sWhCode2 + ","+(String)((resultList).get(i)).get("storcode");
+							sWhCode = sWhCode + ",'"+ ((resultList).get(i)).get("storcode") +"'";
+							sWhCode2 = sWhCode2 + ","+ ((resultList).get(i)).get("storcode");
 						}
 						
 	    			}
@@ -687,7 +708,7 @@ private void GetInvImg(String InvCode) throws JSONException
 //        return false;
 //    }
 	
-	 private boolean GetStockInfo(String WhCode,String BinCode) throws JSONException, ParseException, IOException
+	 private boolean GetStockInfo(@NonNull String WhCode, @NonNull String BinCode) throws JSONException, ParseException, IOException
 	    {
 		 if(array!=null)
 			{array.removeAll(array);}
@@ -776,7 +797,7 @@ private void GetInvImg(String InvCode) throws JSONException
 			
 	    }
 	//ADD BY WUQIONG 2015/04/14 
-	 private boolean GetStockInfoSum(String WhCode,String BinCode) throws JSONException, ParseException, IOException
+	 private boolean GetStockInfoSum(@NonNull String WhCode, @NonNull String BinCode) throws JSONException, ParseException, IOException
 	    {
 //		 if(array!=null)
 //			{array.removeAll(array);}
@@ -914,7 +935,7 @@ private void GetInvImg(String InvCode) throws JSONException
 //		 }
 //		return true; 
 //	 }
-	 private boolean GetBaseWhCdByName(String WhName) throws JSONException, ParseException, IOException
+	 private boolean GetBaseWhCdByName(@NonNull String WhName) throws JSONException, ParseException, IOException
 	 {
 
 //			 if(array!=null)
@@ -1053,11 +1074,12 @@ private void GetInvImg(String InvCode) throws JSONException
 //			return true;
 //	 }
 	 //ADD BY WUQIOING
-	 private OnKeyListener myTxtListener = new 
+@Nullable
+private OnKeyListener myTxtListener = new
 	    		OnKeyListener()
 	    {
 			@Override
-			public boolean onKey(View v, int arg1, KeyEvent arg2) {
+			public boolean onKey(@NonNull View v, int arg1, @NonNull KeyEvent arg2) {
 				{
 					switch(v.getId())
 					{
@@ -1196,7 +1218,7 @@ private void GetInvImg(String InvCode) throws JSONException
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) 
+	public boolean onOptionsItemSelected(@NonNull MenuItem item)
 	{
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
@@ -1210,9 +1232,12 @@ private void GetInvImg(String InvCode) throws JSONException
 		return super.onOptionsItemSelected(item);
 	}
 
-	private static AlertDialog SelectLine = null;
-	private buttonOnClickC buttonOnClickC = new buttonOnClickC(0);
-	static String[] LNameList = new String[2];
+    @Nullable
+    private static AlertDialog    SelectLine     = null;
+    @NonNull
+    private        buttonOnClickC buttonOnClickC = new buttonOnClickC(0);
+    @NonNull
+    static         String[]       LNameList      = new String[2];
 	
 	private void Changeline() {
 
@@ -1251,7 +1276,7 @@ private void GetInvImg(String InvCode) throws JSONException
 		}
 
 		@Override
-		public void onClick(DialogInterface dialog, int whichButton) {
+		public void onClick(@NonNull DialogInterface dialog, int whichButton) {
 			if (whichButton >= 0) {
 				index = whichButton;
 			} else {

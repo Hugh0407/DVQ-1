@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -53,65 +55,95 @@ public class MultilateralTradeDetail extends Activity {
     String CALBODYID ="";
     String CINVBASID = "";
     String INVENTORYID = "";
+    @Nullable
     String CORP = MainLogin.objLog.STOrgCode;
     String WAREHOUSEID = "";
     String ScanType = "";
     String BillCode = "";
     String CBILLID = "";
     String PK_CORP = "";
+    @Nullable
     JSONObject jsBody;
     JSONObject jsBoxTotal;
     JSONObject jsSerino;
     JSONObject jsTotal;
+    @NonNull
     String weight = "";
-    String num = "";
+    @NonNull
+    String num    = "";
     Double number;
     Double ntotaloutinvnum;
+    @Nullable
     @InjectView(R.id.TextView31)
     TextView TextView31;
+    @Nullable
     @InjectView(R.id.txtBarcode)
     EditText txtBarcode;
+    @Nullable
     @InjectView(R.id.TextView33)
     TextView TextView33;
+    @Nullable
     @InjectView(R.id.txtSaleInvCode)
     EditText txtSaleInvCode;
+    @Nullable
     @InjectView(R.id.txtSaleInvName)
     EditText txtSaleInvName;
+    @Nullable
     @InjectView(R.id.txtSaleType)
     EditText txtSaleType;
+    @Nullable
     @InjectView(R.id.txtSaleSpec)
     EditText txtSaleSpec;
+    @Nullable
     @InjectView(R.id.txtSaleBatch)
     EditText txtSaleBatch;
+    @Nullable
     @InjectView(R.id.txtSaleNumber)
     EditText txtSaleNumber;
+    @Nullable
     @InjectView(R.id.txtSaleWeight)
     EditText txtSaleWeight;
+    @Nullable
     @InjectView(R.id.txtSaleTotal)
     EditText txtSaleTotal;
+    @Nullable
     @InjectView(R.id.txtSaleUnit)
     EditText txtSaleUnit;
+    @Nullable
     @InjectView(R.id.tvSalecount)
     TextView tvSalecount;
+    @Nullable
     @InjectView(R.id.btnTask)
     Button btnTask;
+    @Nullable
     @InjectView(R.id.btnDetail)
     Button btnDetail;
+    @Nullable
     @InjectView(R.id.btnReturn)
     Button btnReturn;
+    @Nullable
     @InjectView(R.id.txtSaleCustoms)
     EditText txtSaleCustoms;
 
+    @Nullable
     private GetMultilateralTradeBaseInfo objSaleBaseInfo   = null;
-    private HashMap<String, Object> m_mapSaleBaseInfo = null;
-    private SplitBarcode            m_cSplitBarcode   = null;
-    private ArrayList<String>       ScanedBarcode     = new ArrayList<String>();
-    List<Map<String, Object>> lstTaskBody = null;
-    private AlertDialog DeleteButton = null;
-    private AlertDialog SelectButton = null;
-    private ButtonOnClick buttonDelOnClick = new ButtonOnClick(0);
-    SimpleAdapter listItemAdapter=null;
-    SimpleAdapter listTaskAdapter=null;
+    @Nullable
+    private HashMap<String, Object>      m_mapSaleBaseInfo = null;
+    @Nullable
+    private SplitBarcode                 m_cSplitBarcode   = null;
+    private ArrayList<String>            ScanedBarcode     = new ArrayList<String>();
+    @Nullable
+            List<Map<String, Object>>    lstTaskBody       = null;
+    @Nullable
+    private AlertDialog                  DeleteButton      = null;
+    @Nullable
+    private AlertDialog                  SelectButton      = null;
+    @NonNull
+    private ButtonOnClick                buttonDelOnClick  = new ButtonOnClick(0);
+    @Nullable
+            SimpleAdapter                listItemAdapter   =null;
+    @Nullable
+            SimpleAdapter                listTaskAdapter   =null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -188,9 +220,10 @@ public class MultilateralTradeDetail extends Activity {
 
     }
 
+    @NonNull
     private View.OnKeyListener myTxtListener = new View.OnKeyListener() {
         @Override
-        public boolean onKey(View v, int keyCode, KeyEvent event) {
+        public boolean onKey(@NonNull View v, int keyCode, @NonNull KeyEvent event) {
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
                 switch (v.getId()) {
                     case R.id.txtBarcode:
@@ -319,14 +352,14 @@ public class MultilateralTradeDetail extends Activity {
      * @param str
      * @return
      */
-    public boolean isNumber(String str) {
+    public boolean isNumber(@NonNull String str) {
         Pattern pattern = Pattern.compile("[0-9]*");
         Matcher isNum = pattern.matcher(str);
         return isNum.matches();
     }
 
 
-    private boolean ScanDetail(String Scanbarcode) {
+    private boolean ScanDetail(@Nullable String Scanbarcode) {
         if (Scanbarcode == null || Scanbarcode.equals(""))
             return false;
 
@@ -391,9 +424,10 @@ public class MultilateralTradeDetail extends Activity {
      * 网络请求后的线程通信
      * msg.obj 是从子线程传递过来的数据
      */
+    @NonNull
     Handler mHandler = new Handler() {
         @Override
-        public void handleMessage(Message msg) {
+        public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
                 case 1:
@@ -779,6 +813,7 @@ public class MultilateralTradeDetail extends Activity {
         return;
     }
 
+    @NonNull
     private DialogInterface.OnClickListener listenExit = new
             DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog,
@@ -820,7 +855,7 @@ public class MultilateralTradeDetail extends Activity {
     }
 
     @OnClick({R.id.btnTask, R.id.btnDetail, R.id.btnReturn})
-    public void onViewClicked(View view) {
+    public void onViewClicked(@NonNull View view) {
         switch (view.getId()) {
             case R.id.btnTask:
                 try {
@@ -981,7 +1016,7 @@ public class MultilateralTradeDetail extends Activity {
         }
 
         @Override
-        public void onClick(DialogInterface dialog, int whichButton) {
+        public void onClick(@NonNull DialogInterface dialog, int whichButton) {
             if (whichButton >= 0) {
                 index = whichButton;
             } else {
@@ -1129,7 +1164,7 @@ public class MultilateralTradeDetail extends Activity {
 
                 if (whichButton == DialogInterface.BUTTON_POSITIVE) {
 
-                    Map<String, Object> mapTemp = (Map<String, Object>) lstTaskBody
+                    Map<String, Object> mapTemp = lstTaskBody
                             .get(index);
                     String invcode = (String) mapTemp.get("invcode");
                     String batch = (String) mapTemp.get("batch");

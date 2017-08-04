@@ -8,6 +8,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -53,26 +55,33 @@ public class StockTransScan extends Activity {
 	// String fileName = "/sdcard/DVQ/4YScan.txt";
 	// String ScanedFileName = "4YScan.txt";
 
-	String fileNameScan = null;
-	String ScanedFileName = null;
-	String UserID = null;
-	File fileScan = null;
+    @Nullable
+    String fileNameScan   = null;
+    @Nullable
+    String ScanedFileName = null;
+    @Nullable
+    String UserID         = null;
+    @Nullable
+    File   fileScan       = null;
 
 	String tmpWHStatus = "";
 
 	String tmpBillStatus = "";
 
-	String ReScanBody = "1";
+    @NonNull
+    String ReScanBody = "1";
 	private writeTxt writeTxt; // 保存LOG文件
 
 	private Button btnTransTask;
 	private Button btnTransReturn;
 	private Button btnTransScanClear;
-	String ScanInvOK = "0";
+    @NonNull
+    String ScanInvOK = "0";
 	private EditText txtTSBarcode;
 	private ListView lvScanDetail;
 	// ADD BY WUQIONG START
-	TextView tvscancount = null;
+    @Nullable
+    TextView tvscancount = null;
 	int listcount = 0;
 	int Tasknnum = 0;
 	// ADD BY WUQIONG END
@@ -85,7 +94,8 @@ public class StockTransScan extends Activity {
 
 	// ADD CAIXY TEST END
 	// add caixy s
-	private String OkFkg = "ng";
+    @NonNull
+    private String OkFkg = "ng";
 
 	private ArrayList<String> ScanedBarcode = new ArrayList<String>();
 	// add caixy e
@@ -102,15 +112,21 @@ public class StockTransScan extends Activity {
 
 	private JSONObject jonsHead; // 源头单据表头
 	private JSONObject jonsBody; // 源头单据表体
-	private List<Map<String, Object>> lstTaskBody = null;
+    @Nullable
+    private List<Map<String, Object>> lstTaskBody = null;
 
-	private List<Map<String, Object>> lstSaveBody     = new ArrayList<Map<String, Object>>();
-	private JSONArray                 jsonArrSaveBody = new JSONArray();
-	private JSONObject                jsonSaveBody    = new JSONObject();
-	private int                       iScanedNum      = 0;
-	private SplitBarcode              bar             = null; // 当前扫描条码解析
-	private Inventory                 currentObj      = null; // 当前扫描到的存货信息
-	private Hashtable                 SerialValues    = null;
+    private List<Map<String, Object>> lstSaveBody     = new ArrayList<Map<String, Object>>();
+    @NonNull
+    private JSONArray                 jsonArrSaveBody = new JSONArray();
+    @NonNull
+    private JSONObject                jsonSaveBody    = new JSONObject();
+    private int                       iScanedNum      = 0;
+    @Nullable
+    private SplitBarcode              bar             = null; // 当前扫描条码解析
+    @Nullable
+    private Inventory                 currentObj      = null; // 当前扫描到的存货信息
+    @Nullable
+    private Hashtable                 SerialValues    = null;
 	List<Map<String, String>> jonsScan;
 	List<Map<String, String>> jonsSerialNo;
 	// private String[] warehouseList = null;
@@ -131,10 +147,12 @@ public class StockTransScan extends Activity {
 	String PKcorpFrom = "";
 	String PKcorpTo = "";
 
-	private List<Map<String, Object>> lstScanDetail = new ArrayList<Map<String, Object>>();
+    @NonNull
+    private List<Map<String, Object>> lstScanDetail = new ArrayList<Map<String, Object>>();
 
 	// 扫描保存分包
-	private List<Map<String, Object>> lstScanBoxNum = new ArrayList<Map<String, Object>>();
+    @NonNull
+    private List<Map<String, Object>> lstScanBoxNum = new ArrayList<Map<String, Object>>();
 
 	// 记录任务中扫描成功后的数据
 	// private ArrayList jsonArrRemove = new ArrayList();
@@ -150,17 +168,15 @@ public class StockTransScan extends Activity {
 	// ADD BY WUQIONG END
 
 	// 定义是否删除Dialog
-	private AlertDialog DeleteAlertDialog = null;
+    @Nullable
+    private AlertDialog DeleteAlertDialog = null;
 
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_MENU) {// 拦截meu键事件 //do something...
 			return false;
 		}
-		if (keyCode == KeyEvent.KEYCODE_BACK) {// 拦截返回按钮事件 //do something...
-			return false;
-		}
-		return true;
-	}
+        return keyCode != KeyEvent.KEYCODE_BACK;
+    }
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -403,7 +419,8 @@ public class StockTransScan extends Activity {
 		return;
 	}
 
-	private DialogInterface.OnClickListener listenExit = new DialogInterface.OnClickListener() {
+    @NonNull
+    private DialogInterface.OnClickListener listenExit = new DialogInterface.OnClickListener() {
 		public void onClick(DialogInterface dialog, int whichButton) {
 			finish();
 			System.gc();
@@ -513,7 +530,7 @@ public class StockTransScan extends Activity {
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
+	public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
@@ -526,9 +543,12 @@ public class StockTransScan extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	private static AlertDialog SelectLine = null;
-	private buttonOnClickC buttonOnClickC = new buttonOnClickC(0);
-	static String[] LNameList = new String[2];
+    @Nullable
+    private static AlertDialog    SelectLine     = null;
+    @NonNull
+    private        buttonOnClickC buttonOnClickC = new buttonOnClickC(0);
+    @NonNull
+    static         String[]       LNameList      = new String[2];
 
 	private void Changeline() {
 
@@ -567,7 +587,7 @@ public class StockTransScan extends Activity {
 		}
 
 		@Override
-		public void onClick(DialogInterface dialog, int whichButton) {
+		public void onClick(@NonNull DialogInterface dialog, int whichButton) {
 			if (whichButton >= 0) {
 				index = whichButton;
 			} else {
@@ -594,7 +614,7 @@ public class StockTransScan extends Activity {
 	}
 
 	// 取得任务LIST
-	private void getTaskListData(JSONObject jas) throws JSONException {
+	private void getTaskListData(@Nullable JSONObject jas) throws JSONException {
 		lstTaskBody = new ArrayList<Map<String, Object>>();
 		Map<String, Object> map;
 		JSONObject tempJso = null;
@@ -669,9 +689,10 @@ public class StockTransScan extends Activity {
 	}
 
 	// 创建对话框的按钮事件侦听
-	private Button.OnClickListener myBtnListner = new Button.OnClickListener() {
+    @Nullable
+    private Button.OnClickListener myBtnListner = new Button.OnClickListener() {
 		@Override
-		public void onClick(View v) {
+		public void onClick(@NonNull View v) {
 			switch (v.getId()) {
 			case R.id.btnTransTask: {
 				// try {
@@ -1232,7 +1253,8 @@ public class StockTransScan extends Activity {
 	}
 
 	// 长按扫描详细，删除该条记录
-	private OnItemLongClickListener myListItemLongListener = new OnItemLongClickListener() {
+    @NonNull
+    private OnItemLongClickListener myListItemLongListener = new OnItemLongClickListener() {
 
 		@Override
 		public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
@@ -1544,7 +1566,8 @@ public class StockTransScan extends Activity {
 
 	}
 
-	private OnItemClickListener myListItemListener = new OnItemClickListener() {
+    @NonNull
+    private OnItemClickListener myListItemListener = new OnItemClickListener() {
 
 		@Override
 		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
@@ -1570,9 +1593,10 @@ public class StockTransScan extends Activity {
 
 	};
 
-	private OnKeyListener myTxtListener = new OnKeyListener() {
+    @NonNull
+    private OnKeyListener myTxtListener = new OnKeyListener() {
 		@Override
-		public boolean onKey(View v, int arg1, KeyEvent arg2) {
+		public boolean onKey(@NonNull View v, int arg1, @NonNull KeyEvent arg2) {
 			{
 				switch (v.getId()) {
 				case id.txtTSBarcode:
@@ -1626,7 +1650,7 @@ public class StockTransScan extends Activity {
 	};
 
 	// 扫描二维码解析功能函数
-	private void ScanBarcode(String barcode) throws JSONException,
+	private void ScanBarcode(@NonNull String barcode) throws JSONException,
 			ParseException, IOException {
 		if (barcode.equals("")) {
 			Toast.makeText(this, R.string.QingSaoMiaoTiaoMa, Toast.LENGTH_LONG).show();
@@ -1832,7 +1856,7 @@ public class StockTransScan extends Activity {
 	}
 
 	// 确认存货在上游单据内有
-	private boolean ConformDetail(String barcode, SplitBarcode bar)
+	private boolean ConformDetail(String barcode, @NonNull SplitBarcode bar)
 			throws JSONException, ParseException, IOException {
 		if (jonsHead == null && jonsBody == null) {
 			Toast.makeText(this, R.string.MeiYouZhaoDaoCanZhao, Toast.LENGTH_LONG).show();
@@ -1990,8 +2014,8 @@ public class StockTransScan extends Activity {
 
 	// ADD BY WUQIONG START
 	// 完成扫描后修改任务里的项目
-	private void GetModTaskList(SplitBarcode bar,
-			JSONObject jsonCheckGetBillCode) throws JSONException {
+	private void GetModTaskList(@NonNull SplitBarcode bar,
+                                @NonNull JSONObject jsonCheckGetBillCode) throws JSONException {
 		String lsBarInvCode = bar.cInvCode;
 		String lsBarBacth = bar.cBatch;
 		String lsBillCode = "";
@@ -2137,10 +2161,11 @@ public class StockTransScan extends Activity {
 	// DEL BY WUQIONG E
 
 	// ADD BY WUQIONG START
-	private String iModTaskIndex = "";
+    @NonNull
+    private String iModTaskIndex = "";
 
-	private void GetModTaskQty(Double Qty, String sBillBID, String sBillHID,
-			int iIndex, String lsSerino) throws JSONException {
+	private void GetModTaskQty(@NonNull Double Qty, String sBillBID, String sBillHID,
+                               int iIndex, String lsSerino) throws JSONException {
 		// iModTaskIndex="";
 		JSONObject JsonModTaskItem = new JSONObject();
 		if (lstSaveBody == null || lstSaveBody.size() < 1) {
@@ -2149,7 +2174,7 @@ public class StockTransScan extends Activity {
 
 		for (int i = 0; i < lstSaveBody.size(); i++) {
 			Double inQty = 0.0;
-			Map<String, Object> temp = (Map<String, Object>) lstSaveBody.get(i);
+			Map<String, Object> temp = lstSaveBody.get(i);
 			if (temp.get("cinvbasid").equals(currentObj.Invbasdoc())) {
 
 				// mod caixy s 解决扫描数量错误
@@ -2355,7 +2380,7 @@ public class StockTransScan extends Activity {
 
 		// 判断是否序列号内控制
 		for (int j = 0; j < lstSaveBody.size(); j++) {
-			Map<String, Object> temp1 = (Map<String, Object>) lstSaveBody
+			Map<String, Object> temp1 = lstSaveBody
 					.get(j);
 			if (temp1.get("SeriNo").equals(currentObj.GetSerino())
 					&& temp1.get("InvCode").equals(currentObj.getInvCode())
@@ -2369,7 +2394,7 @@ public class StockTransScan extends Activity {
 
 		for (int i = 0; i < lstSaveBody.size(); i++) {
 
-			Map<String, Object> temp = (Map<String, Object>) lstSaveBody.get(i);
+			Map<String, Object> temp = lstSaveBody.get(i);
 			if (temp.get("cinvbasid").equals(currentObj.Invbasdoc())) {
 				if (temp.get("csourcebillbid").equals(sBillBID)
 						&& temp.get("csourcebillhid").equals(sBillHID)
@@ -2380,14 +2405,11 @@ public class StockTransScan extends Activity {
 
 		}
 
-		if (inQty > Qty) {
-			return false;
-		}
-		return true;
-	}
+        return inQty <= Qty;
+    }
 
 	// 判断该扫描条码属于哪个单据号
-	private JSONObject CheckGetBillCode(SplitBarcode bar) throws JSONException {
+	private JSONObject CheckGetBillCode(@NonNull SplitBarcode bar) throws JSONException {
 		String lsBarInvCode = bar.cInvCode;
 		String lsBarBacth = bar.cBatch;
 		String lsBillCode = "";
@@ -2497,9 +2519,9 @@ public class StockTransScan extends Activity {
 		return null;
 	}
 
-	private void BindingScanDetail(JSONObject jsonCheckGetBillCode,
-			SplitBarcode bar, String sType,
-			Map<String, Object> mapGetScanedDetail) throws JSONException {
+	private void BindingScanDetail(@NonNull JSONObject jsonCheckGetBillCode,
+                                   @NonNull SplitBarcode bar, @NonNull String sType,
+                                   @Nullable Map<String, Object> mapGetScanedDetail) throws JSONException {
 		ArrayList<Map<String, Object>> lstCurrentBox = null;
 		Map<String, Object> mapCurrentBox = new HashMap<String, Object>();
 		Map<String, Object> mapScanDetail = new HashMap<String, Object>();
@@ -2716,7 +2738,7 @@ public class StockTransScan extends Activity {
 			// ADD BY WUQIONG START
 			if (!iModTaskIndex.equals("")) {
 				if (i != Integer.parseInt(iModTaskIndex)) {
-					JsonArrNew.put((JSONObject) JsonArrays.get(i));
+					JsonArrNew.put(JsonArrays.get(i));
 				} else {
 
 					JSONObject jObj = new JSONObject();
@@ -2868,8 +2890,8 @@ public class StockTransScan extends Activity {
 	 * @return 如果为true 代表没有被扫描过,如果false 代表已经被扫描过了
 	 * @throws JSONException
 	 */
-	private Boolean CheckHasScaned(JSONObject jsonCheckGetBillCode,
-			SplitBarcode bar) throws JSONException {
+	private Boolean CheckHasScaned(@NonNull JSONObject jsonCheckGetBillCode,
+                                   @NonNull SplitBarcode bar) throws JSONException {
 
 		ListAdapter ScanDetailAdapter = lvScanDetail.getAdapter();
 
@@ -2914,7 +2936,7 @@ public class StockTransScan extends Activity {
 
 	}
 
-	private boolean ConformBatch(String invcode, String batch, String AccID)
+	private boolean ConformBatch(String invcode, @NonNull String batch, @NonNull String AccID)
 			throws JSONException, ParseException, IOException {
 		// 获得当前存货的库存 Jonson
 		JSONObject batchList = null;
@@ -3079,17 +3101,25 @@ public class StockTransScan extends Activity {
 
 	// 为listview自定义适配器内部类
 	public static class MyListAdapter extends BaseAdapter {
-		private Context context = null;
-		private LayoutInflater inflater = null;
-		private List<Map<String, Object>> list = null;
-		private String keyString[] = null;
-		private String itemString0 = null; // 记录每个item中textview的值
-		private String itemString1 = null;
-		private String itemString2 = null;
-		private int idValue[] = null;// id值
+        @Nullable
+        private Context                   context     = null;
+        @Nullable
+        private LayoutInflater            inflater    = null;
+        @Nullable
+        private List<Map<String, Object>> list        = null;
+        @Nullable
+        private String                    keyString[] = null;
+        @Nullable
+        private String                    itemString0 = null; // 记录每个item中textview的值
+        @Nullable
+        private String                    itemString1 = null;
+        @Nullable
+        private String                    itemString2 = null;
+        @Nullable
+        private int                       idValue[]   = null;// id值
 
 		public MyListAdapter(Context context, List<Map<String, Object>> list,
-				int resource, String[] from, int[] to) {
+                             int resource, @NonNull String[] from, @NonNull int[] to) {
 			this.context = context;
 			this.list = list;
 			keyString = new String[from.length];
@@ -3114,8 +3144,9 @@ public class StockTransScan extends Activity {
 			return 0;
 		}
 
-		@Override
-		public View getView(int arg0, View arg1, ViewGroup arg2) {
+		@Nullable
+        @Override
+		public View getView(int arg0, @Nullable View arg1, ViewGroup arg2) {
 			// TODO Auto-generated method stub
 			// Map<String,Object> map = (Map<String,Object>)getItem(arg0);
 			// if(!map.get("ScanedNum").toString().equals(map.get("TotalNum").toString()))

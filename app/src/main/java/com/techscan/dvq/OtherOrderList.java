@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,12 +32,14 @@ import java.util.Map;
 
 public class OtherOrderList extends Activity {
 
-	public String m_OrderType;
-	public String m_TypeName;
+    public String                    m_OrderType;
+    public String                    m_TypeName;
 //	private SoundPool sp;// 声明一个SoundPool
 //	private int MainLogin.music;// 定义一个int来设置suondID
-	public List<Map<String, Object>> mData;
-	Button btOtherOrderlistReturn = null;
+    @Nullable
+    public List<Map<String, Object>> mData;
+    @Nullable
+    Button btOtherOrderlistReturn = null;
 	public String m_AccID;
 	public String m_PkCorp;
 	public String m_BillCode;
@@ -168,10 +172,11 @@ public class OtherOrderList extends Activity {
 		
 	}
 
-	private OnClickListener ButtonOnClickListener = new OnClickListener() {
+    @NonNull
+    private OnClickListener ButtonOnClickListener = new OnClickListener() {
 
 		@Override
-		public void onClick(View v) {
+		public void onClick(@NonNull View v) {
 			switch (v.getId()) { // btnSDScanReturn
 			case id.btOtherOrderlistReturn:
 				finish();
@@ -180,7 +185,7 @@ public class OtherOrderList extends Activity {
 		}
 	};
 
-	private JSONObject GetOrderList(String lsBillCode) {
+	private JSONObject GetOrderList(@NonNull String lsBillCode) {
 		// 做一个通用的JSON
 		if (lsBillCode.length() > 0 && lsBillCode.length() < 5) {
 			{
@@ -278,7 +283,7 @@ public class OtherOrderList extends Activity {
 
 	}
 
-	private List<Map<String, Object>> getData(JSONObject jas)
+	private List<Map<String, Object>> getData(@NonNull JSONObject jas)
 			throws JSONException {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		Map<String, Object> map;
@@ -310,10 +315,11 @@ public class OtherOrderList extends Activity {
 		return list;
 	}
 
-	private ListView.OnItemClickListener itemListener = new ListView.OnItemClickListener() {
+    @NonNull
+    private ListView.OnItemClickListener itemListener = new ListView.OnItemClickListener() {
 		@Override
-		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-				long arg3) {
+		public void onItemClick(@NonNull AdapterView<?> arg0, View arg1, int arg2,
+                                long arg3) {
 			Adapter adapter = arg0.getAdapter();
 			// @SuppressWarnings("unchecked")
 			@SuppressWarnings("unchecked")
@@ -377,7 +383,7 @@ public class OtherOrderList extends Activity {
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
+	public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.

@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -42,51 +44,69 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-import static com.techscan.dvq.R.id.ed_num;
 import static com.techscan.dvq.common.Utils.formatDecimal;
 import static com.techscan.dvq.common.Utils.isNumber;
 import static com.techscan.dvq.common.Utils.showToast;
 
 public class OtherOutScanAct extends Activity {
 
+    @Nullable
     @InjectView(R.id.ed_bar_code)
     EditText edBarCode;
+    @Nullable
     @InjectView(R.id.ed_encoding)
     EditText edEncoding;
+    @Nullable
     @InjectView(R.id.ed_name)
     EditText edName;
+    @Nullable
     @InjectView(R.id.ed_type)
     EditText edType;
+    @Nullable
     @InjectView(R.id.ed_spectype)
     EditText edSpectype;
+    @Nullable
     @InjectView(R.id.ed_lot)
     EditText edLot;
+    @Nullable
     @InjectView(R.id.ed_cost_object)
     EditText edCostObject;
+    @Nullable
     @InjectView(R.id.ed_cost_name)
     EditText edCostName;
+    @Nullable
     @InjectView(R.id.ed_manual)
     EditText edManual;
-    @InjectView(ed_num)
+    @Nullable
+    @InjectView(R.id.ed_num)
     EditText edNum;
+    @Nullable
     @InjectView(R.id.ed_weight)
     EditText edWeight;
+    @Nullable
     @InjectView(R.id.ed_qty)
     EditText edQty;
+    @Nullable
     @InjectView(R.id.ed_unit)
     EditText edUnit;
+    @Nullable
     @InjectView(R.id.btn_overview)
     Button   btnOverview;
+    @Nullable
     @InjectView(R.id.btn_detail)
     Button   btnDetail;
+    @Nullable
     @InjectView(R.id.btn_back)
     Button   btnBack;
 
     String TAG = this.getClass().getSimpleName();
+    @NonNull
     public static List<Goods> detailList = new ArrayList<Goods>();
+    @NonNull
     public static List<Goods> ovList     = new ArrayList<Goods>();
     ArrayList<EditText> edList;
 
+    @Nullable
     Activity activity;
     String CWAREHOUSEID = "";
     String PK_CALBODY   = "";
@@ -122,7 +142,7 @@ public class OtherOutScanAct extends Activity {
         edNum.setOnKeyListener(mOnKeyListener);
 //        edManual.setOnKeyListener(mOnKeyListener);
         edCostObject.setOnKeyListener(mOnKeyListener);
-        edNum.addTextChangedListener(new CustomTextWatcher(edName));
+        edNum.addTextChangedListener(new CustomTextWatcher(edNum));
         edBarCode.addTextChangedListener(new CustomTextWatcher(edBarCode));
         addEdToList();
     }
@@ -138,7 +158,7 @@ public class OtherOutScanAct extends Activity {
         edList.add(edType);
         edList.add(edSpectype);
         edList.add(edLot);
-        edList.add(edCostObject);
+//        edList.add(edCostObject);
         edList.add(edCostName);
         edList.add(edManual);
         edList.add(edNum);
@@ -160,15 +180,13 @@ public class OtherOutScanAct extends Activity {
     }
 
     @OnClick({R.id.btn_overview, R.id.btn_detail, R.id.btn_back})
-    public void onViewClicked(View view) {
+    public void onViewClicked(@NonNull View view) {
         switch (view.getId()) {
             case R.id.btn_overview:
-                MyBaseAdapter ovAdapter = new MyBaseAdapter(ovList);
-                showDialog(ovList, ovAdapter, "扫描总览");
+                showLv(ovList, "扫描总览");
                 break;
             case R.id.btn_detail:
-                MyBaseAdapter myBaseAdapter = new MyBaseAdapter(detailList);
-                showDialog(detailList, myBaseAdapter, "扫描明细");
+                showLv(detailList, "扫描明细");
                 break;
             case R.id.btn_back:
                 if (ovList.size() > 0) {
@@ -185,13 +203,19 @@ public class OtherOutScanAct extends Activity {
         }
     }
 
+    private void showLv(@NonNull List<Goods> ovList, @NonNull String title) {
+        MyBaseAdapter ovAdapter = new MyBaseAdapter(ovList);
+        showDialog(ovList, ovAdapter, title);
+    }
+
     /**
      * 网络请求后的线程通信
      * msg.obj 是从子线程传递过来的数据
      */
+    @NonNull
     Handler mHandler = new Handler() {
         @Override
-        public void handleMessage(Message msg) {
+        public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
                 case 1:
@@ -213,7 +237,7 @@ public class OtherOutScanAct extends Activity {
         }
     };
 
-    private void setManualToUI(JSONObject jsonObject) {
+    private void setManualToUI(@Nullable JSONObject jsonObject) {
         try {
             if (jsonObject != null && jsonObject.getBoolean("Status")) {
                 Log.d("TAG", "vfree4: " + jsonObject);
@@ -236,7 +260,7 @@ public class OtherOutScanAct extends Activity {
     }
 
 
-    private void showDialog(final List list, final BaseAdapter adapter, String title) {
+    private void showDialog(@NonNull final List list, @NonNull final BaseAdapter adapter, @NonNull String title) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setTitle(title);
         if (list.size() > 0) {
@@ -545,7 +569,7 @@ public class OtherOutScanAct extends Activity {
     String pk_invbasdoc = "";
     String pk_invmandoc = "";
 
-    private void setInvBaseToUI(JSONObject json) {
+    private void setInvBaseToUI(@Nullable JSONObject json) {
         try {
             if (json != null && json.getBoolean("Status")) {
                 Log.d(TAG, "setInvBaseToUI: " + json);
@@ -587,7 +611,7 @@ public class OtherOutScanAct extends Activity {
      */
     String pk_invmandoc_cost = "";
 
-    private void setInvBaseCostObjToUI(JSONObject json) {
+    private void setInvBaseCostObjToUI(@Nullable JSONObject json) {
         try {
             if (json != null && json.getBoolean("Status")) {
                 Log.d(TAG, "setInvBaseCostObjToUI: " + json);
@@ -647,7 +671,7 @@ public class OtherOutScanAct extends Activity {
                         edManual.setText("");
                     }
                     break;
-                case ed_num:
+                case R.id.ed_num:
                     if (TextUtils.isEmpty(edNum.getText())) {
                         edQty.setText("");
                         return;
@@ -674,10 +698,11 @@ public class OtherOutScanAct extends Activity {
     /**
      * 回车键的点击事件
      */
+    @NonNull
     View.OnKeyListener mOnKeyListener = new View.OnKeyListener() {
 
         @Override
-        public boolean onKey(View v, int keyCode, KeyEvent event) {
+        public boolean onKey(@NonNull View v, int keyCode, @NonNull KeyEvent event) {
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
                 switch (v.getId()) {
                     case R.id.ed_bar_code:

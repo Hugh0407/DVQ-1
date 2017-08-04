@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,9 +38,11 @@ public class VlistRdcl extends Activity {
 //	private SoundPool sp;//声明一个SoundPool
 //	private int MainLogin.music;//定义一个int来设置suondID
 	//ADD CAIXY TEST END
+	@Nullable
 	Button btRdclReturn =null;
 
-	private List<Map<String, Object>> getData(JSONObject jasA ,JSONObject jasB ,String AccID) 
+	@NonNull
+	private List<Map<String, Object>> getData(@NonNull JSONObject jasA , @NonNull JSONObject jasB , String AccID)
 			throws JSONException 
 	{
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
@@ -115,7 +119,8 @@ public class VlistRdcl extends Activity {
 	}
 
 	public List<Map<String, Object>> mData;
-	private Handler handler=null;
+	@Nullable
+	private Handler handler =null;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -268,16 +273,17 @@ public class VlistRdcl extends Activity {
         
         //list.addHeaderView()
         
-        list.setOnItemClickListener((OnItemClickListener) itemListener);		
+        list.setOnItemClickListener(itemListener);
         list.setAdapter(listItemAdapter);  			
 	}
 
-	
+
+	@NonNull
 	private OnClickListener ButtonOnClickListener = new OnClickListener()
     {
   		
 		@Override
-		public void onClick(View v) 
+		public void onClick(@NonNull View v)
 		{
 			switch(v.getId())
   			{			//btnSDScanReturn
@@ -297,7 +303,7 @@ public class VlistRdcl extends Activity {
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
+	public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
@@ -307,13 +313,14 @@ public class VlistRdcl extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
+
+	@NonNull
 	private ListView.OnItemClickListener itemListener = new
 			ListView.OnItemClickListener()
 	{
 		@Override
-		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-				long arg3) 
+		public void onItemClick(@NonNull AdapterView<?> arg0, View arg1, int arg2,
+								long arg3)
 		{
 			// TODO Auto-generated method stub
 			 Adapter adapter=arg0.getAdapter();

@@ -10,6 +10,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -58,29 +60,47 @@ import static com.techscan.dvq.common.Utils.showResultDialog;
 
 public class SalesDelivery extends Activity {
     String NTOTALNUMBER = "";
-    String  CCUSTBASDOCID ="";
-    String  CRECEIVECUSTBASID ="";
-    String CCUSTOMERID = "";
-    String CBIZTYPE = "";
-    String  CSALECORPID = "";
-    String PK_CORP = "";
-    String  VDEF1 = "";
-    String VDEF2 = "";
-    String VDEF5 = "";
-    String VDEF4 = "";
-    String NOTOTALNUMBER = "";
+    @NonNull
+    String CCUSTBASDOCID     ="";
+    @NonNull
+    String CRECEIVECUSTBASID ="";
+    @NonNull
+    String CCUSTOMERID       = "";
+    @NonNull
+    String CBIZTYPE          = "";
+    @NonNull
+    String CSALECORPID       = "";
+    @NonNull
+    String PK_CORP           = "";
+    @NonNull
+    String VDEF1             = "";
+    @NonNull
+    String VDEF2             = "";
+    @NonNull
+    String VDEF5             = "";
+    @NonNull
+    String VDEF4             = "";
+    @NonNull
+    String NOTOTALNUMBER     = "";
     String CWAREHOUSEID = "";    //库存组织
+    @NonNull
     String CSENDWAREID = "";
     String sBillCodes = "";//单据号查询
     String sBeginDate = "";//制单日期开始查询
     String sEndDate = "";//制单日期结束查询
     String CheckBillCode = "";
-    JSONObject table = null;
-    JSONObject jsBody = null;
-    JSONObject jsBoxTotal = null;
-    JSONObject jsSerino = null;
+    @Nullable
+    JSONObject         table             = null;
+    @Nullable
+    JSONObject         jsBody            = null;
+    @Nullable
+    JSONObject         jsBoxTotal        = null;
+    @Nullable
+    JSONObject         jsSerino          = null;
+    @Nullable
     List<SaleOutGoods> saleOutGoodsLists = null;
-    String tmpWHStatus = "";//仓库是否启用货位
+    @NonNull
+    String             tmpWHStatus       = "";//仓库是否启用货位
     EditText txtSalesDelPDOrder;
     private com.techscan.dvq.writeTxt writeTxt;
     EditText txtSalesDelRdcl;//单据日期
@@ -90,12 +110,17 @@ public class SalesDelivery extends Activity {
     Button btnSalesDelExit;
     Button btnSalesDelScan;
     Button btnSalesDelSave;
-    HashMap<String, String> checkInfo = new HashMap<String, String>();
-    private ArrayList<String> ScanedBarcode = new ArrayList<String>();
+    @NonNull
+            HashMap<String, String> checkInfo     = new HashMap<String, String>();
+    @Nullable
+    private ArrayList<String>       ScanedBarcode = new ArrayList<String>();
     ProgressDialog progressDialog;
-    String sBillAccID = "";
+    @NonNull
+    String sBillAccID  = "";
+    @NonNull
     String sBillCorpPK = "";
-    String sBillCode = "";
+    @NonNull
+    String sBillCode   = "";
     String SaleFlg = "";
     String csaleid = "";
 
@@ -103,46 +128,75 @@ public class SalesDelivery extends Activity {
     ImageButton btnSalesDelWH;
 
     int TaskCount = 0;
-    String tmprdCode = "";
-    String tmprdID = "";
-    String tmprdName = "";
-    String tmpposCode = "";
-    String tmpposName = "";
-    String tmpposID = "";
+    @NonNull
+                        String tmprdCode          = "";
+    @NonNull
+                        String tmprdID            = "";
+    @NonNull
+                        String tmprdName          = "";
+    @NonNull
+                        String tmpposCode         = "";
+    @NonNull
+                        String tmpposName         = "";
+    @NonNull
+                        String tmpposID           = "";
     public final static String PREFERENCE_SETTING = "Setting";
     String tmpCdTypeID;
+    @Nullable
     String WhNameA = "";
+    @Nullable
     String WhNameB = "";
 
     TextView tvSaleOutSelect;
     ImageButton btnSaleOutSelect;
-    private UUID uploadGuid = null;
+    @Nullable
+    private UUID     uploadGuid       = null;
+    @Nullable
     private String[] BillTypeNameList = null;
 
-    private String[] WHNameList = null;
-    private String[] WHIDList = null;
-    private String[] CDIDList = null;
-    private String[] CDNameList = null;
-    private AlertDialog CDSelectButton = null;
-    private AlertDialog BillTypeSelectButton = null;
-    private AlertDialog WHSelectButton = null;
-    private ButtonOnClick buttonOnClick = new ButtonOnClick(0);
-    private String tmpWarehousePK = "";
-    private String tmpCorpPK = "";
-    private String tmpBillCode = "";
-    private String tmpCustName = "";
-    private String tmpBillDate = "";
-    private String rdflag = "1";
-    private String GetBillBFlg = "1";
+    @Nullable
+    private String[]                  WHNameList           = null;
+    @Nullable
+    private String[]                  WHIDList             = null;
+    @Nullable
+    private String[]                  CDIDList             = null;
+    @Nullable
+    private String[]                  CDNameList           = null;
+    @Nullable
+    private AlertDialog               CDSelectButton       = null;
+    @Nullable
+    private AlertDialog               BillTypeSelectButton = null;
+    @Nullable
+    private AlertDialog               WHSelectButton       = null;
+    @NonNull
+    private ButtonOnClick             buttonOnClick        = new ButtonOnClick(0);
+    @NonNull
+    private String                    tmpWarehousePK       = "";
+    @NonNull
+    private String                    tmpCorpPK            = "";
+    private String                    tmpBillCode          = "";
+    private String                    tmpCustName          = "";
+    private String                    tmpBillDate          = "";
+    @NonNull
+    private String                    rdflag               = "1";
+    @NonNull
+    private String                    GetBillBFlg          = "1";
     //保存用表头信息
-    private JSONObject jsonSaveHead = null;
-    private JSONObject jsonBillHead = null;
+    @Nullable
+    private JSONObject                jsonSaveHead         = null;
+    @Nullable
+    private JSONObject                jsonBillHead         = null;
     //表体任务
-    private JSONObject jsonBillBodyTask = null;
-    private JSONObject jsonBillBodyTask2 = null;
-    private JSONObject jsTotal=null;
-    private String tmpAccID = "";
-    private List<Map<String, Object>> lstSaveBody = null;
+    @Nullable
+    private JSONObject                jsonBillBodyTask     = null;
+    @Nullable
+    private JSONObject                jsonBillBodyTask2    = null;
+    @Nullable
+    private JSONObject                jsTotal              =null;
+    @NonNull
+    private String                    tmpAccID             = "";
+    @Nullable
+    private List<Map<String, Object>> lstSaveBody          = null;
 
 
     @Override
@@ -233,7 +287,7 @@ public class SalesDelivery extends Activity {
 //    }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == 88) {
             switch (resultCode) {
                 case 1:         // 这是调拨出库单单号列表返回的地方
@@ -585,7 +639,7 @@ public class SalesDelivery extends Activity {
 
 
     //根据订单表头得到表体详细
-    private void GetBillBodyDetailInfo2(String sSaleFlg) {
+    private void GetBillBodyDetailInfo2(@NonNull String sSaleFlg) {
         GetBillBFlg = "0";
         if (tmpAccID == null || tmpAccID.equals(""))
             return;
@@ -1110,7 +1164,7 @@ public class SalesDelivery extends Activity {
 
 
     //绑定订单表头信息
-    private boolean BindingBillDetailInfo(Map<String, Object> mapBillInfo) {
+    private boolean BindingBillDetailInfo(@NonNull Map<String, Object> mapBillInfo) {
         csaleid = mapBillInfo.get("Csaleid").toString();
         tmpBillCode = mapBillInfo.get("BillCode").toString();
         tmpCustName = mapBillInfo.get("CustName").toString();
@@ -1150,7 +1204,7 @@ public class SalesDelivery extends Activity {
             this.index = index;
         }
 
-        public void onClick(DialogInterface dialog, int whichButton) {
+        public void onClick(@NonNull DialogInterface dialog, int whichButton) {
             if (whichButton >= 0) {
                 index = whichButton;
                 dialog.cancel();
@@ -1277,7 +1331,7 @@ public class SalesDelivery extends Activity {
 
     public class OnClickListener implements android.view.View.OnClickListener {
 
-        public void onClick(View v) {
+        public void onClick(@NonNull View v) {
 
             switch (v.getId()) {
                 case id.btnSaleOutSelect:
@@ -1704,9 +1758,10 @@ public class SalesDelivery extends Activity {
      * 网络请求后的线程通信
      * msg.obj 是从子线程传递过来的数据
      */
+    @Nullable
     Handler mHandler = new Handler() {
         @Override
-        public void handleMessage(Message msg) {
+        public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
                 case HANDER_SAVE_RESULT:
@@ -1913,7 +1968,7 @@ public class SalesDelivery extends Activity {
             bulider.setNegativeButton(R.string.QuXiao, null);
             bulider.setPositiveButton(R.string.QueRen, new DialogInterface.OnClickListener() {
                 @Override
-                public void onClick(DialogInterface dialog, int which) {
+                public void onClick(@NonNull DialogInterface dialog, int which) {
                     dialog.dismiss();
                     deleteInfo();
                     finish();
@@ -1924,9 +1979,10 @@ public class SalesDelivery extends Activity {
     }
 
     //退出按钮对话框事件
+    @NonNull
     private DialogInterface.OnClickListener listenExit = new
             DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog,
+                public void onClick(@NonNull DialogInterface dialog,
                                     int whichButton) {
                     dialog.dismiss();
                     finish();
@@ -1939,17 +1995,15 @@ public class SalesDelivery extends Activity {
         if (keyCode == KeyEvent.KEYCODE_MENU) {//拦截meu键事件			//do something...
             return false;
         }
-        if (keyCode == KeyEvent.KEYCODE_BACK) {//拦截返回按钮事件			//do something...
-            return false;
-        }
-        return true;
+        return keyCode != KeyEvent.KEYCODE_BACK;
     }
 
 
     //EditText输入后回车的监听事件
+    @NonNull
     private OnKeyListener EditTextOnKeyListener = new OnKeyListener() {
         @Override
-        public boolean onKey(View v, int arg1, KeyEvent arg2) {
+        public boolean onKey(@NonNull View v, int arg1, @NonNull KeyEvent arg2) {
             if (arg1 == arg2.KEYCODE_ENTER && arg2.getAction() == KeyEvent.ACTION_UP)//&& arg2.getAction() == KeyEvent.ACTION_DOWN
             {
                 switch (v.getId()) {
@@ -2309,7 +2363,8 @@ public class SalesDelivery extends Activity {
     /**
      * 根据批次sku相同合并数量
      */
-    public  JSONArray merge(JSONArray array) {
+    @NonNull
+    public  JSONArray merge(@NonNull JSONArray array) {
 
         JSONArray arrayTemp = new JSONArray();
         int num = 0;

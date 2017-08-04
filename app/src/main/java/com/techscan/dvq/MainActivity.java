@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -35,12 +37,17 @@ import java.io.IOException;
 
 public class MainActivity extends Activity implements OnClickListener,OnKeyListener
 {
-	private final String PREFERENCE_NAME = "survey";
-	public static String CompanyCode="";
-	public static String LoginTime="";
-	public static String LoginString="";
-	public static String LoginUser="";
-	public static String LoingPassword="";
+    private final String PREFERENCE_NAME = "survey";
+    @Nullable
+    public static String CompanyCode     ="";
+    @NonNull
+    public static String LoginTime       ="";
+    @Nullable
+    public static String LoginString     ="";
+    @NonNull
+    public static String LoginUser       ="";
+    @NonNull
+    public static String LoingPassword   ="";
 	
 	//ADD CAIXY TEST START
 //	private SoundPool sp;//声明一个SoundPool
@@ -48,7 +55,7 @@ public class MainActivity extends Activity implements OnClickListener,OnKeyListe
 	//ADD CAIXY TEST END 
 	
 	@Override
-	public boolean onKey(View v,int keyCode,KeyEvent event)
+	public boolean onKey(@NonNull View v, int keyCode, @NonNull KeyEvent event)
 	{
 		if(v.getId()==R.id.etInput)
 		{
@@ -70,7 +77,8 @@ public class MainActivity extends Activity implements OnClickListener,OnKeyListe
 
 	
 	//创建对话框的按钮事件侦听	
-	private DialogInterface.OnClickListener listener = new 
+    @NonNull
+    private DialogInterface.OnClickListener listener = new
 			DialogInterface.OnClickListener()
 	{
 		public void onClick(DialogInterface dialog,
@@ -82,8 +90,9 @@ public class MainActivity extends Activity implements OnClickListener,OnKeyListe
 			startActivityForResult(abcd,R.layout.activity_second);						 
 		}
 	};
-					
-	private DialogInterface.OnClickListener listenExit = new 
+
+    @NonNull
+    private DialogInterface.OnClickListener listenExit = new
 				DialogInterface.OnClickListener()
 	{
 		public void onClick(DialogInterface dialog,
@@ -223,7 +232,7 @@ public class MainActivity extends Activity implements OnClickListener,OnKeyListe
 		}
 	}
 	@Override
-	public void onClick(View v)
+	public void onClick(@NonNull View v)
 	{
 		if(v.getId() ==R.id.btSettingFOk)
 		{
@@ -376,7 +385,7 @@ public class MainActivity extends Activity implements OnClickListener,OnKeyListe
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
+	public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
 			return true;

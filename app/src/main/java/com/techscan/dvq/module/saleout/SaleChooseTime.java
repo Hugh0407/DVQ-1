@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -26,12 +28,16 @@ import butterknife.OnClick;
  */
 
 public class SaleChooseTime extends Activity {
+    @Nullable
     @InjectView(R.id.et_BeginDate)
     EditText txtBeginDate;
+    @Nullable
     @InjectView(R.id.et_EndDate)
     EditText txtEndDate;
+    @Nullable
     @InjectView(R.id.bt_Search)
     Button btSearch;
+    @Nullable
     @InjectView(R.id.et_BillCode)
     EditText txtBillCode;
 
@@ -43,8 +49,11 @@ public class SaleChooseTime extends Activity {
     int day_c;
 
     Calendar mycalendar;
-    String sEndDate = "";
+    @NonNull
+    String sEndDate   = "";
+    @NonNull
     String sBillCodes = "";
+    @NonNull
     String sBeginDate = "";
 
     String months;
@@ -59,7 +68,7 @@ public class SaleChooseTime extends Activity {
 
     }
     @OnClick({R.id.et_BillCode, R.id.et_BeginDate, R.id.et_EndDate,R.id.bt_Search})
-    public void onViewClicked(View view) {
+    public void onViewClicked(@NonNull View view) {
         switch(view.getId()){
             case R.id.et_BeginDate:
                 year_c = mycalendar.get(Calendar.YEAR); //获取Calendar对象中的年
@@ -119,8 +128,11 @@ public class SaleChooseTime extends Activity {
      * 单据开始
      */
 
-    private  DatePickerDialog.OnDateSetListener Datelister_s = new DatePickerDialog.OnDateSetListener() {
+    @NonNull
+    private DatePickerDialog.OnDateSetListener Datelister_s = new DatePickerDialog.OnDateSetListener() {
+        @NonNull
         String mo="";
+        @NonNull
         String days="";
         /**params：view：该事件关联的组件
          * params：myyear：当前选择的年
@@ -160,8 +172,11 @@ public class SaleChooseTime extends Activity {
      * 单据日期结束
      */
 
+    @NonNull
     private DatePickerDialog.OnDateSetListener Datelistener = new DatePickerDialog.OnDateSetListener() {
+        @NonNull
         String mo="";
+        @NonNull
         String days="";
         /**params：view：该事件关联的组件
          * params：myyear：当前选择的年
@@ -197,6 +212,7 @@ public class SaleChooseTime extends Activity {
     };
 
 
+    @NonNull
     private View.OnFocusChangeListener myFocusListener = new View.OnFocusChangeListener() {
         @Override
         public void onFocusChange(View view, boolean hasFocus) {
@@ -207,6 +223,7 @@ public class SaleChooseTime extends Activity {
         }
     };
 
+    @NonNull
     private View.OnFocusChangeListener myFocusListeners = new View.OnFocusChangeListener() {
         @Override
         public void onFocusChange(View view, boolean hasFocus) {
@@ -221,9 +238,10 @@ public class SaleChooseTime extends Activity {
  * 回车事件
  */
 
-    private View.OnKeyListener mOnKeyListener = new View.OnKeyListener(){
+@NonNull
+private View.OnKeyListener mOnKeyListener = new View.OnKeyListener(){
         @Override
-        public boolean onKey(View v, int keyCode, KeyEvent event) {
+        public boolean onKey(@NonNull View v, int keyCode, @NonNull KeyEvent event) {
              if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
                 switch (v.getId()){
                     case  R.id.et_BillCode:

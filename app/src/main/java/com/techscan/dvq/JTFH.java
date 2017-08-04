@@ -1,5 +1,8 @@
 package com.techscan.dvq;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,7 +20,7 @@ import java.util.Map;
  */
 public class JTFH {
 
-	public static List<Map<String,String>> FromSONToMap(JSONObject json,String JasonName)
+	public static List<Map<String,String>> FromSONToMap(@NonNull JSONObject json, String JasonName)
 	{
 		List<Map<String,String>> lists=new  ArrayList<Map<String, String>>();
 		try {
@@ -52,7 +55,8 @@ public class JTFH {
 		
 	}
 	
-	public static String ToJSONFMap(List<Map<String,String>> maps,String JasonName)
+	@Nullable
+    public static String ToJSONFMap(@Nullable List<Map<String,String>> maps, String JasonName)
 	{
 		if(maps==null)
 		{
@@ -74,7 +78,8 @@ public class JTFH {
 			return sb.toString();
 	}
 	
-	public static JSONObject decodeJSONObject(JSONObject json){  
+	@NonNull
+    public static JSONObject decodeJSONObject(@NonNull JSONObject json){
 	       Iterator<String> keys=json.keys();  
   JSONObject jo=null;  
 	       Object o;  
@@ -100,7 +105,8 @@ public class JTFH {
 	/**
 	 * 用来把jobject转化为hashtable
 	 */
-	public static Hashtable ToHashtable(JSONObject jobj)
+	@Nullable
+    public static Hashtable ToHashtable(@NonNull JSONObject jobj)
 	{
 		Iterator itor=jobj.keys();
 		Hashtable hs =null;
@@ -133,7 +139,8 @@ public class JTFH {
 	/**
 	 * 把hashTable中的值转换为JSON
 	 */
-	public static JSONObject FromHashtable(Hashtable hs) throws JSONException
+	@Nullable
+    public static JSONObject FromHashtable(@Nullable Hashtable hs) throws JSONException
 	{
 		if(hs==null)
 		{

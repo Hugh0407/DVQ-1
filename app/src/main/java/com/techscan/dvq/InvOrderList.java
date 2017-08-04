@@ -5,13 +5,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Adapter;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -40,9 +41,10 @@ public class InvOrderList extends Activity {
 //	private SoundPool sp;// 声明一个SoundPool
 //	private int MainLogin.music;// 定义一个int来设置suondID
 	// ADD CAIXY TEST END
+	@Nullable
 	Button btinv_order_listReturn = null;
 
-	private List<Map<String, Object>> getData(JSONObject jas, String AccID)
+	private List<Map<String, Object>> getData(@NonNull JSONObject jas, String AccID)
 			throws JSONException {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		Map<String, Object> map;
@@ -86,7 +88,9 @@ public class InvOrderList extends Activity {
 		return list;
 	}
 
+	@Nullable
 	public List<Map<String, Object>> mData;
+	@Nullable
 	private Handler handler = null;
 
 	@Override
@@ -271,11 +275,11 @@ public class InvOrderList extends Activity {
 
 		// list.addHeaderView()
 
-		list.setOnItemClickListener((OnItemClickListener) itemListener);
+		list.setOnItemClickListener(itemListener);
 		list.setAdapter(listItemAdapter);
 
 		if (!Bill.equals("")) {
-			Map<String, Object> map = (Map<String, Object>) mData.get(0);
+			Map<String, Object> map = mData.get(0);
 			String orderNo = map.get("No").toString();
 			String billId = map.get("BillId").toString();
 			String AccId = map.get("AccID").toString();
@@ -321,10 +325,11 @@ public class InvOrderList extends Activity {
 
 	}
 
+	@NonNull
 	private OnClickListener ButtonOnClickListener = new OnClickListener() {
 
 		@Override
-		public void onClick(View v) {
+		public void onClick(@NonNull View v) {
 			switch (v.getId()) { // btnSDScanReturn
 			case id.btinv_order_listReturn:
 				finish();
@@ -341,7 +346,7 @@ public class InvOrderList extends Activity {
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
+	public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
 			return true;
@@ -352,10 +357,11 @@ public class InvOrderList extends Activity {
 	// private List.. itemListener = new
 	// DialogInterface.OnClickListener()
 
+	@NonNull
 	private ListView.OnItemClickListener itemListener = new ListView.OnItemClickListener() {
 		@Override
-		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-				long arg3) {
+		public void onItemClick(@NonNull AdapterView<?> arg0, View arg1, int arg2,
+								long arg3) {
 			// TODO Auto-generated method stub
 			Adapter adapter = arg0.getAdapter();
 			@SuppressWarnings("unchecked")

@@ -21,6 +21,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,10 +36,12 @@ import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 public class StockInventory extends Activity {
-	
 
-	String ReSaveFlgA = "";
-	String ReSaveFlgB = "";
+
+    @NonNull
+    String ReSaveFlgA = "";
+    @NonNull
+    String ReSaveFlgB = "";
 	EditText txtInvOrderA;
 	EditText txtInvOrderB;
 	ListView lvSIOrder;
@@ -51,12 +55,14 @@ public class StockInventory extends Activity {
 	
 	String headJons;
 	JSONObject jonsHead;		//源头单据表头
-	JSONObject jonsBody;		//源头单据表体
+    @Nullable
+    JSONObject jonsBody;		//源头单据表体
 	
 	JSONObject saveJons;
 	JSONObject currentWarehouse;
-	
-	String ReScanMode = "0";
+
+    @NonNull
+    String ReScanMode = "0";
 	int SameBarCount = 0;
 	//int SameBarCount2 = 0;
 	
@@ -67,49 +73,71 @@ public class StockInventory extends Activity {
 //	String accID="";//帐套号
 //	String vCode="";//盘点单号
 	//String BillId="";//盘点单ID
-	
-	String accIDA="";//帐套号A
+
+    @NonNull
+    String accIDA ="";//帐套号A
 	String vCodeA="";//盘点单号A
 	String BillIdA="";//盘点单IDA
-	String warehouseIDA="";//仓库IDA
-	String warehouseCodeA="";//仓库CodeA
-	
-	String accIDB="";//帐套号B
+    @NonNull
+    String warehouseIDA   ="";//仓库IDA
+    @NonNull
+    String warehouseCodeA ="";//仓库CodeA
+
+    @NonNull
+    String accIDB ="";//帐套号B
 	String vCodeB="";//盘点单号B
 	String BillIdB="";//盘点单IDB
-	String warehouseIDB="";//仓库IDB
-	String warehouseCodeB="";//仓库CodeB
-	String warehouseNameA="";//仓库名称A
-	String warehouseNameB="";//仓库名称B
-	String  companyIDA ="";
-	String  companyIDB ="";
+    @NonNull
+    String warehouseIDB   ="";//仓库IDB
+    @NonNull
+    String warehouseCodeB ="";//仓库CodeB
+    @NonNull
+    String warehouseNameA ="";//仓库名称A
+    @NonNull
+    String warehouseNameB ="";//仓库名称B
+    @NonNull
+    String companyIDA     ="";
+    @NonNull
+    String companyIDB     ="";
 	
 	// 定义是否删除Dialog
-	private AlertDialog DeleteAlertDialog = null;
+    @Nullable
+    private AlertDialog DeleteAlertDialog = null;
 //	private ButtonOnClick buttonDelOnClick = new ButtonOnClick(0);
 	
 	//ADD BY WUQIONG S
 	//String productAddress="";//产地
-	JSONObject m_JsonAdds=null;
-	
-	List<Map<String, Object>> lstSIOrder = new ArrayList<Map<String, Object>>();
-	Map<String, Object> objA = new HashMap<String, Object>();
-	Map<String, Object> objB = new HashMap<String, Object>();
+    @Nullable
+    JSONObject m_JsonAdds=null;
+
+    @NonNull
+    List<Map<String, Object>> lstSIOrder = new ArrayList<Map<String, Object>>();
+    @NonNull
+    Map<String, Object>       objA       = new HashMap<String, Object>();
+    @NonNull
+    Map<String, Object>       objB       = new HashMap<String, Object>();
 	
 	
 	
 	SimpleAdapter lvDBOrderAdapter;
-	String[] from = {"Bill","AccID", "WhName"};
-    int[] to = { R.id.tvSIBill1, R.id.tvSIAccId, R.id.tvWhName1};
+    @NonNull
+    String[] from = {"Bill","AccID", "WhName"};
+    @NonNull
+    int[]    to   = { R.id.tvSIBill1, R.id.tvSIAccId, R.id.tvWhName1};
 	//ADD BY WUQIONG E
-	
-	JSONObject m_SerialNo=null;
-	JSONObject m_ScanDetail=null;
-	
-	String hstable="";
-	Intent scanDetail =null;
+
+    @Nullable
+    JSONObject m_SerialNo   =null;
+    @Nullable
+    JSONObject m_ScanDetail =null;
+
+    @NonNull
+    String hstable    ="";
+    @Nullable
+    Intent scanDetail =null;
 	//UUID uploadGuid=null;
-	String siaddress="";
+    @NonNull
+    String siaddress  ="";
 	
 	//ADD CAIXY TEST START
 //	private SoundPool sp;//声明一个SoundPool
@@ -162,7 +190,7 @@ public class StockInventory extends Activity {
 	
 		
 		@Override  
-		protected void onActivityResult(int requestCode, int resultCode, Intent data)  
+		protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
 		{     
 			if(requestCode==98)
 			{
@@ -371,12 +399,13 @@ public class StockInventory extends Activity {
 
 		        super.onActivityResult(requestCode, resultCode, data);  
 		        System.gc();
-		}   
-  	
-	private OnKeyListener myTxtListener = new OnKeyListener()
+		}
+
+    @NonNull
+    private OnKeyListener myTxtListener = new OnKeyListener()
     {
 		@Override
-		public boolean onKey(View v, int arg1, KeyEvent arg2) {
+		public boolean onKey(@NonNull View v, int arg1, @NonNull KeyEvent arg2) {
 			switch(v.getId())
 			{
 				case id.txtInvOrderA:
@@ -477,7 +506,7 @@ public class StockInventory extends Activity {
 	}
     
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) 
+	public boolean onOptionsItemSelected(@NonNull MenuItem item)
 	{
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
@@ -491,9 +520,12 @@ public class StockInventory extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	private static AlertDialog SelectLine = null;
-	private buttonOnClickC buttonOnClickC = new buttonOnClickC(0);
-	static String[] LNameList = new String[2];
+    @Nullable
+    private static AlertDialog    SelectLine     = null;
+    @NonNull
+    private        buttonOnClickC buttonOnClickC = new buttonOnClickC(0);
+    @NonNull
+    static         String[]       LNameList      = new String[2];
 	
 	private void Changeline() {
 
@@ -532,7 +564,7 @@ public class StockInventory extends Activity {
 		}
 
 		@Override
-		public void onClick(DialogInterface dialog, int whichButton) {
+		public void onClick(@NonNull DialogInterface dialog, int whichButton) {
 			if (whichButton >= 0) {
 				index = whichButton;
 			} else {
@@ -559,7 +591,8 @@ public class StockInventory extends Activity {
 	}
 	
 	//复核按钮对话框事件
-  	private DialogInterface.OnClickListener listenReScan = new 
+    @NonNull
+    private DialogInterface.OnClickListener listenReScan = new
   			DialogInterface.OnClickListener()
   	{
   		public void onClick(DialogInterface dialog,
@@ -570,7 +603,8 @@ public class StockInventory extends Activity {
   	};
 	
 	//取消按钮对话框事件
-  	private DialogInterface.OnClickListener listenExit = new 
+    @NonNull
+    private DialogInterface.OnClickListener listenExit = new
   			DialogInterface.OnClickListener()
   	{
   		public void onClick(DialogInterface dialog,
@@ -585,13 +619,9 @@ public class StockInventory extends Activity {
 	 {		if (keyCode == KeyEvent.KEYCODE_MENU) 
 		 	{//拦截菜单键事件			//do something...	
 		       return false;
-			 }		
-	 if (keyCode == KeyEvent.KEYCODE_BACK) 
-	 {//拦截返回按钮事件			//do something...	
-		 return false;
-	 }		
-	 return true;
-	 }	 
+			 }
+         return keyCode != KeyEvent.KEYCODE_BACK;
+     }
 
   	//取消按钮
   	private void Exit()
@@ -925,7 +955,7 @@ public class StockInventory extends Activity {
 		return true;
 	}
   	
-  	private void btnInvScanClick(String ScanMode)
+  	private void btnInvScanClick(@NonNull String ScanMode)
 	{
 		if((this.accIDA == null||this.accIDA.equals("")) && (this.accIDB == ""||this.accIDB.equals("")))
 		{
@@ -1219,7 +1249,8 @@ public class StockInventory extends Activity {
 	 * @param scanBody专递扫描明细
 	 * @throws JSONException 
 	 */
-	String IsFinishScan(JSONObject Source,JSONObject scanBody) throws JSONException
+    @Nullable
+    String IsFinishScan(@Nullable JSONObject Source, @NonNull JSONObject scanBody) throws JSONException
 	{
 		
 			JSONArray details=null;
@@ -1305,11 +1336,12 @@ public class StockInventory extends Activity {
 	//ADD BY WUQIONG E
   	
 	//创建对话框的按钮事件侦听	
-    private Button.OnClickListener  myListner = new 
+    @NonNull
+    private Button.OnClickListener myListner = new
     		Button.OnClickListener()
     {
 		@Override
-		public void onClick(View v) 
+		public void onClick(@NonNull View v)
 		{
 			switch(v.getId())
 			{

@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,15 +35,18 @@ import java.util.Map;
 
 public class PurOrderList extends Activity {
 
+	@Nullable
 	public List<Map<String, Object>> mData;
 	//ADD CAIXY TEST START
 //	private SoundPool sp;//声明一个SoundPool
 //	private int MainLogin.music;//定义一个int来设置suondID
 	//ADD CAIXY TEST END 
+	@Nullable
 	Button btPurOrderListReturn =null;
-	
-	private Handler handler=null;
-	private List<Map<String, Object>> getData(JSONObject jas) throws JSONException 
+
+	@Nullable
+	private Handler handler =null;
+	private List<Map<String, Object>> getData(@NonNull JSONObject jas) throws JSONException
 	{
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		Map<String, Object> map;
@@ -307,13 +312,13 @@ public class PurOrderList extends Activity {
                 new int[] {R.id.listorder,R.id.listorderdate,R.id.listbusiname,R.id.listpurorgname, R.id.listcorderid}
             ); 
                 
-        list.setOnItemClickListener((OnItemClickListener) itemListener);		
+        list.setOnItemClickListener(itemListener);
         list.setAdapter(listItemAdapter);  	
         
         if(!BillHead.equals(""))
         {
         	
-        	Map<String,Object> map=(Map<String, Object>) mData.get(0);
+        	Map<String,Object> map= mData.get(0);
             
             String orderNo = map.get("billcode").toString();
             String billId = map.get("corderid").toString();
@@ -364,12 +369,13 @@ public class PurOrderList extends Activity {
 	}
 
 
-	
+
+	@NonNull
 	private OnClickListener ButtonOnClickListener = new OnClickListener()
     {
   		
 		@Override
-		public void onClick(View v) 
+		public void onClick(@NonNull View v)
 		{
 			switch(v.getId())
   			{			//btnSDScanReturn
@@ -379,14 +385,15 @@ public class PurOrderList extends Activity {
   			}
 		}	    	
     };
-    
-    
+
+
+	@NonNull
 	private ListView.OnItemClickListener itemListener = new
 			ListView.OnItemClickListener()
 	{
 		@Override
-		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-				long arg3) 
+		public void onItemClick(@NonNull AdapterView<?> arg0, View arg1, int arg2,
+								long arg3)
 		{
 			Adapter adapter=arg0.getAdapter();
             // @SuppressWarnings("unchecked")
@@ -446,7 +453,7 @@ public class PurOrderList extends Activity {
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
+	public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.

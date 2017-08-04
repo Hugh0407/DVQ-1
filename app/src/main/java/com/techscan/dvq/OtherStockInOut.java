@@ -5,6 +5,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -50,6 +52,7 @@ public class OtherStockInOut extends Activity {
 
     int OrderTypeIndex = -1;
 
+    @NonNull
     String m_OrderType = "";
     String m_OrderID = "";
     String m_OrderNo = "";
@@ -57,20 +60,28 @@ public class OtherStockInOut extends Activity {
     String m_WarehouseID = "";
     String m_Crop = "";
 
-    private AlertDialog SelectButton = null;
-    private String[] BillTypeNameList = null;
-    private String[] BillTypeCodeList = null;
+    @Nullable
+    private AlertDialog SelectButton     = null;
+    @Nullable
+    private String[]    BillTypeNameList = null;
+    @Nullable
+    private String[]    BillTypeCodeList = null;
 
 
+    @Nullable
     JSONObject jsHead;
+    @Nullable
     JSONObject jsBody;
+    @Nullable
     JSONObject jsBoxTotal;
+    @Nullable
     JSONObject jsSerino;
 
     private writeTxt writeTxt;        //保存LOG文件
 //	private SoundPool sp;//声明一个SoundPool
 //	private int MainLogin.music;//定义一个int来设置suondID
 
+    @NonNull
     private ButtonOnClick buttonOnClick = new ButtonOnClick(0);
 
 
@@ -149,7 +160,7 @@ public class OtherStockInOut extends Activity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
@@ -162,9 +173,12 @@ public class OtherStockInOut extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    private static AlertDialog SelectLine = null;
-    private buttonOnClickC buttonOnClickC = new buttonOnClickC(0);
-    static String[] LNameList = new String[2];
+    @Nullable
+    private static AlertDialog    SelectLine     = null;
+    @NonNull
+    private        buttonOnClickC buttonOnClickC = new buttonOnClickC(0);
+    @NonNull
+    static         String[]       LNameList      = new String[2];
 
     private void Changeline() {
 
@@ -203,7 +217,7 @@ public class OtherStockInOut extends Activity {
         }
 
         @Override
-        public void onClick(DialogInterface dialog, int whichButton) {
+        public void onClick(@NonNull DialogInterface dialog, int whichButton) {
             if (whichButton >= 0) {
                 index = whichButton;
             } else {
@@ -238,7 +252,7 @@ public class OtherStockInOut extends Activity {
         }
 
         @Override
-        public void onClick(DialogInterface dialog, int whichButton) {
+        public void onClick(@NonNull DialogInterface dialog, int whichButton) {
             if (whichButton >= 0) {
                 index = whichButton;
                 dialog.cancel();
@@ -877,6 +891,7 @@ public class OtherStockInOut extends Activity {
 
     }
 
+    @Nullable
     UUID uploadGuid = null;
 
     private boolean CheckBox() throws JSONException {
@@ -978,7 +993,7 @@ public class OtherStockInOut extends Activity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, @NonNull Intent data) {
         if (requestCode == 92)        //单据选择返回
         {
             if (resultCode != 1) {
@@ -1032,6 +1047,7 @@ public class OtherStockInOut extends Activity {
     }
 
 
+    @NonNull
     private DialogInterface.OnClickListener listenExit = new
             DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog,
@@ -1050,9 +1066,10 @@ public class OtherStockInOut extends Activity {
 
     }
 
+    @NonNull
     private OnKeyListener myTxtListener = new OnKeyListener() {
         @Override
-        public boolean onKey(View v, int arg1, KeyEvent arg2) {
+        public boolean onKey(@NonNull View v, int arg1, @NonNull KeyEvent arg2) {
             String KeyAction = "0";
             switch (v.getId()) {
                 case id.txtOtOrderNo:
@@ -1083,10 +1100,11 @@ public class OtherStockInOut extends Activity {
         }
     };
 
+    @NonNull
     private Button.OnClickListener myListner = new
             Button.OnClickListener() {
                 @Override
-                public void onClick(View v) {
+                public void onClick(@NonNull View v) {
                     switch (v.getId()) {
                         case id.btnOtType:
                             showSingleChoiceDialog();

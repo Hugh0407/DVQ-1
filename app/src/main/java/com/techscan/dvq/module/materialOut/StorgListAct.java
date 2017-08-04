@@ -4,6 +4,8 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.AdapterView;
@@ -26,7 +28,9 @@ import java.util.Map;
 
 public class StorgListAct extends Activity {
 
+    @Nullable
     Button btnBack = null;
+    @Nullable
     public List<Map<String, Object>> mData;
 
     @Override
@@ -59,7 +63,7 @@ public class StorgListAct extends Activity {
         }
     }
 
-    private List<Map<String, Object>> getData(JSONObject jas) throws JSONException {
+    private List<Map<String, Object>> getData(@NonNull JSONObject jas) throws JSONException {
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
         Map<String, Object> map;
 
@@ -82,9 +86,10 @@ public class StorgListAct extends Activity {
         return list;
     }
 
+    @NonNull
     private ListView.OnItemClickListener itemListener = new ListView.OnItemClickListener() {
         @Override
-        public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+        public void onItemClick(@NonNull AdapterView<?> arg0, View arg1, int arg2, long arg3) {
             Adapter adapter = arg0.getAdapter();
             Map<String, Object> map = (Map<String, Object>) adapter.getItem(arg2);
 
@@ -101,10 +106,11 @@ public class StorgListAct extends Activity {
         }
     };
 
+    @NonNull
     private View.OnClickListener ButtonOnClickListener = new View.OnClickListener() {
 
         @Override
-        public void onClick(View v) {
+        public void onClick(@NonNull View v) {
             switch (v.getId()) {
                 case R.id.btn_back:
                     finish();

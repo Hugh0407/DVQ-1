@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -56,25 +58,36 @@ public class StockMove extends Activity {
 
 	// String headJons;
 	// JSONObject jonsHead; //源头单据表头
-	JSONObject jonsBody; // 源头单据表体
+    @Nullable
+    JSONObject jonsBody; // 源头单据表体
 
-	JSONObject saveJons;
-	JSONObject currentWarehouse;
+    @Nullable
+    JSONObject saveJons;
+    @Nullable
+    JSONObject currentWarehouse;
 
 	String warehouseCode;
 	String warehouseID = "";// 仓库ID
-	String companyID;// 公司ID
-	String OrgId; // 库存组织ID
-	String accID = "";// 帐套号
+    @Nullable
+    String companyID;// 公司ID
+    @Nullable
+    String OrgId; // 库存组织ID
+    @Nullable
+    String accID = "";// 帐套号
 	String vCode = "";
 
-	JSONObject m_SerialNo = null;
-	JSONObject m_ScanDetail = null;
+    @Nullable
+    JSONObject m_SerialNo   = null;
+    @Nullable
+    JSONObject m_ScanDetail = null;
 
-	String hstable = "";
+    @Nullable
+    String hstable = "";
 
-	Intent scanDetail = null;
-	UUID uploadGuid = null;
+    @Nullable
+    Intent scanDetail = null;
+    @Nullable
+    UUID   uploadGuid = null;
 
 	// ADD CAIXY TEST START
 	// private SoundPool sp;//声明一个SoundPool
@@ -82,18 +95,28 @@ public class StockMove extends Activity {
 	private writeTxt writeTxt; // 保存LOG文件
 	// ADD CAIXY TEST END
 
-	File file = null;
-	File fileScan = null;
-	String fileName = null;
-	String fileNameScan = null;
-	String ScanedFileName = null;
+    @Nullable
+    File   file           = null;
+    @Nullable
+    File   fileScan       = null;
+    @Nullable
+    String fileName       = null;
+    @Nullable
+    String fileNameScan   = null;
+    @Nullable
+    String ScanedFileName = null;
 	String UserID = "";
-	String ReScanHead = "1";
+    @NonNull
+    String ReScanHead = "1";
 	String BillId = "";
-	private String[] ExitNameList = null;
-	private AlertDialog SelectButton = null;
-	private ButtonOnClick buttonOnClick = new ButtonOnClick(0);
-	private ArrayList<String> ScanedBarcode = new ArrayList<String>();
+    @Nullable
+    private String[]          ExitNameList  = null;
+    @Nullable
+    private AlertDialog       SelectButton  = null;
+    @NonNull
+    private ButtonOnClick     buttonOnClick = new ButtonOnClick(0);
+    @Nullable
+    private ArrayList<String> ScanedBarcode = new ArrayList<String>();
 
 	private class ButtonOnClick implements DialogInterface.OnClickListener {
 		public int index;
@@ -103,7 +126,7 @@ public class StockMove extends Activity {
 		}
 
 		@Override
-		public void onClick(DialogInterface dialog, int whichButton) {
+		public void onClick(@NonNull DialogInterface dialog, int whichButton) {
 			if (whichButton >= 0) {
 				index = whichButton + 3;
 				// dialog.cancel();
@@ -133,11 +156,8 @@ public class StockMove extends Activity {
 		if (keyCode == KeyEvent.KEYCODE_MENU) {// 拦截meu键事件 //do something...
 			return false;
 		}
-		if (keyCode == KeyEvent.KEYCODE_BACK) {// 拦截返回按钮事件 //do something...
-			return false;
-		}
-		return true;
-	}
+        return keyCode != KeyEvent.KEYCODE_BACK;
+    }
 
 	// 获得所有的调出单表头
 	private void btnDBOrderClick() throws ParseException, IOException,
@@ -261,9 +281,10 @@ public class StockMove extends Activity {
 		startActivityForResult(scanDetail, 1);
 	}
 
-	private Button.OnClickListener myListner = new Button.OnClickListener() {
+    @NonNull
+    private Button.OnClickListener myListner = new Button.OnClickListener() {
 		@Override
-		public void onClick(View v) {
+		public void onClick(@NonNull View v) {
 			switch (v.getId()) {
 			case R.id.imgDBOrder: {
 				try {
@@ -345,7 +366,8 @@ public class StockMove extends Activity {
 	};
 
 	// 取消按钮对话框事件
-	private DialogInterface.OnClickListener listenExit = new DialogInterface.OnClickListener() {
+    @NonNull
+    private DialogInterface.OnClickListener listenExit = new DialogInterface.OnClickListener() {
 		public void onClick(DialogInterface dialog, int whichButton) {
 			StockMove.this.finish();
 			Common.ReScanErr = false;
@@ -437,9 +459,10 @@ public class StockMove extends Activity {
 		MainMenu.cancelLoading();
 	}
 
-	OnKeyListener listener = new OnKeyListener() {
+    @NonNull
+    OnKeyListener listener = new OnKeyListener() {
 		@Override
-		public boolean onKey(View v, int arg1, KeyEvent arg2) {
+		public boolean onKey(@NonNull View v, int arg1, @NonNull KeyEvent arg2) {
 			{
 
 				switch (v.getId()) {
@@ -486,7 +509,7 @@ public class StockMove extends Activity {
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
+	public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
@@ -530,9 +553,12 @@ public class StockMove extends Activity {
 		System.gc();
 	}
 
-	private static AlertDialog SelectLine = null;
-	private buttonOnClickC buttonOnClickC = new buttonOnClickC(0);
-	static String[] LNameList = new String[2];
+    @Nullable
+    private static AlertDialog    SelectLine     = null;
+    @NonNull
+    private        buttonOnClickC buttonOnClickC = new buttonOnClickC(0);
+    @NonNull
+    static         String[]       LNameList      = new String[2];
 
 	private void Changeline() {
 
@@ -571,7 +597,7 @@ public class StockMove extends Activity {
 		}
 
 		@Override
-		public void onClick(DialogInterface dialog, int whichButton) {
+		public void onClick(@NonNull DialogInterface dialog, int whichButton) {
 			if (whichButton >= 0) {
 				index = whichButton;
 			} else {
@@ -799,7 +825,7 @@ public class StockMove extends Activity {
 	}
 
 	// 获得任务从调拨订单明细
-	private void LoadOrderListFromDB(String BillId) throws ParseException,
+	private void LoadOrderListFromDB(@NonNull String BillId) throws ParseException,
 			IOException {
 		if (!BillId.equals("")) {
 			try {
@@ -867,7 +893,7 @@ public class StockMove extends Activity {
 	}
 
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 		if (Common.ReScanErr == true) {
 			MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
 			ReScanErr();
@@ -999,7 +1025,8 @@ public class StockMove extends Activity {
 	 * @param scanBody 专递扫描明细
 	 * @throws JSONException
 	 */
-	String IsFinishScan(JSONObject Source, JSONObject scanBody)
+    @Nullable
+    String IsFinishScan(@Nullable JSONObject Source, @NonNull JSONObject scanBody)
 			throws JSONException {
 
 		JSONArray details = null;

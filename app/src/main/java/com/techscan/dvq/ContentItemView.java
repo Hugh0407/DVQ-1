@@ -2,6 +2,8 @@ package com.techscan.dvq;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,7 +28,8 @@ public class ContentItemView extends Activity {
 //	private SoundPool sp;//声明一个SoundPool
 //	private int MainLogin.music;//定义一个int来设置suondID
 	//ADD CAIXY TEST END 
-	Button btcontent_itemReturn =null;
+    @Nullable
+    Button btcontent_itemReturn =null;
 
 
 	@Override
@@ -42,11 +45,12 @@ public class ContentItemView extends Activity {
 
 	}
 
-	private OnClickListener ButtonOnClickListener = new OnClickListener()
+    @NonNull
+    private OnClickListener ButtonOnClickListener = new OnClickListener()
     {
   		
 		@Override
-		public void onClick(View v) 
+		public void onClick(@NonNull View v)
 		{
 			switch(v.getId())
   			{			//btnSDScanReturn
@@ -67,7 +71,7 @@ public class ContentItemView extends Activity {
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
+	public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
@@ -78,7 +82,7 @@ public class ContentItemView extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 	
-	private List<Map<String, Object>> getData(JSONObject jas) 
+	private List<Map<String, Object>> getData(@NonNull JSONObject jas)
 			throws JSONException 
 	{
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();

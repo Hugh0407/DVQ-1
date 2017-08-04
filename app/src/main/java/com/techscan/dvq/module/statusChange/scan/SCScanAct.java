@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -51,32 +53,46 @@ import static com.techscan.dvq.common.Utils.isNumber;
 
 public class SCScanAct extends Activity {
 
+    @Nullable
     @InjectView(R.id.ed_bar_code)
     EditText mEdBarCode;
+    @Nullable
     @InjectView(R.id.ed_encoding)
     EditText mEdEncoding;
+    @Nullable
     @InjectView(R.id.ed_name)
     EditText mEdName;
+    @Nullable
     @InjectView(R.id.ed_type)
     EditText mEdType;
+    @Nullable
     @InjectView(R.id.ed_spectype)
     EditText mEdSpectype;
+    @Nullable
     @InjectView(R.id.ed_lot)
     EditText mEdLot;
+    @Nullable
     @InjectView(R.id.ed_cost_object)
     EditText mEdCostObject;
+    @Nullable
     @InjectView(ed_num)
     EditText mEdNum;
+    @Nullable
     @InjectView(R.id.ed_weight)
     EditText mEdWeight;
+    @Nullable
     @InjectView(R.id.ed_qty)
     EditText mEdQty;
+    @Nullable
     @InjectView(R.id.ed_unit)
     EditText mEdUnit;
+    @Nullable
     @InjectView(R.id.btn_task)
     Button mBtnTask;
+    @Nullable
     @InjectView(R.id.btn_detail)
     Button mBtnDetail;
+    @Nullable
     @InjectView(R.id.btn_back)
     Button mBtnBack;
 
@@ -87,10 +103,13 @@ public class SCScanAct extends Activity {
     String m_WarehouseID;
     String m_pk_Corp;
     ProgressDialog progressDialog;
+    @Nullable
     Activity activity;
 
-    public static List<PurGood> taskList = new ArrayList<PurGood>();
-    public static List<Goods> detailList = new ArrayList<Goods>();
+    @NonNull
+    public static List<PurGood> taskList   = new ArrayList<PurGood>();
+    @NonNull
+    public static List<Goods>   detailList = new ArrayList<Goods>();
 
     @Override
 
@@ -133,7 +152,7 @@ public class SCScanAct extends Activity {
 
 
     @OnClick({R.id.btn_task, R.id.btn_detail, R.id.btn_back})
-    public void onViewClicked(View view) {
+    public void onViewClicked(@NonNull View view) {
         switch (view.getId()) {
             case R.id.btn_task:
                 ScAdapter scAdapter = new ScAdapter(taskList);
@@ -158,9 +177,10 @@ public class SCScanAct extends Activity {
      * 网络请求后的线程通信
      * msg.obj 是从子线程传递过来的数据
      */
+    @NonNull
     Handler mHandler = new Handler() {
         @Override
-        public void handleMessage(Message msg) {
+        public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
                 case 1:
@@ -239,7 +259,7 @@ public class SCScanAct extends Activity {
     String pk_invbasdoc = "";
     String pk_invmandoc = "";
 
-    private void setInvBaseToUI(JSONObject json) throws JSONException {
+    private void setInvBaseToUI(@NonNull JSONObject json) throws JSONException {
         Log.d("TAG", "setInvBaseToUI: " + json);
         if (json.getBoolean("Status")) {
             JSONArray val = json.getJSONArray("baseInfo");
@@ -270,7 +290,7 @@ public class SCScanAct extends Activity {
     }
 
 
-    private void showDialog(List list, BaseAdapter adapter, String title) {
+    private void showDialog(@NonNull List list, BaseAdapter adapter, String title) {
         AlertDialog.Builder builder = new AlertDialog.Builder(SCScanAct.this);
         builder.setTitle(title);
         if (list.size() > 0) {
@@ -595,10 +615,11 @@ public class SCScanAct extends Activity {
     /**
      * 回车键的点击事件
      */
+    @NonNull
     View.OnKeyListener mOnKeyListener = new View.OnKeyListener() {
 
         @Override
-        public boolean onKey(View v, int keyCode, KeyEvent event) {
+        public boolean onKey(@NonNull View v, int keyCode, @NonNull KeyEvent event) {
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
                 switch (v.getId()) {
                     case R.id.ed_bar_code:

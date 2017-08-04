@@ -1,5 +1,7 @@
 package com.techscan.dvq.common;
 
+import android.support.annotation.NonNull;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
@@ -36,7 +38,7 @@ public class Base64Encoder {
      * @param from The src data.
      * @return
      */
-    public static String encode(byte[] from) {
+    public static String encode(@NonNull byte[] from) {
         StringBuffer to          = new StringBuffer((int) (from.length * 1.34) + 3);
         int          num         = 0;
         char         currentByte = 0;
@@ -78,7 +80,7 @@ public class Base64Encoder {
         return to.toString();
     }
 
-    public static String encode(String to) {
+    public static String encode(@NonNull String to) {
         try {
             return encode(to.getBytes("gb2312"));
         } catch (UnsupportedEncodingException e) {
@@ -88,7 +90,7 @@ public class Base64Encoder {
         }
     }
 
-    public static String decoder(String s) {
+    public static String decoder(@NonNull String s) {
         BASE64Decoder decoder = new BASE64Decoder();
         try {
             byte[] b = decoder.decodeBuffer(s);

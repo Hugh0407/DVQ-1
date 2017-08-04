@@ -2,6 +2,8 @@ package com.techscan.dvq.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 /**
  * Created by liuya on 2017/6/22.
@@ -29,7 +31,7 @@ public class Goods implements Parcelable {
     public Goods() {
     }
 
-    protected Goods(Parcel in) {
+    protected Goods(@NonNull Parcel in) {
         barcode = in.readString();
         encoding = in.readString();
         name = in.readString();
@@ -47,11 +49,13 @@ public class Goods implements Parcelable {
     }
 
     public static final Creator<Goods> CREATOR = new Creator<Goods>() {
+        @NonNull
         @Override
-        public Goods createFromParcel(Parcel in) {
+        public Goods createFromParcel(@NonNull Parcel in) {
             return new Goods(in);
         }
 
+        @NonNull
         @Override
         public Goods[] newArray(int size) {
             return new Goods[size];
@@ -59,7 +63,7 @@ public class Goods implements Parcelable {
     };
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (this == obj)
             return true;
         if (obj == null)
@@ -207,7 +211,7 @@ public class Goods implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeString(barcode);
         dest.writeString(encoding);
         dest.writeString(name);

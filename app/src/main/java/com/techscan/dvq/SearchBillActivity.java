@@ -8,6 +8,8 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,26 +29,40 @@ import java.io.FileInputStream;
 import java.util.Calendar;
 
 public class SearchBillActivity extends Activity {
-	private String sDate = "";
-	private TextView tvSearchBillDate1 = null;
-	private ImageButton btSearchBillDate = null;
-	private TextView tvSearchBillType1 = null;
-	private ImageButton btSearchBillType = null;
-	private	Button btSearchSavedBill = null;
-	Button btnSearchBillReturn = null;
-    private static final int DATE_DIALOG_ID = 1;  
-    private static final int SHOW_DATAPICK = 0;  
+    @NonNull
+    private              String      sDate               = "";
+    @Nullable
+    private              TextView    tvSearchBillDate1   = null;
+    @Nullable
+    private              ImageButton btSearchBillDate    = null;
+    @Nullable
+    private              TextView    tvSearchBillType1   = null;
+    @Nullable
+    private              ImageButton btSearchBillType    = null;
+    @Nullable
+    private              Button      btSearchSavedBill   = null;
+    @Nullable
+                         Button      btnSearchBillReturn = null;
+    private static final int         DATE_DIALOG_ID      = 1;
+    private static final int         SHOW_DATAPICK       = 0;
     private int mYear;  
     private int mMonth;  
-    private int mDay;  
-    private AlertDialog SelectButton=null;
-    private String[] BillTypeNameList = null;
-    private String[] BillTypeCodeList = null;
-    private ButtonOnClick buttonOnClick = new ButtonOnClick(0);
-    private TextView txtSavedInfo = null;
+    private int mDay;
+    @Nullable
+    private AlertDialog   SelectButton     =null;
+    @Nullable
+    private String[]      BillTypeNameList = null;
+    @Nullable
+    private String[]      BillTypeCodeList = null;
+    @NonNull
+    private ButtonOnClick buttonOnClick    = new ButtonOnClick(0);
+    @Nullable
+    private TextView      txtSavedInfo     = null;
     int BillTypeIndex = -1;
-    String BillTypeCode = "";
-    ScrollView svSavedBill =null;
+    @NonNull
+    String     BillTypeCode = "";
+    @Nullable
+    ScrollView svSavedBill  =null;
     
 //	private SoundPool sp;//声明一个SoundPool
 //	private int MainLogin.music;//定义一个int来设置suondID
@@ -100,7 +116,7 @@ public class SearchBillActivity extends Activity {
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
+	public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
@@ -132,7 +148,7 @@ public class SearchBillActivity extends Activity {
 		}
 
 		@Override
-		public void onClick(DialogInterface dialog, int whichButton)
+		public void onClick(@NonNull DialogInterface dialog, int whichButton)
 		{
 			if (whichButton >= 0)
 			{
@@ -168,11 +184,12 @@ public class SearchBillActivity extends Activity {
        	sDate = YYYY.toString() + "-" + MM.toString() + "-" + DD.toString();
        	
        	tvSearchBillDate1.setText(sDate);
-    }  
-  
-   
-  
-    private DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {  
+    }
+
+
+
+    @NonNull
+    private DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
   
        public void onDateSet(DatePicker view, int year, int monthOfYear,  
               int dayOfMonth) {  
@@ -287,7 +304,7 @@ public class SearchBillActivity extends Activity {
   
        @Override  
   
-       public void onClick(View v) {  
+       public void onClick(@NonNull View v) {
     	   
    			switch(v.getId())
    			{
@@ -312,7 +329,8 @@ public class SearchBillActivity extends Activity {
   
    
   
-    @Override  
+    @Nullable
+    @Override
   
     protected Dialog onCreateDialog(int id) {  
   
@@ -330,7 +348,7 @@ public class SearchBillActivity extends Activity {
   
     @Override  
   
-    protected void onPrepareDialog(int id, Dialog dialog) {  
+    protected void onPrepareDialog(int id, @NonNull Dialog dialog) {
   
        switch (id) {  
   
@@ -342,12 +360,13 @@ public class SearchBillActivity extends Activity {
   
        }  
   
-    }  
-  
+    }
 
-    Handler saleHandler = new Handler() {    
+
+    @NonNull
+    Handler saleHandler = new Handler() {
   
-       public void handleMessage(Message msg) {  
+       public void handleMessage(@NonNull Message msg) {
              switch (msg.what) {    
              case SearchBillActivity.SHOW_DATAPICK:    
             	 showDialog(DATE_DIALOG_ID);    

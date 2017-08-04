@@ -5,6 +5,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -42,16 +44,24 @@ import java.util.UUID;
 public class Sample_stocking extends Activity {
 
 	ListView lvPDOrder;
-	SimpleAdapter lvDBOrderAdapter;
-	List<Map<String, Object>> lstPDOrder = null;
+    @Nullable
+    SimpleAdapter lvDBOrderAdapter;
+    @Nullable
+    List<Map<String, Object>> lstPDOrder = null;
 
-	String[] from = { "PosName", "PosCode" };
-	int[] to = { R.id.listssposPosName, R.id.listssposPosCode };
+    @NonNull
+    String[] from = { "PosName", "PosCode" };
+    @NonNull
+    int[]    to   = { R.id.listssposPosName, R.id.listssposPosCode };
 	private writeTxt writeTxt ;		//保存LOG文件
-	private String[] BillCodeList = null;
-    private ButtonOnClick buttonOnClick = new ButtonOnClick(0);
-    private AlertDialog BillCodeSelectButton=null;
-    String ReOpenBillCode = "";
+    @Nullable
+    private String[]      BillCodeList         = null;
+    @NonNull
+    private ButtonOnClick buttonOnClick        = new ButtonOnClick(0);
+    @Nullable
+    private AlertDialog   BillCodeSelectButton =null;
+    @NonNull
+            String        ReOpenBillCode       = "";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -114,12 +124,13 @@ public class Sample_stocking extends Activity {
 
 	}
 
-	private OnItemLongClickListener myListItemLongListener = new OnItemLongClickListener() {
+    @NonNull
+    private OnItemLongClickListener myListItemLongListener = new OnItemLongClickListener() {
 
 		@Override
 		public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
 				int arg2, long arg3) {
-			Map<String, Object> mapCurrent = (Map<String, Object>) lstPDOrder
+			Map<String, Object> mapCurrent = lstPDOrder
 					.get(arg2);
 			String PosCode = mapCurrent.get("PosCode").toString();
 			String PosName = mapCurrent.get("PosName").toString();
@@ -137,12 +148,13 @@ public class Sample_stocking extends Activity {
 
 	};
 
-	private OnItemClickListener myListItemListener = new OnItemClickListener() {
+    @NonNull
+    private OnItemClickListener myListItemListener = new OnItemClickListener() {
 
 		@Override
 		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 				long arg3) {
-			Map<String, Object> mapCurrent = (Map<String, Object>) lstPDOrder
+			Map<String, Object> mapCurrent = lstPDOrder
 					.get(arg2);
 
 			String PosCode = mapCurrent.get("PosCode").toString();
@@ -160,9 +172,10 @@ public class Sample_stocking extends Activity {
 
 	}
 
-	private OnKeyListener myTxtListener = new OnKeyListener() {
+    @NonNull
+    private OnKeyListener myTxtListener = new OnKeyListener() {
 		@Override
-		public boolean onKey(View v, int arg1, KeyEvent arg2) {
+		public boolean onKey(@NonNull View v, int arg1, @NonNull KeyEvent arg2) {
 			switch (v.getId()) {
 			case R.id.txtSampleLoacation1:
 				if (arg1 == arg2.KEYCODE_ENTER
@@ -204,7 +217,8 @@ public class Sample_stocking extends Activity {
 		}
 	};
 
-	private TextWatcher watchers = new TextWatcher() {
+    @NonNull
+    private TextWatcher watchers = new TextWatcher() {
 
 		@Override
 		public void afterTextChanged(Editable s) {
@@ -234,7 +248,7 @@ public class Sample_stocking extends Activity {
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) 
+	public boolean onOptionsItemSelected(@NonNull MenuItem item)
 	{
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
@@ -248,9 +262,12 @@ public class Sample_stocking extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	private static AlertDialog SelectLine = null;
-	private buttonOnClickC buttonOnClickC = new buttonOnClickC(0);
-	static String[] LNameList = new String[2];
+    @Nullable
+    private static AlertDialog    SelectLine     = null;
+    @NonNull
+    private        buttonOnClickC buttonOnClickC = new buttonOnClickC(0);
+    @NonNull
+    static         String[]       LNameList      = new String[2];
 	
 	private void Changeline() {
 
@@ -289,7 +306,7 @@ public class Sample_stocking extends Activity {
 		}
 
 		@Override
-		public void onClick(DialogInterface dialog, int whichButton) {
+		public void onClick(@NonNull DialogInterface dialog, int whichButton) {
 			if (whichButton >= 0) {
 				index = whichButton;
 			} else {
@@ -337,9 +354,11 @@ public class Sample_stocking extends Activity {
 	String m_LocationID;
 
 	String sWhCode2 = ""; // 现实用的仓库编码
-	String sWhName = ""; // 现实用的仓库编码
+    @NonNull
+    String sWhName = ""; // 现实用的仓库编码
 	String sWhCode = ""; // 查询用的仓库编码
-	ArrayList IDList = null;
+    @Nullable
+    ArrayList IDList = null;
 
 //	private SoundPool sp;// 声明一个SoundPool
 //	private int MainLogin.music;// 定义一个int来设置suondID
@@ -365,20 +384,25 @@ public class Sample_stocking extends Activity {
 
 	}
 
-	ArrayList<HashMap<String, String>> array = null;
-	SimpleAdapter listItemAdapter = null;
-	UUID uploadGuid;
+    @Nullable
+    ArrayList<HashMap<String, String>> array           = null;
+    @Nullable
+    SimpleAdapter                      listItemAdapter = null;
+    @Nullable
+    UUID uploadGuid;
 
-	private DialogInterface.OnClickListener listenExit = new DialogInterface.OnClickListener() {
+    @NonNull
+    private DialogInterface.OnClickListener listenExit = new DialogInterface.OnClickListener() {
 		public void onClick(DialogInterface dialog, int whichButton) {
 			finish();
 			System.gc();
 		}
 	};
-	
-	
 
-	private DialogInterface.OnClickListener listenOpen = new DialogInterface.OnClickListener() {
+
+
+    @NonNull
+    private DialogInterface.OnClickListener listenOpen = new DialogInterface.OnClickListener() {
 		public void onClick(DialogInterface dialog, int whichButton) {
 			
 			SetNewFrm();
@@ -681,7 +705,7 @@ public class Sample_stocking extends Activity {
 			this.index = index;
 		}
 		
-		public void onClick(DialogInterface dialog, int whichButton)
+		public void onClick(@NonNull DialogInterface dialog, int whichButton)
 		{
 			if (whichButton >= 0)
 			{
@@ -771,7 +795,7 @@ public class Sample_stocking extends Activity {
 						String FindPos = "";
 						for (int x = 0; x < lstPDOrder.size(); x++) {
 							
-							Map<String, Object> mapCurrent = (Map<String, Object>) lstPDOrder.get(x);
+							Map<String, Object> mapCurrent = lstPDOrder.get(x);
 
 							String PosCode = mapCurrent.get("PosCode").toString();
 							if(lsPosCode.equals(PosCode))
@@ -941,7 +965,8 @@ public class Sample_stocking extends Activity {
 	}
 
 	// 取消按钮对话框事件
-	private DialogInterface.OnClickListener listenClose = new DialogInterface.OnClickListener() {
+    @NonNull
+    private DialogInterface.OnClickListener listenClose = new DialogInterface.OnClickListener() {
 		public void onClick(DialogInterface dialog, int whichButton) {
 			try {
 				ClosePDMethod();
@@ -959,7 +984,7 @@ public class Sample_stocking extends Activity {
 	
 
 	// 返回
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 		if (requestCode == 93)// 仓库查询返回
 		{
 			if (data != null) {
@@ -978,27 +1003,27 @@ public class Sample_stocking extends Activity {
 					if (sWhCode.equals("")) {
 						sWhCode = sWhCode
 								+ "'"
-								+ (String) ((resultList).get(i))
+								+ ((resultList).get(i))
 										.get("storcode") + "'";
 						sWhCode2 = sWhCode2
-								+ (String) ((resultList).get(i))
+								+ ((resultList).get(i))
 										.get("storcode");
 						sWhName = sWhName
 								+ "'"
-								+ (String) ((resultList).get(i))
+								+ ((resultList).get(i))
 										.get("storname") + "'";
 					} else {
 						sWhCode = sWhCode
 								+ ",'"
-								+ (String) ((resultList).get(i))
+								+ ((resultList).get(i))
 										.get("storcode") + "'";
 						sWhCode2 = sWhCode2
 								+ ","
-								+ (String) ((resultList).get(i))
+								+ ((resultList).get(i))
 										.get("storcode");
 						sWhName = sWhName
 								+ ",'"
-								+ (String) ((resultList).get(i))
+								+ ((resultList).get(i))
 										.get("storname") + "'";
 					}
 
@@ -1042,9 +1067,10 @@ public class Sample_stocking extends Activity {
 	}
 
 	// 按钮事件
-	private Button.OnClickListener myListner = new Button.OnClickListener() {
+    @NonNull
+    private Button.OnClickListener myListner = new Button.OnClickListener() {
 		@Override
-		public void onClick(View v) {
+		public void onClick(@NonNull View v) {
 			switch (v.getId()) {
 			case R.id.btnSampleOrderNoBrower:
 				OpenBillList();

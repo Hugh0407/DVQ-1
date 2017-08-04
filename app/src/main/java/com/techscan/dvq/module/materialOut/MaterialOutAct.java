@@ -10,6 +10,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
@@ -57,38 +59,53 @@ import static com.techscan.dvq.common.Utils.showToast;
 public class MaterialOutAct extends Activity {
 
 
+    @Nullable
     @InjectView(R.id.bill_num)
     EditText    billNum;
+    @Nullable
     @InjectView(R.id.bill_date)
     EditText    billDate;
+    @Nullable
     @InjectView(R.id.wh)
     EditText    wh;
+    @Nullable
     @InjectView(R.id.refer_wh)
     ImageButton referWh;
+    @Nullable
     @InjectView(R.id.organization)
     EditText    organization;
+    @Nullable
     @InjectView(R.id.refer_organization)
     ImageButton referOrganization;
+    @Nullable
     @InjectView(R.id.lei_bie)
     EditText    leiBie;
+    @Nullable
     @InjectView(R.id.refer_lei_bie)
     ImageButton referLeiBie;
+    @Nullable
     @InjectView(R.id.department)
     EditText    department;
+    @Nullable
     @InjectView(R.id.refer_department)
     ImageButton referDepartment;
+    @Nullable
     @InjectView(R.id.remark)
     EditText    remark;
+    @Nullable
     @InjectView(R.id.btn_scan)
     Button      btnScan;
+    @Nullable
     @InjectView(R.id.btn_save)
     Button      btnSave;
+    @Nullable
     @InjectView(R.id.btn_back)
     Button      btnBack;
 
     private String TAG = this.getClass().getSimpleName();
 
-    List<Goods>             tempList;
+    @Nullable
+    List<Goods> tempList;
     HashMap<String, String> checkInfo;
 
     String CDISPATCHERID     = "";//收发类别code
@@ -103,8 +120,10 @@ public class MaterialOutAct extends Activity {
     int      month;
     int      day;
     Calendar mycalendar;
+    @Nullable
     Activity mActivity;
 
+    @Nullable
     ProgressDialog progressDialog;
 
     @Override
@@ -129,7 +148,7 @@ public class MaterialOutAct extends Activity {
      * @param view
      */
     @OnClick({R.id.bill_date, R.id.btn_scan, R.id.refer_wh, R.id.refer_organization, R.id.refer_lei_bie, R.id.refer_department, R.id.btn_save, R.id.btn_back})
-    public void onViewClicked(View view) {
+    public void onViewClicked(@NonNull View view) {
         switch (view.getId()) {
             case R.id.refer_wh:
                 btnWarehouseClick();
@@ -170,7 +189,7 @@ public class MaterialOutAct extends Activity {
                     bulider.setNegativeButton(R.string.QuXiao, null);
                     bulider.setPositiveButton(R.string.QueRen, new DialogInterface.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
+                        public void onClick(@NonNull DialogInterface dialog, int which) {
                             MaterialOutScanAct.ovList.clear();
                             MaterialOutScanAct.detailList.clear();
                             dialog.dismiss();
@@ -197,7 +216,7 @@ public class MaterialOutAct extends Activity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, @NonNull Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         //仓库的回传数据 <----ListWarehouse.class
         if (requestCode == 97 && resultCode == 13) {
@@ -284,9 +303,10 @@ public class MaterialOutAct extends Activity {
      * 网络请求后的线程通信
      * msg.obj 是从子线程传递过来的数据
      */
+    @Nullable
     Handler mHandler = new Handler() {
         @Override
-        public void handleMessage(Message msg) {
+        public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
                 case HANDER_DEPARTMENT:
@@ -455,7 +475,7 @@ public class MaterialOutAct extends Activity {
      *
      * @param goodsList
      */
-    private void saveInfo(List<Goods> goodsList) {
+    private void saveInfo(@NonNull List<Goods> goodsList) {
 
         try {
             final JSONObject table     = new JSONObject();
@@ -601,6 +621,7 @@ public class MaterialOutAct extends Activity {
     }
 
 
+    @NonNull
     private DatePickerDialog.OnDateSetListener Datelistener    = new DatePickerDialog.OnDateSetListener() {
         /**params：view：该事件关联的组件
          * params：myyear：当前选择的年
@@ -624,6 +645,7 @@ public class MaterialOutAct extends Activity {
         }
 
     };
+    @Nullable
     private View.OnFocusChangeListener         myFocusListener = new View.OnFocusChangeListener() {
         @Override
         public void onFocusChange(View view, boolean hasFocus) {
@@ -637,10 +659,11 @@ public class MaterialOutAct extends Activity {
     /**
      * 回车键的点击事件
      */
+    @NonNull
     View.OnKeyListener mOnKeyListener = new View.OnKeyListener() {
 
         @Override
-        public boolean onKey(View v, int keyCode, KeyEvent event) {
+        public boolean onKey(@NonNull View v, int keyCode, @NonNull KeyEvent event) {
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
                 switch (v.getId()) {
                     case R.id.bill_num:

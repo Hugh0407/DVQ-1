@@ -20,6 +20,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.StrictMode;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -80,21 +82,32 @@ public class MainLogin extends Activity {
     // protected static final Context context = null;
     // 控件的定义
     Button btnLogin, btnExit;
+    @Nullable
     String LoginString, LoginString2, CompanyCode, OrgCode, WhCode, WhCodeB;
+    @NonNull
     public static String      tempFilePath = "";
+    @NonNull
     public static String      appTime      = "";
     //static JSONArray arysUserRole = new JSONArray();
     //static AlertDialog LGalertDialog = null;
+    @Nullable
     static        WifiManager wifi_service = null;
+    @Nullable
     static        String      sWIFIMin     = null;
+    @Nullable
     static        String      sWIFIMax     = null;
 
-    String         newVerName       = "";// 新版本名称
+    @NonNull
+    String newVerName = "";// 新版本名称
     int            newVerCode       = -1;// 新版本号
+    @Nullable
     ProgressDialog pd               = null;
+    @NonNull
     String         UPDATE_SERVERAPK = "dvq.apk";
 
+    @Nullable
     EditText user = null;
+    @Nullable
     EditText pwds = null;
 
     // ADD CAIXY START 15/04/15
@@ -106,7 +119,9 @@ public class MainLogin extends Activity {
     public static int       music2;// 定义一个int来设置suondID
     // ADD CAIXY TEST END
 
+    @NonNull
     public static Common objLog = new Common();
+    @Nullable
     @InjectView(R.id.ed_time)
     EditText edTime;
 
@@ -122,13 +137,11 @@ public class MainLogin extends Activity {
         if (keyCode == KeyEvent.KEYCODE_MENU) {// 拦截meu键事件
             return false;
         }
-        if (keyCode == KeyEvent.KEYCODE_BACK) {// 拦截返回按钮事件
-            return false;
-        }
-        return true;
+        return keyCode != KeyEvent.KEYCODE_BACK;
     }
 
     // 取锟斤拷锟斤拷钮锟皆伙拷锟斤拷锟铰硷拷
+    @NonNull
     private DialogInterface.OnClickListener listenExit = new DialogInterface.OnClickListener() {
         public void onClick(DialogInterface dialog, int whichButton) {
             MainLogin.this.finish();
@@ -223,7 +236,7 @@ public class MainLogin extends Activity {
                 .build();
         Observable.create(new ObservableOnSubscribe<Response>() {
             @Override
-            public void subscribe(ObservableEmitter<Response> e) throws Exception {
+            public void subscribe(@NonNull ObservableEmitter<Response> e) throws Exception {
                 Response response = client.newCall(request).execute();
                 e.onNext(response);
                 e.onComplete();
@@ -233,7 +246,7 @@ public class MainLogin extends Activity {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Response>() {
                     @Override
-                    public void accept(Response response) throws Exception {
+                    public void accept(@NonNull Response response) throws Exception {
 
                         if (response.code() == 200) {
 //                            String     result = EntityUtils.toString(httpResponse.getEntity());
@@ -442,9 +455,10 @@ public class MainLogin extends Activity {
     }
 
     // 创建对话框的按钮事件侦听
+    @NonNull
     private Button.OnClickListener myListner = new Button.OnClickListener() {
         @Override
-        public void onClick(View v) {
+        public void onClick(@NonNull View v) {
             switch (v.getId()) {
                 case R.id.btnLogin: {
                     //ShowLoading();
@@ -681,7 +695,7 @@ public class MainLogin extends Activity {
 
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 
         if (requestCode == 23) {
             if (data != null) {
@@ -806,17 +820,14 @@ public class MainLogin extends Activity {
         // int iWIFIMin = Integer.valueOf(sWIFIMin).intValue();
         // int iWIFIMax = Integer.valueOf(sWIFIMax).intValue();
         int Rssi = wifiInfo.getRssi() * -1;
-        if ((iWIFIMin < Rssi) && (Rssi < iWIFIMax)) {
-            return true;
-        }
-        return false;
+        return (iWIFIMin < Rssi) && (Rssi < iWIFIMax);
 
     }
 
     /**
      * 获得版本号
      */
-    public int getVerCode(Context context) {
+    public int getVerCode(@NonNull Context context) {
         int verCode = -1;
         try {
             verCode = context.getPackageManager().getPackageInfo(
@@ -831,7 +842,7 @@ public class MainLogin extends Activity {
     /**
      * 获得版本名称
      */
-    public String getVerName(Context context) {
+    public String getVerName(@NonNull Context context) {
         String verName = "";
         try {
             verName = context.getPackageManager().getPackageInfo(
@@ -847,6 +858,7 @@ public class MainLogin extends Activity {
      *
      * @return
      */
+    @Nullable
     String lsUrl = "";
 
     //int UrlErr = 0;    //暂时关闭
@@ -942,7 +954,7 @@ public class MainLogin extends Activity {
     /**
      * 更新版本
      */
-    public void doNewVersionUpdate(final String DownStr) {
+    public void doNewVersionUpdate(@NonNull final String DownStr) {
         int          verCode = this.getVerCode(this);
         String       verName = this.getVerName(this);
         StringBuffer sb      = new StringBuffer();
@@ -1021,6 +1033,7 @@ public class MainLogin extends Activity {
         }.start();
     }
 
+    @NonNull
     Handler handler = new Handler() {
 
         @Override
@@ -1094,7 +1107,7 @@ public class MainLogin extends Activity {
 //	}
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
@@ -1125,6 +1138,7 @@ public class MainLogin extends Activity {
 
     }
 
+    @NonNull
     private DatePickerDialog.OnDateSetListener Datelistener = new DatePickerDialog.OnDateSetListener() {
         /**params：view：该事件关联的组件
          * params：myyear：当前选择的年
@@ -1148,6 +1162,7 @@ public class MainLogin extends Activity {
         }
     };
 
+    @NonNull
     private View.OnFocusChangeListener myFocusListener = new View.OnFocusChangeListener() {
         @Override
         public void onFocusChange(View view, boolean hasFocus) {

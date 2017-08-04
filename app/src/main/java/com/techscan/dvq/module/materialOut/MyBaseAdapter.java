@@ -1,5 +1,7 @@
 package com.techscan.dvq.module.materialOut;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,8 +59,9 @@ public class MyBaseAdapter extends BaseAdapter {
      * @return 返回子项的布局
      * 每次生成一次子项，该方法执行一次
      */
+    @Nullable
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
         ViewHolder viewHolder;
         if (convertView == null) {

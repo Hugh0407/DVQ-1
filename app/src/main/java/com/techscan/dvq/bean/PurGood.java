@@ -2,6 +2,7 @@ package com.techscan.dvq.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 /**
  * Created by liuya on 2017/6/30.
@@ -34,7 +35,7 @@ public class PurGood implements Parcelable {
     public PurGood() {
     }
 
-    protected PurGood(Parcel in) {
+    protected PurGood(@NonNull Parcel in) {
         sourceBill = in.readString();
         AccID = in.readString();
         vbillcode = in.readString();
@@ -58,11 +59,13 @@ public class PurGood implements Parcelable {
     }
 
     public static final Creator<PurGood> CREATOR = new Creator<PurGood>() {
+        @NonNull
         @Override
-        public PurGood createFromParcel(Parcel in) {
+        public PurGood createFromParcel(@NonNull Parcel in) {
             return new PurGood(in);
         }
 
+        @NonNull
         @Override
         public PurGood[] newArray(int size) {
             return new PurGood[size];
@@ -235,7 +238,7 @@ public class PurGood implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeString(sourceBill);
         dest.writeString(AccID);
         dest.writeString(vbillcode);

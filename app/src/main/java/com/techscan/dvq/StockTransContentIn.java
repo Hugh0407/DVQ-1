@@ -7,6 +7,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -67,30 +69,48 @@ public class StockTransContentIn extends Activity {
 
     String lsResultBillCodeA = "";
     String lsResultBillCodeB = "";
-    String fileName = null;
-    String fileNameScan = null;
-    String ScanedFileName = null;
-    String UserID = null;
-    File file = null;
-    File fileScan = null;
-    String ReScanHead = "1";
-    private ButtonOnClick buttonOnClick = new ButtonOnClick(0);
-    private AlertDialog SelectButton = null;
-    private String[] ExitNameList = null;
+    @Nullable
+            String        fileName       = null;
+    @Nullable
+            String        fileNameScan   = null;
+    @Nullable
+            String        ScanedFileName = null;
+    @Nullable
+            String        UserID         = null;
+    @Nullable
+            File          file           = null;
+    @Nullable
+            File          fileScan       = null;
+    @NonNull
+            String        ReScanHead     = "1";
+    @NonNull
+    private ButtonOnClick buttonOnClick  = new ButtonOnClick(0);
+    @Nullable
+    private AlertDialog   SelectButton   = null;
+    @Nullable
+    private String[]      ExitNameList   = null;
     // 增加本地数据读取
 
     // private JSONObject JsonModTaskData = new JSONObject();
+    @NonNull
     String fsAccIDFlag = "";
+    @Nullable
     SimpleAdapter lvDBOrderAdapter;
-    private EditText txtOutPDOrder = null;
+    @Nullable
+    private EditText txtOutPDOrder  = null;
+    @Nullable
     private EditText txtTTransInPos = null;
 
     // JSONArray saveJsonArrMulti = new JSONArray();
 
+    @Nullable
     private ImageButton btnTOutPDOrder = null;
-    private Button btnTransInScan = null;
-    private Button btnTransInSave = null;
-    private Button btnTransInExit = null;
+    @Nullable
+    private Button      btnTransInScan = null;
+    @Nullable
+    private Button      btnTransInSave = null;
+    @Nullable
+    private Button      btnTransInExit = null;
 
     // ADD BY WUQIONG 2015/04/24
     TextView tvOutRdcl;
@@ -98,17 +118,22 @@ public class StockTransContentIn extends Activity {
     EditText txtOutRdcl;
     TextView tvOutManualNo;
     EditText txtOutManualNo;
+    @NonNull
     String rdflag = "0";
     String tmprdInCode = "";
     String tmprdInName = "";
+    @NonNull
     String tmpInManualNo = "";
     String tmprdinIDA = "";
     String tmprdinIDB = "";
     String cgeneralhid = "";
 
-    private ArrayList<String> ScanedBarcode = new ArrayList<String>();
-    List<Map<String, Object>> lstPDOrder = null;
+    @Nullable
+    private ArrayList<String>         ScanedBarcode = new ArrayList<String>();
+    @Nullable
+            List<Map<String, Object>> lstPDOrder    = null;
     ListView lvPDOrder;
+    @Nullable
     private AlertDialog DeleteAlertDialog = null;
     // String GetBillHFlg = "0";
     // String GetBillBFlg = "0";
@@ -118,30 +143,40 @@ public class StockTransContentIn extends Activity {
     // String[] from = {"No","From", "To","AccID","Dcorp"};
     // int[] to = { R.id.listpdorder, R.id.listfromware, R.id.listtoware,
     // R.id.listaccid, R.id.listpddcorp};
+    @NonNull
     String[] from = {"No", "From", "To", "AccID", "Dcorp", "statusE"};
-    int[] to = {R.id.listpdorder, R.id.listfromware, R.id.listtoware,
+    @NonNull
+    int[]    to   = {R.id.listpdorder, R.id.listfromware, R.id.listtoware,
             R.id.listaccid, R.id.listpddcorp, R.id.listpdbillstatus};
 
     // ADD CAIXY TEST START
     // private SoundPool sp;//声明一个SoundPool
     // private int MainLogin.music;//定义一个int来设置suondID
     private writeTxt writeTxt; // 保存LOG文件
-    String WhNameA = "";
-    String WhNameB = "";
-    String CompanyCode = "";// corpincode
-    String OrgCode = "";
-    String BillAccID = "";
+    @Nullable
+                        String WhNameA            = "";
+    @Nullable
+                        String WhNameB            = "";
+    @Nullable
+                        String CompanyCode        = "";// corpincode
+    @Nullable
+                        String OrgCode            = "";
+    @NonNull
+                        String BillAccID          = "";
     // String BillCorpPK="";
     public final static String PREFERENCE_SETTING = "Setting";
     int TaskCount = 0;
     // ADD CAIXY TEST END
 
     // 保存用表头信息
+    @Nullable
     private JSONObject jsonSaveHead = null;
 
     // 表体任务
+    @Nullable
     private JSONObject jsonBillBodyTask = null;
 
+    @Nullable
     private List<Map<String, Object>> lstSaveBody = null;
 
     private String tmpAccIDA = "";
@@ -165,6 +200,7 @@ public class StockTransContentIn extends Activity {
     String PKcorpTo = "";
 
     // GUID
+    @Nullable
     private UUID uploadGuid = null;
 
     @Override
@@ -775,7 +811,7 @@ public class StockTransContentIn extends Activity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
@@ -788,9 +824,12 @@ public class StockTransContentIn extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    private static AlertDialog SelectLine = null;
-    private buttonOnClickC buttonOnClickC = new buttonOnClickC(0);
-    static String[] LNameList = new String[2];
+    @Nullable
+    private static AlertDialog    SelectLine     = null;
+    @NonNull
+    private        buttonOnClickC buttonOnClickC = new buttonOnClickC(0);
+    @NonNull
+    static         String[]       LNameList      = new String[2];
 
     private void Changeline() {
 
@@ -829,7 +868,7 @@ public class StockTransContentIn extends Activity {
         }
 
         @Override
-        public void onClick(DialogInterface dialog, int whichButton) {
+        public void onClick(@NonNull DialogInterface dialog, int whichButton) {
             if (whichButton >= 0) {
                 index = whichButton;
             } else {
@@ -876,7 +915,7 @@ public class StockTransContentIn extends Activity {
         }
 
         @Override
-        public void onClick(DialogInterface dialog, int whichButton) {
+        public void onClick(@NonNull DialogInterface dialog, int whichButton) {
             if (whichButton >= 0) {
                 index = whichButton + 3;
                 // dialog.cancel();
@@ -904,7 +943,7 @@ public class StockTransContentIn extends Activity {
     // 增加本地数据读取
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (Common.ReScanErr == true) {
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             ReScanErr();
@@ -1150,7 +1189,7 @@ public class StockTransContentIn extends Activity {
         // }
     }
 
-    private Map<String, Object> GetBillDetailInfoByBillCode(String sAccID,
+    private Map<String, Object> GetBillDetailInfoByBillCode(@NonNull String sAccID,
                                                             String sCorpPK, String sBillCode) {
         JSONObject para = new JSONObject();
         Map<String, Object> map = new HashMap<String, Object>();
@@ -1298,7 +1337,7 @@ public class StockTransContentIn extends Activity {
     }
 
     // 根据订单表头得到表体详细
-    private void GetBillBodyDetailInfo(String sBillIDA, String sBillIDB)
+    private void GetBillBodyDetailInfo(@NonNull String sBillIDA, @NonNull String sBillIDB)
             throws JSONException {
         if (sBillIDA.equals("") && sBillIDB.equals(""))
             return;
@@ -2121,7 +2160,7 @@ public class StockTransContentIn extends Activity {
     // }
     // add caixy s
 
-    private void ScanBarCode(String lsBillCode) {
+    private void ScanBarCode(@NonNull String lsBillCode) {
         if (lsBillCode.length() < 5) {
             Toast.makeText(StockTransContentIn.this, R.string.ShuRuDeDanJuHaoBuZhengQue,
                     Toast.LENGTH_LONG).show();
@@ -2172,7 +2211,7 @@ public class StockTransContentIn extends Activity {
         }
 
         for (int j = 0; j < lstPDOrder.size(); j++) {
-            Map<String, Object> ItemMap = (Map<String, Object>) lstPDOrder
+            Map<String, Object> ItemMap = lstPDOrder
                     .get(j);
             if (mapBillInfo.get("BillId").toString()
                     .equals(ItemMap.get("BillId").toString())
@@ -2338,6 +2377,7 @@ public class StockTransContentIn extends Activity {
     // add caixy e
 
     // 退出按钮对话框事件
+    @NonNull
     private DialogInterface.OnClickListener listenExit = new DialogInterface.OnClickListener() {
         public void onClick(DialogInterface dialog, int whichButton) {
             Common.ReScanErr = false;
@@ -2351,16 +2391,14 @@ public class StockTransContentIn extends Activity {
         if (keyCode == KeyEvent.KEYCODE_MENU) {// 拦截meu键事件 //do something...
             return false;
         }
-        if (keyCode == KeyEvent.KEYCODE_BACK) {// 拦截返回按钮事件 //do something...
-            return false;
-        }
-        return true;
+        return keyCode != KeyEvent.KEYCODE_BACK;
     }
 
     // EditText输入后回车的监听事件
+    @NonNull
     private OnKeyListener EditTextOnKeyListener = new OnKeyListener() {
         @Override
-        public boolean onKey(View v, int arg1, KeyEvent arg2) {
+        public boolean onKey(@NonNull View v, int arg1, @NonNull KeyEvent arg2) {
             switch (v.getId()) {
                 case id.txtOutPDOrder:
                     if (arg1 == arg2.KEYCODE_ENTER
@@ -2519,10 +2557,11 @@ public class StockTransContentIn extends Activity {
     };
 
     // Button按下后的监听事件
+    @NonNull
     private OnClickListener ButtonOnClickListener = new OnClickListener() {
 
         @Override
-        public void onClick(View v) {
+        public void onClick(@NonNull View v) {
             switch (v.getId()) {
                 case id.btnTOutPDOrder:
                     if (lstSaveBody == null || lstSaveBody.size() < 1) {
@@ -2734,7 +2773,7 @@ public class StockTransContentIn extends Activity {
             JSONArray saveJsonArrMulti = new JSONArray();
 
             for (int i = 0; i < lstPDOrder.size(); i++) {
-                sendMapHead = (HashMap<String, Object>) lstPDOrder.get(i);
+                sendMapHead = lstPDOrder.get(i);
                 JSONObject jsonSaveHead = new JSONObject();
                 jsonSaveHead = Common.MapTOJSONOBject(sendMapHead);
 
@@ -2744,7 +2783,7 @@ public class StockTransContentIn extends Activity {
                     sendJsonSave.put("Head", sendJsonArrHead);
 
                     for (int j = 0; j < lstSaveBody.size(); j++) {
-                        sendMapBody = (HashMap<String, Object>) lstSaveBody
+                        sendMapBody = lstSaveBody
                                 .get(j);
 
                         if (!sendMapBody.get("spacenum").toString().equals("1")) {
@@ -2836,7 +2875,7 @@ public class StockTransContentIn extends Activity {
             JSONArray saveJsonArrMulti = new JSONArray();
 
             for (int i = 0; i < lstPDOrder.size(); i++) {
-                sendMapHead = (HashMap<String, Object>) lstPDOrder.get(i);
+                sendMapHead = lstPDOrder.get(i);
                 JSONObject jsonSaveHead = new JSONObject();
                 jsonSaveHead = Common.MapTOJSONOBject(sendMapHead);
 
@@ -2846,7 +2885,7 @@ public class StockTransContentIn extends Activity {
                     sendJsonSave.put("Head", sendJsonArrHead);
 
                     for (int j = 0; j < lstSaveBody.size(); j++) {
-                        sendMapBody = (HashMap<String, Object>) lstSaveBody
+                        sendMapBody = lstSaveBody
                                 .get(j);
 
                         if (!sendMapBody.get("spacenum").toString().equals("1")) {
@@ -3229,12 +3268,13 @@ public class StockTransContentIn extends Activity {
 
     // add caixy s
     // 长按扫描详细，删除该条记录
+    @NonNull
     private OnItemLongClickListener myListItemLongListener = new OnItemLongClickListener() {
 
         @Override
         public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
                                        int arg2, long arg3) {
-            Map<String, Object> mapCurrent = (Map<String, Object>) lstPDOrder
+            Map<String, Object> mapCurrent = lstPDOrder
                     .get(arg2);
 
             String BillId = mapCurrent.get("BillId").toString();

@@ -1,5 +1,7 @@
 package com.techscan.dvq;
 
+import android.support.annotation.NonNull;
+
 /**
  * Created by Hugh on 2017/6/21.
  */
@@ -20,16 +22,19 @@ public class SplitTongChengBarCode {
     public String CW;
     public String ONLY;
     public String NUM;
-    public String AccID = "";
-    public String cInvCode = "";//存货编码
-    public String cBatch = "";//批次
-    public String cSerino = "";//流水号
+    @NonNull
+    public String AccID         = "";
+    public String cInvCode      = "";//存货编码
+    public String cBatch        = "";//批次
+    public String cSerino       = "";//流水号
+    @NonNull
     public String FinishBarCode = "";
-    public String CheckBarCode = "";
+    @NonNull
+    public String CheckBarCode  = "";
 
     public boolean creatorOk=false;
 
-    public SplitTongChengBarCode(String barcode) {
+    public SplitTongChengBarCode(@NonNull String barcode) {
         String[] val;
         if (barcode.contains("|")) {
             val = barcode.split("\\|");

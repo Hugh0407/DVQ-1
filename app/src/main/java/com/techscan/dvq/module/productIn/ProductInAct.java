@@ -10,6 +10,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
@@ -59,32 +61,46 @@ import static com.techscan.dvq.common.Utils.showToast;
 public class ProductInAct extends Activity {
 
 
+    @Nullable
     @InjectView(R.id.bill_num)
     EditText    mBillNum;
+    @Nullable
     @InjectView(R.id.bill_date)
     EditText    mBillDate;
+    @Nullable
     @InjectView(R.id.wh)
     EditText    mWh;
+    @Nullable
     @InjectView(R.id.refer_wh)
     ImageButton mReferWh;
+    @Nullable
     @InjectView(R.id.organization)
     EditText    mOrganization;
+    @Nullable
     @InjectView(R.id.refer_organization)
     ImageButton mReferOrganization;
+    @Nullable
     @InjectView(R.id.lei_bie)
     EditText    mLeiBie;
+    @Nullable
     @InjectView(R.id.refer_lei_bie)
     ImageButton mReferLeiBie;
+    @Nullable
     @InjectView(R.id.department)
     EditText    mDepartment;
+    @Nullable
     @InjectView(R.id.remark)
     EditText    mRemark;
+    @Nullable
     @InjectView(R.id.btnPurInScan)
     Button      mBtnPurInScan;
+    @Nullable
     @InjectView(R.id.btnPurinSave)
     Button      mBtnPurinSave;
+    @Nullable
     @InjectView(R.id.btnBack)
     Button      mBtnBack;
+    @Nullable
     @InjectView(R.id.refer_department)
     ImageButton mReferDepartment;
 
@@ -102,10 +118,13 @@ public class ProductInAct extends Activity {
     int                     month;
     int                     day;
     Calendar                mycalendar;
-    List<Goods>             tempList;
+    @Nullable
+    List<Goods> tempList;
     HashMap<String, String> checkInfo;
-    ProgressDialog          progressDialog;
-    Activity                mActivity;
+    @Nullable
+    ProgressDialog progressDialog;
+    @Nullable
+    Activity       mActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,7 +149,7 @@ public class ProductInAct extends Activity {
     @OnClick({R.id.refer_wh, R.id.refer_organization,
             R.id.refer_lei_bie, R.id.btnPurInScan, R.id.btnPurinSave,
             R.id.btnBack, R.id.refer_department, R.id.bill_date})
-    public void onViewClicked(View view) {
+    public void onViewClicked(@NonNull View view) {
         switch (view.getId()) {
             case R.id.refer_wh:
                 btnWarehouseClick();
@@ -169,7 +188,7 @@ public class ProductInAct extends Activity {
                     bulider.setNegativeButton(R.string.QuXiao, null);
                     bulider.setPositiveButton(R.string.QueRen, new DialogInterface.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
+                        public void onClick(@NonNull DialogInterface dialog, int which) {
                             ProductInScanAct.ovList.clear();
                             ProductInScanAct.detailList.clear();
                             dialog.dismiss();
@@ -196,7 +215,7 @@ public class ProductInAct extends Activity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, @NonNull Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         //仓库的回传数据 <----ListWarehouse.class
         if (requestCode == 97 && resultCode == 13) {
@@ -278,9 +297,10 @@ public class ProductInAct extends Activity {
      * 网络请求后的线程通信
      * msg.obj 是从子线程传递过来的数据
      */
+    @Nullable
     Handler mHandler = new Handler() {
         @Override
-        public void handleMessage(Message msg) {
+        public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
                 case HANDER_DEPARTMENT:
@@ -392,7 +412,7 @@ public class ProductInAct extends Activity {
      * @param goodsList
      * @throws JSONException
      */
-    private void saveInfo(List<Goods> goodsList) {
+    private void saveInfo(@NonNull List<Goods> goodsList) {
         final JSONObject table     = new JSONObject();
         JSONObject       tableHead = new JSONObject();
         try {
@@ -602,6 +622,7 @@ public class ProductInAct extends Activity {
     }
 
 
+    @NonNull
     private DatePickerDialog.OnDateSetListener Datelistener = new DatePickerDialog.OnDateSetListener() {
         /**params：view：该事件关联的组件
          * params：myyear：当前选择的年
@@ -626,6 +647,7 @@ public class ProductInAct extends Activity {
 
     };
 
+    @Nullable
     private View.OnFocusChangeListener myFocusListener = new View.OnFocusChangeListener() {
         @Override
         public void onFocusChange(View view, boolean hasFocus) {
@@ -638,10 +660,11 @@ public class ProductInAct extends Activity {
     /**
      * 回车键的点击事件
      */
-    View.OnKeyListener mOnKeyListener = new View.OnKeyListener() {
+    @NonNull
+            View.OnKeyListener         mOnKeyListener  = new View.OnKeyListener() {
 
         @Override
-        public boolean onKey(View v, int keyCode, KeyEvent event) {
+        public boolean onKey(@NonNull View v, int keyCode, @NonNull KeyEvent event) {
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
                 switch (v.getId()) {
                     case R.id.bill_num:

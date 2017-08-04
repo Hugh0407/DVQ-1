@@ -1,5 +1,7 @@
 package com.techscan.dvq;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import java.io.File;
@@ -7,12 +9,13 @@ import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
 
 public class writeTxt {
-	
+
+    @NonNull
     String filePath = "/sdcard/DVQ/";
     //String fileName = "DVQSavelog.txt";
  
  // 将字符串写入到文本文件中
-    public void writeTxtToFile(String LogName,String strcontent) {
+    public void writeTxtToFile(String LogName, @NonNull String strcontent) {
         //生成文件夹之后，再生成文件，不然会出错
         makeFilePath(filePath, LogName);
         
@@ -47,7 +50,8 @@ public class writeTxt {
     }
      
     // 生成文件
-    public File makeFilePath(String filePath, String fileName) {
+    @Nullable
+    public File makeFilePath(@NonNull String filePath, String fileName) {
         File file = null;
         makeRootDirectory(filePath);
         try {
@@ -62,7 +66,7 @@ public class writeTxt {
     }
      
     // 生成文件夹
-    public static void makeRootDirectory(String filePath) {
+    public static void makeRootDirectory(@NonNull String filePath) {
         File file = null;
         try {
             file = new File(filePath);

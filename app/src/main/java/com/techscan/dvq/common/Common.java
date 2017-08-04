@@ -1,5 +1,8 @@
 package com.techscan.dvq.common;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import com.techscan.dvq.MyHttpClient;
 import com.techscan.dvq.login.MainLogin;
 
@@ -25,39 +28,52 @@ import java.util.Set;
 
 public class Common {
 
+    @NonNull
     public String ScanBarCode = "";
 
+    @Nullable
     public        String LoginString  = "";
+    @Nullable
     public        String LoginString2 = "";
+    @Nullable
     public static String lsUrl        = "";
     //public static String lsUrl = "";
     private static com.techscan.dvq.writeTxt writeTxt;
     public String LoginUser = "";
     public String LoginDate;
     public        String     Password        = "";
+    @Nullable
     public        String     CompanyCode     = "";
     public static boolean    ReScanErr       = false;
     public static JSONArray  arysUserRole    = new JSONArray();
+    @Nullable
     public static JSONArray  arysUserWHRole  = new JSONArray();
     public static JSONObject jsonBodyTask    = new JSONObject();
     public static JSONObject JsonModTaskData = new JSONObject();
 
     public String UserID    = ""; // A帐套对应的用户ID
     public String UserName  = "";
+    @NonNull
     public String CompanyID = "";
+    @Nullable
     public String STOrgCode = ""; // 库存组织编码
 
+    @Nullable
     public String WhCodeA = "";// A帐套仓库过滤条件
 
+    @Nullable
     public String WhCodeB = ""; // //B帐套仓库过滤条件
     public String UserIDB = "";// B帐套对应的用户ID
 
+    @NonNull
     public String VersionCode = "";// 程序版本号
+    @NonNull
     public String CompanyName = "";// 公司名称
 
     static android.app.ProgressDialog PD;
 
-    public static JSONArray RemoveItem(JSONArray list, int index)
+    @NonNull
+    public static JSONArray RemoveItem(@NonNull JSONArray list, int index)
             throws JSONException {
         JSONArray result = new JSONArray();
 
@@ -71,7 +87,7 @@ public class Common {
 
     //static int UrlErr = 0;   //暂时关闭
 
-    public static JSONObject DoHttpQuery(JSONObject para, String funcationName, String AccID)
+    public static JSONObject DoHttpQuery(@NonNull JSONObject para, String funcationName, String AccID)
             throws JSONException, ParseException, IOException {
 
         // String ErrMsg="{\"Status\":false,\"ErrMsg\":'执行数据处理错误'}";
@@ -245,7 +261,8 @@ public class Common {
     }
 
     // Map转JSONObject
-    public static JSONObject MapTOJSONOBject(Map<String, Object> map)
+    @NonNull
+    public static JSONObject MapTOJSONOBject(@NonNull Map<String, Object> map)
             throws JSONException {
         JSONObject                     jsonResult = new JSONObject();
         Set<Map.Entry<String, Object>> entryseSet = map.entrySet();
@@ -255,7 +272,7 @@ public class Common {
         return jsonResult;
     }
 
-    public static boolean CheckUserRole(String AccID, String Pk_Corp,
+    public static boolean CheckUserRole(@NonNull String AccID, @NonNull String Pk_Corp,
                                         String Fun_Code) {
         //return true;
 
@@ -364,10 +381,7 @@ public class Common {
             SimpleDateFormat sdf        = new SimpleDateFormat("yyyy-MM-dd");
             Date             dStartDate = sdf.parse(sStartDate);
             Date             dEndDate   = sdf.parse(sEndDate);
-            if (dStartDate.getTime() <= dEndDate.getTime())
-                return true;
-            else
-                return false;
+            return dStartDate.getTime() <= dEndDate.getTime();
         } catch (Exception ex) {
             return false;
         }

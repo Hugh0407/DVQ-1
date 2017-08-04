@@ -2,6 +2,8 @@ package com.techscan.dvq.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 /**
  * Created by XuHu on 2017/6/27.
@@ -96,7 +98,7 @@ public class SaleOutGoods implements Parcelable {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (this == obj)
             return true;
         if (obj == null)
@@ -217,7 +219,7 @@ public class SaleOutGoods implements Parcelable {
         this.vreceiveaddress = vreceiveaddress;
     }
 
-    protected SaleOutGoods(Parcel in) {
+    protected SaleOutGoods(@NonNull Parcel in) {
         invCode = in.readString();
         spec = in.readString();
         type = in.readString();
@@ -240,7 +242,7 @@ public class SaleOutGoods implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeString(invCode);
         dest.writeString(spec);
         dest.writeString(type);
@@ -268,11 +270,13 @@ public class SaleOutGoods implements Parcelable {
     }
 
     public static final Creator<SaleOutGoods> CREATOR = new Creator<SaleOutGoods>() {
+        @NonNull
         @Override
-        public SaleOutGoods createFromParcel(Parcel in) {
+        public SaleOutGoods createFromParcel(@NonNull Parcel in) {
             return new SaleOutGoods(in);
         }
 
+        @NonNull
         @Override
         public SaleOutGoods[] newArray(int size) {
             return new SaleOutGoods[size];
