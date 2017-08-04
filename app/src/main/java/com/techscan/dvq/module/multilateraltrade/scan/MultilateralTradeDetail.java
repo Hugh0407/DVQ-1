@@ -717,10 +717,8 @@ public class MultilateralTradeDetail extends Activity {
         FunctionName = "CommonQuery";
         if (ScanType.equals("¶à½ÇÃ³Ò×")) {
             try {
-                para.put("FunctionName", "GetSaleOutBodyNew");
-                para.put("BillCode", BillCode);
-                para.put("CSALEID", CSALEID);
-                para.put("CorpPK", "4100");
+                para.put("FunctionName", "GetAdjustOrderBillBody");
+                para.put("BILLID", CSALEID);
                 para.put("TableName", "dbBody");
                 Log.d(TAG, "GetBillBodyDetailInfo: " + BillCode);
             } catch (JSONException e) {

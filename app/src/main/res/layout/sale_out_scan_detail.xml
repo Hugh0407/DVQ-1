@@ -288,6 +288,35 @@
 
             </LinearLayout>
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_margin="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="99dp"
+                android:gravity="center_vertical"
+                android:text="是否拆包："
+                android:id="@+id/textView3" />
+
+            <ToggleButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@android:color/transparent"
+                android:button="@drawable/ios7_btn"
+                android:checked="false"
+                android:text=""
+                android:textOff=""
+                android:textOn=""
+                android:id="@+id/toggleButton" />
+
+
+        </LinearLayout>
 
     </LinearLayout>
 

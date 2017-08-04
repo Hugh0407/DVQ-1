@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -27,13 +28,14 @@ import com.techscan.dvq.GetInvBaseInfo;
 import com.techscan.dvq.ListWarehouse;
 import com.techscan.dvq.R;
 import com.techscan.dvq.R.id;
-import com.techscan.dvq.module.saleout.scan.SalesDeliveryDetail;
 import com.techscan.dvq.SerializableMap;
 import com.techscan.dvq.bean.SaleOutGoods;
 import com.techscan.dvq.common.Base64Encoder;
 import com.techscan.dvq.common.Common;
 import com.techscan.dvq.common.SaveThread;
+import com.techscan.dvq.common.Utils;
 import com.techscan.dvq.login.MainLogin;
+import com.techscan.dvq.module.saleout.scan.SalesDeliveryDetail;
 import com.techscan.dvq.writeTxt;
 
 import org.apache.http.ParseException;
@@ -983,7 +985,7 @@ public class SalesDelivery extends Activity {
                 para.put("FunctionName", "GetSaleOutHeadNew");
                 para.put("CSALEID", csaleid);
                 para.put("BillCode", tmpBillCode);
-                para.put("CorpPK", "4100");
+                para.put("CorpPK",  MainLogin.objLog.CompanyCode);
                 Log.d(TAG, "GetBillHeadDetailInfo: " + csaleid);
             }
             //¶à½ÇÃ³Ò× // TODO: 2017/7/31
@@ -2398,17 +2400,39 @@ public class SalesDelivery extends Activity {
                         if (invcode.equals(invcodeJ)&&batch.equals(batchJ)) {
                             double newValue = Double.parseDouble(box) + Double.parseDouble(boxJ);
                             JSONObject newObject = new JSONObject();
-                            arrayTemp.remove(j);
-                            newObject.put("invcode", invcode);
-                            newObject.put("batch", batch);
-                            newObject.put("invname", invname);
-                            newObject.put("serino", serino);
-                            newObject.put("sno", sno);
-                            newObject.put("invtype", invtype);
-                            newObject.put("invspec", invspec);
-                            newObject.put("vfree4", vfree4);
-                            newObject.put("box", String.valueOf(newValue));
-                            arrayTemp.put(newObject);
+
+                             if (Build.VERSION.SDK_INT >= 19) {
+                                 Log.d(TAG, "UUU: "+ Build.VERSION.SDK_INT +"");
+                                 Log.d(TAG, "UUU: "+ "111");
+//                                Toast.makeText(SalesDelivery.this,"api>19",Toast.LENGTH_SHORT).show();
+                                 arrayTemp.remove(j);
+                                 newObject.put("invcode", invcode);
+                                 newObject.put("batch", batch);
+                                 newObject.put("invname", invname);
+                                 newObject.put("serino", serino);
+                                 newObject.put("sno", sno);
+                                 newObject.put("invtype", invtype);
+                                 newObject.put("invspec", invspec);
+                                 newObject.put("vfree4", vfree4);
+                                 newObject.put("box", String.valueOf(newValue));
+                                 arrayTemp.put(newObject);
+                            }
+                             else{
+                                 Log.d(TAG, "UUU: "+ Build.VERSION.SDK_INT +"");
+                                 Log.d(TAG, "UUU: "+ "444");
+                                 Utils.removeJsonArray(j,arrayTemp);
+                                 newObject.put("invcode", invcode);
+                                 newObject.put("batch", batch);
+                                 newObject.put("invname", invname);
+                                 newObject.put("serino", serino);
+                                 newObject.put("sno", sno);
+                                 newObject.put("invtype", invtype);
+                                 newObject.put("invspec", invspec);
+                                 newObject.put("vfree4", vfree4);
+                                 newObject.put("box", String.valueOf(newValue));
+                                 arrayTemp.put(newObject);
+                            }
+
                             break;
                         }
 

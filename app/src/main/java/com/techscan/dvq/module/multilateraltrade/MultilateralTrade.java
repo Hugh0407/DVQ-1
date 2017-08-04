@@ -8,8 +8,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -21,13 +19,16 @@ import android.widget.Toast;
 import com.techscan.dvq.GetInvBaseInfo;
 import com.techscan.dvq.ListWarehouse;
 import com.techscan.dvq.R;
-import com.techscan.dvq.module.saleout.SaleChooseTime;
 import com.techscan.dvq.SerializableMap;
 import com.techscan.dvq.common.Base64Encoder;
 import com.techscan.dvq.common.Common;
+import com.techscan.dvq.common.RequestThread;
 import com.techscan.dvq.common.SaveThread;
+import com.techscan.dvq.common.Utils;
 import com.techscan.dvq.login.MainLogin;
+import com.techscan.dvq.module.materialOut.DepartmentListAct;
 import com.techscan.dvq.module.multilateraltrade.scan.MultilateralTradeDetail;
+import com.techscan.dvq.module.saleout.SaleChooseTime;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,42 +48,40 @@ import butterknife.OnClick;
 
 import static android.content.ContentValues.TAG;
 import static com.techscan.dvq.R.string.WangLuoChuXiangWenTi;
+import static com.techscan.dvq.common.Utils.HANDER_DEPARTMENT;
 import static com.techscan.dvq.common.Utils.HANDER_SAVE_RESULT;
 import static com.techscan.dvq.common.Utils.showResultDialog;
 
 public class MultilateralTrade extends Activity {
 
-    @Nullable
     @InjectView(R.id.txtMultilateralTrade)
     EditText txtMultilateralTrade;
-    @Nullable
     @InjectView(R.id.txtDocumentNumber)
     EditText txtDocumentNumber;
-    @Nullable
     @InjectView(R.id.imageDocumentNumber)
     ImageButton imageDocumentNumber;
-    @Nullable
     @InjectView(R.id.txtWareHouse)
     EditText txtWareHouse;
-    @Nullable
     @InjectView(R.id.imageWareHouse)
     ImageButton imageWareHouse;
-    @Nullable
-    @InjectView(R.id.txtCustomer)
-    EditText txtCustomer;
-    @Nullable
+    @InjectView(R.id.imageDepartment)
+    ImageButton imageDepartment;
+    @InjectView(R.id.txtOutCompany)
+    EditText txtOutCompany;
+    @InjectView(R.id.txtOutOrg)
+    EditText txtOutOrg;
+    @InjectView(R.id.txtInCompany)
+    EditText txtInCompany;
+    @InjectView(R.id.txtInOrg)
+    EditText txtInOrg;
     @InjectView(R.id.txtBillDate)
     EditText txtBillDate;
-    @Nullable
     @InjectView(R.id.txtDepartment)
     EditText txtDepartment;
-    @Nullable
     @InjectView(R.id.btnScan)
     Button btnScan;
-    @Nullable
     @InjectView(R.id.btnSave)
     Button btnSave;
-    @Nullable
     @InjectView(R.id.btnExit)
     Button btnExit;
 
@@ -94,43 +93,31 @@ public class MultilateralTrade extends Activity {
     private String tmpBillCode = "";
     private String tmpCustName = "";
     private String tmpBillDate = "";
-    String csaleid = "";
-    @NonNull
-    String CBIZTYPE          = "";
-    @NonNull
-    String CSALECORPID       = "";
-    @NonNull
-    String PK_CORP           = "";
-    @NonNull
-    String VDEF1             = "";
-    @NonNull
-    String VDEF2             = "";
-    @NonNull
-    String VDEF5             = "";
-    @NonNull
-    String CCUSTBASDOCID     ="";
-    @NonNull
-    String CRECEIVECUSTBASID ="";
-    @NonNull
-    String CCUSTOMERID       = "";
+    String CBILLID = "";
+    String CBIZTYPE = "";
+    String  CSALECORPID = "";
+    String PK_CORP = "";
+    String  VDEF1 = "";
+    String VDEF2 = "";
+    String VDEF5 = "";
+    String  CCUSTBASDOCID ="";
+    String  CRECEIVECUSTBASID ="";
+    String CCUSTOMERID = "";
     String CWAREHOUSEID = "";//仓库id
     String NTOTALNUMBER = "";
-    @NonNull
-            HashMap<String, String> checkInfo     = new HashMap<String, String>();
-    @Nullable
-    private ArrayList<String>       ScanedBarcode = new ArrayList<String>();
-    @Nullable
-    private JSONObject              jsonSaveHead  = null;
-    @Nullable
-    private JSONObject              jsonBillHead  = null;
-    @Nullable
-            JSONObject              table         = null;
-    @Nullable
-            JSONObject              jsBody        = null;
-    @Nullable
-            JSONObject              jsSerino      = null;
-    @Nullable
-    private JSONObject              jsTotal       =null;
+    String CDPTID = "";//部门id
+    String outCompany = "";//调出公司
+    String inCompany = "";//调入公司
+    String COUTCOMPANYID="";
+    String CINCOMPANYID="";
+    HashMap<String, String> checkInfo = new HashMap<String, String>();
+    private ArrayList<String> ScanedBarcode = new ArrayList<String>();
+    private JSONObject jsonSaveHead = null;
+    private JSONObject jsonBillHead = null;
+    JSONObject table = null;
+    JSONObject jsBody = null;
+    JSONObject jsSerino = null;
+    private JSONObject jsTotal=null;
     ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,12 +128,12 @@ public class MultilateralTrade extends Activity {
         ButterKnife.inject(this);
 //        txtCustomer.setFocusable(false);
 //        txtCustomer.setFocusableInTouchMode(false);
-//        txtBillDate.setFocusable(false);
-//        txtBillDate.setFocusableInTouchMode(false);
+        txtBillDate.setFocusable(false);
+        txtBillDate.setFocusableInTouchMode(false);
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 44) {
             if (resultCode == 4) {
                 if (data != null) {
@@ -174,10 +161,10 @@ public class MultilateralTrade extends Activity {
                             try {
                                 jsonSaveHead = new JSONObject();
                                 jsonSaveHead = Common.MapTOJSONOBject(mapBillInfo);
-                                CheckBillCode = jsonSaveHead.getString("BillCode");
+                                CheckBillCode = jsonSaveHead.getString("vbillcode");
                                 checkInfo.put("BillCode",CheckBillCode);
                                 SaleFlg = jsonSaveHead.getString("saleflg");
-                                BindingBillDetailInfo(mapBillInfo);
+//                                BindingBillDetailInfo(mapBillInfo);
                             } catch (Exception e) {
                                 Toast.makeText(MultilateralTrade.this, e.getMessage(), Toast.LENGTH_LONG).show();
                                 e.printStackTrace();
@@ -186,6 +173,7 @@ public class MultilateralTrade extends Activity {
                             try {
                                 //获得表头信息
                                 GetBillHeadDetailInfo(SaleFlg);
+//                                BindingBillDetailInfo(mapBillInfo);
                                 //获得表体信息
 //                                GetBillBodyDetailInfo(SaleFlg);
                             } catch (Exception e1) {
@@ -232,20 +220,37 @@ public class MultilateralTrade extends Activity {
                 CWAREHOUSEID = warehousePK1;
                 txtWareHouse.setText(warehouseName);
                 checkInfo.put("WHName",warehouseName);
+//                try {
+//                    //获得表头信息
+//                    GetBillHeadDetailInfo(SaleFlg);
+//                    //获得表体信息
+////                                GetBillBodyDetailInfo(SaleFlg);
+//                } catch (Exception e1) {
+//                    e1.printStackTrace();
+//                }
             }
 
+        }
+        else if (requestCode == 96 && resultCode == 4) {
+            String deptname   = data.getStringExtra("deptname");
+            String pk_deptdoc = data.getStringExtra("pk_deptdoc");
+            String deptcode   = data.getStringExtra("deptcode");
+            CDPTID = pk_deptdoc;
+//            department.requestFocus();
+            txtDepartment.setText(deptname);
+            checkInfo.put("Department", deptname);
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    @OnClick({R.id.imageDocumentNumber, R.id.imageWareHouse, R.id.btnScan, R.id.btnSave, R.id.btnExit})
-    public void onViewClicked(@NonNull View view) {
+    @OnClick({R.id.imageDocumentNumber, R.id.imageWareHouse,R.id.imageDepartment, R.id.btnScan, R.id.btnSave, R.id.btnExit})
+    public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.imageDocumentNumber:
                 try{
                     Intent intent = new Intent(MultilateralTrade.this, SaleChooseTime.class);
                     startActivityForResult(intent, 44);
-                    txtWareHouse.requestFocus();
+//                    txtWareHouse.requestFocus();
 
                 }catch (Exception e){
                     Toast.makeText(MultilateralTrade.this, WangLuoChuXiangWenTi, Toast.LENGTH_LONG).show();
@@ -261,12 +266,12 @@ public class MultilateralTrade extends Activity {
                         MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                         return;
                     }
-                    if (txtDocumentNumber.getText().toString() == null || txtDocumentNumber.getText().toString().equals("")) {
-                        Toast.makeText(MultilateralTrade.this, "没有选择单据号",
-                                Toast.LENGTH_LONG).show();
-                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                        return;
-                    }
+//                    if (txtDocumentNumber.getText().toString() == null || txtDocumentNumber.getText().toString().equals("")) {
+//                        Toast.makeText(MultilateralTrade.this, "没有选择单据号",
+//                                Toast.LENGTH_LONG).show();
+//                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                        return;
+//                    }
                     //获取仓库
                     btnWarehouseClick();
                 } catch (JSONException e) {
@@ -275,6 +280,10 @@ public class MultilateralTrade extends Activity {
                     MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                 }
                 break;
+            case R.id.imageDepartment:
+//              Toast.makeText(MultilateralTrade.this,"QQQ",Toast.LENGTH_SHORT).show();
+                btnReferDepartment();
+            break;
             case R.id.btnScan:
                 if (txtMultilateralTrade.getText().toString() == null || txtMultilateralTrade.getText().toString().equals("")) {
                     Toast.makeText(MultilateralTrade.this, "请输入来源单据",
@@ -343,7 +352,21 @@ public class MultilateralTrade extends Activity {
                 break;
         }
     }
-/**
+
+    /**
+     * 获取部门列表信息的网络请求
+     */
+    private void btnReferDepartment() {
+        HashMap<String, String> parameter = new HashMap<String, String>();
+        parameter.put("FunctionName", "GetDeptList");
+        parameter.put("CompanyCode", MainLogin.objLog.CompanyCode);
+        parameter.put("TableName", "department");
+        RequestThread requestThread = new RequestThread(parameter, mHandler, HANDER_DEPARTMENT);
+        Thread        td            = new Thread(requestThread);
+        td.start();
+    }
+
+    /**
  * 扫描按钮
  */
 
@@ -351,7 +374,7 @@ public class MultilateralTrade extends Activity {
         Intent intDeliveryScan = new Intent(MultilateralTrade.this, MultilateralTradeDetail.class);
         intDeliveryScan.putExtra("BillCode", tmpBillCode);
         intDeliveryScan.putExtra("PK_CORP", PK_CORP);
-        intDeliveryScan.putExtra("CSALEID", csaleid);
+        intDeliveryScan.putExtra("CBILLID", CBILLID);
         intDeliveryScan.putExtra("CWAREHOUSEID", CWAREHOUSEID);
         intDeliveryScan.putExtra("ScanType", txtMultilateralTrade.getText().toString());
         if (jsBody!=null){
@@ -374,7 +397,7 @@ public class MultilateralTrade extends Activity {
             bulider.setNegativeButton(R.string.QuXiao, null);
             bulider.setPositiveButton(R.string.QueRen, new DialogInterface.OnClickListener() {
                 @Override
-                public void onClick(@NonNull DialogInterface dialog, int which) {
+                public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
                     deleteInfo();
                     finish();
@@ -384,12 +407,12 @@ public class MultilateralTrade extends Activity {
 
     }
 
-//    private void initView(){
+    private void initView(){
 //        txtCustomer.setFocusable(false);
 //        txtCustomer.setFocusableInTouchMode(false);
-//        txtBillDate.setFocusable(false);
-//        txtBillDate.setFocusableInTouchMode(false);
-//    }
+        txtBillDate.setFocusable(false);
+        txtBillDate.setFocusableInTouchMode(false);
+    }
 
     /**
      * 打开订单列表画面
@@ -401,6 +424,7 @@ public class MultilateralTrade extends Activity {
             ViewGrid.putExtra("sBeginDate", sBeginDate);
             ViewGrid.putExtra("sBillCodes", sBillCodes);
             ViewGrid.putExtra("sEndDate", sEndDate);
+            ViewGrid.putExtra("whId",CWAREHOUSEID);
             startActivityForResult(ViewGrid, 88);
 
     }
@@ -408,16 +432,22 @@ public class MultilateralTrade extends Activity {
     /**
      * 绑定订单表头信息
      */
-    private boolean BindingBillDetailInfo(@NonNull Map<String, Object> mapBillInfo) {
-        csaleid = mapBillInfo.get("Csaleid").toString();
-        tmpBillCode = mapBillInfo.get("BillCode").toString();
-        tmpCustName = mapBillInfo.get("CustName").toString();
+    private boolean BindingBillDetailInfo(Map<String, Object> mapBillInfo) {
+        String outOrg = "";
+        String inOrg = "";
+        CBILLID = mapBillInfo.get("cbillid").toString();
+        COUTCOMPANYID = mapBillInfo.get("coutcompanyid").toString();
+        CINCOMPANYID = mapBillInfo.get("coincompanyid").toString();
+        tmpBillCode = mapBillInfo.get("vbillcode").toString();
+        outOrg = mapBillInfo.get("coutcompanyname").toString();
+        inOrg = mapBillInfo.get("coincompanycode").toString();
         tmpBillDate = mapBillInfo.get("BillDate").toString();
+        txtOutCompany.setText("");
+        txtOutOrg.setText(outOrg);
+        txtInCompany.setText("");
+        txtInOrg.setText(inOrg);
         txtDocumentNumber.setText(tmpBillCode);
-        txtCustomer.setText(tmpCustName);
         txtBillDate.setText(tmpBillDate);
-        txtCustomer.setFocusable(false);
-        txtCustomer.setFocusableInTouchMode(false);
         txtBillDate.setFocusable(false);
         txtBillDate.setFocusableInTouchMode(false);
         return true;
@@ -430,21 +460,17 @@ public class MultilateralTrade extends Activity {
     private void GetBillHeadDetailInfo(String sSaleFlg) {
         JSONObject para = new JSONObject();
         try {
-                para.put("FunctionName", "GetSaleOutHeadNew");
-                para.put("CSALEID", csaleid);
-                para.put("BillCode", tmpBillCode);
-                para.put("CorpPK", "4100");
-        } catch (JSONException e2) {
-            Toast.makeText(this, e2.getMessage(), Toast.LENGTH_LONG).show();
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            e2.printStackTrace();
-            return;
-        }
-        try {
+            para.put("FunctionName", "GetAdjustOrderBillHead");
+            para.put("BILLCODE", CheckBillCode);
+            para.put("COMPANYCODE",  MainLogin.objLog.CompanyCode);
+            para.put("WHID",CWAREHOUSEID);
+//            para.put("BillCode", tmpBillCode);
+            para.put("STORGCODE",  MainLogin.objLog.STOrgCode);
             para.put("TableName", "dbHead");
         } catch (JSONException e2) {
             Toast.makeText(this, e2.getMessage(), Toast.LENGTH_LONG).show();
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+            e2.printStackTrace();
             return;
         }
 
@@ -603,7 +629,7 @@ public class MultilateralTrade extends Activity {
     //保存数据
     private void SaveSaleOrder() throws JSONException,
             org.apache.http.ParseException, IOException {
-        if (txtMultilateralTrade.getText().toString().equals("销售出库")) {
+        if (txtMultilateralTrade.getText().toString().equals("多角贸易")) {
             table = new JSONObject();
             JSONArray arrayss = null;
             JSONArray arrayMerge = null;
@@ -624,34 +650,59 @@ public class MultilateralTrade extends Activity {
 //                map.put("NNUMBER",notnum);
                 NTOTALNUMBER = decimalFormat.format(notnum);
             }
-
-            Log.d(TAG, "GGGG: " + map.toString());
+//            ===表头
+//            COTHERCALBODYID == CINCBID
+//            COTHERCORPID == CINCORPID
+//            COTHERWHID == B.CINVWH ID
+//            COUTCALBODYID == COUTCBID
+//            COUTCORPID == COUTCORPID
+//            CWAREHOUSEID == 仓库ID
+//            DBILLDATE
+//            PK_CALBODY = '组织'
+//            PK_CORP = '公司'
+//            VBILLCODE = ''
+//            VUSERDEF1 = VDEF1
+//            VUSERDEF2 = VDEF2
             JSONObject tableHead = new JSONObject();
-            tableHead.put("RECEIVECODE", tmpBillCode);
-            tableHead.put("CBIZTYPE", CBIZTYPE);
-            tableHead.put("COPERATORID", MainLogin.objLog.UserID);
-            tableHead.put("CRECEIPTTYE", "4331");
-            tableHead.put("CSALECORPID", CSALECORPID);
-            tableHead.put("PK_CORP", MainLogin.objLog.STOrgCode);
-            tableHead.put("VBILLCODE", "");
-            String login_user = MainLogin.objLog.LoginUser.toString();
-            String cuserName = Base64Encoder.encode(login_user.getBytes("gb2312"));
-            tableHead.put("USERNAME", cuserName);
+            tableHead.put("COTHERCALBODYID", tmpBillCode);//对方库存组织PK
+            tableHead.put("COTHERCORPID", tmpBillCode);//对方公司ID
+            tableHead.put("COTHERWHID", tmpBillCode);//其它仓库ID
+            tableHead.put("COUTCALBODYID", tmpBillCode);//调出库存组织ID
+            tableHead.put("COUTCORPID", tmpBillCode);//调出公司ID
+
+            tableHead.put("CWAREHOUSEID", CWAREHOUSEID);//仓库id
+            tableHead.put("PK_CALBODY", MainLogin.objLog.STOrgCode);//组织
+            tableHead.put("PK_CORP", MainLogin.objLog.CompanyCode);//公司
+            tableHead.put("VBILLCODE", CheckBillCode);//单据号
             String vd1 = Base64Encoder.encode(VDEF1.getBytes("gb2312"));
             String vd2 = Base64Encoder.encode(VDEF2.getBytes("gb2312"));
-            String vd3 = Base64Encoder.encode(VDEF5.getBytes("gb2312"));
-            tableHead.put("VDEF1", vd1);
-            tableHead.put("VDEF2", vd2);
-            tableHead.put("VDEF5", vd3);
-            tableHead.put("NTOTALNUMBER", NTOTALNUMBER);
-            tableHead.put("NOTOTALNUMBER", "200.00");// TODO: 2017/7/4
+            tableHead.put("VUSERDEF1", vd1);//
+            tableHead.put("VUSERDEF2", vd2);//
+
+
+
+
+
+//            tableHead.put("RECEIVECODE", tmpBillCode);
+//            tableHead.put("CBIZTYPE", CBIZTYPE);
+//            tableHead.put("COPERATORID", MainLogin.objLog.UserID);
+//            tableHead.put("CRECEIPTTYE", "4331");
+//            tableHead.put("CSALECORPID", CSALECORPID);
+//            tableHead.put("PK_CORP", MainLogin.objLog.STOrgCode);
+//            tableHead.put("VBILLCODE", "");
+//            String login_user = MainLogin.objLog.LoginUser.toString();
+//            String cuserName = Base64Encoder.encode(login_user.getBytes("gb2312"));
+//            tableHead.put("USERNAME", cuserName);
+//            String vd3 = Base64Encoder.encode(VDEF5.getBytes("gb2312"));
+//            tableHead.put("VDEF5", vd3);
+//            tableHead.put("NTOTALNUMBER", NTOTALNUMBER);
             table.put("Head", tableHead);
             JSONObject tableBody = new JSONObject();
             JSONArray bodyArray = new JSONArray();
 
             JSONArray bodys = jsBody.getJSONArray("dbBody");
             JSONArray arraysSerino = jsTotal.getJSONArray("Serino");
-            int y = 0;
+//            int y = 0;
             for (int j = 0; j < arraysSerino.length(); j++) {
 
                 for (int i = 0; i < bodys.length(); i++) {
@@ -662,6 +713,33 @@ public class MultilateralTrade extends Activity {
                         DecimalFormat decimalFormat = new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
                         String totalBox = decimalFormat.format(box);//format 返回的是字符串
                         JSONObject object = new JSONObject();
+//
+//                        CBODYWAREHOUSEID = '仓库'
+//                        CFIRSTBILLBID == CBILL_BID
+//                        CFIRSTBILLHID == CBILLID
+//                        CFIRSTTYPE = CTYPECODE
+//                        CINVBASID = CINVBASID
+//                        CINVENTORYID = COUTINVID
+//                        CQUOTEUNITID = CQUOTEUNITID
+//                        CRECEIEVEID =
+//                                CRECEIVEAREAID = PK_ARRIVEAREA
+//                        CSOURCEBILLBID = CBILL_BID
+//                        CSOURCEBILLHID = CBILLID
+//                        CSOURCETYPE = CTYPECODE
+                        object.put("CBODYWAREHOUSEID", bodys.getJSONObject(i).getString("crowno"));//库存仓库
+                        object.put("CFIRSTBILLBID", bodys.getJSONObject(i).getString("crowno"));//源头单据表体ID
+                        object.put("CFIRSTBILLHID", bodys.getJSONObject(i).getString("crowno"));//源头单据表头ID
+                        object.put("CFIRSTTYPE", bodys.getJSONObject(i).getString("crowno"));//源头单据类型
+                        object.put("CINVBASID", bodys.getJSONObject(i).getString("crowno"));//存货基本ID
+                        object.put("CINVENTORYID", bodys.getJSONObject(i).getString("crowno"));//存货ID
+                        object.put("CQUOTEUNITID", bodys.getJSONObject(i).getString("crowno"));//报价计量单位ID
+                        object.put("CRECEIEVEID", bodys.getJSONObject(i).getString("crowno"));//收货单位
+                        object.put("CRECEIVEAREAID", bodys.getJSONObject(i).getString("crowno"));//收货地区
+                        object.put("CSOURCEBILLBID", bodys.getJSONObject(i).getString("crowno"));//来源单据表体序列号
+                        object.put("CSOURCEBILLHID", bodys.getJSONObject(i).getString("crowno"));//来源单据表头序列号
+                        object.put("CSOURCETYPE", bodys.getJSONObject(i).getString("crowno"));//来源单据类型
+
+
                         object.put("CROWNO", bodys.getJSONObject(i).getString("crowno"));
                         object.put("VFREE4", arraysSerino.getJSONObject(j).getString("vfree4"));//海关手册号
                         object.put("VSOURCEROWNO", bodys.getJSONObject(i).getString("crowno"));
@@ -688,7 +766,7 @@ public class MultilateralTrade extends Activity {
                         object.put("VRECEIVEADDRESS", adds);
                         object.put("VRECEIVEPERSON", MainLogin.objLog.LoginUser);
                         bodyArray.put(object);
-                        y++;
+//                        y++;
                     }
                 }
             }
@@ -714,12 +792,26 @@ public class MultilateralTrade extends Activity {
      * 网络请求后的线程通信
      * msg.obj 是从子线程传递过来的数据
      */
-    @NonNull
     Handler mHandler = new Handler() {
         @Override
-        public void handleMessage(@NonNull Message msg) {
+        public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
+                case HANDER_DEPARTMENT:
+                    JSONObject json = (JSONObject) msg.obj;
+                    try {
+                        if (json.getBoolean("Status")) {
+                            JSONArray  val  = json.getJSONArray("department");
+                            JSONObject temp = new JSONObject();
+                            temp.put("department", val);
+                            Intent ViewGrid = new Intent(MultilateralTrade.this, DepartmentListAct.class);
+                            ViewGrid.putExtra("myData", temp.toString());
+                            startActivityForResult(ViewGrid, 96);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    break;
                 case HANDER_SAVE_RESULT:
                     JSONObject saveResult = (JSONObject) msg.obj;
                     try {
@@ -765,15 +857,14 @@ public class MultilateralTrade extends Activity {
         txtWareHouse.setText("");
         txtDocumentNumber.setText("");
         txtBillDate.setText("");
-        txtCustomer.setText("");
+//        txtCustomer.setText("");
 
     }
 
     /**
      * 根据批次sku相同合并数量
      */
-    @NonNull
-    public  JSONArray merge(@NonNull JSONArray array) {
+    public  JSONArray merge(JSONArray array) {
 
         JSONArray arrayTemp = new JSONArray();
         int num = 0;
@@ -809,7 +900,12 @@ public class MultilateralTrade extends Activity {
                         if (invcode.equals(invcodeJ)&&batch.equals(batchJ)) {
                             double newValue = Double.parseDouble(box) + Double.parseDouble(boxJ);
                             JSONObject newObject = new JSONObject();
-                            arrayTemp.remove(j);
+//                            if (Build.VERSION.SDK_INT >= 19) {
+//                               arrayTemp.remove(j);
+//                            }else{
+//
+//                            }
+                            Utils.removeJsonArray(j,arrayTemp);
                             newObject.put("invcode", invcode);
                             newObject.put("batch", batch);
                             newObject.put("invname", invname);
@@ -844,6 +940,7 @@ public class MultilateralTrade extends Activity {
         Log.d(TAG, "DDDDD: "+arrayTemp.toString());
         return arrayTemp;
     }
+
 
     /**
      * 保存弹出提醒

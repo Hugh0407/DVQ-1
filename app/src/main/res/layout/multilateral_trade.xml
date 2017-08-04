@@ -18,8 +18,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="单据号"
+        android:textStyle="bold"
         android:textColor="@color/black"
-        android:textSize="16sp" />
+        android:textSize="19sp" />
      </LinearLayout>
         <LinearLayout
             android:layout_width="0dp"
@@ -46,20 +47,54 @@
             >
 
             <TextView
-                android:id="@+id/tvCustomer"
-                android:layout_width="match_parent"
+                android:id="@+id/tvCOutCompany1"
+                android:layout_width="0dp"
+                android:layout_weight="1.5"
                 android:layout_height="wrap_content"
-                android:text="客户"
+                android:text="调出组织:"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+            <TextView
+                android:id="@+id/tvCOutCompany"
+                android:layout_width="0dp"
+                android:layout_weight="3.5"
+                android:layout_height="wrap_content"
+                android:text="调出组织"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
-
         </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/listtransinlinear3"
+        android:layout_below="@+id/linearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <TextView
+        android:id="@+id/tvCInCompany1"
+        android:layout_width="0dp"
+            android:layout_weight="1.5"
+        android:layout_height="wrap_content"
+        android:text="调入组织:"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tvCInCompany"
+            android:layout_width="0dp"
+            android:layout_weight="3.5"
+            android:layout_height="wrap_content"
+            android:text="调入组织"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
 
 
+    </LinearLayout>
 
-        </LinearLayout>
+
+</LinearLayout>
 
 
 

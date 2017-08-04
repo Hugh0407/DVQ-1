@@ -31,8 +31,8 @@
                 android:layout_height="30dp"
                 android:layout_marginTop="5dp"
                 android:layout_weight="4.1"
+                android:layout_marginRight="5dp"
                 android:width="200dp"
-               android:layout_marginRight="5dp"
                 android:background="@drawable/edittext_style"
                 android:editable="false"
                 android:ems="10"
@@ -41,39 +41,6 @@
                 android:text="多角贸易"/>
 
 
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/tvSalesDelPDOrder"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="单 据 号"/>
-
-            <EditText
-                android:id="@+id/txtDocumentNumber"
-                android:layout_width="0dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="5dp"
-                android:layout_weight="4"
-                android:width="200dp"
-                android:background="@drawable/edittext_style"
-                android:editable="false"
-                android:ems="10"
-                android:singleLine="true"/>
-
-            <ImageButton
-                android:id="@+id/imageDocumentNumber"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:background="@drawable/browse"/>
         </LinearLayout>
 
         <LinearLayout
@@ -114,11 +81,43 @@
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/tvSalesDelPDOrder"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="部门"/>
+                android:text="单  据  号"/>
+
+            <EditText
+                android:id="@+id/txtDocumentNumber"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="4"
+                android:width="200dp"
+                android:background="@drawable/edittext_style"
+                android:editable="false"
+                android:ems="10"
+                android:singleLine="true"/>
+
+            <ImageButton
+                android:id="@+id/imageDocumentNumber"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="@drawable/browse"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="部       门"/>
 
             <EditText
                 android:id="@+id/txtDepartment"
@@ -132,12 +131,41 @@
                 android:ems="10"
                 android:singleLine="true"/>
 
-
             <ImageButton
                 android:id="@+id/imageDepartment"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:background="@drawable/browse"/>
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.9"
+                android:gravity="center"
+                android:text="调出公司"/>
+
+            <EditText
+                android:id="@+id/txtOutCompany"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="4.1"
+                android:layout_marginRight="5dp"
+                android:width="200dp"
+                android:background="@drawable/edittext_style"
+                android:editable="false"
+                android:ems="10"
+                android:singleLine="true"/>
+
+
         </LinearLayout>
 
         <LinearLayout
@@ -147,18 +175,77 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.085"
+                android:layout_weight="0.9"
                 android:gravity="center"
-                android:text="客  户"/>
+                android:text="调出组织"
+                android:id="@+id/textView2" />
 
             <EditText
-                android:id="@+id/txtCustomer"
+                android:id="@+id/txtOutOrg"
                 android:layout_width="0dp"
                 android:layout_height="30dp"
                 android:layout_marginTop="5dp"
-                android:layout_weight="0.95"
+                android:layout_weight="4.1"
+                android:layout_marginRight="0.5dp"
+                android:width="200dp"
+                android:background="@drawable/edittext_style"
+                android:editable="false"
+                android:ems="10"
+                android:singleLine="true"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="6dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.9"
+                android:gravity="center"
+                android:text="调入公司"/>
+
+            <EditText
+                android:id="@+id/txtInCompany"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="4.1"
+                android:layout_marginRight="0.5dp"
+                android:width="200dp"
+                android:background="@drawable/edittext_style"
+                android:editable="false"
+                android:ems="10"
+                android:singleLine="true"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="6dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.9"
+                android:gravity="center"
+                android:text="调入组织"/>
+
+            <EditText
+                android:id="@+id/txtInOrg"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="4.1"
+                android:layout_marginRight="0.5dp"
+                android:width="200dp"
                 android:background="@drawable/edittext_style"
                 android:ems="10"
                 android:singleLine="true"/>
@@ -172,10 +259,10 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_weight="0.9"
                 android:gravity="center"
-                android:layout_weight="0.01"
                 android:text="单据日期"/>
 
 
@@ -184,8 +271,11 @@
                 android:layout_width="0dp"
                 android:layout_height="30dp"
                 android:layout_marginTop="5dp"
-                android:layout_weight="0.99"
+                android:layout_weight="4.1"
+                android:layout_marginRight="0.5dp"
+                android:width="200dp"
                 android:background="@drawable/edittext_style"
+                android:editable="false"
                 android:ems="10"
                 android:singleLine="true"/>
 
