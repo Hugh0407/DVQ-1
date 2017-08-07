@@ -49,11 +49,11 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-import static com.techscan.dvq.R.id.organization;
-import static com.techscan.dvq.R.id.wh;
 import static com.techscan.dvq.common.Utils.HANDER_DEPARTMENT;
 import static com.techscan.dvq.common.Utils.HANDER_SAVE_RESULT;
 import static com.techscan.dvq.common.Utils.HANDER_STORG;
+import static com.techscan.dvq.common.Utils.ORG_NAME;
+import static com.techscan.dvq.common.Utils.PK_CALBODY;
 import static com.techscan.dvq.common.Utils.showResultDialog;
 import static com.techscan.dvq.common.Utils.showToast;
 
@@ -113,7 +113,6 @@ public class OtherOutAct extends Activity {
     String CDISPATCHERID = "";//收发类别code
     String CDPTID        = "";  //部门id
     String CWAREHOUSEID  = "";    //库存组织
-    String PK_CALBODY    = "";      //仓库id
     String CUSER;   //登录员工id
     String PK_CORP;         //公司
     String VBILLCOD;        //单据号
@@ -201,6 +200,7 @@ public class OtherOutAct extends Activity {
         edLeiBie.setOnKeyListener(mOnKeyListener);
         edDep.setOnKeyListener(mOnKeyListener);
         checkInfo = new HashMap<String, String>();
+        edOrg.setText(ORG_NAME);
     }
 
     @Override
@@ -219,7 +219,7 @@ public class OtherOutAct extends Activity {
             CWAREHOUSEID = warehousePK1;
             edWh.requestFocus();
             edWh.setText(warehouseName);
-            edOrg.requestFocus();
+            edLeiBie.requestFocus();
             checkInfo.put("Warehouse", warehouseName);
         }
         //材料出库库存组织的回传数据 <----StorgListAct.class
@@ -230,7 +230,6 @@ public class OtherOutAct extends Activity {
             edOrg.requestFocus();
             edOrg.setText(bodyname);
             edLeiBie.requestFocus();
-            PK_CALBODY = pk_calbody;
             checkInfo.put("Organization", bodyname);
         }
         // 收发类别的回传数据 <----VlistRdcl.class
@@ -421,6 +420,14 @@ public class OtherOutAct extends Activity {
     }
 
     private boolean isAllEdNotEmpty() {
+
+//        if (vFree4.equals("Y")) {
+//            if (TextUtils.isEmpty(mEdManual.getText().toString())) {
+//                showToast(activity, "海关手册号不可为空");
+//                return false;
+//            }
+//        }
+
         return (!TextUtils.isEmpty(edBillNum.getText().toString())
                 && !TextUtils.isEmpty(edBillDate.getText().toString())
                 && !TextUtils.isEmpty(edWh.getText().toString())
@@ -463,11 +470,11 @@ public class OtherOutAct extends Activity {
             edWh.requestFocus();
             return false;
         }
-        if (!edOrg.getText().toString().equals(checkInfo.get("Organization"))) {
-            showToast(activity, "组织信息不正确");
-            edOrg.requestFocus();
-            return false;
-        }
+//        if (!edOrg.getText().toString().equals(checkInfo.get("Organization"))) {
+//            showToast(activity, "组织信息不正确");
+//            edOrg.requestFocus();
+//            return false;
+//        }
         if (!edLeiBie.getText().toString().equals(checkInfo.get("LeiBie"))) {
             showToast(activity, "收发类别信息不正确");
             edLeiBie.requestFocus();
@@ -625,14 +632,14 @@ public class OtherOutAct extends Activity {
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
                 switch (v.getId()) {
                     case R.id.bill_num:
-                        edBillNum.requestFocus();
+                        edWh.requestFocus();
                         return true;
-                    case wh:
-                        edOrg.requestFocus();
-                        return true;
-                    case organization:
+                    case R.id.wh:
                         edLeiBie.requestFocus();
                         return true;
+//                    case organization:
+//                        edLeiBie.requestFocus();
+//                        return true;
                     case R.id.lei_bie:
                         edDep.requestFocus();
                         return true;

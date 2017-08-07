@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -23,12 +22,12 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.techscan.dvq.common.Common;
 import com.techscan.dvq.ListWarehouse;
 import com.techscan.dvq.R;
 import com.techscan.dvq.VlistRdcl;
 import com.techscan.dvq.bean.Goods;
 import com.techscan.dvq.common.Base64Encoder;
+import com.techscan.dvq.common.Common;
 import com.techscan.dvq.common.RequestThread;
 import com.techscan.dvq.common.SaveThread;
 import com.techscan.dvq.common.Utils;
@@ -53,6 +52,8 @@ import butterknife.OnClick;
 import static com.techscan.dvq.common.Utils.HANDER_DEPARTMENT;
 import static com.techscan.dvq.common.Utils.HANDER_SAVE_RESULT;
 import static com.techscan.dvq.common.Utils.HANDER_STORG;
+import static com.techscan.dvq.common.Utils.ORG_NAME;
+import static com.techscan.dvq.common.Utils.PK_CALBODY;
 import static com.techscan.dvq.common.Utils.showResultDialog;
 import static com.techscan.dvq.common.Utils.showToast;
 
@@ -108,10 +109,9 @@ public class MaterialOutAct extends Activity {
     List<Goods> tempList;
     HashMap<String, String> checkInfo;
 
-    String CDISPATCHERID     = "";//收发类别code
-    String CDPTID            = "";  //部门id
-    String CWAREHOUSEID      = "";    //库存组织
-    String PK_CALBODY        = "";      //仓库id
+    String CDISPATCHERID = "";//收发类别code
+    String CDPTID        = "";  //部门id
+    String CWAREHOUSEID  = "";    //库存组织
     String CUSER;   //登录员工id
     String PK_CORP;         //公司
     String VBILLCOD;        //单据号
@@ -148,7 +148,7 @@ public class MaterialOutAct extends Activity {
      * @param view
      */
     @OnClick({R.id.bill_date, R.id.btn_scan, R.id.refer_wh, R.id.refer_organization, R.id.refer_lei_bie, R.id.refer_department, R.id.btn_save, R.id.btn_back})
-    public void onViewClicked(@NonNull View view) {
+    public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.refer_wh:
                 btnWarehouseClick();
@@ -163,7 +163,6 @@ public class MaterialOutAct extends Activity {
                 if (isAllEdNotEmpty()) {
                     Intent in = new Intent(mActivity, MaterialOutScanAct.class);
                     in.putExtra("CWAREHOUSEID", CWAREHOUSEID);
-                    in.putExtra("PK_CALBODY", PK_CALBODY);
                     startActivityForResult(in, 95);
                     if (tempList != null) {
                         tempList.clear();
@@ -189,7 +188,7 @@ public class MaterialOutAct extends Activity {
                     bulider.setNegativeButton(R.string.QuXiao, null);
                     bulider.setPositiveButton(R.string.QueRen, new DialogInterface.OnClickListener() {
                         @Override
-                        public void onClick(@NonNull DialogInterface dialog, int which) {
+                        public void onClick(DialogInterface dialog, int which) {
                             MaterialOutScanAct.ovList.clear();
                             MaterialOutScanAct.detailList.clear();
                             dialog.dismiss();
@@ -216,7 +215,7 @@ public class MaterialOutAct extends Activity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @NonNull Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         //仓库的回传数据 <----ListWarehouse.class
         if (requestCode == 97 && resultCode == 13) {
@@ -226,7 +225,7 @@ public class MaterialOutAct extends Activity {
             CWAREHOUSEID = warehousePK1;
             wh.requestFocus();
             wh.setText(warehouseName);
-            organization.requestFocus();
+            leiBie.requestFocus();
             checkInfo.put("Warehouse", warehouseName);
         }
         //材料出库库存组织的回传数据 <----StorgListAct.class
@@ -237,7 +236,6 @@ public class MaterialOutAct extends Activity {
             organization.requestFocus();
             organization.setText(bodyname);
             leiBie.requestFocus();
-            PK_CALBODY = pk_calbody;
             checkInfo.put("Organization", bodyname);
         }
         // 收发类别的回传数据 <----VlistRdcl.class
@@ -297,6 +295,7 @@ public class MaterialOutAct extends Activity {
         leiBie.setOnKeyListener(mOnKeyListener);
         department.setOnKeyListener(mOnKeyListener);
         checkInfo = new HashMap<String, String>();
+        organization.setText(ORG_NAME);
     }
 
     /**
@@ -306,7 +305,7 @@ public class MaterialOutAct extends Activity {
     @Nullable
     Handler mHandler = new Handler() {
         @Override
-        public void handleMessage(@NonNull Message msg) {
+        public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
                 case HANDER_DEPARTMENT:
@@ -391,11 +390,11 @@ public class MaterialOutAct extends Activity {
             wh.requestFocus();
             return false;
         }
-        if (!organization.getText().toString().equals(checkInfo.get("Organization"))) {
-            showToast(mActivity, "组织信息不正确");
-            organization.requestFocus();
-            return false;
-        }
+//        if (!organization.getText().toString().equals(checkInfo.get("Organization"))) {
+//            showToast(mActivity, "组织信息不正确");
+//            organization.requestFocus();
+//            return false;
+//        }
         if (!leiBie.getText().toString().equals(checkInfo.get("LeiBie"))) {
             showToast(mActivity, "收发类别信息不正确");
             leiBie.requestFocus();
@@ -475,7 +474,7 @@ public class MaterialOutAct extends Activity {
      *
      * @param goodsList
      */
-    private void saveInfo(@NonNull List<Goods> goodsList) {
+    private void saveInfo(List<Goods> goodsList) {
 
         try {
             final JSONObject table     = new JSONObject();
@@ -621,7 +620,6 @@ public class MaterialOutAct extends Activity {
     }
 
 
-    @NonNull
     private DatePickerDialog.OnDateSetListener Datelistener    = new DatePickerDialog.OnDateSetListener() {
         /**params：view：该事件关联的组件
          * params：myyear：当前选择的年
@@ -659,22 +657,22 @@ public class MaterialOutAct extends Activity {
     /**
      * 回车键的点击事件
      */
-    @NonNull
+
     View.OnKeyListener mOnKeyListener = new View.OnKeyListener() {
 
         @Override
-        public boolean onKey(@NonNull View v, int keyCode, @NonNull KeyEvent event) {
+        public boolean onKey(View v, int keyCode, KeyEvent event) {
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
                 switch (v.getId()) {
                     case R.id.bill_num:
-                        billDate.requestFocus();
+                        wh.requestFocus();
                         return true;
                     case R.id.wh:
-                        organization.requestFocus();
-                        return true;
-                    case R.id.organization:
                         leiBie.requestFocus();
                         return true;
+//                    case R.id.organization:
+//                        leiBie.requestFocus();
+//                        return true;
                     case R.id.lei_bie:
                         department.requestFocus();
                         return true;

@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -55,6 +54,8 @@ import butterknife.OnClick;
 import static com.techscan.dvq.common.Utils.HANDER_DEPARTMENT;
 import static com.techscan.dvq.common.Utils.HANDER_SAVE_RESULT;
 import static com.techscan.dvq.common.Utils.HANDER_STORG;
+import static com.techscan.dvq.common.Utils.ORG_NAME;
+import static com.techscan.dvq.common.Utils.PK_CALBODY;
 import static com.techscan.dvq.common.Utils.showResultDialog;
 import static com.techscan.dvq.common.Utils.showToast;
 
@@ -109,14 +110,13 @@ public class OtherInAct extends Activity {
     String CDPTID = "";  //部门id
     String CUSER;   //登录员工id
     String CWAREHOUSEID = "";    //库存组织
-    String PK_CALBODY   = "";      //仓库id
     String PK_CORP;         //公司
     String VBILLCOD;        //单据号
     int    year;
 
-    int                     month;
-    int                     day;
-    Calendar                mycalendar;
+    int      month;
+    int      day;
+    Calendar mycalendar;
     @Nullable
     List<Goods> tempList;
     HashMap<String, String> checkInfo;
@@ -141,7 +141,7 @@ public class OtherInAct extends Activity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @NonNull Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         //仓库的回传数据 <----ListWarehouse.class
         if (requestCode == 97 && resultCode == 13) {
@@ -151,7 +151,7 @@ public class OtherInAct extends Activity {
             CWAREHOUSEID = warehousePK1;
             edWh.requestFocus();
             edWh.setText(warehouseName);
-            edOrganization.requestFocus();
+            edLeiBie.requestFocus();
             checkInfo.put("Warehouse", warehouseName);
         }
         //材料出库库存组织的回传数据 <----StorgListAct.class
@@ -162,7 +162,6 @@ public class OtherInAct extends Activity {
             edOrganization.requestFocus();
             edOrganization.setText(bodyname);
             edLeiBie.requestFocus();
-            PK_CALBODY = pk_calbody;
             checkInfo.put("Organization", bodyname);
         }
         // 收发类别的回传数据 <----VlistRdcl.class
@@ -213,12 +212,13 @@ public class OtherInAct extends Activity {
         edLeiBie.setOnKeyListener(mOnKeyListener);
         edDepartment.setOnKeyListener(mOnKeyListener);
         checkInfo = new HashMap<String, String>();
+        edOrganization.setText(ORG_NAME);
     }
 
     @OnClick({R.id.ed_bill_date, R.id.btn_refer_wh, R.id.btn_refer_organization,
             R.id.btn_refer_lei_bie, R.id.btn_refer_department, R.id.btn_scan, R.id.btn_save,
             R.id.btn_back})
-    public void onViewClicked(@NonNull View view) {
+    public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ed_bill_date:
                 year = mycalendar.get(Calendar.YEAR); //获取Calendar对象中的年
@@ -273,7 +273,7 @@ public class OtherInAct extends Activity {
                     bulider.setNegativeButton(R.string.QuXiao, null);
                     bulider.setPositiveButton(R.string.QueRen, new DialogInterface.OnClickListener() {
                         @Override
-                        public void onClick(@NonNull DialogInterface dialog, int which) {
+                        public void onClick(DialogInterface dialog, int which) {
                             OtherInScanAct.ovList.clear();
                             OtherInScanAct.detailList.clear();
                             dialog.dismiss();
@@ -296,7 +296,7 @@ public class OtherInAct extends Activity {
     @Nullable
     Handler mHandler = new Handler() {
         @Override
-        public void handleMessage(@NonNull Message msg) {
+        public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
                 case HANDER_DEPARTMENT:
@@ -383,11 +383,11 @@ public class OtherInAct extends Activity {
             edWh.requestFocus();
             return false;
         }
-        if (!edOrganization.getText().toString().equals(checkInfo.get("Organization"))) {
-            showToast(mActivity, "组织信息不正确");
-            edOrganization.requestFocus();
-            return false;
-        }
+//        if (!edOrganization.getText().toString().equals(checkInfo.get("Organization"))) {
+//            showToast(mActivity, "组织信息不正确");
+//            edOrganization.requestFocus();
+//            return false;
+//        }
         if (!edLeiBie.getText().toString().equals(checkInfo.get("LeiBie"))) {
             showToast(mActivity, "收发类别信息不正确");
             edLeiBie.requestFocus();
@@ -408,7 +408,7 @@ public class OtherInAct extends Activity {
      * @param goodsList
      * @throws JSONException
      */
-    private void saveInfo(@NonNull List<Goods> goodsList) throws JSONException, UnsupportedEncodingException {
+    private void saveInfo(List<Goods> goodsList) throws JSONException, UnsupportedEncodingException {
         final JSONObject table     = new JSONObject();
         JSONObject       tableHead = new JSONObject();
         tableHead.put("CDISPATCHERID", CDISPATCHERID);
@@ -615,7 +615,6 @@ public class OtherInAct extends Activity {
     }
 
 
-    @NonNull
     private DatePickerDialog.OnDateSetListener Datelistener = new DatePickerDialog.OnDateSetListener() {
         /**params：view：该事件关联的组件
          * params：myyear：当前选择的年
@@ -640,7 +639,7 @@ public class OtherInAct extends Activity {
 
     };
 
-    @NonNull
+
     private View.OnFocusChangeListener myFocusListener = new View.OnFocusChangeListener() {
         @Override
         public void onFocusChange(View view, boolean hasFocus) {
@@ -653,22 +652,22 @@ public class OtherInAct extends Activity {
     /**
      * 回车键的点击事件
      */
-    @NonNull
-            View.OnKeyListener         mOnKeyListener  = new View.OnKeyListener() {
+
+    View.OnKeyListener mOnKeyListener = new View.OnKeyListener() {
 
         @Override
-        public boolean onKey(@NonNull View v, int keyCode, @NonNull KeyEvent event) {
+        public boolean onKey(View v, int keyCode, KeyEvent event) {
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
                 switch (v.getId()) {
                     case R.id.bill_num:
-                        edBillDate.requestFocus();
+                        edWh.requestFocus();
                         return true;
                     case R.id.wh:
-                        edOrganization.requestFocus();
-                        return true;
-                    case R.id.organization:
                         edLeiBie.requestFocus();
                         return true;
+//                    case R.id.organization:
+//                        edLeiBie.requestFocus();
+//                        return true;
                     case R.id.lei_bie:
                         edDepartment.requestFocus();
                         return true;

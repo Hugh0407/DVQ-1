@@ -96,14 +96,14 @@ public class ProductInScanAct extends Activity {
     EditText mEdNum;
 
     @NonNull
-                  String      TAG        = "MaterialOutScanAct";
+    String TAG = "MaterialOutScanAct";
     @NonNull
     public static List<Goods> detailList = new ArrayList<Goods>();
     @NonNull
     public static List<Goods> ovList     = new ArrayList<Goods>();
     @Nullable
     Activity mActivity;
-
+    String vFree4 = ""; // 海关手册号
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -425,6 +425,14 @@ public class ProductInScanAct extends Activity {
      * 海关手册号 没有做校验
      */
     private boolean isAllEdNotNull() {
+
+        if (vFree4.equals("Y")) {
+            if (TextUtils.isEmpty(mEdManual.getText().toString())) {
+                showToast(mActivity, "海关手册号不可为空");
+                return false;
+            }
+        }
+
         if (!TextUtils.isEmpty(mEdBarCode.getText())
                 && !TextUtils.isEmpty(mEdEncoding.getText())
                 && !TextUtils.isEmpty(mEdName.getText())
@@ -485,12 +493,14 @@ public class ProductInScanAct extends Activity {
                     map.put("invtype", tempJso.getString("invtype"));   //型号
                     map.put("invspec", tempJso.getString("invspec"));   //规格
                     map.put("oppdimen", tempJso.getString("oppdimen"));   //重量
+                    map.put("isfree4", tempJso.getString("isfree4"));
                 }
                 if (map != null) {
                     mEdName.setText(map.get("invname").toString());
                     mEdUnit.setText(map.get("measname").toString());
                     mEdType.setText(map.get("invtype").toString());
                     mEdSpectype.setText(map.get("invspec").toString());
+                    vFree4 = map.get("isfree4").toString();
                 }
 
             }
@@ -597,9 +607,11 @@ public class ProductInScanAct extends Activity {
 
                         float weight = Float.valueOf(mEdWeight.getText().toString());
                         mEdQty.setText(String.valueOf(num * weight));
-                        addDataToDetailList();
-                        mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
-                        changeAllEdTextToEmpty();
+                        if (isAllEdNotNull()) {
+                            addDataToDetailList();
+                            mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
+                            changeAllEdTextToEmpty();
+                        }
                         return true;
                     case R.id.ed_manual:
                         if (isAllEdNotNull()) {

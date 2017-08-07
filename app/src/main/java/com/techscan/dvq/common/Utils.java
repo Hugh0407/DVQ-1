@@ -20,7 +20,8 @@ import java.util.regex.Pattern;
  */
 
 public class Utils {
-
+    public static final String PK_CALBODY = "1011TC100000000000KV"; //库存组织id
+    public static final String ORG_NAME = "华奇工厂库存组织"; //库存组织id
     public static final int HANDER_DEPARTMENT   = 1;
     public static final int HANDER_STORG        = 2;
     public static final int HANDER_SAVE_RESULT  = 3;

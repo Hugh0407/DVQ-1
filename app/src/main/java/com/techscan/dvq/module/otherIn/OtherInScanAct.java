@@ -107,9 +107,9 @@ public class OtherInScanAct extends Activity {
     Activity mActivity;
 
     String CWAREHOUSEID = "";
-
-    String PK_CALBODY = "";
-    String BATCH      = "";
+    String vFree4       = "";
+    String PK_CALBODY   = "";
+    String BATCH        = "";
 
 
     @Override
@@ -589,13 +589,15 @@ public class OtherInScanAct extends Activity {
                     pk_invmandoc = tempJso.getString("pk_invmandoc");
                     map.put("invtype", tempJso.getString("invtype"));   //型号
                     map.put("invspec", tempJso.getString("invspec"));   //规格
-                    map.put("oppdimen", tempJso.getString("oppdimen"));   //重量
+                    map.put("oppdimen", tempJso.getString("opzpdimen"));   //重量
+                    map.put("isfree4", tempJso.getString("isfree4"));
                 }
                 if (map != null) {
                     edName.setText(map.get("invname").toString());
                     edUnit.setText(map.get("measname").toString());
                     edType.setText(map.get("invtype").toString());
                     edSpectype.setText(map.get("invspec").toString());
+                    vFree4 = map.get("isfree4").toString();
                 }
 
             }
