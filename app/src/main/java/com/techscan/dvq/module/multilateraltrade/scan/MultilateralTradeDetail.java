@@ -8,8 +8,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -55,94 +53,65 @@ public class MultilateralTradeDetail extends Activity {
     String CALBODYID ="";
     String CINVBASID = "";
     String INVENTORYID = "";
-    @Nullable
     String CORP = MainLogin.objLog.STOrgCode;
     String WAREHOUSEID = "";
     String ScanType = "";
     String BillCode = "";
     String CBILLID = "";
     String PK_CORP = "";
-    @Nullable
     JSONObject jsBody;
     JSONObject jsBoxTotal;
     JSONObject jsSerino;
     JSONObject jsTotal;
-    @NonNull
+    String CINWHID = "";
     String weight = "";
-    @NonNull
     String num    = "";
     Double number;
     Double ntotaloutinvnum;
-    @Nullable
     @InjectView(R.id.TextView31)
     TextView TextView31;
-    @Nullable
     @InjectView(R.id.txtBarcode)
     EditText txtBarcode;
-    @Nullable
     @InjectView(R.id.TextView33)
     TextView TextView33;
-    @Nullable
     @InjectView(R.id.txtSaleInvCode)
     EditText txtSaleInvCode;
-    @Nullable
     @InjectView(R.id.txtSaleInvName)
     EditText txtSaleInvName;
-    @Nullable
     @InjectView(R.id.txtSaleType)
     EditText txtSaleType;
-    @Nullable
     @InjectView(R.id.txtSaleSpec)
     EditText txtSaleSpec;
-    @Nullable
     @InjectView(R.id.txtSaleBatch)
     EditText txtSaleBatch;
-    @Nullable
     @InjectView(R.id.txtSaleNumber)
     EditText txtSaleNumber;
-    @Nullable
     @InjectView(R.id.txtSaleWeight)
     EditText txtSaleWeight;
-    @Nullable
     @InjectView(R.id.txtSaleTotal)
     EditText txtSaleTotal;
-    @Nullable
     @InjectView(R.id.txtSaleUnit)
     EditText txtSaleUnit;
-    @Nullable
     @InjectView(R.id.tvSalecount)
     TextView tvSalecount;
-    @Nullable
     @InjectView(R.id.btnTask)
     Button btnTask;
-    @Nullable
     @InjectView(R.id.btnDetail)
     Button btnDetail;
-    @Nullable
     @InjectView(R.id.btnReturn)
     Button btnReturn;
-    @Nullable
     @InjectView(R.id.txtSaleCustoms)
     EditText txtSaleCustoms;
 
-    @Nullable
     private GetMultilateralTradeBaseInfo objSaleBaseInfo   = null;
-    @Nullable
     private HashMap<String, Object>      m_mapSaleBaseInfo = null;
-    @Nullable
     private SplitBarcode                 m_cSplitBarcode   = null;
     private ArrayList<String>            ScanedBarcode     = new ArrayList<String>();
-    @Nullable
             List<Map<String, Object>>    lstTaskBody       = null;
-    @Nullable
     private AlertDialog                  DeleteButton      = null;
-    @Nullable
     private AlertDialog                  SelectButton      = null;
-    @NonNull
     private ButtonOnClick                buttonDelOnClick  = new ButtonOnClick(0);
-    @Nullable
             SimpleAdapter                listItemAdapter   =null;
-    @Nullable
             SimpleAdapter                listTaskAdapter   =null;
 
     @Override
@@ -204,9 +173,16 @@ public class MultilateralTradeDetail extends Activity {
                         .getString("nnum");
                 String ntotalnum = ((JSONObject) (arrays.get(i)))
                         .getString("nullnum");
+//                if (!TextUtils.isEmpty(ntotalnum)){
+//                    ntotalnum = "0";
+//                }
+//                if (TextUtils.isEmpty(ntotalnum)){
+//                    ntotalnum = "0";
+//                }
                 number = number + Double.valueOf(totalNumber);
                 if (!ntotalnum.toLowerCase().equals("null") && !ntotalnum.isEmpty())
                     ntotaloutinvnum = ntotaloutinvnum + Double.valueOf(ntotalnum);
+
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -220,10 +196,10 @@ public class MultilateralTradeDetail extends Activity {
 
     }
 
-    @NonNull
+
     private View.OnKeyListener myTxtListener = new View.OnKeyListener() {
         @Override
-        public boolean onKey(@NonNull View v, int keyCode, @NonNull KeyEvent event) {
+        public boolean onKey(View v, int keyCode,  KeyEvent event) {
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
                 switch (v.getId()) {
                     case R.id.txtBarcode:
@@ -233,7 +209,7 @@ public class MultilateralTradeDetail extends Activity {
                         return true;
 //                    case R.id.txtSaleCustoms:
 //                        if (TextUtils.isEmpty(txtSaleNumber.getText())){
-//                            Utils.showToast(SalesDeliveryDetail.this, "请输入海关手册号");
+//                            Utils.sh owToast(SalesDeliveryDetail.this, "请输入海关手册号");
 //                            txtSaleCustoms.requestFocus();
 //                            return false;
 //                        }
@@ -352,14 +328,14 @@ public class MultilateralTradeDetail extends Activity {
      * @param str
      * @return
      */
-    public boolean isNumber(@NonNull String str) {
+    public boolean isNumber( String str) {
         Pattern pattern = Pattern.compile("[0-9]*");
         Matcher isNum = pattern.matcher(str);
         return isNum.matches();
     }
 
 
-    private boolean ScanDetail(@Nullable String Scanbarcode) {
+    private boolean ScanDetail(String Scanbarcode) {
         if (Scanbarcode == null || Scanbarcode.equals(""))
             return false;
 
@@ -424,10 +400,10 @@ public class MultilateralTradeDetail extends Activity {
      * 网络请求后的线程通信
      * msg.obj 是从子线程传递过来的数据
      */
-    @NonNull
+
     Handler mHandler = new Handler() {
         @Override
-        public void handleMessage(@NonNull Message msg) {
+        public void handleMessage( Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
                 case 1:
@@ -555,9 +531,20 @@ public class MultilateralTradeDetail extends Activity {
                     // 寻找到了对应存货
                     Double doneqty = 0.0;
                     if (!temp.getString("nullnum").isEmpty() && !temp.getString("nullnum").toLowerCase().equals("null")) {
-                        doneqty = temp.getDouble("nullnum");
+                    String ntotalnum = temp.getString("nullnum");
+//                    if (!TextUtils.isEmpty(ntotalnum)){
+//                        ntotalnum = "0";
+//                    }
+//                    if (TextUtils.isEmpty(ntotalnum)){
+//                        ntotalnum = "0";
+//                    }
+//                    if (ntotalnum==null){
+//                        ntotalnum = "0";
+//                    }
+//                        doneqty = temp.getDouble(ntotalnum);
+                        doneqty = Double.valueOf(ntotalnum);
                         doneqty = doneqty + Double.parseDouble(txtSaleTotal.getText().toString());
-                        Log.d(TAG, "ScanedToGet: " + doneqty.toString());
+                        Log.d(TAG, "SSS: " + doneqty.toString());
                         if (doneqty > temp.getInt("nnum")) {
                             Toast.makeText(this, "这个存货已经超过应发数量了,不允出库!",
                                     Toast.LENGTH_LONG).show();
@@ -606,9 +593,20 @@ public class MultilateralTradeDetail extends Activity {
                         .getString("nnum");
                 String sinnum = ((JSONObject) (arrays.get(i)))
                         .getString("nullnum");
+                Log.d(TAG, "SSS: "+sinnum);
+//                if (sinnum==null){
+//                    sinnum = "0";
+//                }
+//                if (!TextUtils.isEmpty(sinnum)){
+//                    sinnum = "0";
+//                }
+//                if (TextUtils.isEmpty(sinnum)){
+//                    sinnum = "0";
+//                }
                 number = number + Double.valueOf(sshouldinnum);
                 if (!sinnum.toLowerCase().equals("null") && !sinnum.isEmpty())
                     ntotaloutinvnum = ntotaloutinvnum + Double.valueOf(sinnum);
+                Log.d(TAG, "SSS: "+ntotaloutinvnum);
             }
         } catch (JSONException e1) {
             // TODO Auto-generated catch block
@@ -781,6 +779,7 @@ public class MultilateralTradeDetail extends Activity {
                     CALBODYID =tempJso.getString("cquoteunitid");
                     CINVBASID = tempJso.getString("cinvbasid");
                     INVENTORYID = tempJso.getString("coutinvid");
+                    CINWHID = tempJso.getString("cinwhid");
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -813,7 +812,7 @@ public class MultilateralTradeDetail extends Activity {
         return;
     }
 
-    @NonNull
+
     private DialogInterface.OnClickListener listenExit = new
             DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog,
@@ -855,8 +854,8 @@ public class MultilateralTradeDetail extends Activity {
     }
 
     @OnClick({R.id.btnTask, R.id.btnDetail, R.id.btnReturn})
-    public void onViewClicked(@NonNull View view) {
-        switch (view.getId()) {
+    public void onViewClicked( View view) {
+        switch (view.getId())  {
             case R.id.btnTask:
                 try {
                     ShowTaskDig();
@@ -876,6 +875,7 @@ public class MultilateralTradeDetail extends Activity {
                 if (jsSerino != null) {
                     try {
                         Intent intent = new Intent();
+                        intent.putExtra("cinwhid",CINWHID);
                         intent.putExtra("body", jsBody.toString());
                         Log.d("TAG", "ReturnScanedbody: " + jsBody);
                         intent.putExtra("serino", jsSerino.toString());
@@ -1016,7 +1016,7 @@ public class MultilateralTradeDetail extends Activity {
         }
 
         @Override
-        public void onClick(@NonNull DialogInterface dialog, int whichButton) {
+        public void onClick( DialogInterface dialog, int whichButton) {
             if (whichButton >= 0) {
                 index = whichButton;
             } else {
@@ -1237,6 +1237,15 @@ public class MultilateralTradeDetail extends Activity {
                                         .get(i))).getString("nnum");
                                 String sinnum = ((JSONObject) (arraysCount
                                         .get(i))).getString("nullnum");
+//                                if (sinnum==null){
+//                                    sinnum="0";
+//                                }
+//                                if (!TextUtils.isEmpty(sinnum)){
+//                                    sinnum = "0";
+//                                }
+//                                if (TextUtils.isEmpty(sinnum)){
+//                                    sinnum = "0";
+//                                }
 
                                 number = number
                                         + Double.valueOf(sshouldinnum);

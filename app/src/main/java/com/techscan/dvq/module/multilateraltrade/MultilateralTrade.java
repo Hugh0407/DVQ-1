@@ -19,6 +19,7 @@ import com.techscan.dvq.GetInvBaseInfo;
 import com.techscan.dvq.ListWarehouse;
 import com.techscan.dvq.R;
 import com.techscan.dvq.SerializableMap;
+import com.techscan.dvq.VlistRdcl;
 import com.techscan.dvq.common.Base64Encoder;
 import com.techscan.dvq.common.Common;
 import com.techscan.dvq.common.RequestThread;
@@ -26,6 +27,7 @@ import com.techscan.dvq.common.SaveThread;
 import com.techscan.dvq.common.Utils;
 import com.techscan.dvq.login.MainLogin;
 import com.techscan.dvq.module.materialOut.DepartmentListAct;
+import com.techscan.dvq.module.materialOut.StorgListAct;
 import com.techscan.dvq.module.multilateraltrade.scan.MultilateralTradeDetail;
 import com.techscan.dvq.module.saleout.SaleChooseTime;
 
@@ -49,12 +51,23 @@ import static android.content.ContentValues.TAG;
 import static com.techscan.dvq.R.string.WangLuoChuXiangWenTi;
 import static com.techscan.dvq.common.Utils.HANDER_DEPARTMENT;
 import static com.techscan.dvq.common.Utils.HANDER_SAVE_RESULT;
+import static com.techscan.dvq.common.Utils.HANDER_STORG;
 import static com.techscan.dvq.common.Utils.showResultDialog;
 
 public class MultilateralTrade extends Activity {
 
     @InjectView(R.id.txtMultilateralTrade)
     EditText txtMultilateralTrade;
+    @InjectView(R.id.txtDocument)
+    EditText txtDocument;
+    @InjectView(R.id.txtSendAndTake)
+    EditText txtSendAndTake;
+    @InjectView(R.id.imageSendAndTake)
+    ImageButton imageSendAndTake;
+    @InjectView(R.id.txtOrg)
+    EditText txtOrg;
+    @InjectView(R.id.imageOrg)
+    ImageButton imageOrg;
     @InjectView(R.id.txtDocumentNumber)
     EditText txtDocumentNumber;
     @InjectView(R.id.imageDocumentNumber)
@@ -102,15 +115,21 @@ public class MultilateralTrade extends Activity {
     String  CCUSTBASDOCID ="";
     String  CRECEIVECUSTBASID ="";
     String CCUSTOMERID = "";
+    String CDISPATCHERID ="";
     String CWAREHOUSEID = "";//仓库id
     String NTOTALNUMBER = "";
     String CDPTID = "";//部门id
+    String PK_CALBODY = "";//库存组织id
     String OutCompany = "";//调出公司
+    String OutCompanyID = "";//调出公司ID
     String OutOrgID = "";
     String InCompany = "";//调入公司
+    String InCompanyID = "";//调入公司ID
     String InOrgID = "";
     String OutOrgName = "";
     String InOrgName = "";
+    String CINWHID = "";
+    String PK_CUBASDOC = "";
     String COUTCOMPANYID="";
     String CINCOMPANYID="";
     HashMap<String, String> checkInfo = new HashMap<String, String>();
@@ -199,6 +218,7 @@ public class MultilateralTrade extends Activity {
                         String saleTotalBox = bundle.getString("box");
                         String saleSerinno = bundle.getString("serino");
                         String dbBody = bundle.getString("body");
+                        CINWHID = bundle.getString("cinwhid");
                         ScanedBarcode = bundle.getStringArrayList("ScanedBarcode");
                         this.jsBody = new JSONObject(dbBody);
                         Log.d(TAG, "AAAAAA: "+jsBody.toString());
@@ -244,10 +264,31 @@ public class MultilateralTrade extends Activity {
             txtDepartment.setText(deptname);
             checkInfo.put("Department", deptname);
         }
+        //收发类别
+        // 收发类别的回传数据 <----VlistRdcl.class
+        else if (requestCode == 98 && resultCode == 2) {
+            String code  = data.getStringExtra("Code");
+            String name  = data.getStringExtra("Name");
+            String AccID = data.getStringExtra("AccID");
+            String RdIDA = data.getStringExtra("RdIDA");    //需要回传的id
+            String RdIDB = data.getStringExtra("RdIDB");
+            CDISPATCHERID = RdIDA;
+            txtSendAndTake.setText(name);
+            checkInfo.put("LeiBie", name);
+        }
+        //材料出库库存组织的回传数据 <----StorgListAct.class
+        if (requestCode == 94 && resultCode == 6) {
+            String pk_areacl  = data.getStringExtra("pk_areacl");
+            String bodyname   = data.getStringExtra("bodyname");
+            String pk_calbody = data.getStringExtra("pk_calbody");
+            txtOrg.setText(bodyname);
+            PK_CALBODY = pk_calbody;
+            checkInfo.put("Organization", bodyname);
+        }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    @OnClick({R.id.imageDocumentNumber, R.id.imageWareHouse,R.id.imageDepartment, R.id.btnScan, R.id.btnSave, R.id.btnExit})
+    @OnClick({R.id.imageDocumentNumber, R.id.imageWareHouse,R.id.imageOrg,R.id.imageDepartment,R.id.imageSendAndTake, R.id.btnScan, R.id.btnSave, R.id.btnExit})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.imageDocumentNumber:
@@ -261,6 +302,12 @@ public class MultilateralTrade extends Activity {
                     e.printStackTrace();
                     MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                 }
+                break;
+            case R.id.imageSendAndTake:
+                btnRdclClick("");
+                break;
+            case R.id.imageOrg:
+                btnReferSTOrgList();
                 break;
             case R.id.imageWareHouse:
                 try {
@@ -357,6 +404,32 @@ public class MultilateralTrade extends Activity {
         }
     }
 
+    // 打开收发类别画面
+    private void btnRdclClick(String Code) {
+        Intent ViewGrid = new Intent(this, VlistRdcl.class);
+        ViewGrid.putExtra("FunctionName", "GetRdcl");
+        // ViewGrid.putExtra("AccID", "A");
+        // ViewGrid.putExtra("rdflag", "1");
+        // ViewGrid.putExtra("rdcode", "202");
+        ViewGrid.putExtra("AccID", "");
+        ViewGrid.putExtra("rdflag", "1");
+        ViewGrid.putExtra("rdcode", "");
+        startActivityForResult(ViewGrid, 98);
+    }
+
+    /**
+     * 获取库存组织参照的网络请求
+     */
+    private void btnReferSTOrgList() {
+        HashMap<String, String> parameter = new HashMap<String, String>();
+        parameter.put("FunctionName", "GetSTOrgList");
+        parameter.put("CompanyCode", MainLogin.objLog.CompanyCode);
+        parameter.put("TableName", "STOrg");
+        RequestThread requestThread = new RequestThread(parameter, mHandler, HANDER_STORG);
+        Thread        td            = new Thread(requestThread);
+        td.start();
+    }
+
     /**
      * 获取部门列表信息的网络请求
      */
@@ -438,8 +511,8 @@ public class MultilateralTrade extends Activity {
      */
     private boolean BindingBillDetailInfo(Map<String, Object> mapBillInfo) {
 //        CBILLID = mapBillInfo.get("cbillid").toString();
-        COUTCOMPANYID = mapBillInfo.get("coutcompanyid").toString();
-        CINCOMPANYID = mapBillInfo.get("coincompanyid").toString();
+        OutOrgID = mapBillInfo.get("coutcompanyid").toString();
+        InOrgID = mapBillInfo.get("coincompanyid").toString();
         tmpBillCode = mapBillInfo.get("vbillcode").toString();
         OutOrgName = mapBillInfo.get("OutCompany").toString();
         InOrgName = mapBillInfo.get("InCompany").toString();
@@ -534,6 +607,9 @@ public class MultilateralTrade extends Activity {
                     newHeadJSON.put("incalname", tempJso.getString("incalname"));//调入组织名
                     newHeadJSON.put("billcode", tempJso.getString("vcode"));
 //                    newHeadJSON.put("billcode", tmpBillCode);
+                    OutCompanyID = tempJso.getString("coutcorpid");
+//                    PK_CUBASDOC = tempJso.getString("pk_cubasdoc");
+                    InCompanyID = tempJso.getString("cincorpid");
                     VDEF1 = tempJso.getString("vdef1").toString();
                     VDEF2 = tempJso.getString("vdef2").toString();
                     OutCompany = tempJso.getString("outcorpname");
@@ -651,36 +727,37 @@ public class MultilateralTrade extends Activity {
 //            VBILLCODE = ''
 //            VUSERDEF1 = VDEF1
 //            VUSERDEF2 = VDEF2
+//            pk_cubasdoc
+//                    SaveOutAdjBillNew
             JSONObject tableHead = new JSONObject();
-            tableHead.put("COTHERCALBODYID", tmpBillCode);//对方库存组织PK
-            tableHead.put("COTHERCORPID", tmpBillCode);//对方公司ID
-            tableHead.put("COTHERWHID", tmpBillCode);//其它仓库ID
-            tableHead.put("COUTCALBODYID", tmpBillCode);//调出库存组织ID
-            tableHead.put("COUTCORPID", tmpBillCode);//调出公司ID
-
+            tableHead.put("COTHERWHID", CINWHID);//其它仓库ID
+            tableHead.put("DEPARTMENTID", CDPTID);//部门ID
+            tableHead.put("VNOTE", "");//
+            tableHead.put("CDISPATCHERID", CDISPATCHERID);//
+            tableHead.put("FREPLENISHFLAG", "N");//
+            tableHead.put("DBILLDATE", tmpBillDate);//其它仓库ID
+            tableHead.put("COTHERCALBODYID", InOrgID);//对方库存组织PK
+            tableHead.put("COTHERCORPID", InCompanyID);//对方公司ID
+            tableHead.put("COUTCALBODYID", OutOrgID);//调出库存组织ID
+            tableHead.put("COUTCORPID", OutCompanyID);//调出公司ID
             tableHead.put("CWAREHOUSEID", CWAREHOUSEID);//仓库id
-            tableHead.put("PK_CALBODY", MainLogin.objLog.STOrgCode);//组织
+            tableHead.put("PK_CALBODY",PK_CALBODY);//组织
             tableHead.put("PK_CORP", MainLogin.objLog.CompanyCode);//公司
-            tableHead.put("VBILLCODE", CheckBillCode);//单据号
+            tableHead.put("VBILLCODE", txtDocument.getText().toString());//单据号
             String vd1 = Base64Encoder.encode(VDEF1.getBytes("gb2312"));
             String vd2 = Base64Encoder.encode(VDEF2.getBytes("gb2312"));
             tableHead.put("VUSERDEF1", vd1);//
             tableHead.put("VUSERDEF2", vd2);//
-
-
-
-
-
 //            tableHead.put("RECEIVECODE", tmpBillCode);
 //            tableHead.put("CBIZTYPE", CBIZTYPE);
-//            tableHead.put("COPERATORID", MainLogin.objLog.UserID);
+            tableHead.put("CUSER", MainLogin.objLog.UserID);
 //            tableHead.put("CRECEIPTTYE", "4331");
 //            tableHead.put("CSALECORPID", CSALECORPID);
 //            tableHead.put("PK_CORP", MainLogin.objLog.STOrgCode);
 //            tableHead.put("VBILLCODE", "");
-//            String login_user = MainLogin.objLog.LoginUser.toString();
-//            String cuserName = Base64Encoder.encode(login_user.getBytes("gb2312"));
-//            tableHead.put("USERNAME", cuserName);
+            String login_user = MainLogin.objLog.LoginUser.toString();
+            String cuserName = Base64Encoder.encode(login_user.getBytes("gb2312"));
+            tableHead.put("CUSERNAME", cuserName);
 //            String vd3 = Base64Encoder.encode(VDEF5.getBytes("gb2312"));
 //            tableHead.put("VDEF5", vd3);
 //            tableHead.put("NTOTALNUMBER", NTOTALNUMBER);
@@ -709,7 +786,7 @@ public class MultilateralTrade extends Activity {
 //                        CINVBASID = CINVBASID
 //                        CINVENTORYID = COUTINVID
 //                        CQUOTEUNITID = CQUOTEUNITID
-//                        CRECEIEVEID =
+//                        CRECEIEVEID =收货单位
 //                                CRECEIVEAREAID = PK_ARRIVEAREA
 //                        CSOURCEBILLBID = CBILL_BID
 //                        CSOURCEBILLHID = CBILLID
@@ -718,6 +795,7 @@ public class MultilateralTrade extends Activity {
 //                        DBIZDATE = NOW
 //                        DDELIVERDATE = NOW
 //                        NSHOULDOUTNUM =
+                        // TODO: 2017/8/6 库存组织
 //                                PK_BODYCALBODY
 //                        PK_CORP
 //                                VBATCHCODE
@@ -725,54 +803,62 @@ public class MultilateralTrade extends Activity {
 //                        VRECEIVEADDRESS =
 //                                VSOURCEBILLCODE = VCODE
 //                        VSOUREROWNO = CROWNO
-                        object.put("CBODYWAREHOUSEID", bodys.getJSONObject(i).getString("crowno"));//库存仓库
-                        object.put("CFIRSTBILLBID", bodys.getJSONObject(i).getString("crowno"));//源头单据表体ID
-                        object.put("CFIRSTBILLHID", bodys.getJSONObject(i).getString("crowno"));//源头单据表头ID
-                        object.put("CFIRSTTYPE", bodys.getJSONObject(i).getString("crowno"));//源头单据类型
-                        object.put("CINVBASID", bodys.getJSONObject(i).getString("crowno"));//存货基本ID
-                        object.put("CINVENTORYID", bodys.getJSONObject(i).getString("crowno"));//存货ID
-                        object.put("CQUOTEUNITID", bodys.getJSONObject(i).getString("crowno"));//报价计量单位ID
-                        object.put("CRECEIEVEID", bodys.getJSONObject(i).getString("crowno"));//收货单位
-                        object.put("CRECEIVEAREAID", bodys.getJSONObject(i).getString("crowno"));//收货地区
-                        object.put("CSOURCEBILLBID", bodys.getJSONObject(i).getString("crowno"));//来源单据表体序列号
-                        object.put("CSOURCEBILLHID", bodys.getJSONObject(i).getString("crowno"));//来源单据表头序列号
-                        object.put("CSOURCETYPE", bodys.getJSONObject(i).getString("crowno"));
+                        object.put("CBODYWAREHOUSEID",CWAREHOUSEID);//库存仓库
+                        object.put("CFIRSTBILLBID", bodys.getJSONObject(i).getString("cbill_bid"));//源头单据表体ID
+                        object.put("CFIRSTBILLHID", bodys.getJSONObject(i).getString("cbillid"));//源头单据表头ID
+                        object.put("CFIRSTTYPE", bodys.getJSONObject(i).getString("ctypecode"));//源头单据类型
+                        object.put("CINVBASID", bodys.getJSONObject(i).getString("cinvbasid"));//存货基本ID
+                        object.put("CINVENTORYID", bodys.getJSONObject(i).getString("coutinvid"));//存货ID
+                        object.put("CQUOTEUNITID", bodys.getJSONObject(i).getString("cquoteunitid"));//报价计量单位ID
+                        // TODO: 2017/8/6
+                        object.put("CRECEIEVEID", bodys.getJSONObject(i).getString("pk_cubasdoc"));//收货单位todo
+                        object.put("CRECEIVEAREAID", bodys.getJSONObject(i).getString("pk_arrivearea"));//收货地区
+                        object.put("CSOURCEBILLBID", bodys.getJSONObject(i).getString("cbill_bid"));//来源单据表体序列号
+                        object.put("CSOURCEBILLHID", bodys.getJSONObject(i).getString("cbillid"));//来源单据表头序列号
+                        object.put("CSOURCETYPE", bodys.getJSONObject(i).getString("ctypecode"));
                         // /来源单据类型
-                        object.put("DBIZDATE", bodys.getJSONObject(i).getString("crowno"));//来源单据类型
-                        object.put("DDELIVERDATE", bodys.getJSONObject(i).getString("crowno"));//来源单据类型
-                        object.put("NSHOULDOUTNUM", bodys.getJSONObject(i).getString("crowno"));//来源单据类型
-                        object.put("PK_CORP", bodys.getJSONObject(i).getString("crowno"));//公司主键
-                        object.put("VBATCHCODE", bodys.getJSONObject(i).getString("crowno"));//批次
-                        object.put("VRECEIVEADDRESS", bodys.getJSONObject(i).getString("crowno"));//地址
-                        object.put("VSOURCEBILLCODE", bodys.getJSONObject(i).getString("crowno"));//来源单据号
+                        object.put("DBIZDATE", MainLogin.appTime);//
+                        object.put("DDELIVERDATE", MainLogin.appTime);//
+                        object.put("NSHOULDOUTNUM", bodys.getJSONObject(i).getString("nnum"));
+                        object.put("NNUM", totalBox);
+                        // TODO: 2017/8/7
+                        object.put("PK_BODYCALBODY", OutOrgID);
+                        object.put("PK_CORP", PK_CORP);//公司主键
+                        object.put("VBATCHCODE",  arraysSerino.getJSONObject(j).getString("batch"));//批次
+                        // TODO: 2017/8/6
+//                        String add = bodys.getJSONObject(i).getString("vreceiveaddress");
+//                        String adds = Base64Encoder.encode(add.getBytes("gb2312"));
+//                        object.put("VRECEIVEADDRESS", adds);
+//                        object.put("VRECEIVEADDRESS", bodys.getJSONObject(i).getString(""));//地址
+                        object.put("VSOURCEBILLCODE", CheckBillCode);//来源单据号
                         object.put("VSOUREROWNO", bodys.getJSONObject(i).getString("crowno"));//单据行号
 
 
-                        object.put("CROWNO", bodys.getJSONObject(i).getString("crowno"));
+//                        object.put("CROWNO", bodys.getJSONObject(i).getString("crowno"));
                         object.put("VFREE4", arraysSerino.getJSONObject(j).getString("vfree4"));//海关手册号
-                        object.put("VSOURCEROWNO", bodys.getJSONObject(i).getString("crowno"));
-                        object.put("VSOURCERECEIVECODE", tmpBillCode);
-                        object.put("VRECEIVEPOINTID", bodys.getJSONObject(i).getString("crecaddrnode"));
-                        object.put("CRECEIVECUSTID", bodys.getJSONObject(i).getString("creceiptcorpid"));
-                        object.put("CRECEIVEAREAID", bodys.getJSONObject(i).getString("creceiptareaid"));
-//                        object.put("DDELIVERDATE", bodys.getJSONObject(i).getString("ddeliverdate"));
-                        object.put("CBIZTYPE", CBIZTYPE);//表头
-                        object.put("CCUSTBASDOCID", CCUSTBASDOCID);
-                        object.put("CCUSTMANDOCID", CCUSTOMERID);//表头customerID
-                        object.put("CINVBASDOCID", bodys.getJSONObject(i).getString("cinvbasdocid"));
-                        object.put("CINVMANDOCID", bodys.getJSONObject(i).getString("cinventoryid"));
-                        object.put("CRECEIVECUSTBASID", CCUSTBASDOCID);//自己获取
-                        object.put("CSENDCALBODYID", bodys.getJSONObject(i).getString("cadvisecalbodyid"));
-                        object.put("CSENDWAREID", CWAREHOUSEID);//仓库
-                        object.put("CSOURCEBILLBODYID", bodys.getJSONObject(i).getString("corder_bid"));
-                        object.put("CSOURCEBILLID", bodys.getJSONObject(i).getString("csaleid"));
-                        object.put("NNUMBER", totalBox);
-                        object.put("PK_SENDCORP", bodys.getJSONObject(i).getString("pk_corp"));
-                        object.put("VBATCHCODE", arraysSerino.getJSONObject(j).getString("batch"));
-                        String add = bodys.getJSONObject(i).getString("vreceiveaddress");
-                        String adds = Base64Encoder.encode(add.getBytes("gb2312"));
-                        object.put("VRECEIVEADDRESS", adds);
-                        object.put("VRECEIVEPERSON", MainLogin.objLog.LoginUser);
+//                        object.put("VSOURCEROWNO", bodys.getJSONObject(i).getString("crowno"));
+//                        object.put("VSOURCERECEIVECODE", tmpBillCode);
+//                        object.put("VRECEIVEPOINTID", bodys.getJSONObject(i).getString("crecaddrnode"));
+//                        object.put("CRECEIVECUSTID", bodys.getJSONObject(i).getString("creceiptcorpid"));
+//                        object.put("CRECEIVEAREAID", bodys.getJSONObject(i).getString("creceiptareaid"));
+////                        object.put("DDELIVERDATE", bodys.getJSONObject(i).getString("ddeliverdate"));
+//                        object.put("CBIZTYPE", CBIZTYPE);//表头
+//                        object.put("CCUSTBASDOCID", CCUSTBASDOCID);
+//                        object.put("CCUSTMANDOCID", CCUSTOMERID);//表头customerID
+//                        object.put("CINVBASDOCID", bodys.getJSONObject(i).getString("cinvbasdocid"));
+//                        object.put("CINVMANDOCID", bodys.getJSONObject(i).getString("cinventoryid"));
+//                        object.put("CRECEIVECUSTBASID", CCUSTBASDOCID);//自己获取
+//                        object.put("CSENDCALBODYID", bodys.getJSONObject(i).getString("cadvisecalbodyid"));
+//                        object.put("CSENDWAREID", CWAREHOUSEID);//仓库
+//                        object.put("CSOURCEBILLBODYID", bodys.getJSONObject(i).getString("corder_bid"));
+//                        object.put("CSOURCEBILLID", bodys.getJSONObject(i).getString("csaleid"));
+//                        object.put("NNUMBER", totalBox);
+//                        object.put("PK_SENDCORP", bodys.getJSONObject(i).getString("pk_corp"));
+//                        object.put("VBATCHCODE", arraysSerino.getJSONObject(j).getString("batch"));
+////                        String add = bodys.getJSONObject(i).getString("vreceiveaddress");
+////                        String adds = Base64Encoder.encode(add.getBytes("gb2312"));
+//                        object.put("VRECEIVEADDRESS", adds);
+//                        object.put("VRECEIVEPERSON", MainLogin.objLog.LoginUser);
                         bodyArray.put(object);
 //                        y++;
                     }
@@ -789,7 +875,7 @@ public class MultilateralTrade extends Activity {
                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                 return;
             }
-            SaveThread saveThread = new SaveThread(table, "SaveSaleReceive", mHandler, HANDER_SAVE_RESULT);
+            SaveThread saveThread = new SaveThread(table, "SaveAdjOutBillNew", mHandler, HANDER_SAVE_RESULT);
             Thread thread = new Thread(saveThread);
             thread.start();
         }
@@ -815,6 +901,21 @@ public class MultilateralTrade extends Activity {
                             Intent ViewGrid = new Intent(MultilateralTrade.this, DepartmentListAct.class);
                             ViewGrid.putExtra("myData", temp.toString());
                             startActivityForResult(ViewGrid, 96);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case HANDER_STORG:
+                    JSONObject storg = (JSONObject) msg.obj;
+                    try {
+                        if (storg.getBoolean("Status")) {
+                            JSONArray  val  = storg.getJSONArray("STOrg");
+                            JSONObject temp = new JSONObject();
+                            temp.put("STOrg", val);
+                            Intent StorgList = new Intent(MultilateralTrade.this, StorgListAct.class);
+                            StorgList.putExtra("STOrg", temp.toString());
+                            startActivityForResult(StorgList, 94);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -862,6 +963,13 @@ public class MultilateralTrade extends Activity {
      * 清空
      */
     private  void changeAllEdToEmpty(){
+        txtDocument.setText("");
+        txtSendAndTake.setText("");
+        txtDepartment.setText("");
+        txtInCompany.setText("");
+        txtOutCompany.setText("");
+        txtOutOrg.setText("");
+        txtInOrg.setText("");
         txtWareHouse.setText("");
         txtDocumentNumber.setText("");
         txtBillDate.setText("");
