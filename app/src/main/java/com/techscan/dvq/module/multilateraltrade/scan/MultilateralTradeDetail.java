@@ -60,7 +60,7 @@ public class MultilateralTradeDetail extends Activity {
     String WAREHOUSEID = "";
     String ScanType = "";
     String BillCode = "";
-    String CSALEID = "";
+    String CBILLID = "";
     String PK_CORP = "";
     @Nullable
     JSONObject jsBody;
@@ -160,9 +160,9 @@ public class MultilateralTradeDetail extends Activity {
 //        ScanType = intent.getStringExtra("ScanType");
         try {
             ScanedBarcode = intent.getStringArrayListExtra("ScanedBarcode");
-            BillCode = intent.getStringExtra("BillCode");
+//            BillCode = intent.getStringExtra("BillCode");
             PK_CORP = intent.getStringExtra("PK_CORP");
-            CSALEID = intent.getStringExtra("CSALEID");
+            CBILLID = intent.getStringExtra("CBILLID");
             ScanType = intent.getStringExtra("ScanType");
             WAREHOUSEID = intent.getStringExtra("CWAREHOUSEID");
 
@@ -201,9 +201,9 @@ public class MultilateralTradeDetail extends Activity {
             arrays = jsBody.getJSONArray("dbBody");
             for (int i = 0; i < arrays.length(); i++) {
                 String totalNumber = ((JSONObject) (arrays.get(i)))
-                        .getString("doneqty");
+                        .getString("nnum");
                 String ntotalnum = ((JSONObject) (arrays.get(i)))
-                        .getString("ntotaloutinvnum");
+                        .getString("nullnum");
                 number = number + Double.valueOf(totalNumber);
                 if (!ntotalnum.toLowerCase().equals("null") && !ntotalnum.isEmpty())
                     ntotaloutinvnum = ntotaloutinvnum + Double.valueOf(ntotalnum);
@@ -554,11 +554,11 @@ public class MultilateralTradeDetail extends Activity {
                     String Free1 = "";
                     // 寻找到了对应存货
                     Double doneqty = 0.0;
-                    if (!temp.getString("ntotaloutinvnum").isEmpty() && !temp.getString("ntotaloutinvnum").toLowerCase().equals("null")) {
-                        doneqty = temp.getDouble("ntotaloutinvnum");
+                    if (!temp.getString("nullnum").isEmpty() && !temp.getString("nullnum").toLowerCase().equals("null")) {
+                        doneqty = temp.getDouble("nullnum");
                         doneqty = doneqty + Double.parseDouble(txtSaleTotal.getText().toString());
                         Log.d(TAG, "ScanedToGet: " + doneqty.toString());
-                        if (doneqty > temp.getInt("doneqty")) {
+                        if (doneqty > temp.getInt("nnum")) {
                             Toast.makeText(this, "这个存货已经超过应发数量了,不允出库!",
                                     Toast.LENGTH_LONG).show();
                             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
@@ -576,7 +576,7 @@ public class MultilateralTradeDetail extends Activity {
                     }
                     ScanedBarcode.add(bar.FinishBarCode);
                     MainLogin.sp.play(MainLogin.music2, 1, 1, 0, 0, 1);
-                    temp.put("ntotaloutinvnum", doneqty);
+                    temp.put("nullnum", doneqty);
                     break;
                 }
             }
@@ -603,9 +603,9 @@ public class MultilateralTradeDetail extends Activity {
             ntotaloutinvnum = 0.0;
             for (int i = 0; i < arrays.length(); i++) {
                 String sshouldinnum = ((JSONObject) (arrays.get(i)))
-                        .getString("doneqty");
+                        .getString("nnum");
                 String sinnum = ((JSONObject) (arrays.get(i)))
-                        .getString("ntotaloutinvnum");
+                        .getString("nullnum");
                 number = number + Double.valueOf(sshouldinnum);
                 if (!sinnum.toLowerCase().equals("null") && !sinnum.isEmpty())
                     ntotaloutinvnum = ntotaloutinvnum + Double.valueOf(sinnum);
@@ -704,7 +704,7 @@ public class MultilateralTradeDetail extends Activity {
  */
 
     private void LoadSaleOutBody() throws ParseException, IOException {
-        if (BillCode == null || BillCode.equals("") || CSALEID == null || CSALEID.equals("")) {
+        if (CBILLID == null || CBILLID.equals("")) {
             Toast.makeText(this, "请先确认需要扫描的订单号", Toast.LENGTH_LONG).show();
             // ADD CAIXY TEST START
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
@@ -718,7 +718,8 @@ public class MultilateralTradeDetail extends Activity {
         if (ScanType.equals("多角贸易")) {
             try {
                 para.put("FunctionName", "GetAdjustOrderBillBody");
-                para.put("BILLID", CSALEID);
+                para.put("ORDERID", CBILLID);
+                para.put("CORPPK", PK_CORP);
                 para.put("TableName", "dbBody");
                 Log.d(TAG, "GetBillBodyDetailInfo: " + BillCode);
             } catch (JSONException e) {
@@ -777,12 +778,9 @@ public class MultilateralTradeDetail extends Activity {
                 JSONArray jsarray = jsBody.getJSONArray("dbBody");
                 for (int i = 0; i < jsarray.length(); i++) {
                     JSONObject tempJso = jsarray.getJSONObject(i);
-                    CALBODYID =tempJso.getString("cadvisecalbodyid");
-                    Log.d(TAG, "LoadSaleOutBody: "+CALBODYID);
-                    CINVBASID = tempJso.getString("cinvbasdocid");
-                    Log.d(TAG, "LoadSaleOutBody: "+CINVBASID);
-                    INVENTORYID = tempJso.getString("cinventoryid");
-                    Log.d(TAG, "LoadSaleOutBody: "+INVENTORYID);
+                    CALBODYID =tempJso.getString("cquoteunitid");
+                    CINVBASID = tempJso.getString("cinvbasid");
+                    INVENTORYID = tempJso.getString("coutinvid");
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -922,11 +920,11 @@ public class MultilateralTradeDetail extends Activity {
                     ((JSONObject) (arrays.get(i))).getString("invspec"));
             map.put("Invtype",
                     ((JSONObject) (arrays.get(i))).getString("invtype"));
-            String sinnum = ((JSONObject) (arrays.get(i))).getString("ntotaloutinvnum");
+            String sinnum = ((JSONObject) (arrays.get(i))).getString("nullnum");
             if (sinnum.toLowerCase().equals("null") || sinnum.isEmpty())
                 sinnum = "0.0";
             map.put("InvNum",
-                    sinnum + " / " + Double.valueOf(((JSONObject) (arrays.get(i))).getString("doneqty")));
+                    sinnum + " / " + Double.valueOf(((JSONObject) (arrays.get(i))).getString("nnum")));
             lstTaskBody.add(map);
         }
 
@@ -1216,8 +1214,8 @@ public class MultilateralTradeDetail extends Activity {
                             String invcodeold = ((JSONObject) (bodys.get(i)))
                                     .getString("invcode");
                             if (invcodeold.equals(invcode)) {
-                                Double doneqty = temp.getDouble("ntotaloutinvnum");
-                                temp.put("ntotaloutinvnum", doneqty - ScanedTotal);
+                                Double doneqty = temp.getDouble("nullnum");
+                                temp.put("nullnum", doneqty - ScanedTotal);
                             }
 
                             bodynews.put(temp);
@@ -1236,9 +1234,9 @@ public class MultilateralTradeDetail extends Activity {
                             ntotaloutinvnum = 0.0;
                             for (int i = 0; i < arraysCount.length(); i++) {
                                 String sshouldinnum = ((JSONObject) (arraysCount
-                                        .get(i))).getString("doneqty");
+                                        .get(i))).getString("nnum");
                                 String sinnum = ((JSONObject) (arraysCount
-                                        .get(i))).getString("ntotaloutinvnum");
+                                        .get(i))).getString("nullnum");
 
                                 number = number
                                         + Double.valueOf(sshouldinnum);

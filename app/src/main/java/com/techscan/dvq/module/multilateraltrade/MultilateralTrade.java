@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -96,7 +95,7 @@ public class MultilateralTrade extends Activity {
     String CBILLID = "";
     String CBIZTYPE = "";
     String  CSALECORPID = "";
-    String PK_CORP = "";
+    String PK_CORP = MainLogin.objLog.CompanyCode;
     String  VDEF1 = "";
     String VDEF2 = "";
     String VDEF5 = "";
@@ -106,8 +105,12 @@ public class MultilateralTrade extends Activity {
     String CWAREHOUSEID = "";//仓库id
     String NTOTALNUMBER = "";
     String CDPTID = "";//部门id
-    String outCompany = "";//调出公司
-    String inCompany = "";//调入公司
+    String OutCompany = "";//调出公司
+    String OutOrgID = "";
+    String InCompany = "";//调入公司
+    String InOrgID = "";
+    String OutOrgName = "";
+    String InOrgName = "";
     String COUTCOMPANYID="";
     String CINCOMPANYID="";
     HashMap<String, String> checkInfo = new HashMap<String, String>();
@@ -162,6 +165,7 @@ public class MultilateralTrade extends Activity {
                                 jsonSaveHead = new JSONObject();
                                 jsonSaveHead = Common.MapTOJSONOBject(mapBillInfo);
                                 CheckBillCode = jsonSaveHead.getString("vbillcode");
+                                CBILLID = jsonSaveHead.getString("cbillid");
                                 checkInfo.put("BillCode",CheckBillCode);
                                 SaleFlg = jsonSaveHead.getString("saleflg");
 //                                BindingBillDetailInfo(mapBillInfo);
@@ -173,7 +177,7 @@ public class MultilateralTrade extends Activity {
                             try {
                                 //获得表头信息
                                 GetBillHeadDetailInfo(SaleFlg);
-//                                BindingBillDetailInfo(mapBillInfo);
+                                BindingBillDetailInfo(mapBillInfo);
                                 //获得表体信息
 //                                GetBillBodyDetailInfo(SaleFlg);
                             } catch (Exception e1) {
@@ -372,7 +376,7 @@ public class MultilateralTrade extends Activity {
 
     private void SaleScan(){
         Intent intDeliveryScan = new Intent(MultilateralTrade.this, MultilateralTradeDetail.class);
-        intDeliveryScan.putExtra("BillCode", tmpBillCode);
+//        intDeliveryScan.putExtra("BillCode", tmpBillCode);
         intDeliveryScan.putExtra("PK_CORP", PK_CORP);
         intDeliveryScan.putExtra("CBILLID", CBILLID);
         intDeliveryScan.putExtra("CWAREHOUSEID", CWAREHOUSEID);
@@ -433,19 +437,17 @@ public class MultilateralTrade extends Activity {
      * 绑定订单表头信息
      */
     private boolean BindingBillDetailInfo(Map<String, Object> mapBillInfo) {
-        String outOrg = "";
-        String inOrg = "";
-        CBILLID = mapBillInfo.get("cbillid").toString();
+//        CBILLID = mapBillInfo.get("cbillid").toString();
         COUTCOMPANYID = mapBillInfo.get("coutcompanyid").toString();
         CINCOMPANYID = mapBillInfo.get("coincompanyid").toString();
         tmpBillCode = mapBillInfo.get("vbillcode").toString();
-        outOrg = mapBillInfo.get("coutcompanyname").toString();
-        inOrg = mapBillInfo.get("coincompanycode").toString();
+        OutOrgName = mapBillInfo.get("OutCompany").toString();
+        InOrgName = mapBillInfo.get("InCompany").toString();
         tmpBillDate = mapBillInfo.get("BillDate").toString();
-        txtOutCompany.setText("");
-        txtOutOrg.setText(outOrg);
-        txtInCompany.setText("");
-        txtInOrg.setText(inOrg);
+        txtOutCompany.setText(OutCompany);
+        txtOutOrg.setText(OutOrgName);
+        txtInCompany.setText(InCompany);
+        txtInOrg.setText(InOrgName);
         txtDocumentNumber.setText(tmpBillCode);
         txtBillDate.setText(tmpBillDate);
         txtBillDate.setFocusable(false);
@@ -461,11 +463,12 @@ public class MultilateralTrade extends Activity {
         JSONObject para = new JSONObject();
         try {
             para.put("FunctionName", "GetAdjustOrderBillHead");
-            para.put("BILLCODE", CheckBillCode);
-            para.put("COMPANYCODE",  MainLogin.objLog.CompanyCode);
-            para.put("WHID",CWAREHOUSEID);
+//            para.put("BILLCODE", CheckBillCode);
+            para.put("ORDERID", CBILLID);
+//            para.put("COMPANYCODE",  MainLogin.objLog.CompanyCode);
+//            para.put("WHID",CWAREHOUSEID);
 //            para.put("BillCode", tmpBillCode);
-            para.put("STORGCODE",  MainLogin.objLog.STOrgCode);
+//            para.put("STORGCODE",  MainLogin.objLog.STOrgCode);
             para.put("TableName", "dbHead");
         } catch (JSONException e2) {
             Toast.makeText(this, e2.getMessage(), Toast.LENGTH_LONG).show();
@@ -521,35 +524,20 @@ public class MultilateralTrade extends Activity {
                 if (txtMultilateralTrade.getText().toString().equals("多角贸易")) {
                     newHeadJSON.put("VDEF1", tempJso.getString("vdef1"));
                     newHeadJSON.put("VDEF2", tempJso.getString("vdef2"));
-                    newHeadJSON.put("VDEF5", tempJso.getString("vdef5"));
-                    newHeadJSON.put("cbiztype", tempJso.getString("cbiztype"));
-                    newHeadJSON.put("CSALECORPID", tempJso.getString("csalecorpid"));
-                    newHeadJSON.put("PK_CORP", tempJso.getString("pk_corp"));
-                    newHeadJSON.put("cdeptid", tempJso.getString("cdeptid"));
-                    newHeadJSON.put("ccalbodyid", tempJso.getString("ccalbodyid"));
-                    newHeadJSON.put("coperatorid", tempJso.getString("coperatorid"));
-                    newHeadJSON.put("ccustomerid", tempJso.getString("ccustomerid"));
-                    newHeadJSON.put("vreceiveaddress", tempJso.getString("vreceiveaddress"));
-                    newHeadJSON.put("creceiptcorpid", tempJso.getString("creceiptcorpid"));
-                    newHeadJSON.put("csaleid", tempJso.getString("csaleid"));
-                    newHeadJSON.put("billcode", tmpBillCode);
-                    newHeadJSON.put("cdeptid", tempJso.getString("cdeptid"));
-                    newHeadJSON.put("capproveid", tempJso.getString("capproveid"));
-                    newHeadJSON.put("ccalbodyid", tempJso.getString("ccalbodyid"));
-                    newHeadJSON.put("creceiptcustomerid", tempJso.getString("creceiptcustomerid"));
-                    newHeadJSON.put("nheadsummny", tempJso.getString("nheadsummny"));
-                    newHeadJSON.put("creceipttype", tempJso.getString("creceipttype"));
-                    CBIZTYPE = tempJso.getString("cbiztype").toString();
-                    CSALECORPID = tempJso.getString("csalecorpid").toString();
-                    PK_CORP = tempJso.getString("pk_corp").toString();
+                    newHeadJSON.put("outcorpname", tempJso.getString("outcorpname"));
+                    newHeadJSON.put("incorpname", tempJso.getString("incorpname"));
+                    newHeadJSON.put("coutcorpid", tempJso.getString("coutcorpid"));//调出公司ID
+                    newHeadJSON.put("coutcbid", tempJso.getString("coutcbid"));//调出组织ID
+                    newHeadJSON.put("outcalname", tempJso.getString("outcalname"));//调出组织名
+                    newHeadJSON.put("cincorpid", tempJso.getString("cincorpid"));//调入公司ID
+                    newHeadJSON.put("cincbid", tempJso.getString("cincbid"));//调入组织ID
+                    newHeadJSON.put("incalname", tempJso.getString("incalname"));//调入组织名
+                    newHeadJSON.put("billcode", tempJso.getString("vcode"));
+//                    newHeadJSON.put("billcode", tmpBillCode);
                     VDEF1 = tempJso.getString("vdef1").toString();
                     VDEF2 = tempJso.getString("vdef2").toString();
-                    VDEF5 = tempJso.getString("vdef5").toString();
-                    if (!TextUtils.isEmpty(VDEF5)){
-                        VDEF5 = "";
-                    }
-                    CCUSTOMERID  = tempJso.getString("ccustomerid").toString();
-                    CCUSTBASDOCID = tempJso.getString("ccustbasdocid").toString();
+                    OutCompany = tempJso.getString("outcorpname");
+                    InCompany = tempJso.getString("incorpname");
                 }
                 newHeadArray.put(newHeadJSON);
             }
@@ -726,6 +714,17 @@ public class MultilateralTrade extends Activity {
 //                        CSOURCEBILLBID = CBILL_BID
 //                        CSOURCEBILLHID = CBILLID
 //                        CSOURCETYPE = CTYPECODE
+
+//                        DBIZDATE = NOW
+//                        DDELIVERDATE = NOW
+//                        NSHOULDOUTNUM =
+//                                PK_BODYCALBODY
+//                        PK_CORP
+//                                VBATCHCODE
+//                        VFIRSTBILLCODE = VCODE
+//                        VRECEIVEADDRESS =
+//                                VSOURCEBILLCODE = VCODE
+//                        VSOUREROWNO = CROWNO
                         object.put("CBODYWAREHOUSEID", bodys.getJSONObject(i).getString("crowno"));//库存仓库
                         object.put("CFIRSTBILLBID", bodys.getJSONObject(i).getString("crowno"));//源头单据表体ID
                         object.put("CFIRSTBILLHID", bodys.getJSONObject(i).getString("crowno"));//源头单据表头ID
@@ -737,7 +736,16 @@ public class MultilateralTrade extends Activity {
                         object.put("CRECEIVEAREAID", bodys.getJSONObject(i).getString("crowno"));//收货地区
                         object.put("CSOURCEBILLBID", bodys.getJSONObject(i).getString("crowno"));//来源单据表体序列号
                         object.put("CSOURCEBILLHID", bodys.getJSONObject(i).getString("crowno"));//来源单据表头序列号
-                        object.put("CSOURCETYPE", bodys.getJSONObject(i).getString("crowno"));//来源单据类型
+                        object.put("CSOURCETYPE", bodys.getJSONObject(i).getString("crowno"));
+                        // /来源单据类型
+                        object.put("DBIZDATE", bodys.getJSONObject(i).getString("crowno"));//来源单据类型
+                        object.put("DDELIVERDATE", bodys.getJSONObject(i).getString("crowno"));//来源单据类型
+                        object.put("NSHOULDOUTNUM", bodys.getJSONObject(i).getString("crowno"));//来源单据类型
+                        object.put("PK_CORP", bodys.getJSONObject(i).getString("crowno"));//公司主键
+                        object.put("VBATCHCODE", bodys.getJSONObject(i).getString("crowno"));//批次
+                        object.put("VRECEIVEADDRESS", bodys.getJSONObject(i).getString("crowno"));//地址
+                        object.put("VSOURCEBILLCODE", bodys.getJSONObject(i).getString("crowno"));//来源单据号
+                        object.put("VSOUREROWNO", bodys.getJSONObject(i).getString("crowno"));//单据行号
 
 
                         object.put("CROWNO", bodys.getJSONObject(i).getString("crowno"));
