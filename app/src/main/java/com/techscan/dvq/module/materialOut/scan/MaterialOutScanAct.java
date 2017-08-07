@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -47,6 +46,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
+import static com.techscan.dvq.common.Utils.PK_CALBODY;
 import static com.techscan.dvq.common.Utils.formatDecimal;
 import static com.techscan.dvq.common.Utils.isNumber;
 import static com.techscan.dvq.common.Utils.showToast;
@@ -110,14 +110,13 @@ public class MaterialOutScanAct extends Activity {
     Switch   switchM;
 
     String TAG = this.getClass().getSimpleName();
-    @NonNull
+
     public static List<Goods> detailList = new ArrayList<Goods>();
-    @NonNull
-    public static List<Goods> ovList     = new ArrayList<Goods>();
+
+    public static List<Goods> ovList = new ArrayList<Goods>();
     @Nullable
     Activity activity;
     String  CWAREHOUSEID = "";
-    String  PK_CALBODY   = "";
     String  vFree4       = "";
     boolean isPacked     = false;
 
@@ -138,7 +137,7 @@ public class MaterialOutScanAct extends Activity {
     }
 
     @OnClick({R.id.btn_overview, R.id.btn_detail, R.id.btn_back})
-    public void onViewClicked(@NonNull View view) {
+    public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_overview:
                 showLv(ovList, "扫描总览");
@@ -167,7 +166,6 @@ public class MaterialOutScanAct extends Activity {
 
     private void init() {
         CWAREHOUSEID = getIntent().getStringExtra("CWAREHOUSEID");
-        PK_CALBODY = getIntent().getStringExtra("PK_CALBODY");
         ActionBar actionBar = this.getActionBar();
         actionBar.setTitle("物品扫描");
         mEdBarCode.setOnKeyListener(mOnKeyListener);
@@ -192,7 +190,7 @@ public class MaterialOutScanAct extends Activity {
         });
     }
 
-    private void showLv(@NonNull List<Goods> ovList, @NonNull String title) {
+    private void showLv(List<Goods> ovList, String title) {
         MyBaseAdapter adapter = new MyBaseAdapter(ovList);
         showDialog(ovList, adapter, title);
     }
@@ -201,10 +199,10 @@ public class MaterialOutScanAct extends Activity {
      * 网络请求后的线程通信
      * msg.obj 是从子线程传递过来的数据
      */
-    @NonNull
+
     Handler mHandler = new Handler() {
         @Override
-        public void handleMessage(@NonNull Message msg) {
+        public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
                 case 1:
@@ -250,7 +248,7 @@ public class MaterialOutScanAct extends Activity {
      *
      * @param jsonObject 网络获取的json
      */
-    private void setManualToUI(@NonNull JSONObject jsonObject) {
+    private void setManualToUI(JSONObject jsonObject) {
         Log.d(TAG, "setManualToUI: " + jsonObject.toString());
         try {
             if (jsonObject != null && jsonObject.getBoolean("Status")) {
@@ -266,14 +264,14 @@ public class MaterialOutScanAct extends Activity {
                     }
                 }
             } else {
-                showToast(activity, "获取海关手册号异常");
+//                showToast(activity, "获取海关手册号异常");
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    private void showDialog(@NonNull final List list, @NonNull final BaseAdapter adapter, @NonNull String title) {
+    private void showDialog(final List list, final BaseAdapter adapter, String title) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setTitle(title);
         if (list.size() > 0) {
@@ -459,6 +457,12 @@ public class MaterialOutScanAct extends Activity {
      * @return true---->所有的ed都不为空,false---->所有的ed都为空
      */
     private boolean isAllEdNotNull() {
+        if (vFree4.equals("Y")) {
+            if (TextUtils.isEmpty(mEdManual.getText().toString())) {
+                showToast(activity, "海关手册号不可为空");
+                return false;
+            }
+        }
         if (!TextUtils.isEmpty(mEdBarCode.getText())
                 && !TextUtils.isEmpty(mEdEncoding.getText())
                 && !TextUtils.isEmpty(mEdName.getText())
@@ -699,11 +703,11 @@ public class MaterialOutScanAct extends Activity {
     /**
      * 回车键的点击事件
      */
-    @NonNull
+
     View.OnKeyListener mOnKeyListener = new View.OnKeyListener() {
 
         @Override
-        public boolean onKey(@NonNull View v, int keyCode, @NonNull KeyEvent event) {
+        public boolean onKey(View v, int keyCode, KeyEvent event) {
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
                 switch (v.getId()) {
                     case R.id.ed_bar_code:
@@ -786,9 +790,12 @@ public class MaterialOutScanAct extends Activity {
 
         float weight = Float.valueOf(mEdWeight.getText().toString());
         mEdQty.setText(String.valueOf(num * weight));
-        addDataToDetailList();
-        mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
-        changeAllEdTextToEmpty();
+        if (isAllEdNotNull()) {
+            addDataToDetailList();
+            mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
+            changeAllEdTextToEmpty();
+            return true;
+        }
         return true;
     }
 
@@ -821,9 +828,12 @@ public class MaterialOutScanAct extends Activity {
             return true;
         }
 
-        addDataToDetailList();
-        mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
-        changeAllEdTextToEmpty();
+        if (isAllEdNotNull()) {
+            addDataToDetailList();
+            mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
+            changeAllEdTextToEmpty();
+            return true;
+        }
         return true;
     }
 

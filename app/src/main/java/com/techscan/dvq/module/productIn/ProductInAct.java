@@ -55,6 +55,8 @@ import butterknife.OnClick;
 import static com.techscan.dvq.common.Utils.HANDER_DEPARTMENT;
 import static com.techscan.dvq.common.Utils.HANDER_SAVE_RESULT;
 import static com.techscan.dvq.common.Utils.HANDER_STORG;
+import static com.techscan.dvq.common.Utils.ORG_NAME;
+import static com.techscan.dvq.common.Utils.PK_CALBODY;
 import static com.techscan.dvq.common.Utils.showResultDialog;
 import static com.techscan.dvq.common.Utils.showToast;
 
@@ -110,14 +112,13 @@ public class ProductInAct extends Activity {
     String CDPTID = "";  //部门id
     String CUSER;   //登录员工id
     String CWAREHOUSEID = "";    //库存组织
-    String PK_CALBODY   = "";      //仓库id
     String PK_CORP;         //公司
     String VBILLCOD;        //单据号
     int    year;
 
-    int                     month;
-    int                     day;
-    Calendar                mycalendar;
+    int      month;
+    int      day;
+    Calendar mycalendar;
     @Nullable
     List<Goods> tempList;
     HashMap<String, String> checkInfo;
@@ -225,7 +226,7 @@ public class ProductInAct extends Activity {
             CWAREHOUSEID = warehousePK1;
             mWh.requestFocus();
             mWh.setText(warehouseName);
-            mOrganization.requestFocus();
+            mLeiBie.requestFocus();
             checkInfo.put("Warehouse", warehouseName);
         }
         //材料出库库存组织的回传数据 <----StorgListAct.class
@@ -236,7 +237,6 @@ public class ProductInAct extends Activity {
             mOrganization.requestFocus();
             mOrganization.setText(bodyname);
             mLeiBie.requestFocus();
-            PK_CALBODY = pk_calbody;
             checkInfo.put("Organization", bodyname);
         }
         // 收发类别的回传数据 <----VlistRdcl.class
@@ -291,6 +291,7 @@ public class ProductInAct extends Activity {
         mLeiBie.setOnKeyListener(mOnKeyListener);
         mDepartment.setOnKeyListener(mOnKeyListener);
         checkInfo = new HashMap<String, String>();
+        mOrganization.setText(ORG_NAME);
     }
 
     /**
@@ -387,11 +388,11 @@ public class ProductInAct extends Activity {
             mWh.requestFocus();
             return false;
         }
-        if (!mOrganization.getText().toString().equals(checkInfo.get("Organization"))) {
-            showToast(mActivity, "组织信息不正确");
-            mOrganization.requestFocus();
-            return false;
-        }
+//        if (!mOrganization.getText().toString().equals(checkInfo.get("Organization"))) {
+//            showToast(mActivity, "组织信息不正确");
+//            mOrganization.requestFocus();
+//            return false;
+//        }
         if (!mLeiBie.getText().toString().equals(checkInfo.get("LeiBie"))) {
             showToast(mActivity, "收发类别信息不正确");
             mLeiBie.requestFocus();
@@ -519,7 +520,7 @@ public class ProductInAct extends Activity {
                 startActivityForResult(ViewGrid, 97);
             } else {
                 String Errmsg = rev.getString("ErrMsg");
-                showToast(mActivity,Errmsg);
+                showToast(mActivity, Errmsg);
                 SoundHelper.playWarning();
             }
 
@@ -661,21 +662,21 @@ public class ProductInAct extends Activity {
      * 回车键的点击事件
      */
     @NonNull
-            View.OnKeyListener         mOnKeyListener  = new View.OnKeyListener() {
+    View.OnKeyListener mOnKeyListener = new View.OnKeyListener() {
 
         @Override
         public boolean onKey(@NonNull View v, int keyCode, @NonNull KeyEvent event) {
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
                 switch (v.getId()) {
                     case R.id.bill_num:
-                        mBillDate.requestFocus();
+                        mWh.requestFocus();
                         return true;
                     case R.id.wh:
-                        mOrganization.requestFocus();
-                        return true;
-                    case R.id.organization:
                         mLeiBie.requestFocus();
                         return true;
+//                    case R.id.organization:
+//                        mLeiBie.requestFocus();
+//                        return true;
                     case R.id.lei_bie:
                         mDepartment.requestFocus();
                         return true;

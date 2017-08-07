@@ -44,6 +44,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
+import static com.techscan.dvq.common.Utils.PK_CALBODY;
 import static com.techscan.dvq.common.Utils.formatDecimal;
 import static com.techscan.dvq.common.Utils.isNumber;
 import static com.techscan.dvq.common.Utils.showToast;
@@ -109,7 +110,6 @@ public class OtherOutScanAct extends Activity {
     @Nullable
     Activity activity;
     String CWAREHOUSEID = "";
-    String PK_CALBODY   = "";
     String vFree4       = "";
 
     @Override
@@ -133,7 +133,6 @@ public class OtherOutScanAct extends Activity {
 
     private void init() {
         CWAREHOUSEID = getIntent().getStringExtra("CWAREHOUSEID");
-        PK_CALBODY = getIntent().getStringExtra("PK_CALBODY");
         ActionBar actionBar = this.getActionBar();
         actionBar.setTitle("其他出库扫描");
         edBarCode.setOnKeyListener(mOnKeyListener);
@@ -168,7 +167,7 @@ public class OtherOutScanAct extends Activity {
     }
 
     /**
-     *遍历集合，如果edtext是 enabled 并且 为空，则该edtext获取焦点
+     * 遍历集合，如果edtext是 enabled 并且 为空，则该edtext获取焦点
      */
     private void nextUIGetFocus() {
         for (EditText ed : edList) {
@@ -489,6 +488,14 @@ public class OtherOutScanAct extends Activity {
      * @return true---->所有的ed都不为空,false---->所有的ed都为空
      */
     private boolean isAllEdNotNull() {
+
+        if (vFree4.equals("Y")) {
+            if (TextUtils.isEmpty(edManual.getText().toString())) {
+                showToast(activity, "海关手册号不可为空");
+                return false;
+            }
+        }
+
         if (!TextUtils.isEmpty(edBarCode.getText())
                 && !TextUtils.isEmpty(edEncoding.getText())
                 && !TextUtils.isEmpty(edName.getText())
@@ -496,7 +503,7 @@ public class OtherOutScanAct extends Activity {
                 && !TextUtils.isEmpty(edSpectype.getText())
                 && !TextUtils.isEmpty(edUnit.getText())
                 && !TextUtils.isEmpty(edLot.getText())
-                && !TextUtils.isEmpty(edCostObject.getText())
+//                && !TextUtils.isEmpty(edCostObject.getText())
                 && !TextUtils.isEmpty(edQty.getText())) {
             return true;
         } else {
@@ -746,9 +753,12 @@ public class OtherOutScanAct extends Activity {
                             return true;
                         }
 
-                        addDataToDetailList();
-                        edBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
-                        changeAllEdTextToEmpty();
+                        if (isAllEdNotNull()) {
+                            addDataToDetailList();
+                            edBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
+                            changeAllEdTextToEmpty();
+                            return true;
+                        }
                         return true;
                     case R.id.ed_num:
                         if (TextUtils.isEmpty(edNum.getText().toString())) {
@@ -771,9 +781,12 @@ public class OtherOutScanAct extends Activity {
                         float weight = Float.valueOf(edWeight.getText().toString());
                         edQty.setText(String.valueOf(num_f * weight));
 
-                        addDataToDetailList();
-                        edBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
-                        changeAllEdTextToEmpty();
+                        if (isAllEdNotNull()) {
+                            addDataToDetailList();
+                            edBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
+                            changeAllEdTextToEmpty();
+                            return true;
+                        }
                         return true;
 //                    case R.id.ed_manual:
 //                        if (vFree4.equals("Y") && TextUtils.isEmpty(edManual.getText().toString())) {
