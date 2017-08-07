@@ -608,6 +608,7 @@ public class MultilateralTrade extends Activity {
                     newHeadJSON.put("billcode", tempJso.getString("vcode"));
 //                    newHeadJSON.put("billcode", tmpBillCode);
                     OutCompanyID = tempJso.getString("coutcorpid");
+                    CBIZTYPE = tempJso.getString("cbiztypeid");
 //                    PK_CUBASDOC = tempJso.getString("pk_cubasdoc");
                     InCompanyID = tempJso.getString("cincorpid");
                     VDEF1 = tempJso.getString("vdef1").toString();
@@ -683,7 +684,7 @@ public class MultilateralTrade extends Activity {
             jsonSaveHead = null;
             jsonBillHead = null;
             changeAllEdToEmpty();
-            txtDocumentNumber.requestFocus();
+            txtDocument.requestFocus();
             //SaveOk();
             //            IniActivyMemor();// TODO: 2017/7/10 XUHU
         } catch (Exception e) {
@@ -735,6 +736,7 @@ public class MultilateralTrade extends Activity {
             tableHead.put("VNOTE", "");//
             tableHead.put("CDISPATCHERID", CDISPATCHERID);//
             tableHead.put("FREPLENISHFLAG", "N");//
+            tableHead.put("CBIZTYPE", CBIZTYPE);//
             tableHead.put("DBILLDATE", tmpBillDate);//其它仓库ID
             tableHead.put("COTHERCALBODYID", InOrgID);//对方库存组织PK
             tableHead.put("COTHERCORPID", InCompanyID);//对方公司ID
@@ -816,6 +818,7 @@ public class MultilateralTrade extends Activity {
                         object.put("CSOURCEBILLBID", bodys.getJSONObject(i).getString("cbill_bid"));//来源单据表体序列号
                         object.put("CSOURCEBILLHID", bodys.getJSONObject(i).getString("cbillid"));//来源单据表头序列号
                         object.put("CSOURCETYPE", bodys.getJSONObject(i).getString("ctypecode"));
+                        object.put("PK_AREACL", bodys.getJSONObject(i).getString("pk_areacl"));
                         // /来源单据类型
                         object.put("DBIZDATE", MainLogin.appTime);//
                         object.put("DDELIVERDATE", MainLogin.appTime);//
@@ -973,6 +976,7 @@ public class MultilateralTrade extends Activity {
         txtWareHouse.setText("");
         txtDocumentNumber.setText("");
         txtBillDate.setText("");
+        txtOrg.setText("");
 //        txtCustomer.setText("");
 
     }
