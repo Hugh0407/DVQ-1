@@ -834,7 +834,6 @@ public class MultilateralTradeDetail extends Activity {
     }
 
     private void IniDetail() {
-//        currentObj = null;
         txtSaleInvName.setText("");
         txtSaleInvCode.setText("");
         txtSaleBatch.setText("");

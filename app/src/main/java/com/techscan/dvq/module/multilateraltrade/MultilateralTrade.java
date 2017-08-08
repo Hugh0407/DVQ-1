@@ -837,7 +837,7 @@ public class MultilateralTrade extends Activity {
                         object.put("CINVENTORYID", bodys.getJSONObject(i).getString("coutinvid"));//存货ID
                         object.put("CQUOTEUNITID", bodys.getJSONObject(i).getString("cquoteunitid"));//报价计量单位ID
                         // TODO: 2017/8/6
-                        object.put("CRECEIEVEID", bodys.getJSONObject(i).getString("pk_cubasdoc"));//收货单位todo
+                        object.put("CRECEIEVEID", bodys.getJSONObject(i).getString("pk_cumandoc"));//收货单位todo
                         object.put("CRECEIVEAREAID", bodys.getJSONObject(i).getString("pk_arrivearea"));//收货地区
                         object.put("CSOURCEBILLBID", bodys.getJSONObject(i).getString("cbill_bid"));//来源单据表体序列号
                         object.put("CSOURCEBILLHID", bodys.getJSONObject(i).getString("cbillid"));//来源单据表头序列号
