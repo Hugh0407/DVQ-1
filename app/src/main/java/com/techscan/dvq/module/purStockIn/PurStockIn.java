@@ -69,65 +69,65 @@ public class PurStockIn extends Activity {
     boolean NoScanSave = false;
 
     String PurBillCode = "";
-    String DBBillCode = "";
+    String DBBillCode  = "";
     @Nullable
-    private String[]    ExitNameList       = null;
+    private String[] ExitNameList = null;
     @Nullable
-            String      fileName           = null;
+    String fileName       = null;
     @Nullable
-            String      fileNameScan       = null;
+    String fileNameScan   = null;
     @Nullable
-            String      ScanedFileName     = null;
+    String ScanedFileName = null;
     @Nullable
-            String      UserID             = null;
+    String UserID         = null;
     @Nullable
-            File        file               = null;
+    File   file           = null;
     @Nullable
-            File        fileScan           = null;
+    File   fileScan       = null;
     @NonNull
-            String      ReScanHead         = "1";
+    String ReScanHead     = "1";
     @Nullable
     private AlertDialog SelectButton       = null;
     @Nullable
     private AlertDialog SelectButtonNoScan = null;
 
-    int year;
-    int month;
-    int day;
+    int      year;
+    int      month;
+    int      day;
     Calendar mycalendar;
 
     @Nullable
     private ArrayList<String> ScanedBarcode = new ArrayList<String>();
-    Button btnSave;
+    Button      btnSave;
     //Button btnUpdate;
     ImageButton btnBrowOrderNo;
-    Button btnExit;
-    Button btnScan;
-    TextView labVendor;
-    TextView labWarehouse;
+    Button      btnExit;
+    Button      btnScan;
+    TextView    labVendor;
+    TextView    labWarehouse;
     //TextView labWHName;
     //TextView tvbillstatus;
     //EditText txtPosition;
-    EditText txtPurOrderNo;
+    EditText    txtPurOrderNo;
 
     ImageButton btnWarehouse;
     ImageButton btnOrganization;
     //ImageButton btnCategory;
     //ImageButton btnDepartment;
-    EditText txtWareHouse;
-    EditText txtOrganization;
+    EditText    txtWareHouse;
+    EditText    txtOrganization;
     //EditText txtCategory;
     //EditText txtDepartment;
-    EditText txtStartDate;
-    EditText txtEndDate;
-    EditText txtPurInBillCode;
-    EditText txtReMark;
+    EditText    txtStartDate;
+    EditText    txtEndDate;
+    EditText    txtPurInBillCode;
+    EditText    txtReMark;
 
     String CDISPATCHERID = "";//收发类别code
-    String CDPTID = "";  //部门id
+    String CDPTID        = "";  //部门id
     String CUSER;   //登录员工id
     String CWAREHOUSEID = "";    //仓库id
-    String PK_CALBODY = "";      //库存组织
+    String PK_CALBODY   = "";      //库存组织
     String PK_CORP;         //公司
     String VBILLCOD;        //单据号
 
@@ -147,9 +147,9 @@ public class PurStockIn extends Activity {
     JSONObject jsSerino;
 
     String m_FrePlenishFlag = "N";
-    String m_WarehouseID = "";
-    String pk_purcorp = "";
-    String pk_calbody = "";
+    String m_WarehouseID    = "";
+    String pk_purcorp       = "";
+    String pk_calbody       = "";
     @NonNull
     String m_AccID = "A";
 
@@ -161,9 +161,9 @@ public class PurStockIn extends Activity {
 
     String m_PosCode = "";
     String m_PosName = "";
-    String m_PosID = "";
+    String m_PosID   = "";
 
-    String tmpWHStatus = "";//仓库是否启用货位
+    String tmpWHStatus   = "";//仓库是否启用货位
     String tmpBillStatus = "";//单据是否正向采购
 
     int SaveFlg = 0;
@@ -313,9 +313,9 @@ public class PurStockIn extends Activity {
             lstResultBillCode.add(mapResultBillCode);
 
             SimpleAdapter listItemAdapter = new SimpleAdapter(PurStockIn.this, lstResultBillCode,//数据源
-                    android.R.layout.simple_list_item_1,
-                    new String[]{"BillCode"},
-                    new int[]{android.R.id.text1}
+                                                              android.R.layout.simple_list_item_1,
+                                                              new String[]{"BillCode"},
+                                                              new int[]{android.R.id.text1}
             );
             new AlertDialog.Builder(PurStockIn.this).setTitle("单据签字成功")
                     .setAdapter(listItemAdapter, null)
@@ -324,17 +324,17 @@ public class PurStockIn extends Activity {
             //写入log文件
             writeTxt = new writeTxt();
 
-            Date day = new Date();
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            Date             day = new Date();
+            SimpleDateFormat df  = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
             SimpleDateFormat dfd = new SimpleDateFormat("yyyy-MM-dd");
 
             String BillCode = PurBillCode;
             String BillType = "45";
-            String UserID = MainLogin.objLog.UserID;
+            String UserID   = MainLogin.objLog.UserID;
 
             String LogName = BillType + UserID + dfd.format(day) + ".txt";
-            String LogMsg = df.format(day) + " " + "A" + " " + BillCode;
+            String LogMsg  = df.format(day) + " " + "A" + " " + BillCode;
 
             writeTxt.writeTxtToFile(LogName, LogMsg);
         }
@@ -346,9 +346,9 @@ public class PurStockIn extends Activity {
             lstResultBillCode.add(mapResultBillCode);
 
             SimpleAdapter listItemAdapter = new SimpleAdapter(PurStockIn.this, lstResultBillCode,//数据源
-                    android.R.layout.simple_list_item_1,
-                    new String[]{"BillCode"},
-                    new int[]{android.R.id.text1}
+                                                              android.R.layout.simple_list_item_1,
+                                                              new String[]{"BillCode"},
+                                                              new int[]{android.R.id.text1}
             );
             new AlertDialog.Builder(PurStockIn.this).setTitle(R.string.DanJuBaoCunChengGong)
                     .setAdapter(listItemAdapter, null)
@@ -357,15 +357,15 @@ public class PurStockIn extends Activity {
             //写入log文件
             writeTxt = new writeTxt();
 
-            Date day = new Date();
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            SimpleDateFormat dfd = new SimpleDateFormat("yyyy-MM-dd");
-            String BillCode = DBBillCode;
-            String BillType = "5X";
-            String UserID = MainLogin.objLog.UserID;
+            Date             day      = new Date();
+            SimpleDateFormat df       = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            SimpleDateFormat dfd      = new SimpleDateFormat("yyyy-MM-dd");
+            String           BillCode = DBBillCode;
+            String           BillType = "5X";
+            String           UserID   = MainLogin.objLog.UserID;
 
             String LogName = BillType + UserID + dfd.format(day) + ".txt";
-            String LogMsg = df.format(day) + " " + "A" + " " + "1001 " + BillCode;
+            String LogMsg  = df.format(day) + " " + "A" + " " + "1001 " + BillCode;
 
             writeTxt.writeTxtToFile(LogName, LogMsg);
         }
@@ -388,20 +388,20 @@ public class PurStockIn extends Activity {
         head = jsHead.getJSONArray("PurGood");
         saveHeadJons.put("pk_corp", head.getJSONObject(0).getString("pk_corp"));
 
-        JSONArray arrays = jsSerino.getJSONArray("Serino");
+        JSONArray arrays    = jsSerino.getJSONArray("Serino");
         JSONArray lstSerino = new JSONArray();
 
         for (int i = 0; i < arrays.length(); i++) {
-            String OKFlg = "0";
-            String sSerial = ((JSONObject) (arrays.get(i))).getString("sno");
-            String sBatch = ((JSONObject) (arrays.get(i))).getString("batch");
+            String OKFlg    = "0";
+            String sSerial  = ((JSONObject) (arrays.get(i))).getString("sno");
+            String sBatch   = ((JSONObject) (arrays.get(i))).getString("batch");
             String sInvCode = ((JSONObject) (arrays.get(i))).getString("invcode");
-            String serino = ((JSONObject) (arrays.get(i))).getString("serino");
+            String serino   = ((JSONObject) (arrays.get(i))).getString("serino");
             serino = serino.replace("\n", "");
             String totalnum = ((JSONObject) (arrays.get(i))).getString("box");
             totalnum = Integer.valueOf(totalnum).toString();
             String sbarcode = serino;
-            String sfree1 = ((JSONObject) (arrays.get(i))).getString("vfree1");
+            String sfree1   = ((JSONObject) (arrays.get(i))).getString("vfree1");
 
             if (lstSerino.length() < 1) {
                 JSONObject map = new JSONObject();
@@ -415,8 +415,8 @@ public class PurStockIn extends Activity {
             } else {
                 for (int x = 0; x < lstSerino.length(); x++) {
                     String invcode = (String) ((JSONObject) (lstSerino).get(x)).get("invcode");
-                    String batch = (String) ((JSONObject) (lstSerino).get(x)).get("batch");
-                    String Serial = (String) ((JSONObject) (lstSerino).get(x)).get("sno");
+                    String batch   = (String) ((JSONObject) (lstSerino).get(x)).get("batch");
+                    String Serial  = (String) ((JSONObject) (lstSerino).get(x)).get("sno");
 
                     if (Serial.equals(sSerial)
                             && invcode.equals(sInvCode)
@@ -522,9 +522,9 @@ public class PurStockIn extends Activity {
             lstResultBillCode.add(mapResultBillCode);
 
             SimpleAdapter listItemAdapter = new SimpleAdapter(PurStockIn.this, lstResultBillCode,//数据源
-                    android.R.layout.simple_list_item_1,
-                    new String[]{"BillCode"},
-                    new int[]{android.R.id.text1}
+                                                              android.R.layout.simple_list_item_1,
+                                                              new String[]{"BillCode"},
+                                                              new int[]{android.R.id.text1}
             );
             new AlertDialog.Builder(PurStockIn.this).setTitle("单据暂存成功")
                     .setAdapter(listItemAdapter, null)
@@ -559,7 +559,7 @@ public class PurStockIn extends Activity {
         //保存审核采购入库
         jsDBBody = new JSONObject();
 
-        JSONArray heads = jsHead.getJSONArray("PurGood");
+        JSONArray  heads        = jsHead.getJSONArray("PurGood");
         JSONObject saveHeadJons = new JSONObject();
 //		saveHeadJons.put("cgeneralhid", this.m_BillID);                    //采购入库单ID
 //		saveHeadJons.put("coperatorid", MainLogin.objLog.UserID);        //操作员
@@ -575,7 +575,7 @@ public class PurStockIn extends Activity {
         saveHeadJons.put("CDISPATCHERID", CDISPATCHERID);             //收发类别code
         saveHeadJons.put("PK_CALBODY", PK_CALBODY);                    //库存组织
         //saveHeadJons.put("CDPTID", CDPTID);                    //部门
-		saveHeadJons.put("CDPTID", heads.getJSONObject(0).getString("cdeptid"));   //部门
+        saveHeadJons.put("CDPTID", heads.getJSONObject(0).getString("cdeptid"));   //部门
         saveHeadJons.put("CBIZTYPE", heads.getJSONObject(0).getString("cbiztype"));//业务类型
         saveHeadJons.put("VNOTE", txtReMark.getText().toString());//备注
         saveHeadJons.put("FREPLENISHFLAG", m_FrePlenishFlag);//退货标志
@@ -592,16 +592,16 @@ public class PurStockIn extends Activity {
             JSONArray arrays = jsSerino.getJSONArray("Serino");
 
             for (int i = 0; i < arrays.length(); i++) {
-                String OKFlg = "0";
-                String sSerial = ((JSONObject) (arrays.get(i))).getString("sno");
-                String sBatch = ((JSONObject) (arrays.get(i))).getString("batch");
+                String OKFlg    = "0";
+                String sSerial  = ((JSONObject) (arrays.get(i))).getString("sno");
+                String sBatch   = ((JSONObject) (arrays.get(i))).getString("batch");
                 String sInvCode = ((JSONObject) (arrays.get(i))).getString("invcode");
-                String serino = ((JSONObject) (arrays.get(i))).getString("serino");
+                String serino   = ((JSONObject) (arrays.get(i))).getString("serino");
                 serino = serino.replace("\n", "");
                 String totalnum = ((JSONObject) (arrays.get(i))).getString("box");
                 totalnum = Double.valueOf(totalnum).toString();
                 String sbarcode = serino;
-                String sfree1 = ((JSONObject) (arrays.get(i))).getString("vfree1");
+                String sfree1   = ((JSONObject) (arrays.get(i))).getString("vfree1");
 
                 if (lstSerino.length() < 1) {
 //					HashMap<String, Object> map = new HashMap<String, Object>();
@@ -618,7 +618,7 @@ public class PurStockIn extends Activity {
 
                         //Object temp = lstSerino.get(x);
                         String invcode = (String) ((JSONObject) (lstSerino).get(x)).get("invcode");
-                        String batch = (String) ((JSONObject) (lstSerino).get(x)).get("batch");
+                        String batch   = (String) ((JSONObject) (lstSerino).get(x)).get("batch");
                         //String Serial = (String) ((JSONObject) (lstSerino).get(x)).get("sbatchno");
 
 //						String invcode=temp.get("invcode");
@@ -669,7 +669,7 @@ public class PurStockIn extends Activity {
         JSONArray arraySaveBody = new JSONArray();
         if (NoScanSave == false) {
             //JSONArray heads = jsHead.getJSONArray("PurGood");
-            JSONArray bodys = jsBody.getJSONArray("PurBody");
+            JSONArray bodys        = jsBody.getJSONArray("PurBody");
             JSONArray arraysSerino = jsSerino.getJSONArray("Serino");
 
 //			if (tmpBillStatus.equals("N")) {
@@ -680,7 +680,7 @@ public class PurStockIn extends Activity {
 
                     if (arraysSerino.getJSONObject(j).getString("invcode").toUpperCase().equals(
                             bodys.getJSONObject(i).getString("invcode").toUpperCase())) {
-                        Double ldDoneQty = 0.0;
+                        Double  ldDoneQty = 0.0;
                         boolean lbPutFlag = true;
                         for (int k = 0; k < arraySaveBody.length(); k++) {
                             if (arraysSerino.getJSONObject(j).getString("batch").toUpperCase().equals(
@@ -708,14 +708,14 @@ public class PurStockIn extends Activity {
                             obj.put("SOURCCEBILLBID", bodys.getJSONObject(i).getString("corder_bid"));
                             obj.put("VENDORID", heads.getJSONObject(0).getString("cvendormangid"));
                             obj.put("VENDORBASID", heads.getJSONObject(0).getString("cvendorbaseid"));
-                            Log.d(TAG, "PRICE: "+"888");
-                            Log.d(TAG, "PRICE: "+bodys.getJSONObject(i).getString("noriginalcurprice"));
+                            Log.d(TAG, "PRICE: " + "888");
+                            Log.d(TAG, "PRICE: " + bodys.getJSONObject(i).getString("noriginalcurprice"));
                             obj.put("NPRICE", bodys.getJSONObject(i).getString("noriginalcurprice"));
                             obj.put("VSOURCEBILLCODE", m_BillNo);
                             obj.put("VSOURCEBILLROWNO", bodys.getJSONObject(i).getString("crowno"));
                             obj.put("VFREE4", bodys.getJSONObject(i).getString("vfree4"));
                             //jsDBBody.put(y + "", obj);
-                            arraySaveBody.put(obj) ;
+                            arraySaveBody.put(obj);
                             y++;
                         } else
                             arraysSerino.getJSONObject(j).put("NINNUM", ldDoneQty);
@@ -797,11 +797,11 @@ public class PurStockIn extends Activity {
         JSONArray boxs = jsBoxTotal.getJSONArray("BoxList");
 
         for (int i = 0; i < boxs.length(); i++) {
-            String serino = boxs.getJSONObject(i).getString("serial");
+            String serino  = boxs.getJSONObject(i).getString("serial");
             String invcode = boxs.getJSONObject(i).getString("invcode");
-            String batch = boxs.getJSONObject(i).getString("batch");
+            String batch   = boxs.getJSONObject(i).getString("batch");
 
-            int total = boxs.getJSONObject(i).getInt("total");
+            int total    = boxs.getJSONObject(i).getInt("total");
             int icurrent = boxs.getJSONObject(i).getInt("current");
 
 
@@ -828,21 +828,21 @@ public class PurStockIn extends Activity {
                         UpdatePurOrder();
                     } catch (ParseException e) {
                         Toast.makeText(PurStockIn.this, getString(R.string.DanJuBaoCunShiBai) + e.getMessage(),
-                                Toast.LENGTH_LONG).show();
+                                       Toast.LENGTH_LONG).show();
                         //ADD CAIXY TEST START
                         MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                         //ADD CAIXY TEST END
                         e.printStackTrace();
                     } catch (JSONException e) {
                         Toast.makeText(PurStockIn.this, getString(R.string.DanJuBaoCunShiBai) + e.getMessage(),
-                                Toast.LENGTH_LONG).show();
+                                       Toast.LENGTH_LONG).show();
                         //ADD CAIXY TEST START
                         MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                         //ADD CAIXY TEST END
                         e.printStackTrace();
                     } catch (IOException e) {
                         Toast.makeText(PurStockIn.this, getString(R.string.DanJuBaoCunShiBai) + e.getMessage(),
-                                Toast.LENGTH_LONG).show();
+                                       Toast.LENGTH_LONG).show();
                         //ADD CAIXY TEST START
                         MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                         //ADD CAIXY TEST END
@@ -863,17 +863,17 @@ public class PurStockIn extends Activity {
 
                     } catch (ParseException e) {
                         Toast.makeText(PurStockIn.this, R.string.WangLuoChuXianWenTi,
-                                Toast.LENGTH_LONG).show();
+                                       Toast.LENGTH_LONG).show();
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                     } catch (JSONException e) {
                         Toast.makeText(PurStockIn.this, R.string.WangLuoChuXianWenTi,
-                                Toast.LENGTH_LONG).show();
+                                       Toast.LENGTH_LONG).show();
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                     } catch (IOException e) {
                         Toast.makeText(PurStockIn.this, R.string.WangLuoChuXianWenTi,
-                                Toast.LENGTH_LONG).show();
+                                       Toast.LENGTH_LONG).show();
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
@@ -902,21 +902,21 @@ public class PurStockIn extends Activity {
                         }
                     } catch (ParseException e) {
                         Toast.makeText(PurStockIn.this, getString(R.string.DanJuBaoCunShiBai) + e.getMessage(),
-                                Toast.LENGTH_LONG).show();
+                                       Toast.LENGTH_LONG).show();
                         //ADD CAIXY TEST START
                         MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                         //ADD CAIXY TEST END
                         e.printStackTrace();
                     } catch (JSONException e) {
                         Toast.makeText(PurStockIn.this, getString(R.string.DanJuBaoCunShiBai) + e.getMessage(),
-                                Toast.LENGTH_LONG).show();
+                                       Toast.LENGTH_LONG).show();
                         //ADD CAIXY TEST START
                         MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                         //ADD CAIXY TEST END
                         e.printStackTrace();
                     } catch (IOException e) {
                         Toast.makeText(PurStockIn.this, getString(R.string.DanJuBaoCunShiBai) + e.getMessage(),
-                                Toast.LENGTH_LONG).show();
+                                       Toast.LENGTH_LONG).show();
                         //ADD CAIXY TEST START
                         MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                         //ADD CAIXY TEST END
@@ -987,7 +987,7 @@ public class PurStockIn extends Activity {
 
         } catch (ParseException e) {
             Toast.makeText(PurStockIn.this, R.string.WangLuoChuXianWenTi,
-                    Toast.LENGTH_LONG).show();
+                           Toast.LENGTH_LONG).show();
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -1082,8 +1082,8 @@ public class PurStockIn extends Activity {
         if (!CheckBox())
             return;
 
-        boolean isHaveDB = false;
-        JSONArray bodys = jsBody.getJSONArray("PurBody");
+        boolean   isHaveDB = false;
+        JSONArray bodys    = jsBody.getJSONArray("PurBody");
 
 
         for (int i = 0; i < bodys.length(); i++) {
@@ -1102,7 +1102,7 @@ public class PurStockIn extends Activity {
         } else {
             AlertDialog.Builder bulider =
                     new AlertDialog.Builder(this).setTitle(R.string.XunWen).setMessage("改单据已经全部扫描完毕" +
-                            "请点击保存按钮");
+                                                                                               "请点击保存按钮");
             bulider.setPositiveButton(R.string.QueRen, null).create().show();
 
 
@@ -1117,7 +1117,7 @@ public class PurStockIn extends Activity {
 
             if (m_BillID == null || m_BillID.equals("")) {
                 Toast.makeText(this, "单据信息没有获得不能扫描货位",
-                        Toast.LENGTH_LONG).show();
+                               Toast.LENGTH_LONG).show();
                 //ADD CAIXY TEST START
                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                 //ADD CAIXY TEST END
@@ -1126,7 +1126,7 @@ public class PurStockIn extends Activity {
             }
             if (m_AccID == null || m_AccID.equals("")) {
                 Toast.makeText(this, "仓库帐套还没有确认,不能先扫描货位",
-                        Toast.LENGTH_LONG).show();
+                               Toast.LENGTH_LONG).show();
                 //ADD CAIXY TEST START
                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                 //ADD CAIXY TEST END
@@ -1149,7 +1149,7 @@ public class PurStockIn extends Activity {
 //                return;
 //            }
             JSONObject rev = Common.DoHttpQuery(para,
-                    "CommonQuery", m_AccID);
+                                                "CommonQuery", m_AccID);
 
 
             if (rev == null) {
@@ -1174,7 +1174,7 @@ public class PurStockIn extends Activity {
                     //ADD CAIXY TEST END
                     return;
                 }
-                String jposName, jposCode, jposID;
+                String     jposName, jposCode, jposID;
                 JSONObject temp = val.getJSONObject(0);
 
                 jposName = temp.getString("csname");
@@ -1207,7 +1207,7 @@ public class PurStockIn extends Activity {
         } catch (JSONException e) {
 
             Toast.makeText(this,
-                    R.string.WangLuoChuXianWenTi, Toast.LENGTH_LONG).show();
+                           R.string.WangLuoChuXianWenTi, Toast.LENGTH_LONG).show();
 
             //ADD CAIXY TEST START
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
@@ -1280,7 +1280,7 @@ public class PurStockIn extends Activity {
                 return;
             }
 
-            String WHStatus;
+            String     WHStatus;
             JSONObject temp = val.getJSONObject(0);
 
             WHStatus = temp.getString("csflag");
@@ -1397,8 +1397,8 @@ public class PurStockIn extends Activity {
 //	}
 
     private void btnWarehouseClick() throws JSONException {
-        String lgUser = MainLogin.objLog.LoginUser;
-        String lgPwd = MainLogin.objLog.Password;
+        String lgUser      = MainLogin.objLog.LoginUser;
+        String lgPwd       = MainLogin.objLog.Password;
         String LoginString = MainLogin.objLog.LoginString;
 
         JSONObject para = new JSONObject();
@@ -1458,7 +1458,7 @@ public class PurStockIn extends Activity {
         parameter.put("CompanyCode", MainLogin.objLog.CompanyCode);
         parameter.put("TableName", "STOrg");
         RequestThread requestThread = new RequestThread(parameter, mHandler, HANDER_STORG);
-        Thread td = new Thread(requestThread);
+        Thread        td            = new Thread(requestThread);
         td.start();
     }
 
@@ -1481,12 +1481,12 @@ public class PurStockIn extends Activity {
         parameter.put("CompanyCode", MainLogin.objLog.CompanyCode);
         parameter.put("TableName", "department");
         RequestThread requestThread = new RequestThread(parameter, mHandler, HANDER_DEPARTMENT);
-        Thread td = new Thread(requestThread);
+        Thread        td            = new Thread(requestThread);
         td.start();
     }
 
     @NonNull
-            Handler                mHandler  = new Handler() {
+    Handler mHandler = new Handler() {
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
@@ -1495,7 +1495,7 @@ public class PurStockIn extends Activity {
                     JSONObject json = (JSONObject) msg.obj;
                     try {
                         if (json.getBoolean("Status")) {
-                            JSONArray val = json.getJSONArray("department");
+                            JSONArray  val  = json.getJSONArray("department");
                             JSONObject temp = new JSONObject();
                             temp.put("department", val);
                             Intent ViewGrid = new Intent(PurStockIn.this, DepartmentListAct.class);
@@ -1511,7 +1511,7 @@ public class PurStockIn extends Activity {
                     JSONObject storg = (JSONObject) msg.obj;
                     try {
                         if (storg.getBoolean("Status")) {
-                            JSONArray val = storg.getJSONArray("STOrg");
+                            JSONArray  val  = storg.getJSONArray("STOrg");
                             JSONObject temp = new JSONObject();
                             temp.put("STOrg", val);
                             Intent StorgList = new Intent(PurStockIn.this, StorgListAct.class);
@@ -1540,7 +1540,7 @@ public class PurStockIn extends Activity {
                         parameter.put("CORDERID", m_BillID);
                         parameter.put("TableName", "PurBody");
                         RequestThread requestThread = new RequestThread(parameter, mHandler, HANDER_POORDER_BODY);
-                        Thread td = new Thread(requestThread);
+                        Thread        td            = new Thread(requestThread);
                         td.start();
 
                     } catch (JSONException e) {
@@ -1680,16 +1680,15 @@ public class PurStockIn extends Activity {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                                 Toast.makeText(PurStockIn.this, R.string.WangLuoChuXianWenTi,
-                                        Toast.LENGTH_LONG).show();
+                                               Toast.LENGTH_LONG).show();
                                 //ADD CAIXY TEST START
                                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                                 //ADD CAIXY TEST END
-                            }
-                            catch (ParseException e) {
+                            } catch (ParseException e) {
                                 // TODO Auto-generated catch block
                                 e.printStackTrace();
                                 Toast.makeText(PurStockIn.this, R.string.WangLuoChuXianWenTi,
-                                        Toast.LENGTH_LONG).show();
+                                               Toast.LENGTH_LONG).show();
                                 //ADD CAIXY TEST START
                                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                                 //ADD CAIXY TEST END
@@ -1697,7 +1696,7 @@ public class PurStockIn extends Activity {
                                 // TODO Auto-generated catch block
                                 e.printStackTrace();
                                 Toast.makeText(PurStockIn.this, R.string.WangLuoChuXianWenTi,
-                                        Toast.LENGTH_LONG).show();
+                                               Toast.LENGTH_LONG).show();
                                 //ADD CAIXY TEST START
                                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                                 //ADD CAIXY TEST END
@@ -1813,8 +1812,8 @@ public class PurStockIn extends Activity {
         txtEndDate.setOnClickListener(myListner);
         //txtEndDate.setOnKeyListener(mOnKeyListener);
         txtReMark = (EditText) findViewById(id.remark);
-        Date SDate = new Date();
-        Date EDate = new Date();
+        Date             SDate      = new Date();
+        Date             EDate      = new Date();
         SimpleDateFormat Dateformat = new SimpleDateFormat("yyyy-MM-dd");
         txtEndDate.setText(Dateformat.format(SDate));
         long time = SDate.getTime();
@@ -1959,15 +1958,15 @@ public class PurStockIn extends Activity {
         writeTxt = new writeTxt();
 
         //记录扫描数据
-        String lsBillBarCode = "";
+        String lsBillBarCode   = "";
         String lsm_WarehouseID = "";
-        String lspk_purcorp = "";
-        String lsm_BillID = "";
-        String lsm_BillNo = "";
+        String lspk_purcorp    = "";
+        String lsm_BillID      = "";
+        String lsm_BillNo      = "";
         String lstmpBillStatus = "";
-        String lsPosCode = "";
-        String lsm_PosName = "";
-        String lsm_PosID = "";
+        String lsPosCode       = "";
+        String lsm_PosName     = "";
+        String lsm_PosID       = "";
 
         String lspk_calbody = "";
 
@@ -2180,16 +2179,16 @@ public class PurStockIn extends Activity {
                     return;
                 }
 
-                String lsBillBarCode = val[0];
+                String lsBillBarCode   = val[0];
                 String lsm_WarehouseID = val[1];
-                String lspk_purcorp = val[2];
-                String lsm_BillID = val[3];
-                String lsm_BillNo = val[4];
+                String lspk_purcorp    = val[2];
+                String lsm_BillID      = val[3];
+                String lsm_BillNo      = val[4];
                 String lstmpBillStatus = val[5];
-                String lsPosCode = val[6];
-                String lsm_PosName = val[7];
-                String lsm_PosID = val[8];
-                String lspk_calbody = val[9];
+                String lsPosCode       = val[6];
+                String lsm_PosName     = val[7];
+                String lsm_PosID       = val[8];
+                String lspk_calbody    = val[9];
 
                 lspk_calbody = lspk_calbody.replace("\r\n", "");
 
@@ -2486,7 +2485,7 @@ public class PurStockIn extends Activity {
         }
         //仓库
         if (requestCode == 99 && resultCode == 13) {
-            String warehousePK1 = data.getStringExtra("result1");
+            String warehousePK1  = data.getStringExtra("result1");
             String warehousecode = data.getStringExtra("result2");
             String warehouseName = data.getStringExtra("result3");
             CWAREHOUSEID = warehousePK1;
@@ -2496,8 +2495,8 @@ public class PurStockIn extends Activity {
 
         //收发类别
         if (requestCode == 98 && resultCode == 2) {
-            String code = data.getStringExtra("Code");
-            String name = data.getStringExtra("Name");
+            String code  = data.getStringExtra("Code");
+            String name  = data.getStringExtra("Name");
             String AccID = data.getStringExtra("AccID");
             String RdIDA = data.getStringExtra("RdIDA");    //需要回传的id
             String RdIDB = data.getStringExtra("RdIDB");
@@ -2508,9 +2507,9 @@ public class PurStockIn extends Activity {
 
         //部门信息的回传数据
         if (requestCode == 97 && resultCode == 4) {
-            String deptname = data.getStringExtra("deptname");
+            String deptname   = data.getStringExtra("deptname");
             String pk_deptdoc = data.getStringExtra("pk_deptdoc");
-            String deptcode = data.getStringExtra("deptcode");
+            String deptcode   = data.getStringExtra("deptcode");
             CDPTID = pk_deptdoc;
 //            txtDepartment.requestFocus();
 //            txtDepartment.setText(deptname);
@@ -2518,8 +2517,8 @@ public class PurStockIn extends Activity {
 
         //库存组织
         if (requestCode == 94 && resultCode == 6) {
-            String pk_areacl = data.getStringExtra("pk_areacl");
-            String bodyname = data.getStringExtra("bodyname");
+            String pk_areacl  = data.getStringExtra("pk_areacl");
+            String bodyname   = data.getStringExtra("bodyname");
             String pk_calbody = data.getStringExtra("pk_calbody");
             PK_CALBODY = pk_calbody;
             txtOrganization.requestFocus();
@@ -2534,7 +2533,7 @@ public class PurStockIn extends Activity {
 //				txtPurOrderNo.setText("");
                 return;
             }
-            Bundle bundle = data.getExtras();
+            Bundle bundle  = data.getExtras();
             String orderNo = bundle.getString("BillCode");
 //			String vendor = bundle.getString("Vendor");
 //			String warehouse = bundle.getString("Warehouse");
@@ -2576,7 +2575,7 @@ public class PurStockIn extends Activity {
             parameter.put("CORP", MainLogin.objLog.CompanyCode);
             parameter.put("TableName", "PurGood");
             RequestThread requestThread = new RequestThread(parameter, mHandler, HANDER_POORDER_HEAD);
-            Thread td = new Thread(requestThread);
+            Thread        td            = new Thread(requestThread);
             td.start();
         }
         //扫描详细画面返回
@@ -2589,8 +2588,8 @@ public class PurStockIn extends Activity {
 
             Bundle bundle = data.getExtras();
 
-            String boxJS = bundle.getString("box");
-            String serJS = bundle.getString("serino");
+            String boxJS  = bundle.getString("box");
+            String serJS  = bundle.getString("serino");
             String bodyJS = bundle.getString("body");
             String headJS = bundle.getString("head");
             ScanedBarcode = bundle.getStringArrayList("ScanedBarcode");
@@ -2606,7 +2605,7 @@ public class PurStockIn extends Activity {
                 e.printStackTrace();
 
                 Toast.makeText(PurStockIn.this, e.getMessage(),
-                        Toast.LENGTH_LONG).show();
+                               Toast.LENGTH_LONG).show();
                 //ADD CAIXY TEST START
                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                 //ADD CAIXY TEST END

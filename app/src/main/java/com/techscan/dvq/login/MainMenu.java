@@ -37,7 +37,7 @@ import com.techscan.dvq.module.otherIn.OtherInAct;
 import com.techscan.dvq.module.otherOut.OtherOutAct;
 import com.techscan.dvq.module.productIn.ProductInAct;
 import com.techscan.dvq.module.purStockIn.PurStockIn;
-import com.techscan.dvq.module.query.Query;
+import com.techscan.dvq.module.query.QueryAct;
 import com.techscan.dvq.module.statusChange.StatusChangeAct;
 
 import java.io.File;
@@ -895,7 +895,7 @@ public class MainMenu extends Activity {
 
     private void ShowQuery() {
         ShowLoading();
-        Intent query = new Intent(this, Query.class);
+        Intent query = new Intent(this, QueryAct.class);
         startActivity(query);
         cancelLoading();
     }

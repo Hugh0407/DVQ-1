@@ -249,7 +249,7 @@
         <activity android:name=".module.statusChange.StatusChangeAct"/>
         <activity android:name=".module.statusChange.scan.SCScanAct"/>
         <activity android:name=".module.productIn.ProductInScanAct"/>
-        <activity android:name=".module.query.Query"/>
+        <activity android:name=".module.query.QueryAct"/>
         <activity android:name=".module.otherIn.OtherInAct"/>
         <activity android:name=".module.otherOut.OtherOutAct"/>
         <activity android:name=".module.otherIn.OtherInScanAct"/>

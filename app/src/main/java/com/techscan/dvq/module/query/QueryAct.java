@@ -14,18 +14,23 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 
 import com.techscan.dvq.R;
+import com.techscan.dvq.bean.QryGood;
 import com.techscan.dvq.common.RequestThread;
 import com.techscan.dvq.common.SoundHelper;
 import com.techscan.dvq.common.SplitBarcode;
+import com.techscan.dvq.common.Utils;
 import com.techscan.dvq.login.MainLogin;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -34,7 +39,7 @@ import butterknife.OnClick;
 import static com.techscan.dvq.common.Utils.formatDecimal;
 import static com.techscan.dvq.common.Utils.showToast;
 
-public class Query extends Activity {
+public class QueryAct extends Activity {
 
     @Nullable
     @InjectView(R.id.ed_bar_code)
@@ -69,6 +74,10 @@ public class Query extends Activity {
 
     @Nullable
     Activity mActivity;
+    @InjectView(R.id.lv)
+    ListView lv;
+    List<QryGood> list;
+    QueryAdp      adp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +108,9 @@ public class Query extends Activity {
         actionBar.setTitle("查询扫描");
         mEdBarCode.setOnKeyListener(new MyOnKeyListener(mEdBarCode));
         mEdBarCode.addTextChangedListener(new CustomTextWatcher(mEdBarCode));
+        list = new ArrayList<QryGood>();
+        adp = new QueryAdp(list);
+        lv.setAdapter(adp);
     }
 
     @Nullable
@@ -110,10 +122,9 @@ public class Query extends Activity {
                 case 1:
                     JSONObject json = (JSONObject) msg.obj;
                     if (null == json) {
-                        showToast(mActivity, "保存单据失败");
+                        showToast(mActivity, "数据访问失败");
                         return;
                     }
-                    SoundHelper.playOK();
                     Log.d("TAG", "'json: " + json.toString());
                     setInvBaseToUI(json);
                     break;
@@ -136,26 +147,42 @@ public class Query extends Activity {
         if (barDecoder.BarcodeType.equals("C")) {   //C|SKU|LOT|TAX|QTY|SN
             mEdLot.setText(barDecoder.cBatch);
             mEdTotalNum.setText(String.valueOf(barDecoder.dQuantity));
-            getInvBaseInfoByBarcode(barDecoder.cInvCode, barDecoder.cBatch, MainLogin.objLog.STOrgCode);
+            String invcode = barDecoder.cInvCode;
+            if (invcode.contains(",")) {
+                invcode = invcode.split(",")[0];
+            }
+            getInvBaseInfoByBarcode(invcode, barDecoder.cBatch, MainLogin.objLog.STOrgCode);
             return true;
         } else if (barDecoder.BarcodeType.equals("TC")) {    //TC|SKU|LOT|TAX|QTY|NUM|SN
             mEdLot.setText(barDecoder.cBatch);
             double qty = barDecoder.dQuantity;
             double num = barDecoder.iNumber;
             mEdTotalNum.setText(formatDecimal(qty * num));
-            getInvBaseInfoByBarcode(barDecoder.cInvCode, barDecoder.cBatch, MainLogin.objLog.STOrgCode);
+            String invcode = barDecoder.cInvCode;
+            if (invcode.contains(",")) {
+                invcode = invcode.split(",")[0];
+            }
+            getInvBaseInfoByBarcode(invcode, barDecoder.cBatch, MainLogin.objLog.STOrgCode);
             return true;
         } else if (barDecoder.BarcodeType.equals("P")) {// 包码 P|SKU|LOT|WW|TAX|QTY|CW|ONLY|SN    9位
             mEdLot.setText(barDecoder.cBatch);
-            mEdTotalNum.setText(barDecoder.iNumber);
-            getInvBaseInfoByBarcode(barDecoder.cInvCode, barDecoder.cBatch, MainLogin.objLog.STOrgCode);
+            mEdTotalNum.setText(String.valueOf(barDecoder.iNumber));
+            String invcode = barDecoder.cInvCode;
+            if (invcode.contains(",")) {
+                invcode = invcode.split(",")[0];
+            }
+            getInvBaseInfoByBarcode(invcode, barDecoder.cBatch, MainLogin.objLog.STOrgCode);
             return true;
         } else if (barDecoder.BarcodeType.equals("TP")) {//盘码TP|SKU|LOT|WW|TAX|QTY|NUM|CW|ONLY|SN
             mEdLot.setText(barDecoder.cBatch);
             double weight = barDecoder.dQuantity;
             double mEdNum = Double.valueOf(barDecoder.iNumber);
             mEdTotalNum.setText(formatDecimal(weight * mEdNum));
-            getInvBaseInfoByBarcode(barDecoder.cInvCode, barDecoder.cBatch, MainLogin.objLog.STOrgCode);
+            String invcode = barDecoder.cInvCode;
+            if (invcode.contains(",")) {
+                invcode = invcode.split(",")[0];
+            }
+            getInvBaseInfoByBarcode(invcode, barDecoder.cBatch, MainLogin.objLog.STOrgCode);
             return true;
         } else {
             showToast(mActivity, "条码有误,重新输入");
@@ -175,19 +202,20 @@ public class Query extends Activity {
         mEdInTime.setText("");
         mEdShelfLife.setText("");
         mEdManual.setText("");
-
+        list.clear();
+        adp.notifyDataSetChanged();
     }
 
     /**
      * 获取存货基本信息
      *
-     * @param sku 物料编码
+     * @param invcode 物料编码
      */
-    private void getInvBaseInfoByBarcode(String sku, String batchcode, String crop) {
+    private void getInvBaseInfoByBarcode(String invcode, String batchcode, String crop) {
         HashMap<String, String> parameter = new HashMap<String, String>();
         parameter.put("FunctionName", "GetInvInfoByBarcode");
         parameter.put("CompanyCode", MainLogin.objLog.STOrgCode);
-        parameter.put("Invcode", sku);
+        parameter.put("Invcode", invcode);
         parameter.put("BatchCode", batchcode);
         parameter.put("Crop", crop);
         parameter.put("TableName", "baseInfo");
@@ -200,43 +228,40 @@ public class Query extends Activity {
     /**
      * 通过获取到的json 解析得到物料信息,并设置到UI上
      *
-     * @param json
-     * @throws JSONException
+     * @param json 网络请求结果
      */
 
     private void setInvBaseToUI(JSONObject json) {
         Log.d("TAG", "setInvBaseToUI: " + json);
         try {
             if (json.getBoolean("Status")) {
-                JSONArray               val = json.getJSONArray("baseInfo");
-                HashMap<String, Object> map = null;
+                JSONArray val = json.getJSONArray("baseInfo");
+                if (val.length() <= 0) {
+                    showToast(mActivity, "没有该存货");
+                    return;
+                }
+                JSONObject j = val.getJSONObject(0);
+                mEdName.setText(j.getString("invname"));
+                mEdSpec.setText(j.getString("invspec"));
+                String vfree4 = j.getString("vfree4");
+                if (!vfree4.equals("null")) {
+                    mEdManual.setText(vfree4);
+                }
+                QryGood good;
+                list.clear();
                 for (int i = 0; i < val.length(); i++) {
-                    JSONObject tempJso = val.getJSONObject(i);
-                    map = new HashMap<String, Object>();
-                    map.put("invcode", tempJso.getString("invcode"));
-                    map.put("invname", tempJso.getString("invname"));
-                    map.put("pk_cubasdoc", tempJso.getString("pk_cubasdoc"));
-                    map.put("vfree4", tempJso.getString("vfree4"));   //海关手册号
-                    map.put("invtype", tempJso.getString("invtype"));   //型号
-                    map.put("invspec", tempJso.getString("invspec"));   //规格
-                    map.put("dbilldate", tempJso.getString("dbilldate"));
-                    map.put("vbatchcode", tempJso.getString("vbatchcode")); //批次
-                    map.put("custname", tempJso.getString("custname"));
+                    JSONObject jo = val.getJSONObject(i);
+                    good = new QryGood();
+                    good.storname = jo.getString("storname");
+                    good.nonhandnum = jo.getString("nonhandnum");
+                    list.add(good);
                 }
-                if (map != null) {
-                    mEdName.setText(map.get("invname").toString());
-                    mEdSpec.setText(map.get("invspec").toString());
-                    mEdLot.setText(map.get("vbatchcode").toString());
-                    mEdSupplier.setText(map.get("custname").toString());
-//                mEdShelfLife.setText(map.get("createtime").toString());
-                    String s = map.get("vfree4").toString();
-                    if (s.equals("null")) {
-                        mEdManual.setText("");
-                    } else {
-                        mEdManual.setText(s);
-                    }
-                    mEdInTime.setText(map.get("dbilldate").toString());
-                }
+                adp.setList(list);
+                adp.notifyDataSetChanged();
+                SoundHelper.playOK();
+            } else {
+                Utils.showToast(mActivity, json.getString("ErrMsg"));
+                changeAllEdTextToEmpty();
             }
         } catch (JSONException e) {
             e.printStackTrace();

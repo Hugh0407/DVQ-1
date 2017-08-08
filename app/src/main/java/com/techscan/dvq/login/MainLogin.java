@@ -20,7 +20,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.StrictMode;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.InputType;
 import android.util.Log;
@@ -77,49 +76,40 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import static com.techscan.dvq.MainActivity.LoginUser;
+import static com.techscan.dvq.common.Common.lsUrl;
 
 public class MainLogin extends Activity {
     // protected static final Context context = null;
     // 控件的定义
     Button btnLogin, btnExit;
-    @Nullable
     String LoginString, LoginString2, CompanyCode, OrgCode, WhCode, WhCodeB;
-    @NonNull
-    public static String      tempFilePath = "";
-    @NonNull
+    String newVerName       = "";// 新版本名称
+    String UPDATE_SERVERAPK = "dvq.apk";
+
+    public static String tempFilePath = "";
+
     public static String      appTime      = "";
     //static JSONArray arysUserRole = new JSONArray();
     //static AlertDialog LGalertDialog = null;
-    @Nullable
     static        WifiManager wifi_service = null;
-    @Nullable
     static        String      sWIFIMin     = null;
-    @Nullable
     static        String      sWIFIMax     = null;
 
-    @NonNull
-    String newVerName = "";// 新版本名称
-    int            newVerCode       = -1;// 新版本号
-    @Nullable
-    ProgressDialog pd               = null;
-    @NonNull
-    String         UPDATE_SERVERAPK = "dvq.apk";
 
-    @Nullable
+    int            newVerCode = -1;// 新版本号
+    ProgressDialog pd         = null;
+
+
     EditText user = null;
-    @Nullable
     EditText pwds = null;
 
-    // ADD CAIXY START 15/04/15
     TextView tvVer;
-    // ADD CAIXY END 15/04/15
-    // ADD CAIXY TEST START
+
     public static SoundPool sp;// 声明一个SoundPool
     public static int       music;// 定义一个int来设置suondID
     public static int       music2;// 定义一个int来设置suondID
-    // ADD CAIXY TEST END
 
-    @NonNull
+
     public static Common objLog = new Common();
     @Nullable
     @InjectView(R.id.ed_time)
@@ -140,8 +130,7 @@ public class MainLogin extends Activity {
         return keyCode != KeyEvent.KEYCODE_BACK;
     }
 
-    // 取锟斤拷锟斤拷钮锟皆伙拷锟斤拷锟铰硷拷
-    @NonNull
+
     private DialogInterface.OnClickListener listenExit = new DialogInterface.OnClickListener() {
         public void onClick(DialogInterface dialog, int whichButton) {
             MainLogin.this.finish();
@@ -204,6 +193,7 @@ public class MainLogin extends Activity {
         if (lsUrl.equals("")) {
             lsUrl = LoginString;
         }
+        Log.d("TAG", "DoHttpQuery: " + lsUrl);
 //暂时关闭
 //		if(UrlErr > 0)
 //		{
@@ -236,7 +226,7 @@ public class MainLogin extends Activity {
                 .build();
         Observable.create(new ObservableOnSubscribe<Response>() {
             @Override
-            public void subscribe(@NonNull ObservableEmitter<Response> e) throws Exception {
+            public void subscribe(ObservableEmitter<Response> e) throws Exception {
                 Response response = client.newCall(request).execute();
                 e.onNext(response);
                 e.onComplete();
@@ -246,11 +236,15 @@ public class MainLogin extends Activity {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Response>() {
                     @Override
-                    public void accept(@NonNull Response response) throws Exception {
+                    public void accept(Response response) throws Exception {
 
                         if (response.code() == 200) {
-//                            String     result = EntityUtils.toString(httpResponse.getEntity());
-                            String     res = response.body().string();
+                            /**
+                             * GB2312是中国规定的汉字编码，也可以说是简体中文的字符集编码;
+                             * GBK 是 GB2312的扩展 ,除了兼容GB2312外，它还能显示繁体中文
+                             */
+                            String res = new String(response.body().bytes(), "GBK");
+//                            res = new String(res.getBytes("iso-8859-1"), "GBK");
                             JSONObject jas = new JSONObject(res);
 
                             if (!jas.has("Status")) {
@@ -262,7 +256,6 @@ public class MainLogin extends Activity {
                             boolean loginStatus = jas.getBoolean("Status");
                             if (loginStatus == true) {
 
-                                objLog = new Common();
                                 objLog.LoginString = LoginString;
                                 objLog.LoginString2 = LoginString2;
                                 objLog.LoginUser = user.getText().toString().replace("\n", "");
@@ -455,10 +448,10 @@ public class MainLogin extends Activity {
     }
 
     // 创建对话框的按钮事件侦听
-    @NonNull
+
     private Button.OnClickListener myListner = new Button.OnClickListener() {
         @Override
-        public void onClick(@NonNull View v) {
+        public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.btnLogin: {
                     //ShowLoading();
@@ -827,7 +820,7 @@ public class MainLogin extends Activity {
     /**
      * 获得版本号
      */
-    public int getVerCode(@NonNull Context context) {
+    public int getVerCode(Context context) {
         int verCode = -1;
         try {
             verCode = context.getPackageManager().getPackageInfo(
@@ -842,7 +835,7 @@ public class MainLogin extends Activity {
     /**
      * 获得版本名称
      */
-    public String getVerName(@NonNull Context context) {
+    public String getVerName(Context context) {
         String verName = "";
         try {
             verName = context.getPackageManager().getPackageInfo(
@@ -858,8 +851,6 @@ public class MainLogin extends Activity {
      *
      * @return
      */
-    @Nullable
-    String lsUrl = "";
 
     //int UrlErr = 0;    //暂时关闭
     public boolean getServerVer() {
@@ -954,7 +945,7 @@ public class MainLogin extends Activity {
     /**
      * 更新版本
      */
-    public void doNewVersionUpdate(@NonNull final String DownStr) {
+    public void doNewVersionUpdate(final String DownStr) {
         int          verCode = this.getVerCode(this);
         String       verName = this.getVerName(this);
         StringBuffer sb      = new StringBuffer();
@@ -1033,7 +1024,7 @@ public class MainLogin extends Activity {
         }.start();
     }
 
-    @NonNull
+
     Handler handler = new Handler() {
 
         @Override
@@ -1107,7 +1098,7 @@ public class MainLogin extends Activity {
 //	}
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
@@ -1138,7 +1129,7 @@ public class MainLogin extends Activity {
 
     }
 
-    @NonNull
+
     private DatePickerDialog.OnDateSetListener Datelistener = new DatePickerDialog.OnDateSetListener() {
         /**params：view：该事件关联的组件
          * params：myyear：当前选择的年
@@ -1162,7 +1153,7 @@ public class MainLogin extends Activity {
         }
     };
 
-    @NonNull
+
     private View.OnFocusChangeListener myFocusListener = new View.OnFocusChangeListener() {
         @Override
         public void onFocusChange(View view, boolean hasFocus) {
