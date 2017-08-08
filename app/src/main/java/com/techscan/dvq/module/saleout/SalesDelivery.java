@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -205,19 +204,9 @@ public class SalesDelivery extends Activity {
         setContentView(R.layout.activity_sales_delivery);
         this.setTitle("销售出库");
         initView();
-        SharedPreferences sharedPreferences = getSharedPreferences(PREFERENCE_SETTING,
-                Activity.MODE_PRIVATE);
-
-        WhNameA = sharedPreferences.getString("WhCode", "");
-        WhNameB = sharedPreferences.getString("AccId", "");
-//				sCompanyCode=sharedPreferences.getString("CompanyCode", "");
-//		        sOrgCode=sharedPreferences.getString("OrgCode", "");
         ClearBillDetailInfoShow();
         SetBillType();
-
-
         tvSaleOutSelect.requestFocus();
-
         jsonSaveHead = new JSONObject();
     }
 
@@ -400,242 +389,6 @@ public class SalesDelivery extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-//    private Map<String, Object> GetBillDetailInfoByBillCode(String sAccID, String sCorpPK, String sBillCode, String sSaleFlg) {
-//        SaleFlg = sSaleFlg;
-//        JSONObject para = new JSONObject();
-//        Map<String, Object> mapBillInfo = new HashMap<String, Object>();
-//
-//        try {
-//            if (tvSaleOutSelect.getText().toString().equals("销售出库")) {
-//                para.put("FunctionName", "GetSalereceiveHead");
-//                para.put("CorpPK", sCorpPK);
-//                para.put("BillCode", sBillCode);
-//            }
-//
-//        } catch (JSONException e2) {
-//            // TODO Auto-generated catch block
-//            Toast.makeText(this, e2.getMessage(), Toast.LENGTH_LONG).show();
-//            //ADD CAIXY TEST START
-//            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-//            //ADD CAIXY TEST END
-//            e2.printStackTrace();
-//            return null;
-//        }
-//        try {
-//            para.put("TableName", "dbHead");
-//        } catch (JSONException e2) {
-//            // TODO Auto-generated catch block
-//            Toast.makeText(this, e2.getMessage(), Toast.LENGTH_LONG).show();
-//            //ADD CAIXY TEST START
-//            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-//            //ADD CAIXY TEST END
-//            return null;
-//        }
-//
-//        JSONObject jas;
-//        try {
-//            if (!MainLogin.getwifiinfo()) {
-//                Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
-//                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-//                return null;
-//            }
-//            jas = Common.DoHttpQuery(para, "CommonQuery", sAccID);
-//        } catch (Exception ex) {
-//            Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
-//            //ADD CAIXY TEST START
-//            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-//            //ADD CAIXY TEST END
-//            return null;
-//        }
-//
-//        //把取得的单据信息绑定到ListView上
-//        try {
-//            if (jas == null) {
-//                Toast.makeText(this, R.string.WangLuoChuXianWenTi, Toast.LENGTH_LONG).show();
-//                //ADD CAIXY TEST START
-//                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-//                //ADD CAIXY TEST END
-//                return null;
-//            }
-//
-//            if (!jas.getBoolean("Status")) {
-//                String errMsg = "";
-//                if (jas.has("ErrMsg")) {
-//                    errMsg = jas.getString("ErrMsg");
-//                } else {
-//                    errMsg = getString(R.string.WangLuoChuXianWenTi);
-//                }
-//                Toast.makeText(this, errMsg, Toast.LENGTH_LONG).show();
-//                //ADD CAIXY TEST START
-//                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-//                //ADD CAIXY TEST END
-//                return null;
-//            }
-//
-//            //绑定到map
-//            mapBillInfo = new HashMap<String, Object>();
-//            JSONArray jsarray = jas.getJSONArray("dbHead");
-//
-//            jas = jsarray.getJSONObject(0);
-//
-//            if (tvSaleOutSelect.getText().toString().equals("销售出库")) {
-//                //mapBillInfo.put("pk_corp", jas.getString("pk_corp"));//公司PK
-//                mapBillInfo.put("pk_corp", jas.getString("pk_corp"));
-//                mapBillInfo.put("custname", jas.getString("custname"));
-//                mapBillInfo.put("pk_cubasdoc", jas.getString("pk_cubasdoc"));
-//                mapBillInfo.put("pk_cumandoc", jas.getString("pk_cumandoc"));
-//                mapBillInfo.put("billID", jas.getString("csalereceiveid"));
-//                mapBillInfo.put("billCode", jas.getString("vreceivecode"));
-//                mapBillInfo.put("AccID", sAccID);
-//                mapBillInfo.put("vdef11", jas.getString("vdef11"));
-//                mapBillInfo.put("vdef12", jas.getString("vdef12"));
-//                mapBillInfo.put("vdef13", jas.getString("vdef13"));
-//                mapBillInfo.put("saleflg", "");
-//                if (sAccID.equals("A"))
-//                    mapBillInfo.put("coperatorid", MainLogin.objLog.UserID);//操作者
-//                else
-//                    mapBillInfo.put("coperatorid", MainLogin.objLog.UserIDB);//操作者
-//                mapBillInfo.put("ctransporttypeid", jas.getString("ctransporttypeid"));//运输方式ID
-//                mapBillInfo.put("cbiztype", jas.getString("cbiztype"));
-//            }
-//
-////            if(tvSaleOutSelect.getText().toString().equals("退回再送"))
-////            {
-////                //mapBillInfo.put("pk_corp", jas.getString("pk_corp"));
-////                mapBillInfo.put("pk_corp", jas.getString("pk_corp"));
-////                mapBillInfo.put("custname", jas.getString("custname"));
-////                mapBillInfo.put("pk_cubasdoc", jas.getString("pk_cubasdocc"));
-////                mapBillInfo.put("pk_cumandoc", jas.getString("ccustomerid"));
-////                mapBillInfo.put("billID", jas.getString("cgeneralhid"));
-////                mapBillInfo.put("billCode", jas.getString("vbillcode"));
-////                mapBillInfo.put("AccID", sAccID);
-////                mapBillInfo.put("vdef11", jas.getString("vuserdef11"));
-////                mapBillInfo.put("vdef12", jas.getString("vuserdef12"));
-////                mapBillInfo.put("vdef13", jas.getString("vuserdef13"));
-////                mapBillInfo.put("saleflg", "");
-////                if(sAccID.equals("A"))
-////                {
-////                    mapBillInfo.put("coperatorid", MainLogin.objLog.UserID);//操作者
-////                    mapBillInfo.put("ctransporttypeid", "0001AA100000000003U7");//运输方式ID
-////                }
-////                else
-////                {
-////                    mapBillInfo.put("coperatorid", MainLogin.objLog.UserIDB);//操作者
-////                    mapBillInfo.put("ctransporttypeid", "0001DD10000000000XQT");//运输方式ID
-////                }
-////                mapBillInfo.put("cbiztype", jas.getString("cbiztype"));
-////            }
-//
-////            if(tvSaleOutSelect.getText().toString().equals("退回不送"))
-////            {
-////                if(sSaleFlg.equals("T"))
-////                {
-////                    mapBillInfo.put("pk_corp", jas.getString("pk_corp"));
-////                    mapBillInfo.put("custname", jas.getString("custname"));
-////                    mapBillInfo.put("pk_cubasdoc", jas.getString("pk_cubasdoc"));
-////                    mapBillInfo.put("pk_cumandoc", jas.getString("pk_cumandoc"));
-////                    mapBillInfo.put("billID", jas.getString("pk_take"));
-////                    mapBillInfo.put("billCode", jas.getString("vreceiptcode"));
-////                    mapBillInfo.put("AccID", sAccID);
-////                    mapBillInfo.put("vdef11", jas.getString("vdef11"));
-////                    mapBillInfo.put("vdef12", jas.getString("vdef12"));
-////                    mapBillInfo.put("vdef13", jas.getString("vdef13"));
-////                    mapBillInfo.put("saleflg", "T");
-////
-////                    if(sAccID.equals("A"))
-////                    {
-////                        mapBillInfo.put("coperatorid", MainLogin.objLog.UserID);//操作者
-////                        mapBillInfo.put("ctransporttypeid", "0001AA100000000003U7");//运输方式ID
-////                    }
-////                    else
-////                    {
-////                        mapBillInfo.put("coperatorid", MainLogin.objLog.UserIDB);//操作者
-////                        mapBillInfo.put("ctransporttypeid", "0001DD10000000000XQT");//运输方式ID
-////                    }
-////                    mapBillInfo.put("cbiztype", jas.getString("cbiztype"));
-////                }
-////                else if (sSaleFlg.equals("D"))
-////                {
-////                    mapBillInfo.put("pk_corp", jas.getString("pk_corp"));
-////                    mapBillInfo.put("custname", jas.getString("custname"));
-////                    mapBillInfo.put("pk_cubasdoc", jas.getString("pk_cubasdoc"));
-////                    mapBillInfo.put("pk_cumandoc", jas.getString("ccustomerid"));
-////                    mapBillInfo.put("billID", jas.getString("csaleid"));
-////                    mapBillInfo.put("billCode", jas.getString("vreceiptcode"));
-////                    mapBillInfo.put("AccID", sAccID);
-////                    mapBillInfo.put("vdef11", jas.getString("vdef11"));
-////                    mapBillInfo.put("vdef12", jas.getString("vdef12"));
-////                    mapBillInfo.put("vdef13", jas.getString("vdef13"));
-////                    mapBillInfo.put("saleflg", "D");
-////
-////                    if(sAccID.equals("A"))
-////                    {
-////                        mapBillInfo.put("coperatorid", MainLogin.objLog.UserID);//操作者
-////                        mapBillInfo.put("ctransporttypeid", "0001AA100000000003U7");//运输方式ID
-////                    }
-////                    else
-////                    {
-////                        mapBillInfo.put("coperatorid", MainLogin.objLog.UserIDB);//操作者
-////                        mapBillInfo.put("ctransporttypeid", "0001DD10000000000XQT");//运输方式ID
-////                    }
-////                    mapBillInfo.put("cbiztype", jas.getString("cbiztype"));
-////                }
-////            }
-//
-//            //保存用表头JSONObject设置---结束
-//            return mapBillInfo;
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
-//            //ADD CAIXY TEST START
-//            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-//            //ADD CAIXY TEST END
-//            return null;
-//        } catch (Exception ex) {
-//            Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
-//            //ADD CAIXY TEST START
-//            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-//            //ADD CAIXY TEST END
-//            return null;
-//        }
-//    }
-
-//    private void SetRDCL() {
-//        if (tvSaleOutSelect.getText().toString().equals("销售出库")) {
-//            tmprdCode = "202";
-//            if (tmpAccID.equals("A")) {
-//                tmprdID = "0001AA100000000003VD";    //
-//            } else if (tmpAccID.equals("B")) {
-//                tmprdID = "0001DD10000000000XR8";    //
-//            }
-////			tmprdName = "销售出库";
-////			txtSalesDelRdcl.setText(tmprdName);
-//        }
-//
-////        if(tvSaleOutSelect.getText().toString().equals("退回再送"))
-////        {
-////            tmprdCode = "210";
-////            if (tmpAccID.equals("A")) {
-////                tmprdID = "0001AA100000000003VL";        //
-////            } else if (tmpAccID.equals("B")) {
-////                tmprdID = "0001DD10000000000XRG";    //
-////            }
-////            tmprdName = "销售退货";
-////            txtSalesDelRdcl.setText(tmprdName);
-////        }
-//
-////        if(tvSaleOutSelect.getText().toString().equals("退回不送"))
-////        {
-////            tmprdCode = "210";
-////            if (tmpAccID.equals("A")) {
-////                tmprdID = "0001AA100000000003VL";        //
-////            } else if (tmpAccID.equals("B")) {
-////                tmprdID = "0001DD10000000000XRG";    //
-////            }
-////            tmprdName = "销售退货";
-////            txtSalesDelRdcl.setText(tmprdName);
-////        }
-//    }
 
 
     //根据订单表头得到表体详细
@@ -988,13 +741,6 @@ public class SalesDelivery extends Activity {
                 para.put("CorpPK",  MainLogin.objLog.CompanyCode);
                 Log.d(TAG, "GetBillHeadDetailInfo: " + csaleid);
             }
-            //多角贸易 // TODO: 2017/7/31
-//            if (tvSaleOutSelect.getText().toString().equals("多角贸易")) {
-//                para.put("FunctionName", "GetSaleOutHeadNew");
-//                para.put("CSALEID", csaleid);
-//                para.put("BillCode", tmpBillCode);
-//                para.put("CorpPK", "4100");
-//            }
 
         } catch (JSONException e2) {
             Toast.makeText(this, e2.getMessage(), Toast.LENGTH_LONG).show();
@@ -1105,41 +851,7 @@ public class SalesDelivery extends Activity {
                     CCUSTOMERID  = tempJso.getString("ccustomerid").toString();
                     CCUSTBASDOCID = tempJso.getString("ccustbasdocid").toString();
                 }
-                //多角贸易标表头 // TODO: 2017/7/31  
-//                if (tvSaleOutSelect.getText().toString().equals("多角贸易")) {
-//                newHeadJSON.put("VDEF1", tempJso.getString("vdef1"));
-//                newHeadJSON.put("VDEF2", tempJso.getString("vdef2"));
-//                newHeadJSON.put("VDEF5", tempJso.getString("vdef5"));
-//                newHeadJSON.put("cbiztype", tempJso.getString("cbiztype"));
-//                newHeadJSON.put("CSALECORPID", tempJso.getString("csalecorpid"));
-//                newHeadJSON.put("PK_CORP", tempJso.getString("pk_corp"));
-//                newHeadJSON.put("cdeptid", tempJso.getString("cdeptid"));
-//                newHeadJSON.put("ccalbodyid", tempJso.getString("ccalbodyid"));
-//                newHeadJSON.put("coperatorid", tempJso.getString("coperatorid"));
-//                newHeadJSON.put("ccustomerid", tempJso.getString("ccustomerid"));
-//                newHeadJSON.put("vreceiveaddress", tempJso.getString("vreceiveaddress"));
-//                newHeadJSON.put("creceiptcorpid", tempJso.getString("creceiptcorpid"));
-//                newHeadJSON.put("csaleid", tempJso.getString("csaleid"));
-//                newHeadJSON.put("billcode", tmpBillCode);
-//                newHeadJSON.put("cdeptid", tempJso.getString("cdeptid"));
-//                newHeadJSON.put("capproveid", tempJso.getString("capproveid"));
-//                newHeadJSON.put("ccalbodyid", tempJso.getString("ccalbodyid"));
-//                newHeadJSON.put("creceiptcustomerid", tempJso.getString("creceiptcustomerid"));
-//                newHeadJSON.put("nheadsummny", tempJso.getString("nheadsummny"));
-//                newHeadJSON.put("creceipttype", tempJso.getString("creceipttype"));
-//                CBIZTYPE = tempJso.getString("cbiztype").toString();
-//                CSALECORPID = tempJso.getString("csalecorpid").toString();
-//                PK_CORP = tempJso.getString("pk_corp").toString();
-//                VDEF1 = tempJso.getString("vdef1").toString();
-//                VDEF4 = tempJso.getString("vdef1").toString();
-//                VDEF2 = tempJso.getString("vdef2").toString();
-//                VDEF5 = tempJso.getString("vdef5").toString();
-//                if (!TextUtils.isEmpty(VDEF5)){
-//                    VDEF5 = "";
-//                }
-//                CCUSTOMERID  = tempJso.getString("ccustomerid").toString();
-//                CCUSTBASDOCID = tempJso.getString("ccustbasdocid").toString();
-//            }
+
                 newHeadArray.put(newHeadJSON);
             }
             jsonBillHead.put("Status", true);
@@ -1173,12 +885,6 @@ public class SalesDelivery extends Activity {
         txtSalesDelCD.setText(tmpCustName);
         txtSalesDelRdcl.setText(tmpBillDate);
 
-//		if(!Common.CheckUserRole(tmpAccID, tmpCorpPK, "40080802"))
-//		{
-//			MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-//			Toast.makeText(SalesDelivery.this, R.string.MeiYouShiYongGaiDanJuDeQuanXian, Toast.LENGTH_LONG).show();
-//			return false;
-//		}
 
         return true;
     }
@@ -1245,13 +951,6 @@ public class SalesDelivery extends Activity {
 
 //				txtSalesDelPos.requestFocus();
             }
-//运送方式
-//			if(dialog.equals(CDSelectButton))
-//			{
-//				txtSalesDelCD.setText(CDNameList[index].toString());
-//				tmpCdTypeID = CDIDList[index].toString();
-////				txtSalesDelPos.requestFocus();
-//			}
         }
 
 

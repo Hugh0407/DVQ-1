@@ -65,6 +65,7 @@ public class MultilateralTradeDetail extends Activity {
     JSONObject jsTotal;
     String CINWHID = "";
     String weight = "";
+    String CALBODY = "";
     String num    = "";
     Double number;
     Double ntotaloutinvnum;
@@ -129,7 +130,7 @@ public class MultilateralTradeDetail extends Activity {
 //        ScanType = intent.getStringExtra("ScanType");
         try {
             ScanedBarcode = intent.getStringArrayListExtra("ScanedBarcode");
-//            BillCode = intent.getStringExtra("BillCode");
+            CALBODY = intent.getStringExtra("PK_CALBODY");
             PK_CORP = intent.getStringExtra("PK_CORP");
             CBILLID = intent.getStringExtra("CBILLID");
             ScanType = intent.getStringExtra("ScanType");
@@ -776,7 +777,7 @@ public class MultilateralTradeDetail extends Activity {
                 JSONArray jsarray = jsBody.getJSONArray("dbBody");
                 for (int i = 0; i < jsarray.length(); i++) {
                     JSONObject tempJso = jsarray.getJSONObject(i);
-                    CALBODYID =tempJso.getString("cquoteunitid");
+                    CALBODYID =CALBODY;//kucunzuhi
                     CINVBASID = tempJso.getString("cinvbasid");
                     INVENTORYID = tempJso.getString("coutinvid");
                     CINWHID = tempJso.getString("cinwhid");

@@ -150,6 +150,14 @@ public class MultilateralTrade extends Activity {
         ButterKnife.inject(this);
 //        txtCustomer.setFocusable(false);
 //        txtCustomer.setFocusableInTouchMode(false);
+        txtOutCompany.setFocusable(false);
+        txtOutCompany.setFocusableInTouchMode(false);
+        txtOutOrg.setFocusable(false);
+        txtOutOrg.setFocusableInTouchMode(false);
+        txtInCompany.setFocusable(false);
+        txtInCompany.setFocusableInTouchMode(false);
+        txtInOrg.setFocusable(false);
+        txtInOrg.setFocusableInTouchMode(false);
         txtBillDate.setFocusable(false);
         txtBillDate.setFocusableInTouchMode(false);
     }
@@ -244,14 +252,6 @@ public class MultilateralTrade extends Activity {
                 CWAREHOUSEID = warehousePK1;
                 txtWareHouse.setText(warehouseName);
                 checkInfo.put("WHName",warehouseName);
-//                try {
-//                    //获得表头信息
-//                    GetBillHeadDetailInfo(SaleFlg);
-//                    //获得表体信息
-////                                GetBillBodyDetailInfo(SaleFlg);
-//                } catch (Exception e1) {
-//                    e1.printStackTrace();
-//                }
             }
 
         }
@@ -291,11 +291,11 @@ public class MultilateralTrade extends Activity {
     @OnClick({R.id.imageDocumentNumber, R.id.imageWareHouse,R.id.imageOrg,R.id.imageDepartment,R.id.imageSendAndTake, R.id.btnScan, R.id.btnSave, R.id.btnExit})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.imageDocumentNumber:
+            case R.id.imageDocumentNumber://单据号
                 try{
                     Intent intent = new Intent(MultilateralTrade.this, SaleChooseTime.class);
                     startActivityForResult(intent, 44);
-//                    txtWareHouse.requestFocus();
+                    txtDocument.requestFocus();
 
                 }catch (Exception e){
                     Toast.makeText(MultilateralTrade.this, WangLuoChuXiangWenTi, Toast.LENGTH_LONG).show();
@@ -303,36 +303,23 @@ public class MultilateralTrade extends Activity {
                     MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                 }
                 break;
-            case R.id.imageSendAndTake:
+            case R.id.imageSendAndTake://收发类别
                 btnRdclClick("");
                 break;
-            case R.id.imageOrg:
+            case R.id.imageOrg://库存组织
                 btnReferSTOrgList();
                 break;
-            case R.id.imageWareHouse:
+            case R.id.imageWareHouse://仓库
                 try {
-                    if (txtMultilateralTrade.getText().toString() == null || txtMultilateralTrade.getText().toString().equals("")) {
-                        Toast.makeText(MultilateralTrade.this, "请输入来源单据",
-                                Toast.LENGTH_LONG).show();
-                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                        return;
-                    }
-//                    if (txtDocumentNumber.getText().toString() == null || txtDocumentNumber.getText().toString().equals("")) {
-//                        Toast.makeText(MultilateralTrade.this, "没有选择单据号",
-//                                Toast.LENGTH_LONG).show();
-//                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-//                        return;
-//                    }
                     //获取仓库
                     btnWarehouseClick();
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(MultilateralTrade.this, "请输入单据来源", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MultilateralTrade.this, "获取仓库失败", Toast.LENGTH_SHORT).show();
                     MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                 }
                 break;
-            case R.id.imageDepartment:
-//              Toast.makeText(MultilateralTrade.this,"QQQ",Toast.LENGTH_SHORT).show();
+            case R.id.imageDepartment://部门
                 btnReferDepartment();
             break;
             case R.id.btnScan:
@@ -349,6 +336,12 @@ public class MultilateralTrade extends Activity {
                     MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                     return;
                 }
+                if (txtOrg.getText().toString() == null || txtOrg.getText().toString().equals("")) {
+                    Toast.makeText(MultilateralTrade.this, "库存组织没有选择",
+                            Toast.LENGTH_LONG).show();
+                    MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+                    return;
+                }
                 if (txtWareHouse.getText().toString() == null || txtWareHouse.getText().toString().equals("")) {
                     Toast.makeText(MultilateralTrade.this, "仓库没有选择",
                             Toast.LENGTH_LONG).show();
@@ -357,7 +350,7 @@ public class MultilateralTrade extends Activity {
                 }
                 SaleScan();
                 break;
-            case R.id.btnSave:
+            case R.id.btnSave://保存按钮
                 try
                 {
                     if (jsBody==null||jsBody.equals("")){
@@ -371,20 +364,51 @@ public class MultilateralTrade extends Activity {
                         Toast.makeText(MultilateralTrade.this, "请输入来源单据",
                                 Toast.LENGTH_LONG).show();
                         MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+                        txtDocumentNumber.requestFocus();
                         return;
                     }
 
+
                     if (txtDocumentNumber.getText().toString() == null || (!txtDocumentNumber.getText().toString().equals(checkInfo.get("BillCode")))) {
-                        Toast.makeText(MultilateralTrade.this, "没有选择单据号",
+                        Toast.makeText(MultilateralTrade.this, "请选择单据号",
+                                Toast.LENGTH_LONG).show();
+                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+                        return;
+                    }
+                    if (txtDocument.getText().toString() == null || txtDocument.getText().toString().equals("")) {
+                        Toast.makeText(MultilateralTrade.this, "请输入出库单号",
+                                Toast.LENGTH_LONG).show();
+                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+                        txtDocument.requestFocus();
+                        return;
+                    }
+
+
+                    if (txtOrg.getText().toString() == null || (!txtOrg.getText().toString().equals(checkInfo.get("Organization")))) {
+                        Toast.makeText(MultilateralTrade.this, "请选择库存组织",
                                 Toast.LENGTH_LONG).show();
                         MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                         return;
                     }
 
                     if (txtWareHouse.getText().toString() == null || (!txtWareHouse.getText().toString().equals(checkInfo.get("WHName")))) {
-                        Toast.makeText(MultilateralTrade.this, "仓库没有选择",
+                        Toast.makeText(MultilateralTrade.this, "请选择仓库",
                                 Toast.LENGTH_LONG).show();
                         MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+                        return;
+                    }
+                    if (txtSendAndTake.getText().toString() == null || txtSendAndTake.getText().toString().equals("")) {
+                        Toast.makeText(MultilateralTrade.this, "请选择收发类别",
+                                Toast.LENGTH_LONG).show();
+                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+                        txtSendAndTake.requestFocus();
+                        return;
+                    }
+                    if (txtDepartment.getText().toString() == null || txtDepartment.getText().toString().equals("")) {
+                        Toast.makeText(MultilateralTrade.this, "请选择部门",
+                                Toast.LENGTH_LONG).show();
+                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+                        txtDepartment.requestFocus();
                         return;
                     }
                     SaveSaleOrder();
@@ -449,7 +473,7 @@ public class MultilateralTrade extends Activity {
 
     private void SaleScan(){
         Intent intDeliveryScan = new Intent(MultilateralTrade.this, MultilateralTradeDetail.class);
-//        intDeliveryScan.putExtra("BillCode", tmpBillCode);
+        intDeliveryScan.putExtra("PK_CALBODY", PK_CALBODY);
         intDeliveryScan.putExtra("PK_CORP", PK_CORP);
         intDeliveryScan.putExtra("CBILLID", CBILLID);
         intDeliveryScan.putExtra("CWAREHOUSEID", CWAREHOUSEID);
@@ -705,16 +729,16 @@ public class MultilateralTrade extends Activity {
             JSONObject map = new JSONObject();
             Double notnum = 0.0;
             JSONArray arrays = jsTotal.getJSONArray("Serino");
-            for (int i = 0; i < arrays.length(); i++) {
-//                String totalnum = ((JSONObject) (arrays.get(i))).getString("box");
-//                totalnum = Double.valueOf(totalnum).toString();
-                Double box = arrays.getJSONObject(i).getDouble("box");
-                DecimalFormat decimalFormat = new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
-                String totalBox = decimalFormat.format(box);
-                notnum += Double.valueOf(totalBox);
-//                map.put("NNUMBER",notnum);
-                NTOTALNUMBER = decimalFormat.format(notnum);
-            }
+//            for (int i = 0; i < arrays.length(); i++) {
+////                String totalnum = ((JSONObject) (arrays.get(i))).getString("box");
+////                totalnum = Double.valueOf(totalnum).toString();
+//                Double box = arrays.getJSONObject(i).getDouble("box");
+//                DecimalFormat decimalFormat = new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
+//                String totalBox = decimalFormat.format(box);
+//                notnum += Double.valueOf(totalBox);
+////                map.put("NNUMBER",notnum);
+//                NTOTALNUMBER = decimalFormat.format(notnum);
+//            }
 //            ===表头
 //            COTHERCALBODYID == CINCBID
 //            COTHERCORPID == CINCORPID
