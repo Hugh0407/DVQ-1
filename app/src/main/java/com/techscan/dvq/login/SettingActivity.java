@@ -6,7 +6,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,13 +14,14 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.techscan.dvq.R;
+import com.techscan.dvq.common.Common;
 
 public class SettingActivity extends Activity implements OnClickListener {
 
     public final static String PREFERENCE_SETTING = "Setting";
 
     @Override
-    public void onClick(@NonNull View v) {
+    public void onClick(View v) {
         if (v.getId() == R.id.btSAOkS) {
             EditText text1 = (EditText) findViewById(R.id.eTAddress);
             //EditText text2 =(EditText)findViewById(R.id.eTAddress2);
@@ -39,6 +39,7 @@ public class SettingActivity extends Activity implements OnClickListener {
 
 
             String Address1 = text1.getText().toString();
+            Common.lsUrl = Address1;
             //String Address2=text2.getText().toString();
             //String AddressB=textB.getText().toString();
 
@@ -87,7 +88,7 @@ public class SettingActivity extends Activity implements OnClickListener {
         }
     }
 
-    public static boolean isNum(@NonNull String paramString) {
+    public static boolean isNum(String paramString) {
         return paramString.matches("^[-+]?(([0-9]+)([.]([0-9]+))?|([.]([0-9]+))?)$");
     }
 
@@ -171,7 +172,7 @@ public class SettingActivity extends Activity implements OnClickListener {
     }
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             return true;

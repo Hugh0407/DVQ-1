@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- 填充颜色 -->
-    <solid android:color="#dddddd"></solid>
+    <solid android:color="#dddddd"/>
     <!-- 设置圆角的半径 -->
-    <corners android:radius="5dp"></corners>
+    <corners android:radius="5dp"/>
     <!-- 描边 -->
-    <stroke android:color="#eeeeee" android:width="0dp"></stroke>
+    <stroke
+        android:width="0dp"
+        android:color="#eeeeee"/>
     <!-- text值的相对位置 -->
-    <padding android:left="5dp" android:right="5dp" />
+    <padding
+        android:left="5dp"
+        android:right="5dp"/>
 </shape>

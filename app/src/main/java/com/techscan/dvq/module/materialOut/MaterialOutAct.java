@@ -310,7 +310,8 @@ public class MaterialOutAct extends Activity {
                     JSONObject json = (JSONObject) msg.obj;
                     try {
                         if (json.getBoolean("Status")) {
-                            JSONArray  val  = json.getJSONArray("department");
+                            JSONArray val = json.getJSONArray("department");
+                            Log.d("TAG", "json: " + val);
                             JSONObject temp = new JSONObject();
                             temp.put("department", val);
                             Intent ViewGrid = new Intent(mActivity, DepartmentListAct.class);
@@ -482,7 +483,7 @@ public class MaterialOutAct extends Activity {
                 remark.setText("");
             }
             tableHead.put("VNOTE", remark.getText().toString());
-            tableHead.put("FREPLENISHFLAG", "N");    //N不退,是否退货标志位
+            tableHead.put("FREPLENISHFLAG", "N"); //N不退,是否退货标志位
             table.put("Head", tableHead);
             JSONObject tableBody = new JSONObject();
             JSONArray  bodyArray = new JSONArray();

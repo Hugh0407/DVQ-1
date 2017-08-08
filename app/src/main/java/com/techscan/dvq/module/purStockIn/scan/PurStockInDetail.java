@@ -29,6 +29,7 @@ import android.widget.Toast;
 import com.techscan.dvq.common.Common;
 import com.techscan.dvq.GetInvBaseInfo;
 import com.techscan.dvq.Inventory;
+import com.techscan.dvq.common.Utils;
 import com.techscan.dvq.login.MainLogin;
 import com.techscan.dvq.R;
 import com.techscan.dvq.R.id;
@@ -63,24 +64,24 @@ public class PurStockInDetail extends Activity {
     @Nullable
     private SplitBarcode            m_cSplitBarcode  = null;
     @Nullable
-            String                  fileNameScan     = null;
+    String fileNameScan   = null;
     @Nullable
-            String                  ScanedFileName   = null;
+    String ScanedFileName = null;
     @Nullable
-            String                  UserID           = null;
+    String UserID         = null;
     @Nullable
-            File                    fileScan         = null;
+    File   fileScan       = null;
     @NonNull
-            String                  ReScanBody       = "1";
+    String ReScanBody     = "1";
     private com.techscan.dvq.writeTxt writeTxt;        //保存LOG文件
 
     String m_BillNo = "";
     String m_BillID = "";
 
-    String tmpWHStatus = "";
-    String tmpBillStatus = "";
+    String tmpWHStatus    = "";
+    String tmpBillStatus  = "";
     String tmpWarehouseID = "";
-    String tmpposID = "";
+    String tmpposID       = "";
     private ArrayList<String> ScanedBarcode = new ArrayList<String>();
     @Nullable
     JSONObject jsHead;
@@ -108,9 +109,9 @@ public class PurStockInDetail extends Activity {
     // Map<String, Object> map;
 
     TextView tvPurcount;
-    Button btnTask;
-    Button btnDetail;
-    Button btnExit;
+    Button   btnTask;
+    Button   btnDetail;
+    Button   btnExit;
 
     EditText txtPurType;
     EditText txtPurSpec;
@@ -148,8 +149,8 @@ public class PurStockInDetail extends Activity {
             return;
         }
 
-        JSONObject para = new JSONObject();
-        String FunctionName = "";
+        JSONObject para         = new JSONObject();
+        String     FunctionName = "";
         FunctionName = "CommonQuery";
         // 获取表头
         try {
@@ -161,7 +162,7 @@ public class PurStockInDetail extends Activity {
             e2.printStackTrace();
 
             Toast.makeText(PurStockInDetail.this, e2.getMessage(),
-                    Toast.LENGTH_LONG).show();
+                           Toast.LENGTH_LONG).show();
             // ADD CAIXY TEST START
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             // ADD CAIXY TEST END
@@ -174,7 +175,7 @@ public class PurStockInDetail extends Activity {
 //                return;
 //            }
             jsHead = Common.DoHttpQuery(para, FunctionName, "");
-            Log.d(TAG, "HEAD: "+jsHead.toString());
+            Log.d(TAG, "HEAD: " + jsHead.toString());
         } catch (Exception ex) {
             Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
             // ADD CAIXY TEST START
@@ -197,7 +198,7 @@ public class PurStockInDetail extends Activity {
 //                return;
 //            }
             jsBody = Common.DoHttpQuery(para, FunctionName, "");
-            Log.d(TAG, "AAA: "+jsBody.toString());
+            Log.d(TAG, "AAA: " + jsBody.toString());
         } catch (JSONException e2) {
             e2.printStackTrace();
             Toast.makeText(this, e2.getMessage(), Toast.LENGTH_LONG).show();
@@ -293,7 +294,7 @@ public class PurStockInDetail extends Activity {
                     // return false;
                     //return true;
                     TotalBox = String.valueOf(Double.parseDouble(temp.getString("box").toString())
-                                                + Double.parseDouble(TotalBox));
+                                                      + Double.parseDouble(TotalBox));
                     temp.put("box", TotalBox);
                     return true;
                 }
@@ -378,8 +379,7 @@ public class PurStockInDetail extends Activity {
         return stotal == 1;
     }
 
-    private boolean ScanDetail(@Nullable String Scanbarcode)
-    {
+    private boolean ScanDetail(@Nullable String Scanbarcode) {
         if (Scanbarcode == null || Scanbarcode.equals(""))
             return false;
 
@@ -400,13 +400,13 @@ public class PurStockInDetail extends Activity {
 
         m_cSplitBarcode = bar;
 
-        if(!bar.BarcodeType.equals("C") && !bar.BarcodeType.equals("TC")
+        if (!bar.BarcodeType.equals("C") && !bar.BarcodeType.equals("TC")
                 && !bar.BarcodeType.equals("Y"))
             bar.creatorOk = false;
 
         String FinishBarCode = bar.FinishBarCode;
 
-        if(bar.BarcodeType.equals("TC")) {
+        if (bar.BarcodeType.equals("TC")) {
             if (ScanedBarcode != null || ScanedBarcode.size() > 0) {
                 for (int si = 0; si < ScanedBarcode.size(); si++) {
                     String BarCode = ScanedBarcode.get(si).toString();
@@ -544,15 +544,15 @@ public class PurStockInDetail extends Activity {
                     String Free1 = "";
                     // 寻找到了对应存货
                     Double doneqty = 0.0;
-                    if(!temp.getString("nconfirmnum").isEmpty() &&
+                    if (!temp.getString("nconfirmnum").isEmpty() &&
                             !temp.getString("nconfirmnum").toLowerCase().equals("null")) {
                         doneqty = temp.getDouble("nconfirmnum");
                     }
                     doneqty = doneqty + Double.parseDouble(m_mapInvBaseInfo.get("total").toString());
 //                  if (doneqty  >= temp.getInt("nordernum")) {
-                    if (doneqty  > temp.getInt("tasknum")) {
+                    if (doneqty > temp.getInt("tasknum")) {
                         Toast.makeText(this, "这个存货已经超过应收数量了,不允许收!",
-                                Toast.LENGTH_LONG).show();
+                                       Toast.LENGTH_LONG).show();
                         // ADD CAIXY TEST START
                         MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                         // ADD CAIXY TEST END
@@ -627,7 +627,7 @@ public class PurStockInDetail extends Activity {
                         .getString("nconfirmnum");
 
                 ishouldinnum = ishouldinnum + Double.valueOf(sshouldinnum);
-                if(!sinnum.toLowerCase().equals("null") && !sinnum.isEmpty())
+                if (!sinnum.toLowerCase().equals("null") && !sinnum.isEmpty())
                     iinnum = iinnum + Double.valueOf(sinnum);
             }
         } catch (JSONException e1) {
@@ -640,7 +640,7 @@ public class PurStockInDetail extends Activity {
             // ADD CAIXY TEST END
         }
         tvPurcount.setText("总量" + ishouldinnum + " | " + "已扫" + iinnum
-                + " | " + "未扫" + (ishouldinnum - iinnum) );
+                                   + " | " + "未扫" + (ishouldinnum - iinnum));
         MainLogin.sp.play(MainLogin.music2, 1, 1, 0, 0, 1);
 //        Log.d("TAG", "ScanedToGet: music2_2");
         txtBarcode.requestFocus();
@@ -684,7 +684,7 @@ public class PurStockInDetail extends Activity {
             JSONArray val = StockInfo.getJSONArray("Stock");
             if (val.length() < 1) {
                 Toast.makeText(this, "获取货位库存数据信息失败,货位上没有该货品,不能调出",
-                        Toast.LENGTH_LONG).show();
+                               Toast.LENGTH_LONG).show();
                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                 return false;
             }
@@ -701,11 +701,11 @@ public class PurStockInDetail extends Activity {
             }
 
             double sancount = getScanCount(currentObj.Invmandoc(),
-                    currentObj.GetBatch());
+                                           currentObj.GetBatch());
             sancount += 1.0;
             if (sancount > stockCount) {
                 Toast.makeText(this, "该货品在该货位的发出库存已经不足了,不能发出",
-                        Toast.LENGTH_LONG).show();
+                               Toast.LENGTH_LONG).show();
                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                 return false;
             }
@@ -763,7 +763,7 @@ public class PurStockInDetail extends Activity {
             JSONArray val = StockInfo.getJSONArray("InvInfo");
             if (val.length() < 1) {
                 Toast.makeText(this, "获取货位库存数据信息失败,货位上没有该货品,不能调出",
-                        Toast.LENGTH_LONG).show();
+                               Toast.LENGTH_LONG).show();
                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                 return false;
             }
@@ -784,11 +784,11 @@ public class PurStockInDetail extends Activity {
             }
 
             double sancount = getScanCount(currentObj.Invmandoc(),
-                    currentObj.GetBatch());
+                                           currentObj.GetBatch());
             sancount += 1.0;
             if (sancount > stockCount) {
                 Toast.makeText(this, "该货品在该货位的发出库存已经不足了,不能发出",
-                        Toast.LENGTH_LONG).show();
+                               Toast.LENGTH_LONG).show();
                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                 return false;
             }
@@ -867,7 +867,7 @@ public class PurStockInDetail extends Activity {
 
         // 获得当前单据的流水号
         JSONObject SERINOList = null;
-        JSONObject para = new JSONObject();
+        JSONObject para       = new JSONObject();
 
         para.put("FunctionName", "GetSERINO");
         para.put("CBUSNO", m_BillID);
@@ -900,7 +900,7 @@ public class PurStockInDetail extends Activity {
                     "serino").toString();
             if (SERINO.equals(bar.cSerino)) {
                 Toast.makeText(this, "该存货的流水号已经被保存,请确认流水号是否重复！",
-                        Toast.LENGTH_LONG).show();
+                               Toast.LENGTH_LONG).show();
                 // ADD CAIXY TEST START
                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                 // ADD CAIXY TEST END
@@ -925,22 +925,27 @@ public class PurStockInDetail extends Activity {
             switch (msg.what) {
                 case 1:
                     JSONObject json = (JSONObject) msg.obj;
-                    if (json != null) {
-                        try {
+                    try {
 
+                        if (json == null) {
+                            Utils.showToast(PurStockInDetail.this, "网络请求失败");
+                            return;
+                        }
+
+                        if (json.getBoolean("Status")) {
                             Log.d("TAG", "handleMessage: TEST");
                             Log.d("TAG", "json: " + json);
                             objInvBaseInfo.SetInvBaseToParam(json);
                             m_mapInvBaseInfo = objInvBaseInfo.mapInvBaseInfo;
                             SetInvBaseToUI();
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                        } else {
+                            Utils.showToast(PurStockInDetail.this, json.getString("ErrMsg"));
                         }
-                    } else {
-                        Log.d("TAG", "handleMessage: NULL");
-                        return;
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
+
                     break;
             }
         }
@@ -959,10 +964,10 @@ public class PurStockInDetail extends Activity {
         txtPurWeight.setText(m_mapInvBaseInfo.get("quantity").toString());
         txtPurNumber.setText(m_mapInvBaseInfo.get("number").toString());
 
-        Double ldTotal = (Double) m_mapInvBaseInfo.get("quantity") * (Integer)m_mapInvBaseInfo.get("number");
+        Double ldTotal = (Double) m_mapInvBaseInfo.get("quantity") * (Integer) m_mapInvBaseInfo.get("number");
         txtPurTotal.setText(ldTotal.toString());
-        m_mapInvBaseInfo.put("total",ldTotal);
-        if(m_mapInvBaseInfo.get("barcodetype").toString().equals("TC")) {
+        m_mapInvBaseInfo.put("total", ldTotal);
+        if (m_mapInvBaseInfo.get("barcodetype").toString().equals("TC")) {
             txtBatch.setFocusableInTouchMode(false);
             txtBatch.setFocusable(false);
             txtPurNumber.setFocusableInTouchMode(false);
@@ -970,8 +975,7 @@ public class PurStockInDetail extends Activity {
             txtPurTotal.setFocusableInTouchMode(false);
             txtPurTotal.setFocusable(false);
             ScanedToGet();
-        }
-        else if(m_mapInvBaseInfo.get("barcodetype").toString().equals("C") ) {
+        } else if (m_mapInvBaseInfo.get("barcodetype").toString().equals("C")) {
             txtBatch.setFocusableInTouchMode(false);
             txtBatch.setFocusable(false);
             txtPurNumber.setFocusableInTouchMode(true);
@@ -980,8 +984,7 @@ public class PurStockInDetail extends Activity {
             txtPurTotal.setFocusable(false);
             txtPurNumber.requestFocus();
             txtPurNumber.selectAll();
-        }
-        else if(m_mapInvBaseInfo.get("barcodetype").toString().equals("Y")){
+        } else if (m_mapInvBaseInfo.get("barcodetype").toString().equals("Y")) {
             txtBatch.setFocusableInTouchMode(true);
             txtBatch.setFocusable(true);
             txtBatch.requestFocus();
@@ -1086,7 +1089,7 @@ public class PurStockInDetail extends Activity {
     private void Return() {
 //        if (jsBoxTotal != null && jsSerino != null) {
         if (jsSerino != null) {
-            Log.d(TAG, "Return: "+jsSerino.toString());
+            Log.d(TAG, "Return: " + jsSerino.toString());
             Intent intent = new Intent();
 
 //            intent.putExtra("box", jsBoxTotal.toString());
@@ -1110,7 +1113,7 @@ public class PurStockInDetail extends Activity {
         }
     }
 
-    private void  ShowDetailDig() throws JSONException {
+    private void ShowDetailDig() throws JSONException {
         lstTaskBody = new ArrayList<Map<String, Object>>();
         Log.d("TAG", "jsSerino: " + jsSerino);
         Map<String, Object> map;
@@ -1127,7 +1130,7 @@ public class PurStockInDetail extends Activity {
             map = new HashMap<String, Object>();
 
             String sSerial = ((JSONObject) (arrays.get(i))).getString("sno");
-            String sBatch = ((JSONObject) (arrays.get(i))).getString("batch");
+            String sBatch  = ((JSONObject) (arrays.get(i))).getString("batch");
             String sInvCode = ((JSONObject) (arrays.get(i)))
                     .getString("invcode");
             String serino = ((JSONObject) (arrays.get(i))).getString("serino");
@@ -1223,10 +1226,10 @@ public class PurStockInDetail extends Activity {
                     //
                     // //new String[]
                     // {"invname","invcode","batch","sno","okflg"},
-                    String invcode = (String) mapTemp.get("invcode");
-                    String batch = (String) mapTemp.get("batch");
-                    String sno = (String) mapTemp.get("sno");
-                    String serino = (String) mapTemp.get("serino");
+                    String invcode     = (String) mapTemp.get("invcode");
+                    String batch       = (String) mapTemp.get("batch");
+                    String sno         = (String) mapTemp.get("sno");
+                    String serino      = (String) mapTemp.get("serino");
                     Double ScanedTotal = Double.valueOf(mapTemp.get("total").toString());
 
                     if (ScanedBarcode != null || ScanedBarcode.size() > 0) {
@@ -1250,8 +1253,8 @@ public class PurStockInDetail extends Activity {
                     try {
                         arrays = jsSerino.getJSONArray("Serino");
 
-                        HashMap<String, Object> Temp = new HashMap<String, Object>();
-                        JSONArray serinos = new JSONArray();
+                        HashMap<String, Object> Temp    = new HashMap<String, Object>();
+                        JSONArray               serinos = new JSONArray();
 
                         for (int i = 0; i < arrays.length(); i++) {
                             String serino1 = ((JSONObject) (arrays.get(i)))
@@ -1312,30 +1315,30 @@ public class PurStockInDetail extends Activity {
 
                         //if (it == 1) {
 
-                            JSONArray bodys = jsBody.getJSONArray("PurBody");
-                            JSONArray bodynews = new JSONArray();
-                            // JSONArray serinos = new JSONArray();
-                            for (int i = 0; i < bodys.length(); i++) {
-                                JSONObject temp = bodys.getJSONObject(i);
+                        JSONArray bodys    = jsBody.getJSONArray("PurBody");
+                        JSONArray bodynews = new JSONArray();
+                        // JSONArray serinos = new JSONArray();
+                        for (int i = 0; i < bodys.length(); i++) {
+                            JSONObject temp = bodys.getJSONObject(i);
 
-                                String invcodeold = ((JSONObject) (bodys.get(i)))
-                                        .getString("invcode");
+                            String invcodeold = ((JSONObject) (bodys.get(i)))
+                                    .getString("invcode");
 //                                String batchcodeold = ((JSONObject) (bodys
 //                                        .get(i))).getString("vbatchcode");
 
 //                                if (invcodeold.equals(invcode)
 //                                        && batchcodeold.equals(batch)) {
-                                if (invcodeold.equals(invcode)) {
-                                    Double doneqty = temp.getDouble("nconfirmnum");
-                                    temp.put("nconfirmnum", doneqty - ScanedTotal);
-                                }
-
-                                bodynews.put(temp);
+                            if (invcodeold.equals(invcode)) {
+                                Double doneqty = temp.getDouble("nconfirmnum");
+                                temp.put("nconfirmnum", doneqty - ScanedTotal);
                             }
 
-                            jsBody = new JSONObject();
-                            jsBody.put("Status", "true");
-                            jsBody.put("PurBody", bodynews);
+                            bodynews.put(temp);
+                        }
+
+                        jsBody = new JSONObject();
+                        jsBody.put("Status", "true");
+                        jsBody.put("PurBody", bodynews);
 
                         //}
 
@@ -1353,7 +1356,7 @@ public class PurStockInDetail extends Activity {
 
                                 ishouldinnum = ishouldinnum
                                         + Double.valueOf(sshouldinnum);
-                                if(!sinnum.toLowerCase().equals("null") && !sinnum.isEmpty())
+                                if (!sinnum.toLowerCase().equals("null") && !sinnum.isEmpty())
                                     iinnum = iinnum + Double.valueOf(sinnum);
                             }
                         } catch (JSONException e1) {
@@ -1361,8 +1364,8 @@ public class PurStockInDetail extends Activity {
                             e1.printStackTrace();
                         }
                         tvPurcount.setText("总量" + ishouldinnum + " | " + "已扫"
-                                + iinnum + " | " + "未扫"
-                                + (ishouldinnum - iinnum) );
+                                                   + iinnum + " | " + "未扫"
+                                                   + (ishouldinnum - iinnum));
                         //SaveScanedBody();//写入本地
                         IniDetail();
 
@@ -1370,7 +1373,7 @@ public class PurStockInDetail extends Activity {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                         Toast.makeText(PurStockInDetail.this, e.getMessage(),
-                                Toast.LENGTH_LONG).show();
+                                       Toast.LENGTH_LONG).show();
                         // ADD CAIXY TEST START
                         MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                         // ADD CAIXY TEST END
@@ -1413,12 +1416,12 @@ public class PurStockInDetail extends Activity {
 //            }
             map.put("Batch", "");// test caixy
             String sinnum = ((JSONObject) (arrays.get(i))).getString("nconfirmnum");
-            if(sinnum.toLowerCase().equals("null") || sinnum.isEmpty())
+            if (sinnum.toLowerCase().equals("null") || sinnum.isEmpty())
                 sinnum = "0.0";
 //            map.put("InvNum",
 //                    sinnum + " / " + Double.valueOf(((JSONObject) (arrays.get(i))).getString("nordernum")));
             map.put("InvNum",
-                   sinnum + " / " + Double.valueOf(((JSONObject) (arrays.get(i))).getString("tasknum")));
+                    sinnum + " / " + Double.valueOf(((JSONObject) (arrays.get(i))).getString("tasknum")));
             // map.put("DoneQty", )
             lstTaskBody.add(map);
         }
@@ -1431,7 +1434,7 @@ public class PurStockInDetail extends Activity {
                 // ImageItem的XML文件里面的一个ImageView,两个TextView ID
                 new int[]{
                         id.txtpurinorder, id.txtpurininvcode,
-                       id.txtpurininvname, id.txtpurinnumber});
+                        id.txtpurininvname, id.txtpurinnumber});
         new AlertDialog.Builder(PurStockInDetail.this).setTitle("源单信息")
                 .setAdapter(listItemAdapter, null)
                 .setPositiveButton(R.string.QueRen, null).show();
@@ -1482,8 +1485,7 @@ public class PurStockInDetail extends Activity {
                             txtPurTotal.setText(m_mapInvBaseInfo.get("total").toString());
                             ScanedToGet();
                             return true;
-                        }
-                        catch (Exception ex){
+                        } catch (Exception ex) {
                             txtPurNumber.setText("");
                             txtPurNumber.requestFocus();
 
@@ -1494,24 +1496,22 @@ public class PurStockInDetail extends Activity {
                     }
                 case id.txtPurBatch:
                     if (arg1 == 66 && arg2.getAction() == KeyEvent.ACTION_UP) {
-                        if(txtBatch.getText().toString().equals(""))
-                                return false;
+                        if (txtBatch.getText().toString().equals(""))
+                            return false;
                         m_cSplitBarcode.cBatch = txtBatch.getText().toString().replace("\r", "").replace("\n", "");
-                        m_mapInvBaseInfo.put("batch",txtBatch.getText().toString().replace("\r", "").replace("\n", ""));
+                        m_mapInvBaseInfo.put("batch", txtBatch.getText().toString().replace("\r", "").replace("\n", ""));
                         txtPurTotal.requestFocus();
                         return true;
                     }
                 case id.txtPurTotal:
                     if (arg1 == 66 && arg2.getAction() == KeyEvent.ACTION_UP) {
-                        try
-                        {
+                        try {
                             Double.parseDouble(txtPurTotal.getText().toString());
                             m_mapInvBaseInfo.put("number", Integer.valueOf(txtPurNumber.getText().toString()));
                             m_mapInvBaseInfo.put("total", Double.valueOf(txtPurTotal.getText().toString()));
                             ScanedToGet();
                             return true;
-                        }
-                        catch(Exception ex){
+                        } catch (Exception ex) {
                             txtPurTotal.setText("");
                             txtPurTotal.requestFocus();
                             Toast.makeText(PurStockInDetail.this, "输入的数值不正确", Toast.LENGTH_LONG).show();
@@ -1521,7 +1521,7 @@ public class PurStockInDetail extends Activity {
                     }
 
             }
-             return false;
+            return false;
         }
 
     };
@@ -1563,41 +1563,41 @@ public class PurStockInDetail extends Activity {
 
         //if (tag.equals("1")) {
 
-            try {
-                String temp = this.getIntent().getStringExtra("head");
-                jsHead = new JSONObject(temp);
-                Log.d("TAG", "GetDetailHead: " + temp);
+        try {
+            String temp = this.getIntent().getStringExtra("head");
+            jsHead = new JSONObject(temp);
+            Log.d("TAG", "GetDetailHead: " + temp);
 
-                temp = this.getIntent().getStringExtra("body");
-                jsBody = new JSONObject(temp);
-                Log.d("TAG", "GetDetailBody: " + temp);
+            temp = this.getIntent().getStringExtra("body");
+            jsBody = new JSONObject(temp);
+            Log.d("TAG", "GetDetailBody: " + temp);
 
-                if (tag.equals("1")) {
-                    temp = this.getIntent().getStringExtra("serino");
-                    jsSerino = new JSONObject(temp);
-                }
-
-                //temp = this.getIntent().getStringExtra("box");
-                //jsBoxTotal = new JSONObject(temp);
-                jsBoxTotal = null;
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-                Toast.makeText(PurStockInDetail.this, e.getMessage(),
-                        Toast.LENGTH_LONG).show();
-                // ADD CAIXY TEST START
-                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                // ADD CAIXY TEST END
+            if (tag.equals("1")) {
+                temp = this.getIntent().getStringExtra("serino");
+                jsSerino = new JSONObject(temp);
             }
+
+            //temp = this.getIntent().getStringExtra("box");
+            //jsBoxTotal = new JSONObject(temp);
+            jsBoxTotal = null;
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Toast.makeText(PurStockInDetail.this, e.getMessage(),
+                           Toast.LENGTH_LONG).show();
+            // ADD CAIXY TEST START
+            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+            // ADD CAIXY TEST END
+        }
 
         //}
 
-        txtPurType = (EditText)findViewById(R.id.txtPurType);
-        txtPurSpec = (EditText)findViewById(R.id.txtPurSpec);
-        txtPurNumber = (EditText)findViewById(R.id.txtPurNumber);
-        txtPurWeight = (EditText)findViewById(R.id.txtPurWeight);
-        txtPurTotal = (EditText)findViewById(R.id.txtPurTotal);
-        txtPurUnit = (EditText)findViewById(R.id.txtPurUnit);
+        txtPurType = (EditText) findViewById(R.id.txtPurType);
+        txtPurSpec = (EditText) findViewById(R.id.txtPurSpec);
+        txtPurNumber = (EditText) findViewById(R.id.txtPurNumber);
+        txtPurWeight = (EditText) findViewById(R.id.txtPurWeight);
+        txtPurTotal = (EditText) findViewById(R.id.txtPurTotal);
+        txtPurUnit = (EditText) findViewById(R.id.txtPurUnit);
 
         tvPurcount = (TextView) findViewById(R.id.tvPurcount);
         txtBarcode = (EditText) findViewById(R.id.txtPurBarcode);
@@ -1637,12 +1637,12 @@ public class PurStockInDetail extends Activity {
         } catch (ParseException e) {
             e.printStackTrace();
             Toast.makeText(PurStockInDetail.this, e.getMessage(),
-                    Toast.LENGTH_LONG).show();
+                           Toast.LENGTH_LONG).show();
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
         } catch (IOException e) {
             e.printStackTrace();
             Toast.makeText(PurStockInDetail.this, e.getMessage(),
-                    Toast.LENGTH_LONG).show();
+                           Toast.LENGTH_LONG).show();
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
         }
 
@@ -1665,20 +1665,20 @@ public class PurStockInDetail extends Activity {
                         .getString("nconfirmnum");
 
                 ishouldinnum = ishouldinnum + Double.valueOf(sshouldinnum);
-                if(!sinnum.toLowerCase().equals("null") && !sinnum.isEmpty())
+                if (!sinnum.toLowerCase().equals("null") && !sinnum.isEmpty())
                     iinnum = iinnum + Double.valueOf(sinnum);
             }
         } catch (JSONException e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();
             Toast.makeText(PurStockInDetail.this, e1.getMessage(),
-                    Toast.LENGTH_LONG).show();
+                           Toast.LENGTH_LONG).show();
             // ADD CAIXY TEST START
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             // ADD CAIXY TEST END
         }
         tvPurcount.setText("总量" + ishouldinnum + " | " + "已扫" + iinnum
-                + " | " + "未扫" + (ishouldinnum - iinnum));
+                                   + " | " + "未扫" + (ishouldinnum - iinnum));
 
         //ReScanBody();
     }
