@@ -52,8 +52,6 @@ import butterknife.OnClick;
 import static com.techscan.dvq.common.Utils.HANDER_DEPARTMENT;
 import static com.techscan.dvq.common.Utils.HANDER_SAVE_RESULT;
 import static com.techscan.dvq.common.Utils.HANDER_STORG;
-import static com.techscan.dvq.common.Utils.ORG_NAME;
-import static com.techscan.dvq.common.Utils.PK_CALBODY;
 import static com.techscan.dvq.common.Utils.showResultDialog;
 import static com.techscan.dvq.common.Utils.showToast;
 
@@ -113,14 +111,15 @@ public class OtherOutAct extends Activity {
     String CDISPATCHERID = "";//收发类别code
     String CDPTID        = "";  //部门id
     String CWAREHOUSEID  = "";    //库存组织
+    String PK_CALBODY    = "";    //库存组织 id
     String CUSER;   //登录员工id
     String PK_CORP;         //公司
     String VBILLCOD;        //单据号
 
-    int            year;
-    int            month;
-    int            day;
-    Calendar       mycalendar;
+    int      year;
+    int      month;
+    int      day;
+    Calendar mycalendar;
     @Nullable
     ProgressDialog progressDialog;
 
@@ -156,7 +155,7 @@ public class OtherOutAct extends Activity {
                 btnReferDepartment();
                 break;
             case R.id.btn_scan:
-                if (isAllEdNotEmpty()) {
+                if (checkSaveInfo()) {
                     Intent in = new Intent(activity, OtherOutScanAct.class);
                     in.putExtra("CWAREHOUSEID", CWAREHOUSEID);
                     in.putExtra("PK_CALBODY", PK_CALBODY);
@@ -164,8 +163,6 @@ public class OtherOutAct extends Activity {
                     if (tempList != null) {
                         tempList.clear();
                     }
-                } else {
-                    showToast(activity, "请先核对信息，再进行扫描");
                 }
                 break;
             case R.id.btn_save:
@@ -200,7 +197,6 @@ public class OtherOutAct extends Activity {
         edLeiBie.setOnKeyListener(mOnKeyListener);
         edDep.setOnKeyListener(mOnKeyListener);
         checkInfo = new HashMap<String, String>();
-        edOrg.setText(ORG_NAME);
     }
 
     @Override
@@ -211,27 +207,27 @@ public class OtherOutAct extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @NonNull Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        //材料出库库存组织的回传数据 <----StorgListAct.class
+        if (requestCode == 94 && resultCode == 6) {
+            String pk_areacl  = data.getStringExtra("pk_areacl");
+            String bodyname   = data.getStringExtra("bodyname");
+            String pk_calbody = data.getStringExtra("pk_calbody");
+            PK_CALBODY = pk_calbody;
+            edOrg.setText(bodyname);
+            edWh.requestFocus();
+            checkInfo.put("Organization", bodyname);
+        }
         //仓库的回传数据 <----ListWarehouse.class
         if (requestCode == 97 && resultCode == 13) {
             String warehousePK1  = data.getStringExtra("result1");
             String warehousecode = data.getStringExtra("result2");
             String warehouseName = data.getStringExtra("result3");
             CWAREHOUSEID = warehousePK1;
-            edWh.requestFocus();
             edWh.setText(warehouseName);
             edLeiBie.requestFocus();
             checkInfo.put("Warehouse", warehouseName);
         }
-        //材料出库库存组织的回传数据 <----StorgListAct.class
-        if (requestCode == 94 && resultCode == 6) {
-            String pk_areacl  = data.getStringExtra("pk_areacl");
-            String bodyname   = data.getStringExtra("bodyname");
-            String pk_calbody = data.getStringExtra("pk_calbody");
-            edOrg.requestFocus();
-            edOrg.setText(bodyname);
-            edLeiBie.requestFocus();
-            checkInfo.put("Organization", bodyname);
-        }
+
         // 收发类别的回传数据 <----VlistRdcl.class
         if (requestCode == 98 && resultCode == 2) {
             String code  = data.getStringExtra("Code");
@@ -240,7 +236,6 @@ public class OtherOutAct extends Activity {
             String RdIDA = data.getStringExtra("RdIDA");    //需要回传的id
             String RdIDB = data.getStringExtra("RdIDB");
             CDISPATCHERID = RdIDA;
-            edLeiBie.requestFocus();
             edLeiBie.setText(name);
             edDep.requestFocus();
             checkInfo.put("LeiBie", name);
@@ -419,24 +414,6 @@ public class OtherOutAct extends Activity {
         startActivityForResult(ViewGrid, 98);
     }
 
-    private boolean isAllEdNotEmpty() {
-
-//        if (vFree4.equals("Y")) {
-//            if (TextUtils.isEmpty(mEdManual.getText().toString())) {
-//                showToast(activity, "海关手册号不可为空");
-//                return false;
-//            }
-//        }
-
-        return (!TextUtils.isEmpty(edBillNum.getText().toString())
-                && !TextUtils.isEmpty(edBillDate.getText().toString())
-                && !TextUtils.isEmpty(edWh.getText().toString())
-                && !TextUtils.isEmpty(edOrg.getText().toString())
-                && !TextUtils.isEmpty(edLeiBie.getText().toString())
-                && !TextUtils.isEmpty(edDep.getText().toString()));
-    }
-
-
     private void changeAllEdToEmpty() {
         edBillNum.setText("");
 //        edBillDate.setText("");
@@ -600,7 +577,7 @@ public class OtherOutAct extends Activity {
             month = monthOfYear;
             day = dayOfMonth;
             updateDate();
-            edWh.requestFocus();//选择日期后将焦点跳到“仓库的EdText”
+            edOrg.requestFocus();//选择日期后将焦点跳到“仓库的EdText”
         }
 
         //当DatePickerDialog关闭时，更新日期显示

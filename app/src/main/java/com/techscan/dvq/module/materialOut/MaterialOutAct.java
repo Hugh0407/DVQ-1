@@ -52,8 +52,6 @@ import butterknife.OnClick;
 import static com.techscan.dvq.common.Utils.HANDER_DEPARTMENT;
 import static com.techscan.dvq.common.Utils.HANDER_SAVE_RESULT;
 import static com.techscan.dvq.common.Utils.HANDER_STORG;
-import static com.techscan.dvq.common.Utils.ORG_NAME;
-import static com.techscan.dvq.common.Utils.PK_CALBODY;
 import static com.techscan.dvq.common.Utils.showResultDialog;
 import static com.techscan.dvq.common.Utils.showToast;
 
@@ -112,6 +110,7 @@ public class MaterialOutAct extends Activity {
     String CDISPATCHERID = "";//收发类别code
     String CDPTID        = "";  //部门id
     String CWAREHOUSEID  = "";    //库存组织
+    String PK_CALBODY    = "";    //库存组织id
     String CUSER;   //登录员工id
     String PK_CORP;         //公司
     String VBILLCOD;        //单据号
@@ -160,15 +159,14 @@ public class MaterialOutAct extends Activity {
                 btnRdclClick("");
                 break;
             case R.id.btn_scan:
-                if (isAllEdNotEmpty()) {
+                if (checkSaveInfo()) {
                     Intent in = new Intent(mActivity, MaterialOutScanAct.class);
                     in.putExtra("CWAREHOUSEID", CWAREHOUSEID);
+                    in.putExtra("PK_CALBODY", PK_CALBODY);
                     startActivityForResult(in, 95);
                     if (tempList != null) {
                         tempList.clear();
                     }
-                } else {
-                    showToast(mActivity, "请先核对信息，再进行扫描");
                 }
                 break;
             case R.id.btn_save:
@@ -235,7 +233,8 @@ public class MaterialOutAct extends Activity {
             String pk_calbody = data.getStringExtra("pk_calbody");
             organization.requestFocus();
             organization.setText(bodyname);
-            leiBie.requestFocus();
+            wh.requestFocus();
+            PK_CALBODY = pk_calbody;
             checkInfo.put("Organization", bodyname);
         }
         // 收发类别的回传数据 <----VlistRdcl.class
@@ -295,7 +294,6 @@ public class MaterialOutAct extends Activity {
         leiBie.setOnKeyListener(mOnKeyListener);
         department.setOnKeyListener(mOnKeyListener);
         checkInfo = new HashMap<String, String>();
-        organization.setText(ORG_NAME);
     }
 
     /**
@@ -390,11 +388,11 @@ public class MaterialOutAct extends Activity {
             wh.requestFocus();
             return false;
         }
-//        if (!organization.getText().toString().equals(checkInfo.get("Organization"))) {
-//            showToast(mActivity, "组织信息不正确");
-//            organization.requestFocus();
-//            return false;
-//        }
+        if (!organization.getText().toString().equals(checkInfo.get("Organization"))) {
+            showToast(mActivity, "组织信息不正确");
+            organization.requestFocus();
+            return false;
+        }
         if (!leiBie.getText().toString().equals(checkInfo.get("LeiBie"))) {
             showToast(mActivity, "收发类别信息不正确");
             leiBie.requestFocus();
@@ -458,15 +456,6 @@ public class MaterialOutAct extends Activity {
         if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
-    }
-
-    private boolean isAllEdNotEmpty() {
-        return (!TextUtils.isEmpty(billNum.getText().toString())
-                && !TextUtils.isEmpty(billDate.getText().toString())
-                && !TextUtils.isEmpty(wh.getText().toString())
-                && !TextUtils.isEmpty(organization.getText().toString())
-                && !TextUtils.isEmpty(leiBie.getText().toString())
-                && !TextUtils.isEmpty(department.getText().toString()));
     }
 
     /**
@@ -633,7 +622,7 @@ public class MaterialOutAct extends Activity {
             month = monthOfYear;
             day = dayOfMonth;
             updateDate();
-            wh.requestFocus();//选择日期后将焦点跳到“仓库的EdText”
+            organization.requestFocus();//选择日期后将焦点跳到“仓库的EdText”
         }
 
         //当DatePickerDialog关闭时，更新日期显示

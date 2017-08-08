@@ -433,19 +433,51 @@ public class ProductInScanAct extends Activity {
             }
         }
 
-        if (!TextUtils.isEmpty(mEdBarCode.getText())
-                && !TextUtils.isEmpty(mEdEncoding.getText())
-                && !TextUtils.isEmpty(mEdName.getText())
-                && !TextUtils.isEmpty(mEdType.getText())
-                && !TextUtils.isEmpty(mEdSpectype.getText())
-                && !TextUtils.isEmpty(mEdUnit.getText())
-                && !TextUtils.isEmpty(mEdLot.getText())
-                && !TextUtils.isEmpty(mEdQty.getText())) {
-            return true;
-        } else {
-            showToast(mActivity, "信息不完整，请核对");
+        if (TextUtils.isEmpty(mEdBarCode.getText().toString())) {
+            showToast(mActivity, "条码不可为空");
             return false;
         }
+
+        if (TextUtils.isEmpty(mEdEncoding.getText().toString())) {
+            showToast(mActivity, "物料编码不可为空");
+            return false;
+        }
+
+        if (TextUtils.isEmpty(mEdName.getText().toString())) {
+            showToast(mActivity, "物料名称不可为空");
+            return false;
+        }
+
+        if (TextUtils.isEmpty(mEdType.getText().toString())) {
+            showToast(mActivity, "物料型号不可为空");
+            return false;
+        }
+
+        if (TextUtils.isEmpty(mEdSpectype.getText().toString())) {
+            showToast(mActivity, "物料规格不可为空");
+            return false;
+        }
+
+        if (TextUtils.isEmpty(mEdUnit.getText().toString())) {
+            showToast(mActivity, "单位不可为空");
+            return false;
+        }
+
+        if (TextUtils.isEmpty(mEdLot.getText().toString())) {
+            showToast(mActivity, "批次不可为空");
+            return false;
+        }
+
+//        if (TextUtils.isEmpty(mEdCostObject.getText().toString())) {
+//            showToast(activity, "成本对象不可为空");
+//            return false;
+//        }
+
+        if (TextUtils.isEmpty(mEdQty.getText().toString())) {
+            showToast(mActivity, "总量不可为空");
+            return false;
+        }
+        return true;
     }
 
     /**

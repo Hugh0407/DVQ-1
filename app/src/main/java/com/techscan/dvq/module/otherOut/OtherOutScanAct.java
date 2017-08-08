@@ -44,7 +44,6 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-import static com.techscan.dvq.common.Utils.PK_CALBODY;
 import static com.techscan.dvq.common.Utils.formatDecimal;
 import static com.techscan.dvq.common.Utils.isNumber;
 import static com.techscan.dvq.common.Utils.showToast;
@@ -110,6 +109,7 @@ public class OtherOutScanAct extends Activity {
     @Nullable
     Activity activity;
     String CWAREHOUSEID = "";
+    String PK_CALBODY = "";
     String vFree4       = "";
 
     @Override
@@ -133,6 +133,7 @@ public class OtherOutScanAct extends Activity {
 
     private void init() {
         CWAREHOUSEID = getIntent().getStringExtra("CWAREHOUSEID");
+        PK_CALBODY = getIntent().getStringExtra("PK_CALBODY");
         ActionBar actionBar = this.getActionBar();
         actionBar.setTitle("其他出库扫描");
         edBarCode.setOnKeyListener(mOnKeyListener);
@@ -496,20 +497,52 @@ public class OtherOutScanAct extends Activity {
             }
         }
 
-        if (!TextUtils.isEmpty(edBarCode.getText())
-                && !TextUtils.isEmpty(edEncoding.getText())
-                && !TextUtils.isEmpty(edName.getText())
-                && !TextUtils.isEmpty(edType.getText())
-                && !TextUtils.isEmpty(edSpectype.getText())
-                && !TextUtils.isEmpty(edUnit.getText())
-                && !TextUtils.isEmpty(edLot.getText())
-//                && !TextUtils.isEmpty(edCostObject.getText())
-                && !TextUtils.isEmpty(edQty.getText())) {
-            return true;
-        } else {
-            showToast(activity, "信息不完整，请核对");
+
+        if (TextUtils.isEmpty(edBarCode.getText().toString())) {
+            showToast(activity, "条码不可为空");
             return false;
         }
+
+        if (TextUtils.isEmpty(edEncoding.getText().toString())) {
+            showToast(activity, "物料编码不可为空");
+            return false;
+        }
+
+        if (TextUtils.isEmpty(edName.getText().toString())) {
+            showToast(activity, "物料名称不可为空");
+            return false;
+        }
+
+        if (TextUtils.isEmpty(edType.getText().toString())) {
+            showToast(activity, "物料型号不可为空");
+            return false;
+        }
+
+        if (TextUtils.isEmpty(edSpectype.getText().toString())) {
+            showToast(activity, "物料规格不可为空");
+            return false;
+        }
+
+        if (TextUtils.isEmpty(edUnit.getText().toString())) {
+            showToast(activity, "单位不可为空");
+            return false;
+        }
+
+        if (TextUtils.isEmpty(edLot.getText().toString())) {
+            showToast(activity, "批次不可为空");
+            return false;
+        }
+
+//        if (TextUtils.isEmpty(edCostObject.getText().toString())) {
+//            showToast(activity, "成本对象不可为空");
+//            return false;
+//        }
+
+        if (TextUtils.isEmpty(edQty.getText().toString())) {
+            showToast(activity, "总量不可为空");
+            return false;
+        }
+        return true;
     }
 
     /**

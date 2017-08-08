@@ -46,7 +46,6 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-import static com.techscan.dvq.common.Utils.PK_CALBODY;
 import static com.techscan.dvq.common.Utils.formatDecimal;
 import static com.techscan.dvq.common.Utils.isNumber;
 import static com.techscan.dvq.common.Utils.showToast;
@@ -117,6 +116,7 @@ public class MaterialOutScanAct extends Activity {
     @Nullable
     Activity activity;
     String  CWAREHOUSEID = "";
+    String  PK_CALBODY   = "";
     String  vFree4       = "";
     boolean isPacked     = false;
 
@@ -166,6 +166,7 @@ public class MaterialOutScanAct extends Activity {
 
     private void init() {
         CWAREHOUSEID = getIntent().getStringExtra("CWAREHOUSEID");
+        PK_CALBODY = getIntent().getStringExtra("PK_CALBODY");
         ActionBar actionBar = this.getActionBar();
         actionBar.setTitle("物品扫描");
         mEdBarCode.setOnKeyListener(mOnKeyListener);
@@ -463,20 +464,51 @@ public class MaterialOutScanAct extends Activity {
                 return false;
             }
         }
-        if (!TextUtils.isEmpty(mEdBarCode.getText())
-                && !TextUtils.isEmpty(mEdEncoding.getText())
-                && !TextUtils.isEmpty(mEdName.getText())
-                && !TextUtils.isEmpty(mEdType.getText())
-                && !TextUtils.isEmpty(mEdSpectype.getText())
-                && !TextUtils.isEmpty(mEdUnit.getText())
-                && !TextUtils.isEmpty(mEdLot.getText())
-                && !TextUtils.isEmpty(mEdCostObject.getText())
-                && !TextUtils.isEmpty(mEdQty.getText())) {
-            return true;
-        } else {
-            showToast(activity, "信息不完整，请核对");
+        if (TextUtils.isEmpty(mEdBarCode.getText().toString())) {
+            showToast(activity, "条码不可为空");
             return false;
         }
+
+        if (TextUtils.isEmpty(mEdEncoding.getText().toString())) {
+            showToast(activity, "物料编码不可为空");
+            return false;
+        }
+
+        if (TextUtils.isEmpty(mEdName.getText().toString())) {
+            showToast(activity, "物料名称不可为空");
+            return false;
+        }
+
+        if (TextUtils.isEmpty(mEdType.getText().toString())) {
+            showToast(activity, "物料型号不可为空");
+            return false;
+        }
+
+        if (TextUtils.isEmpty(mEdSpectype.getText().toString())) {
+            showToast(activity, "物料规格不可为空");
+            return false;
+        }
+
+        if (TextUtils.isEmpty(mEdUnit.getText().toString())) {
+            showToast(activity, "单位不可为空");
+            return false;
+        }
+
+        if (TextUtils.isEmpty(mEdLot.getText().toString())) {
+            showToast(activity, "批次不可为空");
+            return false;
+        }
+
+        if (TextUtils.isEmpty(mEdCostObject.getText().toString())) {
+            showToast(activity, "成本对象不可为空");
+            return false;
+        }
+
+        if (TextUtils.isEmpty(mEdQty.getText().toString())) {
+            showToast(activity, "总量不可为空");
+            return false;
+        }
+        return true;
     }
 
     /**

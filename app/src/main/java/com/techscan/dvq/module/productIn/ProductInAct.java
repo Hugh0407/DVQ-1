@@ -23,12 +23,12 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.techscan.dvq.common.Common;
 import com.techscan.dvq.ListWarehouse;
 import com.techscan.dvq.R;
 import com.techscan.dvq.VlistRdcl;
 import com.techscan.dvq.bean.Goods;
 import com.techscan.dvq.common.Base64Encoder;
+import com.techscan.dvq.common.Common;
 import com.techscan.dvq.common.RequestThread;
 import com.techscan.dvq.common.SaveThread;
 import com.techscan.dvq.common.SoundHelper;
@@ -55,8 +55,6 @@ import butterknife.OnClick;
 import static com.techscan.dvq.common.Utils.HANDER_DEPARTMENT;
 import static com.techscan.dvq.common.Utils.HANDER_SAVE_RESULT;
 import static com.techscan.dvq.common.Utils.HANDER_STORG;
-import static com.techscan.dvq.common.Utils.ORG_NAME;
-import static com.techscan.dvq.common.Utils.PK_CALBODY;
 import static com.techscan.dvq.common.Utils.showResultDialog;
 import static com.techscan.dvq.common.Utils.showToast;
 
@@ -112,6 +110,7 @@ public class ProductInAct extends Activity {
     String CDPTID = "";  //部门id
     String CUSER;   //登录员工id
     String CWAREHOUSEID = "";    //库存组织
+    String PK_CALBODY   = "";    //库存组织 id
     String PK_CORP;         //公司
     String VBILLCOD;        //单据号
     int    year;
@@ -162,14 +161,12 @@ public class ProductInAct extends Activity {
                 btnRdclClick("");
                 break;
             case R.id.btnPurInScan:
-                if (isAllEdNotEmpty()) {
+                if (checkSaveInfo()) {
                     Intent in = new Intent(mActivity, ProductInScanAct.class);
                     startActivityForResult(in, 95);
                     if (tempList != null) {
                         tempList.clear();
                     }
-                } else {
-                    showToast(mActivity, "请先核对信息，再进行扫描");
                 }
                 break;
             case R.id.btnPurinSave:
@@ -224,7 +221,6 @@ public class ProductInAct extends Activity {
             String warehousecode = data.getStringExtra("result2");
             String warehouseName = data.getStringExtra("result3");
             CWAREHOUSEID = warehousePK1;
-            mWh.requestFocus();
             mWh.setText(warehouseName);
             mLeiBie.requestFocus();
             checkInfo.put("Warehouse", warehouseName);
@@ -234,9 +230,9 @@ public class ProductInAct extends Activity {
             String pk_areacl  = data.getStringExtra("pk_areacl");
             String bodyname   = data.getStringExtra("bodyname");
             String pk_calbody = data.getStringExtra("pk_calbody");
-            mOrganization.requestFocus();
+            PK_CALBODY = pk_calbody;
             mOrganization.setText(bodyname);
-            mLeiBie.requestFocus();
+            mWh.requestFocus();
             checkInfo.put("Organization", bodyname);
         }
         // 收发类别的回传数据 <----VlistRdcl.class
@@ -247,7 +243,6 @@ public class ProductInAct extends Activity {
             String RdIDA = data.getStringExtra("RdIDA");    //需要回传的id
             String RdIDB = data.getStringExtra("RdIDB");
             CDISPATCHERID = RdIDA;
-            mLeiBie.requestFocus();
             mLeiBie.setText(name);
             mDepartment.requestFocus();
             checkInfo.put("LeiBie", name);
@@ -291,7 +286,6 @@ public class ProductInAct extends Activity {
         mLeiBie.setOnKeyListener(mOnKeyListener);
         mDepartment.setOnKeyListener(mOnKeyListener);
         checkInfo = new HashMap<String, String>();
-        mOrganization.setText(ORG_NAME);
     }
 
     /**
@@ -388,11 +382,11 @@ public class ProductInAct extends Activity {
             mWh.requestFocus();
             return false;
         }
-//        if (!mOrganization.getText().toString().equals(checkInfo.get("Organization"))) {
-//            showToast(mActivity, "组织信息不正确");
-//            mOrganization.requestFocus();
-//            return false;
-//        }
+        if (!mOrganization.getText().toString().equals(checkInfo.get("Organization"))) {
+            showToast(mActivity, "组织信息不正确");
+            mOrganization.requestFocus();
+            return false;
+        }
         if (!mLeiBie.getText().toString().equals(checkInfo.get("LeiBie"))) {
             showToast(mActivity, "收发类别信息不正确");
             mLeiBie.requestFocus();
@@ -562,14 +556,6 @@ public class ProductInAct extends Activity {
         td.start();
     }
 
-    private boolean isAllEdNotEmpty() {
-        return (!TextUtils.isEmpty(mBillNum.getText().toString())
-                && !TextUtils.isEmpty(mBillDate.getText().toString())
-                && !TextUtils.isEmpty(mWh.getText().toString())
-                && !TextUtils.isEmpty(mOrganization.getText().toString())
-                && !TextUtils.isEmpty(mLeiBie.getText().toString())
-                && !TextUtils.isEmpty(mDepartment.getText().toString()));
-    }
 
     private void changeAllEdToEmpty() {
         mBillNum.setText("");
@@ -637,7 +623,7 @@ public class ProductInAct extends Activity {
             month = monthOfYear;
             day = dayOfMonth;
             updateDate();
-            mWh.requestFocus(); //选择日期后将焦点跳到“仓库的EdText”
+            mOrganization.requestFocus(); //选择日期后将焦点跳到“仓库的EdText”
         }
 
         //当DatePickerDialog关闭时，更新日期显示

@@ -493,19 +493,58 @@ public class OtherInScanAct extends Activity {
      * 海关手册号 没有做校验
      */
     private boolean isAllEdNotNull() {
-        if (!TextUtils.isEmpty(edBarCode.getText())
-                && !TextUtils.isEmpty(edInvcode.getText())
-                && !TextUtils.isEmpty(edName.getText())
-                && !TextUtils.isEmpty(edType.getText())
-                && !TextUtils.isEmpty(edSpectype.getText())
-                && !TextUtils.isEmpty(edUnit.getText())
-                && !TextUtils.isEmpty(edBatch.getText())
-                && !TextUtils.isEmpty(edQty.getText())) {
-            return true;
-        } else {
-            showToast(mActivity, "信息不完整，请核对");
+        if (vFree4.equals("Y")) {
+            if (TextUtils.isEmpty(edManual.getText().toString())) {
+                showToast(mActivity, "海关手册号不可为空");
+                return false;
+            }
+        }
+
+        if (TextUtils.isEmpty(edBarCode.getText().toString())) {
+            showToast(mActivity, "条码不可为空");
             return false;
         }
+
+        if (TextUtils.isEmpty(edInvcode.getText().toString())) {
+            showToast(mActivity, "物料编码不可为空");
+            return false;
+        }
+
+        if (TextUtils.isEmpty(edName.getText().toString())) {
+            showToast(mActivity, "物料名称不可为空");
+            return false;
+        }
+
+        if (TextUtils.isEmpty(edType.getText().toString())) {
+            showToast(mActivity, "物料型号不可为空");
+            return false;
+        }
+
+        if (TextUtils.isEmpty(edSpectype.getText().toString())) {
+            showToast(mActivity, "物料规格不可为空");
+            return false;
+        }
+
+        if (TextUtils.isEmpty(edUnit.getText().toString())) {
+            showToast(mActivity, "单位不可为空");
+            return false;
+        }
+
+        if (TextUtils.isEmpty(edBatch.getText().toString())) {
+            showToast(mActivity, "批次不可为空");
+            return false;
+        }
+
+//        if (TextUtils.isEmpty(mEdCostObject.getText().toString())) {
+//            showToast(mActivity, "成本对象不可为空");
+//            return false;
+//        }
+
+        if (TextUtils.isEmpty(edQty.getText().toString())) {
+            showToast(mActivity, "总量不可为空");
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -589,7 +628,7 @@ public class OtherInScanAct extends Activity {
                     pk_invmandoc = tempJso.getString("pk_invmandoc");
                     map.put("invtype", tempJso.getString("invtype"));   //型号
                     map.put("invspec", tempJso.getString("invspec"));   //规格
-                    map.put("oppdimen", tempJso.getString("opzpdimen"));   //重量
+                    map.put("oppdimen", tempJso.getString("oppdimen")); //重量
                     map.put("isfree4", tempJso.getString("isfree4"));
                 }
                 if (map != null) {
@@ -733,9 +772,11 @@ public class OtherInScanAct extends Activity {
 
                         float weight = Float.valueOf(edWeight.getText().toString());
                         edQty.setText(String.valueOf(num * weight));
-                        addDataToDetailList();
-                        edBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
-                        changeAllEdTextToEmpty();
+                        if (isAllEdNotNull()) {
+                            addDataToDetailList();
+                            edBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
+                            changeAllEdTextToEmpty();
+                        }
                         return true;
                     case R.id.ed_batch:
                         //液体需要根据批次号获取海关手册号
@@ -765,9 +806,11 @@ public class OtherInScanAct extends Activity {
                             return true;
                         }
 
-                        addDataToDetailList();
-                        edBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
-                        changeAllEdTextToEmpty();
+                        if (isAllEdNotNull()) {
+                            addDataToDetailList();
+                            edBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
+                            changeAllEdTextToEmpty();
+                        }
                         return true;
                     case R.id.ed_manual:
                         if (isAllEdNotNull()) {
