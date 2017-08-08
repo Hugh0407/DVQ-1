@@ -708,7 +708,8 @@ public class MultilateralTrade extends Activity {
             jsonSaveHead = null;
             jsonBillHead = null;
             changeAllEdToEmpty();
-            txtDocument.requestFocus();
+            ScanedBarcode = null;
+            txtDocumentNumber.requestFocus();
             //SaveOk();
             //            IniActivyMemor();// TODO: 2017/7/10 XUHU
         } catch (Exception e) {
@@ -761,7 +762,7 @@ public class MultilateralTrade extends Activity {
             tableHead.put("CDISPATCHERID", CDISPATCHERID);//
             tableHead.put("FREPLENISHFLAG", "N");//
             tableHead.put("CBIZTYPE", CBIZTYPE);//
-            tableHead.put("DBILLDATE", tmpBillDate);//其它仓库ID
+            tableHead.put("DBILLDATE", tmpBillDate);//
             tableHead.put("COTHERCALBODYID", InOrgID);//对方库存组织PK
             tableHead.put("COTHERCORPID", InCompanyID);//对方公司ID
             tableHead.put("COUTCALBODYID", OutOrgID);//调出库存组织ID
@@ -853,9 +854,9 @@ public class MultilateralTrade extends Activity {
                         object.put("PK_CORP", PK_CORP);//公司主键
                         object.put("VBATCHCODE",  arraysSerino.getJSONObject(j).getString("batch"));//批次
                         // TODO: 2017/8/6
-//                        String add = bodys.getJSONObject(i).getString("vreceiveaddress");
-//                        String adds = Base64Encoder.encode(add.getBytes("gb2312"));
-//                        object.put("VRECEIVEADDRESS", adds);
+                        String add = bodys.getJSONObject(i).getString("vreceiveaddress");
+                        String adds = Base64Encoder.encode(add.getBytes("gb2312"));
+                        object.put("VRECEIVEADDRESS", adds);
 //                        object.put("VRECEIVEADDRESS", bodys.getJSONObject(i).getString(""));//地址
                         object.put("VSOURCEBILLCODE", CheckBillCode);//来源单据号
                         object.put("VSOUREROWNO", bodys.getJSONObject(i).getString("crowno"));//单据行号
@@ -982,7 +983,7 @@ public class MultilateralTrade extends Activity {
      */
     private void progressDialogDismiss() {
         if (progressDialog != null && progressDialog.isShowing()) {
-            progressDialog.dismiss();
+            progressDialog.cancel();
         }
     }
 

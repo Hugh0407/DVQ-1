@@ -1229,6 +1229,7 @@ public class SalesDelivery extends Activity {
             jsBody = null;
             jsonSaveHead = null;
             jsonBillHead = null;
+            ScanedBarcode = null;
             changeAllEdToEmpty();
             txtSalesDelPDOrder.requestFocus();
             //SaveOk();
