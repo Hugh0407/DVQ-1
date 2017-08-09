@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -53,72 +52,74 @@ import static com.techscan.dvq.common.Utils.showToast;
 
 public class MaterialOutScanAct extends Activity {
 
-    @Nullable
+
     @InjectView(R.id.ed_bar_code)
     EditText mEdBarCode;    //条码
-    @Nullable
+
     @InjectView(R.id.ed_encoding)
     EditText mEdEncoding;   //编码（Sku）
-    @Nullable
+
     @InjectView(R.id.ed_type)
     EditText mEdType;   // 型号
-    @Nullable
+
     @InjectView(R.id.ed_spectype)
     EditText mEdSpectype;   //规格
-    @Nullable
+
     @InjectView(R.id.ed_lot)
     EditText mEdLot;        //批次
-    @Nullable
+
     @InjectView(R.id.ed_name)
     EditText mEdName;       //物料名
-    @Nullable
+
     @InjectView(R.id.ed_unit)
     EditText mEdUnit;
-    @Nullable
+
     @InjectView(R.id.ed_qty)
     EditText mEdQty;
-    @Nullable
+
     @InjectView(R.id.btn_overview)
-    Button   mBtnOverview;
-    @Nullable
+    Button mBtnOverview;
+
     @InjectView(R.id.btn_detail)
-    Button   mBtnDetail;
-    @Nullable
+    Button mBtnDetail;
+
     @InjectView(R.id.btn_back)
-    Button   mBtnBack;
-    @Nullable
+    Button mBtnBack;
+
     @InjectView(R.id.ed_num)
     EditText mEdNum;
-    @Nullable
+
     @InjectView(R.id.ed_weight)
     EditText mEdWeight;
-    @Nullable
+
     @InjectView(R.id.ed_cost_object)
     EditText mEdCostObject;
-    @Nullable
+
     @InjectView(R.id.ed_manual)
     EditText mEdManual;
-    @Nullable
+
     @InjectView(R.id.ed_cost_name)
     EditText edCostName;
-    @Nullable
+
     @InjectView(R.id.packed)
     TextView packed;
-    @Nullable
+
     @InjectView(R.id.switch_m)
-    Switch   switchM;
+    Switch switchM;
 
     String TAG = this.getClass().getSimpleName();
 
     public static List<Goods> detailList = new ArrayList<Goods>();
 
     public static List<Goods> ovList = new ArrayList<Goods>();
-    @Nullable
+
     Activity activity;
     String  CWAREHOUSEID = "";
     String  PK_CALBODY   = "";
     String  vFree4       = "";
+    String  barQty       = "";  //条码上显示出的物料数量，在拆托的时候用到
     boolean isPacked     = false;
+    SplitBarcode barDecoder;
 
 
     @Override
@@ -187,6 +188,8 @@ public class MaterialOutScanAct extends Activity {
                     packed.setText("不拆托");
                     isPacked = false;
                 }
+                // 每当“拆托开关” 发生改变的时候，因为调取的接口不同，需要重新调用，所以界面清空
+                changeAllEdTextToEmpty();
             }
         });
     }
@@ -209,6 +212,7 @@ public class MaterialOutScanAct extends Activity {
                 case 1:
                     //获取货物基本信息
                     setInvBaseToUI((JSONObject) msg.obj);
+                    //获取海关手册号
                     getInvBaseVFree4(mEdLot.getText().toString());
                     break;
                 case 2:
@@ -219,30 +223,9 @@ public class MaterialOutScanAct extends Activity {
                     //设置成本对象
                     setInvBaseCostObjToUI((JSONObject) msg.obj);
                     break;
-                case 4:
-                    setPackageNumToUI((JSONObject) msg.obj);
-                    break;
             }
         }
     };
-
-    /**
-     * 当拆拖的时候，通过网络获取该托盘的数量
-     *
-     * @param jsonObject 结果信息
-     */
-    private void setPackageNumToUI(JSONObject jsonObject) {
-        Log.d(TAG, "setPackageNumToUI: " + jsonObject.toString());
-        try {
-            if (jsonObject != null && jsonObject.getBoolean("Status")) {
-
-            } else {
-                showToast(activity, "获取数量异常");
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
 
     /**
      * 设置海关手册号
@@ -318,7 +301,8 @@ public class MaterialOutScanAct extends Activity {
         mEdBarCode.setText(bar);
         mEdBarCode.setSelection(mEdBarCode.length());   //将光标移动到最后的位置
         mEdBarCode.selectAll();
-        SplitBarcode barDecoder = new SplitBarcode(bar);
+
+        barDecoder = new SplitBarcode(bar);
 
         if (!barDecoder.creatorOk) {
             showToast(activity, "条码有误");
@@ -343,12 +327,13 @@ public class MaterialOutScanAct extends Activity {
             mEdNum.setEnabled(true);
             mEdEncoding.setText(barDecoder.cInvCode);
             mEdLot.setText(barDecoder.cBatch);
+            barQty = String.valueOf(barDecoder.dQuantity);
             mEdWeight.setText(String.valueOf(barDecoder.dQuantity));
             mEdQty.setText("");
             mEdNum.setText("1");
             mEdNum.selectAll();
             mEdNum.setSelection(mEdNum.length());   //将光标移动到最后的位置
-            getInvBaseInfo(barDecoder.cInvCode);
+            getInvBaseInfo(barDecoder.cInvCode, bar);
             mEdNum.requestFocus();  //包码扫描后光标跳到“数量”,输入数量,添加到列表
         } else if (barDecoder.BarcodeType.equals("TC")) {
             for (int i = 0; i < detailList.size(); i++) {
@@ -363,22 +348,19 @@ public class MaterialOutScanAct extends Activity {
             mEdEncoding.setText(barDecoder.cInvCode);
             mEdLot.setText(barDecoder.cBatch);
             //对于托码,如果拆过托，只显示总量。未拆托的正常显示
+            getInvBaseInfo(barDecoder.cInvCode, bar);
+            mEdWeight.setText(String.valueOf(barDecoder.dQuantity));
+            mEdNum.setText(String.valueOf(barDecoder.iNumber));
+            double qty = barDecoder.dQuantity;
+            double num = barDecoder.iNumber;
+            barQty = formatDecimal(qty * num);
             if (isPacked) {
-                getPackageNum(bar);
-                mEdWeight.setText("--");
-                mEdNum.setText("--");
                 mEdQty.setEnabled(true);
-                mEdQty.requestFocus();
             } else {
-                getInvBaseInfo(barDecoder.cInvCode);
-                mEdWeight.setText(String.valueOf(barDecoder.dQuantity));
-                mEdNum.setText(String.valueOf(barDecoder.iNumber));
-                double qty = barDecoder.dQuantity;
-                double num = barDecoder.iNumber;
                 mEdQty.setText(formatDecimal(qty * num));
                 mEdQty.setEnabled(false);
-                mEdCostObject.requestFocus();
             }
+            mEdCostObject.requestFocus();
         } else {
             showToast(activity, "条码有误");
             SoundHelper.playWarning();
@@ -424,19 +406,25 @@ public class MaterialOutScanAct extends Activity {
      */
     private void addDataToDetailList() {
         Goods goods = new Goods();
-        goods.setBarcode(mEdBarCode.getText().toString());
-        goods.setEncoding(mEdEncoding.getText().toString());
         goods.setName(mEdName.getText().toString());
         goods.setType(mEdType.getText().toString());
         goods.setSpec(mEdSpectype.getText().toString());
         goods.setUnit(mEdUnit.getText().toString());
         goods.setLot(mEdLot.getText().toString());
-        goods.setQty(Float.valueOf(mEdQty.getText().toString()));
         goods.setCostObject(mEdCostObject.getText().toString());
         goods.setPk_invbasdoc(pk_invbasdoc);
         goods.setPk_invmandoc(pk_invmandoc);
         goods.setManual(mEdManual.getText().toString());
         goods.setPk_invmandoc_cost(pk_invmandoc_cost);
+        /*********************************************************************/
+        //拆包需要的属性
+        goods.setBarcode(mEdBarCode.getText().toString());
+        goods.setEncoding(mEdEncoding.getText().toString());
+        goods.setQty(Float.valueOf(mEdQty.getText().toString()));
+        goods.setCodeType(barDecoder.BarcodeType);
+        goods.setBarQty(barQty);
+        goods.setDoPacked(isPacked);
+        /*********************************************************************/
         detailList.add(goods);
         addDataToOvList();
         SoundHelper.playOK();
@@ -447,6 +435,7 @@ public class MaterialOutScanAct extends Activity {
      */
     private void changeAllEdTextToEmpty() {
         mEdBarCode.setText(""); // mEdBarCode有一个监听，在那里将所有的ed清空
+        mEdBarCode.requestFocus();
         mEdLot.setEnabled(false);
         mEdNum.setEnabled(false);
         mEdQty.setEnabled(false);
@@ -514,19 +503,23 @@ public class MaterialOutScanAct extends Activity {
     /**
      * 获取存货基本信息
      *
-     * @param invCode 物料编码
+     * @param invCode 液体 不填barcode
      */
     private void getInvBaseInfo(String invCode) {
+        this.getInvBaseInfo(invCode, "");
+    }
+
+    private void getInvBaseInfo(String invCode, String barcode) {
         HashMap<String, String> parameter = new HashMap<String, String>();
         parameter.put("FunctionName", "GetInvBaseInfo");
         parameter.put("CompanyCode", MainLogin.objLog.CompanyCode);
         parameter.put("InvCode", invCode);
+        parameter.put("BarCode", barcode);
         parameter.put("TableName", "baseInfo");
         RequestThread requestThread = new RequestThread(parameter, mHandler, 1);
         Thread        td            = new Thread(requestThread);
         td.start();
     }
-
 
     /**
      * 获取存货基本信息 海关手册号
@@ -597,7 +590,7 @@ public class MaterialOutScanAct extends Activity {
     String pk_invbasdoc = "";
     String pk_invmandoc = "";
 
-    private void setInvBaseToUI(@Nullable JSONObject json) {
+    private void setInvBaseToUI(JSONObject json) {
         try {
             if (json != null && json.getBoolean("Status")) {
                 Log.d(TAG, "setInvBaseToUI: " + json);
@@ -615,8 +608,9 @@ public class MaterialOutScanAct extends Activity {
                     pk_invmandoc = tempJso.getString("pk_invmandoc");
                     map.put("invtype", tempJso.getString("invtype"));   //型号
                     map.put("invspec", tempJso.getString("invspec"));   //规格
-                    map.put("oppdimen", tempJso.getString("oppdimen"));   //重量
-                    map.put("isfree4", tempJso.getString("isfree4"));   //重量
+                    map.put("oppdimen", tempJso.getString("oppdimen")); //重量
+                    map.put("isfree4", tempJso.getString("isfree4"));
+                    map.put("currentweight", tempJso.getString("currentweight"));
                 }
                 if (map != null) {
                     mEdName.setText(map.get("invname").toString());
@@ -625,6 +619,10 @@ public class MaterialOutScanAct extends Activity {
                     mEdSpectype.setText(map.get("invspec").toString());
                     //海关手册号 有或无的标志位 ，分为 Y 和 N 两种
                     vFree4 = map.get("isfree4").toString();
+                    String cw = map.get("currentweight").toString();
+                    if (isPacked && !cw.equals("null")) {
+                        mEdQty.setText(cw);
+                    }
                 }
             }
         } catch (JSONException e) {
@@ -640,7 +638,7 @@ public class MaterialOutScanAct extends Activity {
      */
     String pk_invmandoc_cost = "";
 
-    private void setInvBaseCostObjToUI(@Nullable JSONObject json) {
+    private void setInvBaseCostObjToUI(JSONObject json) {
         try {
             if (json != null && json.getBoolean("Status")) {
                 Log.d(TAG, "InvBaseInfo: " + json.toString());

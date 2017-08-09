@@ -52,6 +52,7 @@ import butterknife.OnClick;
 import static com.techscan.dvq.common.Utils.HANDER_DEPARTMENT;
 import static com.techscan.dvq.common.Utils.HANDER_SAVE_RESULT;
 import static com.techscan.dvq.common.Utils.HANDER_STORG;
+import static com.techscan.dvq.common.Utils.formatDecimal;
 import static com.techscan.dvq.common.Utils.showResultDialog;
 import static com.techscan.dvq.common.Utils.showToast;
 
@@ -505,6 +506,21 @@ public class MaterialOutAct extends Activity {
             table.put("Body", tableBody);
             table.put("GUIDS", UUID.randomUUID().toString());
             table.put("OPDATE", billDate.getText().toString());
+            JSONArray  jsonArray = new JSONArray();
+            JSONObject jsonOb;
+            for (Goods good : MaterialOutScanAct.detailList) {
+                if (good.isDoPacked()) {
+                    jsonOb = new JSONObject();
+                    jsonOb.put("BARCODE", good.getBarcode());
+                    jsonOb.put("INVCODE", good.getEncoding());
+                    jsonOb.put("OPQTY", formatDecimal(good.getQty()));
+                    jsonOb.put("BARQTY", good.getBarQty());
+                    jsonOb.put("BARCODETYPE", good.getCodeType());
+                    jsonOb.put("GUIDS", UUID.randomUUID().toString());
+                    jsonArray.put(jsonOb);
+                }
+            }
+            table.put("JAY", jsonArray);
             Log.d(TAG, "saveInfo: " + table.toString());
             SaveThread saveThread = new SaveThread(table, "SaveMaterialOut", mHandler, HANDER_SAVE_RESULT);
             Thread     thread     = new Thread(saveThread);
