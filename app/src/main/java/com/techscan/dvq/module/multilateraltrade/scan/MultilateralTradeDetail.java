@@ -451,7 +451,11 @@ public class MultilateralTradeDetail extends Activity {
                             for (int i=0;i<jsonArray.length();i++) {
                                 JSONObject tempJso = jsonArray.getJSONObject(i);
                                 Log.d(TAG, "vfree4: "+tempJso.getString("vfree4"));
-                                txtSaleCustoms.setText(tempJso.getString("vfree4"));
+                                if (tempJso.getString("vfree4").equals("null")){
+                                    txtSaleCustoms.setText("");
+                                }else{
+                                    txtSaleCustoms.setText(tempJso.getString("vfree4"));
+                                }
                                 m_mapSaleBaseInfo.put("vfree4",txtSaleCustoms.getText().toString());
                                 SetInvBaseToUI();
 //                                    txtSaleCustoms.requestFocus();

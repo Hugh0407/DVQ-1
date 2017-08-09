@@ -368,11 +368,6 @@ public class SalesDeliveryDetail extends Activity {
         if (Scanbarcode == null || Scanbarcode.equals(""))
             return false;
 
-        if (!MainLogin.getwifiinfo()) {
-            Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            return false;
-        }
 
         SplitBarcode bar = new SplitBarcode(Scanbarcode);
 
@@ -458,28 +453,17 @@ public class SalesDeliveryDetail extends Activity {
                     JSONObject jsons = (JSONObject) msg.obj;
                     Log.d(TAG, "vfree4: "+jsons.toString());
                     try {
-//                            if (jsons != null && jsons.getBoolean("Status")) {
-//                                JSONArray jsonArray = jsons.getJSONArray("vfree4");
-//                                if (jsonArray.length() > 0) {
-//                                    JSONObject j = jsonArray.getJSONObject(0);
-//                                    String vfree4 = j.getString("vfree4");
-//                                    Log.d(TAG, "vfree4: "+vfree4);
-//                                    if (vfree4.equals("null")) {
-//                                        txtSaleCustoms.setText("");
-////                                        SetInvBaseToUI();
-//                                    } else {
-//                                        txtSaleCustoms.setText(vfree4);
-//                                        txtSaleCustoms.setEnabled(false);
-////                                        SetInvBaseToUI();
-//                                    }
-//                                }
-//                            }
                         if (jsons.getBoolean("Status")) {
                             JSONArray jsonArray = jsons.getJSONArray("customs");
                             for (int i=0;i<jsonArray.length();i++) {
                                 JSONObject tempJso = jsonArray.getJSONObject(i);
                                 Log.d(TAG, "vfree4: "+tempJso.getString("vfree4"));
-                                txtSaleCustoms.setText(tempJso.getString("vfree4"));
+                                if (tempJso.getString("vfree4").equals("null")){
+                                    txtSaleCustoms.setText("");
+                                }else{
+                                    txtSaleCustoms.setText(tempJso.getString("vfree4"));
+                                }
+
                                 m_mapSaleBaseInfo.put("vfree4",txtSaleCustoms.getText().toString());
                                 SetInvBaseToUI();
 //                                    txtSaleCustoms.requestFocus();
