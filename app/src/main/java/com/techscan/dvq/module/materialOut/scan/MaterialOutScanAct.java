@@ -447,12 +447,16 @@ public class MaterialOutScanAct extends Activity {
      * @return true---->所有的ed都不为空,false---->所有的ed都为空
      */
     private boolean isAllEdNotNull() {
-        if (vFree4.equals("Y")) {
-            if (TextUtils.isEmpty(mEdManual.getText().toString())) {
-                showToast(activity, "海关手册号不可为空");
-                return false;
-            }
+        if (vFree4.equals("Y") && TextUtils.isEmpty(mEdManual.getText().toString())) {
+            showToast(activity, "海关手册号不可为空");
+            return false;
         }
+
+        if (vFree4.equals("N") && !TextUtils.isEmpty(mEdManual.getText().toString())) {
+            showToast(activity, "此物料没有海关手册");
+            return false;
+        }
+
         if (TextUtils.isEmpty(mEdBarCode.getText().toString())) {
             showToast(activity, "条码不可为空");
             return false;

@@ -109,7 +109,7 @@ public class OtherOutScanAct extends Activity {
     @Nullable
     Activity activity;
     String CWAREHOUSEID = "";
-    String PK_CALBODY = "";
+    String PK_CALBODY   = "";
     String vFree4       = "";
 
     @Override
@@ -490,11 +490,14 @@ public class OtherOutScanAct extends Activity {
      */
     private boolean isAllEdNotNull() {
 
-        if (vFree4.equals("Y")) {
-            if (TextUtils.isEmpty(edManual.getText().toString())) {
-                showToast(activity, "海关手册号不可为空");
-                return false;
-            }
+        if (vFree4.equals("Y") && TextUtils.isEmpty(edManual.getText().toString())) {
+            showToast(activity, "海关手册号不可为空");
+            return false;
+        }
+
+        if (vFree4.equals("N") && !TextUtils.isEmpty(edManual.getText().toString())) {
+            showToast(activity, "此物料没有海关手册");
+            return false;
         }
 
 
