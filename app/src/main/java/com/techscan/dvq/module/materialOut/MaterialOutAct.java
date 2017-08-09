@@ -504,7 +504,7 @@ public class MaterialOutAct extends Activity {
             tableBody.put("ScanDetails", bodyArray);
             table.put("Body", tableBody);
             table.put("GUIDS", UUID.randomUUID().toString());
-            table.put("OPDATE", MainLogin.appTime);
+            table.put("OPDATE", billDate.getText().toString());
             Log.d(TAG, "saveInfo: " + table.toString());
             SaveThread saveThread = new SaveThread(table, "SaveMaterialOut", mHandler, HANDER_SAVE_RESULT);
             Thread     thread     = new Thread(saveThread);
