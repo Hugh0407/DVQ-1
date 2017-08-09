@@ -777,7 +777,7 @@ public class MultilateralTradeDetail extends Activity {
                 JSONArray jsarray = jsBody.getJSONArray("dbBody");
                 for (int i = 0; i < jsarray.length(); i++) {
                     JSONObject tempJso = jsarray.getJSONObject(i);
-                    CALBODYID =CALBODY;//kucunzuhi
+                    CALBODYID =CALBODY;//¿â´æ×éÖ¯
                     CINVBASID = tempJso.getString("cinvbasid");
                     INVENTORYID = tempJso.getString("coutinvid");
                     CINWHID = tempJso.getString("cinwhid");

@@ -18,8 +18,10 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.SimpleAdapter;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -123,7 +125,11 @@ public class SalesDeliveryDetail extends Activity {
     @Nullable
     @InjectView(R.id.txtSaleCustoms)
     EditText txtSaleCustoms;
-
+    @InjectView(R.id.packed)
+    TextView packed;
+    @InjectView(R.id.switch_m)
+    Switch switch_m;
+    boolean isPacked     = false;
     @Nullable
     private GetSaleBaseInfo           objSaleBaseInfo   = null;
     @Nullable
@@ -832,6 +838,18 @@ public class SalesDeliveryDetail extends Activity {
         txtBarcode.addTextChangedListener(new CustomTextWatcher(txtBarcode));
         txtSaleNumber.addTextChangedListener(new CustomTextWatcher(txtSaleNumber));
 //        this.txtBarcode.addTextChangedListener(watchers);
+        switch_m.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    packed.setText("²ðÍÐ");
+                    isPacked = true;
+                } else {
+                    packed.setText("²»²ðÍÐ");
+                    isPacked = false;
+                }
+            }
+        });
     }
 
     private void IniDetail() {
