@@ -246,14 +246,8 @@ public class OtherInAct extends Activity {
             case R.id.btn_save:
                 if (checkSaveInfo()) {
                     if (tempList != null && tempList.size() > 0) {
-                        try {
-                            saveInfo(tempList);
-                            showProgressDialog();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        } catch (UnsupportedEncodingException e) {
-                            e.printStackTrace();
-                        }
+                        saveInfo(tempList);
+                        showProgressDialog();
                     } else {
                         showToast(mActivity, "没有需要保存的数据");
                     }
@@ -401,51 +395,57 @@ public class OtherInAct extends Activity {
      * @param goodsList
      * @throws JSONException
      */
-    private void saveInfo(List<Goods> goodsList) throws JSONException, UnsupportedEncodingException {
+    private void saveInfo(List<Goods> goodsList) {
         final JSONObject table     = new JSONObject();
         JSONObject       tableHead = new JSONObject();
-        tableHead.put("CDISPATCHERID", CDISPATCHERID);
-        tableHead.put("CDPTID", CDPTID);
-        tableHead.put("CUSER", MainLogin.objLog.UserID);
-        tableHead.put("CWAREHOUSEID", CWAREHOUSEID);
-        tableHead.put("PK_CALBODY", PK_CALBODY);
-        tableHead.put("PK_CORP", MainLogin.objLog.STOrgCode);
-        tableHead.put("VBILLCODE", edBillNum.getText().toString());
-        String login_user = MainLogin.objLog.LoginUser.toString();
-        String cuserName  = Base64Encoder.encode(login_user.getBytes("gb2312"));
-        tableHead.put("CUSERNAME", cuserName);
-        if (edRemark.getText().toString().isEmpty()) {
-            edRemark.setText("");
-        }
-        tableHead.put("VNOTE", edRemark.getText().toString());
-        tableHead.put("FREPLENISHFLAG", "N");    //N不退，Y退
-        table.put("Head", tableHead);
-        JSONObject tableBody = new JSONObject();
-        JSONArray  bodyArray = new JSONArray();
-        for (Goods good : goodsList) {
-            JSONObject object = new JSONObject();
-            object.put("CINVBASID", good.getPk_invbasdoc());
-            object.put("CINVENTORYID", good.getPk_invmandoc());
-            object.put("WGDATE", edBillDate.getText().toString());    //LEO要求，将时间添加到表体上
-            object.put("NINNUM", Utils.formatDecimal(good.getQty()));
-            object.put("CINVCODE", good.getEncoding());
-            object.put("COSTOBJECT", good.getPk_invmandoc_cost());
-            object.put("BLOTMGT", "1");
-            object.put("PK_BODYCALBODY", PK_CALBODY);
-            object.put("PK_CORP", MainLogin.objLog.STOrgCode);
-            object.put("VBATCHCODE", good.getLot());
-            object.put("VFREE4", good.getManual());    //海关手册号
-            bodyArray.put(object);
-        }
-        tableBody.put("ScanDetails", bodyArray);
-        table.put("Body", tableBody);
-        table.put("GUIDS", UUID.randomUUID().toString());
-        table.put("OPDATE", MainLogin.appTime);
-        Log.d(TAG, "saveInfo: " + table.toString());
+        try {
+            tableHead.put("CDISPATCHERID", CDISPATCHERID);
+            tableHead.put("CDPTID", CDPTID);
+            tableHead.put("CUSER", MainLogin.objLog.UserID);
+            tableHead.put("CWAREHOUSEID", CWAREHOUSEID);
+            tableHead.put("PK_CALBODY", PK_CALBODY);
+            tableHead.put("PK_CORP", MainLogin.objLog.STOrgCode);
+            tableHead.put("VBILLCODE", edBillNum.getText().toString());
+            String login_user = MainLogin.objLog.LoginUser.toString();
+            String cuserName  = Base64Encoder.encode(login_user.getBytes("gb2312"));
+            tableHead.put("CUSERNAME", cuserName);
+            if (edRemark.getText().toString().isEmpty()) {
+                edRemark.setText("");
+            }
+            tableHead.put("VNOTE", edRemark.getText().toString());
+            tableHead.put("FREPLENISHFLAG", "N");    //N不退，Y退
+            table.put("Head", tableHead);
+            JSONObject tableBody = new JSONObject();
+            JSONArray  bodyArray = new JSONArray();
+            for (Goods good : goodsList) {
+                JSONObject object = new JSONObject();
+                object.put("CINVBASID", good.getPk_invbasdoc());
+                object.put("CINVENTORYID", good.getPk_invmandoc());
+                object.put("WGDATE", edBillDate.getText().toString());    //LEO要求，将时间添加到表体上
+                object.put("NINNUM", Utils.formatDecimal(good.getQty()));
+                object.put("CINVCODE", good.getEncoding());
+                object.put("COSTOBJECT", good.getPk_invmandoc_cost());
+                object.put("BLOTMGT", "1");
+                object.put("PK_BODYCALBODY", PK_CALBODY);
+                object.put("PK_CORP", MainLogin.objLog.STOrgCode);
+                object.put("VBATCHCODE", good.getLot());
+                object.put("VFREE4", good.getManual());    //海关手册号
+                bodyArray.put(object);
+            }
+            tableBody.put("ScanDetails", bodyArray);
+            table.put("Body", tableBody);
+            table.put("GUIDS", UUID.randomUUID().toString());
+            table.put("OPDATE", edBillDate.getText().toString());
+            Log.d(TAG, "saveInfo: " + table.toString());
 
-        SaveThread saveThread = new SaveThread(table, "SaveOtherIn", mHandler, HANDER_SAVE_RESULT);
-        Thread     thread     = new Thread(saveThread);
-        thread.start();
+            SaveThread saveThread = new SaveThread(table, "SaveOtherIn", mHandler, HANDER_SAVE_RESULT);
+            Thread     thread     = new Thread(saveThread);
+            thread.start();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 
     // 打开收发类别画面

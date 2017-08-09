@@ -211,84 +211,96 @@ public class MainLogin extends Activity {
         // 调用服务
         /*********************************************************************/
         // 表单提交
-        RequestBody        formBody = new FormBody.Builder().build();
-        final OkHttpClient client   = new OkHttpClient();
-        final Request request = new Request.Builder()
-                .url(lsUrl)
-                .addHeader("Self-Test", "V")
-                .addHeader("User-Code", user_name)
-                .addHeader("User-Pwd", password)
-                .addHeader("User-Company", CompanyCode)
-                .addHeader("Data-Source", "A")
-                .addHeader("Org-Code", OrgCode)
-                .addHeader("Version-Code", Version)
-                .post(formBody)
-                .build();
-        Observable.create(new ObservableOnSubscribe<Response>() {
-            @Override
-            public void subscribe(ObservableEmitter<Response> e) throws Exception {
-                Response response = client.newCall(request).execute();
-                e.onNext(response);
-                e.onComplete();
-            }
-        })
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<Response>() {
-                    @Override
-                    public void accept(Response response) throws Exception {
+        RequestBody formBody = new FormBody.Builder().build();
+        try {
+            final OkHttpClient client = new OkHttpClient();
+            final Request request = new Request.Builder()
+                    .url(lsUrl)
+                    .addHeader("Self-Test", "V")
+                    .addHeader("User-Code", user_name)
+                    .addHeader("User-Pwd", password)
+                    .addHeader("User-Company", CompanyCode)
+                    .addHeader("Data-Source", "A")
+                    .addHeader("Org-Code", OrgCode)
+                    .addHeader("Version-Code", Version)
+                    .post(formBody)
+                    .build();
+            Observable.create(new ObservableOnSubscribe<Response>() {
+                @Override
+                public void subscribe(ObservableEmitter<Response> e) throws Exception {
+                    Response response = client.newCall(request).execute();
+                    if (!response.isSuccessful()) {
+                        Utils.showToast(MainLogin.this, "网络连接异常");
+                        return;
+                    }
+                    e.onNext(response);
+                    e.onComplete();
+                }
+            })
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Consumer<Response>() {
+                        @Override
+                        public void accept(Response response) throws Exception {
 
-                        if (response.code() == 200) {
-                            /**
-                             * GB2312是中国规定的汉字编码，也可以说是简体中文的字符集编码;
-                             * GBK 是 GB2312的扩展 ,除了兼容GB2312外，它还能显示繁体中文
-                             */
-                            String res = new String(response.body().bytes(), "GBK");
+                            if (response.code() == 200) {
+                                /**
+                                 * GB2312是中国规定的汉字编码，也可以说是简体中文的字符集编码;
+                                 * GBK 是 GB2312的扩展 ,除了兼容GB2312外，它还能显示繁体中文
+                                 */
+                                String res = new String(response.body().bytes(), "GBK");
 //                            res = new String(res.getBytes("iso-8859-1"), "GBK");
-                            JSONObject jas = new JSONObject(res);
+                                JSONObject jas = new JSONObject(res);
 
-                            if (!jas.has("Status")) {
-                                Utils.showToast(MainLogin.this, R.string.WangLuoChuXianWenTi);
-                                SoundHelper.playWarning();
-                                return;
-                            }
-
-                            boolean loginStatus = jas.getBoolean("Status");
-                            if (loginStatus == true) {
-
-                                objLog.LoginString = LoginString;
-                                objLog.LoginString2 = LoginString2;
-                                objLog.LoginUser = user.getText().toString().replace("\n", "");
-                                objLog.Password = pwds.getText().toString().replace("\n", "");
-                                objLog.CompanyCode = CompanyCode;
-
-                                objLog.UserID = jas.getString("userid");
-                                objLog.UserName = LoginUser;
-                                objLog.STOrgCode = OrgCode;
-                                objLog.WhCodeA = WhCode;
-                                objLog.WhCodeB = WhCodeB;
-
-                                objLog.UserIDB = jas.getString("useridb");
-                                objLog.VersionCode = Version;
-                                //增加 设置页面
-                                SimpleDateFormat f    = new SimpleDateFormat("yyyy-MM-dd");
-                                Date             date = new Date();
-                                objLog.LoginDate = f.format(date);
-                                if (!GetInfo()) {
+                                if (!jas.has("Status")) {
+                                    Utils.showToast(MainLogin.this, R.string.WangLuoChuXianWenTi);
+                                    SoundHelper.playWarning();
                                     return;
                                 }
-                                Intent MenuForm = new Intent(MainLogin.this, MainMenu.class);
-                                startActivity(MenuForm);
 
-                            } else {
-                                String ErrMsg = jas.getString("ErrMsg");
-                                Log.d("TAG", "accept: " + ErrMsg);
-                                Utils.showToast(MainLogin.this, ErrMsg);
-                                SoundHelper.playWarning();
+                                boolean loginStatus = jas.getBoolean("Status");
+                                if (loginStatus == true) {
+
+                                    objLog.LoginString = LoginString;
+                                    objLog.LoginString2 = LoginString2;
+                                    objLog.LoginUser = user.getText().toString().replace("\n", "");
+                                    objLog.Password = pwds.getText().toString().replace("\n", "");
+                                    objLog.CompanyCode = CompanyCode;
+
+                                    objLog.UserID = jas.getString("userid");
+                                    objLog.UserName = LoginUser;
+                                    objLog.STOrgCode = OrgCode;
+                                    objLog.WhCodeA = WhCode;
+                                    objLog.WhCodeB = WhCodeB;
+
+                                    objLog.UserIDB = jas.getString("useridb");
+                                    objLog.VersionCode = Version;
+                                    //增加 设置页面
+                                    SimpleDateFormat f    = new SimpleDateFormat("yyyy-MM-dd");
+                                    Date             date = new Date();
+                                    objLog.LoginDate = f.format(date);
+                                    if (!GetInfo()) {
+                                        return;
+                                    }
+                                    Intent MenuForm = new Intent(MainLogin.this, MainMenu.class);
+                                    startActivity(MenuForm);
+
+                                } else {
+                                    String ErrMsg = jas.getString("ErrMsg");
+                                    Log.d("TAG", "accept: " + ErrMsg);
+                                    Utils.showToast(MainLogin.this, ErrMsg);
+                                    SoundHelper.playWarning();
+                                }
                             }
                         }
-                    }
-                });
+                    });
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            //如果Request的url不合法，会触发该异常
+            Utils.showToast(MainLogin.this, "web地址参数不合法");
+            return;
+        }
+
 //
 //        /*********************************************************************/
 //

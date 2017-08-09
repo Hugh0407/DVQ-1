@@ -446,7 +446,7 @@ public class ProductInAct extends Activity {
             tableBody.put("ScanDetails", bodyArray);
             table.put("Body", tableBody);
             table.put("GUIDS", UUID.randomUUID().toString());
-            table.put("OPDATE", MainLogin.appTime);
+            table.put("OPDATE", mBillDate.getText().toString());
             Log.d(TAG, "saveInfo: " + table.toString());
 
             SaveThread saveThread = new SaveThread(table, "SavePrdStockIn", mHandler, HANDER_SAVE_RESULT);

@@ -8,8 +8,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -26,14 +24,14 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.techscan.dvq.common.Common;
 import com.techscan.dvq.GetInvBaseInfo;
 import com.techscan.dvq.Inventory;
-import com.techscan.dvq.common.Utils;
-import com.techscan.dvq.login.MainLogin;
 import com.techscan.dvq.R;
 import com.techscan.dvq.R.id;
+import com.techscan.dvq.common.Common;
 import com.techscan.dvq.common.SplitBarcode;
+import com.techscan.dvq.common.Utils;
+import com.techscan.dvq.login.MainLogin;
 import com.techscan.dvq.writeTxt;
 
 import org.apache.http.ParseException;
@@ -57,22 +55,22 @@ import static android.content.ContentValues.TAG;
 
 public class PurStockInDetail extends Activity {
 
-    @Nullable
-    private GetInvBaseInfo          objInvBaseInfo   = null;
-    @Nullable
+
+    private GetInvBaseInfo objInvBaseInfo = null;
+
     private HashMap<String, Object> m_mapInvBaseInfo = null;
-    @Nullable
-    private SplitBarcode            m_cSplitBarcode  = null;
-    @Nullable
-    String fileNameScan   = null;
-    @Nullable
+
+    private SplitBarcode m_cSplitBarcode = null;
+
+    String fileNameScan = null;
+
     String ScanedFileName = null;
-    @Nullable
-    String UserID         = null;
-    @Nullable
-    File   fileScan       = null;
-    @NonNull
-    String ReScanBody     = "1";
+
+    String UserID = null;
+
+    File fileScan = null;
+
+    String ReScanBody = "1";
     private com.techscan.dvq.writeTxt writeTxt;        //保存LOG文件
 
     String m_BillNo = "";
@@ -83,9 +81,9 @@ public class PurStockInDetail extends Activity {
     String tmpWarehouseID = "";
     String tmpposID       = "";
     private ArrayList<String> ScanedBarcode = new ArrayList<String>();
-    @Nullable
+
     JSONObject jsHead;
-    @Nullable
+
     JSONObject jsBody;
 
     // ADD CAIXY TEST START
@@ -94,10 +92,10 @@ public class PurStockInDetail extends Activity {
 //	private int MainLogin.music2;// 定义一个int来设置suondID
     // ADD CAIXY TEST END
 
-    @Nullable
+
     Inventory currentObj; // 当前扫描到的存货信息
 
-    @Nullable
+
     JSONObject jsBoxTotal;
     JSONObject jsSerino;
 
@@ -123,15 +121,15 @@ public class PurStockInDetail extends Activity {
     Double ishouldinnum;
     Double iinnum;
 
-    @Nullable
+
     List<Map<String, Object>> lstTaskBody = null;
 
-    @Nullable
-    private AlertDialog   DeleteButton     = null;
-    @NonNull
+
+    private AlertDialog DeleteButton = null;
+
     private ButtonOnClick buttonDelOnClick = new ButtonOnClick(0);
-    @Nullable
-    private AlertDialog   SelectButton     = null;
+
+    private AlertDialog SelectButton = null;
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_MENU) {// 拦截meu键事件 //do something...
@@ -379,7 +377,7 @@ public class PurStockInDetail extends Activity {
         return stotal == 1;
     }
 
-    private boolean ScanDetail(@Nullable String Scanbarcode) {
+    private boolean ScanDetail(String Scanbarcode) {
         if (Scanbarcode == null || Scanbarcode.equals(""))
             return false;
 
@@ -550,17 +548,20 @@ public class PurStockInDetail extends Activity {
                     }
                     doneqty = doneqty + Double.parseDouble(m_mapInvBaseInfo.get("total").toString());
 //                  if (doneqty  >= temp.getInt("nordernum")) {
-                    if (doneqty > temp.getInt("tasknum")) {
-                        Toast.makeText(this, "这个存货已经超过应收数量了,不允许收!",
-                                       Toast.LENGTH_LONG).show();
-                        // ADD CAIXY TEST START
-                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                        // ADD CAIXY TEST END
-                        IniDetail();
-                        txtBarcode.setText("");
-                        txtBarcode.requestFocus();
-                        return false;
-                    }
+/*********************************************************************/
+                    // 如果超过,现在客户说可以入,修改人：liuya
+//                    if (doneqty > temp.getInt("tasknum")) {
+//                        Toast.makeText(this, "这个存货已经超过应收数量了,不允许收!",
+//                                       Toast.LENGTH_LONG).show();
+//                        // ADD CAIXY TEST START
+//                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                        // ADD CAIXY TEST END
+//                        IniDetail();
+//                        txtBarcode.setText("");
+//                        txtBarcode.requestFocus();
+//                        return false;
+//                    }
+/*********************************************************************/
 //                    Double ldTotal = 0.0;
 //                    if(bar.BarcodeType.equals("TC") ) {
 //                        ldTotal = (Double) m_mapInvBaseInfo.get("quantity") * (Integer)m_mapInvBaseInfo.get("number");
@@ -855,7 +856,7 @@ public class PurStockInDetail extends Activity {
     }
 
     // 确认存货流水号是否和上游单据一致
-    private boolean ConformGetSERINO(String barcode, @NonNull SplitBarcode bar)
+    private boolean ConformGetSERINO(String barcode, SplitBarcode bar)
             throws JSONException, ParseException, IOException {
         if (m_BillID.equals("")) {
             Toast.makeText(this, R.string.MeiYouZhaoDaoCanZhao, Toast.LENGTH_LONG).show();
@@ -917,10 +918,10 @@ public class PurStockInDetail extends Activity {
      * 网络请求后的线程通信
      * msg.obj 是从子线程传递过来的数据
      */
-    @Nullable
+
     Handler mHandler = new Handler() {
         @Override
-        public void handleMessage(@NonNull Message msg) {
+        public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
                 case 1:
@@ -1005,7 +1006,7 @@ public class PurStockInDetail extends Activity {
         }
 
         @Override
-        public void onClick(@NonNull DialogInterface dialog, int whichButton) {
+        public void onClick(DialogInterface dialog, int whichButton) {
             if (whichButton >= 0) {
                 index = whichButton;
                 // dialog.cancel();
@@ -1053,10 +1054,10 @@ public class PurStockInDetail extends Activity {
         txtPurUnit.setText("");
     }
 
-    @NonNull
+
     private Button.OnClickListener myButtonListner = new Button.OnClickListener() {
         @Override
-        public void onClick(@NonNull View v) {
+        public void onClick(View v) {
             switch (v.getId()) {
                 case id.btnPurTask:
                     try {
@@ -1441,8 +1442,8 @@ public class PurStockInDetail extends Activity {
 
     }
 
-    @NonNull
-    private TextWatcher   watchers      = new TextWatcher() {
+
+    private TextWatcher watchers = new TextWatcher() {
 
         @Override
         public void afterTextChanged(Editable s) {
@@ -1463,10 +1464,10 @@ public class PurStockInDetail extends Activity {
         }
 
     };
-    @NonNull
+
     private OnKeyListener myTxtListener = new OnKeyListener() {
         @Override
-        public boolean onKey(@NonNull View v, int arg1, @NonNull KeyEvent arg2) {
+        public boolean onKey(View v, int arg1, KeyEvent arg2) {
             switch (v.getId()) {
                 case id.txtPurBarcode:
                     if (arg1 == 66 && arg2.getAction() == KeyEvent.ACTION_UP) {
@@ -1739,7 +1740,7 @@ public class PurStockInDetail extends Activity {
         return;
     }
 
-    @NonNull
+
     private DialogInterface.OnClickListener listenExit = new
             DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog,
@@ -1861,7 +1862,7 @@ public class PurStockInDetail extends Activity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
@@ -1874,12 +1875,12 @@ public class PurStockInDetail extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Nullable
-    private static AlertDialog    SelectLine     = null;
-    @NonNull
-    private        buttonOnClickC buttonOnClickC = new buttonOnClickC(0);
-    @NonNull
-    static         String[]       LNameList      = new String[2];
+
+    private static AlertDialog SelectLine = null;
+
+    private buttonOnClickC buttonOnClickC = new buttonOnClickC(0);
+
+    static String[] LNameList = new String[2];
 
     private void Changeline() {
 
@@ -1918,7 +1919,7 @@ public class PurStockInDetail extends Activity {
         }
 
         @Override
-        public void onClick(@NonNull DialogInterface dialog, int whichButton) {
+        public void onClick(DialogInterface dialog, int whichButton) {
             if (whichButton >= 0) {
                 index = whichButton;
             } else {
