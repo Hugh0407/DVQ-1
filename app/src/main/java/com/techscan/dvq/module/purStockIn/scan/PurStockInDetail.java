@@ -280,8 +280,7 @@ public class PurStockInDetail extends Activity {
             JSONArray serinos = jsSerino.getJSONArray("Serino");
 
             for (int i = 0; i < serinos.length(); i++) {
-                JSONObject temp = new JSONObject();
-                temp = serinos.getJSONObject(i);
+                JSONObject temp = serinos.getJSONObject(i);
                 if (temp.getString("serino").equals(serino)) {
                     //temp.put("box", TotalBox);
                     // Toast.makeText(this, "该条码已经被扫描过了,不能再次扫描",
@@ -398,13 +397,13 @@ public class PurStockInDetail extends Activity {
 
         m_cSplitBarcode = bar;
 
-        if (!bar.BarcodeType.equals("C") && !bar.BarcodeType.equals("TC")
-                && !bar.BarcodeType.equals("Y"))
-            bar.creatorOk = false;
+//        if (!bar.BarcodeType.equals("C") && !bar.BarcodeType.equals("TC")
+//                && !bar.BarcodeType.equals("Y"))
+//            bar.creatorOk = false;
 
         String FinishBarCode = bar.FinishBarCode;
 
-        if (bar.BarcodeType.equals("TC")) {
+        if (bar.BarcodeType.equals("TC") || bar.BarcodeType.equals("TP")) {
             if (ScanedBarcode != null || ScanedBarcode.size() > 0) {
                 for (int si = 0; si < ScanedBarcode.size(); si++) {
                     String BarCode = ScanedBarcode.get(si).toString();
@@ -995,6 +994,29 @@ public class PurStockInDetail extends Activity {
             txtPurNumber.setFocusableInTouchMode(false);
             txtPurNumber.setFocusable(false);
             //txtPurNumber.setVisibility();
+        } else if (m_mapInvBaseInfo.get("barcodetype").toString().equals("P")) {
+            /*********************************************************************/
+            //直接复制 “C”
+            txtBatch.setFocusableInTouchMode(false);
+            txtBatch.setFocusable(false);
+            txtPurNumber.setFocusableInTouchMode(true);
+            txtPurNumber.setFocusable(true);
+            txtPurTotal.setFocusableInTouchMode(false);
+            txtPurTotal.setFocusable(false);
+            txtPurNumber.requestFocus();
+            txtPurNumber.selectAll();
+            /*********************************************************************/
+        } else if (m_mapInvBaseInfo.get("barcodetype").toString().equals("TP")) {
+            /*********************************************************************/
+            //直接复制 “TC”
+            txtBatch.setFocusableInTouchMode(false);
+            txtBatch.setFocusable(false);
+            txtPurNumber.setFocusableInTouchMode(false);
+            txtPurNumber.setFocusable(false);
+            txtPurTotal.setFocusableInTouchMode(false);
+            txtPurTotal.setFocusable(false);
+            ScanedToGet();
+            /*********************************************************************/
         }
     }
 
@@ -1060,25 +1082,10 @@ public class PurStockInDetail extends Activity {
         public void onClick(View v) {
             switch (v.getId()) {
                 case id.btnPurTask:
-                    try {
-                        ShowTaskDig();
-                    } catch (JSONException e) {
-                        e.printStackTrace(); // ADD CAIXY TEST START
-                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                        // ADD CAIXY TEST END
-                    }
+                    ShowTaskDig();
                     break;
                 case id.btnPurDetail:
-                    try {
-                        ShowDetailDig();
-                    } catch (JSONException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                        // ADD CAIXY TEST START
-                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                        // ADD CAIXY TEST END
-                    }
-
+                    ShowDetailDig();
                     break;
                 case id.btnPurReturn:
                     Return();
@@ -1089,32 +1096,30 @@ public class PurStockInDetail extends Activity {
 
     private void Return() {
 //        if (jsBoxTotal != null && jsSerino != null) {
+        Intent intent = new Intent();
         if (jsSerino != null) {
             Log.d(TAG, "Return: " + jsSerino.toString());
-            Intent intent = new Intent();
 
 //            intent.putExtra("box", jsBoxTotal.toString());
             //Log.d("TAG", "ReturnjsBoxTotal: " + jsBoxTotal);
             intent.putExtra("box", "");
             intent.putExtra("head", jsHead.toString());
-            Log.d("TAG", "ReturnScanedhead: " + jsHead);
             intent.putExtra("body", jsBody.toString());
-            Log.d("TAG", "ReturnScanedbody: " + jsBody);
             intent.putExtra("serino", jsSerino.toString());
-            Log.d("TAG", "ReturnScanedSerino: " + jsSerino);
             intent.putStringArrayListExtra("ScanedBarcode", ScanedBarcode);
+            Log.d("TAG", "ReturnScanedhead: " + jsHead);
+            Log.d("TAG", "ReturnScanedbody: " + jsBody);
+            Log.d("TAG", "ReturnScanedSerino: " + jsSerino);
             Log.d("TAG", "ReturnScanedBarcode: " + ScanedBarcode);
             PurStockInDetail.this.setResult(1, intent);// 设置回传数据。resultCode值是1，这个值在主窗口将用来区分回传数据的来源，以做不同的处理
             PurStockInDetail.this.finish();
-
         } else {
-            Intent intent = new Intent();
             PurStockInDetail.this.setResult(2, intent);// 设置回传数据。resultCode值是1，这个值在主窗口将用来区分回传数据的来源，以做不同的处理
             PurStockInDetail.this.finish();
         }
     }
 
-    private void ShowDetailDig() throws JSONException {
+    private void ShowDetailDig() {
         lstTaskBody = new ArrayList<Map<String, Object>>();
         Log.d("TAG", "jsSerino: " + jsSerino);
         Map<String, Object> map;
@@ -1125,26 +1130,26 @@ public class PurStockInDetail extends Activity {
             // ADD CAIXY TEST END
             return;
         }
-        JSONArray arrays = jsSerino.getJSONArray("Serino");
+        JSONArray arrays = null;
+        try {
+            arrays = jsSerino.getJSONArray("Serino");
+            for (int i = 0; i < arrays.length(); i++) {
+                map = new HashMap<String, Object>();
 
-        for (int i = 0; i < arrays.length(); i++) {
-            map = new HashMap<String, Object>();
+                String sSerial = ((JSONObject) (arrays.get(i))).getString("sno");
+                String sBatch  = ((JSONObject) (arrays.get(i))).getString("batch");
+                String sInvCode = ((JSONObject) (arrays.get(i))).getString("invcode");
+                String serino = ((JSONObject) (arrays.get(i))).getString("serino");
+                String sTotal = ((JSONObject) (arrays.get(i))).getString("box");
 
-            String sSerial = ((JSONObject) (arrays.get(i))).getString("sno");
-            String sBatch  = ((JSONObject) (arrays.get(i))).getString("batch");
-            String sInvCode = ((JSONObject) (arrays.get(i)))
-                    .getString("invcode");
-            String serino = ((JSONObject) (arrays.get(i))).getString("serino");
-            String sTotal = ((JSONObject) (arrays.get(i))).getString("box");
-
-            map.put("invcode", sInvCode);
-            map.put("invname",
-                    ((JSONObject) (arrays.get(i))).getString("invname"));
-            map.put("batch", sBatch);
-            map.put("sno", sSerial);
-            map.put("serino", serino);
-            map.put("okflg", " ");
-            map.put("total", sTotal);
+                map.put("invcode", sInvCode);
+                map.put("invname",
+                        ((JSONObject) (arrays.get(i))).getString("invname"));
+                map.put("batch", sBatch);
+                map.put("sno", sSerial);
+                map.put("serino", serino);
+                map.put("okflg", " ");
+                map.put("total", sTotal);
 //            JSONArray boxs = jsBoxTotal.getJSONArray("BoxList");
 //            for (int x = 0; x < boxs.length(); x++) {
 //                JSONObject temp = boxs.getJSONObject(x);
@@ -1163,7 +1168,11 @@ public class PurStockInDetail extends Activity {
 //                    }
 //                }
 //            }
-            lstTaskBody.add(map);
+                lstTaskBody.add(map);
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
         // jsBoxTotal
         Log.d("TAG", "lstTaskBody: " + lstTaskBody);
@@ -1196,7 +1205,6 @@ public class PurStockInDetail extends Activity {
                 });
 
         DeleteButton.show();
-
     }
 
     private void ConfirmDelItem(int index) {
@@ -1389,7 +1397,7 @@ public class PurStockInDetail extends Activity {
         }
     }
 
-    private void ShowTaskDig() throws JSONException {
+    private void ShowTaskDig() {
         lstTaskBody = new ArrayList<Map<String, Object>>();
         // purBody
         Map<String, Object> map;
@@ -1401,31 +1409,37 @@ public class PurStockInDetail extends Activity {
             // ADD CAIXY TEST END
             return;
         }
-        JSONArray arrays = jsBody.getJSONArray("PurBody");
-
-        for (int i = 0; i < arrays.length(); i++) {
-            map = new HashMap<String, Object>();
-            map.put("BillCode", m_BillNo);
-            map.put("InvName",
-                    ((JSONObject) (arrays.get(i))).getString("invname"));
-            map.put("InvCode",
-                    ((JSONObject) (arrays.get(i))).getString("invcode"));
+        JSONArray arrays = null;
+        try {
+            arrays = jsBody.getJSONArray("PurBody");
+            for (int i = 0; i < arrays.length(); i++) {
+                map = new HashMap<String, Object>();
+                map.put("BillCode", m_BillNo);
+                map.put("InvName",
+                        ((JSONObject) (arrays.get(i))).getString("invname"));
+                map.put("InvCode",
+                        ((JSONObject) (arrays.get(i))).getString("invcode"));
 //            String batchs = ((JSONObject) (arrays.get(i)))
 //                    .getString("vbatchcode");
 //            if (batchs == null || batchs.equals("") || batchs.equals("null")) {
 //                batchs = "批次未指定";
 //            }
-            map.put("Batch", "");// test caixy
-            String sinnum = ((JSONObject) (arrays.get(i))).getString("nconfirmnum");
-            if (sinnum.toLowerCase().equals("null") || sinnum.isEmpty())
-                sinnum = "0.0";
+                map.put("Batch", "");// test caixy
+                String sinnum = ((JSONObject) (arrays.get(i))).getString("nconfirmnum");
+                if (sinnum.toLowerCase().equals("null") || sinnum.isEmpty())
+                    sinnum = "0.0";
 //            map.put("InvNum",
 //                    sinnum + " / " + Double.valueOf(((JSONObject) (arrays.get(i))).getString("nordernum")));
-            map.put("InvNum",
-                    sinnum + " / " + Double.valueOf(((JSONObject) (arrays.get(i))).getString("tasknum")));
-            // map.put("DoneQty", )
-            lstTaskBody.add(map);
+                map.put("InvNum",
+                        sinnum + " / " + Double.valueOf(((JSONObject) (arrays.get(i))).getString("tasknum")));
+                // map.put("DoneQty", )
+                lstTaskBody.add(map);
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
+
 
         SimpleAdapter listItemAdapter = new SimpleAdapter(
                 PurStockInDetail.this, lstTaskBody,// 数据源
@@ -1465,7 +1479,7 @@ public class PurStockInDetail extends Activity {
 
     };
 
-    private OnKeyListener myTxtListener = new OnKeyListener() {
+    private OnKeyListener myKeyListener = new OnKeyListener() {
         @Override
         public boolean onKey(View v, int arg1, KeyEvent arg2) {
             switch (v.getId()) {
@@ -1520,7 +1534,6 @@ public class PurStockInDetail extends Activity {
                             return false;
                         }
                     }
-
             }
             return false;
         }
@@ -1618,10 +1631,10 @@ public class PurStockInDetail extends Activity {
         btnDetail.setOnClickListener(myButtonListner);
 
         this.txtBarcode.addTextChangedListener(watchers);
-        txtBarcode.setOnKeyListener(myTxtListener);
-        txtPurNumber.setOnKeyListener(myTxtListener);
-        txtBatch.setOnKeyListener(myTxtListener);
-        txtPurTotal.setOnKeyListener(myTxtListener);
+        txtBarcode.setOnKeyListener(myKeyListener);
+        txtPurNumber.setOnKeyListener(myKeyListener);
+        txtBatch.setOnKeyListener(myKeyListener);
+        txtPurTotal.setOnKeyListener(myKeyListener);
 
         ActionBar actionBar = this.getActionBar();
         actionBar.setTitle("采购入库扫描明细");
@@ -1743,8 +1756,7 @@ public class PurStockInDetail extends Activity {
 
     private DialogInterface.OnClickListener listenExit = new
             DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog,
-                                    int whichButton) {
+                public void onClick(DialogInterface dialog, int whichButton) {
                     finish();
                     System.gc();
                 }
@@ -1856,16 +1868,12 @@ public class PurStockInDetail extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.pur_stock_in_detail, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             Changeline();
@@ -1944,6 +1952,4 @@ public class PurStockInDetail extends Activity {
             }
         }
     }
-
-
 }

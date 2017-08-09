@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -26,12 +25,12 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.techscan.dvq.common.Common;
 import com.techscan.dvq.ListWarehouse;
 import com.techscan.dvq.PurOrderList;
 import com.techscan.dvq.R;
 import com.techscan.dvq.R.id;
 import com.techscan.dvq.VlistRdcl;
+import com.techscan.dvq.common.Common;
 import com.techscan.dvq.common.RequestThread;
 import com.techscan.dvq.login.MainLogin;
 import com.techscan.dvq.login.MainMenu;
@@ -64,7 +63,7 @@ import static com.techscan.dvq.common.Utils.HANDER_POORDER_HEAD;
 import static com.techscan.dvq.common.Utils.HANDER_STORG;
 
 public class PurStockIn extends Activity {
-    @NonNull
+
     private ButtonOnClick buttonOnClick = new ButtonOnClick(0);
     boolean NoScanSave = false;
 
@@ -84,8 +83,8 @@ public class PurStockIn extends Activity {
     File   file           = null;
     @Nullable
     File   fileScan       = null;
-    @NonNull
-    String ReScanHead     = "1";
+
+    String ReScanHead = "1";
     @Nullable
     private AlertDialog SelectButton       = null;
     @Nullable
@@ -150,13 +149,13 @@ public class PurStockIn extends Activity {
     String m_WarehouseID    = "";
     String pk_purcorp       = "";
     String pk_calbody       = "";
-    @NonNull
+
     String m_AccID = "A";
 
     String m_BillID = "";
     String m_BillNo = "";
 
-    @NonNull
+
     String m_companyCode = "1001";
 
     String m_PosCode = "";
@@ -177,8 +176,110 @@ public class PurStockIn extends Activity {
     @Nullable
     UUID uploadGuid = null;
 
-    @NonNull
+
     private Context MyContext = this;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_pur_stock_in);
+
+        ActionBar actionBar = this.getActionBar();
+        actionBar.setTitle("采购入库");
+//		Drawable TitleBar = this.getResources().getDrawable(R.drawable.bg_barbackgroup);
+//		actionBar.setBackgroundDrawable(TitleBar);
+//		actionBar.show();
+
+        SaveFlg = 0;
+
+        m_FrePlenishFlag = this.getIntent().getStringExtra("freplenishflag");//退货标志 Y退货 N入库
+
+        btnSave = (Button) findViewById(R.id.btnPurinSave);
+//		btnUpdate = (Button)findViewById(R.id.btnPurinUpdate);
+        btnExit = (Button) findViewById(R.id.btnPurInExit);
+        btnScan = (Button) findViewById(R.id.btnPurInScan);
+        btnBrowOrderNo = (ImageButton) findViewById(R.id.btnPurBrower);
+
+        labVendor = (TextView) findViewById(R.id.labPurVendor);
+        txtPurOrderNo = (EditText) findViewById(R.id.txtPurOrderNo);
+//		txtPosition = (EditText)findViewById(R.id.txtPurPosition);
+        txtPurInBillCode = (EditText) findViewById(R.id.txtpurinbillcode);
+        //labWHName = (TextView)findViewById(R.id.labWHName);
+        //tvbillstatus = (TextView)findViewById(R.id.tvbillstatus);
+        //this.tvbillstatus.setText("  ");
+
+        btnSave.setOnClickListener(myListner);
+        //btnUpdate.setOnClickListener(myListner);
+        btnBrowOrderNo.setOnClickListener(myListner);
+        btnExit.setOnClickListener(myListner);
+        btnScan.setOnClickListener(myListner);
+
+        btnWarehouse = (ImageButton) findViewById(R.id.refer_wh);
+        btnWarehouse.setOnClickListener(myListner);
+        btnOrganization = (ImageButton) findViewById(id.refer_organization);
+        btnOrganization.setOnClickListener(myListner);
+        //btnCategory = (ImageButton)findViewById(id.refer_lei_bie);
+        //btnCategory.setOnClickListener(myListner);
+//        btnDepartment = (ImageButton) findViewById(id.refer_department);
+//        btnDepartment.setOnClickListener(myListner);
+
+        txtWareHouse = (EditText) findViewById(R.id.wh);
+        txtOrganization = (EditText) findViewById(R.id.organization);
+        //txtCategory = (EditText)findViewById(R.id.lei_bie);
+//        txtDepartment = (EditText) findViewById(R.id.department);
+
+        txtStartDate = (EditText) findViewById(id.txtStartDate);
+        txtEndDate = (EditText) findViewById(id.txtEndDate);
+        txtStartDate.setOnFocusChangeListener(myFocusListener);
+        txtStartDate.setOnClickListener(myListner);
+        //txtStartDate.setOnKeyListener(mOnKeyListener);
+        txtEndDate.setOnFocusChangeListener(myFocusListener);
+        txtEndDate.setOnClickListener(myListner);
+        //txtEndDate.setOnKeyListener(mOnKeyListener);
+        txtReMark = (EditText) findViewById(id.remark);
+        Date             SDate      = new Date();
+        Date             EDate      = new Date();
+        SimpleDateFormat Dateformat = new SimpleDateFormat("yyyy-MM-dd");
+        txtEndDate.setText(Dateformat.format(SDate));
+        long time = SDate.getTime();
+        time = time - 10 * 24 * 60 * 60 * 1000;//定义十天前
+        EDate.setTime(time);
+        txtStartDate.setText(Dateformat.format(EDate));
+
+        //ADD CAIXY START
+//    	sp= new SoundPool(10, AudioManager.STREAM_SYSTEM, 5);//第一个参数为同时播放数据流的最大个数，第二数据流类型，第三为声音质量
+//    	MainLogin.music = MainLogin.sp.load(this, R.raw.xxx, 1); //把你的声音素材放到res/raw里，第2个参数即为资源文件，第3个为音乐的优先级
+//    	MainLogin.music2 = MainLogin.sp.load(this, R.raw.yyy, 1); //把你的声音素材放到res/raw里，第2个参数即为资源文件，第3个为音乐的优先级
+//    	//ADD CAIXY END
+        //m_companyCode = MainLogin.objLog.CompanyCode;
+
+        txtPurOrderNo.setAllCaps(true);
+        //txtPosition.setAllCaps(true);
+
+        btnSave.setFocusable(false);
+        //btnUpdate.setFocusable(false);
+        btnBrowOrderNo.setFocusable(false);
+        btnExit.setFocusable(false);
+        btnScan.setFocusable(false);
+
+        txtPurOrderNo.requestFocus();
+        //this.txtPosition.addTextChangedListener(watcher);
+        //this.txtPosition.setOnKeyListener(myTxtListener);
+        this.txtPurOrderNo.setOnKeyListener(myTxtListener);
+        txtPurOrderNo.setOnLongClickListener(myTxtLongClick);
+
+        UserID = MainLogin.objLog.UserID;
+        //String LogName = BillType + UserID + dfd.format(day)+".txt";
+        ScanedFileName = "45" + UserID + ".txt";
+        fileName = "/sdcard/DVQ/45" + UserID + ".txt";
+        fileNameScan = "/sdcard/DVQ/45Scan" + UserID + ".txt";
+
+
+        file = new File(fileName);
+        fileScan = new File(fileNameScan);
+        ReScanHead();
+        MainMenu.cancelLoading();
+    }
 
     private boolean SaveDBOrder() throws JSONException, ParseException, IOException {
         jsDBHead = new JSONObject();
@@ -819,7 +920,7 @@ public class PurStockIn extends Activity {
         return true;
     }
 
-    @NonNull
+
     private DialogInterface.OnClickListener listenUpdate = new
             DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog,
@@ -852,7 +953,6 @@ public class PurStockIn extends Activity {
             };
 
 
-    @NonNull
     private DialogInterface.OnClickListener listenSave2 = new
             DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog,
@@ -881,7 +981,6 @@ public class PurStockIn extends Activity {
             };
 
 
-    @NonNull
     private DialogInterface.OnClickListener listenSave = new
             DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog,
@@ -925,7 +1024,7 @@ public class PurStockIn extends Activity {
                 }
             };
 
-    @NonNull
+
     private DialogInterface.OnClickListener listenExit = new
             DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog,
@@ -1419,9 +1518,7 @@ public class PurStockIn extends Activity {
             if (rev == null) {
                 // 网络通讯错误
                 Toast.makeText(this, "错误！网络通讯错误", Toast.LENGTH_LONG).show();
-                // ADD CAIXY TEST START
                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                // ADD CAIXY TEST END
                 return;
             }
             if (rev.getBoolean("Status")) {
@@ -1437,16 +1534,12 @@ public class PurStockIn extends Activity {
             } else {
                 String Errmsg = rev.getString("ErrMsg");
                 Toast.makeText(this, Errmsg, Toast.LENGTH_LONG).show();
-                // ADD CAIXY TEST START
                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                // ADD CAIXY TEST END
             }
 
         } catch (Exception e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
-            // ADD CAIXY TEST START
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            // ADD CAIXY TEST END
         }
 
     }
@@ -1485,10 +1578,10 @@ public class PurStockIn extends Activity {
         td.start();
     }
 
-    @NonNull
+
     Handler mHandler = new Handler() {
         @Override
-        public void handleMessage(@NonNull Message msg) {
+        public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
                 case HANDER_DEPARTMENT:
@@ -1564,7 +1657,7 @@ public class PurStockIn extends Activity {
     private Button.OnClickListener myListner = new
             Button.OnClickListener() {
                 @Override
-                public void onClick(@NonNull View v) {
+                public void onClick(View v) {
                     switch (v.getId()) {
                         case R.id.txtStartDate: {
                             year = Integer.valueOf(txtStartDate.getText().toString().split("-")[0]);
@@ -1754,109 +1847,6 @@ public class PurStockIn extends Activity {
             };
 
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pur_stock_in);
-
-        ActionBar actionBar = this.getActionBar();
-        actionBar.setTitle("采购入库");
-//		Drawable TitleBar = this.getResources().getDrawable(R.drawable.bg_barbackgroup);
-//		actionBar.setBackgroundDrawable(TitleBar);
-//		actionBar.show();
-
-        SaveFlg = 0;
-
-        m_FrePlenishFlag = this.getIntent().getStringExtra("freplenishflag");//退货标志 Y退货 N入库
-
-        btnSave = (Button) findViewById(R.id.btnPurinSave);
-//		btnUpdate = (Button)findViewById(R.id.btnPurinUpdate);
-        btnExit = (Button) findViewById(R.id.btnPurInExit);
-        btnScan = (Button) findViewById(R.id.btnPurInScan);
-        btnBrowOrderNo = (ImageButton) findViewById(R.id.btnPurBrower);
-
-        labVendor = (TextView) findViewById(R.id.labPurVendor);
-        txtPurOrderNo = (EditText) findViewById(R.id.txtPurOrderNo);
-//		txtPosition = (EditText)findViewById(R.id.txtPurPosition);
-        txtPurInBillCode = (EditText) findViewById(R.id.txtpurinbillcode);
-        //labWHName = (TextView)findViewById(R.id.labWHName);
-        //tvbillstatus = (TextView)findViewById(R.id.tvbillstatus);
-        //this.tvbillstatus.setText("  ");
-
-        btnSave.setOnClickListener(myListner);
-        //btnUpdate.setOnClickListener(myListner);
-        btnBrowOrderNo.setOnClickListener(myListner);
-        btnExit.setOnClickListener(myListner);
-        btnScan.setOnClickListener(myListner);
-
-        btnWarehouse = (ImageButton) findViewById(R.id.refer_wh);
-        btnWarehouse.setOnClickListener(myListner);
-        btnOrganization = (ImageButton) findViewById(id.refer_organization);
-        btnOrganization.setOnClickListener(myListner);
-        //btnCategory = (ImageButton)findViewById(id.refer_lei_bie);
-        //btnCategory.setOnClickListener(myListner);
-//        btnDepartment = (ImageButton) findViewById(id.refer_department);
-//        btnDepartment.setOnClickListener(myListner);
-
-        txtWareHouse = (EditText) findViewById(R.id.wh);
-        txtOrganization = (EditText) findViewById(R.id.organization);
-        //txtCategory = (EditText)findViewById(R.id.lei_bie);
-//        txtDepartment = (EditText) findViewById(R.id.department);
-
-        txtStartDate = (EditText) findViewById(id.txtStartDate);
-        txtEndDate = (EditText) findViewById(id.txtEndDate);
-        txtStartDate.setOnFocusChangeListener(myFocusListener);
-        txtStartDate.setOnClickListener(myListner);
-        //txtStartDate.setOnKeyListener(mOnKeyListener);
-        txtEndDate.setOnFocusChangeListener(myFocusListener);
-        txtEndDate.setOnClickListener(myListner);
-        //txtEndDate.setOnKeyListener(mOnKeyListener);
-        txtReMark = (EditText) findViewById(id.remark);
-        Date             SDate      = new Date();
-        Date             EDate      = new Date();
-        SimpleDateFormat Dateformat = new SimpleDateFormat("yyyy-MM-dd");
-        txtEndDate.setText(Dateformat.format(SDate));
-        long time = SDate.getTime();
-        time = time - 10 * 24 * 60 * 60 * 1000;//定义十天前
-        EDate.setTime(time);
-        txtStartDate.setText(Dateformat.format(EDate));
-
-        //ADD CAIXY START
-//    	sp= new SoundPool(10, AudioManager.STREAM_SYSTEM, 5);//第一个参数为同时播放数据流的最大个数，第二数据流类型，第三为声音质量
-//    	MainLogin.music = MainLogin.sp.load(this, R.raw.xxx, 1); //把你的声音素材放到res/raw里，第2个参数即为资源文件，第3个为音乐的优先级
-//    	MainLogin.music2 = MainLogin.sp.load(this, R.raw.yyy, 1); //把你的声音素材放到res/raw里，第2个参数即为资源文件，第3个为音乐的优先级
-//    	//ADD CAIXY END
-        //m_companyCode = MainLogin.objLog.CompanyCode;
-
-        txtPurOrderNo.setAllCaps(true);
-        //txtPosition.setAllCaps(true);
-
-        btnSave.setFocusable(false);
-        //btnUpdate.setFocusable(false);
-        btnBrowOrderNo.setFocusable(false);
-        btnExit.setFocusable(false);
-        btnScan.setFocusable(false);
-
-        txtPurOrderNo.requestFocus();
-        //this.txtPosition.addTextChangedListener(watcher);
-        //this.txtPosition.setOnKeyListener(myTxtListener);
-        this.txtPurOrderNo.setOnKeyListener(myTxtListener);
-        txtPurOrderNo.setOnLongClickListener(myTxtLongClick);
-
-        UserID = MainLogin.objLog.UserID;
-        //String LogName = BillType + UserID + dfd.format(day)+".txt";
-        ScanedFileName = "45" + UserID + ".txt";
-        fileName = "/sdcard/DVQ/45" + UserID + ".txt";
-        fileNameScan = "/sdcard/DVQ/45Scan" + UserID + ".txt";
-
-
-        file = new File(fileName);
-        fileScan = new File(fileNameScan);
-        ReScanHead();
-        MainMenu.cancelLoading();
-    }
-
-    @NonNull
     private DatePickerDialog.OnDateSetListener SDatelistener = new DatePickerDialog.OnDateSetListener() {
         /**params：view：该事件关联的组件
          * params：myyear：当前选择的年
@@ -1888,7 +1878,7 @@ public class PurStockIn extends Activity {
 
     };
 
-    @NonNull
+
     private DatePickerDialog.OnDateSetListener EDatelistener = new DatePickerDialog.OnDateSetListener() {
         /**params：view：该事件关联的组件
          * params：myyear：当前选择的年
@@ -1920,10 +1910,10 @@ public class PurStockIn extends Activity {
 
     };
 
-    @NonNull
+
     private View.OnFocusChangeListener myFocusListener = new View.OnFocusChangeListener() {
         @Override
-        public void onFocusChange(@NonNull View view, boolean hasFocus) {
+        public void onFocusChange(View view, boolean hasFocus) {
             if (hasFocus) {
                 switch (view.getId()) {
                     case R.id.txtStartDate: {
@@ -2038,7 +2028,7 @@ public class PurStockIn extends Activity {
             bulider.setNegativeButton(R.string.QuXiao, null);
             bulider.setPositiveButton(R.string.QueRen, new DialogInterface.OnClickListener() {
                 @Override
-                public void onClick(@NonNull DialogInterface dialog, int which) {
+                public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
                     IniActivyMemor();
                     finish();
@@ -2110,7 +2100,7 @@ public class PurStockIn extends Activity {
         }
 
         @Override
-        public void onClick(@NonNull DialogInterface dialog, int whichButton) {
+        public void onClick(DialogInterface dialog, int whichButton) {
             if (whichButton >= 0) {
                 index = whichButton + 3;
                 // dialog.cancel();
@@ -2265,10 +2255,10 @@ public class PurStockIn extends Activity {
 
     }
 
-    @NonNull
+
     private View.OnLongClickListener myTxtLongClick = new View.OnLongClickListener() {
         @Override
-        public boolean onLongClick(@NonNull View view) {
+        public boolean onLongClick(View view) {
             switch (view.getId()) {
 
                 case R.id.txtPurOrderNo:
@@ -2294,7 +2284,7 @@ public class PurStockIn extends Activity {
     private OnKeyListener myTxtListener = new
             OnKeyListener() {
                 @Override
-                public boolean onKey(@NonNull View v, int arg1, @NonNull KeyEvent arg2) {
+                public boolean onKey(View v, int arg1, KeyEvent arg2) {
                     {
                         if (arg1 == 66 && arg2.getAction()
                                 == KeyEvent.ACTION_UP) {
@@ -2392,7 +2382,7 @@ public class PurStockIn extends Activity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
@@ -2406,11 +2396,11 @@ public class PurStockIn extends Activity {
     }
 
     @Nullable
-    private static AlertDialog    SelectLine     = null;
-    @NonNull
-    private        buttonOnClickC buttonOnClickC = new buttonOnClickC(0);
-    @NonNull
-    static         String[]       LNameList      = new String[2];
+    private static AlertDialog SelectLine = null;
+
+    private buttonOnClickC buttonOnClickC = new buttonOnClickC(0);
+
+    static String[] LNameList = new String[2];
 
     private void Changeline() {
 
@@ -2449,7 +2439,7 @@ public class PurStockIn extends Activity {
         }
 
         @Override
-        public void onClick(@NonNull DialogInterface dialog, int whichButton) {
+        public void onClick(DialogInterface dialog, int whichButton) {
             if (whichButton >= 0) {
                 index = whichButton;
             } else {
@@ -2476,7 +2466,7 @@ public class PurStockIn extends Activity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @NonNull Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if (Common.ReScanErr == true) {
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);

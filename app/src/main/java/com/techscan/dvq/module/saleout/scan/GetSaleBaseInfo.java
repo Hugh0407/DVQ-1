@@ -1,7 +1,6 @@
 package com.techscan.dvq.module.saleout.scan;
 
 import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.techscan.dvq.common.RequestThread;
@@ -20,41 +19,39 @@ import java.util.HashMap;
 public class GetSaleBaseInfo {
 
     @Nullable
-    public HashMap<String,Object> mapSaleBaseInfo = null;
+    public HashMap<String, Object> mapSaleBaseInfo = null;
     String InvCode = "";
 
     /**
      * 获取存货基本信息
-     *
-     *
      */
-    public GetSaleBaseInfo(@NonNull SplitBarcode cSplitBarcode, Handler mHandler, String PK_CORP) {
+    public GetSaleBaseInfo(SplitBarcode cSplitBarcode, Handler mHandler, String PK_CORP) {
         //判断invcode是否有逗号。如果有逗号就分割，拿逗号后面的invcode；否则就拿原来的invcode。
         InvCode = cSplitBarcode.cInvCode;
-        if (InvCode.contains(",")){
+        if (InvCode.contains(",")) {
             String[] incCodeArray = InvCode.split("\\,");
             InvCode = incCodeArray[1];
-        }else{
+        } else {
             InvCode = cSplitBarcode.cInvCode;
         }
         mapSaleBaseInfo = new HashMap<String, Object>();
-        mapSaleBaseInfo.put("barcodetype",cSplitBarcode.BarcodeType);
-        mapSaleBaseInfo.put("batch",cSplitBarcode.cBatch);
-        mapSaleBaseInfo.put("serino",cSplitBarcode.cSerino);
-        mapSaleBaseInfo.put("quantity",cSplitBarcode.dQuantity);
-        mapSaleBaseInfo.put("number",cSplitBarcode.iNumber);
-        mapSaleBaseInfo.put("cwflag",cSplitBarcode.CWFlag);
-        mapSaleBaseInfo.put("onlyflag",cSplitBarcode.OnlyFlag);
-        mapSaleBaseInfo.put("taxflag",cSplitBarcode.TaxFlag);
-        mapSaleBaseInfo.put("outsourcing",cSplitBarcode.Outsourcing);
-        mapSaleBaseInfo.put("barcode",cSplitBarcode.FinishBarCode);
+        mapSaleBaseInfo.put("barcodetype", cSplitBarcode.BarcodeType);
+        mapSaleBaseInfo.put("batch", cSplitBarcode.cBatch);
+        mapSaleBaseInfo.put("serino", cSplitBarcode.cSerino);
+        mapSaleBaseInfo.put("quantity", cSplitBarcode.dQuantity);
+        mapSaleBaseInfo.put("number", cSplitBarcode.iNumber);
+        mapSaleBaseInfo.put("cwflag", cSplitBarcode.CWFlag);
+        mapSaleBaseInfo.put("onlyflag", cSplitBarcode.OnlyFlag);
+        mapSaleBaseInfo.put("taxflag", cSplitBarcode.TaxFlag);
+        mapSaleBaseInfo.put("outsourcing", cSplitBarcode.Outsourcing);
+        mapSaleBaseInfo.put("barcode", cSplitBarcode.FinishBarCode);
         HashMap<String, String> parameter = new HashMap<String, String>();
         parameter.put("FunctionName", "GetInvBaseInfo");
         parameter.put("CompanyCode", PK_CORP);
-        parameter.put("InvCode",InvCode);
+        parameter.put("InvCode", InvCode);
         parameter.put("TableName", "baseInfo");
         RequestThread requestThread = new RequestThread(parameter, mHandler, 1);
-        Thread td = new Thread(requestThread);
+        Thread        td            = new Thread(requestThread);
         td.start();
     }
 
@@ -65,12 +62,12 @@ public class GetSaleBaseInfo {
      * @param json
      * @throws JSONException
      */
-    @NonNull
+
     String pk_invbasdoc = "";
-    @NonNull
+
     String pk_invmandoc = "";
 
-    public void SetSaleBaseToParam(@NonNull JSONObject json) throws JSONException {
+    public void SetSaleBaseToParam(JSONObject json) throws JSONException {
         //Log.d(TAG, "SetInvBaseToUI: " + json);
         if (json.getBoolean("Status")) {
             JSONArray val = json.getJSONArray("baseInfo");
