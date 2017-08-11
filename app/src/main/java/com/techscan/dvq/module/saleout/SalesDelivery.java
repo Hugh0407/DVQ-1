@@ -1049,9 +1049,27 @@ public class SalesDelivery extends Activity {
                 //单据图标
                 case id.btnSalesDelPDOrder:
                     try {
-                        Intent intent = new Intent(SalesDelivery.this, SaleChooseTime.class);
-                        startActivityForResult(intent, 44);
-                        txtSalesDelWH.requestFocus();
+                        if (jsSerino == null || jsSerino.length() < 1){
+                            Intent intent = new Intent(SalesDelivery.this, SaleChooseTime.class);
+                            startActivityForResult(intent, 44);
+                            txtSalesDelWH.requestFocus();
+                        }else{
+                            AlertDialog.Builder bulider =
+                                    new AlertDialog.Builder(SalesDelivery.this).setTitle(R.string.XunWen).setMessage("已扫描数据，是否要清空?");
+                            bulider.setNegativeButton(R.string.QuXiao, null);
+                            bulider.setPositiveButton(R.string.QueRen, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(@NonNull DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    deleteInfo();
+                                    Intent intent = new Intent(SalesDelivery.this, SaleChooseTime.class);
+                                    startActivityForResult(intent, 44);
+                                    txtSalesDelWH.requestFocus();
+                                }
+                            }).create().show();
+
+                        }
+
 
                     } catch (ParseException e) {
                         Toast.makeText(SalesDelivery.this, e.getMessage(), Toast.LENGTH_LONG).show();
@@ -1229,7 +1247,7 @@ public class SalesDelivery extends Activity {
             jsBody = null;
             jsonSaveHead = null;
             jsonBillHead = null;
-            ScanedBarcode = null;
+            ScanedBarcode = new ArrayList<String>();
             changeAllEdToEmpty();
             txtSalesDelPDOrder.requestFocus();
             //SaveOk();
@@ -1507,6 +1525,11 @@ public class SalesDelivery extends Activity {
 
     private void SaleScan(){
 //        if (tvSaleOutSelect.getText().toString().equals("销售出库")){
+        System.out.println("通过Map.keySet遍历key和value：");
+        for (String BillCode : checkInfo.keySet()) {
+            Log.d(TAG, "SaleScan: "+"key= "+ BillCode + " and value= " + checkInfo.get(BillCode));
+//            System.out.println("key= "+ BillCode + " and value= " + checkInfo.get(BillCode));
+        }
         Intent intDeliveryScan = new Intent(SalesDelivery.this, SalesDeliveryDetail.class);
         intDeliveryScan.putExtra("BillCode", tmpBillCode);
         intDeliveryScan.putExtra("PK_CORP", PK_CORP);

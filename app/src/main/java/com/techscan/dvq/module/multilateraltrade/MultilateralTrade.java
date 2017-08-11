@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -293,9 +294,25 @@ public class MultilateralTrade extends Activity {
         switch (view.getId()) {
             case R.id.imageDocumentNumber://单据号
                 try{
-                    Intent intent = new Intent(MultilateralTrade.this, SaleChooseTime.class);
-                    startActivityForResult(intent, 44);
-                    txtDocument.requestFocus();
+                    if (jsSerino == null || jsSerino.length() < 1){
+                        Intent intent = new Intent(MultilateralTrade.this, SaleChooseTime.class);
+                        startActivityForResult(intent, 44);
+                        txtDocument.requestFocus();
+                    }else{
+                        AlertDialog.Builder bulider =
+                                new AlertDialog.Builder(MultilateralTrade.this).setTitle(R.string.XunWen).setMessage("已扫描数据，是否要清空?");
+                        bulider.setNegativeButton(R.string.QuXiao, null);
+                        bulider.setPositiveButton(R.string.QueRen, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(@NonNull DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                deleteInfo();
+                                Intent intent = new Intent(MultilateralTrade.this, SaleChooseTime.class);
+                                startActivityForResult(intent, 44);
+                                txtDocument.requestFocus();
+                            }
+                        }).create().show();
+                    }
 
                 }catch (Exception e){
                     Toast.makeText(MultilateralTrade.this, WangLuoChuXiangWenTi, Toast.LENGTH_LONG).show();
@@ -708,7 +725,7 @@ public class MultilateralTrade extends Activity {
             jsonSaveHead = null;
             jsonBillHead = null;
             changeAllEdToEmpty();
-            ScanedBarcode = null;
+            ScanedBarcode = new ArrayList<String>();
             txtDocumentNumber.requestFocus();
             //SaveOk();
             //            IniActivyMemor();// TODO: 2017/7/10 XUHU

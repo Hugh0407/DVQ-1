@@ -1816,18 +1816,39 @@ public class PurStockIn extends Activity {
                             ScanDetail();
                             break;
                         }
+                        //查询单据
                         case R.id.btnPurBrower: {
                             Common.ShowLoading(MyContext);
-                            if (jsDBBody == null || jsDBBody.length() < 1) {
-
-                            } else {
-                                Toast.makeText(PurStockIn.this, R.string.GaiRenWuYiJingBeiSaoMiao_WuFaXiuGaiDingDan, Toast.LENGTH_LONG).show();
-                                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                                Common.cancelLoading();
-                                break;
-                            }
-                            ShowOrderNoList("");
+//                            ***********// TODO: 2017/8/11  XUHU
+//                            if (jsDBBody == null || jsDBBody.length() < 1) {
+//
+//                            } else {
+//                                Toast.makeText(PurStockIn.this, R.string.GaiRenWuYiJingBeiSaoMiao_WuFaXiuGaiDingDan, Toast.LENGTH_LONG).show();
+//                                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                                Common.cancelLoading();
+//                                break;
+//                            }
+//                            ShowOrderNoList("");
                             //Common.cancelLoading();
+
+//                            ***********************************
+
+                            if (jsSerino == null || jsSerino.length() < 1){
+                                ShowOrderNoList("");
+                            }else{
+                                AlertDialog.Builder bulider =
+                                        new AlertDialog.Builder(PurStockIn.this).setTitle(R.string.XunWen).setMessage("已扫描数据，是否要清空?");
+                                bulider.setNegativeButton(R.string.QuXiao, null);
+                                bulider.setPositiveButton(R.string.QueRen, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(@NonNull DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                        IniActivyMemor();
+                                        ShowOrderNoList("");
+                                    }
+                                }).create().show();
+
+                            }
                             break;
                         }
                         case R.id.refer_wh:
