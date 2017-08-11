@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -49,6 +50,7 @@ import java.util.List;
 import java.util.Map;
 
 import static android.content.ContentValues.TAG;
+import static com.techscan.dvq.common.Utils.isNumber;
 
 //import com.techscan.dvq.StockMoveScan.ButtonOnClickDelconfirm;
 //import com.techscan.dvq.StockMoveScan.ButtonOnClick;
@@ -242,7 +244,7 @@ public class PurStockInDetail extends Activity {
         }
     }
 
-    private boolean ScanSerial(String serino, String Free1, String TotalBox)
+    private boolean ScanSerial(String serino, String Free1, String TotalBox,String bar)
             throws JSONException {
         if (jsSerino == null)
             jsSerino = new JSONObject();
@@ -267,7 +269,13 @@ public class PurStockInDetail extends Activity {
 
             for (int i = 0; i < serinos.length(); i++) {
                 JSONObject temp = serinos.getJSONObject(i);
-                if (temp.getString("serino").equals(serino)) {
+                if (temp.getString("batch").equals(txtBatch.getText().toString())&&temp.getString("serino").equals(serino)&&bar.equals("Y")){
+                    TotalBox = String.valueOf(Double.parseDouble(temp.getString("box").toString())
+                            + Double.parseDouble(TotalBox));
+                    temp.put("box", TotalBox);
+                    return true;
+                }
+                if (temp.getString("serino").equals(serino)&&!bar.equals("Y")) {
                     //temp.put("box", TotalBox);
                     // Toast.makeText(this, "该条码已经被扫描过了,不能再次扫描",
                     // Toast.LENGTH_LONG).show();
@@ -291,7 +299,6 @@ public class PurStockInDetail extends Activity {
             temp.put("sno", m_mapInvBaseInfo.get("serino").toString());
             // caixy 需要增加产地
             temp.put("vfree1", Free1);
-
             serinos.put(temp);
         }
 
@@ -551,7 +558,7 @@ public class PurStockInDetail extends Activity {
 //                        txtPurTotal.setText(ldTotal.toString());
 //                    }
 
-                    if (ScanSerial(bar.FinishBarCode, Free1, txtPurTotal.getText().toString()) == false) {
+                    if (ScanSerial(bar.FinishBarCode, Free1, txtPurTotal.getText().toString(),bar.BarcodeType) == false) {
                         txtBarcode.setText("");
                         txtBarcode.requestFocus();
                         return false;
@@ -1447,6 +1454,22 @@ public class PurStockInDetail extends Activity {
                 case id.txtPurNumber:
                     if (arg1 == 66 && arg2.getAction() == KeyEvent.ACTION_UP) {
                         try {
+                            if (TextUtils.isEmpty(txtPurNumber.getText())) {
+                                Utils.showToast(PurStockInDetail.this, "数量不能为空");
+//                            txtSaleNumber.requestFocus();
+                                return true;
+                            }
+                            if (!isNumber(txtPurNumber.getText().toString())) {
+                                Utils.showToast(PurStockInDetail.this, "数量不正确");
+                                txtPurTotal.setText("");
+//                            txtSaleNumber.requestFocus();
+                                return true;
+                            }
+                            if (Float.valueOf(txtPurNumber.getText().toString()) <= 0) {
+                                Utils.showToast(PurStockInDetail.this, "数量不正确");
+//                            txtSaleNumber.requestFocus();
+                                return true;
+                            }
                             Integer.parseInt(txtPurNumber.getText().toString());
                             m_mapInvBaseInfo.put("number", Integer.valueOf(txtPurNumber.getText().toString()));
                             m_mapInvBaseInfo.put("total", Integer.valueOf(txtPurNumber.getText().toString())
@@ -1465,8 +1488,13 @@ public class PurStockInDetail extends Activity {
                     }
                 case id.txtPurBatch:
                     if (arg1 == 66 && arg2.getAction() == KeyEvent.ACTION_UP) {
-                        if (txtBatch.getText().toString().equals(""))
-                            return false;
+//                        if (txtBatch.getText().toString().equals(""))
+//                            return false;
+                        if (TextUtils.isEmpty(txtBatch.getText())) {
+                            Utils.showToast(PurStockInDetail.this, "批次不能为空");
+//                            txtSaleNumber.requestFocus();
+                            return true;
+                        }
                         m_cSplitBarcode.cBatch = txtBatch.getText().toString().replace("\r", "").replace("\n", "");
                         m_mapInvBaseInfo.put("batch", txtBatch.getText().toString().replace("\r", "").replace("\n", ""));
                         txtPurTotal.requestFocus();
@@ -1475,6 +1503,22 @@ public class PurStockInDetail extends Activity {
                 case id.txtPurTotal:
                     if (arg1 == 66 && arg2.getAction() == KeyEvent.ACTION_UP) {
                         try {
+                            if (TextUtils.isEmpty(txtPurTotal.getText())) {
+                                Utils.showToast(PurStockInDetail.this, "数量不能为空");
+//                            txtSaleNumber.requestFocus();
+                                return true;
+                            }
+                            if (!isNumber(txtPurTotal.getText().toString())) {
+                                Utils.showToast(PurStockInDetail.this, "数量不正确");
+                                txtPurTotal.setText("");
+//                            txtSaleNumber.requestFocus();
+                                return true;
+                            }
+                            if (Float.valueOf(txtPurTotal.getText().toString()) <= 0) {
+                                Utils.showToast(PurStockInDetail.this, "数量不正确");
+//                            txtSaleNumber.requestFocus();
+                                return true;
+                            }
                             Double.parseDouble(txtPurTotal.getText().toString());
                             m_mapInvBaseInfo.put("number", Integer.valueOf(txtPurNumber.getText().toString()));
                             m_mapInvBaseInfo.put("total", Double.valueOf(txtPurTotal.getText().toString()));
