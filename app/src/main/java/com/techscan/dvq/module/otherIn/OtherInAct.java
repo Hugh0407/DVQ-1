@@ -318,20 +318,21 @@ public class OtherInAct extends Activity {
                 case HANDER_SAVE_RESULT:
                     JSONObject saveResult = (JSONObject) msg.obj;
                     try {
-                        if (saveResult != null) {
-                            if (saveResult.getBoolean("Status")) {
-                                Log.d(TAG, "保存" + saveResult.toString());
-                                showResultDialog(mActivity, saveResult.getString("ErrMsg"));
-                                tempList.clear();
-                                OtherInScanAct.ovList.clear();
-                                OtherInScanAct.detailList.clear();
-                                setBarCodeToEmpty();
-                                edBillNum.requestFocus();
-                            } else {
-                                showResultDialog(mActivity, saveResult.getString("ErrMsg"));
-                            }
-                        } else {
+                        if (saveResult == null) {
                             showResultDialog(mActivity, "数据提交失败!");
+                            return;
+                        }
+
+                        if (saveResult.getBoolean("Status")) {
+                            Log.d(TAG, "保存" + saveResult.toString());
+                            showResultDialog(mActivity, saveResult.getString("ErrMsg"));
+                            tempList.clear();
+                            OtherInScanAct.ovList.clear();
+                            OtherInScanAct.detailList.clear();
+                            setBarCodeToEmpty();
+                            edBillNum.requestFocus();
+                        } else {
+                            showResultDialog(mActivity, saveResult.getString("ErrMsg"));
                         }
                         progressDialogDismiss();
                     } catch (JSONException e) {
@@ -528,7 +529,7 @@ public class OtherInAct extends Activity {
         parameter.put("FunctionName", "GetSTOrgList");
         parameter.put("CompanyCode", MainLogin.objLog.CompanyCode);
         parameter.put("TableName", "STOrg");
-        Utils.doRequest(parameter,mHandler,HANDER_STORG);
+        Utils.doRequest(parameter, mHandler, HANDER_STORG);
     }
 
     /**
@@ -539,7 +540,7 @@ public class OtherInAct extends Activity {
         parameter.put("FunctionName", "GetDeptList");
         parameter.put("CompanyCode", MainLogin.objLog.CompanyCode);
         parameter.put("TableName", "department");
-        Utils.doRequest(parameter,mHandler,HANDER_DEPARTMENT);
+        Utils.doRequest(parameter, mHandler, HANDER_DEPARTMENT);
     }
 
     private void setBarCodeToEmpty() {

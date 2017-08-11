@@ -140,8 +140,8 @@ public class SalesDeliveryDetail extends Activity {
     @Nullable
     List<Map<String, Object>> listTaskBody = null;
     @Nullable
-    List<Map<String, Object>> lstTaskBody = null;
-    List<Map<String, Object>> lstDetailBody =null;
+    List<Map<String, Object>> lstTaskBody  = null;
+    List<Map<String, Object>> lstDetailBody = null;
     @Nullable
     private AlertDialog   DeleteButton     = null;
     @Nullable
@@ -153,7 +153,7 @@ public class SalesDeliveryDetail extends Activity {
     @Nullable
     SimpleAdapter listTaskAdapter = null;
     @Nullable
-    String []invcode =null;
+    String[]      invcode         = null;
     Double TOTAL = 0.0;
 
     @Override
@@ -227,7 +227,7 @@ public class SalesDeliveryDetail extends Activity {
         }
 
         tvSalecount.setText("总量" + number + " | " + "已扫" + ntotaloutinvnum
-                + " | " + "未扫" + (number - ntotaloutinvnum));
+                                    + " | " + "未扫" + (number - ntotaloutinvnum));
 
     }
 
@@ -402,10 +402,10 @@ public class SalesDeliveryDetail extends Activity {
 
         IniDetail();
         try {
-            if (isPacked==false) {
+            if (isPacked == false) {
                 objSaleBaseInfo = new GetSaleBaseInfo(m_cSplitBarcode, mHandler, PK_CORP);
-            }else{
-                objSaleBaseInfo = new GetSaleBaseInfo(m_cSplitBarcode, mHandler, PK_CORP,bar.FinishBarCode);
+            } else {
+                objSaleBaseInfo = new GetSaleBaseInfo(m_cSplitBarcode, mHandler, PK_CORP, bar.FinishBarCode);
             }
         } catch (Exception ex) {
             Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
@@ -524,12 +524,12 @@ public class SalesDeliveryDetail extends Activity {
 
     private boolean ScanedToGet() {
         SplitBarcode bar = m_cSplitBarcode;
-        Double S = 0.0;
+        Double       S   = 0.0;
         try {
             JSONArray bodys = jsBody.getJSONArray("dbBody");
             Log.d("TAG", "dbBody: " + bodys);
-            boolean isFind = false;
-            boolean isExist=false;
+            boolean isFind  = false;
+            boolean isExist = false;
             S = Double.parseDouble(txtSaleTotal.getText().toString());
 //            for (int t= 0;t<listTaskBody.size();t++){
 //                Map<String, Object> map = listTaskBody.get(t);
@@ -568,42 +568,42 @@ public class SalesDeliveryDetail extends Activity {
 //                    listTaskBody.add(map);
 //                }
 //            }
-            for (int i=0; i < bodys.length(); i++) {
+            for (int i = 0; i < bodys.length(); i++) {
                 JSONObject temp = bodys.getJSONObject(i);
-                Log.d(TAG, "InvCode: "+temp.getString("invcode"));
-                        if (temp.getString("invcode").equals(m_mapSaleBaseInfo.get("invcode").toString())) {
+                Log.d(TAG, "InvCode: " + temp.getString("invcode"));
+                if (temp.getString("invcode").equals(m_mapSaleBaseInfo.get("invcode").toString())) {
 //                          if (Double.parseDouble(txtSaleTotal.getText().toString())-temp.getDouble("ntotaloutinvnum")==0){
 //
 //                          }
 
-                            isFind = true;
-                            String Free1 = "";
-                            // 寻找到了对应存货
-                            Double doneqty = 0.0;
-                            if (!temp.getString("ntotaloutinvnum").isEmpty() && !temp.getString("ntotaloutinvnum").toLowerCase().equals("null")) {
-                                doneqty = temp.getDouble("ntotaloutinvnum");
-                                doneqty = doneqty + Double.parseDouble(txtSaleTotal.getText().toString());
-                                Log.d(TAG, "ScanedToGet: " + doneqty.toString());
-                                if (doneqty > temp.getInt("doneqty")) {
-                                    Toast.makeText(this, "这个存货已经超过应发数量了,不允出库!",
-                                            Toast.LENGTH_LONG).show();
-                                    MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                                    IniDetail();
-                                    txtBarcode.setText("");
-                                    txtBarcode.requestFocus();
-                                    return false;
-                                }
+                    isFind = true;
+                    String Free1 = "";
+                    // 寻找到了对应存货
+                    Double doneqty = 0.0;
+                    if (!temp.getString("ntotaloutinvnum").isEmpty() && !temp.getString("ntotaloutinvnum").toLowerCase().equals("null")) {
+                        doneqty = temp.getDouble("ntotaloutinvnum");
+                        doneqty = doneqty + Double.parseDouble(txtSaleTotal.getText().toString());
+                        Log.d(TAG, "ScanedToGet: " + doneqty.toString());
+                        if (doneqty > temp.getInt("doneqty")) {
+                            Toast.makeText(this, "这个存货已经超过应发数量了,不允出库!",
+                                           Toast.LENGTH_LONG).show();
+                            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+                            IniDetail();
+                            txtBarcode.setText("");
+                            txtBarcode.requestFocus();
+                            return false;
+                        }
 
-                            }
-                            if (ScanSerial(bar.FinishBarCode, Free1, txtSaleTotal.getText().toString()) == false) {
-                                txtBarcode.setText("");
-                                txtBarcode.requestFocus();
-                                return false;
-                            }
-                            ScanedBarcode.add(bar.FinishBarCode);
-                            MainLogin.sp.play(MainLogin.music2, 1, 1, 0, 0, 1);
-                            temp.put("ntotaloutinvnum", doneqty);
-                            break;
+                    }
+                    if (ScanSerial(bar.FinishBarCode, Free1, txtSaleTotal.getText().toString()) == false) {
+                        txtBarcode.setText("");
+                        txtBarcode.requestFocus();
+                        return false;
+                    }
+                    ScanedBarcode.add(bar.FinishBarCode);
+                    MainLogin.sp.play(MainLogin.music2, 1, 1, 0, 0, 1);
+                    temp.put("ntotaloutinvnum", doneqty);
+                    break;
                 }
             }
 
@@ -645,7 +645,7 @@ public class SalesDeliveryDetail extends Activity {
             // ADD CAIXY TEST END
         }
         tvSalecount.setText("总量" + number + " | " + "已扫" + ntotaloutinvnum
-                + " | " + "未扫" + (number - ntotaloutinvnum));
+                                    + " | " + "未扫" + (number - ntotaloutinvnum));
 
         txtBarcode.requestFocus();
         txtBarcode.setText("");
@@ -684,7 +684,7 @@ public class SalesDeliveryDetail extends Activity {
                 temp = serinos.getJSONObject(i);
                 if (temp.getString("serino").equals(serino)) {
                     TotalBox = String.valueOf(Double.parseDouble(temp.getString("box").toString())
-                            + Double.parseDouble(TotalBox));
+                                                      + Double.parseDouble(TotalBox));
                     temp.put("box", TotalBox);
                     return true;
                 }
@@ -747,7 +747,7 @@ public class SalesDeliveryDetail extends Activity {
             } catch (JSONException e) {
                 e.printStackTrace();
                 Toast.makeText(SalesDeliveryDetail.this, "无法获取表体信息",
-                        Toast.LENGTH_LONG).show();
+                               Toast.LENGTH_LONG).show();
                 // ADD CAIXY TEST START
                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                 // ADD CAIXY TEST END
@@ -894,7 +894,7 @@ public class SalesDeliveryDetail extends Activity {
                 if (isChecked) {
                     packed.setText("拆托");
                     txtBarcode.requestFocus();
-                    lstDetailBody=null;
+                    lstDetailBody = null;
                     isPacked = true;
                 } else {
                     packed.setText("不拆托");
@@ -1215,8 +1215,8 @@ public class SalesDeliveryDetail extends Activity {
                             e1.printStackTrace();
                         }
                         tvSalecount.setText("总量" + number + " | " + "已扫"
-                                + ntotaloutinvnum + " | " + "未扫"
-                                + (number - ntotaloutinvnum));
+                                                    + ntotaloutinvnum + " | " + "未扫"
+                                                    + (number - ntotaloutinvnum));
                         //SaveScanedBody();//写入本地
                         IniDetail();
 
@@ -1224,7 +1224,7 @@ public class SalesDeliveryDetail extends Activity {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                         Toast.makeText(SalesDeliveryDetail.this, e.getMessage(),
-                                Toast.LENGTH_LONG).show();
+                                       Toast.LENGTH_LONG).show();
                         // ADD CAIXY TEST START
                         MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                         // ADD CAIXY TEST END

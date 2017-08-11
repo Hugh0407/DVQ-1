@@ -233,7 +233,6 @@ public class MaterialOutScanAct extends Activity {
      * @param jsonObject 网络获取的json
      */
     private void setManualToUI(JSONObject jsonObject) {
-        Log.d(TAG, "setManualToUI: " + jsonObject.toString());
         try {
             if (jsonObject != null && jsonObject.getBoolean("Status")) {
                 Log.d(TAG, "vfree4: " + jsonObject);
@@ -738,14 +737,6 @@ public class MaterialOutScanAct extends Activity {
                         if (keyEnterNum()) return true;
                         break;
                     case R.id.ed_manual:
-                        if (vFree4.equals("Y") && TextUtils.isEmpty(mEdManual.getText().toString())) {
-                            showToast(activity, "海关手册号不可为空");
-                            return true;
-                        }
-                        if (vFree4.equals("N") && !TextUtils.isEmpty(mEdManual.getText().toString())) {
-                            showToast(activity, "此项应该为空值");
-                            return true;
-                        }
                         if (isAllEdNotNull()) {
                             addDataToDetailList();
                             mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
@@ -807,7 +798,6 @@ public class MaterialOutScanAct extends Activity {
         mEdQty.setText(String.valueOf(num * weight));
         if (isAllEdNotNull()) {
             addDataToDetailList();
-            mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
             changeAllEdTextToEmpty();
             return true;
         }
@@ -845,7 +835,6 @@ public class MaterialOutScanAct extends Activity {
 
         if (isAllEdNotNull()) {
             addDataToDetailList();
-            mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
             changeAllEdTextToEmpty();
             return true;
         }
