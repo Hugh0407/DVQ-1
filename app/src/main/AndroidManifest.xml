@@ -30,9 +30,9 @@
             android:name=".login.MainLogin"
             android:label="@string/app_name">
             <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-            <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
@@ -233,16 +233,15 @@
         <activity android:name=".module.saleout.SaleChooseTime"/>
         <activity android:name=".module.saleout.scan.SalesDeliveryDetail"/>
         <activity android:name=".module.materialOut.MaterialOutAct"/>
+        <activity android:name=".module.materialOut.scan.MaterialOutScanAct">
 
-        <activity
-            android:name=".module.materialOut.scan.MaterialOutScanAct">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN"/>-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN"/> -->
 
-                <!--<category android:name="android.intent.category.LAUNCHER"/>-->
-            <!--</intent-filter>-->
+
+            <!-- <category android:name="android.intent.category.LAUNCHER"/> -->
+            <!-- </intent-filter> -->
         </activity>
-
         <activity android:name=".module.materialOut.DepartmentListAct"/>
         <activity android:name=".module.materialOut.StorgListAct"/>
         <activity android:name=".module.productIn.ProductInAct"/>
@@ -260,6 +259,10 @@
         <activity
             android:name=".module.multilateraltrade.scan.MultilateralTradeDetail"
             android:label="@string/title_activity_multilateral_trade_detail"/>
+        <activity android:name=".module.pur.PurStockInAct">
+        </activity>
+        <activity android:name=".module.pur.PurStockInScanAct">
+        </activity>
     </application>
 
 </manifest>

@@ -1,130 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.techscan.dvq.module.purStockIn.PurStockIn"
-    android:orientation="vertical">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context=".module.pur.PurStockInAct">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:orientation="vertical"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingLeft="3dp"
-            android:paddingTop="15dp"
-            android:paddingBottom="15dp"
             android:layout_margin="3dp"
-            android:background="@color/white">
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:paddingBottom="15dp"
+            android:paddingLeft="3dp"
+            android:paddingTop="15dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:gravity="center_vertical"
+                android:orientation="horizontal"
                 android:paddingBottom="5dp">
 
                 <TextView
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:textSize="18sp"
+                    android:text="来源单据："
                     android:textColor="@color/darkgray"
-                    android:textStyle="bold"
-                    android:text="来源单据：" />
-
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp">
+                android:orientation="horizontal"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp">
+
                 <EditText
-                    android:id="@+id/txtStartDate"
+                    android:id="@+id/ed_start_date"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
-                    android:ems="10"
-                    android:singleLine="true"
-                    android:textAllCaps="true"
-                    android:background="@drawable/edittext_style"
                     android:layout_weight="0.4"
+                    android:background="@drawable/edittext_style"
+                    android:ems="10"
+                    android:enabled="false"
                     android:hint="订单开始日"
-                    android:editable="false"/>
+                    android:singleLine="true"
+                    android:textAllCaps="true"/>
 
                 <TextView
                     android:layout_width="60dp"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:text=" ~ "
-                    android:layout_weight="0.2"/>
+                    android:layout_weight="0.2"
+                    android:text=" ~ "/>
 
                 <EditText
-                    android:id="@+id/txtEndDate"
+                    android:id="@+id/ed_end_date"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
-                    android:ems="10"
-                    android:singleLine="true"
-                    android:textAllCaps="true"
-                    android:background="@drawable/edittext_style"
-                    android:layout_weight="0.4"
-                    android:hint="订单结束日"
                     android:layout_marginRight="3dp"
-                    android:editable="false"/>
+                    android:layout_weight="0.4"
+                    android:background="@drawable/edittext_style"
+                    android:ems="10"
+                    android:enabled="false"
+                    android:hint="订单结束日"
+                    android:singleLine="true"
+                    android:textAllCaps="true"/>
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp">
+                android:orientation="horizontal"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp">
 
                 <TextView
-                    android:id="@+id/tvsearchInvUnitName"
                     android:layout_width="64dp"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:text="采购订单" />
+                    android:text="采购订单"/>
 
                 <EditText
-                    android:id="@+id/txtPurOrderNo"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/ed_purorder_no"
+                    android:layout_width="0dp"
                     android:layout_height="30dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/edittext_style"
                     android:ems="10"
                     android:singleLine="true"
-                    android:textAllCaps="true"
-                    android:background="@drawable/edittext_style"
-                    android:layout_weight="1"/>
+                    android:textAllCaps="true"/>
+
                 <ImageButton
-                    android:id="@+id/btnPurBrower"
+                    android:id="@+id/btn_purbrower"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="3dp"
                     android:background="@drawable/browse"/>
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:paddingTop="5dp"
                 android:paddingBottom="5dp"
-                android:gravity="center_vertical">
+                android:paddingTop="5dp">
+
                 <TextView
-                    android:id="@+id/tvPurVen"
                     android:layout_width="64dp"
                     android:layout_height="wrap_content"
-                    android:text="供应商" />
+                    android:text="供应商"/>
+
                 <TextView
-                    android:id="@+id/labPurVendor"
+                    android:id="@+id/labpurvendor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="----"/>
@@ -134,27 +134,27 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:padding ="5dp">
+            android:orientation="horizontal"
+            android:padding="5dp">
 
             <TextView
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:textSize="18sp"
+                android:text="入库信息："
                 android:textColor="@color/darkgray"
-                android:textStyle="bold"
-                android:text="入库信息：" />
+                android:textSize="18sp"
+                android:textStyle="bold"/>
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="5dp"
+            android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:padding="5dp">
+
             <TextView
                 android:layout_width="68dp"
                 android:layout_height="match_parent"
@@ -162,8 +162,8 @@
                 android:text="入库单号"/>
 
             <EditText
-                android:id="@+id/txtpurinbillcode"
-                android:layout_width="wrap_content"
+                android:id="@+id/ed_billcode"
+                android:layout_width="0dp"
                 android:layout_height="30dp"
                 android:layout_weight="1"
                 android:background="@drawable/edittext_style"
@@ -171,17 +171,19 @@
                 android:maxLines="1"
                 android:singleLine="true"
                 android:textAllCaps="true"/>
+
             <TextView
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_marginLeft="3dp"/>
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="5dp"
+            android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:padding="5dp">
 
             <TextView
                 android:layout_width="68dp"
@@ -190,8 +192,8 @@
                 android:text="仓库"/>
 
             <EditText
-                android:id="@+id/wh"
-                android:layout_width="wrap_content"
+                android:id="@+id/ed_wh"
+                android:layout_width="0dp"
                 android:layout_height="30dp"
                 android:layout_weight="1"
                 android:background="@drawable/edittext_style"
@@ -199,8 +201,9 @@
                 android:maxLines="1"
                 android:singleLine="true"
                 android:textAllCaps="true"/>
+
             <ImageButton
-                android:id="@+id/refer_wh"
+                android:id="@+id/wh_refer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="3dp"
@@ -211,9 +214,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="5dp"
+            android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:padding="5dp">
 
             <TextView
                 android:layout_width="68dp"
@@ -222,7 +225,7 @@
                 android:text="库存组织"/>
 
             <EditText
-                android:id="@+id/organization"
+                android:id="@+id/org"
                 android:layout_width="0dp"
                 android:layout_height="30dp"
                 android:layout_weight="3"
@@ -233,7 +236,7 @@
                 android:textAllCaps="true"/>
 
             <ImageButton
-                android:id="@+id/refer_organization"
+                android:id="@+id/refer_org"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="3dp"
@@ -242,44 +245,44 @@
         </LinearLayout>
 
         <!--<LinearLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:padding="5dp"-->
-            <!--android:orientation="horizontal"-->
-            <!--android:gravity="center_vertical">-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:padding="5dp"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:gravity="center_vertical">-->
 
-            <!--<TextView-->
-                <!--android:layout_width="68dp"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:gravity="center_vertical"-->
-                <!--android:text="收发类别"/>-->
+        <!--<TextView-->
+        <!--android:layout_width="68dp"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:gravity="center_vertical"-->
+        <!--android:text="收发类别"/>-->
 
-            <!--<EditText-->
-                <!--android:id="@+id/lei_bie"-->
-                <!--android:layout_width="0dp"-->
-                <!--android:layout_height="30dp"-->
-                <!--android:layout_weight="3"-->
-                <!--android:background="@drawable/edittext_style"-->
-                <!--android:ems="10"-->
-                <!--android:maxLines="1"-->
-                <!--android:singleLine="true"-->
-                <!--android:textAllCaps="true"/>-->
+        <!--<EditText-->
+        <!--android:id="@+id/lei_bie"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="30dp"-->
+        <!--android:layout_weight="3"-->
+        <!--android:background="@drawable/edittext_style"-->
+        <!--android:ems="10"-->
+        <!--android:maxLines="1"-->
+        <!--android:singleLine="true"-->
+        <!--android:textAllCaps="true"/>-->
 
-            <!--<ImageButton-->
-                <!--android:id="@+id/refer_lei_bie"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginLeft="3dp"-->
-                <!--android:background="@drawable/browse"/>-->
+        <!--<ImageButton-->
+        <!--android:id="@+id/refer_lei_bie"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginLeft="3dp"-->
+        <!--android:background="@drawable/browse"/>-->
 
         <!--</LinearLayout>-->
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
+            android:layout_height="0dp"
             android:layout_weight="1"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="5dp">
 
             <TextView
                 android:layout_width="68dp"
@@ -288,60 +291,57 @@
 
             <EditText
                 android:id="@+id/remark"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:background="@drawable/edittext_style"
                 android:layout_weight="1"
+                android:background="@drawable/edittext_style"
                 android:gravity="left|top"/>
         </LinearLayout>
 
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/PurStockInButtonBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
         android:layout_marginBottom="0dp"
         android:background="#d7d6d6"
-        android:orientation="horizontal" >
+        android:orientation="horizontal">
 
         <Button
-            android:id="@+id/btnPurInScan"
+            android:id="@+id/btn_scan"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/button_normal_style"
-            android:textColor="@color/white"
-            android:text="扫描" />
+            android:text="扫描"
+            android:textColor="@color/white"/>
 
 
         <!--<Button-->
-            <!--android:id="@+id/btnPurinUpdate"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_weight="1"-->
-            <!--android:background="@drawable/button_normal_style"-->
-            <!--android:textColor="@color/white"-->
-            <!--android:text="暂存" />-->
+        <!--android:id="@+id/btnPurinUpdate"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_weight="1"-->
+        <!--android:background="@drawable/button_normal_style"-->
+        <!--android:textColor="@color/white"-->
+        <!--android:text="暂存" />-->
 
         <Button
-            android:id="@+id/btnPurinSave"
+            android:id="@+id/btn_save"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/button_normal_style"
-            android:textColor="@color/white"
-            android:text="保存" />
+            android:text="保存"
+            android:textColor="@color/white"/>
 
         <Button
-            android:id="@+id/btnPurInExit"
+            android:id="@+id/btn_exit"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/button_normal_style"
-            android:textColor="@color/white"
-            android:text="退出" />
+            android:text="退出"
+            android:textColor="@color/white"/>
     </LinearLayout>
 </LinearLayout>

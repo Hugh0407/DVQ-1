@@ -32,6 +32,8 @@ import com.techscan.dvq.R.id;
 import com.techscan.dvq.VlistRdcl;
 import com.techscan.dvq.common.Common;
 import com.techscan.dvq.common.RequestThread;
+import com.techscan.dvq.common.SoundHelper;
+import com.techscan.dvq.common.Utils;
 import com.techscan.dvq.login.MainLogin;
 import com.techscan.dvq.login.MainMenu;
 import com.techscan.dvq.module.materialOut.DepartmentListAct;
@@ -1322,7 +1324,6 @@ public class PurStockIn extends Activity {
     private void ShowOrderNoList(String Bar) {
 
         Intent PurOrder = new Intent(this, PurOrderList.class);
-
         PurOrder.putExtra("BillCode", Bar);
         PurOrder.putExtra("StartDate", txtStartDate.getText().toString());
         PurOrder.putExtra("EndDate", txtEndDate.getText().toString());
@@ -1803,9 +1804,7 @@ public class PurStockIn extends Activity {
 
                             } else {
                                 Toast.makeText(PurStockIn.this, R.string.GaiRenWuYiJingBeiSaoMiao_WuFaXiuGaiDingDan, Toast.LENGTH_LONG).show();
-                                //ADD CAIXY TEST START
                                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                                //ADD CAIXY TEST END
                                 Common.cancelLoading();
                                 break;
                             }
@@ -1866,7 +1865,7 @@ public class PurStockIn extends Activity {
                 txtStartDate.setText(lsStartDate);
             } else {
                 Toast.makeText(PurStockIn.this, "开始日大于结束日或日期格式不正确", Toast.LENGTH_LONG).show();
-                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+                SoundHelper.playWarning();
 
             }
             //txtStartDate.clearFocus();
@@ -2587,14 +2586,9 @@ public class PurStockIn extends Activity {
 //				this.jsBoxTotal = new JSONObject(boxJS);
                 this.jsBoxTotal = null;
             } catch (JSONException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
-
-                Toast.makeText(PurStockIn.this, e.getMessage(),
-                               Toast.LENGTH_LONG).show();
-                //ADD CAIXY TEST START
-                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                //ADD CAIXY TEST END
+                Utils.showToast(PurStockIn.this,e.getMessage());
+                SoundHelper.playWarning();
             }
         }
     }

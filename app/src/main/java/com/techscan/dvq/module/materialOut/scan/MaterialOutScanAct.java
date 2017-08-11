@@ -614,7 +614,7 @@ public class MaterialOutScanAct extends Activity {
                     map.put("invspec", tempJso.getString("invspec"));   //规格
                     map.put("oppdimen", tempJso.getString("oppdimen")); //重量
                     map.put("isfree4", tempJso.getString("isfree4"));
-                    map.put("currentweight", tempJso.getString("currentweight"));
+//                    map.put("currentweight", tempJso.getString("currentweight"));
                 }
                 if (map != null) {
                     mEdName.setText(map.get("invname").toString());
@@ -623,10 +623,10 @@ public class MaterialOutScanAct extends Activity {
                     mEdSpectype.setText(map.get("invspec").toString());
                     //海关手册号 有或无的标志位 ，分为 Y 和 N 两种
                     vFree4 = map.get("isfree4").toString();
-                    String cw = map.get("currentweight").toString();
-                    if (isPacked && !cw.equals("null")) {
-                        mEdQty.setText(cw);
-                    }
+//                    String cw = map.get("currentweight").toString();
+//                    if (isPacked && !cw.equals("null")) {
+//                        mEdQty.setText(cw);
+//                    }
                 }
             }
         } catch (JSONException e) {
