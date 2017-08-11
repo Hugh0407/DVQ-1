@@ -358,63 +358,59 @@ public class SalesDeliveryDetail extends Activity {
 
 
     private boolean ScanDetail(@Nullable String Scanbarcode) {
-        if (Scanbarcode == null || Scanbarcode.equals(""))
-            return false;
+            if (Scanbarcode == null || Scanbarcode.equals(""))
+                return false;
 
 
-        SplitBarcode bar = new SplitBarcode(Scanbarcode);
+            SplitBarcode bar = new SplitBarcode(Scanbarcode);
 
-        if (bar.creatorOk == false) {
-            Toast.makeText(this, "扫描的不是正确货品条码", Toast.LENGTH_LONG).show();
-            //ADD CAIXY TEST START
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            //ADD CAIXY TEST END
-            return false;
-        }
-        m_cSplitBarcode = bar;
-
-        //判断条码类型是否正确
-        if (bar.BarcodeType.equals("P") || bar.BarcodeType.equals("TP")) {
-//            txtSaleCustoms.setEnabled(true);
-//            txtSaleCustoms.requestFocus();
-            String FinishBarCode = bar.FinishBarCode;
-            if (bar.BarcodeType.equals("TP")) {
-                if (ScanedBarcode != null || ScanedBarcode.size() > 0) {
-                    for (int si = 0; si < ScanedBarcode.size(); si++) {
-                        String BarCode = ScanedBarcode.get(si).toString();
-                        if (BarCode.equals(FinishBarCode)) {
-                            Toast.makeText(this, "该条码已经被扫描过了,不能再次扫描", Toast.LENGTH_SHORT)
-                                    .show();
-                            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                            return false;
+            if (bar.creatorOk == false) {
+                Toast.makeText(this, "扫描的不是正确货品条码", Toast.LENGTH_LONG).show();
+                //ADD CAIXY TEST START
+                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+                //ADD CAIXY TEST END
+                return false;
+            }
+            m_cSplitBarcode = bar;
+            //判断条码类型是否正确
+            if (bar.BarcodeType.equals("P") || bar.BarcodeType.equals("TP")) {
+                String FinishBarCode = bar.FinishBarCode;
+                if (bar.BarcodeType.equals("TP")) {
+                    if (ScanedBarcode != null || ScanedBarcode.size() > 0) {
+                        for (int si = 0; si < ScanedBarcode.size(); si++) {
+                            String BarCode = ScanedBarcode.get(si).toString();
+                            if (BarCode.equals(FinishBarCode)) {
+                                Toast.makeText(this, "该条码已经被扫描过了,不能再次扫描", Toast.LENGTH_SHORT)
+                                        .show();
+                                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+                                return false;
+                            }
                         }
                     }
                 }
+            } else {
+                Toast.makeText(this, "扫描的条码类型不匹配", Toast.LENGTH_LONG).show();
+                //ADD CAIXY TEST START
+                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+                //ADD CAIXY TEST END
+                return false;
             }
-        } else {
-            Toast.makeText(this, "扫描的条码类型不匹配", Toast.LENGTH_LONG).show();
-            //ADD CAIXY TEST START
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            //ADD CAIXY TEST END
-            return false;
+
+            IniDetail();
+            try {
+                if (isPacked == false) {
+                    objSaleBaseInfo = new GetSaleBaseInfo(m_cSplitBarcode, mHandler, PK_CORP);
+                } else {
+                    objSaleBaseInfo = new GetSaleBaseInfo(m_cSplitBarcode, mHandler, PK_CORP, bar.FinishBarCode);
+                }
+            } catch (Exception ex) {
+                Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
+                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+                return false;
+            }
+            return true;
         }
 
-
-        IniDetail();
-        try {
-            if (isPacked==false) {
-                objSaleBaseInfo = new GetSaleBaseInfo(m_cSplitBarcode, mHandler, PK_CORP);
-            }else{
-                objSaleBaseInfo = new GetSaleBaseInfo(m_cSplitBarcode, mHandler, PK_CORP,bar.FinishBarCode);
-            }
-        } catch (Exception ex) {
-            Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            return false;
-        }
-
-        return true;
-    }
 
     /**
      * 网络请求后的线程通信
@@ -446,7 +442,7 @@ public class SalesDeliveryDetail extends Activity {
                     JSONObject jSon = (JSONObject) msg.obj;
                     if (jSon != null) {
                         try {
-                            Log.d(TAG, "handleMessage1: " + jSon.toString());
+                            Log.d(TAG, "JSON: " + jSon.toString());
                             objSaleBaseInfo.SetSaleBaseToParam(jSon);
                             m_mapSaleBaseInfo = objSaleBaseInfo.mapSaleBaseInfo;
                             getInvBaseVFree4();
@@ -489,6 +485,7 @@ public class SalesDeliveryDetail extends Activity {
 
     //把取得的数据加载到页面控件上
     private void SetInvBaseToUI() {
+        if (isPacked==false){
         txtSaleInvCode.setText(m_mapSaleBaseInfo.get("invcode").toString());
         txtSaleInvName.setText(m_mapSaleBaseInfo.get("invname").toString());
         txtSaleType.setText(m_mapSaleBaseInfo.get("invtype").toString());
@@ -520,6 +517,39 @@ public class SalesDeliveryDetail extends Activity {
             txtSaleNumber.requestFocus();
             txtSaleNumber.selectAll();
         }
+        }else{
+            txtSaleInvCode.setText(m_mapSaleBaseInfo.get("invcode").toString());
+            txtSaleInvName.setText(m_mapSaleBaseInfo.get("invname").toString());
+            txtSaleType.setText(m_mapSaleBaseInfo.get("invtype").toString());
+            txtSaleSpec.setText(m_mapSaleBaseInfo.get("invspec").toString());
+            txtSaleBatch.setText(m_mapSaleBaseInfo.get("batch").toString());
+            txtSaleUnit.setText(m_mapSaleBaseInfo.get("measname").toString());
+            txtBarcode.setText(m_mapSaleBaseInfo.get("barcode").toString());
+            txtSaleWeight.setText("--");
+            txtSaleNumber.setText("--");
+            Double ldTotal = (Double) m_mapSaleBaseInfo.get("quantity") * (Integer) m_mapSaleBaseInfo.get("number");
+            txtSaleTotal.setText(ldTotal.toString());
+            m_mapSaleBaseInfo.put("total", ldTotal);
+            if (m_mapSaleBaseInfo.get("barcodetype").toString().equals("TP")) {
+                txtSaleBatch.setFocusableInTouchMode(false);
+                txtSaleBatch.setFocusable(false);
+                txtSaleNumber.setFocusableInTouchMode(false);
+                txtSaleNumber.setFocusable(false);
+                txtSaleTotal.setFocusableInTouchMode(false);
+                txtSaleTotal.setFocusable(false);
+                ScanedToGet();
+            } else if (m_mapSaleBaseInfo.get("barcodetype").toString().equals("P")) {
+                txtSaleBatch.setFocusableInTouchMode(false);
+                txtSaleBatch.setFocusable(false);
+                txtSaleNumber.setFocusableInTouchMode(true);
+                txtSaleNumber.setFocusable(true);
+                txtSaleNumber.setEnabled(true);
+                txtSaleTotal.setFocusableInTouchMode(false);
+                txtSaleTotal.setFocusable(false);
+                txtSaleNumber.requestFocus();
+                txtSaleNumber.selectAll();
+        }
+      }
     }
 
     private boolean ScanedToGet() {
@@ -753,12 +783,12 @@ public class SalesDeliveryDetail extends Activity {
                 // ADD CAIXY TEST END
             }
             try {
-                if (!MainLogin.getwifiinfo()) {
-                    Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG)
-                            .show();
-                    MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                    return;
-                }
+//                if (!MainLogin.getwifiinfo()) {
+//                    Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG)
+//                            .show();
+//                    MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                    return;
+//                }
                 jsBody = Common.DoHttpQuery(para, FunctionName, "");
                 Log.d(TAG, "GetBillBodyDetailInfo: " + jsBody.toString());
             } catch (Exception e) {
@@ -894,7 +924,7 @@ public class SalesDeliveryDetail extends Activity {
                 if (isChecked) {
                     packed.setText("拆托");
                     txtBarcode.requestFocus();
-                    lstDetailBody=null;
+                    IniDetail();
                     isPacked = true;
                 } else {
                     packed.setText("不拆托");
@@ -922,7 +952,6 @@ public class SalesDeliveryDetail extends Activity {
         txtSaleNumber.setEnabled(false);
         txtSaleTotal.setEnabled(false);
         txtSaleWeight.setEnabled(false);
-
     }
 
     @OnClick({R.id.btnTask, R.id.btnDetail, R.id.btnReturn})

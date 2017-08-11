@@ -1131,8 +1131,8 @@ public class PurStockIn extends Activity {
             return;
         }
         Common.ShowLoading(MyContext);
-//        if (SavePurOrder() == true) {
-        if (SSSSS() == true) {// TODO: 2017/8/11  
+//        if (SavePurOrder() == true) { 暂时注销 TODO: 2017/8/11  by XUHU
+        if (saveData() == true) {// TODO: 2017/8/11  by XUHU
             //SaveOk();
             MainLogin.sp.play(MainLogin.music2, 1, 1, 0, 0, 1);
             Toast.makeText(this, "采购入库单保存成功", Toast.LENGTH_LONG).show();
@@ -1832,7 +1832,7 @@ public class PurStockIn extends Activity {
                             //Common.cancelLoading();
 
 //                            ***********************************
-
+//扫描到数据没有保存，再次点击采购订单图标，这时候对扫描的数据进行处理 // TODO: 2017/8/11 XUHU
                             if (jsSerino == null || jsSerino.length() < 1){
                                 ShowOrderNoList("");
                             }else{
@@ -2632,8 +2632,10 @@ public class PurStockIn extends Activity {
         }
     }
 
-    //保存数据
-    private boolean SSSSS() throws JSONException,
+    /**
+     * 保存数据  // TODO: 2017/8/11 XUHU
+     */
+    private boolean saveData() throws JSONException,
             ParseException, IOException {
             table = new JSONObject();
             JSONArray arrayss = null;
@@ -2761,7 +2763,7 @@ public class PurStockIn extends Activity {
     }
 
     /**
-     * 根据批次sku相同合并数量
+     * 根据批次sku相同合并数量  todo XUHU
      */
     @NonNull
     public  JSONArray merge(@NonNull JSONArray array) {
@@ -2798,7 +2800,7 @@ public class PurStockIn extends Activity {
                         if (invcode.equals(invcodeJ)&&batch.equals(batchJ)) {
                             double newValue = Double.parseDouble(box) + Double.parseDouble(boxJ);
                             JSONObject newObject = new JSONObject();
-
+            //判断sdk版本是否大于19，大于调用remove（），否则调用自定义方法
                             if (Build.VERSION.SDK_INT >= 19) {
                                 Log.d(TAG, "UUU: "+ Build.VERSION.SDK_INT +"");
                                 Log.d(TAG, "UUU: "+ "111");
@@ -2826,27 +2828,19 @@ public class PurStockIn extends Activity {
                                 newObject.put("box", String.valueOf(newValue));
                                 arrayTemp.put(newObject);
                             }
-
                             break;
                         }
-
                         numJ++;
-
                         String a = numJ+"";
                         Log.d(TAG, "Merge: "+a);
-
-
                     }
                     if (numJ - 1 == arrayTemp.length() - 1) {
                         arrayTemp.put(array.get(i));
                     }
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
             }
-
         }
         Log.d(TAG, "DDDDD: "+arrayTemp.toString());
         return arrayTemp;
