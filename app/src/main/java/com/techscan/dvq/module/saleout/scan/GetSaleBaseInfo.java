@@ -48,6 +48,7 @@ public class GetSaleBaseInfo {
         HashMap<String, String> parameter = new HashMap<String, String>();
         parameter.put("FunctionName", "GetInvBaseInfo");
         parameter.put("CompanyCode", PK_CORP);
+        parameter.put("BarCode","");
         parameter.put("InvCode", InvCode);
         parameter.put("TableName", "baseInfo");
         RequestThread requestThread = new RequestThread(parameter, mHandler, 1);
@@ -63,25 +64,16 @@ public class GetSaleBaseInfo {
      * @throws JSONException
      */
 
-    String pk_invbasdoc = "";
-
-    String pk_invmandoc = "";
-
     public void SetSaleBaseToParam(JSONObject json) throws JSONException {
-        //Log.d(TAG, "SetInvBaseToUI: " + json);
         if (json.getBoolean("Status")) {
             JSONArray val = json.getJSONArray("baseInfo");
-            //mapInvBaseInfo = null;
             for (int i = 0; i < val.length(); i++) {
                 JSONObject tempJso = val.getJSONObject(i);
-                //mapInvBaseInfo = new HashMap<String, Object>();
                 mapSaleBaseInfo.put("invname", tempJso.getString("invname"));   //物料名称
                 mapSaleBaseInfo.put("invcode", tempJso.getString("invcode"));   //物料号
                 mapSaleBaseInfo.put("measname", tempJso.getString("measname"));   //单位
                 mapSaleBaseInfo.put("pk_invbasdoc", tempJso.getString("pk_invbasdoc"));//物料bas PK
-                //pk_invbasdoc = tempJso.getString("pk_invbasdoc");
                 mapSaleBaseInfo.put("pk_invmandoc", tempJso.getString("pk_invmandoc"));//物料man PK
-                //pk_invmandoc = tempJso.getString("pk_invmandoc");
                 mapSaleBaseInfo.put("invtype", tempJso.getString("invtype"));   //型号
                 mapSaleBaseInfo.put("invspec", tempJso.getString("invspec"));   //规格
             }

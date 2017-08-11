@@ -536,7 +536,6 @@ public class PurStockInDetail extends Activity {
                 if (temp.getString("invcode").equals(m_mapInvBaseInfo.get("invcode").toString())) {
                     isFind = true;
                     //ShowDetail();
-
                     //String Free1 = temp.getString("vfree1");
                     String Free1 = "";
                     // 寻找到了对应存货

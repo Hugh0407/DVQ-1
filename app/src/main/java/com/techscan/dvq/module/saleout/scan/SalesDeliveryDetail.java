@@ -138,7 +138,10 @@ public class SalesDeliveryDetail extends Activity {
     private SplitBarcode            m_cSplitBarcode   = null;
     private ArrayList<String>       ScanedBarcode     = new ArrayList<String>();
     @Nullable
+    List<Map<String, Object>> listTaskBody = null;
+    @Nullable
     List<Map<String, Object>> lstTaskBody = null;
+    List<Map<String, Object>> lstDetailBody = null;
     @Nullable
     private AlertDialog   DeleteButton     = null;
     @Nullable
@@ -149,6 +152,9 @@ public class SalesDeliveryDetail extends Activity {
     SimpleAdapter listItemAdapter = null;
     @Nullable
     SimpleAdapter listTaskAdapter = null;
+    @Nullable
+    String []invcode =null;
+    Double TOTAL = 0.0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -439,8 +445,6 @@ public class SalesDeliveryDetail extends Activity {
                             m_mapSaleBaseInfo = objSaleBaseInfo.mapSaleBaseInfo;
 //                            SetInvBaseToUI();
                             getInvBaseVFree4();
-
-
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -463,15 +467,10 @@ public class SalesDeliveryDetail extends Activity {
                                 } else {
                                     txtSaleCustoms.setText(tempJso.getString("vfree4"));
                                 }
-
                                 m_mapSaleBaseInfo.put("vfree4", txtSaleCustoms.getText().toString());
                                 SetInvBaseToUI();
-//                                    txtSaleCustoms.requestFocus();
-//                                    txtSaleCustoms.setFocusableInTouchMode(true);
-//                                    txtSaleCustoms.setFocusable(true);
                             }
                         } else {
-//                                txtSaleCustoms.requestFocus();
                             m_mapSaleBaseInfo.put("vfree4", txtSaleCustoms.getText().toString());
                             SetInvBaseToUI();
                         }
@@ -497,7 +496,6 @@ public class SalesDeliveryDetail extends Activity {
         Double ldTotal = (Double) m_mapSaleBaseInfo.get("quantity") * (Integer) m_mapSaleBaseInfo.get("number");
         txtSaleTotal.setText(ldTotal.toString());
         m_mapSaleBaseInfo.put("total", ldTotal);
-//        m_mapSaleBaseInfo.put("vfree4", txtSaleCustoms.getText().toString());
         if (m_mapSaleBaseInfo.get("barcodetype").toString().equals("TP")) {
             txtSaleBatch.setFocusableInTouchMode(false);
             txtSaleBatch.setFocusable(false);
@@ -505,20 +503,10 @@ public class SalesDeliveryDetail extends Activity {
             txtSaleNumber.setFocusable(false);
             txtSaleTotal.setFocusableInTouchMode(false);
             txtSaleTotal.setFocusable(false);
-//            txtSaleCustoms.requestFocus();
-//            txtSaleCustoms.selectAll();
-//            txtSaleCustoms.setFocusableInTouchMode(true);
-//            txtSaleCustoms.setFocusable(true);
-//            txtSaleCustoms.setEnabled(true);
             ScanedToGet();
         } else if (m_mapSaleBaseInfo.get("barcodetype").toString().equals("P")) {
             txtSaleBatch.setFocusableInTouchMode(false);
             txtSaleBatch.setFocusable(false);
-//            txtSaleCustoms.requestFocus();
-//            txtSaleCustoms.selectAll();
-//            txtSaleCustoms.setFocusableInTouchMode(true);
-//            txtSaleCustoms.setFocusable(true);
-//            txtSaleCustoms.setEnabled(true);
             txtSaleNumber.setFocusableInTouchMode(true);
             txtSaleNumber.setFocusable(true);
             txtSaleNumber.setEnabled(true);
@@ -531,44 +519,88 @@ public class SalesDeliveryDetail extends Activity {
 
     private boolean ScanedToGet() {
         SplitBarcode bar = m_cSplitBarcode;
+        Double S = 0.0;
         try {
             JSONArray bodys = jsBody.getJSONArray("dbBody");
             Log.d("TAG", "dbBody: " + bodys);
             boolean isFind = false;
-            for (int i = 0; i < bodys.length(); i++) {
+            boolean isExist=false;
+            S = Double.parseDouble(txtSaleTotal.getText().toString());
+//            for (int t= 0;t<listTaskBody.size();t++){
+//                Map<String, Object> map = listTaskBody.get(t);
+//                String invcode = (String) map.get("invcode");
+//                if (invcode.equals(m_mapSaleBaseInfo.get("invcode"))){
+//                   isExist = true;
+//                }else{
+//                    Toast.makeText(this, "扫描不再本次任务!",
+//                            Toast.LENGTH_LONG).show();
+//                }
+//            }
+//            if (isExist) {
+//                for (int t = 0; t < listTaskBody.size(); t++) {
+//                    Map<String, Object> map = listTaskBody.get(t);
+//                    String invcode = (String) map.get("invcode");
+//                    Double doneqty = (Double) map.get("doneqty");
+//                    if (invcode.equals(m_mapSaleBaseInfo.get("invcode"))) {
+//                        if (S > doneqty) {
+//                            map.put("ntotaloutinvnum", doneqty);
+//                            S = S - doneqty;
+//                        } else if (S <= doneqty && S != 0) {
+//                            map.put("ntotaloutinvnum", S);
+//                            S = S - S;
+//                        } else if (S == 0) {
+//                            break;
+//                        }
+//                    }
+//                    if (S>0){
+//
+//                    }
+////                    else {
+////
+////                        Toast.makeText(this, "超出!",
+////                                Toast.LENGTH_LONG).show();
+////                    }
+//                    listTaskBody.add(map);
+//                }
+//            }
+            for (int i=0; i < bodys.length(); i++) {
                 JSONObject temp = bodys.getJSONObject(i);
-                if (temp.getString("invcode").equals(m_mapSaleBaseInfo.get("invcode").toString())) {
-                    isFind = true;
-                    String Free1 = "";
-                    // 寻找到了对应存货
-                    Double doneqty = 0.0;
-                    if (!temp.getString("ntotaloutinvnum").isEmpty() && !temp.getString("ntotaloutinvnum").toLowerCase().equals("null")) {
-                        doneqty = temp.getDouble("ntotaloutinvnum");
-                        doneqty = doneqty + Double.parseDouble(txtSaleTotal.getText().toString());
-                        Log.d(TAG, "ScanedToGet: " + doneqty.toString());
-                        if (doneqty > temp.getInt("doneqty")) {
-                            Toast.makeText(this, "这个存货已经超过应发数量了,不允出库!",
-                                    Toast.LENGTH_LONG).show();
-                            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                            IniDetail();
-                            txtBarcode.setText("");
-                            txtBarcode.requestFocus();
-                            return false;
-                        }
-                    }
+                Log.d(TAG, "InvCode: "+temp.getString("invcode"));
+                        if (temp.getString("invcode").equals(m_mapSaleBaseInfo.get("invcode").toString())) {
+//                          if (Double.parseDouble(txtSaleTotal.getText().toString())-temp.getDouble("ntotaloutinvnum")==0){
+//
+//                          }
 
-                    if (ScanSerial(bar.FinishBarCode, Free1, txtSaleTotal.getText().toString()) == false) {
-                        txtBarcode.setText("");
-                        txtBarcode.requestFocus();
-                        return false;
-                    }
-                    ScanedBarcode.add(bar.FinishBarCode);
-                    MainLogin.sp.play(MainLogin.music2, 1, 1, 0, 0, 1);
-                    temp.put("ntotaloutinvnum", doneqty);
-                    break;
+                            isFind = true;
+                            String Free1 = "";
+                            // 寻找到了对应存货
+                            Double doneqty = 0.0;
+                            if (!temp.getString("ntotaloutinvnum").isEmpty() && !temp.getString("ntotaloutinvnum").toLowerCase().equals("null")) {
+                                doneqty = temp.getDouble("ntotaloutinvnum");
+                                doneqty = doneqty + Double.parseDouble(txtSaleTotal.getText().toString());
+                                Log.d(TAG, "ScanedToGet: " + doneqty.toString());
+                                if (doneqty > temp.getInt("doneqty")) {
+                                    Toast.makeText(this, "这个存货已经超过应发数量了,不允出库!",
+                                            Toast.LENGTH_LONG).show();
+                                    MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+                                    IniDetail();
+                                    txtBarcode.setText("");
+                                    txtBarcode.requestFocus();
+                                    return false;
+                                }
+
+                            }
+                            if (ScanSerial(bar.FinishBarCode, Free1, txtSaleTotal.getText().toString()) == false) {
+                                txtBarcode.setText("");
+                                txtBarcode.requestFocus();
+                                return false;
+                            }
+                            ScanedBarcode.add(bar.FinishBarCode);
+                            MainLogin.sp.play(MainLogin.music2, 1, 1, 0, 0, 1);
+                            temp.put("ntotaloutinvnum", doneqty);
+                            break;
                 }
             }
-
 
             if (isFind == false) {
                 IniDetail();
@@ -763,14 +795,45 @@ public class SalesDeliveryDetail extends Activity {
                 }
 
                 JSONArray jsarray = jsBody.getJSONArray("dbBody");
+                invcode = new String[jsarray.length()];
                 for (int i = 0; i < jsarray.length(); i++) {
                     JSONObject tempJso = jsarray.getJSONObject(i);
+                    invcode[i] =tempJso.getString("invcode");
+                    Log.d(TAG, "LoadSaleOutBody: "+invcode[i].toString());
                     CALBODYID = tempJso.getString("cadvisecalbodyid");
-                    Log.d(TAG, "LoadSaleOutBody: " + CALBODYID);
                     CINVBASID = tempJso.getString("cinvbasdocid");
-                    Log.d(TAG, "LoadSaleOutBody: " + CINVBASID);
                     INVENTORYID = tempJso.getString("cinventoryid");
-                    Log.d(TAG, "LoadSaleOutBody: " + INVENTORYID);
+                }
+                listTaskBody = new ArrayList<Map<String, Object>>();
+                // purBody
+                Map<String, Object> map;
+
+                if (jsBody == null) {
+                    Toast.makeText(this, R.string.MeiYouDeDaoBiaoTiShuJu, Toast.LENGTH_LONG).show();
+                    // ADD CAIXY TEST START
+                    MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+                    // ADD CAIXY TEST END
+                    return;
+                }
+                JSONArray arrays = jsBody.getJSONArray("dbBody");
+                Double total = 0.0;
+                for (int i = 0; i < arrays.length(); i++) {
+                    map = new HashMap<String, Object>();
+                    map.put("invname",
+                            ((JSONObject) (arrays.get(i))).getString("invname"));
+                    map.put("invcode",
+                            ((JSONObject) (arrays.get(i))).getString("invcode"));
+                    map.put("invspec",
+                            ((JSONObject) (arrays.get(i))).getString("invspec"));
+                    map.put("ntotaloutinvnum",
+                            ((JSONObject) (arrays.get(i))).getString("ntotaloutinvnum"));
+                    map.put("invtype",
+                            ((JSONObject) (arrays.get(i))).getString("invtype"));
+                    map.put("doneqty",
+                            ((JSONObject) (arrays.get(i))).getString("doneqty"));
+                    lstTaskBody.add(map);
+                    total = ((JSONObject) (arrays.get(i))).getDouble("doneqty");
+                    TOTAL = TOTAL+total;
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -945,7 +1008,7 @@ public class SalesDeliveryDetail extends Activity {
     }
 
     private void ShowDetailDig() throws JSONException {
-        lstTaskBody = new ArrayList<Map<String, Object>>();
+        lstDetailBody = new ArrayList<Map<String, Object>>();
         Map<String, Object> map;
         if (jsSerino == null || !jsSerino.has("Serino")) {
             Toast.makeText(this, "还没有扫描到的记录", Toast.LENGTH_SHORT).show();
@@ -971,11 +1034,12 @@ public class SalesDeliveryDetail extends Activity {
             map.put("invtype", invtype);
             map.put("invspec", invspec);
             map.put("total", sTotal);
-            lstTaskBody.add(map);
+            lstDetailBody.add(map);
         }
-        Log.d("TAG", "lstTaskBody: " + lstTaskBody);
+        Log.d("TAG", "lstTaskBody: " + lstDetailBody);
+        Log.d("TAG", "lstTaskBody: " + lstDetailBody.size());
         listItemAdapter = new SimpleAdapter(
-                SalesDeliveryDetail.this, lstTaskBody,// 数据源
+                SalesDeliveryDetail.this, lstDetailBody,// 数据源
                 R.layout.item_sale_out_details,// ListItem的XML实现
                 // 动态数组与ImageItem对应的子项
                 new String[]{"invname", "invcode", "invspec", "invtype", "batch", "total"},
@@ -1042,112 +1106,6 @@ public class SalesDeliveryDetail extends Activity {
         SelectButton = new AlertDialog.Builder(this).setTitle(R.string.QueRenShanChu)
                 .setMessage(R.string.NiQueRenShanChuGaiXingWeiJiLuMa)
                 .setPositiveButton(R.string.QueRen, buttondel)
-//                        new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        Map<String, Object> mapTemp = (Map<String, Object>) lstTaskBody
-//                                .get(index);
-//                        String invcode = (String) mapTemp.get("invcode");
-//                        String batch = (String) mapTemp.get("batch");
-//                        String sno = (String) mapTemp.get("sno");
-//                        String serino = (String) mapTemp.get("serino");
-//                        String totals = (String) mapTemp.get("total");
-//                        Double ScanedTotal = Double.parseDouble(mapTemp.get("total").toString());
-//
-//                        if (ScanedBarcode != null || ScanedBarcode.size() > 0) {
-//                            for (int si = 0; si < ScanedBarcode.size(); si++) {
-//                                String RemoveBarCode = ScanedBarcode.get(si).toString();
-//                                if (RemoveBarCode.equals(serino)) {
-//                                    ScanedBarcode.remove(si);
-////                                    si--;
-//                                }
-//                            }
-//                        }
-//
-//                        JSONArray arrays;
-//                        try {
-//                            arrays = jsSerino.getJSONArray("Serino");
-//
-//                            HashMap<String, Object> Temp = new HashMap<String, Object>();
-//                            JSONArray serinos = new JSONArray();
-//
-//                            for (int i = 0; i < arrays.length(); i++) {
-//                                String serino1 = ((JSONObject) (arrays.get(i)))
-//                                        .getString("serino");
-//                                if (!serino1.equals(serino)) {
-//                                    JSONObject temp = new JSONObject();
-//                                    temp = arrays.getJSONObject(i);
-//                                    serinos.put(temp);
-//                                }
-//                            }
-//
-//                            jsSerino = new JSONObject();
-//
-//                            if (serinos.length() > 0) {
-//                                jsSerino.put("Serino", serinos);
-//                            }
-//                            JSONArray bodys = jsBody.getJSONArray("dbBody");
-//                            JSONArray bodynews = new JSONArray();
-//                            // JSONArray serinos = new JSONArray();
-//                            for (int i = 0; i < bodys.length(); i++) {
-//                                JSONObject temp = bodys.getJSONObject(i);
-//
-//                                String invcodeold = ((JSONObject) (bodys.get(i)))
-//                                        .getString("invcode");
-//                                if (invcodeold.equals(invcode)) {
-//                                    Double doneqty = temp.getDouble("ntotaloutinvnum");
-//                                    temp.put("ntotaloutinvnum", doneqty - ScanedTotal);
-//                                }
-//
-//                                bodynews.put(temp);
-//                            }
-//
-//                            jsBody = new JSONObject();
-//                            jsBody.put("Status", "true");
-//                            jsBody.put("dbBody", bodynews);
-//
-//                            //}
-//
-//                            JSONArray arraysCount;
-//                            try {
-//                                arraysCount = jsBody.getJSONArray("dbBody");
-//                                number = 0.0;
-//                                ntotaloutinvnum = 0.0;
-//                                for (int i = 0; i < arraysCount.length(); i++) {
-//                                    String sshouldinnum = ((JSONObject) (arraysCount
-//                                            .get(i))).getString("doneqty");
-//                                    String sinnum = ((JSONObject) (arraysCount
-//                                            .get(i))).getString("ntotaloutinvnum");
-//
-//                                    number = number
-//                                            + Double.valueOf(sshouldinnum);
-//                                    if (!sinnum.toLowerCase().equals("null") && !sinnum.isEmpty())
-//                                        ntotaloutinvnum = ntotaloutinvnum + Double.valueOf(sinnum);
-//                                }
-//                            } catch (JSONException e1) {
-//                                // TODO Auto-generated catch block
-//                                e1.printStackTrace();
-//                            }
-//                            tvSalecount.setText("总量" + number + " | " + "已扫"
-//                                    + ntotaloutinvnum + " | " + "未扫"
-//                                    + (number - ntotaloutinvnum));
-//                            //SaveScanedBody();//写入本地
-//                            IniDetail();
-//
-//                        } catch (JSONException e) {
-//                            // TODO Auto-generated catch block
-//                            e.printStackTrace();
-//                            Toast.makeText(SalesDeliveryDetail.this, e.getMessage(),
-//                                    Toast.LENGTH_LONG).show();
-//                            // ADD CAIXY TEST START
-//                            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-//                            // ADD CAIXY TEST END
-//                        }
-//
-//                        DeleteButton.cancel();
-//
-//                    }
-//                })
                 .setNegativeButton(R.string.QuXiao, null).show();
     }
 
@@ -1167,7 +1125,7 @@ public class SalesDeliveryDetail extends Activity {
 
                 if (whichButton == DialogInterface.BUTTON_POSITIVE) {
 
-                    Map<String, Object> mapTemp = lstTaskBody
+                    Map<String, Object> mapTemp = lstDetailBody
                             .get(index);
                     String invcode     = (String) mapTemp.get("invcode");
                     String batch       = (String) mapTemp.get("batch");
@@ -1219,6 +1177,7 @@ public class SalesDeliveryDetail extends Activity {
                             if (invcodeold.equals(invcode)) {
                                 Double doneqty = temp.getDouble("ntotaloutinvnum");
                                 temp.put("ntotaloutinvnum", doneqty - ScanedTotal);
+//                                break;
                             }
 
                             bodynews.put(temp);
