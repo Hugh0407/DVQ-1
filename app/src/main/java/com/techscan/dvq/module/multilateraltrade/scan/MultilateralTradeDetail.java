@@ -53,7 +53,7 @@ public class MultilateralTradeDetail extends Activity {
     String CALBODYID ="";
     String CINVBASID = "";
     String INVENTORYID = "";
-    String CORP = MainLogin.objLog.STOrgCode;
+    String CORP = MainLogin.objLog.CompanyCode;
     String WAREHOUSEID = "";
     String ScanType = "";
     String BillCode = "";

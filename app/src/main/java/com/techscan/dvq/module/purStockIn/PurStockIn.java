@@ -7,9 +7,11 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -50,6 +52,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -85,6 +88,9 @@ public class PurStockIn extends Activity {
     File   file           = null;
     @Nullable
     File   fileScan       = null;
+
+    private JSONObject                jsTotal              =null;
+    private JSONObject                table              =null;
 
     String ReScanHead = "1";
     @Nullable
@@ -693,7 +699,7 @@ public class PurStockIn extends Activity {
             //head = jsHead.getJSONArray("PurGood");
 
             JSONArray arrays = jsSerino.getJSONArray("Serino");
-
+            Log.d(TAG, "SavePurOrder: "+arrays.length()+"");
             for (int i = 0; i < arrays.length(); i++) {
                 String OKFlg    = "0";
                 String sSerial  = ((JSONObject) (arrays.get(i))).getString("sno");
@@ -738,6 +744,8 @@ public class PurStockIn extends Activity {
                         }
                     }
                     if (OKFlg.equals("0")) {
+                    //************************
+//                    if (OKFlg.equals("1")) {// TODO: 2017/8/11 xuhu
                         //HashMap<String, Object> map = new HashMap<String, Object>();
                         JSONObject map = new JSONObject();
                         map.put("invcode", sInvCode);
@@ -748,6 +756,8 @@ public class PurStockIn extends Activity {
                         map.put("totalnum", totalnum);
                         lstSerino.put(map);
                         OKFlg = "1";
+                    // ************************
+//                        OKFlg = "0";//By XUHU
                     }
                 }
             }
@@ -784,9 +794,11 @@ public class PurStockIn extends Activity {
                             bodys.getJSONObject(i).getString("invcode").toUpperCase())) {
                         Double  ldDoneQty = 0.0;
                         boolean lbPutFlag = true;
+//                        JSONObject obj = new JSONObject();// TODO: 2017/8/11  By XUHU
                         for (int k = 0; k < arraySaveBody.length(); k++) {
                             if (arraysSerino.getJSONObject(j).getString("batch").toUpperCase().equals(
                                     arraySaveBody.getJSONObject(k).getString("VBATCHCODE").toUpperCase())) {
+                                Log.d(TAG, "Num2: "+String.valueOf(arraysSerino.getJSONObject(j).getDouble("box")));
                                 ldDoneQty = ldDoneQty + arraysSerino.getJSONObject(j).getDouble("box");
                                 lbPutFlag = false;
                                 break;
@@ -794,6 +806,7 @@ public class PurStockIn extends Activity {
                                 lbPutFlag = true;
                         }
                         if (lbPutFlag) {
+                            //******先注销 by XUHU
                             JSONObject obj = new JSONObject();
                             obj.put("CINVBASID", bodys.getJSONObject(i).getString("cbaseid"));
                             obj.put("CINVENTORYID", bodys.getJSONObject(i).getString("cmangid"));
@@ -802,6 +815,7 @@ public class PurStockIn extends Activity {
                             //						if (!bodys.getJSONObject(i).getString("nconfirmnum").toLowerCase().equals(null) &&
                             //								!bodys.getJSONObject(i).getString("nconfirmnum").isEmpty())
                             //							ldDoneQty = bodys.getJSONObject(i).getDouble("nconfirmnum");
+                            Log.d(TAG, "Num1: "+String.valueOf(arraysSerino.getJSONObject(j).getDouble("box")));
                             obj.put("NINNUM", arraysSerino.getJSONObject(j).getDouble("box"));                    //数量
                             obj.put("NORDERNUM", bodys.getJSONObject(i).getDouble("nordernum"));
                             obj.put("PK_BODYCALBODY", PK_CALBODY);
@@ -819,7 +833,10 @@ public class PurStockIn extends Activity {
                             arraySaveBody.put(obj);
                             y++;
                         } else
+                        //******先注销 By XUHU
                             arraysSerino.getJSONObject(j).put("NINNUM", ldDoneQty);
+//                          obj.put("NINNUM", ldDoneQty);
+//                          arraySaveBody.put(obj);
                     }
                 }
             }
@@ -834,7 +851,7 @@ public class PurStockIn extends Activity {
 //            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
 //            return false;
 //        }
-        Log.d("TAG", "SavePurOrder: " + saveJons);
+        Log.d("TAG", "SavePurOrderJsonData: " + saveJons.toString());
         JSONObject jas = Common.DoHttpQuery(saveJons, "SavePurStockIn", "A");
 
         if (jas == null) {
@@ -1114,7 +1131,8 @@ public class PurStockIn extends Activity {
             return;
         }
         Common.ShowLoading(MyContext);
-        if (SavePurOrder() == true) {
+//        if (SavePurOrder() == true) {
+        if (SSSSS() == true) {// TODO: 2017/8/11  
             //SaveOk();
             MainLogin.sp.play(MainLogin.music2, 1, 1, 0, 0, 1);
             Toast.makeText(this, "采购入库单保存成功", Toast.LENGTH_LONG).show();
@@ -1798,18 +1816,39 @@ public class PurStockIn extends Activity {
                             ScanDetail();
                             break;
                         }
+                        //查询单据
                         case R.id.btnPurBrower: {
                             Common.ShowLoading(MyContext);
-                            if (jsDBBody == null || jsDBBody.length() < 1) {
-
-                            } else {
-                                Toast.makeText(PurStockIn.this, R.string.GaiRenWuYiJingBeiSaoMiao_WuFaXiuGaiDingDan, Toast.LENGTH_LONG).show();
-                                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                                Common.cancelLoading();
-                                break;
-                            }
-                            ShowOrderNoList("");
+//                            ***********// TODO: 2017/8/11  XUHU
+//                            if (jsDBBody == null || jsDBBody.length() < 1) {
+//
+//                            } else {
+//                                Toast.makeText(PurStockIn.this, R.string.GaiRenWuYiJingBeiSaoMiao_WuFaXiuGaiDingDan, Toast.LENGTH_LONG).show();
+//                                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                                Common.cancelLoading();
+//                                break;
+//                            }
+//                            ShowOrderNoList("");
                             //Common.cancelLoading();
+
+//                            ***********************************
+
+                            if (jsSerino == null || jsSerino.length() < 1){
+                                ShowOrderNoList("");
+                            }else{
+                                AlertDialog.Builder bulider =
+                                        new AlertDialog.Builder(PurStockIn.this).setTitle(R.string.XunWen).setMessage("已扫描数据，是否要清空?");
+                                bulider.setNegativeButton(R.string.QuXiao, null);
+                                bulider.setPositiveButton(R.string.QueRen, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(@NonNull DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                        IniActivyMemor();
+                                        ShowOrderNoList("");
+                                    }
+                                }).create().show();
+
+                            }
                             break;
                         }
                         case R.id.refer_wh:
@@ -2591,5 +2630,225 @@ public class PurStockIn extends Activity {
                 SoundHelper.playWarning();
             }
         }
+    }
+
+    //保存数据
+    private boolean SSSSS() throws JSONException,
+            ParseException, IOException {
+            table = new JSONObject();
+            JSONArray arrayss = null;
+            JSONArray arrayMerge = null;
+            arrayss = jsSerino.getJSONArray("Serino");
+            arrayMerge = merge(arrayss);
+            jsTotal = new JSONObject();
+            jsTotal.put("Serino", arrayMerge);
+        JSONArray  heads        = jsHead.getJSONArray("PurGood");
+        JSONObject saveHeadJons = new JSONObject();
+        saveHeadJons.put("VBILLCODE", txtPurInBillCode.getText().toString()); //采购入库单号(手输)
+        saveHeadJons.put("CUSER", MainLogin.objLog.UserID);               //操作员ID
+        saveHeadJons.put("CUSERNAME", MainLogin.objLog.UserName);        //操作员Name
+        saveHeadJons.put("CWAREHOUSEID", CWAREHOUSEID);               //仓库
+        saveHeadJons.put("PK_CORP", MainLogin.objLog.CompanyCode);
+        saveHeadJons.put("CDISPATCHERID", CDISPATCHERID);             //收发类别code
+        saveHeadJons.put("PK_CALBODY", PK_CALBODY);                    //库存组织         //部门
+        saveHeadJons.put("CDPTID", heads.getJSONObject(0).getString("cdeptid"));   //部门
+        saveHeadJons.put("CBIZTYPE", heads.getJSONObject(0).getString("cbiztype"));//业务类型
+        saveHeadJons.put("VNOTE", txtReMark.getText().toString());//备注
+        saveHeadJons.put("FREPLENISHFLAG", m_FrePlenishFlag);//退货标志
+        saveHeadJons.put("CPROVIDERID", heads.getJSONObject(0).getString("pk_cumandoc"));//供应商ID
+        saveHeadJons.put("CUBASDOC", heads.getJSONObject(0).getString("pk_cubasdoc"));
+            table.put("Head", saveHeadJons);
+            JSONObject tableBody = new JSONObject();
+            JSONArray bodyArray = new JSONArray();
+
+            JSONArray bodys = jsBody.getJSONArray("PurBody");
+            JSONArray arraysSerino = jsTotal.getJSONArray("Serino");
+            for (int j = 0; j < arraysSerino.length(); j++) {
+                for (int i = 0; i < bodys.length(); i++) {
+                    if (arraysSerino.getJSONObject(j).getString("invcode").toLowerCase().equals(
+                            bodys.getJSONObject(i).getString("invcode"))) {
+                        Double box = arraysSerino.getJSONObject(j).getDouble("box");
+                        DecimalFormat decimalFormat = new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
+                        String totalBox = decimalFormat.format(box);//format 返回的是字符串
+                        JSONObject object = new JSONObject();
+
+                       object.put("CINVBASID", bodys.getJSONObject(i).getString("cbaseid"));
+                       object.put("CINVENTORYID", bodys.getJSONObject(i).getString("cmangid"));
+                       object.put("CINVCODE", bodys.getJSONObject(i).getString("invcode"));
+                       object.put("BLOTMGT", "1");        //是否批次管理
+                        Log.d(TAG, "Num1: "+String.valueOf(arraysSerino.getJSONObject(j).getDouble("box")));
+                        object.put("NINNUM",totalBox);                    //数量
+                        object.put("NORDERNUM", bodys.getJSONObject(i).getDouble("nordernum"));
+                        object.put("PK_BODYCALBODY", PK_CALBODY);
+                        object.put("VBATCHCODE", arraysSerino.getJSONObject(j).getString("batch"));
+                        object.put("SOURCCEBILLHID", bodys.getJSONObject(i).getString("corderid"));
+                        object.put("SOURCCEBILLBID", bodys.getJSONObject(i).getString("corder_bid"));
+                        object.put("VENDORID", heads.getJSONObject(0).getString("cvendormangid"));
+                        object.put("VENDORBASID", heads.getJSONObject(0).getString("cvendorbaseid"));
+                        Log.d(TAG, "PRICE: " + bodys.getJSONObject(i).getString("noriginalcurprice"));
+                       object.put("NPRICE", bodys.getJSONObject(i).getString("noriginalcurprice"));
+                       object.put("VSOURCEBILLCODE", m_BillNo);
+                       object.put("VSOURCEBILLROWNO", bodys.getJSONObject(i).getString("crowno"));
+                       object.put("VFREE4", bodys.getJSONObject(i).getString("vfree4"));
+                        //jsDBBody.put(y + "", obj);
+                        bodyArray.put(object);
+                    }
+                }
+            }
+            tableBody.put("ScanDetails", bodyArray);
+            table.put("Body", tableBody);
+            table.put("GUIDS", UUID.randomUUID().toString());
+            Log.d(TAG, "SaveSaleOrder: " + MainLogin.appTime);
+            table.put("OPDATE", MainLogin.appTime);
+            Log.d(TAG, "XXXXXX: " + table.toString());
+            if (!MainLogin.getwifiinfo()) {
+                Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
+                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+                return false;
+            }
+//            SaveThread saveThread = new SaveThread(table, "SaveSaleReceive", mHandler, HANDER_SAVE_RESULT);
+//            Thread thread = new Thread(saveThread);
+//            thread.start();
+        JSONObject jas = Common.DoHttpQuery(table, "SavePurStockIn", "A");
+
+        if (jas == null) {
+            Toast.makeText(this, "单据保存过程中出现了问题," +
+                    "请尝试再次提交或!", Toast.LENGTH_LONG).show();
+            //ADD CAIXY TEST START
+            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+            //ADD CAIXY TEST END
+            return false;
+        }
+
+        if (!jas.getBoolean("Status")) {
+            String errMsg;
+            if (jas.has("ErrMsg")) {
+                errMsg = jas.getString("ErrMsg");
+            } else {
+                errMsg = getString(R.string.WangLuoChuXianWenTi);
+            }
+            Toast.makeText(this, errMsg, Toast.LENGTH_LONG).show();
+            //ADD CAIXY TEST START
+            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+            //ADD CAIXY TEST END
+            return false;
+        }
+
+        if (jas.getBoolean("Status")) {
+            SaveFlg = 0;
+            String lsResultBillCode = "";
+
+            if (jas.has("BillCode")) {
+                lsResultBillCode = jas.getString("BillCode");
+            } else {
+                Toast.makeText(this, "单据保存过程中出现了问题," +
+                        "请尝试再次提交或到电脑系统中确认后再决定是否继续保存!", Toast.LENGTH_LONG).show();
+                //ADD CAIXY TEST START
+                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+                //ADD CAIXY TEST END
+                return false;
+            }
+
+            PurBillCode = lsResultBillCode;
+
+
+            //写入log文件
+
+
+        }
+        return true;
+
+    }
+
+    /**
+     * 根据批次sku相同合并数量
+     */
+    @NonNull
+    public  JSONArray merge(@NonNull JSONArray array) {
+
+        JSONArray arrayTemp = new JSONArray();
+        int num = 0;
+        for(int i = 0;i < array.length();i++) {
+            if (num == 0) {
+                try {
+                    arrayTemp.put(array.get(i));
+                    num++;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                try {
+                    int numJ = 0;
+                    Log.d(TAG, "Merge: "+arrayTemp.length());
+                    for (int j = 0; j < arrayTemp.length(); j++) {
+                        JSONObject newJsonObjectI = (JSONObject) array.get(i);
+                        JSONObject newJsonObjectJ = (JSONObject) arrayTemp.get(j);
+                        String invcode = newJsonObjectI.get("invcode").toString();
+                        String invname = newJsonObjectI.get("invname").toString();
+                        String batch = newJsonObjectI.get("batch").toString();
+                        String box = newJsonObjectI.get("box").toString();
+                        String sno = newJsonObjectI.get("sno").toString();
+                        String serino = newJsonObjectI.get("serino").toString();
+                        String vfree1 = newJsonObjectI.get("vfree1").toString();
+
+                        String invcodeJ = newJsonObjectJ.get("invcode").toString();
+                        String batchJ = newJsonObjectJ.get("batch").toString();
+                        String boxJ = newJsonObjectJ.get("box").toString();
+
+                        if (invcode.equals(invcodeJ)&&batch.equals(batchJ)) {
+                            double newValue = Double.parseDouble(box) + Double.parseDouble(boxJ);
+                            JSONObject newObject = new JSONObject();
+
+                            if (Build.VERSION.SDK_INT >= 19) {
+                                Log.d(TAG, "UUU: "+ Build.VERSION.SDK_INT +"");
+                                Log.d(TAG, "UUU: "+ "111");
+//                                Toast.makeText(SalesDelivery.this,"api>19",Toast.LENGTH_SHORT).show();
+                                arrayTemp.remove(j);
+                                newObject.put("invcode", invcode);
+                                newObject.put("batch", batch);
+                                newObject.put("invname", invname);
+                                newObject.put("serino", serino);
+                                newObject.put("sno", sno);
+                                newObject.put("vfree1", vfree1);
+                                newObject.put("box", String.valueOf(newValue));
+                                arrayTemp.put(newObject);
+                            }
+                            else{
+                                Log.d(TAG, "UUU: "+ Build.VERSION.SDK_INT +"");
+                                Log.d(TAG, "UUU: "+ "444");
+                                Utils.removeJsonArray(j,arrayTemp);
+                                newObject.put("invcode", invcode);
+                                newObject.put("batch", batch);
+                                newObject.put("invname", invname);
+                                newObject.put("serino", serino);
+                                newObject.put("sno", sno);
+                                newObject.put("vfree1", vfree1);
+                                newObject.put("box", String.valueOf(newValue));
+                                arrayTemp.put(newObject);
+                            }
+
+                            break;
+                        }
+
+                        numJ++;
+
+                        String a = numJ+"";
+                        Log.d(TAG, "Merge: "+a);
+
+
+                    }
+                    if (numJ - 1 == arrayTemp.length() - 1) {
+                        arrayTemp.put(array.get(i));
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+        }
+        Log.d(TAG, "DDDDD: "+arrayTemp.toString());
+        return arrayTemp;
     }
 }
