@@ -2,7 +2,6 @@ package com.techscan.dvq.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 /**
@@ -12,26 +11,31 @@ import android.support.annotation.Nullable;
 
 public class Goods implements Parcelable {
 
-
-    String barcode;     // 条码
-    String encoding;    //编码（sku）
-    String name;        //名称
-    String type;        //类型
-    String unit;        //单位
-    String lot;         //批次
-    String spec;        //规格
-    float  qty;         //总量
-    int    num;         //数目
-    String pk_invbasdoc;
-    String pk_invmandoc;
-    String pk_invmandoc_cost;
-    String costObject;
-    String manual;  // 海关手册号
+    //Y | C | TC   g
+    //原总重        g
+    String  barcode;     // 条码 g
+    String  encoding;    //编码（sku） g
+    String  name;        //名称
+    String  type;        //类型
+    String  unit;        //单位
+    String  lot;         //批次
+    String  spec;        //规格
+    float   qty;         //总量 g
+    int     num;         //数目
+    String  codeType;    // g
+    boolean isDoPacked;  //是否拆包 g
+    String  barQty;       //条码上显示的总重 g
+    String  pk_invbasdoc;
+    String  pk_invmandoc;
+    String  pk_invmandoc_cost;
+    String  costObject;
+    String  manual;  // 海关手册号
 
     public Goods() {
     }
 
-    protected Goods(@NonNull Parcel in) {
+
+    protected Goods(Parcel in) {
         barcode = in.readString();
         encoding = in.readString();
         name = in.readString();
@@ -41,6 +45,9 @@ public class Goods implements Parcelable {
         spec = in.readString();
         qty = in.readFloat();
         num = in.readInt();
+        codeType = in.readString();
+        isDoPacked = in.readByte() != 0;
+        barQty = in.readString();
         pk_invbasdoc = in.readString();
         pk_invmandoc = in.readString();
         pk_invmandoc_cost = in.readString();
@@ -49,13 +56,11 @@ public class Goods implements Parcelable {
     }
 
     public static final Creator<Goods> CREATOR = new Creator<Goods>() {
-        @NonNull
         @Override
-        public Goods createFromParcel(@NonNull Parcel in) {
+        public Goods createFromParcel(Parcel in) {
             return new Goods(in);
         }
 
-        @NonNull
         @Override
         public Goods[] newArray(int size) {
             return new Goods[size];
@@ -165,6 +170,30 @@ public class Goods implements Parcelable {
         this.num = num;
     }
 
+    public String getCodeType() {
+        return codeType;
+    }
+
+    public void setCodeType(String codeType) {
+        this.codeType = codeType;
+    }
+
+    public boolean isDoPacked() {
+        return isDoPacked;
+    }
+
+    public void setDoPacked(boolean doPacked) {
+        isDoPacked = doPacked;
+    }
+
+    public String getBarQty() {
+        return barQty;
+    }
+
+    public void setBarQty(String barQty) {
+        this.barQty = barQty;
+    }
+
     public String getPk_invbasdoc() {
         return pk_invbasdoc;
     }
@@ -211,7 +240,7 @@ public class Goods implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(@NonNull Parcel dest, int flags) {
+    public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(barcode);
         dest.writeString(encoding);
         dest.writeString(name);
@@ -221,6 +250,9 @@ public class Goods implements Parcelable {
         dest.writeString(spec);
         dest.writeFloat(qty);
         dest.writeInt(num);
+        dest.writeString(codeType);
+        dest.writeByte((byte) (isDoPacked ? 1 : 0));
+        dest.writeString(barQty);
         dest.writeString(pk_invbasdoc);
         dest.writeString(pk_invmandoc);
         dest.writeString(pk_invmandoc_cost);

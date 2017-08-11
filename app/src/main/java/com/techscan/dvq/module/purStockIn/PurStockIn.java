@@ -731,8 +731,7 @@ public class PurStockIn extends Activity {
 //								&& batch.equals(sBatch)) {
 //							OKFlg = "1";
 //						}
-                        if (invcode.equals(sInvCode)
-                                && batch.equals(sBatch)) {
+                        if (invcode.equals(sInvCode) && batch.equals(sBatch)) {
                             OKFlg = "1";
                         }
                     }
@@ -809,7 +808,6 @@ public class PurStockIn extends Activity {
                             obj.put("SOURCCEBILLBID", bodys.getJSONObject(i).getString("corder_bid"));
                             obj.put("VENDORID", heads.getJSONObject(0).getString("cvendormangid"));
                             obj.put("VENDORBASID", heads.getJSONObject(0).getString("cvendorbaseid"));
-                            Log.d(TAG, "PRICE: " + "888");
                             Log.d(TAG, "PRICE: " + bodys.getJSONObject(i).getString("noriginalcurprice"));
                             obj.put("NPRICE", bodys.getJSONObject(i).getString("noriginalcurprice"));
                             obj.put("VSOURCEBILLCODE", m_BillNo);
@@ -1163,8 +1161,6 @@ public class PurStockIn extends Activity {
 //			SaveOk();
 //			IniActivyMemor();
 //		}
-
-
     }
 
     private void Update() throws JSONException, ParseException, IOException {

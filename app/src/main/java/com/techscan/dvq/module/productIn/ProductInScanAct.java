@@ -426,11 +426,14 @@ public class ProductInScanAct extends Activity {
      */
     private boolean isAllEdNotNull() {
 
-        if (vFree4.equals("Y")) {
-            if (TextUtils.isEmpty(mEdManual.getText().toString())) {
-                showToast(mActivity, "海关手册号不可为空");
-                return false;
-            }
+        if (vFree4.equals("Y") && TextUtils.isEmpty(mEdManual.getText().toString())) {
+            showToast(mActivity, "海关手册号不可为空");
+            return false;
+        }
+
+        if (vFree4.equals("N") && !TextUtils.isEmpty(mEdManual.getText().toString())) {
+            showToast(mActivity, "此物料没有海关手册");
+            return false;
         }
 
         if (TextUtils.isEmpty(mEdBarCode.getText().toString())) {
