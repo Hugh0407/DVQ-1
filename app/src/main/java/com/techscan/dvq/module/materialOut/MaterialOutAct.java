@@ -341,20 +341,21 @@ public class MaterialOutAct extends Activity {
                 case HANDER_SAVE_RESULT:
                     JSONObject saveResult = (JSONObject) msg.obj;
                     try {
-                        if (saveResult != null) {
-                            if (saveResult.getBoolean("Status")) {
-                                Log.d(TAG, "保存" + saveResult.toString());
-                                showResultDialog(mActivity, saveResult.getString("ErrMsg"));
-                                MaterialOutScanAct.ovList.clear();
-                                MaterialOutScanAct.detailList.clear();
-                                tempList.clear();
-                                changeAllEdToEmpty();
-                                billNum.requestFocus();
-                            } else {
-                                showResultDialog(mActivity, saveResult.getString("ErrMsg"));
-                            }
-                        } else {
+                        if (saveResult == null) {
                             showResultDialog(mActivity, "数据提交失败!");
+                            return;
+                        }
+
+                        if (saveResult.getBoolean("Status")) {
+                            Log.d(TAG, "保存" + saveResult.toString());
+                            showResultDialog(mActivity, saveResult.getString("ErrMsg"));
+                            MaterialOutScanAct.ovList.clear();
+                            MaterialOutScanAct.detailList.clear();
+                            tempList.clear();
+                            setBarCodeToEmpty();
+                            billNum.requestFocus();
+                        } else {
+                            showResultDialog(mActivity, saveResult.getString("ErrMsg"));
                         }
                         progressDialogDismiss();
                     } catch (JSONException e) {
@@ -408,7 +409,7 @@ public class MaterialOutAct extends Activity {
         return true;
     }
 
-    private void changeAllEdToEmpty() {
+    private void setBarCodeToEmpty() {
         billNum.setText("");
         //
 //        billDate.setText("");
@@ -486,6 +487,8 @@ public class MaterialOutAct extends Activity {
             tableHead.put("VNOTE", remark.getText().toString());
             tableHead.put("FREPLENISHFLAG", "N"); //N不退,是否退货标志位
             table.put("Head", tableHead);
+            /*********************************************************************/
+            // 节点 Body
             JSONObject tableBody = new JSONObject();
             JSONArray  bodyArray = new JSONArray();
             for (Goods c : goodsList) {
@@ -504,8 +507,13 @@ public class MaterialOutAct extends Activity {
             }
             tableBody.put("ScanDetails", bodyArray);
             table.put("Body", tableBody);
+
+            /*********************************************************************/
+
             table.put("GUIDS", UUID.randomUUID().toString());
             table.put("OPDATE", billDate.getText().toString());
+            /*********************************************************************/
+            // 拆拖部分的保存，节点 JAY
             JSONArray  jsonArray = new JSONArray();
             JSONObject jsonOb;
             for (Goods good : MaterialOutScanAct.detailList) {
@@ -521,6 +529,7 @@ public class MaterialOutAct extends Activity {
                 }
             }
             table.put("JAY", jsonArray);
+            /*********************************************************************/
             Log.d(TAG, "saveInfo: " + table.toString());
             SaveThread saveThread = new SaveThread(table, "SaveMaterialOut", mHandler, HANDER_SAVE_RESULT);
             Thread     thread     = new Thread(saveThread);

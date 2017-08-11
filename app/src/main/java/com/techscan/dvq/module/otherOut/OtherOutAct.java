@@ -29,7 +29,6 @@ import com.techscan.dvq.common.Common;
 import com.techscan.dvq.common.RequestThread;
 import com.techscan.dvq.common.SaveThread;
 import com.techscan.dvq.common.SoundHelper;
-import com.techscan.dvq.common.Utils;
 import com.techscan.dvq.login.MainLogin;
 import com.techscan.dvq.module.materialOut.DepartmentListAct;
 import com.techscan.dvq.module.materialOut.StorgListAct;
@@ -52,6 +51,7 @@ import butterknife.OnClick;
 import static com.techscan.dvq.common.Utils.HANDER_DEPARTMENT;
 import static com.techscan.dvq.common.Utils.HANDER_SAVE_RESULT;
 import static com.techscan.dvq.common.Utils.HANDER_STORG;
+import static com.techscan.dvq.common.Utils.formatDecimal;
 import static com.techscan.dvq.common.Utils.showResultDialog;
 import static com.techscan.dvq.common.Utils.showToast;
 
@@ -308,7 +308,7 @@ public class OtherOutAct extends Activity {
                                 OtherOutScanAct.ovList.clear();
                                 OtherOutScanAct.detailList.clear();
                                 tempList.clear();
-                                changeAllEdToEmpty();
+                                setBarCodeToEmpty();
                                 edBillNum.requestFocus();
                             } else {
                                 showResultDialog(activity, saveResult.getString("ErrMsg"));
@@ -414,7 +414,7 @@ public class OtherOutAct extends Activity {
         startActivityForResult(ViewGrid, 98);
     }
 
-    private void changeAllEdToEmpty() {
+    private void setBarCodeToEmpty() {
         edBillNum.setText("");
 //        edBillDate.setText("");
 //        edWh.setText("");
@@ -538,7 +538,7 @@ public class OtherOutAct extends Activity {
                 JSONObject object = new JSONObject();
                 object.put("CINVBASID", c.getPk_invbasdoc());
                 object.put("CINVENTORYID", c.getPk_invmandoc());
-                object.put("NOUTNUM", Utils.formatDecimal(c.getQty()));
+                object.put("NOUTNUM", formatDecimal(c.getQty()));
                 object.put("CINVCODE", c.getEncoding());
                 object.put("BLOTMGT", "1");
                 object.put("COSTOBJECT", c.getPk_invmandoc());
@@ -552,6 +552,21 @@ public class OtherOutAct extends Activity {
             table.put("Body", tableBody);
             table.put("GUIDS", UUID.randomUUID().toString());
             table.put("OPDATE", edBillDate.getText().toString());
+            JSONArray  jsonArray = new JSONArray();
+            JSONObject jsonOb;
+            for (Goods good : OtherOutScanAct.detailList) {
+                if (good.isDoPacked()) {
+                    jsonOb = new JSONObject();
+                    jsonOb.put("BARCODE", good.getBarcode());
+                    jsonOb.put("INVCODE", good.getEncoding());
+                    jsonOb.put("OPQTY", formatDecimal(good.getQty()));
+                    jsonOb.put("BARQTY", good.getBarQty());
+                    jsonOb.put("BARCODETYPE", good.getCodeType());
+                    jsonOb.put("GUIDS", UUID.randomUUID().toString());
+                    jsonArray.put(jsonOb);
+                }
+            }
+            table.put("JAY", jsonArray);
             Log.d(TAG, "saveInfo: " + table.toString());
             SaveThread saveThread = new SaveThread(table, "SaveOtherOut", mHandler, HANDER_SAVE_RESULT);
             Thread     thread     = new Thread(saveThread);

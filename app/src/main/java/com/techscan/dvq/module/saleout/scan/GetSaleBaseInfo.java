@@ -107,6 +107,7 @@ public class GetSaleBaseInfo {
                 mapSaleBaseInfo.put("pk_invmandoc", tempJso.getString("pk_invmandoc"));//物料man PK
                 mapSaleBaseInfo.put("invtype", tempJso.getString("invtype"));   //型号
                 mapSaleBaseInfo.put("invspec", tempJso.getString("invspec"));   //规格
+                mapSaleBaseInfo.put("currentweight", tempJso.getString("currentweight"));   //规格
             }
 
         }

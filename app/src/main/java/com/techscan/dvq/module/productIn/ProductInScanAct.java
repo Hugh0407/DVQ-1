@@ -26,9 +26,9 @@ import android.widget.ListView;
 
 import com.techscan.dvq.R;
 import com.techscan.dvq.bean.Goods;
-import com.techscan.dvq.common.RequestThread;
 import com.techscan.dvq.common.SoundHelper;
 import com.techscan.dvq.common.SplitBarcode;
+import com.techscan.dvq.common.Utils;
 import com.techscan.dvq.login.MainLogin;
 import com.techscan.dvq.module.materialOut.MyBaseAdapter;
 
@@ -283,62 +283,6 @@ public class ProductInScanAct extends Activity {
             return false;
         }
 
-//        String[] barCode = bar.split("\\|");
-//
-//        if (barCode.length == 8 && barCode[0].equals("P")) {// 包码 P|SKU|LOT|WW|TAX|QTY|CW_ONLY|SN 8位
-//            mEdNum.setEnabled(true);
-//            mEdManual.setEnabled(true);
-//            mEdNum.setFocusable(true);
-//            String encoding = barCode[1];
-//            if (encoding.contains(",")) {
-//                encoding = encoding.split(",")[0];
-//            }
-//            mEdEncoding.setText(encoding);
-//            getInvBaseInfo(encoding);
-//            String lot = barCode[2];
-//            if (lot.contains(",")) {
-//                lot = lot.split(",")[0];
-//            }
-//            mEdLot.setText(lot);
-//            mEdWeight.setText(barCode[5]);
-//            mEdQty.setText("");
-//            mEdNum.setText("1");
-//            mEdNum.requestFocus();  //包码扫描后光标跳到“数量”,输入数量,添加到列表
-//            mEdNum.setSelection(mEdNum.length());   //将光标移动到最后的位置
-//            return true;
-//        } else if (barCode.length == 9 && barCode[0].equals("TP")) {//盘码TP|SKU|LOT|WW|TAX|QTY|NUM|CW_ONLY|SN 9位
-//            for (int i = 0; i < detailList.size(); i++) {
-//                if (detailList.get(i).getBarcode().equals(bar)) {
-//                    showToast(mActivity, "该托盘已扫描");
-//                    SoundHelper.playWarning();
-//                    return false;
-//                }
-//            }
-//            mEdManual.setEnabled(true);
-//            mEdManual.requestFocus();
-//            String encoding = barCode[1];
-//            if (encoding.contains(",")) {
-//                encoding = encoding.split(",")[0];
-//            }
-//            mEdEncoding.setText(encoding);
-//            getInvBaseInfo(encoding);
-//            String lot = barCode[2];
-//            if (lot.contains(",")) {
-//                lot = lot.split(",")[0];
-//            }
-//            mEdLot.setText(lot);
-//            mEdWeight.setText(barCode[5]);
-//            mEdNum.setText(barCode[6]);
-//            double weight = Double.valueOf(barCode[5]);
-//            double mEdNum = Double.valueOf(barCode[6]);
-//            mEdQty.setText(formatDecimal(weight * mEdNum));
-//            isBaoBarCode = true;
-//            return true;
-//        } else {
-//            showToast(mActivity, "条码有误重新输入");
-//            SoundHelper.playWarning();
-//            return false;
-//        }
     }
 
     private void addDataToOvList() {
@@ -403,17 +347,8 @@ public class ProductInScanAct extends Activity {
      * 清空所有的Edtext
      */
     private void changeAllEdTextToEmpty() {
-        mEdNum.setText("");
         mEdBarCode.setText("");
-        mEdEncoding.setText("");
-        mEdName.setText("");
-        mEdType.setText("");
-        mEdUnit.setText("");
-        mEdLot.setText("");
-        mEdQty.setText("");
-        mEdWeight.setText("");
-        mEdSpectype.setText("");
-        mEdManual.setText("");
+        mEdBarCode.requestFocus();
         mEdNum.setEnabled(false);
         mEdManual.setEnabled(false);
     }
@@ -486,17 +421,15 @@ public class ProductInScanAct extends Activity {
     /**
      * 获取存货基本信息
      *
-     * @param sku 物料编码
+     * @param invcode 物料编码
      */
-    private void getInvBaseInfo(String sku) {
+    private void getInvBaseInfo(String invcode) {
         HashMap<String, String> parameter = new HashMap<String, String>();
         parameter.put("FunctionName", "GetInvBaseInfo");
         parameter.put("CompanyCode", MainLogin.objLog.CompanyCode);
-        parameter.put("InvCode", sku);
+        parameter.put("InvCode", invcode);
         parameter.put("TableName", "baseInfo");
-        RequestThread requestThread = new RequestThread(parameter, mHandler, 1);
-        Thread        td            = new Thread(requestThread);
-        td.start();
+        Utils.doRequest(parameter, mHandler, 1);
     }
 
 
@@ -578,6 +511,7 @@ public class ProductInScanAct extends Activity {
                         mEdQty.setText("");
                         mEdWeight.setText("");
                         mEdSpectype.setText("");
+                        mEdManual.setText("");
                     }
                     break;
                 case ed_num:
@@ -644,14 +578,12 @@ public class ProductInScanAct extends Activity {
                         mEdQty.setText(String.valueOf(num * weight));
                         if (isAllEdNotNull()) {
                             addDataToDetailList();
-                            mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
                             changeAllEdTextToEmpty();
                         }
                         return true;
                     case R.id.ed_manual:
                         if (isAllEdNotNull()) {
                             addDataToDetailList();
-                            mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
                             changeAllEdTextToEmpty();
                         }
                         return true;

@@ -25,9 +25,9 @@ import android.widget.ListView;
 
 import com.techscan.dvq.R;
 import com.techscan.dvq.bean.Goods;
-import com.techscan.dvq.common.RequestThread;
 import com.techscan.dvq.common.SoundHelper;
 import com.techscan.dvq.common.SplitBarcode;
+import com.techscan.dvq.common.Utils;
 import com.techscan.dvq.login.MainLogin;
 import com.techscan.dvq.module.materialOut.MyBaseAdapter;
 
@@ -470,19 +470,8 @@ public class OtherInScanAct extends Activity {
      * 清空所有的Edtext
      */
     private void changeAllEdTextToEmpty() {
-        edNum.setText("");
         edBarCode.setText("");
-        edInvcode.setText("");
-        edName.setText("");
-        edType.setText("");
-        edUnit.setText("");
-        edBatch.setText("");
-        edQty.setText("");
-        edWeight.setText("");
-        edSpectype.setText("");
-        edManual.setText("");
-        edCostName.setText("");
-        edCostObject.setText("");
+        edBarCode.requestFocus();
         edNum.setEnabled(false);
     }
 
@@ -561,9 +550,7 @@ public class OtherInScanAct extends Activity {
         parameter.put("CompanyCode", MainLogin.objLog.CompanyCode);
         parameter.put("InvCode", sku);
         parameter.put("TableName", "baseInfo");
-        RequestThread requestThread = new RequestThread(parameter, mHandler, 1);
-        Thread        td            = new Thread(requestThread);
-        td.start();
+        Utils.doRequest(parameter, mHandler, 1);
     }
 
     /**
@@ -582,9 +569,8 @@ public class OtherInScanAct extends Activity {
         para.put("CINVBASID", pk_invbasdoc);
         para.put("INVENTORYID", pk_invmandoc);
         para.put("TableName", "vfree4");
-        RequestThread requestThread = new RequestThread(para, mHandler, 2);
-        Thread        td            = new Thread(requestThread);
-        td.start();
+        para.put("TableName", "vfree4");
+        Utils.doRequest(para, mHandler, 2);
     }
 
     /**
@@ -598,9 +584,8 @@ public class OtherInScanAct extends Activity {
         parameter.put("CompanyCode", MainLogin.objLog.CompanyCode);
         parameter.put("InvCode", invCode);
         parameter.put("TableName", "baseInfo");
-        RequestThread requestThread = new RequestThread(parameter, mHandler, 3);
-        Thread        td            = new Thread(requestThread);
-        td.start();
+        parameter.put("TableName", "vfree4");
+        Utils.doRequest(parameter, mHandler, 3);
     }
 
 
@@ -711,6 +696,9 @@ public class OtherInScanAct extends Activity {
                         edQty.setText("");
                         edWeight.setText("");
                         edSpectype.setText("");
+                        edManual.setText("");
+                        edCostName.setText("");
+                        edCostObject.setText("");
                     }
                     break;
                 case ed_num:
@@ -777,7 +765,6 @@ public class OtherInScanAct extends Activity {
                         edQty.setText(String.valueOf(num * weight));
                         if (isAllEdNotNull()) {
                             addDataToDetailList();
-                            edBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
                             changeAllEdTextToEmpty();
                         }
                         return true;
@@ -811,14 +798,12 @@ public class OtherInScanAct extends Activity {
 
                         if (isAllEdNotNull()) {
                             addDataToDetailList();
-                            edBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
                             changeAllEdTextToEmpty();
                         }
                         return true;
                     case R.id.ed_manual:
                         if (isAllEdNotNull()) {
                             addDataToDetailList();
-                            edBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
                             changeAllEdTextToEmpty();
                         }
                         return true;

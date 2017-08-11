@@ -28,7 +28,6 @@ import com.techscan.dvq.VlistRdcl;
 import com.techscan.dvq.bean.Goods;
 import com.techscan.dvq.common.Base64Encoder;
 import com.techscan.dvq.common.Common;
-import com.techscan.dvq.common.RequestThread;
 import com.techscan.dvq.common.SaveThread;
 import com.techscan.dvq.common.SoundHelper;
 import com.techscan.dvq.common.Utils;
@@ -319,20 +318,21 @@ public class OtherInAct extends Activity {
                 case HANDER_SAVE_RESULT:
                     JSONObject saveResult = (JSONObject) msg.obj;
                     try {
-                        if (saveResult != null) {
-                            if (saveResult.getBoolean("Status")) {
-                                Log.d(TAG, "保存" + saveResult.toString());
-                                showResultDialog(mActivity, saveResult.getString("ErrMsg"));
-                                tempList.clear();
-                                OtherInScanAct.ovList.clear();
-                                OtherInScanAct.detailList.clear();
-                                changeAllEdToEmpty();
-                                edBillNum.requestFocus();
-                            } else {
-                                showResultDialog(mActivity, saveResult.getString("ErrMsg"));
-                            }
-                        } else {
+                        if (saveResult == null) {
                             showResultDialog(mActivity, "数据提交失败!");
+                            return;
+                        }
+
+                        if (saveResult.getBoolean("Status")) {
+                            Log.d(TAG, "保存" + saveResult.toString());
+                            showResultDialog(mActivity, saveResult.getString("ErrMsg"));
+                            tempList.clear();
+                            OtherInScanAct.ovList.clear();
+                            OtherInScanAct.detailList.clear();
+                            setBarCodeToEmpty();
+                            edBillNum.requestFocus();
+                        } else {
+                            showResultDialog(mActivity, saveResult.getString("ErrMsg"));
                         }
                         progressDialogDismiss();
                     } catch (JSONException e) {
@@ -529,9 +529,7 @@ public class OtherInAct extends Activity {
         parameter.put("FunctionName", "GetSTOrgList");
         parameter.put("CompanyCode", MainLogin.objLog.CompanyCode);
         parameter.put("TableName", "STOrg");
-        RequestThread requestThread = new RequestThread(parameter, mHandler, HANDER_STORG);
-        Thread        td            = new Thread(requestThread);
-        td.start();
+        Utils.doRequest(parameter, mHandler, HANDER_STORG);
     }
 
     /**
@@ -542,12 +540,10 @@ public class OtherInAct extends Activity {
         parameter.put("FunctionName", "GetDeptList");
         parameter.put("CompanyCode", MainLogin.objLog.CompanyCode);
         parameter.put("TableName", "department");
-        RequestThread requestThread = new RequestThread(parameter, mHandler, HANDER_DEPARTMENT);
-        Thread        td            = new Thread(requestThread);
-        td.start();
+        Utils.doRequest(parameter, mHandler, HANDER_DEPARTMENT);
     }
 
-    private void changeAllEdToEmpty() {
+    private void setBarCodeToEmpty() {
         edBillNum.setText("");
 //        edBillDate.setText("");
 //        edWh.setText("");

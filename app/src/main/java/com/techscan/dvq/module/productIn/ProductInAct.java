@@ -32,7 +32,6 @@ import com.techscan.dvq.common.Common;
 import com.techscan.dvq.common.RequestThread;
 import com.techscan.dvq.common.SaveThread;
 import com.techscan.dvq.common.SoundHelper;
-import com.techscan.dvq.common.Utils;
 import com.techscan.dvq.login.MainLogin;
 import com.techscan.dvq.module.materialOut.DepartmentListAct;
 import com.techscan.dvq.module.materialOut.StorgListAct;
@@ -55,6 +54,7 @@ import butterknife.OnClick;
 import static com.techscan.dvq.common.Utils.HANDER_DEPARTMENT;
 import static com.techscan.dvq.common.Utils.HANDER_SAVE_RESULT;
 import static com.techscan.dvq.common.Utils.HANDER_STORG;
+import static com.techscan.dvq.common.Utils.formatDecimal;
 import static com.techscan.dvq.common.Utils.showResultDialog;
 import static com.techscan.dvq.common.Utils.showToast;
 
@@ -338,7 +338,7 @@ public class ProductInAct extends Activity {
                                 tempList.clear();
                                 ProductInScanAct.ovList.clear();
                                 ProductInScanAct.detailList.clear();
-                                changeAllEdToEmpty();
+                                setBarCodeToEmpty();
                                 mBillNum.requestFocus();
                             } else {
                                 showResultDialog(mActivity, saveResult.getString("ErrMsg"));
@@ -434,7 +434,7 @@ public class ProductInAct extends Activity {
                 object.put("CINVBASID", c.getPk_invbasdoc());
                 object.put("CINVENTORYID", c.getPk_invmandoc());
                 object.put("WGDATE", mBillDate.getText().toString());    //LEO要求，将时间添加到表体上
-                object.put("NINNUM", Utils.formatDecimal(c.getQty()));
+                object.put("NINNUM", formatDecimal(c.getQty()));
                 object.put("CINVCODE", c.getEncoding());
                 object.put("BLOTMGT", "1");
                 object.put("PK_BODYCALBODY", PK_CALBODY);
@@ -447,8 +447,22 @@ public class ProductInAct extends Activity {
             table.put("Body", tableBody);
             table.put("GUIDS", UUID.randomUUID().toString());
             table.put("OPDATE", mBillDate.getText().toString());
+            JSONArray  jsonArray = new JSONArray();
+            JSONObject jsonOb;
+            for (Goods good : ProductInScanAct.detailList) {
+                if (good.isDoPacked()) {
+                    jsonOb = new JSONObject();
+                    jsonOb.put("BARCODE", good.getBarcode());
+                    jsonOb.put("INVCODE", good.getEncoding());
+                    jsonOb.put("OPQTY", formatDecimal(good.getQty()));
+                    jsonOb.put("BARQTY", good.getBarQty());
+                    jsonOb.put("BARCODETYPE", good.getCodeType());
+                    jsonOb.put("GUIDS", UUID.randomUUID().toString());
+                    jsonArray.put(jsonOb);
+                }
+            }
+            table.put("JAY", jsonArray);
             Log.d(TAG, "saveInfo: " + table.toString());
-
             SaveThread saveThread = new SaveThread(table, "SavePrdStockIn", mHandler, HANDER_SAVE_RESULT);
             Thread     thread     = new Thread(saveThread);
             thread.start();
@@ -557,7 +571,7 @@ public class ProductInAct extends Activity {
     }
 
 
-    private void changeAllEdToEmpty() {
+    private void setBarCodeToEmpty() {
         mBillNum.setText("");
 //        mBillDate.setText("");
 //        mWh.setText("");
