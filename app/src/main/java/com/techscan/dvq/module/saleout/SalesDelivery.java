@@ -1270,7 +1270,7 @@ public class SalesDelivery extends Activity {
             tableHead.put("COPERATORID", MainLogin.objLog.UserID);
             tableHead.put("CRECEIPTTYE", "4331");
             tableHead.put("CSALECORPID", CSALECORPID);
-            tableHead.put("PK_CORP", MainLogin.objLog.STOrgCode);
+            tableHead.put("PK_CORP", MainLogin.objLog.CompanyCode);
             tableHead.put("VBILLCODE", "");
             String login_user = MainLogin.objLog.LoginUser.toString();
             String cuserName = Base64Encoder.encode(login_user.getBytes("gb2312"));
@@ -1345,113 +1345,6 @@ public class SalesDelivery extends Activity {
             Thread thread = new Thread(saveThread);
             thread.start();
         }
-        //多角贸易保存接口 // TODO: 2017/7/31
-//        if (tvSaleOutSelect.getText().toString().equals("多角贸易")){
-//                table = new JSONObject();
-//                JSONArray arrayss = null;
-//                JSONArray arrayMerge = null;
-//                arrayss = jsSerino.getJSONArray("Serino");
-//                arrayMerge = merge(arrayss);
-//                jsTotal = new JSONObject();
-//                jsTotal.put("Serino",arrayMerge);
-//                JSONObject map = new JSONObject();
-//                Double notnum = 0.0;
-//                JSONArray arrays = jsTotal.getJSONArray("Serino");
-//                for (int i = 0; i < arrays.length(); i++) {
-////                String totalnum = ((JSONObject) (arrays.get(i))).getString("box");
-////                totalnum = Double.valueOf(totalnum).toString();
-//                    Double box = arrays.getJSONObject(i).getDouble("box");
-//                    DecimalFormat decimalFormat = new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
-//                    String totalBox = decimalFormat.format(box);
-//                    notnum +=Double.valueOf(totalBox);
-////                map.put("NNUMBER",notnum);
-//                    NTOTALNUMBER = decimalFormat.format(notnum);
-//                }
-//
-//                Log.d(TAG, "GGGG: "+map.toString());
-//                JSONObject tableHead = new JSONObject();
-//                tableHead.put("RECEIVECODE",tmpBillCode);
-//                tableHead.put("CBIZTYPE", CBIZTYPE);
-//                tableHead.put("COPERATORID", MainLogin.objLog.UserID);
-//                tableHead.put("CRECEIPTTYE", "4331");
-//                tableHead.put("CSALECORPID", CSALECORPID);
-//                tableHead.put("PK_CORP", MainLogin.objLog.STOrgCode);
-//                tableHead.put("VBILLCODE", "");
-//                String login_user = MainLogin.objLog.LoginUser.toString();
-//                String cuserName  = Base64Encoder.encode(login_user.getBytes("gb2312"));
-//                tableHead.put("USERNAME", cuserName);
-//                String vd1 =  Base64Encoder.encode(VDEF1.getBytes("gb2312"));
-//                String vd2 =  Base64Encoder.encode(VDEF2.getBytes("gb2312"));
-//                String vd3 =  Base64Encoder.encode(VDEF5.getBytes("gb2312"));
-//                tableHead.put("VDEF1", vd1);
-//                tableHead.put("VDEF2", vd2);
-//                tableHead.put("VDEF5", vd3);
-//                tableHead.put("NTOTALNUMBER",NTOTALNUMBER);
-//                tableHead.put("NOTOTALNUMBER","200.00");// TODO: 2017/7/4
-//                table.put("Head", tableHead);
-//                JSONObject tableBody = new JSONObject();
-//                JSONArray bodyArray = new JSONArray();
-//
-//                JSONArray bodys = jsBody.getJSONArray("dbBody");
-//                JSONArray arraysSerino = jsTotal.getJSONArray("Serino");
-//                int y = 0;
-//                for (int j=0; j<arraysSerino.length(); j++) {
-//
-//                    for (int i = 0; i < bodys.length(); i++) {
-//
-//                        if(arraysSerino.getJSONObject(j).getString("invcode").toLowerCase().equals(
-//                                bodys.getJSONObject(i).getString("invcode")))
-//                        {
-//                            Double box = arraysSerino.getJSONObject(j).getDouble("box");
-//                            DecimalFormat decimalFormat = new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
-//                            String totalBox = decimalFormat.format(box);//format 返回的是字符串
-//                            JSONObject object = new JSONObject();
-//                            object.put("CROWNO", bodys.getJSONObject(i).getString("crowno"));
-//                            object.put("VFREE4",arraysSerino.getJSONObject(j).getString("vfree4"));//海关手册号
-//                            object.put("VSOURCEROWNO", bodys.getJSONObject(i).getString("crowno"));
-//                            object.put("VSOURCERECEIVECODE", tmpBillCode);
-//                            object.put("VRECEIVEPOINTID", bodys.getJSONObject(i).getString("crecaddrnode"));
-//                            object.put("CRECEIVECUSTID", bodys.getJSONObject(i).getString("creceiptcorpid"));
-//                            object.put("CRECEIVEAREAID", bodys.getJSONObject(i).getString("creceiptareaid"));
-////                        object.put("DDELIVERDATE", bodys.getJSONObject(i).getString("ddeliverdate"));
-//                            object.put("CBIZTYPE", CBIZTYPE);//表头
-//                            object.put("CCUSTBASDOCID", CCUSTBASDOCID);
-//                            object.put("CCUSTMANDOCID", CCUSTOMERID);//表头customerID
-//                            object.put("CINVBASDOCID",bodys.getJSONObject(i).getString("cinvbasdocid"));
-//                            object.put("CINVMANDOCID", bodys.getJSONObject(i).getString("cinventoryid"));
-//                            object.put("CRECEIVECUSTBASID",CCUSTBASDOCID);//自己获取
-//                            object.put("CSENDCALBODYID",bodys.getJSONObject(i).getString("cadvisecalbodyid"));
-//                            object.put("CSENDWAREID", CWAREHOUSEID);//仓库
-//                            object.put("CSOURCEBILLBODYID", bodys.getJSONObject(i).getString("corder_bid"));
-//                            object.put("CSOURCEBILLID",bodys.getJSONObject(i).getString("csaleid"));
-//                            object.put("NNUMBER", totalBox);
-//                            object.put("PK_SENDCORP", bodys.getJSONObject(i).getString("pk_corp"));
-//                            object.put("VBATCHCODE", arraysSerino.getJSONObject(j).getString("batch"));
-//                            String add = bodys.getJSONObject(i).getString("vreceiveaddress");
-//                            String adds  = Base64Encoder.encode(add.getBytes("gb2312"));
-//                            object.put("VRECEIVEADDRESS",adds);
-//                            object.put("VRECEIVEPERSON",MainLogin.objLog.LoginUser);
-//                            bodyArray.put(object);
-//                            y++;
-//                        }
-//                    }
-//                }
-//                tableBody.put("ScanDetails", bodyArray);
-//                table.put("Body", tableBody);
-//                table.put("GUIDS", UUID.randomUUID().toString());
-//                Log.d(TAG, "SaveSaleOrder: "+MainLogin.appTime);
-//                table.put("OPDATE", MainLogin.appTime);
-//                Log.d(TAG, "XXXXXX: " + table.toString());
-//                if (!MainLogin.getwifiinfo()) {
-//                    Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
-//                    MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-//                    return;
-//                }
-//                SaveThread saveThread = new SaveThread(table, "SaveSaleReceive", mHandler, HANDER_SAVE_RESULT);
-//                Thread thread = new Thread(saveThread);
-//                thread.start();
-//
-//        }
     }
 
     /**

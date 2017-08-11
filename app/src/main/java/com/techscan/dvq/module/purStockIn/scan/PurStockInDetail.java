@@ -616,7 +616,7 @@ public class PurStockInDetail extends Activity {
         }
         tvPurcount.setText("×ÜÁ¿" + ishouldinnum + " | " + "ÒÑÉ¨" + iinnum
                                    + " | " + "Î´É¨" + (ishouldinnum - iinnum));
-        SoundHelper.playWarning();
+        SoundHelper.playOK();
 //        Log.d("TAG", "ScanedToGet: music2_2");
         txtBarcode.requestFocus();
         txtBarcode.setText("");
