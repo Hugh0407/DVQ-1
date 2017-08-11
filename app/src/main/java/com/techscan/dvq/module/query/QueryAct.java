@@ -18,7 +18,6 @@ import android.widget.ListView;
 
 import com.techscan.dvq.R;
 import com.techscan.dvq.bean.QryGood;
-import com.techscan.dvq.common.RequestThread;
 import com.techscan.dvq.common.SoundHelper;
 import com.techscan.dvq.common.SplitBarcode;
 import com.techscan.dvq.common.Utils;
@@ -219,9 +218,7 @@ public class QueryAct extends Activity {
         parameter.put("BatchCode", batchcode);
         parameter.put("Crop", crop);
         parameter.put("TableName", "baseInfo");
-        RequestThread requestThread = new RequestThread(parameter, mHandler, 1);
-        Thread        td            = new Thread(requestThread);
-        td.start();
+        Utils.doRequest(parameter, mHandler, 1);
     }
 
 

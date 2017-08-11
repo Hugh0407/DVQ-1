@@ -35,7 +35,6 @@
                 android:layout_height="30dp"
                 android:layout_weight="1"
                 android:background="@drawable/edittext_style"
-                android:ems="10"
                 android:inputType="text"
                 android:maxLines="1"
                 android:singleLine="true"
@@ -338,12 +337,12 @@
                     android:layout_height="30dp"
                     android:layout_weight="1"
                     android:background="@drawable/edittext_style"
-                    android:editable="false"
                     android:ems="10"
-                    android:focusable="false"
+                    android:enabled="false"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:textAllCaps="true"/>
+                    android:textAllCaps="true"
+                    android:textColor="@color/black"/>
 
             </LinearLayout>
         </LinearLayout>
@@ -375,7 +374,6 @@
                     android:background="@drawable/edittext_style"
                     android:ems="10"
                     android:enabled="false"
-                    android:inputType="numberDecimal"
                     android:maxLines="1"
                     android:singleLine="true"
                     android:textAllCaps="true"
@@ -437,10 +435,10 @@
                 android:layout_weight="1"/>
 
             <Switch
-                android:checked="false"
                 android:id="@+id/switch_m"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:checked="false"
                 android:thumb="@drawable/switch_thumb"
                 android:track="@drawable/switch_track"/>
         </LinearLayout>

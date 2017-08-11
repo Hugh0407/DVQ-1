@@ -2,6 +2,7 @@ package com.techscan.dvq.common;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.widget.Toast;
 
@@ -10,6 +11,7 @@ import org.json.JSONArray;
 import java.lang.reflect.Field;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -20,12 +22,12 @@ import java.util.regex.Pattern;
  */
 
 public class Utils {
-    public static final String ORG_NAME = "华奇工厂库存组织"; //库存组织id
-    public static final int HANDER_DEPARTMENT   = 1;
-    public static final int HANDER_STORG        = 2;
-    public static final int HANDER_SAVE_RESULT  = 3;
-    public static final int HANDER_POORDER_HEAD = 4;
-    public static final int HANDER_POORDER_BODY = 5;
+    public static final String ORG_NAME            = "华奇工厂库存组织"; //库存组织id
+    public static final int    HANDER_DEPARTMENT   = 1;
+    public static final int    HANDER_STORG        = 2;
+    public static final int    HANDER_SAVE_RESULT  = 3;
+    public static final int    HANDER_POORDER_HEAD = 4;
+    public static final int    HANDER_POORDER_BODY = 5;
 
     public static String formatTime(long time) {
         java.util.Date   date = new java.util.Date(time);
@@ -89,17 +91,24 @@ public class Utils {
         dialog.setPositiveButton("关闭", null);
         dialog.show();
     }
-/**
- * JSONArray 实现兼容老版本API的remove方法
- */
-    public static void removeJsonArray(int index, JSONArray array) throws Exception{
-        if(index < 0)
+
+    /**
+     * JSONArray 实现兼容老版本API的remove方法
+     */
+    public static void removeJsonArray(int index, JSONArray array) throws Exception {
+        if (index < 0)
             return;
-        Field valuesField=JSONArray.class.getDeclaredField("values");
+        Field valuesField = JSONArray.class.getDeclaredField("values");
         valuesField.setAccessible(true);
-        List<Object> values=(List<Object>)valuesField.get(array);
-        if(index >= values.size())
+        List<Object> values = (List<Object>) valuesField.get(array);
+        if (index >= values.size())
             return;
         values.remove(index);
+    }
+
+    public static void doRequest(HashMap<String, String> parameter, Handler mHandler, int msgWhat) {
+        RequestThread requestThread = new RequestThread(parameter, mHandler, msgWhat);
+        Thread        td            = new Thread(requestThread);
+        td.start();
     }
 }

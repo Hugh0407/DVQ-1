@@ -27,9 +27,9 @@ import android.widget.TextView;
 
 import com.techscan.dvq.R;
 import com.techscan.dvq.bean.Goods;
-import com.techscan.dvq.common.RequestThread;
 import com.techscan.dvq.common.SoundHelper;
 import com.techscan.dvq.common.SplitBarcode;
+import com.techscan.dvq.common.Utils;
 import com.techscan.dvq.login.MainLogin;
 import com.techscan.dvq.module.materialOut.MyBaseAdapter;
 
@@ -174,7 +174,7 @@ public class MaterialOutScanAct extends Activity {
         mEdLot.setOnKeyListener(mOnKeyListener);
         mEdQty.setOnKeyListener(mOnKeyListener);
         mEdNum.setOnKeyListener(mOnKeyListener);
-//        mEdManual.setOnKeyListener(mOnKeyListener);
+        mEdManual.setOnKeyListener(mOnKeyListener);
         mEdCostObject.setOnKeyListener(mOnKeyListener);
         mEdNum.addTextChangedListener(new CustomTextWatcher(mEdNum));
         mEdBarCode.addTextChangedListener(new CustomTextWatcher(mEdBarCode));
@@ -303,7 +303,7 @@ public class MaterialOutScanAct extends Activity {
         mEdBarCode.selectAll();
 
         barDecoder = new SplitBarcode(bar);
-
+        barQty = String.valueOf(barDecoder.dQuantity);
         if (!barDecoder.creatorOk) {
             showToast(activity, "条码有误");
             return;
@@ -319,22 +319,28 @@ public class MaterialOutScanAct extends Activity {
             getInvBaseInfo(barDecoder.cInvCode);
             mEdLot.requestFocus();  //如果是液体需要手动输入“批次”和“总量”,这里将光标跳到“批次（lot）”
         } else if (barDecoder.BarcodeType.equals("C")) {
-            //如果是包码，批次和总重都改变为不可编辑，数量由员工输入，焦点跳到“数量”
-            // 获取海关手册号
 
             mEdLot.setEnabled(false);
-            mEdQty.setEnabled(false);
-            mEdNum.setEnabled(true);
             mEdEncoding.setText(barDecoder.cInvCode);
             mEdLot.setText(barDecoder.cBatch);
-            barQty = String.valueOf(barDecoder.dQuantity);
-            mEdWeight.setText(String.valueOf(barDecoder.dQuantity));
-            mEdQty.setText("");
+            mEdWeight.setText(barQty);
             mEdNum.setText("1");
-            mEdNum.selectAll();
-            mEdNum.setSelection(mEdNum.length());   //将光标移动到最后的位置
+            mEdQty.setText(barQty);
+            if (isPacked) {
+                mEdNum.setEnabled(false);
+                mEdQty.setEnabled(true);
+                mEdQty.selectAll();
+                mEdQty.setSelection(mEdQty.length());   //将光标移动到最后的位置
+                mEdQty.requestFocus();
+            } else {
+                mEdQty.setEnabled(false);
+                mEdNum.setEnabled(true);
+                mEdNum.selectAll();
+                mEdNum.setSelection(mEdNum.length());   //将光标移动到最后的位置
+                mEdNum.requestFocus();                  //包码扫描后光标跳到“数量”,输入数量,添加到列表
+            }
             getInvBaseInfo(barDecoder.cInvCode, bar);
-            mEdNum.requestFocus();  //包码扫描后光标跳到“数量”,输入数量,添加到列表
+
         } else if (barDecoder.BarcodeType.equals("TC")) {
             for (int i = 0; i < detailList.size(); i++) {
                 if (detailList.get(i).getBarcode().equals(bar)) {
@@ -520,9 +526,7 @@ public class MaterialOutScanAct extends Activity {
         parameter.put("InvCode", invCode);
         parameter.put("BarCode", barcode);
         parameter.put("TableName", "baseInfo");
-        RequestThread requestThread = new RequestThread(parameter, mHandler, 1);
-        Thread        td            = new Thread(requestThread);
-        td.start();
+        Utils.doRequest(parameter, mHandler, 1);
     }
 
     /**
@@ -532,18 +536,16 @@ public class MaterialOutScanAct extends Activity {
         if (TextUtils.isEmpty(batch)) {
             return;
         }
-        HashMap<String, String> para = new HashMap<String, String>();
-        para.put("FunctionName", "GetInvFreeByInvCodeAndLot");
-        para.put("CORP", MainLogin.objLog.STOrgCode);
-        para.put("BATCH", batch);
-        para.put("WAREHOUSEID", CWAREHOUSEID);
-        para.put("CALBODYID", PK_CALBODY);
-        para.put("CINVBASID", pk_invbasdoc);
-        para.put("INVENTORYID", pk_invmandoc);
-        para.put("TableName", "vfree4");
-        RequestThread requestThread = new RequestThread(para, mHandler, 2);
-        Thread        td            = new Thread(requestThread);
-        td.start();
+        HashMap<String, String> parameter = new HashMap<String, String>();
+        parameter.put("FunctionName", "GetInvFreeByInvCodeAndLot");
+        parameter.put("CORP", MainLogin.objLog.STOrgCode);
+        parameter.put("BATCH", batch);
+        parameter.put("WAREHOUSEID", CWAREHOUSEID);
+        parameter.put("CALBODYID", PK_CALBODY);
+        parameter.put("CINVBASID", pk_invbasdoc);
+        parameter.put("INVENTORYID", pk_invmandoc);
+        parameter.put("TableName", "vfree4");
+        Utils.doRequest(parameter, mHandler, 2);
     }
 
     /**
@@ -560,28 +562,7 @@ public class MaterialOutScanAct extends Activity {
         parameter.put("CompanyCode", MainLogin.objLog.CompanyCode);
         parameter.put("InvCode", invCode);
         parameter.put("TableName", "baseInfo");
-        RequestThread requestThread = new RequestThread(parameter, mHandler, 3);
-        Thread        td            = new Thread(requestThread);
-        td.start();
-    }
-
-    /**
-     * 如果是包码,需要网络访问获取数量，
-     *
-     * @param barcode 通过barcode来获取哪个包
-     */
-    private void getPackageNum(String barcode) {
-        if (TextUtils.isEmpty(barcode)) {
-            return;
-        }
-        HashMap<String, String> parameter = new HashMap<String, String>();
-        parameter.put("FunctionName", "GetInvBaseInfo");
-//        parameter.put("CompanyCode", MainLogin.objLog.CompanyCode);
-//        parameter.put("InvCode", invCode);
-        parameter.put("TableName", "package_num");
-        RequestThread requestThread = new RequestThread(parameter, mHandler, 4);
-        Thread        td            = new Thread(requestThread);
-        td.start();
+        Utils.doRequest(parameter, mHandler, 3);
     }
 
 
@@ -614,7 +595,7 @@ public class MaterialOutScanAct extends Activity {
                     map.put("invspec", tempJso.getString("invspec"));   //规格
                     map.put("oppdimen", tempJso.getString("oppdimen")); //重量
                     map.put("isfree4", tempJso.getString("isfree4"));
-//                    map.put("currentweight", tempJso.getString("currentweight"));
+                    map.put("currentweight", tempJso.getString("currentweight"));
                 }
                 if (map != null) {
                     mEdName.setText(map.get("invname").toString());
@@ -623,10 +604,10 @@ public class MaterialOutScanAct extends Activity {
                     mEdSpectype.setText(map.get("invspec").toString());
                     //海关手册号 有或无的标志位 ，分为 Y 和 N 两种
                     vFree4 = map.get("isfree4").toString();
-//                    String cw = map.get("currentweight").toString();
-//                    if (isPacked && !cw.equals("null")) {
-//                        mEdQty.setText(cw);
-//                    }
+                    String cw = map.get("currentweight").toString();
+                    if (isPacked && !cw.equals("null")) {
+                        mEdQty.setText(cw);
+                    }
                 }
             }
         } catch (JSONException e) {
@@ -756,21 +737,21 @@ public class MaterialOutScanAct extends Activity {
                     case R.id.ed_num:
                         if (keyEnterNum()) return true;
                         break;
-//                    case R.id.ed_manual:
-//                        if (vFree4.equals("Y") && TextUtils.isEmpty(mEdManual.getText().toString())) {
-//                            showToast(activity, "海关手册号不可为空");
-//                            return true;
-//                        }
-//                        if (vFree4.equals("N") && !TextUtils.isEmpty(mEdManual.getText().toString())) {
-//                            showToast(activity, "此项应该为空值");
-//                            return true;
-//                        }
-//                        if (isAllEdNotNull()) {
-//                            addDataToDetailList();
-//                            mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
-//                            changeAllEdTextToEmpty();
-//                        }
-//                        return true;
+                    case R.id.ed_manual:
+                        if (vFree4.equals("Y") && TextUtils.isEmpty(mEdManual.getText().toString())) {
+                            showToast(activity, "海关手册号不可为空");
+                            return true;
+                        }
+                        if (vFree4.equals("N") && !TextUtils.isEmpty(mEdManual.getText().toString())) {
+                            showToast(activity, "此项应该为空值");
+                            return true;
+                        }
+                        if (isAllEdNotNull()) {
+                            addDataToDetailList();
+                            mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
+                            changeAllEdTextToEmpty();
+                        }
+                        return true;
                     case R.id.ed_cost_object:
                         if (keyEnterCostObj()) return true;
                         break;
@@ -878,12 +859,6 @@ public class MaterialOutScanAct extends Activity {
             return true;
         }
         barAnalysis();
-//                        if (isAllEdNotNull()) {
-////                            addDataToDetailList();
-//                            mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
-//                            changeAllEdTextToEmpty();
-//                        } else {
-//                        }
         return true;
     }
 }

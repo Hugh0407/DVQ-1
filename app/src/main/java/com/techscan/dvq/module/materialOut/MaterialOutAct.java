@@ -348,7 +348,7 @@ public class MaterialOutAct extends Activity {
                                 MaterialOutScanAct.ovList.clear();
                                 MaterialOutScanAct.detailList.clear();
                                 tempList.clear();
-                                changeAllEdToEmpty();
+                                setBarCodeToEmpty();
                                 billNum.requestFocus();
                             } else {
                                 showResultDialog(mActivity, saveResult.getString("ErrMsg"));
@@ -408,7 +408,7 @@ public class MaterialOutAct extends Activity {
         return true;
     }
 
-    private void changeAllEdToEmpty() {
+    private void setBarCodeToEmpty() {
         billNum.setText("");
         //
 //        billDate.setText("");
