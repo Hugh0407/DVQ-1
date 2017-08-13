@@ -142,7 +142,8 @@
                 android:gravity="center_vertical"
                 android:text="批  　次"/>
             <EditText
-                android:focusable="false"
+               android:focusable="false"
+                android:editable="false"
                 android:id="@+id/txtSaleBatch"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
@@ -252,7 +253,7 @@
 
                 <EditText
                     android:textColor="@color/black"
-                    android:focusable="false"
+                    android:enabled="false"
                     android:inputType="number"
                     android:id="@+id/txtSaleTotal"
                     android:layout_width="0dp"
@@ -260,7 +261,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/edittext_style"
                     android:singleLine="true"
-                    android:editable="false"/>
+                    />
 
             </LinearLayout>
 

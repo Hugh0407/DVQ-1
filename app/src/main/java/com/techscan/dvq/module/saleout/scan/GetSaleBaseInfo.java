@@ -21,6 +21,8 @@ public class GetSaleBaseInfo {
     @Nullable
     public HashMap<String, Object> mapSaleBaseInfo = null;
     String InvCode = "";
+    Double a=0.0;
+    Double b=0.0;
 
     /**
      * 获取存货基本信息
@@ -40,6 +42,9 @@ public class GetSaleBaseInfo {
         mapSaleBaseInfo.put("serino", cSplitBarcode.cSerino);
         mapSaleBaseInfo.put("quantity", cSplitBarcode.dQuantity);
         mapSaleBaseInfo.put("number", cSplitBarcode.iNumber);
+        a = Double.valueOf(cSplitBarcode.dQuantity);
+        b = Double.valueOf(cSplitBarcode.iNumber);
+        mapSaleBaseInfo.put("barqty", a*b);
         mapSaleBaseInfo.put("cwflag", cSplitBarcode.CWFlag);
         mapSaleBaseInfo.put("onlyflag", cSplitBarcode.OnlyFlag);
         mapSaleBaseInfo.put("taxflag", cSplitBarcode.TaxFlag);
@@ -71,6 +76,9 @@ public class GetSaleBaseInfo {
         mapSaleBaseInfo.put("serino", cSplitBarcode.cSerino);
         mapSaleBaseInfo.put("quantity", cSplitBarcode.dQuantity);
         mapSaleBaseInfo.put("number", cSplitBarcode.iNumber);
+        a = Double.valueOf(cSplitBarcode.dQuantity);
+        b = Double.valueOf(cSplitBarcode.iNumber);
+        mapSaleBaseInfo.put("barqty", a*b);
         mapSaleBaseInfo.put("cwflag", cSplitBarcode.CWFlag);
         mapSaleBaseInfo.put("onlyflag", cSplitBarcode.OnlyFlag);
         mapSaleBaseInfo.put("taxflag", cSplitBarcode.TaxFlag);

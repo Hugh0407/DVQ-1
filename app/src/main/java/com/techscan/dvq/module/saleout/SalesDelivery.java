@@ -50,6 +50,7 @@ import java.util.UUID;
 
 import static android.content.ContentValues.TAG;
 import static com.techscan.dvq.common.Utils.HANDER_SAVE_RESULT;
+import static com.techscan.dvq.common.Utils.formatDecimal;
 import static com.techscan.dvq.common.Utils.showResultDialog;
 
 
@@ -878,6 +879,23 @@ public class SalesDelivery extends Activity {
             }
             tableBody.put("ScanDetails", bodyArray);
             table.put("Body", tableBody);
+//            ********************²ð°ü
+            JSONArray  jsonArray = new JSONArray();
+            JSONArray arraysPacked = jsTotal.getJSONArray("Serino");
+            JSONObject jsonOb;
+            for (int a=0;a<arraysPacked.length();a++){
+                if (arraysPacked.getJSONObject(a).getBoolean("isDoPacked")){
+                    jsonOb = new JSONObject();
+                    jsonOb.put("BARCODE", arraysPacked.getJSONObject(a).getString("barcode"));
+                    jsonOb.put("INVCODE", arraysPacked.getJSONObject(a).getString("invcode"));
+                    jsonOb.put("OPQTY", formatDecimal(arraysPacked.getJSONObject(a).getString("opqty")));
+                    jsonOb.put("BARQTY", formatDecimal(arraysPacked.getJSONObject(a).getString("barqty")));
+                    jsonOb.put("BARCODETYPE", arraysPacked.getJSONObject(a).getString("barcodetype"));
+                    jsonOb.put("GUIDS", UUID.randomUUID().toString());
+                    jsonArray.put(jsonOb);
+                }
+            }
+            table.put("JAY", jsonArray);
             table.put("GUIDS", UUID.randomUUID().toString());
             Log.d(TAG, "SaveSaleOrder: " + MainLogin.appTime);
             table.put("OPDATE", MainLogin.appTime);
@@ -1239,11 +1257,21 @@ public class SalesDelivery extends Activity {
                     int numJ = 0;
                     Log.d(TAG, "Merge: "+arrayTemp.length());
                     for (int j = 0; j < arrayTemp.length(); j++) {
+//                        jsonOb.put("BARCODE", arraysPacked.getJSONObject(a).getString("barcode"));
+//                        jsonOb.put("INVCODE", arraysPacked.getJSONObject(a).getString("invcode"));
+//                        jsonOb.put("OPQTY", formatDecimal(arraysPacked.getJSONObject(a).getString("opqty")));
+//                        jsonOb.put("BARQTY", arraysPacked.getJSONObject(a).getString("barqty"));
+//                        jsonOb.put("BARCODETYPE", arraysPacked.getJSONObject(a).getString("barcodetype"));
                         JSONObject newJsonObjectI = (JSONObject) array.get(i);
                         JSONObject newJsonObjectJ = (JSONObject) arrayTemp.get(j);
                         String invcode = newJsonObjectI.get("invcode").toString();
                         String invname = newJsonObjectI.get("invname").toString();
                         String batch = newJsonObjectI.get("batch").toString();
+                        String barcode = newJsonObjectI.get("barcode").toString();
+                        boolean isDoPacked = newJsonObjectI.getBoolean("isDoPacked");
+                        String barqty = newJsonObjectI.get("barqty").toString();
+                        String opqty = newJsonObjectI.get("opqty").toString();
+                        String barcodetype = newJsonObjectI.get("barcodetype").toString();
                         String box = newJsonObjectI.get("box").toString();
                         String sno = newJsonObjectI.get("sno").toString();
                         String invtype = newJsonObjectI.get("invtype").toString();
@@ -1254,9 +1282,14 @@ public class SalesDelivery extends Activity {
                         String invcodeJ = newJsonObjectJ.get("invcode").toString();
                         String batchJ = newJsonObjectJ.get("batch").toString();
                         String boxJ = newJsonObjectJ.get("box").toString();
+                        String barcodeJ = newJsonObjectJ.get("barcode").toString();
+                        boolean isDoPackedJ = newJsonObjectJ.getBoolean("isDoPacked");
 
-                        if (invcode.equals(invcodeJ)&&batch.equals(batchJ)) {
+                        if (invcode.equals(invcodeJ)&&batch.equals(batchJ)&&barcode.equals(barcodeJ)&&isDoPacked==isDoPackedJ) {
                             double newValue = Double.parseDouble(box) + Double.parseDouble(boxJ);
+                            if (isDoPacked){
+                                opqty = String.valueOf(newValue);
+                            }
                             JSONObject newObject = new JSONObject();
 
                              if (Build.VERSION.SDK_INT >= 19) {
@@ -1273,6 +1306,12 @@ public class SalesDelivery extends Activity {
                                  newObject.put("invspec", invspec);
                                  newObject.put("vfree4", vfree4);
                                  newObject.put("box", String.valueOf(newValue));
+//                   **************** ²ð°ü
+                                 newObject.put("barcode", barcode);
+                                 newObject.put("isDoPacked", isDoPacked);
+                                 newObject.put("barqty", barqty);
+                                 newObject.put("opqty", opqty);
+                                 newObject.put("barcodetype", barcodetype);
                                  arrayTemp.put(newObject);
                             }
                              else{
@@ -1288,6 +1327,12 @@ public class SalesDelivery extends Activity {
                                  newObject.put("invspec", invspec);
                                  newObject.put("vfree4", vfree4);
                                  newObject.put("box", String.valueOf(newValue));
+                                 //                   **************** ²ð°ü
+                                 newObject.put("barcode", barcode);
+                                 newObject.put("isDoPacked", isDoPacked);
+                                 newObject.put("barqty", barqty);
+                                 newObject.put("opqty", opqty);
+                                 newObject.put("barcodetype", barcodetype);
                                  arrayTemp.put(newObject);
                             }
 
