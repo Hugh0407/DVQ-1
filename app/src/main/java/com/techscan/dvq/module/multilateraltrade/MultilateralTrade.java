@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -53,6 +54,7 @@ import static com.techscan.dvq.R.string.WangLuoChuXiangWenTi;
 import static com.techscan.dvq.common.Utils.HANDER_DEPARTMENT;
 import static com.techscan.dvq.common.Utils.HANDER_SAVE_RESULT;
 import static com.techscan.dvq.common.Utils.HANDER_STORG;
+import static com.techscan.dvq.common.Utils.formatDecimal;
 import static com.techscan.dvq.common.Utils.showResultDialog;
 
 public class MultilateralTrade extends Activity {
@@ -428,7 +430,7 @@ public class MultilateralTrade extends Activity {
                         txtDepartment.requestFocus();
                         return;
                     }
-                    SaveSaleOrder();
+                    saveData();
                     showProgressDialog();
                 }catch (Exception e){
                     e.printStackTrace();
@@ -734,7 +736,7 @@ public class MultilateralTrade extends Activity {
         }
     }
     //保存数据
-    private void SaveSaleOrder() throws JSONException,
+    private void saveData() throws JSONException,
             org.apache.http.ParseException, IOException {
         if (txtMultilateralTrade.getText().toString().equals("多角贸易")) {
             table = new JSONObject();
@@ -744,34 +746,7 @@ public class MultilateralTrade extends Activity {
             arrayMerge = merge(arrayss);
             jsTotal = new JSONObject();
             jsTotal.put("Serino", arrayMerge);
-            JSONObject map = new JSONObject();
-            Double notnum = 0.0;
-            JSONArray arrays = jsTotal.getJSONArray("Serino");
-//            for (int i = 0; i < arrays.length(); i++) {
-////                String totalnum = ((JSONObject) (arrays.get(i))).getString("box");
-////                totalnum = Double.valueOf(totalnum).toString();
-//                Double box = arrays.getJSONObject(i).getDouble("box");
-//                DecimalFormat decimalFormat = new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
-//                String totalBox = decimalFormat.format(box);
-//                notnum += Double.valueOf(totalBox);
-////                map.put("NNUMBER",notnum);
-//                NTOTALNUMBER = decimalFormat.format(notnum);
-//            }
-//            ===表头
-//            COTHERCALBODYID == CINCBID
-//            COTHERCORPID == CINCORPID
-//            COTHERWHID == B.CINVWH ID
-//            COUTCALBODYID == COUTCBID
-//            COUTCORPID == COUTCORPID
-//            CWAREHOUSEID == 仓库ID
-//            DBILLDATE
-//            PK_CALBODY = '组织'
-//            PK_CORP = '公司'
-//            VBILLCODE = ''
-//            VUSERDEF1 = VDEF1
-//            VUSERDEF2 = VDEF2
-//            pk_cubasdoc
-//                    SaveOutAdjBillNew
+
             JSONObject tableHead = new JSONObject();
             tableHead.put("COTHERWHID", CINWHID);//其它仓库ID
             tableHead.put("DEPARTMENTID", CDPTID);//部门ID
@@ -792,26 +767,16 @@ public class MultilateralTrade extends Activity {
             String vd2 = Base64Encoder.encode(VDEF2.getBytes("gb2312"));
             tableHead.put("VUSERDEF1", vd1);//
             tableHead.put("VUSERDEF2", vd2);//
-//            tableHead.put("RECEIVECODE", tmpBillCode);
-//            tableHead.put("CBIZTYPE", CBIZTYPE);
             tableHead.put("CUSER", MainLogin.objLog.UserID);
-//            tableHead.put("CRECEIPTTYE", "4331");
-//            tableHead.put("CSALECORPID", CSALECORPID);
-//            tableHead.put("PK_CORP", MainLogin.objLog.STOrgCode);
-//            tableHead.put("VBILLCODE", "");
             String login_user = MainLogin.objLog.LoginUser.toString();
             String cuserName = Base64Encoder.encode(login_user.getBytes("gb2312"));
             tableHead.put("CUSERNAME", cuserName);
-//            String vd3 = Base64Encoder.encode(VDEF5.getBytes("gb2312"));
-//            tableHead.put("VDEF5", vd3);
-//            tableHead.put("NTOTALNUMBER", NTOTALNUMBER);
             table.put("Head", tableHead);
             JSONObject tableBody = new JSONObject();
             JSONArray bodyArray = new JSONArray();
 
             JSONArray bodys = jsBody.getJSONArray("dbBody");
             JSONArray arraysSerino = jsTotal.getJSONArray("Serino");
-//            int y = 0;
             for (int j = 0; j < arraysSerino.length(); j++) {
 
                 for (int i = 0; i < bodys.length(); i++) {
@@ -822,31 +787,6 @@ public class MultilateralTrade extends Activity {
                         DecimalFormat decimalFormat = new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
                         String totalBox = decimalFormat.format(box);//format 返回的是字符串
                         JSONObject object = new JSONObject();
-//
-//                        CBODYWAREHOUSEID = '仓库'
-//                        CFIRSTBILLBID == CBILL_BID
-//                        CFIRSTBILLHID == CBILLID
-//                        CFIRSTTYPE = CTYPECODE
-//                        CINVBASID = CINVBASID
-//                        CINVENTORYID = COUTINVID
-//                        CQUOTEUNITID = CQUOTEUNITID
-//                        CRECEIEVEID =收货单位
-//                                CRECEIVEAREAID = PK_ARRIVEAREA
-//                        CSOURCEBILLBID = CBILL_BID
-//                        CSOURCEBILLHID = CBILLID
-//                        CSOURCETYPE = CTYPECODE
-
-//                        DBIZDATE = NOW
-//                        DDELIVERDATE = NOW
-//                        NSHOULDOUTNUM =
-                        // TODO: 2017/8/6 库存组织
-//                                PK_BODYCALBODY
-//                        PK_CORP
-//                                VBATCHCODE
-//                        VFIRSTBILLCODE = VCODE
-//                        VRECEIVEADDRESS =
-//                                VSOURCEBILLCODE = VCODE
-//                        VSOUREROWNO = CROWNO
                         object.put("CBODYWAREHOUSEID",CWAREHOUSEID);//库存仓库
                         object.put("CFIRSTBILLBID", bodys.getJSONObject(i).getString("cbill_bid"));//源头单据表体ID
                         object.put("CFIRSTBILLHID", bodys.getJSONObject(i).getString("cbillid"));//源头单据表头ID
@@ -874,43 +814,32 @@ public class MultilateralTrade extends Activity {
                         String add = bodys.getJSONObject(i).getString("vreceiveaddress");
                         String adds = Base64Encoder.encode(add.getBytes("gb2312"));
                         object.put("VRECEIVEADDRESS", adds);
-//                        object.put("VRECEIVEADDRESS", bodys.getJSONObject(i).getString(""));//地址
                         object.put("VSOURCEBILLCODE", CheckBillCode);//来源单据号
                         object.put("VSOUREROWNO", bodys.getJSONObject(i).getString("crowno"));//单据行号
-
-
-//                        object.put("CROWNO", bodys.getJSONObject(i).getString("crowno"));
                         object.put("VFREE4", arraysSerino.getJSONObject(j).getString("vfree4"));//海关手册号
-//                        object.put("VSOURCEROWNO", bodys.getJSONObject(i).getString("crowno"));
-//                        object.put("VSOURCERECEIVECODE", tmpBillCode);
-//                        object.put("VRECEIVEPOINTID", bodys.getJSONObject(i).getString("crecaddrnode"));
-//                        object.put("CRECEIVECUSTID", bodys.getJSONObject(i).getString("creceiptcorpid"));
-//                        object.put("CRECEIVEAREAID", bodys.getJSONObject(i).getString("creceiptareaid"));
-////                        object.put("DDELIVERDATE", bodys.getJSONObject(i).getString("ddeliverdate"));
-//                        object.put("CBIZTYPE", CBIZTYPE);//表头
-//                        object.put("CCUSTBASDOCID", CCUSTBASDOCID);
-//                        object.put("CCUSTMANDOCID", CCUSTOMERID);//表头customerID
-//                        object.put("CINVBASDOCID", bodys.getJSONObject(i).getString("cinvbasdocid"));
-//                        object.put("CINVMANDOCID", bodys.getJSONObject(i).getString("cinventoryid"));
-//                        object.put("CRECEIVECUSTBASID", CCUSTBASDOCID);//自己获取
-//                        object.put("CSENDCALBODYID", bodys.getJSONObject(i).getString("cadvisecalbodyid"));
-//                        object.put("CSENDWAREID", CWAREHOUSEID);//仓库
-//                        object.put("CSOURCEBILLBODYID", bodys.getJSONObject(i).getString("corder_bid"));
-//                        object.put("CSOURCEBILLID", bodys.getJSONObject(i).getString("csaleid"));
-//                        object.put("NNUMBER", totalBox);
-//                        object.put("PK_SENDCORP", bodys.getJSONObject(i).getString("pk_corp"));
-//                        object.put("VBATCHCODE", arraysSerino.getJSONObject(j).getString("batch"));
-////                        String add = bodys.getJSONObject(i).getString("vreceiveaddress");
-////                        String adds = Base64Encoder.encode(add.getBytes("gb2312"));
-//                        object.put("VRECEIVEADDRESS", adds);
-//                        object.put("VRECEIVEPERSON", MainLogin.objLog.LoginUser);
                         bodyArray.put(object);
-//                        y++;
                     }
                 }
             }
             tableBody.put("ScanDetails", bodyArray);
             table.put("Body", tableBody);
+            //            ********************拆包
+            JSONArray  jsonArray = new JSONArray();
+            JSONArray arraysPacked = jsSerino.getJSONArray("Serino");
+            JSONObject jsonOb;
+            for (int a=0;a<arraysPacked.length();a++){
+                if (arraysPacked.getJSONObject(a).getBoolean("isDoPacked")){
+                    jsonOb = new JSONObject();
+                    jsonOb.put("BARCODE", arraysPacked.getJSONObject(a).getString("barcode"));
+                    jsonOb.put("INVCODE", arraysPacked.getJSONObject(a).getString("invcode"));
+                    jsonOb.put("OPQTY", formatDecimal(arraysPacked.getJSONObject(a).getString("opqty")));
+                    jsonOb.put("BARQTY", formatDecimal(arraysPacked.getJSONObject(a).getString("barqty")));
+                    jsonOb.put("BARCODETYPE", arraysPacked.getJSONObject(a).getString("barcodetype"));
+                    jsonOb.put("GUIDS", UUID.randomUUID().toString());
+                    jsonArray.put(jsonOb);
+                }
+            }
+            table.put("JAY", jsonArray);
             table.put("GUIDS", UUID.randomUUID().toString());
             Log.d(TAG, "SaveSaleOrder: " + MainLogin.appTime);
             table.put("OPDATE", MainLogin.appTime);
@@ -1054,20 +983,31 @@ public class MultilateralTrade extends Activity {
                         String invspec = newJsonObjectI.get("invspec").toString();
                         String serino = newJsonObjectI.get("serino").toString();
                         String vfree4 = newJsonObjectI.get("vfree4").toString();
+//                        **********拆包拆托
+                        String barcode = newJsonObjectI.get("barcode").toString();
+                        boolean isDoPacked = newJsonObjectI.getBoolean("isDoPacked");
+                        String barqty = newJsonObjectI.get("barqty").toString();
+                        String opqty = newJsonObjectI.get("opqty").toString();
+                        String barcodetype = newJsonObjectI.get("barcodetype").toString();
 
                         String invcodeJ = newJsonObjectJ.get("invcode").toString();
                         String batchJ = newJsonObjectJ.get("batch").toString();
                         String boxJ = newJsonObjectJ.get("box").toString();
+                        String barcodeJ = newJsonObjectJ.get("barcode").toString();
+                        boolean isDoPackedJ = newJsonObjectJ.getBoolean("isDoPacked");
 
                         if (invcode.equals(invcodeJ)&&batch.equals(batchJ)) {
+//                        if (invcode.equals(invcodeJ)&&batch.equals(batchJ)&&barcode.equals(barcodeJ)&&isDoPacked==isDoPackedJ) {
                             double newValue = Double.parseDouble(box) + Double.parseDouble(boxJ);
-                            JSONObject newObject = new JSONObject();
-//                            if (Build.VERSION.SDK_INT >= 19) {
-//                               arrayTemp.remove(j);
-//                            }else{
-//
+//                            if (isDoPacked){
+//                                opqty = String.valueOf(newValue);
 //                            }
-                            Utils.removeJsonArray(j,arrayTemp);
+                            JSONObject newObject = new JSONObject();
+                         if (Build.VERSION.SDK_INT >= 19) {
+                            Log.d(TAG, "UUU: "+ Build.VERSION.SDK_INT +"");
+                            Log.d(TAG, "UUU: "+ "111");
+//                                Toast.makeText(SalesDelivery.this,"api>19",Toast.LENGTH_SHORT).show();
+                            arrayTemp.remove(j);
                             newObject.put("invcode", invcode);
                             newObject.put("batch", batch);
                             newObject.put("invname", invname);
@@ -1077,7 +1017,35 @@ public class MultilateralTrade extends Activity {
                             newObject.put("invspec", invspec);
                             newObject.put("vfree4", vfree4);
                             newObject.put("box", String.valueOf(newValue));
+//                   **************** 拆包
+                            newObject.put("barcode", barcode);
+                            newObject.put("isDoPacked", isDoPacked);
+                            newObject.put("barqty", barqty);
+                            newObject.put("opqty", opqty);
+                            newObject.put("barcodetype", barcodetype);
                             arrayTemp.put(newObject);
+                        }
+                         else{
+                             Log.d(TAG, "UUU: "+ Build.VERSION.SDK_INT +"");
+                             Log.d(TAG, "UUU: "+ "444");
+                             Utils.removeJsonArray(j,arrayTemp);
+                             newObject.put("invcode", invcode);
+                             newObject.put("batch", batch);
+                             newObject.put("invname", invname);
+                             newObject.put("serino", serino);
+                             newObject.put("sno", sno);
+                             newObject.put("invtype", invtype);
+                             newObject.put("invspec", invspec);
+                             newObject.put("vfree4", vfree4);
+                             newObject.put("box", String.valueOf(newValue));
+                             //                   **************** 拆包
+                             newObject.put("barcode", barcode);
+                             newObject.put("isDoPacked", isDoPacked);
+                             newObject.put("barqty", barqty);
+                             newObject.put("opqty", opqty);
+                             newObject.put("barcodetype", barcodetype);
+                             arrayTemp.put(newObject);
+                         }
                             break;
                         }
 

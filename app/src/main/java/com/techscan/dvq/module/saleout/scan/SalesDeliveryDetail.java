@@ -63,6 +63,8 @@ public class SalesDeliveryDetail extends Activity {
     String BillCode    = "";
     String CSALEID     = "";
     String PK_CORP     = "";
+    String cw = "";
+    Double ldTotal = 0.0;
     @Nullable
     JSONObject jsBody;
     JSONObject jsBoxTotal;
@@ -140,8 +142,8 @@ public class SalesDeliveryDetail extends Activity {
     @Nullable
     List<Map<String, Object>> listTaskBody = null;
     @Nullable
-    List<Map<String, Object>> lstTaskBody  = null;
-    List<Map<String, Object>> lstDetailBody = null;
+    List<Map<String, Object>> lstTaskBody = null;
+    List<Map<String, Object>> lstDetailBody =null;
     @Nullable
     private AlertDialog   DeleteButton     = null;
     @Nullable
@@ -153,7 +155,7 @@ public class SalesDeliveryDetail extends Activity {
     @Nullable
     SimpleAdapter listTaskAdapter = null;
     @Nullable
-    String[]      invcode         = null;
+    String []invcode =null;
     Double TOTAL = 0.0;
 
     @Override
@@ -206,7 +208,7 @@ public class SalesDeliveryDetail extends Activity {
             if (jsBody == null || !jsBody.has("dbBody")) {
                 Common.ReScanErr = true;
                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                ReScanErr();
+                scanErr();
                 return;
             }
             arrays = jsBody.getJSONArray("dbBody");
@@ -227,7 +229,7 @@ public class SalesDeliveryDetail extends Activity {
         }
 
         tvSalecount.setText("总量" + number + " | " + "已扫" + ntotaloutinvnum
-                                    + " | " + "未扫" + (number - ntotaloutinvnum));
+                + " | " + "未扫" + (number - ntotaloutinvnum));
 
     }
 
@@ -238,7 +240,7 @@ public class SalesDeliveryDetail extends Activity {
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
                 switch (v.getId()) {
                     case R.id.txtBarcode:
-                        ScanDetail(txtBarcode.getText().toString());
+                        analyzeBarCode(txtBarcode.getText().toString());
                         txtBarcode.requestFocus();
                         txtBarcode.setText("");
                         return true;
@@ -261,7 +263,69 @@ public class SalesDeliveryDetail extends Activity {
                         }
                         m_mapSaleBaseInfo.put("number", Integer.valueOf(txtSaleNumber.getText().toString()));
 
-                        ScanedToGet();
+                        addDataToDetail();
+                        IniDetail();
+                        txtBarcode.setText("");
+                        txtBarcode.requestFocus();
+                        return true;
+                    case R.id.txtSaleTotal:
+                        Double S = 0.0;
+                        if (isPacked&&!cw.equals("null")){
+                            S = Double.valueOf(cw);
+                            if (!isNumber(txtSaleTotal.getText().toString())) {
+                                Utils.showToast(SalesDeliveryDetail.this, "数量不正确");
+                                txtSaleTotal.setText("");
+//                            txtSaleNumber.requestFocus();
+                                return true;
+                            }
+                            if (TextUtils.isEmpty(txtSaleTotal.getText())) {
+                                Utils.showToast(SalesDeliveryDetail.this, "数量不能为空");
+//                            txtSaleNumber.requestFocus();
+                                return true;
+                            }
+                            if (Double.valueOf(txtSaleTotal.getText().toString())>S){
+                                Utils.showToast(SalesDeliveryDetail.this, "数量已超出");
+                                txtSaleTotal.requestFocus();
+                                return true;
+                            }
+                        }else{
+                            if (!isNumber(txtSaleTotal.getText().toString())) {
+                                Utils.showToast(SalesDeliveryDetail.this, "数量不正确");
+                                txtSaleTotal.setText("");
+//                            txtSaleNumber.requestFocus();
+                                return true;
+                            }
+
+                            if (TextUtils.isEmpty(txtSaleTotal.getText())) {
+                                Utils.showToast(SalesDeliveryDetail.this, "数量不能为空");
+//                            txtSaleNumber.requestFocus();
+                                return true;
+                            }
+                            if (Double.valueOf(txtSaleTotal.getText().toString())>ldTotal){
+                                Utils.showToast(SalesDeliveryDetail.this, "数量已超出");
+                                txtSaleTotal.requestFocus();
+                                return true;
+                            }
+                        }
+                        if (TextUtils.isEmpty(txtSaleTotal.getText())) {
+                            Utils.showToast(SalesDeliveryDetail.this, "数量不能为空");
+//                            txtSaleNumber.requestFocus();
+                            return true;
+                        }
+                        if (!isNumber(txtSaleTotal.getText().toString())) {
+                            Utils.showToast(SalesDeliveryDetail.this, "数量不正确");
+                            txtSaleTotal.setText("");
+//                            txtSaleNumber.requestFocus();
+                            return true;
+                        }
+                        if (Float.valueOf(txtSaleTotal.getText().toString()) <= 0) {
+                            Utils.showToast(SalesDeliveryDetail.this, "数量不正确");
+//                            txtSaleNumber.requestFocus();
+                            return true;
+                        }
+                        m_mapSaleBaseInfo.put("total", Double.valueOf(txtSaleTotal.getText().toString()));
+
+                        addDataToDetail();
                         IniDetail();
                         txtBarcode.setText("");
                         txtBarcode.requestFocus();
@@ -357,7 +421,7 @@ public class SalesDeliveryDetail extends Activity {
     }
 
 
-    private boolean ScanDetail(@Nullable String Scanbarcode) {
+    private boolean analyzeBarCode(@Nullable String Scanbarcode) {
         if (Scanbarcode == null || Scanbarcode.equals(""))
             return false;
 
@@ -402,10 +466,10 @@ public class SalesDeliveryDetail extends Activity {
 
         IniDetail();
         try {
-            if (isPacked == false) {
+            if (isPacked==false) {
                 objSaleBaseInfo = new GetSaleBaseInfo(m_cSplitBarcode, mHandler, PK_CORP);
-            } else {
-                objSaleBaseInfo = new GetSaleBaseInfo(m_cSplitBarcode, mHandler, PK_CORP, bar.FinishBarCode);
+            }else{
+                objSaleBaseInfo = new GetSaleBaseInfo(m_cSplitBarcode, mHandler, PK_CORP,bar.FinishBarCode);
             }
         } catch (Exception ex) {
             Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
@@ -489,6 +553,7 @@ public class SalesDeliveryDetail extends Activity {
 
     //把取得的数据加载到页面控件上
     private void SetInvBaseToUI() {
+//        Double ldTotal = 0.0;
         txtSaleInvCode.setText(m_mapSaleBaseInfo.get("invcode").toString());
         txtSaleInvName.setText(m_mapSaleBaseInfo.get("invname").toString());
         txtSaleType.setText(m_mapSaleBaseInfo.get("invtype").toString());
@@ -498,112 +563,103 @@ public class SalesDeliveryDetail extends Activity {
         txtBarcode.setText(m_mapSaleBaseInfo.get("barcode").toString());
         txtSaleWeight.setText(m_mapSaleBaseInfo.get("quantity").toString());
         txtSaleNumber.setText(m_mapSaleBaseInfo.get("number").toString());
-        Double ldTotal = (Double) m_mapSaleBaseInfo.get("quantity") * (Integer) m_mapSaleBaseInfo.get("number");
-        txtSaleTotal.setText(ldTotal.toString());
-        m_mapSaleBaseInfo.put("total", ldTotal);
+         cw = m_mapSaleBaseInfo.get("currentweight").toString();
+        if (isPacked && !cw.equals("null")) {
+            txtSaleTotal.setText(cw);
+        }else{
+            ldTotal = (Double) m_mapSaleBaseInfo.get("quantity") * (Integer) m_mapSaleBaseInfo.get("number");
+            txtSaleTotal.setText(ldTotal.toString());
+        }
         if (m_mapSaleBaseInfo.get("barcodetype").toString().equals("TP")) {
-            txtSaleBatch.setFocusableInTouchMode(false);
-            txtSaleBatch.setFocusable(false);
-            txtSaleNumber.setFocusableInTouchMode(false);
-            txtSaleNumber.setFocusable(false);
-            txtSaleTotal.setFocusableInTouchMode(false);
-            txtSaleTotal.setFocusable(false);
-            ScanedToGet();
+            if (isPacked==false) {
+                m_mapSaleBaseInfo.put("total", ldTotal);
+                txtSaleBatch.setFocusableInTouchMode(false);
+                txtSaleBatch.setFocusable(false);
+                txtSaleNumber.setFocusableInTouchMode(false);
+                txtSaleNumber.setFocusable(false);
+                txtSaleTotal.setFocusableInTouchMode(false);
+                txtSaleTotal.setFocusable(false);
+                addDataToDetail();
+            }else{
+                txtSaleTotal.setEnabled(true);
+                txtSaleTotal.requestFocus();
+                txtSaleTotal.setFocusableInTouchMode(true);
+                txtSaleTotal.setFocusable(true);
+            }
         } else if (m_mapSaleBaseInfo.get("barcodetype").toString().equals("P")) {
-            txtSaleBatch.setFocusableInTouchMode(false);
-            txtSaleBatch.setFocusable(false);
-            txtSaleNumber.setFocusableInTouchMode(true);
-            txtSaleNumber.setFocusable(true);
-            txtSaleNumber.setEnabled(true);
-            txtSaleTotal.setFocusableInTouchMode(false);
-            txtSaleTotal.setFocusable(false);
-            txtSaleNumber.requestFocus();
-            txtSaleNumber.selectAll();
+            if (isPacked==false) {
+                m_mapSaleBaseInfo.put("total", ldTotal);
+                txtSaleBatch.setFocusableInTouchMode(false);
+                txtSaleBatch.setFocusable(false);
+                txtSaleNumber.setFocusableInTouchMode(true);
+                txtSaleNumber.setFocusable(true);
+                txtSaleNumber.setEnabled(true);
+                txtSaleTotal.setFocusableInTouchMode(false);
+                txtSaleTotal.setFocusable(false);
+                txtSaleNumber.requestFocus();
+                txtSaleNumber.selectAll();
+            }else{
+//                txtSaleBatch.setFocusableInTouchMode(false);
+//                txtSaleBatch.setFocusable(false);
+//                txtSaleNumber.setFocusableInTouchMode(false);
+//                txtSaleNumber.setFocusable(false);
+//                txtSaleNumber.setEnabled(false);
+//                txtSaleTotal.setFocusableInTouchMode(true);
+//                txtSaleTotal.setFocusable(true);
+//                txtSaleTotal.requestFocus();
+//                txtSaleTotal.selectAll();
+
+                txtSaleTotal.setEnabled(true);
+                txtSaleTotal.requestFocus();
+                txtSaleTotal.setFocusableInTouchMode(true);
+                txtSaleTotal.setFocusable(true);
+            }
         }
     }
 
-    private boolean ScanedToGet() {
+    private boolean addDataToDetail() {
         SplitBarcode bar = m_cSplitBarcode;
-        Double       S   = 0.0;
+        Double S = 0.0;
         try {
             JSONArray bodys = jsBody.getJSONArray("dbBody");
             Log.d("TAG", "dbBody: " + bodys);
-            boolean isFind  = false;
-            boolean isExist = false;
-            S = Double.parseDouble(txtSaleTotal.getText().toString());
-//            for (int t= 0;t<listTaskBody.size();t++){
-//                Map<String, Object> map = listTaskBody.get(t);
-//                String invcode = (String) map.get("invcode");
-//                if (invcode.equals(m_mapSaleBaseInfo.get("invcode"))){
-//                   isExist = true;
-//                }else{
-//                    Toast.makeText(this, "扫描不再本次任务!",
-//                            Toast.LENGTH_LONG).show();
-//                }
-//            }
-//            if (isExist) {
-//                for (int t = 0; t < listTaskBody.size(); t++) {
-//                    Map<String, Object> map = listTaskBody.get(t);
-//                    String invcode = (String) map.get("invcode");
-//                    Double doneqty = (Double) map.get("doneqty");
-//                    if (invcode.equals(m_mapSaleBaseInfo.get("invcode"))) {
-//                        if (S > doneqty) {
-//                            map.put("ntotaloutinvnum", doneqty);
-//                            S = S - doneqty;
-//                        } else if (S <= doneqty && S != 0) {
-//                            map.put("ntotaloutinvnum", S);
-//                            S = S - S;
-//                        } else if (S == 0) {
-//                            break;
-//                        }
-//                    }
-//                    if (S>0){
-//
-//                    }
-////                    else {
-////
-////                        Toast.makeText(this, "超出!",
-////                                Toast.LENGTH_LONG).show();
-////                    }
-//                    listTaskBody.add(map);
-//                }
-//            }
-            for (int i = 0; i < bodys.length(); i++) {
+            boolean isFind = false;
+            for (int i=0; i < bodys.length(); i++) {
                 JSONObject temp = bodys.getJSONObject(i);
-                Log.d(TAG, "InvCode: " + temp.getString("invcode"));
-                if (temp.getString("invcode").equals(m_mapSaleBaseInfo.get("invcode").toString())) {
-//                          if (Double.parseDouble(txtSaleTotal.getText().toString())-temp.getDouble("ntotaloutinvnum")==0){
+                Log.d(TAG, "InvCode: "+temp.getString("invcode"));
+                        if (temp.getString("invcode").equals(m_mapSaleBaseInfo.get("invcode").toString())) {
+                            isFind = true;
+                            String empty = "";
+//                            String rowno =temp.getString("rowno");
+//                            if (){
 //
-//                          }
+//                            }
+                            Double doneqty = 0.0;
+                            if (!temp.getString("ntotaloutinvnum").isEmpty() && !temp.getString("ntotaloutinvnum").toLowerCase().equals("null")) {
+                                String rowno =temp.getString("rowno");
+                                doneqty = temp.getDouble("ntotaloutinvnum");
+                                doneqty = doneqty + Double.parseDouble(txtSaleTotal.getText().toString());
+                                Log.d(TAG, "ScanedToGet: " + doneqty.toString());
+                                if (doneqty > temp.getInt("doneqty")) {
+                                    Toast.makeText(this, "这个存货已经超过应发数量了,不允出库!",
+                                            Toast.LENGTH_LONG).show();
+                                    MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+                                    IniDetail();
+                                    txtBarcode.setText("");
+                                    txtBarcode.requestFocus();
+                                    return false;
+                                }
 
-                    isFind = true;
-                    String Free1 = "";
-                    // 寻找到了对应存货
-                    Double doneqty = 0.0;
-                    if (!temp.getString("ntotaloutinvnum").isEmpty() && !temp.getString("ntotaloutinvnum").toLowerCase().equals("null")) {
-                        doneqty = temp.getDouble("ntotaloutinvnum");
-                        doneqty = doneqty + Double.parseDouble(txtSaleTotal.getText().toString());
-                        Log.d(TAG, "ScanedToGet: " + doneqty.toString());
-                        if (doneqty > temp.getInt("doneqty")) {
-                            Toast.makeText(this, "这个存货已经超过应发数量了,不允出库!",
-                                           Toast.LENGTH_LONG).show();
-                            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                            IniDetail();
-                            txtBarcode.setText("");
-                            txtBarcode.requestFocus();
-                            return false;
-                        }
-
-                    }
-                    if (ScanSerial(bar.FinishBarCode, Free1, txtSaleTotal.getText().toString()) == false) {
-                        txtBarcode.setText("");
-                        txtBarcode.requestFocus();
-                        return false;
-                    }
-                    ScanedBarcode.add(bar.FinishBarCode);
-                    MainLogin.sp.play(MainLogin.music2, 1, 1, 0, 0, 1);
-                    temp.put("ntotaloutinvnum", doneqty);
-                    break;
+                            }
+                            if (saveScanDetail(bar.FinishBarCode, empty, txtSaleTotal.getText().toString()) == false) {
+                                txtBarcode.setText("");
+                                txtBarcode.requestFocus();
+                                return false;
+                            }
+                            ScanedBarcode.add(bar.FinishBarCode);
+                            MainLogin.sp.play(MainLogin.music2, 1, 1, 0, 0, 1);
+                            temp.put("ntotaloutinvnum", doneqty);
+                            break;
                 }
             }
 
@@ -645,7 +701,7 @@ public class SalesDeliveryDetail extends Activity {
             // ADD CAIXY TEST END
         }
         tvSalecount.setText("总量" + number + " | " + "已扫" + ntotaloutinvnum
-                                    + " | " + "未扫" + (number - ntotaloutinvnum));
+                + " | " + "未扫" + (number - ntotaloutinvnum));
 
         txtBarcode.requestFocus();
         txtBarcode.setText("");
@@ -655,7 +711,7 @@ public class SalesDeliveryDetail extends Activity {
     }
 
     //保存扫描明细
-    private boolean ScanSerial(String serino, String Free1, String TotalBox)
+    private boolean saveScanDetail(String serino, String Free1, String TotalBox)
             throws JSONException {
         if (jsSerino == null) {
             jsSerino = new JSONObject();
@@ -673,6 +729,12 @@ public class SalesDeliveryDetail extends Activity {
             temp.put("invtype", m_mapSaleBaseInfo.get("invtype").toString());
             temp.put("invspec", m_mapSaleBaseInfo.get("invspec").toString());
             temp.put("vfree4", m_mapSaleBaseInfo.get("vfree4").toString());
+//            ***************拆包
+            temp.put("barcodetype", m_mapSaleBaseInfo.get("barcodetype").toString());
+            temp.put("barcode", m_mapSaleBaseInfo.get("barcode").toString());
+            temp.put("barqty", m_mapSaleBaseInfo.get("barqty").toString());
+            temp.put("opqty", TotalBox);
+            temp.put("isDoPacked", isPacked);
             serinos.put(temp);
 
 
@@ -682,9 +744,15 @@ public class SalesDeliveryDetail extends Activity {
             for (int i = 0; i < serinos.length(); i++) {
                 JSONObject temp = new JSONObject();
                 temp = serinos.getJSONObject(i);
-                if (temp.getString("serino").equals(serino)) {
+                if (temp.getString("serino").equals(serino)&&(temp.getBoolean("isDoPacked")==false)) {
                     TotalBox = String.valueOf(Double.parseDouble(temp.getString("box").toString())
-                                                      + Double.parseDouble(TotalBox));
+                            + Double.parseDouble(TotalBox));
+                    temp.put("box", TotalBox);
+                    return true;
+                }
+                if (temp.getString("serino").equals(serino)&&(temp.getBoolean("isDoPacked")==true)) {
+                    TotalBox = String.valueOf(Double.parseDouble(temp.getString("box").toString())
+                            + Double.parseDouble(TotalBox));
                     temp.put("box", TotalBox);
                     return true;
                 }
@@ -699,6 +767,12 @@ public class SalesDeliveryDetail extends Activity {
             temp.put("invtype", m_mapSaleBaseInfo.get("invtype").toString());
             temp.put("invspec", m_mapSaleBaseInfo.get("invspec").toString());
             temp.put("vfree4", m_mapSaleBaseInfo.get("vfree4").toString());
+            //            ***************chaib
+            temp.put("barcodetype", m_mapSaleBaseInfo.get("barcodetype").toString());
+            temp.put("barcode", m_mapSaleBaseInfo.get("barcode").toString());
+            temp.put("barqty", m_mapSaleBaseInfo.get("barqty").toString());
+            temp.put("opqty", TotalBox);
+            temp.put("isDoPacked", isPacked);
             serinos.put(temp);
         }
         Log.d(TAG, "ScanSerial: " + jsSerino.toString());
@@ -747,7 +821,7 @@ public class SalesDeliveryDetail extends Activity {
             } catch (JSONException e) {
                 e.printStackTrace();
                 Toast.makeText(SalesDeliveryDetail.this, "无法获取表体信息",
-                               Toast.LENGTH_LONG).show();
+                        Toast.LENGTH_LONG).show();
                 // ADD CAIXY TEST START
                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                 // ADD CAIXY TEST END
@@ -861,7 +935,7 @@ public class SalesDeliveryDetail extends Activity {
 
     }
 
-    private void ReScanErr() {
+    private void scanErr() {
         AlertDialog.Builder bulider =
                 new AlertDialog.Builder(this).setTitle(R.string.CuoWu).setMessage("数据加载出现错误" + "\r\n" + "退出该模块并且再次尝试加载缓存");
 
@@ -885,8 +959,10 @@ public class SalesDeliveryDetail extends Activity {
         txtBarcode.setOnKeyListener(myTxtListener);
         txtSaleNumber.setOnKeyListener(myTxtListener);
         txtSaleCustoms.setOnKeyListener(myTxtListener);
+        txtSaleTotal.setOnKeyListener(myTxtListener);
         txtBarcode.addTextChangedListener(new CustomTextWatcher(txtBarcode));
         txtSaleNumber.addTextChangedListener(new CustomTextWatcher(txtSaleNumber));
+        txtSaleTotal.addTextChangedListener(new CustomTextWatcher(txtSaleTotal));
 //        this.txtBarcode.addTextChangedListener(watchers);
         switch_m.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -894,13 +970,14 @@ public class SalesDeliveryDetail extends Activity {
                 if (isChecked) {
                     packed.setText("拆托");
                     txtBarcode.requestFocus();
-                    lstDetailBody = null;
                     isPacked = true;
                 } else {
                     packed.setText("不拆托");
                     isPacked = false;
                 }
+                IniDetail();
             }
+
         });
     }
 
@@ -1215,8 +1292,8 @@ public class SalesDeliveryDetail extends Activity {
                             e1.printStackTrace();
                         }
                         tvSalecount.setText("总量" + number + " | " + "已扫"
-                                                    + ntotaloutinvnum + " | " + "未扫"
-                                                    + (number - ntotaloutinvnum));
+                                + ntotaloutinvnum + " | " + "未扫"
+                                + (number - ntotaloutinvnum));
                         //SaveScanedBody();//写入本地
                         IniDetail();
 
@@ -1224,7 +1301,7 @@ public class SalesDeliveryDetail extends Activity {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                         Toast.makeText(SalesDeliveryDetail.this, e.getMessage(),
-                                       Toast.LENGTH_LONG).show();
+                                Toast.LENGTH_LONG).show();
                         // ADD CAIXY TEST START
                         MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                         // ADD CAIXY TEST END

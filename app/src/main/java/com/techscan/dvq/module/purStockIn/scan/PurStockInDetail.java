@@ -269,12 +269,14 @@ public class PurStockInDetail extends Activity {
 
             for (int i = 0; i < serinos.length(); i++) {
                 JSONObject temp = serinos.getJSONObject(i);
+//                *************如果是液体入库，比较批次、条码是否相同以及条码类型是否是Y，再进行合并 XUHU/  / TODO: 2017/8/11
                 if (temp.getString("batch").equals(txtBatch.getText().toString())&&temp.getString("serino").equals(serino)&&bar.equals("Y")){
                     TotalBox = String.valueOf(Double.parseDouble(temp.getString("box").toString())
                             + Double.parseDouble(TotalBox));
                     temp.put("box", TotalBox);
                     return true;
                 }
+ //                *************条码是否相同以及条码类型是否不为Y，再进行合并 XUHU // TODO: 2017/8/11
                 if (temp.getString("serino").equals(serino)&&!bar.equals("Y")) {
                     //temp.put("box", TotalBox);
                     // Toast.makeText(this, "该条码已经被扫描过了,不能再次扫描",
