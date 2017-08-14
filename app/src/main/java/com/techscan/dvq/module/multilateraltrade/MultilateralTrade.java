@@ -825,7 +825,7 @@ public class MultilateralTrade extends Activity {
             table.put("Body", tableBody);
             //            ********************²ð°ü
             JSONArray  jsonArray = new JSONArray();
-            JSONArray arraysPacked = jsTotal.getJSONArray("Serino");
+            JSONArray arraysPacked = jsSerino.getJSONArray("Serino");
             JSONObject jsonOb;
             for (int a=0;a<arraysPacked.length();a++){
                 if (arraysPacked.getJSONObject(a).getBoolean("isDoPacked")){
@@ -996,11 +996,12 @@ public class MultilateralTrade extends Activity {
                         String barcodeJ = newJsonObjectJ.get("barcode").toString();
                         boolean isDoPackedJ = newJsonObjectJ.getBoolean("isDoPacked");
 
-                        if (invcode.equals(invcodeJ)&&batch.equals(batchJ)&&barcode.equals(barcodeJ)&&isDoPacked==isDoPackedJ) {
+                        if (invcode.equals(invcodeJ)&&batch.equals(batchJ)) {
+//                        if (invcode.equals(invcodeJ)&&batch.equals(batchJ)&&barcode.equals(barcodeJ)&&isDoPacked==isDoPackedJ) {
                             double newValue = Double.parseDouble(box) + Double.parseDouble(boxJ);
-                            if (isDoPacked){
-                                opqty = String.valueOf(newValue);
-                            }
+//                            if (isDoPacked){
+//                                opqty = String.valueOf(newValue);
+//                            }
                             JSONObject newObject = new JSONObject();
                          if (Build.VERSION.SDK_INT >= 19) {
                             Log.d(TAG, "UUU: "+ Build.VERSION.SDK_INT +"");

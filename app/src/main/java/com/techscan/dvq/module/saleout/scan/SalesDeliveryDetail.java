@@ -629,10 +629,14 @@ public class SalesDeliveryDetail extends Activity {
                 Log.d(TAG, "InvCode: "+temp.getString("invcode"));
                         if (temp.getString("invcode").equals(m_mapSaleBaseInfo.get("invcode").toString())) {
                             isFind = true;
-                            String Free1 = "";
-                            // 寻找到了对应存货
+                            String empty = "";
+//                            String rowno =temp.getString("rowno");
+//                            if (){
+//
+//                            }
                             Double doneqty = 0.0;
                             if (!temp.getString("ntotaloutinvnum").isEmpty() && !temp.getString("ntotaloutinvnum").toLowerCase().equals("null")) {
+                                String rowno =temp.getString("rowno");
                                 doneqty = temp.getDouble("ntotaloutinvnum");
                                 doneqty = doneqty + Double.parseDouble(txtSaleTotal.getText().toString());
                                 Log.d(TAG, "ScanedToGet: " + doneqty.toString());
@@ -647,7 +651,7 @@ public class SalesDeliveryDetail extends Activity {
                                 }
 
                             }
-                            if (saveScanDetail(bar.FinishBarCode, Free1, txtSaleTotal.getText().toString()) == false) {
+                            if (saveScanDetail(bar.FinishBarCode, empty, txtSaleTotal.getText().toString()) == false) {
                                 txtBarcode.setText("");
                                 txtBarcode.requestFocus();
                                 return false;
