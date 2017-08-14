@@ -739,7 +739,6 @@ public class MaterialOutScanAct extends Activity {
                     case R.id.ed_manual:
                         if (isAllEdNotNull()) {
                             addDataToDetailList();
-                            mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
                             changeAllEdTextToEmpty();
                         }
                         return true;
@@ -758,7 +757,6 @@ public class MaterialOutScanAct extends Activity {
         if (TextUtils.isEmpty(mEdCostObject.getText())) {
             if (isAllEdNotNull()) {
                 addDataToDetailList();
-                mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
                 changeAllEdTextToEmpty();
                 return true;
             }
@@ -767,7 +765,6 @@ public class MaterialOutScanAct extends Activity {
         if (!TextUtils.isEmpty(edCostName.getText()) && !TextUtils.isEmpty(mEdCostObject.getText())) {
             if (isAllEdNotNull()) {
                 addDataToDetailList();
-                mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
                 changeAllEdTextToEmpty();
                 return true;
             }

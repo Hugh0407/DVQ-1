@@ -263,6 +263,8 @@
         </activity>
         <activity android:name=".module.pur.PurStockInScanAct">
         </activity>
+        <activity android:name=".module.statusChange.tab.StatusChangeScanAct">
+        </activity>
     </application>
 
 </manifest>

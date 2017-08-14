@@ -44,7 +44,6 @@ public class Utils {
     }
 
     /**
-     * ++++++++++++++
      * 格式化小数，一律格式为两位小数
      *
      * @param num 必须为float类型

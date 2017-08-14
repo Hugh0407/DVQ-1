@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -24,12 +23,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import com.techscan.dvq.login.MainLogin;
 import com.techscan.dvq.R;
 import com.techscan.dvq.bean.Goods;
 import com.techscan.dvq.bean.PurGood;
-import com.techscan.dvq.common.RequestThread;
+import com.techscan.dvq.common.SoundHelper;
 import com.techscan.dvq.common.Utils;
+import com.techscan.dvq.login.MainLogin;
 import com.techscan.dvq.module.materialOut.MyBaseAdapter;
 
 import org.json.JSONArray;
@@ -45,7 +44,9 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 
 import static com.techscan.dvq.R.id.ed_num;
+import static com.techscan.dvq.common.Utils.doRequest;
 import static com.techscan.dvq.common.Utils.isNumber;
+import static com.techscan.dvq.common.Utils.showToast;
 
 /**
  * 形态转换模块下的 扫描界面
@@ -88,28 +89,28 @@ public class SCScanAct extends Activity {
     EditText mEdUnit;
     @Nullable
     @InjectView(R.id.btn_task)
-    Button mBtnTask;
+    Button   mBtnTask;
     @Nullable
     @InjectView(R.id.btn_detail)
-    Button mBtnDetail;
+    Button   mBtnDetail;
     @Nullable
     @InjectView(R.id.btn_back)
-    Button mBtnBack;
+    Button   mBtnBack;
 
-    String m_BillNo;
-    String m_BillID;
-    String m_BillType;
-    String m_AccID;
-    String m_WarehouseID;
-    String m_pk_Corp;
+    String         m_BillNo;
+    String         m_BillID;
+    String         m_BillType;
+    String         m_AccID;
+    String         m_WarehouseID;
+    String         m_pk_Corp;
     ProgressDialog progressDialog;
     @Nullable
     Activity activity;
 
-    @NonNull
-    public static List<PurGood> taskList   = new ArrayList<PurGood>();
-    @NonNull
-    public static List<Goods>   detailList = new ArrayList<Goods>();
+
+    public static List<PurGood> taskList = new ArrayList<PurGood>();
+
+    public static List<Goods> detailList = new ArrayList<Goods>();
 
     @Override
 
@@ -152,7 +153,7 @@ public class SCScanAct extends Activity {
 
 
     @OnClick({R.id.btn_task, R.id.btn_detail, R.id.btn_back})
-    public void onViewClicked(@NonNull View view) {
+    public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_task:
                 ScAdapter scAdapter = new ScAdapter(taskList);
@@ -177,10 +178,10 @@ public class SCScanAct extends Activity {
      * 网络请求后的线程通信
      * msg.obj 是从子线程传递过来的数据
      */
-    @NonNull
+
     Handler mHandler = new Handler() {
         @Override
-        public void handleMessage(@NonNull Message msg) {
+        public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
                 case 1:
@@ -205,8 +206,8 @@ public class SCScanAct extends Activity {
                     try {
                         if (jsonBody != null && jsonBody.getBoolean("Status")) {
                             Log.d("TAG", "jsonBody: " + jsonBody);
-                            JSONArray jsonArray = jsonBody.getJSONArray("PurBody");
-                            PurGood purGood;
+                            JSONArray  jsonArray = jsonBody.getJSONArray("PurBody");
+                            PurGood    purGood;
                             JSONObject object;
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 object = jsonArray.getJSONObject(i);
@@ -240,11 +241,7 @@ public class SCScanAct extends Activity {
                     if (null == json) {
                         return;
                     }
-                    try {
-                        setInvBaseToUI(json);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    setInvBaseToUI(json);
                     break;
             }
         }
@@ -259,43 +256,47 @@ public class SCScanAct extends Activity {
     String pk_invbasdoc = "";
     String pk_invmandoc = "";
 
-    private void setInvBaseToUI(@NonNull JSONObject json) throws JSONException {
+    private void setInvBaseToUI(JSONObject json) {
         Log.d("TAG", "setInvBaseToUI: " + json);
-        if (json.getBoolean("Status")) {
-            JSONArray val = json.getJSONArray("baseInfo");
-            HashMap<String, Object> map = null;
-            for (int i = 0; i < val.length(); i++) {
-                JSONObject tempJso = val.getJSONObject(i);
-                map = new HashMap<String, Object>();
-                map.put("invname", tempJso.getString("invname"));   //橡胶填充油
-                map.put("invcode", tempJso.getString("invcode"));   //00179
-                map.put("measname", tempJso.getString("measname"));   //千克
-                map.put("pk_invbasdoc", tempJso.getString("pk_invbasdoc"));
-                pk_invbasdoc = tempJso.getString("pk_invbasdoc");
-                map.put("pk_invmandoc", tempJso.getString("pk_invmandoc"));
-                pk_invmandoc = tempJso.getString("pk_invmandoc");
-                map.put("invtype", tempJso.getString("invtype"));   //型号
-                map.put("invspec", tempJso.getString("invspec"));   //规格
-                map.put("oppdimen", tempJso.getString("oppdimen"));   //重量
-            }
-            if (map != null) {
-                mEdName.setText(map.get("invname").toString());
-                mEdUnit.setText(map.get("measname").toString());
-                mEdType.setText(map.get("invtype").toString());
-                mEdSpectype.setText(map.get("invspec").toString());
-                mEdCostObject.setText(map.get("invname").toString());
-            }
+        try {
+            if (json.getBoolean("Status")) {
+                JSONArray               val = json.getJSONArray("baseInfo");
+                HashMap<String, Object> map = null;
+                for (int i = 0; i < val.length(); i++) {
+                    JSONObject tempJso = val.getJSONObject(i);
+                    map = new HashMap<String, Object>();
+                    map.put("invname", tempJso.getString("invname"));   //橡胶填充油
+                    map.put("invcode", tempJso.getString("invcode"));   //00179
+                    map.put("measname", tempJso.getString("measname"));   //千克
+                    map.put("pk_invbasdoc", tempJso.getString("pk_invbasdoc"));
+                    pk_invbasdoc = tempJso.getString("pk_invbasdoc");
+                    map.put("pk_invmandoc", tempJso.getString("pk_invmandoc"));
+                    pk_invmandoc = tempJso.getString("pk_invmandoc");
+                    map.put("invtype", tempJso.getString("invtype"));   //型号
+                    map.put("invspec", tempJso.getString("invspec"));   //规格
+                    map.put("oppdimen", tempJso.getString("oppdimen"));   //重量
+                }
+                if (map != null) {
+                    mEdName.setText(map.get("invname").toString());
+                    mEdUnit.setText(map.get("measname").toString());
+                    mEdType.setText(map.get("invtype").toString());
+                    mEdSpectype.setText(map.get("invspec").toString());
+                    mEdCostObject.setText(map.get("invname").toString());
+                }
 
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
 
-    private void showDialog(@NonNull List list, BaseAdapter adapter, String title) {
+    private void showDialog(List list, BaseAdapter adapter, String title) {
         AlertDialog.Builder builder = new AlertDialog.Builder(SCScanAct.this);
         builder.setTitle(title);
         if (list.size() > 0) {
-            View view = LayoutInflater.from(SCScanAct.this).inflate(R.layout.dialog_scan_details, null);
-            ListView lv = (ListView) view.findViewById(R.id.lv);
+            View     view = LayoutInflater.from(SCScanAct.this).inflate(R.layout.dialog_scan_details, null);
+            ListView lv   = (ListView) view.findViewById(R.id.lv);
             lv.setAdapter(adapter);
             builder.setView(view);
         } else {
@@ -316,9 +317,7 @@ public class SCScanAct extends Activity {
         parameter.put("BillCode", m_BillNo);
         parameter.put("pk_corp", m_pk_Corp);
         parameter.put("TableName", "PurHead");
-        RequestThread requestThread = new RequestThread(parameter, mHandler, 1);
-        Thread td = new Thread(requestThread);
-        td.start();
+        doRequest(parameter, mHandler, 1);
     }
 
     /**
@@ -330,9 +329,7 @@ public class SCScanAct extends Activity {
         parameter.put("BillID", m_BillID);
         parameter.put("accId", m_AccID);
         parameter.put("TableName", "PurBody");
-        RequestThread requestThread = new RequestThread(parameter, mHandler, 2);
-        Thread td = new Thread(requestThread);
-        td.start();
+        doRequest(parameter, mHandler, 2);
     }
 
     /**
@@ -346,9 +343,7 @@ public class SCScanAct extends Activity {
         parameter.put("CompanyCode", MainLogin.objLog.CompanyCode);
         parameter.put("InvCode", sku);
         parameter.put("TableName", "baseInfo");
-        RequestThread requestThread = new RequestThread(parameter, mHandler, 3);
-        Thread td = new Thread(requestThread);
-        td.start();
+        doRequest(parameter, mHandler, 3);
     }
 
     private void setDataToBack() {
@@ -358,7 +353,7 @@ public class SCScanAct extends Activity {
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Intent in = new Intent();
+                Intent in     = new Intent();
                 Bundle bundle = new Bundle();
                 bundle.putParcelableArrayList("taskList", (ArrayList<? extends Parcelable>) taskList);
                 in.putExtras(bundle);
@@ -425,7 +420,7 @@ public class SCScanAct extends Activity {
         mEdBarCode.setSelection(mEdBarCode.length());   //将光标移动到最后的位置
         mEdBarCode.selectAll();
         String[] barCode = Bar.split("\\|");
-        if (barCode.length == 9 && barCode[0].equals("P")) {// 包码 P|SKU|LOT|WW|TAX|QTY|CW|ONLY|SN    9位
+        if (barCode.length == 8 && barCode[0].equals("P")) {// 包码 P|SKU|LOT|WW|TAX|QTY|CW|SN    9位
 
             /*********************************************************************/
             //判断该条码在“任务” 列表中是否存在
@@ -449,7 +444,7 @@ public class SCScanAct extends Activity {
             mEdNum.setSelection(mEdNum.length());   //将光标移动到最后的位置
             getInvBaseInfo(encoding);
             return true;
-        } else if (barCode.length == 10 && barCode[0].equals("TP")) {//盘码TP|SKU|LOT|WW|TAX|QTY|NUM|CW|ONLY|SN
+        } else if (barCode.length == 9 && barCode[0].equals("TP")) {//盘码TP|SKU|LOT|WW|TAX|QTY|NUM|CW|SN
             /*********************************************************************/
             //判断该条码在“任务” 列表中是否存在
             for (PurGood pur : taskList) {
@@ -491,14 +486,46 @@ public class SCScanAct extends Activity {
      * @return true---->所有的ed都不为空,false---->所有的ed都为空
      */
     private boolean isAllEdNotNull() {
-        return (!TextUtils.isEmpty(mEdBarCode.getText())
-                && !TextUtils.isEmpty(mEdEncoding.getText())
-                && !TextUtils.isEmpty(mEdName.getText())
-                && !TextUtils.isEmpty(mEdType.getText())
-                && !TextUtils.isEmpty(mEdSpectype.getText())
-                && !TextUtils.isEmpty(mEdUnit.getText())
-                && !TextUtils.isEmpty(mEdLot.getText())
-                && !TextUtils.isEmpty(mEdQty.getText()));
+        if (TextUtils.isEmpty(mEdBarCode.getText())) {
+            showToast(activity, "条码不可为空");
+            return false;
+        }
+
+        if (TextUtils.isEmpty(mEdEncoding.getText())) {
+            showToast(activity, "物料编码不可为空");
+            return false;
+        }
+
+        if (TextUtils.isEmpty(mEdName.getText())) {
+            showToast(activity, "物料名称不可为空");
+            return false;
+        }
+
+        if (TextUtils.isEmpty(mEdType.getText())) {
+            showToast(activity, "类型不可为空");
+            return false;
+        }
+
+        if (TextUtils.isEmpty(mEdSpectype.getText())) {
+            showToast(activity, "规格不可为空");
+            return false;
+        }
+
+        if (TextUtils.isEmpty(mEdUnit.getText())) {
+            showToast(activity, "单位不可为空");
+            return false;
+        }
+
+        if (TextUtils.isEmpty(mEdLot.getText())) {
+            showToast(activity, "批次不可为空");
+            return false;
+        }
+
+        if (TextUtils.isEmpty(mEdQty.getText())) {
+            showToast(activity, "总量不可为空");
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -530,6 +557,7 @@ public class SCScanAct extends Activity {
                 pur.setNum_task(String.valueOf(nowNum));
             }
         }
+        SoundHelper.playOK();
         return detailList.add(goods);
     }
 
@@ -537,17 +565,8 @@ public class SCScanAct extends Activity {
      * 清空所有的Edtext
      */
     private void changeAllEdTextToEmpty() {
-        mEdNum.setText("");
         mEdBarCode.setText("");
-        mEdEncoding.setText("");
-        mEdName.setText("");
-        mEdType.setText("");
-        mEdUnit.setText("");
-        mEdLot.setText("");
-        mEdQty.setText("");
-        mEdWeight.setText("");
-        mEdSpectype.setText("");
-        mEdCostObject.setText("");
+        mEdBarCode.requestFocus();
         mEdLot.setEnabled(false);
         mEdNum.setEnabled(false);
         mEdQty.setEnabled(false);
@@ -615,23 +634,22 @@ public class SCScanAct extends Activity {
     /**
      * 回车键的点击事件
      */
-    @NonNull
+
     View.OnKeyListener mOnKeyListener = new View.OnKeyListener() {
 
         @Override
-        public boolean onKey(@NonNull View v, int keyCode, @NonNull KeyEvent event) {
+        public boolean onKey(View v, int keyCode, KeyEvent event) {
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
                 switch (v.getId()) {
                     case R.id.ed_bar_code:
-                        if (!TextUtils.isEmpty(mEdBarCode.getText().toString())) {
-                            if (isAllEdNotNull() && addDataToDetailList()) {
-                                mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
-                                changeAllEdTextToEmpty();
-                            } else {
-                                barAnalysis();
-                            }
-                        } else {
+                        if (TextUtils.isEmpty(mEdBarCode.getText().toString())) {
                             Utils.showToast(activity, "请输入条码");
+                        }
+
+                        if (isAllEdNotNull() && addDataToDetailList()) {
+                            changeAllEdTextToEmpty();
+                        } else {
+                            barAnalysis();
                         }
                         return true;
                     case R.id.ed_lot:
@@ -659,13 +677,12 @@ public class SCScanAct extends Activity {
                         float weight = Float.valueOf(mEdWeight.getText().toString());
                         mEdQty.setText(String.valueOf(num * weight));
                         if (addDataToDetailList()) {
-                            mEdBarCode.requestFocus();  //如果添加成功将管标跳到“条码”框
                             changeAllEdTextToEmpty();
                         }
                         return true;
                 }
             }
-            return false;
+            return true;
         }
     };
 }
