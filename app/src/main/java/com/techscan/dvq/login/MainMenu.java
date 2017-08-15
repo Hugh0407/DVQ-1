@@ -39,6 +39,7 @@ import com.techscan.dvq.module.productIn.ProductInAct;
 import com.techscan.dvq.module.purStockIn.PurStockIn;
 import com.techscan.dvq.module.query.QueryAct;
 import com.techscan.dvq.module.statusChange.StatusChangeAct;
+import com.techscan.dvq.module.statusChange.tab.StatusChangeScanAct;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -507,7 +508,8 @@ public class MainMenu extends Activity {
                         ShowPurIn();
                     } else if (RadioGroupType.getCheckedRadioButtonId() == id.radioButton2) {
                         //采购退库
-                        Utils.showToast(MainMenu.this, "采购退库待加");
+                        ShowMyTest();
+//                        Utils.showToast(MainMenu.this, "采购退库待加");
                     } else if (RadioGroupType.getCheckedRadioButtonId() == id.radioButton3) {
                         //*********************************************************************
                         //形态转换模块  时间06.28  by liuya
@@ -989,6 +991,16 @@ public class MainMenu extends Activity {
         Intent SaleIn = new Intent(this, PurStockIn.class);
         SaleIn.putExtra("freplenishflag", "N");
         startActivity(SaleIn);
+        cancelLoading();
+    }
+
+    // 显示采购入库画面
+    private void ShowMyTest() {
+
+        ShowLoading();
+        Intent SaleIn = new Intent(this, StatusChangeScanAct.class);
+        startActivity(SaleIn);
+        cancelLoading();
     }
 
     private void ShowLoading() {

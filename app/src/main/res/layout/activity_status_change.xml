@@ -49,6 +49,38 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="单据日期"/>
+
+            <EditText
+                android:id="@+id/ed_bill_date"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_weight="3"
+                android:background="@drawable/edittext_style"
+                android:clickable="true"
+                android:ems="10"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textAllCaps="true"/>
+
+            <Space
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/browse"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <TextView
@@ -108,7 +140,6 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/PurStockInButtonBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="0dp"

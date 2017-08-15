@@ -3,33 +3,37 @@ package com.techscan.dvq.module.statusChange;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
-import com.techscan.dvq.login.MainLogin;
 import com.techscan.dvq.OtherOrderList;
 import com.techscan.dvq.R;
 import com.techscan.dvq.bean.PurGood;
 import com.techscan.dvq.common.SaveThread;
 import com.techscan.dvq.common.Utils;
+import com.techscan.dvq.login.MainLogin;
 import com.techscan.dvq.module.statusChange.scan.SCScanAct;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
@@ -46,45 +50,53 @@ public class StatusChangeAct extends Activity {
 
     @Nullable
     @InjectView(R.id.ed_bill_type)
-    EditText mEdBillType;
+    EditText    mEdBillType;
     @Nullable
     @InjectView(R.id.btn_bill_type)
     ImageButton mBtnBillType;
     @Nullable
     @InjectView(R.id.ed_source_bill)
-    EditText mEdSourceBill;
+    EditText    mEdSourceBill;
     @Nullable
     @InjectView(R.id.btn_source_bill)
     ImageButton mBtnSourceBill;
     @Nullable
     @InjectView(R.id.ed_select_wh)
-    EditText mEdSelectWh;
+    EditText    mEdSelectWh;
     @Nullable
     @InjectView(R.id.btn_select_wh)
     ImageButton mBtnSelectWh;
 
     @Nullable
     @InjectView(R.id.sacn)
-    Button mSacn;
+    Button   mSacn;
     @Nullable
     @InjectView(R.id.save)
-    Button mSave;
+    Button   mSave;
     @Nullable
     @InjectView(R.id.back)
-    Button mBack;
+    Button   mBack;
+    @InjectView(R.id.ed_bill_date)
+    EditText edBillDate;
 
-    String result = "";
-    String OrderNo = "";
-    String OrderID = "";
+    String result        = "";
+    String OrderNo       = "";
+    String OrderID       = "";
     String WarehouseName = "";
-    String WarehouseID = "";
-    String AccID = "";
-    String pk_corp = "";
+    String WarehouseID   = "";
+    String AccID         = "";
+    String pk_corp       = "";
     List<PurGood> taskList;
     @Nullable
     ProgressDialog progressDialog;
     @Nullable
     Activity       activity;
+
+
+    int      year;
+    int      month;
+    int      day;
+    Calendar mycalendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +106,13 @@ public class StatusChangeAct extends Activity {
         ActionBar actionBar = this.getActionBar();
         actionBar.setTitle("形态转换");
         activity = this;
+        mycalendar = Calendar.getInstance();//初始化Calendar日历对象
+        year = mycalendar.get(Calendar.YEAR); //获取Calendar对象中的年
+        month = mycalendar.get(Calendar.MONTH);//获取Calendar对象中的月
+        day = mycalendar.get(Calendar.DAY_OF_MONTH);//获取这个月的第几天
+        edBillDate.setText(MainLogin.appTime);
+        edBillDate.setInputType(InputType.TYPE_NULL);
+        edBillDate.setOnFocusChangeListener(myFocusListener);
         mBtnBillType.setVisibility(View.INVISIBLE);
         mBtnSelectWh.setVisibility(View.INVISIBLE);
     }
@@ -105,8 +124,8 @@ public class StatusChangeAct extends Activity {
     }
 
     @OnClick({R.id.btn_bill_type, R.id.btn_source_bill, R.id.btn_select_wh,
-            R.id.sacn, R.id.save, R.id.back})
-    public void onViewClicked(@NonNull View view) {
+            R.id.sacn, R.id.save, R.id.back, R.id.ed_bill_date})
+    public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_bill_type:
                 break;
@@ -128,12 +147,7 @@ public class StatusChangeAct extends Activity {
                     Utils.showToast(activity, "没有需要保存的数据");
                     return;
                 }
-
-                try {
-                    saveInfo();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                saveInfo();
                 showProgressDialog("提示", "正在保存,请稍后...");
                 break;
             case R.id.back:
@@ -143,7 +157,7 @@ public class StatusChangeAct extends Activity {
                     bulider.setNegativeButton(R.string.QuXiao, null);
                     bulider.setPositiveButton(R.string.QueRen, new DialogInterface.OnClickListener() {
                         @Override
-                        public void onClick(@NonNull DialogInterface dialog, int which) {
+                        public void onClick(DialogInterface dialog, int which) {
                             SCScanAct.taskList.clear();
                             SCScanAct.detailList.clear();
                             dialog.dismiss();
@@ -156,6 +170,10 @@ public class StatusChangeAct extends Activity {
                     finish();
                 }
                 break;
+            case R.id.ed_bill_date:
+                DatePickerDialog dpd = new DatePickerDialog(activity, Datelistener, year, month, day);
+                dpd.show();//显示DatePickerDialog组件
+                break;
         }
     }
 
@@ -166,7 +184,7 @@ public class StatusChangeAct extends Activity {
     @Nullable
     Handler mHandler = new Handler() {
         @Override
-        public void handleMessage(@NonNull Message msg) {
+        public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
                 case 1:
@@ -203,90 +221,95 @@ public class StatusChangeAct extends Activity {
         mEdSelectWh.setText("");
     }
 
-    private void saveInfo() throws JSONException {
-        String CFIRSTBILLBID = null;
-        String CFIRSTBILLHID = null;
-        final JSONObject table = new JSONObject();
-        JSONObject saveOut = new JSONObject();
-        JSONObject saveOutHead = new JSONObject();
-        saveOutHead.put("CWAREHOUSEID", WarehouseID);
-        saveOutHead.put("PK_CALBODY", MainLogin.objLog.STOrgCode);
-        saveOutHead.put("PK_CORP", MainLogin.objLog.STOrgCode);
-        saveOutHead.put("CLASTMODIID", MainLogin.objLog.UserID);
-        saveOutHead.put("COPERATORID", MainLogin.objLog.UserID);
-        saveOutHead.put("CDISPATCHERID", "0001TC100000000011Q8");
-        JSONObject saveOutBody = new JSONObject();
-        JSONArray saveOutArray = new JSONArray();
-        for (int i = 0; i < taskList.size(); i++) {
-            PurGood purGood = taskList.get(i);
-            if (purGood.getFbillrowflag().equals("3")) {
-                saveOutBody.put("CSOURCEBILLBID", purGood.getCsourcebillbid());
-                saveOutBody.put("CSOURCEBILLHID", purGood.getCsourcebillhid());
-                CFIRSTBILLBID = purGood.getCsourcebillbid();
-                CFIRSTBILLHID = purGood.getCsourcebillhid();
-                saveOutBody.put("CFIRSTBILLBID", CFIRSTBILLBID);
-                saveOutBody.put("CFIRSTBILLHID", CFIRSTBILLHID);
-                saveOutBody.put("CBODYWAREHOUSEID", WarehouseID);
-                saveOutBody.put("INVCODE", purGood.getInvcode());
-                saveOutBody.put("CINVBASID", purGood.getPk_invbasdoc());
-                saveOutBody.put("CINVENTORYID", purGood.getCinventoryid());
-                saveOutBody.put("NSHOULDOUTNUM", purGood.getNshouldinnum());
-                saveOutBody.put("NSHOULDOUTNUM", "100.00");
-                saveOutBody.put("NOUTNUM", purGood.getNum_task());
-                saveOutBody.put("PK_BODYCALBODY", "1011TC100000000000KV");
-                saveOutBody.put("VSOURCEBILLCODE", purGood.getSourceBill());
-                saveOutBody.put("VSOURCEROWNO", purGood.getVsourcerowno());
-                saveOutBody.put("VBATCHCODE", purGood.getVbatchcode());
-                saveOutBody.put("CSOURCETYPE", "4N");
+    private void saveInfo() {
+        String           CFIRSTBILLBID = null;
+        String           CFIRSTBILLHID = null;
+        final JSONObject table         = new JSONObject();
+        JSONObject       saveOut       = new JSONObject();
+        JSONObject       saveOutHead   = new JSONObject();
+        try {
+            saveOutHead.put("CWAREHOUSEID", WarehouseID);
+            saveOutHead.put("PK_CALBODY", MainLogin.objLog.STOrgCode);
+            saveOutHead.put("PK_CORP", MainLogin.objLog.STOrgCode);
+            saveOutHead.put("CLASTMODIID", MainLogin.objLog.UserID);
+            saveOutHead.put("COPERATORID", MainLogin.objLog.UserID);
+            saveOutHead.put("CDISPATCHERID", "0001TC100000000011Q8");
+            JSONObject saveOutBody  = new JSONObject();
+            JSONArray  saveOutArray = new JSONArray();
+            for (int i = 0; i < taskList.size(); i++) {
+                PurGood purGood = taskList.get(i);
+                if (purGood.getFbillrowflag().equals("3")) {
+                    saveOutBody.put("CSOURCEBILLBID", purGood.getCsourcebillbid());
+                    saveOutBody.put("CSOURCEBILLHID", purGood.getCsourcebillhid());
+                    CFIRSTBILLBID = purGood.getCsourcebillbid();
+                    CFIRSTBILLHID = purGood.getCsourcebillhid();
+                    saveOutBody.put("CFIRSTBILLBID", CFIRSTBILLBID);
+                    saveOutBody.put("CFIRSTBILLHID", CFIRSTBILLHID);
+                    saveOutBody.put("CBODYWAREHOUSEID", WarehouseID);
+                    saveOutBody.put("INVCODE", purGood.getInvcode());
+                    saveOutBody.put("CINVBASID", purGood.getPk_invbasdoc());
+                    saveOutBody.put("CINVENTORYID", purGood.getCinventoryid());
+                    saveOutBody.put("NSHOULDOUTNUM", purGood.getNshouldinnum());
+                    saveOutBody.put("NSHOULDOUTNUM", "100.00");
+                    saveOutBody.put("NOUTNUM", purGood.getNum_task());
+                    saveOutBody.put("PK_BODYCALBODY", "1011TC100000000000KV");
+                    saveOutBody.put("VSOURCEBILLCODE", purGood.getSourceBill());
+                    saveOutBody.put("VSOURCEROWNO", purGood.getVsourcerowno());
+                    saveOutBody.put("VBATCHCODE", purGood.getVbatchcode());
+                    saveOutBody.put("CSOURCETYPE", "4N");
+                }
             }
-        }
-        saveOutArray.put(saveOutBody);
-        saveOut.put("Head", saveOutHead);
-        saveOut.put("Body", saveOutArray);
-        saveOut.put("GUIDS", UUID.randomUUID().toString());
-        table.put("SaveOut", saveOut);
+            saveOutArray.put(saveOutBody);
+            saveOut.put("Head", saveOutHead);
+            saveOut.put("Body", saveOutArray);
+            saveOut.put("GUIDS", UUID.randomUUID().toString());
+            table.put("SaveOut", saveOut);
 
-        JSONObject saveIn = new JSONObject();
-        JSONObject saveInHead = new JSONObject();
-        saveInHead.put("CWAREHOUSEID", WarehouseID);     //仓库
-        saveInHead.put("PK_CALBODY", MainLogin.objLog.STOrgCode);   //库存组织
-        saveInHead.put("PK_CORP", MainLogin.objLog.STOrgCode);   //库存组织
-        saveInHead.put("CLASTMODIID", MainLogin.objLog.UserID);  //操作人id  ？
-        saveInHead.put("COPERATORID", MainLogin.objLog.UserID);  //操作人id   ？
-        saveInHead.put("CDISPATCHERID", "0001TC100000000011QO");//收发类别,邹俊豪说的先写死
-        JSONObject saveInBody = new JSONObject();
-        JSONArray saveInArray = new JSONArray();
-        for (int i = 0; i < taskList.size(); i++) {
-            PurGood purGood = taskList.get(i);
-            if (purGood.getFbillrowflag().equals("2")) {
-                saveInBody.put("CSOURCEBILLBID", purGood.getCsourcebillbid());
-                saveInBody.put("CSOURCEBILLHID", purGood.getCsourcebillhid());
-                saveInBody.put("CFIRSTBILLBID", CFIRSTBILLBID);
-                saveInBody.put("CFIRSTBILLHID", CFIRSTBILLHID);
-                saveInBody.put("CBODYWAREHOUSEID", WarehouseID);
-                saveInBody.put("INVCODE", purGood.getInvcode());
-                saveInBody.put("CINVBASID", purGood.getPk_invbasdoc());
-                saveInBody.put("CINVENTORYID", purGood.getCinventoryid());
+            JSONObject saveIn     = new JSONObject();
+            JSONObject saveInHead = new JSONObject();
+            saveInHead.put("CWAREHOUSEID", WarehouseID);     //仓库
+            saveInHead.put("PK_CALBODY", MainLogin.objLog.STOrgCode);   //库存组织
+            saveInHead.put("PK_CORP", MainLogin.objLog.STOrgCode);   //库存组织
+            saveInHead.put("CLASTMODIID", MainLogin.objLog.UserID);  //操作人id  ？
+            saveInHead.put("COPERATORID", MainLogin.objLog.UserID);  //操作人id   ？
+            saveInHead.put("CDISPATCHERID", "0001TC100000000011QO");//收发类别,邹俊豪说的先写死
+            JSONObject saveInBody  = new JSONObject();
+            JSONArray  saveInArray = new JSONArray();
+            for (int i = 0; i < taskList.size(); i++) {
+                PurGood purGood = taskList.get(i);
+                if (purGood.getFbillrowflag().equals("2")) {
+                    saveInBody.put("CSOURCEBILLBID", purGood.getCsourcebillbid());
+                    saveInBody.put("CSOURCEBILLHID", purGood.getCsourcebillhid());
+                    saveInBody.put("CFIRSTBILLBID", CFIRSTBILLBID);
+                    saveInBody.put("CFIRSTBILLHID", CFIRSTBILLHID);
+                    saveInBody.put("CBODYWAREHOUSEID", WarehouseID);
+                    saveInBody.put("INVCODE", purGood.getInvcode());
+                    saveInBody.put("CINVBASID", purGood.getPk_invbasdoc());
+                    saveInBody.put("CINVENTORYID", purGood.getCinventoryid());
 //                saveInBody.put("NSHOULDOUTNUM", purGood.getNshouldinnum());
-                saveInBody.put("NSHOULDOUTNUM", "100.00");
-                saveInBody.put("NINNUM", purGood.getNum_task());
-                saveInBody.put("VSOURCEBILLCODE", purGood.getSourceBill());
-                saveInBody.put("PK_BODYCALBODY", "1011TC100000000000KV");
-                saveInBody.put("VSOURCEBILLCODE", purGood.getSourceBill());
-                saveInBody.put("VSOURCEROWNO", purGood.getVsourcerowno());
-                saveInBody.put("VBATCHCODE", purGood.getVbatchcode());
-                saveInBody.put("CSOURCETYPE", "4N");
+                    saveInBody.put("NSHOULDOUTNUM", "100.00");
+                    saveInBody.put("NINNUM", purGood.getNum_task());
+                    saveInBody.put("VSOURCEBILLCODE", purGood.getSourceBill());
+                    saveInBody.put("PK_BODYCALBODY", "1011TC100000000000KV");
+                    saveInBody.put("VSOURCEBILLCODE", purGood.getSourceBill());
+                    saveInBody.put("VSOURCEROWNO", purGood.getVsourcerowno());
+                    saveInBody.put("VBATCHCODE", purGood.getVbatchcode());
+                    saveInBody.put("CSOURCETYPE", "4N");
+                }
             }
+            saveInArray.put(saveInBody);
+            saveIn.put("Head", saveInHead);
+            saveIn.put("Body", saveInArray);
+            saveIn.put("GUIDS", UUID.randomUUID().toString());
+            table.put("SaveIn", saveIn);
+            table.put("OPDATE", edBillDate.getText().toString());
+            Log.d("TAG", "saveInfo: " + table.toString());
+            SaveThread saveThread = new SaveThread(table, "SaveOtherInOutBill", mHandler, 1);
+            Thread     thread     = new Thread(saveThread);
+            thread.start();
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
-        saveInArray.put(saveInBody);
-        saveIn.put("Head", saveInHead);
-        saveIn.put("Body", saveInArray);
-        saveIn.put("GUIDS", UUID.randomUUID().toString());
-        table.put("SaveIn", saveIn);
-        Log.d("TAG", "saveInfo: " + table.toString());
-        SaveThread saveThread = new SaveThread(table, "SaveOtherInOutBill", mHandler, 1);
-        Thread thread = new Thread(saveThread);
-        thread.start();
     }
 
     /**
@@ -332,12 +355,23 @@ public class StatusChangeAct extends Activity {
     }
 
     private boolean checkSaveInfo() {
-        return !TextUtils.isEmpty(mEdSourceBill.getText().toString())
-                && !TextUtils.isEmpty(mEdSelectWh.getText().toString());
+        if (TextUtils.isEmpty(mEdSourceBill.getText().toString())) {
+            showToast(activity, "来源单号不可为空");
+            mEdSourceBill.requestFocus();
+            return false;
+        }
+
+        if (TextUtils.isEmpty(mEdSelectWh.getText().toString())) {
+            showToast(activity, "仓库不可为空");
+            mEdSelectWh.requestFocus();
+            return false;
+        }
+
+        return true;
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @NonNull Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         // 回传数据<----OtherOrderList.class，从ShowOrderList(); 中跳过去
         if (requestCode == 99 && resultCode == 1) {
@@ -362,7 +396,7 @@ public class StatusChangeAct extends Activity {
         if (requestCode == 93 && resultCode == 7) {
             taskList = data.getParcelableArrayListExtra("taskList");
             Log.d(TAG, "onActivityResult: " + taskList);
-            Log.d(TAG, "onActivityResult: " + taskList.toArray());
+            Log.d(TAG, "onActivityResult: " + Arrays.toString(taskList.toArray()));
         }
     }
 
@@ -399,5 +433,38 @@ public class StatusChangeAct extends Activity {
             startActivityForResult(otherOrderDetail, 93);
         }
     }
+
+    private View.OnFocusChangeListener myFocusListener = new View.OnFocusChangeListener() {
+        @Override
+        public void onFocusChange(View view, boolean hasFocus) {
+            if (hasFocus) {
+                DatePickerDialog dpd = new DatePickerDialog(activity, Datelistener, year, month, day);
+                dpd.show();//显示DatePickerDialog组件
+            }
+        }
+    };
+
+    private DatePickerDialog.OnDateSetListener Datelistener = new DatePickerDialog.OnDateSetListener() {
+        /**params：view：该事件关联的组件
+         * params：myyear：当前选择的年
+         * params：monthOfYear：当前选择的月
+         * params：dayOfMonth：当前选择的日
+         */
+        @Override
+        public void onDateSet(DatePicker view, int myyear, int monthOfYear, int dayOfMonth) {
+            //修改year、month、day的变量值，以便以后单击按钮时，DatePickerDialog上显示上一次修改后的值
+            year = myyear;
+            month = monthOfYear;
+            day = dayOfMonth;
+            updateDate();
+        }
+
+        //当DatePickerDialog关闭时，更新日期显示
+        private void updateDate() {
+            //在TextView上显示日期
+            edBillDate.setText(year + "-" + (month + 1) + "-" + day);
+        }
+
+    };
 }
 
