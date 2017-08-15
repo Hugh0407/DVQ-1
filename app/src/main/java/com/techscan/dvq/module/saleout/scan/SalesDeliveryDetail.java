@@ -290,7 +290,7 @@ public class SalesDeliveryDetail extends Activity {
                             }
                         }else{
                             if (!isNumber(txtSaleTotal.getText().toString())) {
-                                Utils.showToast(SalesDeliveryDetail.this, "数量不正确");
+                                Utils.showToast(SalesDeliveryDetail.this, "数量不正确a");
                                 txtSaleTotal.setText("");
 //                            txtSaleNumber.requestFocus();
                                 return true;
@@ -466,11 +466,11 @@ public class SalesDeliveryDetail extends Activity {
 
         IniDetail();
         try {
-            if (isPacked==false) {
-                objSaleBaseInfo = new GetSaleBaseInfo(m_cSplitBarcode, mHandler, PK_CORP);
-            }else{
+//            if (isPacked==false) {
+//                objSaleBaseInfo = new GetSaleBaseInfo(m_cSplitBarcode, mHandler, PK_CORP);
+//            }else{
                 objSaleBaseInfo = new GetSaleBaseInfo(m_cSplitBarcode, mHandler, PK_CORP,bar.FinishBarCode);
-            }
+//            }
         } catch (Exception ex) {
             Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
@@ -564,15 +564,21 @@ public class SalesDeliveryDetail extends Activity {
         txtSaleWeight.setText(m_mapSaleBaseInfo.get("quantity").toString());
         txtSaleNumber.setText(m_mapSaleBaseInfo.get("number").toString());
          cw = m_mapSaleBaseInfo.get("currentweight").toString();
-        if (isPacked && !cw.equals("null")) {
+        if (!cw.equals("null")) {
             txtSaleTotal.setText(cw);
         }else{
             ldTotal = (Double) m_mapSaleBaseInfo.get("quantity") * (Integer) m_mapSaleBaseInfo.get("number");
+            int b=ldTotal.intValue();
+            Integer ldTotal=Integer.valueOf(b);
             txtSaleTotal.setText(ldTotal.toString());
         }
         if (m_mapSaleBaseInfo.get("barcodetype").toString().equals("TP")) {
             if (isPacked==false) {
-                m_mapSaleBaseInfo.put("total", ldTotal);
+                if (!cw.equals("null")){
+                    m_mapSaleBaseInfo.put("total", cw);
+                }else {
+                    m_mapSaleBaseInfo.put("total", ldTotal);
+                }
                 txtSaleBatch.setFocusableInTouchMode(false);
                 txtSaleBatch.setFocusable(false);
                 txtSaleNumber.setFocusableInTouchMode(false);
@@ -583,12 +589,17 @@ public class SalesDeliveryDetail extends Activity {
             }else{
                 txtSaleTotal.setEnabled(true);
                 txtSaleTotal.requestFocus();
+                txtSaleTotal.selectAll();
                 txtSaleTotal.setFocusableInTouchMode(true);
                 txtSaleTotal.setFocusable(true);
             }
         } else if (m_mapSaleBaseInfo.get("barcodetype").toString().equals("P")) {
             if (isPacked==false) {
-                m_mapSaleBaseInfo.put("total", ldTotal);
+                if (!cw.equals("null")){
+                    m_mapSaleBaseInfo.put("total", cw);
+                }else {
+                    m_mapSaleBaseInfo.put("total", ldTotal);
+                }
                 txtSaleBatch.setFocusableInTouchMode(false);
                 txtSaleBatch.setFocusable(false);
                 txtSaleNumber.setFocusableInTouchMode(true);
@@ -611,6 +622,7 @@ public class SalesDeliveryDetail extends Activity {
 
                 txtSaleTotal.setEnabled(true);
                 txtSaleTotal.requestFocus();
+                txtSaleTotal.selectAll();
                 txtSaleTotal.setFocusableInTouchMode(true);
                 txtSaleTotal.setFocusable(true);
             }
@@ -620,6 +632,7 @@ public class SalesDeliveryDetail extends Activity {
     private boolean addDataToDetail() {
         SplitBarcode bar = m_cSplitBarcode;
         Double S = 0.0;
+//        S= Double.valueOf(txtSaleTotal.getText().toString());
         try {
             JSONArray bodys = jsBody.getJSONArray("dbBody");
             Log.d("TAG", "dbBody: " + bodys);
@@ -629,20 +642,19 @@ public class SalesDeliveryDetail extends Activity {
                 Log.d(TAG, "InvCode: "+temp.getString("invcode"));
                         if (temp.getString("invcode").equals(m_mapSaleBaseInfo.get("invcode").toString())) {
                             isFind = true;
-                            String empty = "";
-//                            String rowno =temp.getString("rowno");
-//                            if (){
-//
+//                            if (S<=0){
+//                                break;
 //                            }
+                            String empty = "";
                             Double doneqty = 0.0;
                             if (!temp.getString("ntotaloutinvnum").isEmpty() && !temp.getString("ntotaloutinvnum").toLowerCase().equals("null")) {
-                                String rowno =temp.getString("rowno");
+//                                String rowno =temp.getString("crowno");
                                 doneqty = temp.getDouble("ntotaloutinvnum");
                                 doneqty = doneqty + Double.parseDouble(txtSaleTotal.getText().toString());
                                 Log.d(TAG, "ScanedToGet: " + doneqty.toString());
                                 if (doneqty > temp.getInt("doneqty")) {
                                     Toast.makeText(this, "这个存货已经超过应发数量了,不允出库!",
-                                            Toast.LENGTH_LONG).show();
+                                    Toast.LENGTH_LONG).show();
                                     MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                                     IniDetail();
                                     txtBarcode.setText("");
@@ -754,6 +766,7 @@ public class SalesDeliveryDetail extends Activity {
                     TotalBox = String.valueOf(Double.parseDouble(temp.getString("box").toString())
                             + Double.parseDouble(TotalBox));
                     temp.put("box", TotalBox);
+                    temp.put("opqty", TotalBox);
                     return true;
                 }
             }
@@ -1093,7 +1106,7 @@ public class SalesDeliveryDetail extends Activity {
         lstDetailBody = new ArrayList<Map<String, Object>>();
         Map<String, Object> map;
         if (jsSerino == null || !jsSerino.has("Serino")) {
-            Toast.makeText(this, "还没有扫描到的记录", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "没有扫描到明细记录", Toast.LENGTH_SHORT).show();
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             return;
         }
@@ -1210,10 +1223,10 @@ public class SalesDeliveryDetail extends Activity {
                     Map<String, Object> mapTemp = lstDetailBody
                             .get(index);
                     String invcode     = (String) mapTemp.get("invcode");
-                    String batch       = (String) mapTemp.get("batch");
-                    String sno         = (String) mapTemp.get("sno");
+//                    String batch       = (String) mapTemp.get("batch");
+//                    String sno         = (String) mapTemp.get("sno");
                     String serino      = (String) mapTemp.get("serino");
-                    String totals      = (String) mapTemp.get("total");
+//                    String totals      = (String) mapTemp.get("total");
                     Double ScanedTotal = Double.parseDouble(mapTemp.get("total").toString());
 
                     if (ScanedBarcode != null || ScanedBarcode.size() > 0) {
@@ -1230,7 +1243,7 @@ public class SalesDeliveryDetail extends Activity {
                     try {
                         arrays = jsSerino.getJSONArray("Serino");
 
-                        HashMap<String, Object> Temp    = new HashMap<String, Object>();
+//                        HashMap<String, Object> Temp    = new HashMap<String, Object>();
                         JSONArray               serinos = new JSONArray();
 
                         for (int i = 0; i < arrays.length(); i++) {
@@ -1256,13 +1269,15 @@ public class SalesDeliveryDetail extends Activity {
 
                             String invcodeold = ((JSONObject) (bodys.get(i)))
                                     .getString("invcode");
-                            if (invcodeold.equals(invcode)) {
+                            Double total = ((JSONObject) (bodys.get(i)))
+                                    .getDouble("ntotaloutinvnum");
+                            if (invcodeold.equals(invcode)&&total>0) {
                                 Double doneqty = temp.getDouble("ntotaloutinvnum");
                                 temp.put("ntotaloutinvnum", doneqty - ScanedTotal);
-//                                break;
                             }
 
                             bodynews.put(temp);
+//                            break;
                         }
 
                         jsBody = new JSONObject();

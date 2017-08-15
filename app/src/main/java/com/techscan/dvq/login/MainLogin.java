@@ -154,7 +154,9 @@ public class MainLogin extends Activity {
         LoginString = mySharedPreferences.getString("Address", "");        //主地址
         LoginString2 = mySharedPreferences.getString("Address2", "");    //副地址
         CompanyCode = mySharedPreferences.getString("CompanyCode", "");
-        OrgCode = mySharedPreferences.getString("OrgCode", "");
+        // TODO: 2017/8/15  XUHU
+//        OrgCode = mySharedPreferences.getString("OrgCode", "");
+        OrgCode = mySharedPreferences.getString("CompanyCode", "");
         WhCode = mySharedPreferences.getString("WhCode", "");// 获取A公司的过滤仓库
         // AccId=mySharedPreferences.getString("AccId", "A");
         WhCodeB = mySharedPreferences.getString("AccId", "");// 获取B公司的过滤仓库
@@ -269,6 +271,8 @@ public class MainLogin extends Activity {
                                 objLog.UserID = jas.getString("userid");
                                 objLog.UserName = LoginUser;
                                 objLog.STOrgCode = OrgCode;
+//                                ************// TODO: 2017/8/15 XUHU
+//                                objLog.STOrgCode = CompanyCode;
                                 objLog.WhCodeA = WhCode;
                                 objLog.WhCodeB = WhCodeB;
 

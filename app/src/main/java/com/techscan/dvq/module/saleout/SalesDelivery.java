@@ -828,6 +828,19 @@ public class SalesDelivery extends Activity {
             tableHead.put("VDEF1", vd1);
             tableHead.put("VDEF2", vd2);
             tableHead.put("VDEF5", vd3);
+//            JSONArray ss = jsBody.getJSONArray("dbBody");
+//            JSONArray dd = jsTotal.getJSONArray("Serino");
+//            Log.d(TAG, "saveData: "+ss.length()+"");
+//            Log.d(TAG, "saveData: "+dd.length()+"");
+//            Double qq = Double.valueOf(NTOTALNUMBER);
+//            double ff = 0.0;
+//            if (dd.length()<ss.length()){
+//                ff = ss.length()-dd.length()+1;
+//                String rr = formatDecimal(String.valueOf(qq*ff));
+//                tableHead.put("NTOTALNUMBER", rr);
+//            }else {
+//                tableHead.put("NTOTALNUMBER", NTOTALNUMBER);
+//            }
             tableHead.put("NTOTALNUMBER", NTOTALNUMBER);
             tableHead.put("NOTOTALNUMBER", "200.00");// TODO: 2017/7/4
             table.put("Head", tableHead);
@@ -836,11 +849,9 @@ public class SalesDelivery extends Activity {
 
             JSONArray bodys = jsBody.getJSONArray("dbBody");
             JSONArray arraysSerino = jsTotal.getJSONArray("Serino");
-            int y = 0;
-            for (int j = 0; j < arraysSerino.length(); j++) {
-
+//            int y = 0;
+                for (int j = 0; j < arraysSerino.length(); j++) {
                 for (int i = 0; i < bodys.length(); i++) {
-
                     if (arraysSerino.getJSONObject(j).getString("invcode").toLowerCase().equals(
                             bodys.getJSONObject(i).getString("invcode"))) {
                         Double box = arraysSerino.getJSONObject(j).getDouble("box");
@@ -848,6 +859,7 @@ public class SalesDelivery extends Activity {
                         String totalBox = decimalFormat.format(box);//format 返回的是字符串
                         JSONObject object = new JSONObject();
                         object.put("CROWNO", bodys.getJSONObject(i).getString("crowno"));
+                        object.put("BLARGESSFLAG", bodys.getJSONObject(i).getString("blargessflag"));
                         object.put("VFREE4", arraysSerino.getJSONObject(j).getString("vfree4"));//海关手册号
                         object.put("VSOURCEROWNO", bodys.getJSONObject(i).getString("crowno"));
                         object.put("VSOURCERECEIVECODE", tmpBillCode);
@@ -873,7 +885,7 @@ public class SalesDelivery extends Activity {
                         object.put("VRECEIVEADDRESS", adds);
                         object.put("VRECEIVEPERSON", MainLogin.objLog.LoginUser);
                         bodyArray.put(object);
-                        y++;
+//                        y++;
                     }
                 }
             }

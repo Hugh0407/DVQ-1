@@ -455,12 +455,12 @@ public class MultilateralTradeDetail extends Activity {
 
         IniDetail();
         try {
-            if (isPacked==false) {
-                objSaleBaseInfo = new GetMultilateralTradeBaseInfo(m_cSplitBarcode, mHandler, PK_CORP);
+//            if (isPacked==false) {
+//                objSaleBaseInfo = new GetMultilateralTradeBaseInfo(m_cSplitBarcode, mHandler, PK_CORP);
 //            objSaleBaseInfo = new GetSaleBaseInfo(bar, mHandler, CORP,WAREHOUSEID,CALBODYID,CINVBASID,INVENTORYID);
-            }else{
+//            }else{
                 objSaleBaseInfo = new GetMultilateralTradeBaseInfo(m_cSplitBarcode, mHandler, PK_CORP,bar.FinishBarCode);
-            }
+//            }
         } catch (Exception ex) {
             Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
@@ -577,15 +577,22 @@ public class MultilateralTradeDetail extends Activity {
         txtSaleWeight.setText(m_mapSaleBaseInfo.get("quantity").toString());
         txtSaleNumber.setText(m_mapSaleBaseInfo.get("number").toString());
         cw = m_mapSaleBaseInfo.get("currentweight").toString();
-        if (isPacked && !cw.equals("null")) {
+//        if (isPacked && !cw.equals("null")) {
+        if (!cw.equals("null")) {
             txtSaleTotal.setText(cw);
         }else{
             ldTotal = (Double) m_mapSaleBaseInfo.get("quantity") * (Integer) m_mapSaleBaseInfo.get("number");
+            int b=ldTotal.intValue();
+            Integer ldTotal=Integer.valueOf(b);
             txtSaleTotal.setText(ldTotal.toString());
         }
         if (m_mapSaleBaseInfo.get("barcodetype").toString().equals("TP")) {
             if (isPacked==false) {
-                m_mapSaleBaseInfo.put("total", ldTotal);
+                if (!cw.equals("null")){
+                    m_mapSaleBaseInfo.put("total", cw);
+                }else {
+                    m_mapSaleBaseInfo.put("total", ldTotal);
+                }
                 txtSaleBatch.setFocusableInTouchMode(false);
                 txtSaleBatch.setFocusable(false);
                 txtSaleNumber.setFocusableInTouchMode(false);
@@ -596,12 +603,18 @@ public class MultilateralTradeDetail extends Activity {
             }else{
                 txtSaleTotal.setEnabled(true);
                 txtSaleTotal.requestFocus();
+                txtSaleTotal.selectAll();
                 txtSaleTotal.setFocusableInTouchMode(true);
                 txtSaleTotal.setFocusable(true);
             }
         } else if (m_mapSaleBaseInfo.get("barcodetype").toString().equals("P")) {
             if (isPacked==false) {
-                m_mapSaleBaseInfo.put("total", ldTotal);
+                if (!cw.equals("null")){
+                    m_mapSaleBaseInfo.put("total", cw);
+                }else {
+                    m_mapSaleBaseInfo.put("total", ldTotal);
+                }
+//                m_mapSaleBaseInfo.put("total", ldTotal);
                 txtSaleBatch.setFocusableInTouchMode(false);
                 txtSaleBatch.setFocusable(false);
                 txtSaleNumber.setFocusableInTouchMode(true);
@@ -614,6 +627,7 @@ public class MultilateralTradeDetail extends Activity {
             }else{
                 txtSaleTotal.setEnabled(true);
                 txtSaleTotal.requestFocus();
+                txtSaleTotal.selectAll();
                 txtSaleTotal.setFocusableInTouchMode(true);
                 txtSaleTotal.setFocusable(true);
             }
@@ -767,12 +781,14 @@ public class MultilateralTradeDetail extends Activity {
                     TotalBox = String.valueOf(Double.parseDouble(temp.getString("box").toString())
                             + Double.parseDouble(TotalBox));
                     temp.put("box", TotalBox);
+//                    temp.put("opqty", TotalBox);
                     return true;
                 }
                 if (temp.getString("serino").equals(serino)&&(temp.getBoolean("isDoPacked")==true)) {
                     TotalBox = String.valueOf(Double.parseDouble(temp.getString("box").toString())
                             + Double.parseDouble(TotalBox));
                     temp.put("box", TotalBox);
+                    temp.put("opqty", TotalBox);
                     return true;
                 }
             }
@@ -1079,7 +1095,7 @@ public class MultilateralTradeDetail extends Activity {
         lstTaskBody = new ArrayList<Map<String, Object>>();
         Map<String, Object> map;
         if (jsSerino == null || !jsSerino.has("Serino")) {
-            Toast.makeText(this, "还没有扫描到的记录", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "没有扫描到明细记录", Toast.LENGTH_SHORT).show();
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             return;
         }
