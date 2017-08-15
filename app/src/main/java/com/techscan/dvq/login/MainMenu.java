@@ -357,7 +357,7 @@ public class MainMenu extends Activity {
                 lstImageItem.add(map);
                 // TODO: 2017/7/31 XUHU
                 map = new HashMap<String, Object>();
-                map.put("ItemImage", R.drawable.icon_ck_qt);
+                map.put("ItemImage", R.drawable.icon_my_dj);
                 map.put("ItemText", "¶à½ÇÃ³Ò×");
                 lstImageItem.add(map);
 
