@@ -997,6 +997,7 @@ public class SalesDelivery extends Activity {
         para.put("FunctionName", "GetWareHouseList");
         para.put("CompanyCode", MainLogin.objLog.CompanyCode);
         para.put("STOrgCode", MainLogin.objLog.STOrgCode);
+        Log.d(TAG, "SSS: "+MainLogin.objLog.STOrgCode);
         para.put("TableName", "warehouse");
 
         try {

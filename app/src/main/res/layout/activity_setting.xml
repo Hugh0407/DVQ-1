@@ -105,22 +105,6 @@
         android:layout_alignRight="@+id/txtWebAddress"
         android:text="公司Code" />
 
-    <EditText
-        android:id="@+id/txtstaccid"
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/txtstwhcode"
-        android:ems="10"
-        android:singleLine="true"
-        android:visibility="visible"
-        android:background="@drawable/edittext_style"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:layout_alignLeft="@+id/eTAddress"
-        android:layout_alignStart="@+id/eTAddress" />
-
     <TextView
         android:visibility="gone"
         android:id="@+id/tvsearchInvUnitName"
@@ -133,6 +117,7 @@
         android:text="库存组织" />
 
     <TextView
+        android:visibility="gone"
         android:id="@+id/tvsearchInvcorpcode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -142,6 +127,7 @@
         android:text="仓库前缀A" />
 
     <TextView
+
         android:id="@+id/tvSearchInvcsCode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -149,7 +135,7 @@
         android:layout_alignBottom="@+id/txtstaccid"
         android:layout_alignRight="@+id/tvsearchInvcorpcode"
         android:text="仓库前缀B"
-        android:visibility="visible" />
+        android:visibility="gone" />
 
     <EditText
         android:id="@+id/eTCpy"
@@ -183,6 +169,7 @@
         android:layout_alignEnd="@+id/eTCpy" />
 
     <EditText
+        android:visibility="gone"
         android:id="@+id/txtstwhcode"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
@@ -208,5 +195,17 @@
         android:layout_margin="5dp"
         android:layout_above="@+id/SettingsButtonBar"
         android:layout_toRightOf="@+id/TextView02"/>
+
+    <EditText
+        android:id="@+id/txtstaccid"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:ems="10"
+        android:singleLine="true"
+        android:visibility="gone"
+        android:background="@drawable/edittext_style"
+        android:layout_below="@+id/eTCpy"
+        android:layout_alignLeft="@+id/eTCpy"
+        android:layout_alignStart="@+id/eTCpy" />
 
 </RelativeLayout>
