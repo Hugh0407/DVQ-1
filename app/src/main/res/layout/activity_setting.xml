@@ -122,6 +122,7 @@
         android:layout_alignStart="@+id/eTAddress" />
 
     <TextView
+        android:visibility="gone"
         android:id="@+id/tvsearchInvUnitName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -166,6 +167,7 @@
         android:layout_alignStart="@+id/eTAddress" />
 
     <EditText
+        android:visibility="gone"
         android:id="@+id/txtstorgcode"
         android:layout_width="wrap_content"
         android:layout_height="30dp"

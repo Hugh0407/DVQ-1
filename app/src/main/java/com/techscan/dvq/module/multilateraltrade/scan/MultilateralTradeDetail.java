@@ -767,6 +767,7 @@ public class MultilateralTradeDetail extends Activity {
                     TotalBox = String.valueOf(Double.parseDouble(temp.getString("box").toString())
                             + Double.parseDouble(TotalBox));
                     temp.put("box", TotalBox);
+                    temp.put("opqty", TotalBox);
                     return true;
                 }
                 if (temp.getString("serino").equals(serino)&&(temp.getBoolean("isDoPacked")==true)) {
@@ -1079,7 +1080,7 @@ public class MultilateralTradeDetail extends Activity {
         lstTaskBody = new ArrayList<Map<String, Object>>();
         Map<String, Object> map;
         if (jsSerino == null || !jsSerino.has("Serino")) {
-            Toast.makeText(this, "还没有扫描到的记录", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "没有扫描到明细记录", Toast.LENGTH_SHORT).show();
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             return;
         }
