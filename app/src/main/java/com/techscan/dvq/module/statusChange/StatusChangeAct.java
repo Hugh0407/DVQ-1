@@ -408,7 +408,7 @@ public class StatusChangeAct extends Activity {
         }
         Intent otherOrder = new Intent(this, OtherOrderList.class);
         otherOrder.putExtra("OrderType", "4N");
-        otherOrder.putExtra("Typename", this.mEdBillType.getText().toString());
+        otherOrder.putExtra("Typename", mEdBillType.getText().toString());
         otherOrder.putExtra("BillCode", lsBillCode);
         startActivityForResult(otherOrder, 99);
     }
