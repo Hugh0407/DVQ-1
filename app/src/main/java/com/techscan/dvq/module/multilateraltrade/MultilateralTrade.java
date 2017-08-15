@@ -394,13 +394,14 @@ public class MultilateralTrade extends Activity {
                         MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                         return;
                     }
-                    if (txtDocument.getText().toString() == null || txtDocument.getText().toString().equals("")) {
-                        Toast.makeText(MultilateralTrade.this, "请输入出库单号",
-                                Toast.LENGTH_LONG).show();
-                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                        txtDocument.requestFocus();
-                        return;
-                    }
+
+//                    if (txtDocument.getText().toString() == null || txtDocument.getText().toString().equals("")) {
+//                        Toast.makeText(MultilateralTrade.this, "请输入出库单号",
+//                                Toast.LENGTH_LONG).show();
+//                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                        txtDocument.requestFocus();
+//                        return;
+//                    }
 
 
                     if (txtOrg.getText().toString() == null || (!txtOrg.getText().toString().equals(checkInfo.get("Organization")))) {

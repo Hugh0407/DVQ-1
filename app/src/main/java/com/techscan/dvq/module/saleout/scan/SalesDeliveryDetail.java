@@ -290,7 +290,7 @@ public class SalesDeliveryDetail extends Activity {
                             }
                         }else{
                             if (!isNumber(txtSaleTotal.getText().toString())) {
-                                Utils.showToast(SalesDeliveryDetail.this, "数量不正确");
+                                Utils.showToast(SalesDeliveryDetail.this, "数量不正确a");
                                 txtSaleTotal.setText("");
 //                            txtSaleNumber.requestFocus();
                                 return true;
@@ -466,11 +466,11 @@ public class SalesDeliveryDetail extends Activity {
 
         IniDetail();
         try {
-            if (isPacked==false) {
-                objSaleBaseInfo = new GetSaleBaseInfo(m_cSplitBarcode, mHandler, PK_CORP);
-            }else{
+//            if (isPacked==false) {
+//                objSaleBaseInfo = new GetSaleBaseInfo(m_cSplitBarcode, mHandler, PK_CORP);
+//            }else{
                 objSaleBaseInfo = new GetSaleBaseInfo(m_cSplitBarcode, mHandler, PK_CORP,bar.FinishBarCode);
-            }
+//            }
         } catch (Exception ex) {
             Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
@@ -564,15 +564,21 @@ public class SalesDeliveryDetail extends Activity {
         txtSaleWeight.setText(m_mapSaleBaseInfo.get("quantity").toString());
         txtSaleNumber.setText(m_mapSaleBaseInfo.get("number").toString());
          cw = m_mapSaleBaseInfo.get("currentweight").toString();
-        if (isPacked && !cw.equals("null")) {
+        if (!cw.equals("null")) {
             txtSaleTotal.setText(cw);
         }else{
             ldTotal = (Double) m_mapSaleBaseInfo.get("quantity") * (Integer) m_mapSaleBaseInfo.get("number");
+            int b=ldTotal.intValue();
+            Integer ldTotal=Integer.valueOf(b);
             txtSaleTotal.setText(ldTotal.toString());
         }
         if (m_mapSaleBaseInfo.get("barcodetype").toString().equals("TP")) {
             if (isPacked==false) {
-                m_mapSaleBaseInfo.put("total", ldTotal);
+                if (!cw.equals("null")){
+                    m_mapSaleBaseInfo.put("total", cw);
+                }else {
+                    m_mapSaleBaseInfo.put("total", ldTotal);
+                }
                 txtSaleBatch.setFocusableInTouchMode(false);
                 txtSaleBatch.setFocusable(false);
                 txtSaleNumber.setFocusableInTouchMode(false);
@@ -583,12 +589,17 @@ public class SalesDeliveryDetail extends Activity {
             }else{
                 txtSaleTotal.setEnabled(true);
                 txtSaleTotal.requestFocus();
+                txtSaleTotal.selectAll();
                 txtSaleTotal.setFocusableInTouchMode(true);
                 txtSaleTotal.setFocusable(true);
             }
         } else if (m_mapSaleBaseInfo.get("barcodetype").toString().equals("P")) {
             if (isPacked==false) {
-                m_mapSaleBaseInfo.put("total", ldTotal);
+                if (!cw.equals("null")){
+                    m_mapSaleBaseInfo.put("total", cw);
+                }else {
+                    m_mapSaleBaseInfo.put("total", ldTotal);
+                }
                 txtSaleBatch.setFocusableInTouchMode(false);
                 txtSaleBatch.setFocusable(false);
                 txtSaleNumber.setFocusableInTouchMode(true);
@@ -611,6 +622,7 @@ public class SalesDeliveryDetail extends Activity {
 
                 txtSaleTotal.setEnabled(true);
                 txtSaleTotal.requestFocus();
+                txtSaleTotal.selectAll();
                 txtSaleTotal.setFocusableInTouchMode(true);
                 txtSaleTotal.setFocusable(true);
             }
@@ -748,13 +760,13 @@ public class SalesDeliveryDetail extends Activity {
                     TotalBox = String.valueOf(Double.parseDouble(temp.getString("box").toString())
                             + Double.parseDouble(TotalBox));
                     temp.put("box", TotalBox);
-                    temp.put("opqty", TotalBox);
                     return true;
                 }
                 if (temp.getString("serino").equals(serino)&&(temp.getBoolean("isDoPacked")==true)) {
                     TotalBox = String.valueOf(Double.parseDouble(temp.getString("box").toString())
                             + Double.parseDouble(TotalBox));
                     temp.put("box", TotalBox);
+                    temp.put("opqty", TotalBox);
                     return true;
                 }
             }

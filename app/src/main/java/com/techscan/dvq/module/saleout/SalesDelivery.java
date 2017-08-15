@@ -859,6 +859,7 @@ public class SalesDelivery extends Activity {
                         String totalBox = decimalFormat.format(box);//format 返回的是字符串
                         JSONObject object = new JSONObject();
                         object.put("CROWNO", bodys.getJSONObject(i).getString("crowno"));
+                        object.put("BLARGESSFLAG", bodys.getJSONObject(i).getString("blargessflag"));
                         object.put("VFREE4", arraysSerino.getJSONObject(j).getString("vfree4"));//海关手册号
                         object.put("VSOURCEROWNO", bodys.getJSONObject(i).getString("crowno"));
                         object.put("VSOURCERECEIVECODE", tmpBillCode);
@@ -997,7 +998,6 @@ public class SalesDelivery extends Activity {
         para.put("FunctionName", "GetWareHouseList");
         para.put("CompanyCode", MainLogin.objLog.CompanyCode);
         para.put("STOrgCode", MainLogin.objLog.STOrgCode);
-        Log.d(TAG, "SSS: "+MainLogin.objLog.STOrgCode);
         para.put("TableName", "warehouse");
 
         try {

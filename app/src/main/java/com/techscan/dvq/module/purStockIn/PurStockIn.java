@@ -1745,13 +1745,13 @@ public class PurStockIn extends Activity {
                                     MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                                     return;
                                 }
-
-                                if (txtPurInBillCode.getText().toString().isEmpty()) {
-                                    Toast.makeText(PurStockIn.this, "请输入采购入库单号", Toast.LENGTH_LONG).show();
-                                    MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                                    txtPurInBillCode.requestFocus();
-                                    return;
-                                }
+                                // TODO: 2017/8/15 XUHU 除了华奇 其他都不要手动输入入库单号，交给nc判断，先注销
+//                                if (txtPurInBillCode.getText().toString().isEmpty()) {
+//                                    Toast.makeText(PurStockIn.this, "请输入采购入库单号", Toast.LENGTH_LONG).show();
+//                                    MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                                    txtPurInBillCode.requestFocus();
+//                                    return;
+//                                }
 
                                 if (CWAREHOUSEID.isEmpty()) {
                                     Toast.makeText(PurStockIn.this, "请输入仓库号", Toast.LENGTH_LONG).show();
@@ -2691,7 +2691,13 @@ public class PurStockIn extends Activity {
                        object.put("NPRICE", bodys.getJSONObject(i).getString("noriginalcurprice"));
                        object.put("VSOURCEBILLCODE", m_BillNo);
                        object.put("VSOURCEBILLROWNO", bodys.getJSONObject(i).getString("crowno"));
-                       object.put("VFREE4", bodys.getJSONObject(i).getString("vfree4"));
+                        if (bodys.getJSONObject(i).getString("vfree4").equals("null")){
+                            String vfree4 = "";
+                            object.put("VFREE4", vfree4);
+                        }else{
+                            object.put("VFREE4", bodys.getJSONObject(i).getString("vfree4"));
+                        }
+                        // object.put("VFREE4", bodys.getJSONObject(i).getString("vfree4"));
                         //jsDBBody.put(y + "", obj);
                         bodyArray.put(object);
                     }
