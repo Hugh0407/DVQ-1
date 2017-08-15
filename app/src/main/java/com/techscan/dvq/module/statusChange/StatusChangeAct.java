@@ -26,24 +26,22 @@ import com.techscan.dvq.bean.PurGood;
 import com.techscan.dvq.common.SaveThread;
 import com.techscan.dvq.common.Utils;
 import com.techscan.dvq.login.MainLogin;
-import com.techscan.dvq.module.statusChange.scan.SCScanAct;
+import com.techscan.dvq.module.statusChange.tab.StatusChangeScanAct;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.List;
 import java.util.UUID;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-import static android.content.ContentValues.TAG;
 import static com.techscan.dvq.common.Utils.showResultDialog;
 import static com.techscan.dvq.common.Utils.showToast;
+import static com.techscan.dvq.module.statusChange.tab.StatusChangeScanAct.taskList;
 
 
 public class StatusChangeAct extends Activity {
@@ -86,7 +84,6 @@ public class StatusChangeAct extends Activity {
     String WarehouseID   = "";
     String AccID         = "";
     String pk_corp       = "";
-    List<PurGood> taskList;
     @Nullable
     ProgressDialog progressDialog;
     @Nullable
@@ -158,15 +155,15 @@ public class StatusChangeAct extends Activity {
                     bulider.setPositiveButton(R.string.QueRen, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            SCScanAct.taskList.clear();
-                            SCScanAct.detailList.clear();
+                            StatusChangeScanAct.taskList.clear();
+                            StatusChangeScanAct.detailList.clear();
                             dialog.dismiss();
                             finish();
                         }
                     }).create().show();
                 } else {
-                    SCScanAct.taskList.clear();
-                    SCScanAct.detailList.clear();
+                    StatusChangeScanAct.taskList.clear();
+                    StatusChangeScanAct.detailList.clear();
                     finish();
                 }
                 break;
@@ -200,8 +197,7 @@ public class StatusChangeAct extends Activity {
                             Log.d("TAG", "保存" + info.toString());
                             showResultDialog(activity, info.getString("ErrMsg"));
                             taskList.clear();
-                            SCScanAct.taskList.clear();
-                            SCScanAct.detailList.clear();
+                            StatusChangeScanAct.detailList.clear();
                             changeAllEdToEmpty();
                             mEdSourceBill.requestFocus();
                         } else {
@@ -303,6 +299,8 @@ public class StatusChangeAct extends Activity {
             saveIn.put("GUIDS", UUID.randomUUID().toString());
             table.put("SaveIn", saveIn);
             table.put("OPDATE", edBillDate.getText().toString());
+            table.put("AUDITORID", MainLogin.objLog.UserID);
+            table.put("ORDERID", OrderID);
             Log.d("TAG", "saveInfo: " + table.toString());
             SaveThread saveThread = new SaveThread(table, "SaveOtherInOutBill", mHandler, 1);
             Thread     thread     = new Thread(saveThread);
@@ -394,9 +392,7 @@ public class StatusChangeAct extends Activity {
         }
         // 回传数据<----OtherStockInDetail.class，从ShowScanDetail(); 中跳过去
         if (requestCode == 93 && resultCode == 7) {
-            taskList = data.getParcelableArrayListExtra("taskList");
-            Log.d(TAG, "onActivityResult: " + taskList);
-            Log.d(TAG, "onActivityResult: " + Arrays.toString(taskList.toArray()));
+//
         }
     }
 
@@ -423,7 +419,7 @@ public class StatusChangeAct extends Activity {
         if (OrderID == null || OrderID.equals("")) {
             showToast(StatusChangeAct.this, "请选择来源的单据号");
         } else {
-            Intent otherOrderDetail = new Intent(this, SCScanAct.class);
+            Intent otherOrderDetail = new Intent(this, StatusChangeScanAct.class);
             otherOrderDetail.putExtra("OrderID", OrderID);
             otherOrderDetail.putExtra("BillNo", OrderNo);
             otherOrderDetail.putExtra("OrderType", "4N");

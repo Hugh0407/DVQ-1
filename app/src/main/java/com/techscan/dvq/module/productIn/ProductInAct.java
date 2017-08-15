@@ -367,11 +367,12 @@ public class ProductInAct extends Activity {
             return false;
         }
 
-        if (TextUtils.isEmpty(mBillNum.getText().toString())) {
-            showToast(mActivity, "单据号不能为空");
-            mBillNum.requestFocus();
-            return false;
-        }
+//        if (TextUtils.isEmpty(mBillNum.getText().toString())) {
+//            showToast(mActivity, "单据号不能为空");
+//            mBillNum.requestFocus();
+//            return false;
+//        }
+
         if (TextUtils.isEmpty(mBillDate.getText().toString())) {
             showToast(mActivity, "日期不能为空");
             mBillDate.requestFocus();

@@ -55,55 +55,38 @@ public class MaterialOutScanAct extends Activity {
 
     @InjectView(R.id.ed_bar_code)
     EditText mEdBarCode;    //条码
-
     @InjectView(R.id.ed_encoding)
     EditText mEdEncoding;   //编码（Sku）
-
     @InjectView(R.id.ed_type)
     EditText mEdType;   // 型号
-
     @InjectView(R.id.ed_spectype)
     EditText mEdSpectype;   //规格
-
     @InjectView(R.id.ed_lot)
     EditText mEdLot;        //批次
-
     @InjectView(R.id.ed_name)
     EditText mEdName;       //物料名
-
     @InjectView(R.id.ed_unit)
     EditText mEdUnit;
-
     @InjectView(R.id.ed_qty)
     EditText mEdQty;
-
     @InjectView(R.id.btn_overview)
     Button mBtnOverview;
-
     @InjectView(R.id.btn_detail)
     Button mBtnDetail;
-
     @InjectView(R.id.btn_back)
     Button mBtnBack;
-
     @InjectView(R.id.ed_num)
     EditText mEdNum;
-
     @InjectView(R.id.ed_weight)
     EditText mEdWeight;
-
     @InjectView(R.id.ed_cost_object)
     EditText mEdCostObject;
-
     @InjectView(R.id.ed_manual)
     EditText mEdManual;
-
     @InjectView(R.id.ed_cost_name)
     EditText edCostName;
-
     @InjectView(R.id.packed)
     TextView packed;
-
     @InjectView(R.id.switch_m)
     Switch switchM;
 
@@ -604,7 +587,7 @@ public class MaterialOutScanAct extends Activity {
                     //海关手册号 有或无的标志位 ，分为 Y 和 N 两种
                     vFree4 = map.get("isfree4").toString();
                     String cw = map.get("currentweight").toString();
-                    if (isPacked && !cw.equals("null")) {
+                    if (!cw.equals("null")) {
                         mEdQty.setText(cw);
                     }
                 }

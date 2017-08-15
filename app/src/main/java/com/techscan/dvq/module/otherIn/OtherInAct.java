@@ -355,11 +355,12 @@ public class OtherInAct extends Activity {
             return false;
         }
 
-        if (TextUtils.isEmpty(edBillNum.getText().toString())) {
-            showToast(mActivity, "单据号不能为空");
-            edBillNum.requestFocus();
-            return false;
-        }
+//        if (TextUtils.isEmpty(edBillNum.getText().toString())) {
+//            showToast(mActivity, "单据号不能为空");
+//            edBillNum.requestFocus();
+//            return false;
+//        }
+
         if (TextUtils.isEmpty(edBillDate.getText().toString())) {
             showToast(mActivity, "日期不能为空");
             edBillDate.requestFocus();

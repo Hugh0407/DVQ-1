@@ -376,11 +376,13 @@ public class MaterialOutAct extends Activity {
             showToast(mActivity, "单据信息不正确请核对");
             return false;
         }
-        if (TextUtils.isEmpty(billNum.getText().toString())) {
-            showToast(mActivity, "单据号不能为空");
-            billNum.requestFocus();
-            return false;
-        }
+
+//        if (TextUtils.isEmpty(billNum.getText().toString())) {
+//            showToast(mActivity, "单据号不能为空");
+//            billNum.requestFocus();
+//            return false;
+//        }
+
         if (TextUtils.isEmpty(billDate.getText().toString())) {
             showToast(mActivity, "日期不能为空");
             billDate.requestFocus();
@@ -654,7 +656,7 @@ public class MaterialOutAct extends Activity {
         //当DatePickerDialog关闭时，更新日期显示
         private void updateDate() {
             //在TextView上显示日期
-            billDate.setText(year + "-" + (month + 1) + "-" + day);
+            billDate.setText(year + "-" + String.format("%02d", (month + 1)) + "-" + day);
         }
 
     };

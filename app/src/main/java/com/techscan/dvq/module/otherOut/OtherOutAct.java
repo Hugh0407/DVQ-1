@@ -432,11 +432,11 @@ public class OtherOutAct extends Activity {
             showToast(activity, "单据信息不正确请核对");
             return false;
         }
-        if (TextUtils.isEmpty(edBillNum.getText().toString())) {
-            showToast(activity, "单据号不能为空");
-            edBillNum.requestFocus();
-            return false;
-        }
+//        if (TextUtils.isEmpty(edBillNum.getText().toString())) {
+//            showToast(activity, "单据号不能为空");
+//            edBillNum.requestFocus();
+//            return false;
+//        }
         if (TextUtils.isEmpty(edBillDate.getText().toString())) {
             showToast(activity, "日期不能为空");
             edBillDate.requestFocus();
@@ -447,11 +447,13 @@ public class OtherOutAct extends Activity {
             edWh.requestFocus();
             return false;
         }
+
 //        if (!edOrg.getText().toString().equals(checkInfo.get("Organization"))) {
 //            showToast(activity, "组织信息不正确");
 //            edOrg.requestFocus();
 //            return false;
 //        }
+
         if (!edLeiBie.getText().toString().equals(checkInfo.get("LeiBie"))) {
             showToast(activity, "收发类别信息不正确");
             edLeiBie.requestFocus();

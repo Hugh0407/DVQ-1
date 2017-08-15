@@ -383,9 +383,6 @@ public class SCScanAct extends Activity {
                 try {
                     if (progressDialog.isShowing()) {
                         Thread.sleep(30 * 1000);
-                        // cancel和dismiss方法本质都是一样的，都是从屏幕中删除Dialog,唯一的区别是
-                        // 调用cancel方法会回调DialogInterface.OnCancelListener如果注册的话,dismiss方法不会回掉
-                        // progressDialog.dismiss();
                         if (progressDialog.isShowing()) {
                             progressDialog.dismiss();
                         }
@@ -682,7 +679,7 @@ public class SCScanAct extends Activity {
                         return true;
                 }
             }
-            return true;
+            return false;
         }
     };
 }

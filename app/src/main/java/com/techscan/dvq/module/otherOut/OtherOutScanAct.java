@@ -700,7 +700,7 @@ public class OtherOutScanAct extends Activity {
                     //海关手册号 有或无的标志位 ，分为 Y 和 N 两种
                     vFree4 = map.get("isfree4").toString();
                     String cw = map.get("currentweight").toString();
-                    if (isPacked && !cw.equals("null")) {
+                    if (!cw.equals("null")) {
                         edQty.setText(cw);
                     }
                 }

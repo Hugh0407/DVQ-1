@@ -25,6 +25,7 @@
             android:layout_weight="1"
             android:background="@drawable/edittext_style"
             android:enabled="false"
+            android:focusable="false"
             android:maxLines="1"
             android:singleLine="true"
             android:textAllCaps="true"

@@ -557,7 +557,7 @@ public class ProductInScanAct extends Activity {
                         }
                         barAnalysis();
                         return true;
-                    case ed_num:
+                    case R.id.ed_num:
                         if (TextUtils.isEmpty(mEdNum.getText().toString())) {
                             showToast(mActivity, "«Î ‰»Î ˝¡ø");
                             return true;
