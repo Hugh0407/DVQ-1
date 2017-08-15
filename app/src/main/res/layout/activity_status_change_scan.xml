@@ -54,7 +54,8 @@
                 android:button="@null"
                 android:checked="true"
                 android:gravity="center"
-                android:text="转换前"/>
+                android:text="转换前"
+                android:textColor="@color/white"/>
 
             <RadioButton
                 android:id="@+id/after"
@@ -64,7 +65,8 @@
                 android:background="@drawable/tab_btn_selecter"
                 android:button="@null"
                 android:gravity="center"
-                android:text="转换后"/>
+                android:text="转换后"
+                android:textColor="@color/white"/>
         </RadioGroup>
 
         <android.support.v4.view.ViewPager

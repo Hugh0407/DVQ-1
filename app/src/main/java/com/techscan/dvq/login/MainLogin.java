@@ -161,6 +161,10 @@ public class MainLogin extends Activity {
         // AccId=mySharedPreferences.getString("AccId", "A");
         WhCodeB = mySharedPreferences.getString("AccId", "");// 获取B公司的过滤仓库
 
+        SharedPreferences.Editor editor = mySharedPreferences.edit();
+        editor.putString("account",user.getText().toString());
+        editor.apply();
+
         // EditText user=(EditText)findViewById(R.id.txtUserName);
         // EditText pwds=(EditText)findViewById(R.id.txtPassword);
 
@@ -777,7 +781,8 @@ public class MainLogin extends Activity {
 
         sWIFIMin = mySharedPreferences.getString("WIFIMin", "");
         sWIFIMax = mySharedPreferences.getString("WIFIMax", "");
-
+        String account = mySharedPreferences.getString("account", "");
+        user.setText(account);
         this.LoginString = mySharedPreferences.getString("Address", "");
         this.LoginString2 = mySharedPreferences.getString("Address2", "");
         if (LoginString.equals("") || LoginString == null || LoginString2.equals("") || LoginString2 == null) {

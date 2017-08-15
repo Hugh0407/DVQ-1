@@ -46,7 +46,6 @@
             android:drawableRight="@drawable/password"
             android:ems="10"
             android:hint="请输入密码"
-            android:text="123456aS!"
             android:inputType="textPassword"
             android:paddingLeft="5dp"
             android:paddingRight="10dp"/>
