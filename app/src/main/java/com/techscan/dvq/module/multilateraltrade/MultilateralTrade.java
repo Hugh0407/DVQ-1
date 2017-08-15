@@ -417,13 +417,13 @@ public class MultilateralTrade extends Activity {
                         MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                         return;
                     }
-                    if (txtSendAndTake.getText().toString() == null || txtSendAndTake.getText().toString().equals("")) {
-                        Toast.makeText(MultilateralTrade.this, "请选择收发类别",
-                                Toast.LENGTH_LONG).show();
-                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                        txtSendAndTake.requestFocus();
-                        return;
-                    }
+//                    if (txtSendAndTake.getText().toString() == null || txtSendAndTake.getText().toString().equals("")) {
+//                        Toast.makeText(MultilateralTrade.this, "请选择收发类别",
+//                                Toast.LENGTH_LONG).show();
+//                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                        txtSendAndTake.requestFocus();
+//                        return;
+//                    }
                     if (txtDepartment.getText().toString() == null || txtDepartment.getText().toString().equals("")) {
                         Toast.makeText(MultilateralTrade.this, "请选择部门",
                                 Toast.LENGTH_LONG).show();
@@ -752,7 +752,8 @@ public class MultilateralTrade extends Activity {
             tableHead.put("COTHERWHID", CINWHID);//其它仓库ID
             tableHead.put("DEPARTMENTID", CDPTID);//部门ID
             tableHead.put("VNOTE", "");//
-            tableHead.put("CDISPATCHERID", CDISPATCHERID);//
+            tableHead.put("CDISPATCHERID", "");//
+//            tableHead.put("CDISPATCHERID", CDISPATCHERID);//
             tableHead.put("FREPLENISHFLAG", "N");//
             tableHead.put("CBIZTYPE", CBIZTYPE);//
             tableHead.put("DBILLDATE", tmpBillDate);//
