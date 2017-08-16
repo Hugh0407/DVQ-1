@@ -161,7 +161,7 @@ public class VlistRdcl extends Activity {
 				para.put("rdcode", Code);
 				para.put("FunctionName", "GetRdcl");
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
+
 			}
 		}
 		else
@@ -178,7 +178,6 @@ public class VlistRdcl extends Activity {
 		try {
 			para.put("TableName",  "dbHead");
 		} catch (JSONException e2) {
-			// TODO Auto-generated catch block
 			Toast.makeText(this, e2.getMessage(), Toast.LENGTH_LONG).show();
 			MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
 			return;

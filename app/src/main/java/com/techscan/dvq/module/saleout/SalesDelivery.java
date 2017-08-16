@@ -912,11 +912,11 @@ public class SalesDelivery extends Activity {
             Log.d(TAG, "SaveSaleOrder: " + MainLogin.appTime);
             table.put("OPDATE", MainLogin.appTime);
             Log.d(TAG, "XXXXXX: " + table.toString());
-            if (!MainLogin.getwifiinfo()) {
-                Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
-                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                return;
-            }
+//            if (!MainLogin.getwifiinfo()) {
+//                Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
+//                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                return;
+//            }
             SaveThread saveThread = new SaveThread(table, "SaveSaleReceive", mHandler, HANDER_SAVE_RESULT);
             Thread thread = new Thread(saveThread);
             thread.start();
