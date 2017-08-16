@@ -840,12 +840,7 @@ public class SalesDeliveryDetail extends Activity {
                 // ADD CAIXY TEST END
             }
             try {
-                if (!MainLogin.getwifiinfo()) {
-                    Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG)
-                            .show();
-                    MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                    return;
-                }
+
                 jsBody = Common.DoHttpQuery(para, FunctionName, "");
                 Log.d(TAG, "GetBillBodyDetailInfo: " + jsBody.toString());
             } catch (Exception e) {

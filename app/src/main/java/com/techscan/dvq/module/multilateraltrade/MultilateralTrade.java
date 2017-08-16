@@ -596,11 +596,11 @@ public class MultilateralTrade extends Activity {
 
         JSONObject jas;
         try {
-            if (!MainLogin.getwifiinfo()) {
-                Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
-                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                return;
-            }
+//            if (!MainLogin.getwifiinfo()) {
+//                Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
+//                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                return;
+//            }
             jas = Common.DoHttpQuery(para, "CommonQuery", "");
             Log.d(TAG, "GetBillHeadDetailInfo: " + jas.toString());
         } catch (Exception ex) {
@@ -689,11 +689,11 @@ public class MultilateralTrade extends Activity {
             para.put("CompanyCode", MainLogin.objLog.CompanyCode);
             para.put("STOrgCode", MainLogin.objLog.STOrgCode);
             para.put("TableName", "warehouse");
-            if (!MainLogin.getwifiinfo()) {
-                Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
-                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                return;
-            }
+//            if (!MainLogin.getwifiinfo()) {
+//                Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
+//                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                return;
+//            }
             JSONObject rev = Common.DoHttpQuery(para, "CommonQuery", "");
             Log.d(TAG, "btnWarehouseClick: " + rev.toString());
             if (rev == null) {
@@ -846,11 +846,11 @@ public class MultilateralTrade extends Activity {
             Log.d(TAG, "SaveSaleOrder: " + MainLogin.appTime);
             table.put("OPDATE", MainLogin.appTime);
             Log.d(TAG, "XXXXXX: " + table.toString());
-            if (!MainLogin.getwifiinfo()) {
-                Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
-                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                return;
-            }
+//            if (!MainLogin.getwifiinfo()) {
+//                Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
+//                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                return;
+//            }
             SaveThread saveThread = new SaveThread(table, "SaveAdjOutBillNew", mHandler, HANDER_SAVE_RESULT);
             Thread thread = new Thread(saveThread);
             thread.start();

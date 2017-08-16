@@ -273,11 +273,11 @@ public class GetInvBaseInfo {
 
                 JSONObject jas;
                 try {
-                    if (!MainLogin.getwifiinfo()) {
-                        Toast.makeText(this, "WIFI信号差!请保持网络畅通", Toast.LENGTH_LONG).show();
-                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                        return;
-                    }
+//                    if (!MainLogin.getwifiinfo()) {
+//                        Toast.makeText(this, "WIFI信号差!请保持网络畅通", Toast.LENGTH_LONG).show();
+//                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                        return;
+//                    }
                     jas = Common.DoHttpQuery(para, "CommonQuery", "");
                     Log.d(TAG, "JAS: " + jas.toString());
 
