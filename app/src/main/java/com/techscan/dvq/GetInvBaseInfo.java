@@ -307,7 +307,7 @@ public class GetInvBaseInfo {
 
 
                     if (!jas.getBoolean("Status")) {
-                        String errMsg = "";
+                        String errMsg;
                         if (jas.has("ErrMsg")) {
                             errMsg = jas.getString("ErrMsg");
                         } else {

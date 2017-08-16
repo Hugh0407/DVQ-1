@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Adapter;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -162,7 +161,7 @@ public class VlistRdcl extends Activity {
 				para.put("rdcode", Code);
 				para.put("FunctionName", "GetRdcl");
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
+
 			}
 		}
 		else
@@ -172,7 +171,6 @@ public class VlistRdcl extends Activity {
 				para.put("rdcode", "");
 				para.put("FunctionName", "GetRdcl");
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -180,30 +178,20 @@ public class VlistRdcl extends Activity {
 		try {
 			para.put("TableName",  "dbHead");
 		} catch (JSONException e2) {
-			// TODO Auto-generated catch block
 			Toast.makeText(this, e2.getMessage(), Toast.LENGTH_LONG).show();
-			//ADD CAIXY TEST START
 			MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-			//ADD CAIXY TEST END
 			return;
 		}	
 		
 		JSONObject jasA;
 		JSONObject jasB;
 		try {
-			if(!MainLogin.getwifiinfo()) {
-	            Toast.makeText(this, R.string.WiFiXingHaoCha,Toast.LENGTH_LONG).show();
-	            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-	            return ;
-	        }
 			jasA = Common.DoHttpQuery(para, FunctionName, "A");
 			jasB = Common.DoHttpQuery(para, FunctionName, "B");
 		} catch (Exception ex)
 		{
 			Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
-			//ADD CAIXY TEST START
 			MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-			//ADD CAIXY TEST END
 			return;
 		}
 		try 
@@ -211,33 +199,25 @@ public class VlistRdcl extends Activity {
 			if(jasA==null)
 			{
 				Toast.makeText(this, R.string.WangLuoChuXiangWenTi, Toast.LENGTH_LONG).show();
-				//ADD CAIXY TEST START
 				MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-				//ADD CAIXY TEST END
 				return;
 			}
 			if(!jasA.getBoolean("Status"))
 			{
 				Toast.makeText(this, jasA.getString("ErrMsg"), Toast.LENGTH_LONG).show();
-				//ADD CAIXY TEST START
 				MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-				//ADD CAIXY TEST END
 				return;
 			}
 			if(jasB==null)
 			{
 				Toast.makeText(this, R.string.WangLuoChuXiangWenTi, Toast.LENGTH_LONG).show();
-				//ADD CAIXY TEST START
 				MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-				//ADD CAIXY TEST END
 				return;
 			}
 			if(!jasB.getBoolean("Status"))
 			{
 				Toast.makeText(this, jasB.getString("ErrMsg"), Toast.LENGTH_LONG).show();
-				//ADD CAIXY TEST START
 				MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-				//ADD CAIXY TEST END
 				return;
 			}
 			mData = getData(jasA,jasB,AccID);
@@ -247,17 +227,13 @@ public class VlistRdcl extends Activity {
 		{
 			e.printStackTrace();
 			Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
-			//ADD CAIXY TEST START
 			MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-			//ADD CAIXY TEST END
 			return;
 		}
 		catch (Exception ex)
 		{
 			Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
-			//ADD CAIXY TEST START
 			MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-			//ADD CAIXY TEST END
 			return;
 		}
 		
