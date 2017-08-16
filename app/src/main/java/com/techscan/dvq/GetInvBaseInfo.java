@@ -270,7 +270,6 @@ public class GetInvBaseInfo {
                     //ADD CAIXY TEST END
                     return;
                 }
-
                 JSONObject jas;
                 try {
 //                    if (!MainLogin.getwifiinfo()) {
