@@ -1,16 +1,5 @@
 package com.techscan.dvq;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.http.ParseException;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -39,6 +28,17 @@ import com.techscan.dvq.R.id;
 import com.techscan.dvq.WarehouseMultilist.MyAdapter;
 import com.techscan.dvq.common.Common;
 import com.techscan.dvq.login.MainLogin;
+
+import org.apache.http.ParseException;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class SbbinActivity extends Activity {
 	
@@ -180,11 +180,11 @@ private void GetInvImg(String InvCode) throws JSONException
 
 	
 
-	if(!MainLogin.getwifiinfo()) {
-        Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
-        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-        return ;
-    }
+//	if(!MainLogin.getwifiinfo()) {
+//        Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
+//        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//        return ;
+//    }
 	JSONObject rev = null;
 	try {
 		
@@ -727,11 +727,11 @@ private void GetInvImg(String InvCode) throws JSONException
 			para.put("CompanyCode", MainLogin.objLog.CompanyCode);
 			
 			
-	        if(!MainLogin.getwifiinfo()) {
-	            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
-	            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-	            return false;
-	        }
+//	        if(!MainLogin.getwifiinfo()) {
+//	            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
+//	            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//	            return false;
+//	        }
 			
 	        
 			serList = Common.DoHttpQuery(para, "CommonQuery", "");
@@ -815,11 +815,11 @@ private void GetInvImg(String InvCode) throws JSONException
 			para.put("WhCode", WhCode.toUpperCase().replace("\n", ""));
 			para.put("BinCode", BinCode.toUpperCase().replace("\n", ""));
 			para.put("CompanyCode", MainLogin.objLog.CompanyCode);
-	        if(!MainLogin.getwifiinfo()) {
-	            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
-	            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-	            return false;
-	        }
+//	        if(!MainLogin.getwifiinfo()) {
+//	            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
+//	            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//	            return false;
+//	        }
 			serList = Common.
 					DoHttpQuery(para, "CommonQuery", "");
 			if(serList==null)
@@ -953,11 +953,11 @@ private void GetInvImg(String InvCode) throws JSONException
 				para.put("FunctionName", "GetBaseWhCodeByName");
 				para.put("TableName","WhCodeByName");
 				para.put("WhName", WhName.toUpperCase().replace("\n", ""));
-		        if(!MainLogin.getwifiinfo()) {
-		            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
-		            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-		            return false;
-		        }
+//		        if(!MainLogin.getwifiinfo()) {
+//		            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
+//		            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//		            return false;
+//		        }
 				serList = Common.
 						DoHttpQuery(para, "CommonQuery", "");
 				if(serList==null)

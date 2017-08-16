@@ -247,11 +247,11 @@ private void GetInvImg(String InvCode) throws JSONException
 
 	
 
-	if(!MainLogin.getwifiinfo()) {
-        Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
-        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-        return ;
-    }
+//	if(!MainLogin.getwifiinfo()) {
+//        Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
+//        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//        return ;
+//    }
 	JSONObject rev = null;
 	try {
 		
@@ -391,11 +391,11 @@ private void GetInvImg(String InvCode) throws JSONException
 		{
 		
 //			writeTxt.writeTxtToFile("log.txt","4.1:");
-			if(!MainLogin.getwifiinfo()) {
-	            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
-	            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-	            return false ;
-	        }
+//			if(!MainLogin.getwifiinfo()) {
+//	            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
+//	            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//	            return false ;
+//	        }
 			
 		serList = Common.
 				DoHttpQuery(para, "CommonQuery", AccID);

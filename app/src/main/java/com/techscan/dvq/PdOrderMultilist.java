@@ -453,20 +453,20 @@ public class PdOrderMultilist extends Activity {
 		try {
 			if(InOutFlag.equals("Out"))
 			{
-		        if(!MainLogin.getwifiinfo()) {
-		            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
-		            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-		            return ;
-		        }
+//		        if(!MainLogin.getwifiinfo()) {
+//		            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
+//		            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//		            return ;
+//		        }
 				jas = Common.DoHttpQuery(para, "GetAdjustOrderBillHead", "");
 			}
 			else
 			{
-		        if(!MainLogin.getwifiinfo()) {
-		            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
-		            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-		            return ;
-		        }
+//		        if(!MainLogin.getwifiinfo()) {
+//		            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
+//		            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//		            return ;
+//		        }
 				jas = Common.DoHttpQuery(para, "GetAdjustOutBillHead", "");
 			}
 			

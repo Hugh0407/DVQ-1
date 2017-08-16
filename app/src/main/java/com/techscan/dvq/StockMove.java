@@ -179,12 +179,12 @@ public class StockMove extends Activity {
 		para.put("TableName", "warehouse");
 
 		try {
-			if (!MainLogin.getwifiinfo()) {
-				Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG)
-						.show();
-				MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-				return;
-			}
+//			if (!MainLogin.getwifiinfo()) {
+//				Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG)
+//						.show();
+//				MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//				return;
+//			}
 
 			JSONObject rev = Common.DoHttpQuery(para, "CommonQuery", "");
 			if (rev == null) {
@@ -718,11 +718,11 @@ public class StockMove extends Activity {
 		// this.saveJons.put("GUIDS", "b67eb2c2-2cdc-4776-9fc5-715fb8bad3b3");
 
 		// String abcd= (String)saveJons.get("GUIDS");
-		if (!MainLogin.getwifiinfo()) {
-			Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
-			MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-			return;
-		}
+//		if (!MainLogin.getwifiinfo()) {
+//			Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
+//			MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//			return;
+//		}
 
 		JSONObject jas = Common.DoHttpQuery(saveJons, "SaveAdjBill", accID);
 		if (jas == null) {
@@ -836,12 +836,12 @@ public class StockMove extends Activity {
 				para.put("BillID", BillId);
 				para.put("TableName", "Body");
 				para.put("AccId", accID);
-				if (!MainLogin.getwifiinfo()) {
-					Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG)
-							.show();
-					MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-					return;
-				}
+//				if (!MainLogin.getwifiinfo()) {
+//					Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG)
+//							.show();
+//					MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//					return;
+//				}
 
 				JSONObject jas = Common.DoHttpQuery(para,
 						"GetAdjustOrderBillBody", "");

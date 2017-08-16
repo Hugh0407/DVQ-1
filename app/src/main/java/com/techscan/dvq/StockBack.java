@@ -395,11 +395,11 @@ public class StockBack extends Activity {
 			para.put("Corp",scorpCode);
 			para.put("WhName", sWHName.toUpperCase().replace("\n", ""));
 		
-			if(!MainLogin.getwifiinfo()) {
-	            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
-	            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-	            return ;
-	        }
+//			if(!MainLogin.getwifiinfo()) {
+//	            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
+//	            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//	            return ;
+//	        }
 			
 			serList = Common.
 					DoHttpQuery(para, "CommonQuery", "A");
@@ -994,12 +994,12 @@ private Button.OnClickListener myListner = new Button.OnClickListener() {
 					{
 						//saveJonsA.put("Body", JArrayA);
 						try {
-							if(!MainLogin.getwifiinfo())
-							{
-					            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
-					            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-					            return ;
-					        }
+//							if(!MainLogin.getwifiinfo())
+//							{
+//					            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
+//					            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//					            return ;
+//					        }
 							
 							jasA = Common.DoHttpQuery(ScanDetail, "SaveStockBack", "A");
 
@@ -1024,11 +1024,11 @@ private Button.OnClickListener myListner = new Button.OnClickListener() {
 					{
 						//saveJonsB.put("Body", JArrayB);
 						try {
-							if(!MainLogin.getwifiinfo()) {
-					            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
-					            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-					            return ;
-					        }
+//							if(!MainLogin.getwifiinfo()) {
+//					            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
+//					            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//					            return ;
+//					        }
 							
 							jasB = Common.DoHttpQuery(ScanDetail, "SaveStockBack", "B");
 							

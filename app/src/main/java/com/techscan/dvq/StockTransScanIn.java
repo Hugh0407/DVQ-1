@@ -465,11 +465,11 @@ public class StockTransScanIn extends Activity {
 
 //    	    para.put("LotB", this.currentObj.GetBatch());
 //    	    para.put("TableName", "Stock");
-        if (!MainLogin.getwifiinfo()) {
-            Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            return false;
-        }
+//        if (!MainLogin.getwifiinfo()) {
+//            Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
+//            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//            return false;
+//        }
         JSONObject StockInfo = Common.DoHttpQuery(para, "CommonQuery", this.bar.AccID);
 
         if (StockInfo == null) {
@@ -787,11 +787,11 @@ public class StockTransScanIn extends Activity {
             return;
         }
 
-        if (!MainLogin.getwifiinfo()) {
-            Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            return;
-        }
+//        if (!MainLogin.getwifiinfo()) {
+//            Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
+//            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//            return;
+//        }
 
 
         //获得当前单据的流水号
@@ -1006,11 +1006,11 @@ public class StockTransScanIn extends Activity {
         //IniScan();
         //条码分析
 
-        if (!MainLogin.getwifiinfo()) {
-            Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            return;
-        }
+//        if (!MainLogin.getwifiinfo()) {
+//            Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
+//            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//            return;
+//        }
         bar = new SplitBarcode(barcode);
         if (bar.creatorOk == false) {
             Toast.makeText(this, R.string.SaoMiaoDeBuShiZhengQueHuoPinTiaoMa, Toast.LENGTH_LONG).show();
@@ -1270,11 +1270,11 @@ public class StockTransScanIn extends Activity {
 
         para.put("LotB", this.currentObj.GetBatch());
         para.put("TableName", "Stock");
-        if (!MainLogin.getwifiinfo()) {
-            Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            return false;
-        }
+//        if (!MainLogin.getwifiinfo()) {
+//            Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
+//            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//            return false;
+//        }
         JSONObject StockInfo = Common.DoHttpQuery(para, "CommonQuery", this.bar.AccID);
 
         if (StockInfo == null) {

@@ -852,11 +852,11 @@ private AlertDialog SelectButton = null;
 				para.put("BinCode", posCode);
 				para.put("TableName", "position");
 				
-				if(!MainLogin.getwifiinfo()) {
-		            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
-		            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-		            return ;
-		        }
+//				if(!MainLogin.getwifiinfo()) {
+//		            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
+//		            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//		            return ;
+//		        }
 
 				JSONObject revA = Common.DoHttpQuery(para, "CommonQuery","A");
 				
@@ -939,11 +939,11 @@ private AlertDialog SelectButton = null;
 				para.put("BinCode", posCode);
 				para.put("TableName", "position");
 				
-				if(!MainLogin.getwifiinfo()) {
-		            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
-		            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-		            return ;
-		        }
+//				if(!MainLogin.getwifiinfo()) {
+//		            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
+//		            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//		            return ;
+//		        }
 
 				JSONObject revB = Common.DoHttpQuery(para, "CommonQuery",
 						"B");
@@ -1108,11 +1108,11 @@ private AlertDialog SelectButton = null;
 				{
 					//saveJonsA.put("Body", JArrayA);
 					try {
-						if(!MainLogin.getwifiinfo()) {
-				            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
-				            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-				            return ;
-				        }
+//						if(!MainLogin.getwifiinfo()) {
+//				            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
+//				            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//				            return ;
+//				        }
 						
 						jasA = Common.DoHttpQuery(ScanDetail, "CheckSTOCKINVENTORY", "A");
 
@@ -1137,11 +1137,11 @@ private AlertDialog SelectButton = null;
 				{
 					//saveJonsB.put("Body", JArrayB);
 					try {
-						if(!MainLogin.getwifiinfo()) {
-				            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
-				            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-				            return ;
-				        }
+//						if(!MainLogin.getwifiinfo()) {
+//				            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
+//				            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//				            return ;
+//				        }
 						
 						jasB = Common.DoHttpQuery(ScanDetail, "CheckSTOCKINVENTORY", "B");
 						

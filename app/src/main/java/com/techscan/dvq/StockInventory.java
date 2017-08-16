@@ -694,12 +694,12 @@ public class StockInventory extends Activity {
 				para.put("FunctionName", "GetSameBarCount");
 				para.put("BillId", BillIdA);
 				para.put("TableName", "SameCount");
-				
-				if(!MainLogin.getwifiinfo()) {
-		            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
-		            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-		            return ;
-		        }
+//
+//				if(!MainLogin.getwifiinfo()) {
+//		            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
+//		            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//		            return ;
+//		        }
 
 				JSONObject revA = Common.DoHttpQuery(para, "CommonQuery","A");
 				
@@ -768,11 +768,11 @@ public class StockInventory extends Activity {
 				para.put("BillId", BillIdB);
 				para.put("TableName", "SameCount");
 				
-				if(!MainLogin.getwifiinfo()) {
-		            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
-		            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-		            return ;
-		        }
+//				if(!MainLogin.getwifiinfo()) {
+//		            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
+//		            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//		            return ;
+//		        }
 
 				JSONObject revB = Common.DoHttpQuery(para, "CommonQuery",
 						"B");
@@ -845,11 +845,11 @@ public class StockInventory extends Activity {
 				para.put("BillId", BillIdA);
 				para.put("TableName", "DelSameBar");
 				
-				if(!MainLogin.getwifiinfo()) {
-		            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
-		            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-		            return false;
-		        }
+//				if(!MainLogin.getwifiinfo()) {
+//		            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
+//		            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//		            return false;
+//		        }
 
 				JSONObject revA = Common.DoHttpQuery(para, "CommonQuery","A");
 				
@@ -903,11 +903,11 @@ public class StockInventory extends Activity {
 				para.put("BillId", BillIdB);
 				para.put("TableName", "DelSameBar");
 				
-				if(!MainLogin.getwifiinfo()) {
-		            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
-		            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-		            return false ;
-		        }
+//				if(!MainLogin.getwifiinfo()) {
+//		            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
+//		            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//		            return false ;
+//		        }
 
 				JSONObject revB = Common.DoHttpQuery(para, "CommonQuery",
 						"B");
@@ -1075,11 +1075,11 @@ public class StockInventory extends Activity {
 			saveJons.put("VbillID", BillIdA);
 			saveJons.put("companyID", companyIDA);
 			saveJons.put("coperatorid", MainLogin.objLog.UserID);
-			if(!MainLogin.getwifiinfo()) {
-	            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
-	            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-	            return ;
-	        }
+//			if(!MainLogin.getwifiinfo()) {
+//	            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
+//	            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//	            return ;
+//	        }
 			
 			jasA= Common.DoHttpQuery(saveJons, "SaveSTOCKINVENTORY", "A"); 
 			if(jasA==null)
@@ -1106,11 +1106,11 @@ public class StockInventory extends Activity {
 			saveJons.put("companyID", companyIDB);
 			saveJons.put("coperatorid", MainLogin.objLog.UserIDB);
 			
-			if(!MainLogin.getwifiinfo()) {
-	            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
-	            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-	            return ;
-	        }
+//			if(!MainLogin.getwifiinfo()) {
+//	            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
+//	            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//	            return ;
+//	        }
 			
 			jasB= Common.DoHttpQuery(saveJons, "SaveSTOCKINVENTORY", "B"); 
 			if(jasB==null)

@@ -2709,11 +2709,11 @@ public class PurStockIn extends Activity {
             Log.d(TAG, "SaveSaleOrder: " + MainLogin.appTime);
             table.put("OPDATE", MainLogin.appTime);
             Log.d(TAG, "XXXXXX: " + table.toString());
-            if (!MainLogin.getwifiinfo()) {
-                Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
-                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                return false;
-            }
+//            if (!MainLogin.getwifiinfo()) {
+//                Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
+//                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                return false;
+//            }
 //            SaveThread saveThread = new SaveThread(table, "SaveSaleReceive", mHandler, HANDER_SAVE_RESULT);
 //            Thread thread = new Thread(saveThread);
 //            thread.start();
@@ -2722,9 +2722,7 @@ public class PurStockIn extends Activity {
         if (jas == null) {
             Toast.makeText(this, "单据保存过程中出现了问题," +
                     "请尝试再次提交或!", Toast.LENGTH_LONG).show();
-            //ADD CAIXY TEST START
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            //ADD CAIXY TEST END
             return false;
         }
 
@@ -2736,9 +2734,7 @@ public class PurStockIn extends Activity {
                 errMsg = getString(R.string.WangLuoChuXianWenTi);
             }
             Toast.makeText(this, errMsg, Toast.LENGTH_LONG).show();
-            //ADD CAIXY TEST START
             MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            //ADD CAIXY TEST END
             return false;
         }
 

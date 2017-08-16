@@ -486,16 +486,16 @@ public class Sample_stocking extends Activity {
 		} else {
 			para.put("BillID", this.m_OrderID);
 		}
-		if (!MainLogin.getwifiinfo()) {
-			Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
-			MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-			return;
-		}
-		if (!MainLogin.getwifiinfo()) {
-			Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
-			MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-			return;
-		}
+//		if (!MainLogin.getwifiinfo()) {
+//			Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
+//			MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//			return;
+//		}
+//		if (!MainLogin.getwifiinfo()) {
+//			Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
+//			MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//			return;
+//		}
 		result = MainLogin.objLog.DoHttpQuery(para, "CommonQuery", "");
 		if (result == null) {
 			Toast.makeText(this, R.string.WangLuoChuXianWenTi, Toast.LENGTH_LONG).show();
@@ -587,11 +587,11 @@ public class Sample_stocking extends Activity {
 		JSONObject jas;
 		try 
 		{
-			if(!MainLogin.getwifiinfo()) {
-	            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
-	            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-	            return ;
-	        }
+//			if(!MainLogin.getwifiinfo()) {
+//	            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
+//	            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//	            return ;
+//	        }
 			jas = MainLogin.objLog.
 					DoHttpQuery(para, "CommonQuery", "A");
 
@@ -754,12 +754,12 @@ public class Sample_stocking extends Activity {
 			JSONObject para = new JSONObject();
 			para.put("FunctionName", "ShowSSPos");
 			para.put("OrderID", m_OrderID);
-			if (!MainLogin.getwifiinfo()) {
-				Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG)
-						.show();
-				MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-				return;
-			}
+//			if (!MainLogin.getwifiinfo()) {
+//				Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG)
+//						.show();
+//				MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//				return;
+//			}
 			result = MainLogin.objLog.DoHttpQuery(para, "ShowSSPos", "A");
 			if (result == null) {
 				Toast.makeText(this, R.string.WangLuoChuXianWenTi, Toast.LENGTH_LONG)
@@ -828,12 +828,12 @@ public class Sample_stocking extends Activity {
 			para.put("FunctionName", "SSPosScanNum");
 			para.put("PosCode", PosCode);
 			para.put("OrderID", m_OrderID);
-			if (!MainLogin.getwifiinfo()) {
-				Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG)
-						.show();
-				MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-				return;
-			}
+//			if (!MainLogin.getwifiinfo()) {
+//				Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG)
+//						.show();
+//				MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//				return;
+//			}
 			result = MainLogin.objLog.DoHttpQuery(para, "SSPosScanNum", "A");
 			if (result == null) {
 				Toast.makeText(this, R.string.WangLuoChuXianWenTi, Toast.LENGTH_LONG)
@@ -877,12 +877,12 @@ public class Sample_stocking extends Activity {
 			para.put("FunctionName", "ReOpenStockTaking");
 			para.put("CreateUser", MainLogin.objLog.UserID);
 			para.put("OrderCode", this.ReOpenBillCode);
-			if (!MainLogin.getwifiinfo()) {
-				Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG)
-						.show();
-				MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-				return;
-			}
+//			if (!MainLogin.getwifiinfo()) {
+//				Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG)
+//						.show();
+//				MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//				return;
+//			}
 			result = MainLogin.objLog
 					.DoHttpQuery(para, "ReOpenStockTaking", "A");
 			if (result == null) {
@@ -924,12 +924,12 @@ public class Sample_stocking extends Activity {
 			para.put("FunctionName", "CloseStockTaking");
 			para.put("CreateUser", MainLogin.objLog.UserID);
 			para.put("OrderID", m_OrderID);
-			if (!MainLogin.getwifiinfo()) {
-				Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG)
-						.show();
-				MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-				return;
-			}
+//			if (!MainLogin.getwifiinfo()) {
+//				Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG)
+//						.show();
+//				MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//				return;
+//			}
 			result = MainLogin.objLog
 					.DoHttpQuery(para, "CloseStockTaking", "A");
 			if (result == null) {

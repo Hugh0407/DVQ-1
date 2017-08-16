@@ -156,11 +156,11 @@ public class BillInfoOrderList extends Activity {
 
         JSONObject jas;
         try {
-            if(!MainLogin.getwifiinfo()) {
-                Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
-                sp.play(music, 1, 1, 0, 0, 1);
-                return;
-            }
+//            if(!MainLogin.getwifiinfo()) {
+//                Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
+//                sp.play(music, 1, 1, 0, 0, 1);
+//                return;
+//            }
             jas = Common.DoHttpQuery(para, "CommonQuery", "");
         } catch (Exception ex)
         {

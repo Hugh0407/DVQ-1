@@ -181,12 +181,12 @@ public class InvOrderList extends Activity {
 
 		JSONObject jas;
 		try {
-			if (!MainLogin.getwifiinfo()) {
-				Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG)
-						.show();
-				MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-				return;
-			}
+//			if (!MainLogin.getwifiinfo()) {
+//				Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG)
+//						.show();
+//				MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//				return;
+//			}
 			jas = Common.DoHttpQuery(para, FunctionName, AccID);
 		} catch (Exception ex) {
 			Toast.makeText(this, R.string.WangLuoChuXianWenTi, Toast.LENGTH_LONG).show();

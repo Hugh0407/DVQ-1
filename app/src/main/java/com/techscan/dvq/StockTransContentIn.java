@@ -618,11 +618,11 @@ public class StockTransContentIn extends Activity {
             }
         }
 
-        if (!MainLogin.getwifiinfo()) {
-            Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            return;
-        }
+//        if (!MainLogin.getwifiinfo()) {
+//            Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
+//            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//            return;
+//        }
         JSONObject rev = null;
         try {
             // rev = Common.DoHttpQuery(para, "CommonQuery", tmpAccID);
@@ -1220,12 +1220,12 @@ public class StockTransContentIn extends Activity {
 
         JSONObject jas;
         try {
-            if (!MainLogin.getwifiinfo()) {
-                Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG)
-                        .show();
-                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                return null;
-            }
+//            if (!MainLogin.getwifiinfo()) {
+//                Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG)
+//                        .show();
+//                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                return null;
+//            }
             jas = Common.DoHttpQuery(para, "CommonQuery", sAccID);
         } catch (Exception ex) {
             Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
@@ -1366,12 +1366,12 @@ public class StockTransContentIn extends Activity {
         }
 
         try {
-            if (!MainLogin.getwifiinfo()) {
-                Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG)
-                        .show();
-                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                return;
-            }
+//            if (!MainLogin.getwifiinfo()) {
+//                Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG)
+//                        .show();
+//                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                return;
+//            }
             JSONArray JsonArrNew = new JSONArray();// Json ›…Ì
             if (!sBillIDA.equals("")) {
                 JSONObject revA = Common.DoHttpQuery(paraA, "CommonQuery", "A");
@@ -1833,12 +1833,12 @@ public class StockTransContentIn extends Activity {
                 para.put("BinCode", posCode);
                 para.put("TableName", "position");
 
-                if (!MainLogin.getwifiinfo()) {
-                    Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG)
-                            .show();
-                    MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                    return;
-                }
+//                if (!MainLogin.getwifiinfo()) {
+//                    Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG)
+//                            .show();
+//                    MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                    return;
+//                }
 
                 JSONObject revA = Common.DoHttpQuery(para, "CommonQuery", "A");
 
@@ -1921,13 +1921,13 @@ public class StockTransContentIn extends Activity {
                 para.put("WareHouse", wareHousePKToB);
                 para.put("BinCode", posCode);
                 para.put("TableName", "position");
-
-                if (!MainLogin.getwifiinfo()) {
-                    Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG)
-                            .show();
-                    MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                    return;
-                }
+//
+//                if (!MainLogin.getwifiinfo()) {
+//                    Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG)
+//                            .show();
+//                    MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                    return;
+//                }
 
                 JSONObject revB = Common.DoHttpQuery(para, "CommonQuery", "B");
 
@@ -2968,11 +2968,11 @@ public class StockTransContentIn extends Activity {
             saveJsonB.put("ManualNo", tmpInManualNo.toString());
         }
 
-        if (!MainLogin.getwifiinfo()) {
-            Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            return;
-        }
+//        if (!MainLogin.getwifiinfo()) {
+//            Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
+//            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//            return;
+//        }
 
         if (tmpAccIDA.equals("A") && lsResultBillCodeA.equals("")
                 && SaveA == true) {

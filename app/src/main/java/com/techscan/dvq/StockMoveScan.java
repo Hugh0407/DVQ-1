@@ -263,12 +263,12 @@ public class StockMoveScan extends Activity {
 
 		JSONObject rev = null;
 		try {
-			if (!MainLogin.getwifiinfo()) {
-				Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG)
-						.show();
-				MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-				return;
-			}
+//			if (!MainLogin.getwifiinfo()) {
+//				Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG)
+//						.show();
+//				MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//				return;
+//			}
 			rev = Common.DoHttpQuery(para, "CommonQuery", m_AccID);
 
 			if (rev == null) {
@@ -800,11 +800,11 @@ public class StockMoveScan extends Activity {
 		para.put("LotB", currentObj.GetBatch());
 		para.put("TableName", "Stock");
 
-		if (!MainLogin.getwifiinfo()) {
-			Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
-			MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-			return false;
-		}
+//		if (!MainLogin.getwifiinfo()) {
+//			Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
+//			MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//			return false;
+//		}
 
 		JSONObject rev = Common.DoHttpQuery(para, "CommonQuery", m_AccID);
 
@@ -964,12 +964,12 @@ public class StockMoveScan extends Activity {
 			para.put("BinCode", posCode);
 			para.put("TableName", "position");
 
-			if (!MainLogin.getwifiinfo()) {
-				Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG)
-						.show();
-				MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-				return;
-			}
+//			if (!MainLogin.getwifiinfo()) {
+//				Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG)
+//						.show();
+//				MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//				return;
+//			}
 
 			JSONObject rev = Common.DoHttpQuery(para, "CommonQuery", m_AccID);
 
@@ -1609,11 +1609,11 @@ public class StockMoveScan extends Activity {
 			return;
 		}
 
-		if (!MainLogin.getwifiinfo()) {
-			Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
-			MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-			return;
-		}
+//		if (!MainLogin.getwifiinfo()) {
+//			Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
+//			MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//			return;
+//		}
 		// IniScan();
 		// ÌõÂë·ÖÎö
 
@@ -1959,11 +1959,11 @@ public class StockMoveScan extends Activity {
 		para.put("Invcode", bar.cInvCode);
 		para.put("Batch", bar.cBatch);
 
-		if (!MainLogin.getwifiinfo()) {
-			Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
-			MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-			return false;
-		}
+//		if (!MainLogin.getwifiinfo()) {
+//			Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
+//			MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//			return false;
+//		}
 
 		serList = Common.DoHttpQuery(para, "CommonQuery", AccID);
 
@@ -2045,11 +2045,11 @@ public class StockMoveScan extends Activity {
 		para.put("InvCode", invcode);
 		para.put("TableName", "batch");
 
-		if (!MainLogin.getwifiinfo()) {
-			Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
-			MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-			return false;
-		}
+//		if (!MainLogin.getwifiinfo()) {
+//			Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
+//			MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//			return false;
+//		}
 		batchList = Common.DoHttpQuery(para, "CommonQuery", AccID);
 
 		if (batchList == null) {

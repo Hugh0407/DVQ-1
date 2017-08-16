@@ -172,11 +172,11 @@ public class Sample_stokcing_detail extends Activity {
 		para.put("CurBag", bar.currentBox);
 		para.put("TotBag", bar.TotalBox);
 		para.put("Position", this.m_Location);
-		if(!MainLogin.getwifiinfo()) {
-            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            return false;
-        }
+//		if(!MainLogin.getwifiinfo()) {
+//            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
+//            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//            return false;
+//        }
 		result = MainLogin.objLog.DoHttpQuery(para, "InsertSampleST", "A");
 		if (result == null) {
 			Toast.makeText(this, R.string.WangLuoChuXianWenTi, Toast.LENGTH_LONG).show();
@@ -217,11 +217,11 @@ public class Sample_stokcing_detail extends Activity {
 		para.put("BillID", this.m_OrderID);
 		para.put("PosCode", this.txtLocation.getText().toString());
 		para.put("CompanyCode", MainLogin.objLog.CompanyCode);
-		if(!MainLogin.getwifiinfo()) {
-            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            return ;
-        }
+//		if(!MainLogin.getwifiinfo()) {
+//            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
+//            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//            return ;
+//        }
 		serList = MainLogin.objLog.DoHttpQuery(para, "CommonQuery", "A");
 		if (serList == null) {
 			// Toast.makeText(this, serList.getString("获取物料过程中发生了错误"),
@@ -404,11 +404,11 @@ public class Sample_stokcing_detail extends Activity {
 		para.put("BillID", m_OrderID);
 		para.put("Barcode", barcode);
 		para.put("CreateUser", MainLogin.objLog.UserID);
-		if(!MainLogin.getwifiinfo()) {
-            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            return ;
-        }
+//		if(!MainLogin.getwifiinfo()) {
+//            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
+//            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//            return ;
+//        }
 		result = MainLogin.objLog.DoHttpQuery(para, "DeleteSampleST", "A");
 		if (result == null) {
 			Toast.makeText(this, R.string.WangLuoChuXianWenTi, Toast.LENGTH_LONG).show();
@@ -445,11 +445,11 @@ public class Sample_stokcing_detail extends Activity {
 		para.put("BillID", this.m_OrderID);
 		para.put("PosCode", this.txtLocation.getText().toString());
 		para.put("UserID", MainLogin.objLog.UserID);
-		if(!MainLogin.getwifiinfo()) {
-            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            return ;
-        }
+//		if(!MainLogin.getwifiinfo()) {
+//            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
+//            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//            return ;
+//        }
 		
 		scnList1 = MainLogin.objLog.DoHttpQuery(para, "CommonQuery", "A");
 		if (scnList1 == null) {
@@ -561,11 +561,11 @@ public class Sample_stokcing_detail extends Activity {
 		para.put("BillID", this.m_OrderID);
 		para.put("PosCode", this.txtLocation.getText().toString());
 		para.put("UserID", MainLogin.objLog.UserID);
-		if(!MainLogin.getwifiinfo()) {
-            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            return ;
-        }
+//		if(!MainLogin.getwifiinfo()) {
+//            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
+//            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//            return ;
+//        }
 		scnList1 = MainLogin.objLog.DoHttpQuery(para, "CommonQuery", "A");
 		if (scnList1 == null) {
 			// Toast.makeText(this, serList.getString("获取物料过程中发生了错误"),
@@ -632,11 +632,11 @@ public class Sample_stokcing_detail extends Activity {
 		para.put("BillID", this.m_OrderID);
 		para.put("PosCode", this.txtLocation.getText().toString());
 		para.put("UserID", MainLogin.objLog.UserID);
-		if(!MainLogin.getwifiinfo()) {
-            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            return ;
-        }
+//		if(!MainLogin.getwifiinfo()) {
+//            Toast.makeText(this, R.string.WiFiXinHaoCha,Toast.LENGTH_LONG).show();
+//            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//            return ;
+//        }
 		scnList1 = MainLogin.objLog.DoHttpQuery(para, "CommonQuery", "A");
 		if (scnList1 == null) {
 			// Toast.makeText(this, serList.getString("获取物料过程中发生了错误"),

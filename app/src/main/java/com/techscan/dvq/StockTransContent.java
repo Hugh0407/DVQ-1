@@ -296,11 +296,11 @@ public class StockTransContent extends Activity {
             }
         }
 
-        if (!MainLogin.getwifiinfo()) {
-            Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            return;
-        }
+//        if (!MainLogin.getwifiinfo()) {
+//            Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
+//            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//            return;
+//        }
         JSONObject rev = null;
         try {
             // if(tmpAccIDA.equals("A"))
@@ -1182,11 +1182,11 @@ public class StockTransContent extends Activity {
 
         // JSONObject jas= Common.DoHttpQuery(saveJson, "SaveAdjOutBill",
         // fsAccIDFlag);
-        if (!MainLogin.getwifiinfo()) {
-            Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-            return;
-        }
+//        if (!MainLogin.getwifiinfo()) {
+//            Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
+//            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//            return;
+//        }
 
         if (tmpAccIDA.equals("A") && lsResultBillCodeA.equals("")
                 && SaveA == true) {
@@ -2137,12 +2137,12 @@ public class StockTransContent extends Activity {
         }
 
         try {
-            if (!MainLogin.getwifiinfo()) {
-                Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG)
-                        .show();
-                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                return;
-            }
+//            if (!MainLogin.getwifiinfo()) {
+//                Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG)
+//                        .show();
+//                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                return;
+//            }
             JSONArray JsonArrNew = new JSONArray();// Json ›…Ì
             if (!sBillIDA.equals("")) {
                 JSONObject revA = Common.DoHttpQuery(paraA, "CommonQuery", "");
@@ -2684,12 +2684,12 @@ public class StockTransContent extends Activity {
                 para.put("BinCode", posCode);
                 para.put("TableName", "position");
 
-                if (!MainLogin.getwifiinfo()) {
-                    Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG)
-                            .show();
-                    MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                    return;
-                }
+//                if (!MainLogin.getwifiinfo()) {
+//                    Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG)
+//                            .show();
+//                    MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                    return;
+//                }
 
                 JSONObject revA = Common.DoHttpQuery(para, "CommonQuery", "A");
 
@@ -2773,12 +2773,12 @@ public class StockTransContent extends Activity {
                 para.put("BinCode", posCode);
                 para.put("TableName", "position");
 
-                if (!MainLogin.getwifiinfo()) {
-                    Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG)
-                            .show();
-                    MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                    return;
-                }
+//                if (!MainLogin.getwifiinfo()) {
+//                    Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG)
+//                            .show();
+//                    MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                    return;
+//                }
 
                 JSONObject revB = Common.DoHttpQuery(para, "CommonQuery", "B");
 
@@ -2869,12 +2869,12 @@ public class StockTransContent extends Activity {
         try {
             Map<String, Object> map = null;
             JSONObject tempJso = null;
-            if (!MainLogin.getwifiinfo()) {
-                Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG)
-                        .show();
-                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                return;
-            }
+//            if (!MainLogin.getwifiinfo()) {
+//                Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG)
+//                        .show();
+//                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                return;
+//            }
             JSONObject rev = Common.DoHttpQuery(para, "CommonQuery",
                     lsBillAccID);
 

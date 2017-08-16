@@ -808,11 +808,11 @@ public class StockTransScan extends Activity {
 
 		para.put("LotB", this.currentObj.GetBatch());
 		para.put("TableName", "Stock");
-		if (!MainLogin.getwifiinfo()) {
-			Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
-			MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-			return false;
-		}
+//		if (!MainLogin.getwifiinfo()) {
+//			Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
+//			MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//			return false;
+//		}
 		JSONObject StockInfo = Common.DoHttpQuery(para, "CommonQuery",
 				bar.AccID);
 
@@ -893,11 +893,11 @@ public class StockTransScan extends Activity {
 
 		// para.put("LotB", this.currentObj.GetBatch());
 		// para.put("TableName", "Stock");
-		if (!MainLogin.getwifiinfo()) {
-			Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
-			MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-			return false;
-		}
+//		if (!MainLogin.getwifiinfo()) {
+//			Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
+//			MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//			return false;
+//		}
 		JSONObject StockInfo = Common.DoHttpQuery(para, "CommonQuery",
 				bar.AccID);
 
@@ -1664,11 +1664,11 @@ public class StockTransScan extends Activity {
 		// IniScan();
 		// 条码分析
 
-		if (!MainLogin.getwifiinfo()) {
-			Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
-			MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-			return;
-		}
+//		if (!MainLogin.getwifiinfo()) {
+//			Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
+//			MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//			return;
+//		}
 
 		bar = new SplitBarcode(barcode);
 		if (bar.creatorOk == false) {
@@ -2957,12 +2957,12 @@ public class StockTransScan extends Activity {
 		// 这里的WareHouse需要让操作员选择.
 		para.put("InvCode", invcode);
 		para.put("TableName", "batch");
-
-		if (!MainLogin.getwifiinfo()) {
-			Toast.makeText(this, "R.string.WiFiXinHaoCha", Toast.LENGTH_LONG).show();
-			MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-			return false;
-		}
+//
+//		if (!MainLogin.getwifiinfo()) {
+//			Toast.makeText(this, "R.string.WiFiXinHaoCha", Toast.LENGTH_LONG).show();
+//			MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//			return false;
+//		}
 		batchList = Common.DoHttpQuery(para, "CommonQuery", AccID);
 
 		if (batchList == null) {
