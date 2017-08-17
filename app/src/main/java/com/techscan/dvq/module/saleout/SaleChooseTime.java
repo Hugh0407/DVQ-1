@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.techscan.dvq.DateCompare;
 import com.techscan.dvq.R;
+import com.techscan.dvq.login.MainLogin;
 
 import java.util.Calendar;
 
@@ -273,19 +274,22 @@ private View.OnKeyListener mOnKeyListener = new View.OnKeyListener(){
           txtEndDate.setOnFocusChangeListener(myFocusListener);
           txtBillCode.setOnKeyListener(mOnKeyListener);
           txtBeginDate.setOnKeyListener(mOnKeyListener);
-        if (month<9){
-            months = "0"+(month+1);
-        }else{
-            months = (month+1)+"";
-        }
-        if (day<10){
-            dayys = "0"+(day);
-        }else{
-            dayys = day+"";
-        }
-          txtBeginDate.setText((year+"")+"-"+months+"-"+dayys);
-          txtEndDate.setText((year+"")+"-"+months+"-"+dayys);
-           }
+//        if (month<9){
+//            months = "0"+(month+1);
+//        }else{
+//            months = (month+1)+"";
+//        }
+//        if (day<10){
+//            dayys = "0"+(day);
+//        }else{
+//            dayys = day+"";
+//        }
+//          txtBeginDate.setText((year+"")+"-"+months+"-"+dayys);
+//          txtEndDate.setText((year+"")+"-"+months+"-"+dayys);
+          txtBeginDate.setText(MainLogin.appTime);
+          txtEndDate.setText(MainLogin.appTime);
+
+    }
 
 
 }
