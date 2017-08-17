@@ -89,8 +89,8 @@ public class PurStockIn extends Activity {
     @Nullable
     File   fileScan       = null;
 
-    private JSONObject                jsTotal              =null;
-    private JSONObject                table              =null;
+    private JSONObject jsTotal = null;
+    private JSONObject table   = null;
 
     String ReScanHead = "1";
     @Nullable
@@ -245,7 +245,11 @@ public class PurStockIn extends Activity {
         txtEndDate.setOnClickListener(myListner);
         //txtEndDate.setOnKeyListener(mOnKeyListener);
         txtReMark = (EditText) findViewById(id.remark);
-        Date             SDate      = new Date();
+        String[] date  = MainLogin.appTime.split("-");
+        /**
+         * 默认从1900开始
+         */
+        Date     SDate = new Date(Integer.valueOf(date[0]) - 1900, Integer.valueOf(date[1]) - 1, Integer.valueOf(date[2]));
         Date             EDate      = new Date();
         SimpleDateFormat Dateformat = new SimpleDateFormat("yyyy-MM-dd");
         txtEndDate.setText(Dateformat.format(SDate));
@@ -699,7 +703,7 @@ public class PurStockIn extends Activity {
             //head = jsHead.getJSONArray("PurGood");
 
             JSONArray arrays = jsSerino.getJSONArray("Serino");
-            Log.d(TAG, "SavePurOrder: "+arrays.length()+"");
+            Log.d(TAG, "SavePurOrder: " + arrays.length() + "");
             for (int i = 0; i < arrays.length(); i++) {
                 String OKFlg    = "0";
                 String sSerial  = ((JSONObject) (arrays.get(i))).getString("sno");
@@ -744,7 +748,7 @@ public class PurStockIn extends Activity {
                         }
                     }
                     if (OKFlg.equals("0")) {
-                    //************************
+                        //************************
 //                    if (OKFlg.equals("1")) {// TODO: 2017/8/11 xuhu
                         //HashMap<String, Object> map = new HashMap<String, Object>();
                         JSONObject map = new JSONObject();
@@ -756,7 +760,7 @@ public class PurStockIn extends Activity {
                         map.put("totalnum", totalnum);
                         lstSerino.put(map);
                         OKFlg = "1";
-                    // ************************
+                        // ************************
 //                        OKFlg = "0";//By XUHU
                     }
                 }
@@ -798,7 +802,7 @@ public class PurStockIn extends Activity {
                         for (int k = 0; k < arraySaveBody.length(); k++) {
                             if (arraysSerino.getJSONObject(j).getString("batch").toUpperCase().equals(
                                     arraySaveBody.getJSONObject(k).getString("VBATCHCODE").toUpperCase())) {
-                                Log.d(TAG, "Num2: "+String.valueOf(arraysSerino.getJSONObject(j).getDouble("box")));
+                                Log.d(TAG, "Num2: " + String.valueOf(arraysSerino.getJSONObject(j).getDouble("box")));
                                 ldDoneQty = ldDoneQty + arraysSerino.getJSONObject(j).getDouble("box");
                                 lbPutFlag = false;
                                 break;
@@ -815,7 +819,7 @@ public class PurStockIn extends Activity {
                             //						if (!bodys.getJSONObject(i).getString("nconfirmnum").toLowerCase().equals(null) &&
                             //								!bodys.getJSONObject(i).getString("nconfirmnum").isEmpty())
                             //							ldDoneQty = bodys.getJSONObject(i).getDouble("nconfirmnum");
-                            Log.d(TAG, "Num1: "+String.valueOf(arraysSerino.getJSONObject(j).getDouble("box")));
+                            Log.d(TAG, "Num1: " + String.valueOf(arraysSerino.getJSONObject(j).getDouble("box")));
                             obj.put("NINNUM", arraysSerino.getJSONObject(j).getDouble("box"));                    //数量
                             obj.put("NORDERNUM", bodys.getJSONObject(i).getDouble("nordernum"));
                             obj.put("PK_BODYCALBODY", PK_CALBODY);
@@ -833,7 +837,7 @@ public class PurStockIn extends Activity {
                             arraySaveBody.put(obj);
                             y++;
                         } else
-                        //******先注销 By XUHU
+                            //******先注销 By XUHU
                             arraysSerino.getJSONObject(j).put("NINNUM", ldDoneQty);
 //                          obj.put("NINNUM", ldDoneQty);
 //                          arraySaveBody.put(obj);
@@ -1833,9 +1837,9 @@ public class PurStockIn extends Activity {
 
 //                            ***********************************
 //扫描到数据没有保存，再次点击采购订单图标，这时候对扫描的数据进行处理 // TODO: 2017/8/11 XUHU
-                            if (jsSerino == null || jsSerino.length() < 1){
+                            if (jsSerino == null || jsSerino.length() < 1) {
                                 ShowOrderNoList("");
-                            }else{
+                            } else {
                                 AlertDialog.Builder bulider =
                                         new AlertDialog.Builder(PurStockIn.this).setTitle(R.string.XunWen).setMessage("已扫描数据，是否要清空?");
                                 bulider.setNegativeButton(R.string.QuXiao, null);
@@ -2626,7 +2630,7 @@ public class PurStockIn extends Activity {
                 this.jsBoxTotal = null;
             } catch (JSONException e) {
                 e.printStackTrace();
-                Utils.showToast(PurStockIn.this,e.getMessage());
+                Utils.showToast(PurStockIn.this, e.getMessage());
                 SoundHelper.playWarning();
             }
         }
@@ -2637,13 +2641,13 @@ public class PurStockIn extends Activity {
      */
     private boolean saveData() throws JSONException,
             ParseException, IOException {
-            table = new JSONObject();
-            JSONArray arrayss = null;
-            JSONArray arrayMerge = null;
-            arrayss = jsSerino.getJSONArray("Serino");
-            arrayMerge = merge(arrayss);
-            jsTotal = new JSONObject();
-            jsTotal.put("Serino", arrayMerge);
+        table = new JSONObject();
+        JSONArray arrayss    = null;
+        JSONArray arrayMerge = null;
+        arrayss = jsSerino.getJSONArray("Serino");
+        arrayMerge = merge(arrayss);
+        jsTotal = new JSONObject();
+        jsTotal.put("Serino", arrayMerge);
         JSONArray  heads        = jsHead.getJSONArray("PurGood");
         JSONObject saveHeadJons = new JSONObject();
         saveHeadJons.put("VBILLCODE", txtPurInBillCode.getText().toString()); //采购入库单号(手输)
@@ -2659,56 +2663,56 @@ public class PurStockIn extends Activity {
         saveHeadJons.put("FREPLENISHFLAG", m_FrePlenishFlag);//退货标志
         saveHeadJons.put("CPROVIDERID", heads.getJSONObject(0).getString("pk_cumandoc"));//供应商ID
         saveHeadJons.put("CUBASDOC", heads.getJSONObject(0).getString("pk_cubasdoc"));
-            table.put("Head", saveHeadJons);
-            JSONObject tableBody = new JSONObject();
-            JSONArray bodyArray = new JSONArray();
+        table.put("Head", saveHeadJons);
+        JSONObject tableBody = new JSONObject();
+        JSONArray  bodyArray = new JSONArray();
 
-            JSONArray bodys = jsBody.getJSONArray("PurBody");
-            JSONArray arraysSerino = jsTotal.getJSONArray("Serino");
-            for (int j = 0; j < arraysSerino.length(); j++) {
-                for (int i = 0; i < bodys.length(); i++) {
-                    if (arraysSerino.getJSONObject(j).getString("invcode").toLowerCase().equals(
-                            bodys.getJSONObject(i).getString("invcode"))) {
-                        Double box = arraysSerino.getJSONObject(j).getDouble("box");
-                        DecimalFormat decimalFormat = new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
-                        String totalBox = decimalFormat.format(box);//format 返回的是字符串
-                        JSONObject object = new JSONObject();
+        JSONArray bodys        = jsBody.getJSONArray("PurBody");
+        JSONArray arraysSerino = jsTotal.getJSONArray("Serino");
+        for (int j = 0; j < arraysSerino.length(); j++) {
+            for (int i = 0; i < bodys.length(); i++) {
+                if (arraysSerino.getJSONObject(j).getString("invcode").toLowerCase().equals(
+                        bodys.getJSONObject(i).getString("invcode"))) {
+                    Double        box           = arraysSerino.getJSONObject(j).getDouble("box");
+                    DecimalFormat decimalFormat = new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
+                    String        totalBox      = decimalFormat.format(box);//format 返回的是字符串
+                    JSONObject    object        = new JSONObject();
 
-                       object.put("CINVBASID", bodys.getJSONObject(i).getString("cbaseid"));
-                       object.put("CINVENTORYID", bodys.getJSONObject(i).getString("cmangid"));
-                       object.put("CINVCODE", bodys.getJSONObject(i).getString("invcode"));
-                       object.put("BLOTMGT", "1");        //是否批次管理
-                        Log.d(TAG, "Num1: "+String.valueOf(arraysSerino.getJSONObject(j).getDouble("box")));
-                        object.put("NINNUM",totalBox);                    //数量
-                        object.put("NORDERNUM", bodys.getJSONObject(i).getDouble("nordernum"));
-                        object.put("PK_BODYCALBODY", PK_CALBODY);
-                        object.put("VBATCHCODE", arraysSerino.getJSONObject(j).getString("batch"));
-                        object.put("SOURCCEBILLHID", bodys.getJSONObject(i).getString("corderid"));
-                        object.put("SOURCCEBILLBID", bodys.getJSONObject(i).getString("corder_bid"));
-                        object.put("VENDORID", heads.getJSONObject(0).getString("cvendormangid"));
-                        object.put("VENDORBASID", heads.getJSONObject(0).getString("cvendorbaseid"));
-                        Log.d(TAG, "PRICE: " + bodys.getJSONObject(i).getString("noriginalcurprice"));
-                       object.put("NPRICE", bodys.getJSONObject(i).getString("noriginalcurprice"));
-                       object.put("VSOURCEBILLCODE", m_BillNo);
-                       object.put("VSOURCEBILLROWNO", bodys.getJSONObject(i).getString("crowno"));
-                        if (bodys.getJSONObject(i).getString("vfree4").equals("null")){
-                            String vfree4 = "";
-                            object.put("VFREE4", vfree4);
-                        }else{
-                            object.put("VFREE4", bodys.getJSONObject(i).getString("vfree4"));
-                        }
-                        // object.put("VFREE4", bodys.getJSONObject(i).getString("vfree4"));
-                        //jsDBBody.put(y + "", obj);
-                        bodyArray.put(object);
+                    object.put("CINVBASID", bodys.getJSONObject(i).getString("cbaseid"));
+                    object.put("CINVENTORYID", bodys.getJSONObject(i).getString("cmangid"));
+                    object.put("CINVCODE", bodys.getJSONObject(i).getString("invcode"));
+                    object.put("BLOTMGT", "1");        //是否批次管理
+                    Log.d(TAG, "Num1: " + String.valueOf(arraysSerino.getJSONObject(j).getDouble("box")));
+                    object.put("NINNUM", totalBox);                    //数量
+                    object.put("NORDERNUM", bodys.getJSONObject(i).getDouble("nordernum"));
+                    object.put("PK_BODYCALBODY", PK_CALBODY);
+                    object.put("VBATCHCODE", arraysSerino.getJSONObject(j).getString("batch"));
+                    object.put("SOURCCEBILLHID", bodys.getJSONObject(i).getString("corderid"));
+                    object.put("SOURCCEBILLBID", bodys.getJSONObject(i).getString("corder_bid"));
+                    object.put("VENDORID", heads.getJSONObject(0).getString("cvendormangid"));
+                    object.put("VENDORBASID", heads.getJSONObject(0).getString("cvendorbaseid"));
+                    Log.d(TAG, "PRICE: " + bodys.getJSONObject(i).getString("noriginalcurprice"));
+                    object.put("NPRICE", bodys.getJSONObject(i).getString("noriginalcurprice"));
+                    object.put("VSOURCEBILLCODE", m_BillNo);
+                    object.put("VSOURCEBILLROWNO", bodys.getJSONObject(i).getString("crowno"));
+                    if (bodys.getJSONObject(i).getString("vfree4").equals("null")) {
+                        String vfree4 = "";
+                        object.put("VFREE4", vfree4);
+                    } else {
+                        object.put("VFREE4", bodys.getJSONObject(i).getString("vfree4"));
                     }
+                    // object.put("VFREE4", bodys.getJSONObject(i).getString("vfree4"));
+                    //jsDBBody.put(y + "", obj);
+                    bodyArray.put(object);
                 }
             }
-            tableBody.put("ScanDetails", bodyArray);
-            table.put("Body", tableBody);
-            table.put("GUIDS", UUID.randomUUID().toString());
-            Log.d(TAG, "SaveSaleOrder: " + MainLogin.appTime);
-            table.put("OPDATE", MainLogin.appTime);
-            Log.d(TAG, "XXXXXX: " + table.toString());
+        }
+        tableBody.put("ScanDetails", bodyArray);
+        table.put("Body", tableBody);
+        table.put("GUIDS", UUID.randomUUID().toString());
+        Log.d(TAG, "SaveSaleOrder: " + MainLogin.appTime);
+        table.put("OPDATE", MainLogin.appTime);
+        Log.d(TAG, "XXXXXX: " + table.toString());
 //            if (!MainLogin.getwifiinfo()) {
 //                Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
 //                MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
@@ -2768,11 +2772,11 @@ public class PurStockIn extends Activity {
      * 根据批次sku相同合并数量  todo XUHU
      */
     @NonNull
-    public  JSONArray merge(@NonNull JSONArray array) {
+    public JSONArray merge(@NonNull JSONArray array) {
 
         JSONArray arrayTemp = new JSONArray();
-        int num = 0;
-        for(int i = 0;i < array.length();i++) {
+        int       num       = 0;
+        for (int i = 0; i < array.length(); i++) {
             if (num == 0) {
                 try {
                     arrayTemp.put(array.get(i));
@@ -2783,29 +2787,29 @@ public class PurStockIn extends Activity {
             } else {
                 try {
                     int numJ = 0;
-                    Log.d(TAG, "Merge: "+arrayTemp.length());
+                    Log.d(TAG, "Merge: " + arrayTemp.length());
                     for (int j = 0; j < arrayTemp.length(); j++) {
                         JSONObject newJsonObjectI = (JSONObject) array.get(i);
                         JSONObject newJsonObjectJ = (JSONObject) arrayTemp.get(j);
-                        String invcode = newJsonObjectI.get("invcode").toString();
-                        String invname = newJsonObjectI.get("invname").toString();
-                        String batch = newJsonObjectI.get("batch").toString();
-                        String box = newJsonObjectI.get("box").toString();
-                        String sno = newJsonObjectI.get("sno").toString();
-                        String serino = newJsonObjectI.get("serino").toString();
-                        String vfree1 = newJsonObjectI.get("vfree1").toString();
+                        String     invcode        = newJsonObjectI.get("invcode").toString();
+                        String     invname        = newJsonObjectI.get("invname").toString();
+                        String     batch          = newJsonObjectI.get("batch").toString();
+                        String     box            = newJsonObjectI.get("box").toString();
+                        String     sno            = newJsonObjectI.get("sno").toString();
+                        String     serino         = newJsonObjectI.get("serino").toString();
+                        String     vfree1         = newJsonObjectI.get("vfree1").toString();
 
                         String invcodeJ = newJsonObjectJ.get("invcode").toString();
-                        String batchJ = newJsonObjectJ.get("batch").toString();
-                        String boxJ = newJsonObjectJ.get("box").toString();
+                        String batchJ   = newJsonObjectJ.get("batch").toString();
+                        String boxJ     = newJsonObjectJ.get("box").toString();
 
-                        if (invcode.equals(invcodeJ)&&batch.equals(batchJ)) {
-                            double newValue = Double.parseDouble(box) + Double.parseDouble(boxJ);
+                        if (invcode.equals(invcodeJ) && batch.equals(batchJ)) {
+                            double     newValue  = Double.parseDouble(box) + Double.parseDouble(boxJ);
                             JSONObject newObject = new JSONObject();
-            //判断sdk版本是否大于19，大于调用remove（），否则调用自定义方法
+                            //判断sdk版本是否大于19，大于调用remove（），否则调用自定义方法
                             if (Build.VERSION.SDK_INT >= 19) {
-                                Log.d(TAG, "UUU: "+ Build.VERSION.SDK_INT +"");
-                                Log.d(TAG, "UUU: "+ "111");
+                                Log.d(TAG, "UUU: " + Build.VERSION.SDK_INT + "");
+                                Log.d(TAG, "UUU: " + "111");
 //                                Toast.makeText(SalesDelivery.this,"api>19",Toast.LENGTH_SHORT).show();
                                 arrayTemp.remove(j);
                                 newObject.put("invcode", invcode);
@@ -2816,11 +2820,10 @@ public class PurStockIn extends Activity {
                                 newObject.put("vfree1", vfree1);
                                 newObject.put("box", String.valueOf(newValue));
                                 arrayTemp.put(newObject);
-                            }
-                            else{
-                                Log.d(TAG, "UUU: "+ Build.VERSION.SDK_INT +"");
-                                Log.d(TAG, "UUU: "+ "444");
-                                Utils.removeJsonArray(j,arrayTemp);
+                            } else {
+                                Log.d(TAG, "UUU: " + Build.VERSION.SDK_INT + "");
+                                Log.d(TAG, "UUU: " + "444");
+                                Utils.removeJsonArray(j, arrayTemp);
                                 newObject.put("invcode", invcode);
                                 newObject.put("batch", batch);
                                 newObject.put("invname", invname);
@@ -2833,8 +2836,8 @@ public class PurStockIn extends Activity {
                             break;
                         }
                         numJ++;
-                        String a = numJ+"";
-                        Log.d(TAG, "Merge: "+a);
+                        String a = numJ + "";
+                        Log.d(TAG, "Merge: " + a);
                     }
                     if (numJ - 1 == arrayTemp.length() - 1) {
                         arrayTemp.put(array.get(i));
@@ -2844,7 +2847,7 @@ public class PurStockIn extends Activity {
                 }
             }
         }
-        Log.d(TAG, "DDDDD: "+arrayTemp.toString());
+        Log.d(TAG, "DDDDD: " + arrayTemp.toString());
         return arrayTemp;
     }
 }

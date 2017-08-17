@@ -400,12 +400,12 @@ public class OtherOutScanAct extends Activity {
         } else if (barDecoder.BarcodeType.equals("P")) {
             String invCode = barDecoder.cInvCode;
             if (invCode.contains(",")) {
-                invCode = invCode.split(",")[0];
+                invCode = invCode.split(",")[1];
             }
             edEncoding.setText(invCode);
             String batch = barDecoder.cBatch;
             if (batch.contains(",")) {
-                batch = batch.split(",")[0];
+                batch = batch.split(",")[1];
             }
             edLot.setText(batch);
             edWeight.setText(barQty);
@@ -434,12 +434,12 @@ public class OtherOutScanAct extends Activity {
             }
             String encoding = barDecoder.cInvCode;
             if (encoding.contains(",")) {
-                encoding = encoding.split(",")[0];
+                encoding = encoding.split(",")[1];
             }
             edEncoding.setText(encoding);
             String batch = barDecoder.cBatch;
             if (batch.contains(",")) {
-                batch = batch.split(",")[0];
+                batch = batch.split(",")[1];
             }
             edLot.setText(batch);
             edWeight.setText(String.valueOf(barDecoder.dQuantity));

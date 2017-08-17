@@ -162,7 +162,7 @@ public class MainLogin extends Activity {
         WhCodeB = mySharedPreferences.getString("AccId", "");// 获取B公司的过滤仓库
 
         SharedPreferences.Editor editor = mySharedPreferences.edit();
-        editor.putString("account",user.getText().toString());
+        editor.putString("account", user.getText().toString());
         editor.apply();
 
         // EditText user=(EditText)findViewById(R.id.txtUserName);
@@ -727,8 +727,8 @@ public class MainLogin extends Activity {
         year = mycalendar.get(Calendar.YEAR); //获取Calendar对象中的年
         month = mycalendar.get(Calendar.MONTH);//获取Calendar对象中的月
         day = mycalendar.get(Calendar.DAY_OF_MONTH);//获取这个月的第几天
-        appTime = year + "-" + (month + 1) + "-" + day;
-        edTime.setText(Utils.formatTime(System.currentTimeMillis()));
+        appTime = Utils.formatTime(System.currentTimeMillis());
+        edTime.setText(appTime);
         edTime.setOnFocusChangeListener(myFocusListener);
         edTime.setInputType(InputType.TYPE_NULL);
 
