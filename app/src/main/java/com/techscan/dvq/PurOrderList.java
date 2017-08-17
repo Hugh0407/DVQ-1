@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Adapter;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -172,8 +171,6 @@ public class PurOrderList extends Activity {
 
 		StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().detectLeakedSqlLiteObjects().
 				detectLeakedClosableObjects().penaltyLog().penaltyDeath().build()); 
-		
-		
 
 		FunctionName="CommonQuery";
 		try 

@@ -66,6 +66,7 @@ import static com.techscan.dvq.common.Utils.HANDER_DEPARTMENT;
 import static com.techscan.dvq.common.Utils.HANDER_POORDER_BODY;
 import static com.techscan.dvq.common.Utils.HANDER_POORDER_HEAD;
 import static com.techscan.dvq.common.Utils.HANDER_STORG;
+import static com.techscan.dvq.login.MainLogin.appTime;
 
 public class PurStockIn extends Activity {
 
@@ -776,7 +777,7 @@ public class PurStockIn extends Activity {
             uploadGuid = UUID.randomUUID();
         }
         saveJons.put("GUIDS", uploadGuid.toString());
-        saveJons.put("OPDATE", MainLogin.appTime);
+        saveJons.put("OPDATE", appTime);
 
         JSONArray arraySaveBody = new JSONArray();
         if (NoScanSave == false) {
@@ -2706,8 +2707,8 @@ public class PurStockIn extends Activity {
             tableBody.put("ScanDetails", bodyArray);
             table.put("Body", tableBody);
             table.put("GUIDS", UUID.randomUUID().toString());
-            Log.d(TAG, "SaveSaleOrder: " + MainLogin.appTime);
-            table.put("OPDATE", MainLogin.appTime);
+            Log.d(TAG, "SaveSaleOrder: " + appTime);
+            table.put("OPDATE", appTime);
             Log.d(TAG, "XXXXXX: " + table.toString());
 //            if (!MainLogin.getwifiinfo()) {
 //                Toast.makeText(this, R.string.WiFiXinHaoCha, Toast.LENGTH_LONG).show();
