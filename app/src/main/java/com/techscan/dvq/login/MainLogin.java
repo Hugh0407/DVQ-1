@@ -1170,10 +1170,10 @@ public class MainLogin extends Activity {
             day = dayOfMonth;
             if (month<9){
             months = "0"+(month+1);
-        }else{
+           }else{
             months = (month+1)+"";
-        }
-        if (day<10){
+           }
+           if (day<10){
             dayys = "0"+(day);
         }else{
             dayys = day+"";
