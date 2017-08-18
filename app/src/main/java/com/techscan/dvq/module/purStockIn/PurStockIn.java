@@ -1131,7 +1131,7 @@ public class PurStockIn extends Activity {
             Toast.makeText(this, "请先确认需要扫描的订单号", Toast.LENGTH_LONG).show();
 
             //ADD CAIXY TEST START
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             //ADD CAIXY TEST END
             return;
         }
@@ -1423,7 +1423,7 @@ public class PurStockIn extends Activity {
             Toast.makeText(this, "请先确认需要扫描的订单号", Toast.LENGTH_LONG).show();
 
             //ADD CAIXY TEST START
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             //ADD CAIXY TEST END
             return;
         }
@@ -1747,7 +1747,7 @@ public class PurStockIn extends Activity {
                             try {
                                 if (m_BillNo.isEmpty()) {
                                     Toast.makeText(PurStockIn.this, "请输入采购订单号", Toast.LENGTH_LONG).show();
-                                    MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                                    MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                                     return;
                                 }
                                 // TODO: 2017/8/15 XUHU 除了华奇 其他都不要手动输入入库单号，交给nc判断，先注销
@@ -1760,13 +1760,13 @@ public class PurStockIn extends Activity {
 
                                 if (CWAREHOUSEID.isEmpty()) {
                                     Toast.makeText(PurStockIn.this, "请输入仓库号", Toast.LENGTH_LONG).show();
-                                    MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                                    MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                                     txtWareHouse.requestFocus();
                                     return;
                                 }
                                 if (PK_CALBODY.isEmpty()) {
                                     Toast.makeText(PurStockIn.this, "请输入库存组织号", Toast.LENGTH_LONG).show();
-                                    MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                                    MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                                     txtOrganization.requestFocus();
                                     return;
                                 }
@@ -1786,7 +1786,7 @@ public class PurStockIn extends Activity {
 
                                 if (jsSerino == null || jsSerino.length() < 1) {
                                     Toast.makeText(PurStockIn.this, "没有扫描详细不能保存", Toast.LENGTH_LONG).show();
-                                    MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                                    MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                                     return;
                                 }
                                 Save1();

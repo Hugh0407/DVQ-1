@@ -620,7 +620,7 @@ public class SalesDelivery extends Activity {
                         Toast.makeText(SalesDelivery.this, "请输入来源单据",
                                 Toast.LENGTH_LONG).show();
                         // ADD CAIXY TEST START
-                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                         // ADD CAIXY TEST END
                         return;
                     }
@@ -629,7 +629,7 @@ public class SalesDelivery extends Activity {
                         Toast.makeText(SalesDelivery.this, "没有选择单据号",
                                 Toast.LENGTH_LONG).show();
                         // ADD CAIXY TEST START
-                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                         // ADD CAIXY TEST END
                         return;
                     }
@@ -638,7 +638,7 @@ public class SalesDelivery extends Activity {
                         Toast.makeText(SalesDelivery.this, "仓库没有选择",
                                 Toast.LENGTH_LONG).show();
                         // ADD CAIXY TEST START
-                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                         // ADD CAIXY TEST END
                         return;
                     }
@@ -652,7 +652,7 @@ public class SalesDelivery extends Activity {
                             Toast.makeText(SalesDelivery.this, "没有要保存的数据",
                                     Toast.LENGTH_LONG).show();
                             // ADD CAIXY TEST START
-                            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                             // ADD CAIXY TEST END
                             return;
 
@@ -661,7 +661,7 @@ public class SalesDelivery extends Activity {
                             Toast.makeText(SalesDelivery.this, "请输入来源单据",
                                     Toast.LENGTH_LONG).show();
                             // ADD CAIXY TEST START
-                            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                             // ADD CAIXY TEST END
                             return;
                         }
@@ -670,7 +670,7 @@ public class SalesDelivery extends Activity {
                             Toast.makeText(SalesDelivery.this, "没有选择单据号",
                                     Toast.LENGTH_LONG).show();
                             // ADD CAIXY TEST START
-                            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                             // ADD CAIXY TEST END
                             return;
                         }
@@ -679,7 +679,7 @@ public class SalesDelivery extends Activity {
                             Toast.makeText(SalesDelivery.this, "仓库没有选择",
                                     Toast.LENGTH_LONG).show();
                             // ADD CAIXY TEST START
-                            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                             // ADD CAIXY TEST END
                             return;
                         }
@@ -708,7 +708,7 @@ public class SalesDelivery extends Activity {
                                     Toast.LENGTH_LONG).show();
 
                             // ADD CAIXY TEST START
-                            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                             // ADD CAIXY TEST END
                             return;
                         }
@@ -718,7 +718,7 @@ public class SalesDelivery extends Activity {
                                     Toast.LENGTH_LONG).show();
 
                             // ADD CAIXY TEST START
-                            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                             // ADD CAIXY TEST END
                             return;
                         }

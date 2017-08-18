@@ -195,6 +195,7 @@
                     android:text="数  　量"/>
 
                 <EditText
+                    android:textColor="@color/black"
                     android:inputType="number"
                     android:id="@+id/txtSaleNumber"
                     android:layout_width="0dp"

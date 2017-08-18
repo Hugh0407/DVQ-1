@@ -75,6 +75,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import static android.content.ContentValues.TAG;
 import static com.techscan.dvq.MainActivity.LoginUser;
 import static com.techscan.dvq.common.Common.lsUrl;
 
@@ -728,18 +729,18 @@ public class MainLogin extends Activity {
         year = mycalendar.get(Calendar.YEAR); //获取Calendar对象中的年
         month = mycalendar.get(Calendar.MONTH);//获取Calendar对象中的月
         day = mycalendar.get(Calendar.DAY_OF_MONTH);//获取这个月的第几天
-//                if (month<9){
-//            months = "0"+(month+1);
-//        }else{
-//            months = (month+1)+"";
-//        }
-//        if (day<10){
-//            dayys = "0"+(day);
-//        }else{
-//            dayys = day+"";
-//        }
-        appTime = year + "-" + (month + 1) + "-" + day;
-//        appTime = year + "-" + months + "-" + dayys;
+                if (month<9){
+            months = "0"+(month+1);
+        }else{
+            months = (month+1)+"";
+        }
+        if (day<10){
+            dayys = "0"+(day);
+        }else{
+            dayys = day+"";
+        }
+//        appTime = year + "-" + (month + 1) + "-" + day;
+        appTime = year + "-" + months + "-" + dayys;
         edTime.setText(Utils.formatTime(System.currentTimeMillis()));
         edTime.setOnFocusChangeListener(myFocusListener);
         edTime.setInputType(InputType.TYPE_NULL);
@@ -1184,6 +1185,7 @@ public class MainLogin extends Activity {
         //当DatePickerDialog关闭时，更新日期显示
         private void updateDate() {
             appTime = year + "-" + months + "-" + dayys;
+            Log.d(TAG, "updateDate: "+appTime);
             //在TextView上显示日期
             edTime.setText(appTime);
         }

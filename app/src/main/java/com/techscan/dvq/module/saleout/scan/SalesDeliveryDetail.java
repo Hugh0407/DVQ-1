@@ -290,7 +290,7 @@ public class SalesDeliveryDetail extends Activity {
                             }
                         }else{
                             if (!isNumber(txtSaleTotal.getText().toString())) {
-                                Utils.showToast(SalesDeliveryDetail.this, "数量不正确a");
+                                Utils.showToast(SalesDeliveryDetail.this, "数量不正确");
                                 txtSaleTotal.setText("");
 //                            txtSaleNumber.requestFocus();
                                 return true;
@@ -587,11 +587,11 @@ public class SalesDeliveryDetail extends Activity {
                 txtSaleTotal.setFocusable(false);
                 addDataToDetail();
             }else{
+                txtSaleTotal.setFocusableInTouchMode(true);
+                txtSaleTotal.setFocusable(true);
                 txtSaleTotal.setEnabled(true);
                 txtSaleTotal.requestFocus();
                 txtSaleTotal.selectAll();
-                txtSaleTotal.setFocusableInTouchMode(true);
-                txtSaleTotal.setFocusable(true);
             }
         } else if (m_mapSaleBaseInfo.get("barcodetype").toString().equals("P")) {
             if (isPacked==false) {
@@ -610,21 +610,11 @@ public class SalesDeliveryDetail extends Activity {
                 txtSaleNumber.requestFocus();
                 txtSaleNumber.selectAll();
             }else{
-//                txtSaleBatch.setFocusableInTouchMode(false);
-//                txtSaleBatch.setFocusable(false);
-//                txtSaleNumber.setFocusableInTouchMode(false);
-//                txtSaleNumber.setFocusable(false);
-//                txtSaleNumber.setEnabled(false);
-//                txtSaleTotal.setFocusableInTouchMode(true);
-//                txtSaleTotal.setFocusable(true);
-//                txtSaleTotal.requestFocus();
-//                txtSaleTotal.selectAll();
-
+                txtSaleTotal.setFocusableInTouchMode(true);
+                txtSaleTotal.setFocusable(true);
                 txtSaleTotal.setEnabled(true);
                 txtSaleTotal.requestFocus();
                 txtSaleTotal.selectAll();
-                txtSaleTotal.setFocusableInTouchMode(true);
-                txtSaleTotal.setFocusable(true);
             }
         }
     }
@@ -1102,7 +1092,7 @@ public class SalesDeliveryDetail extends Activity {
         Map<String, Object> map;
         if (jsSerino == null || !jsSerino.has("Serino")) {
             Toast.makeText(this, "没有扫描到明细记录", Toast.LENGTH_SHORT).show();
-            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//            MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
             return;
         }
         JSONArray arrays = jsSerino.getJSONArray("Serino");

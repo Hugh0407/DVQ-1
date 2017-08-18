@@ -352,19 +352,19 @@ public class MultilateralTrade extends Activity {
                 if (txtDocumentNumber.getText().toString() == null || txtDocumentNumber.getText().toString().equals("")) {
                     Toast.makeText(MultilateralTrade.this, "没有选择单据号",
                             Toast.LENGTH_LONG).show();
-                    MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                    MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                     return;
                 }
                 if (txtOrg.getText().toString() == null || txtOrg.getText().toString().equals("")) {
                     Toast.makeText(MultilateralTrade.this, "库存组织没有选择",
                             Toast.LENGTH_LONG).show();
-                    MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                    MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                     return;
                 }
                 if (txtWareHouse.getText().toString() == null || txtWareHouse.getText().toString().equals("")) {
                     Toast.makeText(MultilateralTrade.this, "仓库没有选择",
                             Toast.LENGTH_LONG).show();
-                    MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                    MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                     return;
                 }
                 SaleScan();
@@ -375,14 +375,14 @@ public class MultilateralTrade extends Activity {
                     if (jsBody==null||jsBody.equals("")){
                         Toast.makeText(MultilateralTrade.this, "没有要保存的数据",
                                 Toast.LENGTH_LONG).show();
-                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                         return;
 
                     }
                     if (txtMultilateralTrade.getText().toString() == null || txtMultilateralTrade.getText().toString().equals("")) {
                         Toast.makeText(MultilateralTrade.this, "请输入来源单据",
                                 Toast.LENGTH_LONG).show();
-                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                         txtDocumentNumber.requestFocus();
                         return;
                     }
@@ -391,7 +391,7 @@ public class MultilateralTrade extends Activity {
                     if (txtDocumentNumber.getText().toString() == null || (!txtDocumentNumber.getText().toString().equals(checkInfo.get("BillCode")))) {
                         Toast.makeText(MultilateralTrade.this, "请选择单据号",
                                 Toast.LENGTH_LONG).show();
-                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                         return;
                     }
 
@@ -407,14 +407,14 @@ public class MultilateralTrade extends Activity {
                     if (txtOrg.getText().toString() == null || (!txtOrg.getText().toString().equals(checkInfo.get("Organization")))) {
                         Toast.makeText(MultilateralTrade.this, "请选择库存组织",
                                 Toast.LENGTH_LONG).show();
-                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                         return;
                     }
 
                     if (txtWareHouse.getText().toString() == null || (!txtWareHouse.getText().toString().equals(checkInfo.get("WHName")))) {
                         Toast.makeText(MultilateralTrade.this, "请选择仓库",
                                 Toast.LENGTH_LONG).show();
-                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                         return;
                     }
 //                    if (txtSendAndTake.getText().toString() == null || txtSendAndTake.getText().toString().equals("")) {
@@ -427,7 +427,7 @@ public class MultilateralTrade extends Activity {
                     if (txtDepartment.getText().toString() == null || txtDepartment.getText().toString().equals("")) {
                         Toast.makeText(MultilateralTrade.this, "请选择部门",
                                 Toast.LENGTH_LONG).show();
-                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
+//                        MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
                         txtDepartment.requestFocus();
                         return;
                     }

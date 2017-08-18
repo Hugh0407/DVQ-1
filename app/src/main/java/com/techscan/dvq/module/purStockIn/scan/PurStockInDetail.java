@@ -1107,7 +1107,7 @@ public class PurStockInDetail extends Activity {
         Map<String, Object> map;
         if (jsSerino == null || !jsSerino.has("Serino")) {
             Toast.makeText(this, "还没有扫描到的记录", Toast.LENGTH_LONG).show();
-            SoundHelper.playWarning();
+//            SoundHelper.playWarning();
             return;
         }
         JSONArray arrays;
