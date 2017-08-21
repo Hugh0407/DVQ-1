@@ -116,6 +116,7 @@ public class GetSaleBaseInfo {
                 mapSaleBaseInfo.put("invtype", tempJso.getString("invtype"));   //型号
                 mapSaleBaseInfo.put("invspec", tempJso.getString("invspec"));   //规格
                 mapSaleBaseInfo.put("currentweight", tempJso.getString("currentweight"));   //规格
+//                mapSaleBaseInfo.put("vfree5", tempJso.getString("vfree5"));   //规格
             }
 
         }

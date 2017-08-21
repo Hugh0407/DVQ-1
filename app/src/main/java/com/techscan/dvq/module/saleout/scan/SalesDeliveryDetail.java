@@ -127,6 +127,8 @@ public class SalesDeliveryDetail extends Activity {
     @Nullable
     @InjectView(R.id.txtSaleCustoms)
     EditText txtSaleCustoms;
+    @InjectView(R.id.txtLot)
+    EditText txtLot;
     @InjectView(R.id.packed)
     TextView packed;
     @InjectView(R.id.switch_m)
@@ -528,6 +530,7 @@ public class SalesDeliveryDetail extends Activity {
                     try {
                         if (jsons.getBoolean("Status")) {
                             JSONArray jsonArray = jsons.getJSONArray("customs");
+                            Log.d(TAG, "size: "+jsonArray.length()+"");
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject tempJso = jsonArray.getJSONObject(i);
                                 Log.d(TAG, "vfree4: " + tempJso.getString("vfree4"));
@@ -536,11 +539,18 @@ public class SalesDeliveryDetail extends Activity {
                                 } else {
                                     txtSaleCustoms.setText(tempJso.getString("vfree4"));
                                 }
+                                if (tempJso.getString("vfree5").equals("null")) {
+                                    txtLot.setText("");
+                                } else {
+                                    txtLot.setText(tempJso.getString("vfree5"));
+                                }
                                 m_mapSaleBaseInfo.put("vfree4", txtSaleCustoms.getText().toString());
+                                m_mapSaleBaseInfo.put("vfree5", txtLot.getText().toString());
                                 SetInvBaseToUI();
                             }
                         } else {
                             m_mapSaleBaseInfo.put("vfree4", txtSaleCustoms.getText().toString());
+                            m_mapSaleBaseInfo.put("vfree5", txtLot.getText().toString());
                             SetInvBaseToUI();
                         }
                     } catch (Exception e) {
@@ -563,6 +573,7 @@ public class SalesDeliveryDetail extends Activity {
         txtBarcode.setText(m_mapSaleBaseInfo.get("barcode").toString());
         txtSaleWeight.setText(m_mapSaleBaseInfo.get("quantity").toString());
         txtSaleNumber.setText(m_mapSaleBaseInfo.get("number").toString());
+//        txtLot.setText(m_mapSaleBaseInfo.get("vfree5").toString());
          cw = m_mapSaleBaseInfo.get("currentweight").toString();
         if (!cw.equals("null")) {
             txtSaleTotal.setText(cw);
@@ -731,6 +742,7 @@ public class SalesDeliveryDetail extends Activity {
             temp.put("invtype", m_mapSaleBaseInfo.get("invtype").toString());
             temp.put("invspec", m_mapSaleBaseInfo.get("invspec").toString());
             temp.put("vfree4", m_mapSaleBaseInfo.get("vfree4").toString());
+            temp.put("vfree5", m_mapSaleBaseInfo.get("vfree5").toString());
 //            ***************²ð°ü
             temp.put("barcodetype", m_mapSaleBaseInfo.get("barcodetype").toString());
             temp.put("barcode", m_mapSaleBaseInfo.get("barcode").toString());
@@ -770,6 +782,7 @@ public class SalesDeliveryDetail extends Activity {
             temp.put("invtype", m_mapSaleBaseInfo.get("invtype").toString());
             temp.put("invspec", m_mapSaleBaseInfo.get("invspec").toString());
             temp.put("vfree4", m_mapSaleBaseInfo.get("vfree4").toString());
+            temp.put("vfree5", m_mapSaleBaseInfo.get("vfree5").toString());
             //            ***************chaib
             temp.put("barcodetype", m_mapSaleBaseInfo.get("barcodetype").toString());
             temp.put("barcode", m_mapSaleBaseInfo.get("barcode").toString());
@@ -993,7 +1006,9 @@ public class SalesDeliveryDetail extends Activity {
         txtBarcode.setFocusable(true);
         txtSaleWeight.setText("");
         txtSaleCustoms.setText("");
+        txtLot.setText("");
         txtSaleCustoms.setEnabled(false);
+        txtLot.setEnabled(false);
         txtSaleNumber.setEnabled(false);
         txtSaleTotal.setEnabled(false);
         txtSaleWeight.setEnabled(false);
