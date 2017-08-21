@@ -21,6 +21,7 @@ public class GetSaleBaseInfo {
     @Nullable
     public HashMap<String, Object> mapSaleBaseInfo = null;
     String InvCode = "";
+    String purducBatch;
     Double a=0.0;
     Double b=0.0;
 
@@ -71,6 +72,13 @@ public class GetSaleBaseInfo {
             InvCode = cSplitBarcode.cInvCode;
         }
         mapSaleBaseInfo = new HashMap<String, Object>();
+        purducBatch = cSplitBarcode.purductBatch;
+        if (purducBatch.equals("null")){
+            purducBatch="";
+            mapSaleBaseInfo.put("vfree5", purducBatch);
+        }else{
+            mapSaleBaseInfo.put("vfree5",purducBatch);
+        }
         mapSaleBaseInfo.put("barcodetype", cSplitBarcode.BarcodeType);
         mapSaleBaseInfo.put("batch", cSplitBarcode.cBatch);
         mapSaleBaseInfo.put("serino", cSplitBarcode.cSerino);
@@ -116,6 +124,7 @@ public class GetSaleBaseInfo {
                 mapSaleBaseInfo.put("invtype", tempJso.getString("invtype"));   //型号
                 mapSaleBaseInfo.put("invspec", tempJso.getString("invspec"));   //规格
                 mapSaleBaseInfo.put("currentweight", tempJso.getString("currentweight"));   //规格
+//                mapSaleBaseInfo.put("vfree5", tempJso.getString("vfree5"));   //规格
             }
 
         }

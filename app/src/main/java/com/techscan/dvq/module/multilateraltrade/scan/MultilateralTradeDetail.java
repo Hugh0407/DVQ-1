@@ -105,6 +105,8 @@ public class MultilateralTradeDetail extends Activity {
     Button btnReturn;
     @InjectView(R.id.txtSaleCustoms)
     EditText txtSaleCustoms;
+    @InjectView(R.id.txtLot)
+    EditText txtLot;
     @InjectView(R.id.packed)
     TextView packed;
     @InjectView(R.id.switch_m)
@@ -544,8 +546,13 @@ public class MultilateralTradeDetail extends Activity {
                                     txtSaleCustoms.setText("");
                                 }else{
                                     txtSaleCustoms.setText(tempJso.getString("vfree4"));
+                                } if (tempJso.getString("vfree5").equals("null")){
+                                    txtLot.setText("");
+                                }else{
+                                    txtLot.setText(tempJso.getString("vfree5"));
                                 }
                                 m_mapSaleBaseInfo.put("vfree4",txtSaleCustoms.getText().toString());
+                                m_mapSaleBaseInfo.put("vfree5",txtLot.getText().toString());
                                 SetInvBaseToUI();
 //                                    txtSaleCustoms.requestFocus();
 //                                    txtSaleCustoms.setFocusableInTouchMode(true);
@@ -555,6 +562,7 @@ public class MultilateralTradeDetail extends Activity {
                         else{
 //                                txtSaleCustoms.requestFocus();
                             m_mapSaleBaseInfo.put("vfree4",txtSaleCustoms.getText().toString());
+                            m_mapSaleBaseInfo.put("vfree5",txtLot.getText().toString());
                             SetInvBaseToUI();
                         }
                     } catch (Exception e) {
@@ -762,6 +770,7 @@ public class MultilateralTradeDetail extends Activity {
             temp.put("invtype", m_mapSaleBaseInfo.get("invtype").toString());
             temp.put("invspec", m_mapSaleBaseInfo.get("invspec").toString());
             temp.put("vfree4", m_mapSaleBaseInfo.get("vfree4").toString());
+            temp.put("vfree5", m_mapSaleBaseInfo.get("vfree5").toString());
             //            ***************²ð°ü
             temp.put("barcodetype", m_mapSaleBaseInfo.get("barcodetype").toString());
             temp.put("barcode", m_mapSaleBaseInfo.get("barcode").toString());
@@ -802,6 +811,7 @@ public class MultilateralTradeDetail extends Activity {
             temp.put("invtype", m_mapSaleBaseInfo.get("invtype").toString());
             temp.put("invspec", m_mapSaleBaseInfo.get("invspec").toString());
             temp.put("vfree4", m_mapSaleBaseInfo.get("vfree4").toString());
+            temp.put("vfree5", m_mapSaleBaseInfo.get("vfree5").toString());
             //            ***************²ð°ü
             temp.put("barcodetype", m_mapSaleBaseInfo.get("barcodetype").toString());
             temp.put("barcode", m_mapSaleBaseInfo.get("barcode").toString());

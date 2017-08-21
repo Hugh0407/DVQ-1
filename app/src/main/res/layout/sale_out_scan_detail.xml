@@ -62,7 +62,7 @@
             android:layout_height="30dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:layout_margin="3dp">
+            android:layout_margin="2dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -86,7 +86,7 @@
             android:layout_height="30dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:layout_margin="3dp">
+            android:layout_margin="2dp">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -110,7 +110,7 @@
             android:layout_height="30dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:layout_margin="3dp">
+            android:layout_margin="2dp">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -135,7 +135,7 @@
             android:layout_height="30dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:layout_margin="3dp">
+            android:layout_margin="2dp">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -159,14 +159,39 @@
             android:layout_height="30dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:layout_margin="3dp">
+            android:layout_margin="2dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="生产批次"/>
+            <EditText
+                android:textColor="@color/black"
+                android:focusable="false"
+                android:id="@+id/txtLot"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:background="@drawable/edittext_style"
+                android:singleLine="true"
+                android:layout_marginLeft="5dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_margin="2dp">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:text="海关手册号"/>
             <EditText
-              android:focusable="false"
+                android:textColor="@color/black"
+                android:focusable="false"
                 android:id="@+id/txtSaleCustoms"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
@@ -182,7 +207,7 @@
             android:layout_height="30dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:layout_margin="3dp">
+            android:layout_margin="2dp">
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -239,7 +264,7 @@
             android:layout_height="30dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:layout_margin="3dp">
+            android:layout_margin="2dp">
 
             <LinearLayout
                 android:layout_width="0dp"

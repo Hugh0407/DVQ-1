@@ -861,6 +861,7 @@ public class SalesDelivery extends Activity {
                         object.put("CROWNO", bodys.getJSONObject(i).getString("crowno"));
                         object.put("BLARGESSFLAG", bodys.getJSONObject(i).getString("blargessflag"));
                         object.put("VFREE4", arraysSerino.getJSONObject(j).getString("vfree4"));//海关手册号
+                        object.put("VFREE5", arraysSerino.getJSONObject(j).getString("vfree5"));//生产批次
                         object.put("VSOURCEROWNO", bodys.getJSONObject(i).getString("crowno"));
                         object.put("VSOURCERECEIVECODE", tmpBillCode);
                         object.put("VRECEIVEPOINTID", bodys.getJSONObject(i).getString("crecaddrnode"));
@@ -1291,13 +1292,15 @@ public class SalesDelivery extends Activity {
                         String invspec = newJsonObjectI.get("invspec").toString();
                         String serino = newJsonObjectI.get("serino").toString();
                         String vfree4 = newJsonObjectI.get("vfree4").toString();
+                        String vfree5 = newJsonObjectI.get("vfree5").toString();
 
                         String invcodeJ = newJsonObjectJ.get("invcode").toString();
                         String batchJ = newJsonObjectJ.get("batch").toString();
                         String boxJ = newJsonObjectJ.get("box").toString();
+                        String vfree5J = newJsonObjectJ.get("vfree5").toString();
                         String barcodeJ = newJsonObjectJ.get("barcode").toString();
                         boolean isDoPackedJ = newJsonObjectJ.getBoolean("isDoPacked");
-                        if (invcode.equals(invcodeJ)&&batch.equals(batchJ)) {
+                        if (invcode.equals(invcodeJ)&&batch.equals(batchJ)&&vfree5.equals(vfree5J)) {
 //                        if (invcode.equals(invcodeJ)&&batch.equals(batchJ)&&barcode.equals(barcodeJ)&&isDoPacked==isDoPackedJ) {
                             double newValue = Double.parseDouble(box) + Double.parseDouble(boxJ);
 //                            if (isDoPacked){
@@ -1318,6 +1321,7 @@ public class SalesDelivery extends Activity {
                                  newObject.put("invtype", invtype);
                                  newObject.put("invspec", invspec);
                                  newObject.put("vfree4", vfree4);
+                                 newObject.put("vfree5", vfree5);
                                  newObject.put("box", String.valueOf(newValue));
 //                   **************** 拆包
                                  newObject.put("barcode", barcode);
@@ -1339,6 +1343,7 @@ public class SalesDelivery extends Activity {
                                  newObject.put("invtype", invtype);
                                  newObject.put("invspec", invspec);
                                  newObject.put("vfree4", vfree4);
+                                 newObject.put("vfree5", vfree5);
                                  newObject.put("box", String.valueOf(newValue));
                                  //                   **************** 拆包
                                  newObject.put("barcode", barcode);
