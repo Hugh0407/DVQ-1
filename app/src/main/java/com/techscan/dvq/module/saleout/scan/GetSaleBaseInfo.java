@@ -21,7 +21,6 @@ public class GetSaleBaseInfo {
     @Nullable
     public HashMap<String, Object> mapSaleBaseInfo = null;
     String InvCode = "";
-    String purducBatch;
     Double a=0.0;
     Double b=0.0;
 
@@ -39,6 +38,7 @@ public class GetSaleBaseInfo {
         }
         mapSaleBaseInfo = new HashMap<String, Object>();
         mapSaleBaseInfo.put("barcodetype", cSplitBarcode.BarcodeType);
+        mapSaleBaseInfo.put("vfree5", cSplitBarcode.purductBatch);
         mapSaleBaseInfo.put("batch", cSplitBarcode.cBatch);
         mapSaleBaseInfo.put("serino", cSplitBarcode.cSerino);
         mapSaleBaseInfo.put("quantity", cSplitBarcode.dQuantity);
@@ -72,13 +72,7 @@ public class GetSaleBaseInfo {
             InvCode = cSplitBarcode.cInvCode;
         }
         mapSaleBaseInfo = new HashMap<String, Object>();
-        purducBatch = cSplitBarcode.purductBatch;
-        if (purducBatch.equals("null")){
-            purducBatch="";
-            mapSaleBaseInfo.put("vfree5", purducBatch);
-        }else{
-            mapSaleBaseInfo.put("vfree5",purducBatch);
-        }
+        mapSaleBaseInfo.put("vfree5", cSplitBarcode.purductBatch);
         mapSaleBaseInfo.put("barcodetype", cSplitBarcode.BarcodeType);
         mapSaleBaseInfo.put("batch", cSplitBarcode.cBatch);
         mapSaleBaseInfo.put("serino", cSplitBarcode.cSerino);

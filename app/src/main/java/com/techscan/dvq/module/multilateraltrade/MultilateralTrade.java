@@ -819,7 +819,7 @@ public class MultilateralTrade extends Activity {
                         object.put("VSOURCEBILLCODE", CheckBillCode);//来源单据号
                         object.put("VSOUREROWNO", bodys.getJSONObject(i).getString("crowno"));//单据行号
                         object.put("VFREE4", arraysSerino.getJSONObject(j).getString("vfree4"));//海关手册号
-                        object.put("VFREE5", arraysSerino.getJSONObject(j).getString("vfree5"));//海关手册号
+                        object.put("VFREE5", arraysSerino.getJSONObject(j).getString("vfree5"));//生产批次
                         bodyArray.put(object);
                     }
                 }
@@ -1021,6 +1021,7 @@ public class MultilateralTrade extends Activity {
                             newObject.put("invtype", invtype);
                             newObject.put("invspec", invspec);
                             newObject.put("vfree4", vfree4);
+                            newObject.put("vfree5", vfree5);
                             newObject.put("box", String.valueOf(newValue));
 //                   **************** 拆包
                             newObject.put("barcode", barcode);
@@ -1042,6 +1043,7 @@ public class MultilateralTrade extends Activity {
                              newObject.put("invtype", invtype);
                              newObject.put("invspec", invspec);
                              newObject.put("vfree4", vfree4);
+                             newObject.put("vfree5", vfree5);
                              newObject.put("box", String.valueOf(newValue));
                              //                   **************** 拆包
                              newObject.put("barcode", barcode);
