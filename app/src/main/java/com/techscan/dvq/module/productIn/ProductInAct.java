@@ -441,7 +441,8 @@ public class ProductInAct extends Activity {
                 object.put("PK_BODYCALBODY", PK_CALBODY);
                 object.put("PK_CORP", MainLogin.objLog.STOrgCode);
                 object.put("VBATCHCODE", c.getLot());
-                object.put("VFREE4", c.getManual());    //海关手册号
+                object.put("VFREE4", c.getManual());        //海关手册号
+                object.put("VFREE5", c.getProductLot());    //生产批次
                 bodyArray.put(object);
             }
             tableBody.put("ScanDetails", bodyArray);

@@ -55,56 +55,43 @@ public class OtherOutScanAct extends Activity {
 
     @InjectView(R.id.ed_bar_code)
     EditText edBarCode;
-
     @InjectView(R.id.ed_encoding)
     EditText edEncoding;
-
     @InjectView(R.id.ed_name)
     EditText edName;
-
     @InjectView(R.id.ed_type)
     EditText edType;
-
     @InjectView(R.id.ed_spectype)
     EditText edSpectype;
-
     @InjectView(R.id.ed_lot)
     EditText edLot;
-
     @InjectView(R.id.ed_cost_object)
     EditText edCostObject;
-
     @InjectView(R.id.ed_cost_name)
     EditText edCostName;
-
     @InjectView(R.id.ed_manual)
     EditText edManual;
-
     @InjectView(R.id.ed_num)
     EditText edNum;
-
     @InjectView(R.id.ed_weight)
     EditText edWeight;
-
     @InjectView(R.id.ed_qty)
     EditText edQty;
-
     @InjectView(R.id.ed_unit)
     EditText edUnit;
-
     @InjectView(R.id.btn_overview)
     Button btnOverview;
-
     @InjectView(R.id.btn_detail)
     Button btnDetail;
-
     @InjectView(R.id.btn_back)
     Button btnBack;
+    @InjectView(R.id.packed)
+    TextView packed;
+    @InjectView(R.id.switch_m)
+    Switch   switchM;
 
     String TAG = this.getClass().getSimpleName();
-    @NonNull
     public static List<Goods> detailList = new ArrayList<Goods>();
-    @NonNull
     public static List<Goods> ovList     = new ArrayList<Goods>();
     ArrayList<EditText> edList;
 
@@ -116,10 +103,7 @@ public class OtherOutScanAct extends Activity {
     SplitBarcode barDecoder;
     String       barQty;
     boolean      isPacked;
-    @InjectView(R.id.packed)
-    TextView packed;
-    @InjectView(R.id.switch_m)
-    Switch   switchM;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -449,13 +433,15 @@ public class OtherOutScanAct extends Activity {
             barQty = formatDecimal(weight * edNum);
             if (isPacked) {
                 edQty.setEnabled(true);
+                edQty.setText(formatDecimal(weight * edNum));
+                // TODO: 2017/8/17 解决光标问题，扫描后光标需要放置到最后
+                edQty.requestFocus();
+                edQty.selectAll();
+                edQty.setSelection(edQty.length());
             } else {
                 edQty.setEnabled(false);
                 edQty.setText(formatDecimal(weight * edNum));
-                edQty.selectAll();
-                edQty.setSelection(edQty.length());
             }
-            edQty.requestFocus();
             getInvBaseInfo(encoding, bar);
             return true;
         } else {

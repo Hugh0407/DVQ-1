@@ -431,6 +431,7 @@ public class OtherInAct extends Activity {
                 object.put("PK_CORP", MainLogin.objLog.STOrgCode);
                 object.put("VBATCHCODE", good.getLot());
                 object.put("VFREE4", good.getManual());    //海关手册号
+                object.put("VFREE5", good.getProductLot());    //海关手册号
                 bodyArray.put(object);
             }
             tableBody.put("ScanDetails", bodyArray);

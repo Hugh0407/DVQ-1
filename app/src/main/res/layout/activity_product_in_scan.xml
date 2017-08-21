@@ -45,7 +45,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="6dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
             android:orientation="horizontal">
 
             <TextView
@@ -75,7 +77,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="6dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
             android:orientation="horizontal">
 
             <TextView
@@ -103,7 +107,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="6dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
             android:orientation="horizontal">
 
             <TextView
@@ -131,7 +137,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="6dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
             android:orientation="horizontal">
 
             <TextView
@@ -159,7 +167,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="6dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
             android:orientation="horizontal">
 
             <TextView
@@ -187,7 +197,38 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="6dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="4dp"
+                android:gravity="center_vertical"
+                android:text="生产批次    "/>
+
+            <EditText
+                android:id="@+id/ed_pur_lot"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:background="@drawable/edittext_style"
+                android:ems="10"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textAllCaps="true"
+                android:textColor="@color/black"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
             android:orientation="horizontal">
 
             <TextView
@@ -221,7 +262,9 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="6dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="6dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
@@ -251,7 +294,9 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="6dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="6dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
@@ -286,7 +331,9 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="6dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="6dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
@@ -316,7 +363,9 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="6dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="6dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
