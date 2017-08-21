@@ -41,6 +41,7 @@ public class GetMultilateralTradeBaseInfo {
             InvCode = cSplitBarcode.cInvCode;
         }
         mapSaleBaseInfo = new HashMap<String, Object>();
+        mapSaleBaseInfo.put("vfree5", cSplitBarcode.purductBatch);
         mapSaleBaseInfo.put("barcodetype",cSplitBarcode.BarcodeType);
         mapSaleBaseInfo.put("batch",cSplitBarcode.cBatch);
         mapSaleBaseInfo.put("serino",cSplitBarcode.cSerino);
@@ -74,6 +75,7 @@ public class GetMultilateralTradeBaseInfo {
             InvCode = cSplitBarcode.cInvCode;
         }
         mapSaleBaseInfo = new HashMap<String, Object>();
+        mapSaleBaseInfo.put("vfree5", cSplitBarcode.purductBatch);
         mapSaleBaseInfo.put("barcodetype",cSplitBarcode.BarcodeType);
         mapSaleBaseInfo.put("batch",cSplitBarcode.cBatch);
         mapSaleBaseInfo.put("serino",cSplitBarcode.cSerino);

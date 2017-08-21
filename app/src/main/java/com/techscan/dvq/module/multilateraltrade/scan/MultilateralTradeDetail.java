@@ -521,22 +521,6 @@ public class MultilateralTradeDetail extends Activity {
                     JSONObject jsons = (JSONObject) msg.obj;
                     Log.d(TAG, "vfree4: "+jsons.toString());
                     try {
-//                            if (jsons != null && jsons.getBoolean("Status")) {
-//                                JSONArray jsonArray = jsons.getJSONArray("vfree4");
-//                                if (jsonArray.length() > 0) {
-//                                    JSONObject j = jsonArray.getJSONObject(0);
-//                                    String vfree4 = j.getString("vfree4");
-//                                    Log.d(TAG, "vfree4: "+vfree4);
-//                                    if (vfree4.equals("null")) {
-//                                        txtSaleCustoms.setText("");
-////                                        SetInvBaseToUI();
-//                                    } else {
-//                                        txtSaleCustoms.setText(vfree4);
-//                                        txtSaleCustoms.setEnabled(false);
-////                                        SetInvBaseToUI();
-//                                    }
-//                                }
-//                            }
                         if (jsons.getBoolean("Status")) {
                             JSONArray jsonArray = jsons.getJSONArray("customs");
                             for (int i=0;i<jsonArray.length();i++) {
@@ -546,23 +530,21 @@ public class MultilateralTradeDetail extends Activity {
                                     txtSaleCustoms.setText("");
                                 }else{
                                     txtSaleCustoms.setText(tempJso.getString("vfree4"));
-                                } if (tempJso.getString("vfree5").equals("null")){
-                                    txtLot.setText("");
-                                }else{
-                                    txtLot.setText(tempJso.getString("vfree5"));
                                 }
+//                              if (tempJso.getString("vfree5").equals("null")){
+//                                    txtLot.setText("");
+//                                }else{
+//                                    txtLot.setText(tempJso.getString("vfree5"));
+//                                }
                                 m_mapSaleBaseInfo.put("vfree4",txtSaleCustoms.getText().toString());
-                                m_mapSaleBaseInfo.put("vfree5",txtLot.getText().toString());
+//                                m_mapSaleBaseInfo.put("vfree5",txtLot.getText().toString());
                                 SetInvBaseToUI();
-//                                    txtSaleCustoms.requestFocus();
-//                                    txtSaleCustoms.setFocusableInTouchMode(true);
-//                                    txtSaleCustoms.setFocusable(true);
                             }
                         }
                         else{
 //                                txtSaleCustoms.requestFocus();
                             m_mapSaleBaseInfo.put("vfree4",txtSaleCustoms.getText().toString());
-                            m_mapSaleBaseInfo.put("vfree5",txtLot.getText().toString());
+//                            m_mapSaleBaseInfo.put("vfree5",txtLot.getText().toString());
                             SetInvBaseToUI();
                         }
                     } catch (Exception e) {
@@ -584,6 +566,7 @@ public class MultilateralTradeDetail extends Activity {
         txtBarcode.setText(m_mapSaleBaseInfo.get("barcode").toString());
         txtSaleWeight.setText(m_mapSaleBaseInfo.get("quantity").toString());
         txtSaleNumber.setText(m_mapSaleBaseInfo.get("number").toString());
+        txtLot.setText(m_mapSaleBaseInfo.get("vfree5").toString());
         cw = m_mapSaleBaseInfo.get("currentweight").toString();
 //        if (isPacked && !cw.equals("null")) {
         if (!cw.equals("null")) {
