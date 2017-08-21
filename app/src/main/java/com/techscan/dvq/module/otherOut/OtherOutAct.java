@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -140,7 +139,7 @@ public class OtherOutAct extends Activity {
 
     @OnClick({R.id.btn_refer_wh, R.id.btn_refer_org, R.id.btn_refer_lei_bie,
             R.id.btn_refer_dep, R.id.btn_scan, R.id.btn_save, R.id.btn_back})
-    public void onViewClicked(@NonNull View view) {
+    public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_refer_wh:
                 btnWarehouseClick();
@@ -205,7 +204,7 @@ public class OtherOutAct extends Activity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @NonNull Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         //材料出库库存组织的回传数据 <----StorgListAct.class
         if (requestCode == 94 && resultCode == 6) {
@@ -262,10 +261,10 @@ public class OtherOutAct extends Activity {
      * 网络请求后的线程通信
      * msg.obj 是从子线程传递过来的数据
      */
-    @NonNull
+
     Handler mHandler = new Handler() {
         @Override
-        public void handleMessage(@NonNull Message msg) {
+        public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
                 case HANDER_DEPARTMENT:
@@ -514,7 +513,7 @@ public class OtherOutAct extends Activity {
      *
      * @param goodsList
      */
-    private void saveInfo(@NonNull List<Goods> goodsList) {
+    private void saveInfo(List<Goods> goodsList) {
         try {
             final JSONObject table     = new JSONObject();
             JSONObject       tableHead = new JSONObject();
@@ -548,6 +547,7 @@ public class OtherOutAct extends Activity {
                 object.put("PK_CORP", MainLogin.objLog.STOrgCode);
                 object.put("VBATCHCODE", c.getLot());
                 object.put("VFREE4", c.getManual());    //海关手册号
+                object.put("VFREE5", c.getProductLot());    //生产批次
                 bodyArray.put(object);
             }
             tableBody.put("ScanDetails", bodyArray);
@@ -580,8 +580,8 @@ public class OtherOutAct extends Activity {
         }
     }
 
-    @NonNull
-    private DatePickerDialog.OnDateSetListener Datelistener    = new DatePickerDialog.OnDateSetListener() {
+
+    private DatePickerDialog.OnDateSetListener Datelistener = new DatePickerDialog.OnDateSetListener() {
         /**params：view：该事件关联的组件
          * params：myyear：当前选择的年
          * params：monthOfYear：当前选择的月
@@ -604,8 +604,8 @@ public class OtherOutAct extends Activity {
         }
 
     };
-    @NonNull
-    private View.OnFocusChangeListener         myFocusListener = new View.OnFocusChangeListener() {
+
+    private View.OnFocusChangeListener myFocusListener = new View.OnFocusChangeListener() {
         @Override
         public void onFocusChange(View view, boolean hasFocus) {
             if (hasFocus) {
@@ -618,11 +618,11 @@ public class OtherOutAct extends Activity {
     /**
      * 回车键的点击事件
      */
-    @NonNull
+
     View.OnKeyListener mOnKeyListener = new View.OnKeyListener() {
 
         @Override
-        public boolean onKey(@NonNull View v, int keyCode, @NonNull KeyEvent event) {
+        public boolean onKey(View v, int keyCode, KeyEvent event) {
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
                 switch (v.getId()) {
                     case R.id.bill_num:

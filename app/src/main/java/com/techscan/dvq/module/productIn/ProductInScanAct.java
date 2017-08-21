@@ -223,6 +223,7 @@ public class ProductInScanAct extends Activity {
                 invCode = invCode.split(",")[0];
             }
             mEdEncoding.setText(invCode);
+            edPurLot.setText(barDecoder.purductBatch);
             getInvBaseInfo(invCode);
             String batch = barDecoder.cBatch;
             if (batch.contains(",")) {
@@ -250,6 +251,7 @@ public class ProductInScanAct extends Activity {
                 encoding = encoding.split(",")[0];
             }
             mEdEncoding.setText(encoding);
+            edPurLot.setText(barDecoder.purductBatch);
             getInvBaseInfo(encoding);
             String batch = barDecoder.cBatch;
             if (batch.contains(",")) {
@@ -468,7 +470,7 @@ public class ProductInScanAct extends Activity {
                     mEdType.setText(map.get("invtype").toString());
                     mEdSpectype.setText(map.get("invspec").toString());
                     vFree4 = map.get("isfree4").toString();
-                    vFree5 = map.get("isfree4").toString();
+                    vFree5 = map.get("isfree5").toString();
                 }
 
             }

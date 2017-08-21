@@ -253,6 +253,7 @@ public class OtherInScanAct extends Activity {
                 invCode = invCode.split(",")[0];
             }
             edInvcode.setText(invCode);
+            edPurBatch.setText(barDecoder.purductBatch);
             getInvBaseInfo(invCode);
             String batch = barDecoder.cBatch;
             if (batch.contains(",")) {
@@ -280,6 +281,7 @@ public class OtherInScanAct extends Activity {
                 encoding = encoding.split(",")[0];
             }
             edInvcode.setText(encoding);
+            edPurBatch.setText(barDecoder.purductBatch);
             getInvBaseInfo(encoding);
             String batch = barDecoder.cBatch;
             if (batch.contains(",")) {

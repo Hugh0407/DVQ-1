@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -80,15 +79,17 @@ public class OtherOutScanAct extends Activity {
     @InjectView(R.id.ed_unit)
     EditText edUnit;
     @InjectView(R.id.btn_overview)
-    Button btnOverview;
+    Button   btnOverview;
     @InjectView(R.id.btn_detail)
-    Button btnDetail;
+    Button   btnDetail;
     @InjectView(R.id.btn_back)
-    Button btnBack;
+    Button   btnBack;
     @InjectView(R.id.packed)
     TextView packed;
     @InjectView(R.id.switch_m)
     Switch   switchM;
+    @InjectView(R.id.ed_pur_lot)
+    EditText edPurLot;
 
     String TAG = this.getClass().getSimpleName();
     public static List<Goods> detailList = new ArrayList<Goods>();
@@ -100,6 +101,7 @@ public class OtherOutScanAct extends Activity {
     String CWAREHOUSEID = "";
     String PK_CALBODY   = "";
     String vFree4       = "";
+    String vFree5       = "";
     SplitBarcode barDecoder;
     String       barQty;
     boolean      isPacked;
@@ -134,6 +136,7 @@ public class OtherOutScanAct extends Activity {
         edQty.setOnKeyListener(mOnKeyListener);
         edNum.setOnKeyListener(mOnKeyListener);
         edManual.setOnKeyListener(mOnKeyListener);
+        edPurLot.setOnKeyListener(mOnKeyListener);
         edCostObject.setOnKeyListener(mOnKeyListener);
         edNum.addTextChangedListener(new CustomTextWatcher(edNum));
         edBarCode.addTextChangedListener(new CustomTextWatcher(edBarCode));
@@ -187,7 +190,7 @@ public class OtherOutScanAct extends Activity {
     }
 
     @OnClick({R.id.btn_overview, R.id.btn_detail, R.id.btn_back})
-    public void onViewClicked(@NonNull View view) {
+    public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_overview:
                 showLv(ovList, "扫描总览");
@@ -210,7 +213,7 @@ public class OtherOutScanAct extends Activity {
         }
     }
 
-    private void showLv(@NonNull List<Goods> ovList, @NonNull String title) {
+    private void showLv(List<Goods> ovList, String title) {
         MyBaseAdapter ovAdapter = new MyBaseAdapter(ovList);
         showDialog(ovList, ovAdapter, title);
     }
@@ -219,10 +222,10 @@ public class OtherOutScanAct extends Activity {
      * 网络请求后的线程通信
      * msg.obj 是从子线程传递过来的数据
      */
-    @NonNull
+
     Handler mHandler = new Handler() {
         @Override
-        public void handleMessage(@NonNull Message msg) {
+        public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
                 case 1:
@@ -266,7 +269,7 @@ public class OtherOutScanAct extends Activity {
     }
 
 
-    private void showDialog(@NonNull final List list, @NonNull final BaseAdapter adapter, @NonNull String title) {
+    private void showDialog(final List list, final BaseAdapter adapter, String title) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setTitle(title);
         if (list.size() > 0) {
@@ -339,6 +342,7 @@ public class OtherOutScanAct extends Activity {
             edWeight.setText(barQty);
             edNum.setText("1");
             edQty.setText(barQty);
+            edPurLot.setText(barDecoder.purductBatch);
             if (isPacked) {
                 edNum.setEnabled(false);
                 edQty.setEnabled(true);
@@ -364,6 +368,7 @@ public class OtherOutScanAct extends Activity {
             }
             edLot.setEnabled(false);
             edNum.setEnabled(false);
+            edPurLot.setText(barDecoder.purductBatch);
             edEncoding.setText(barDecoder.cInvCode);
             edLot.setText(barDecoder.cBatch);
             //对于托码,如果拆过托，只显示总量。未拆托的正常显示
@@ -395,6 +400,7 @@ public class OtherOutScanAct extends Activity {
             edWeight.setText(barQty);
             edQty.setText("");
             edNum.setText("1");
+            edPurLot.setText(barDecoder.purductBatch);
             if (isPacked) {
                 edNum.setEnabled(false);
                 edQty.setEnabled(true);
@@ -426,6 +432,7 @@ public class OtherOutScanAct extends Activity {
                 batch = batch.split(",")[1];
             }
             edLot.setText(batch);
+            edPurLot.setText(barDecoder.purductBatch);
             edWeight.setText(String.valueOf(barDecoder.dQuantity));
             edNum.setText(String.valueOf(barDecoder.iNumber));
             double weight = barDecoder.dQuantity;
@@ -480,6 +487,7 @@ public class OtherOutScanAct extends Activity {
                 good.setCostObject(dtGood.getCostObject());
                 good.setManual(dtGood.getManual());
                 good.setPk_invmandoc_cost(dtGood.getPk_invmandoc_cost());
+                good.setProductLot(dtGood.getProductLot());
                 ovList.add(good);
             }
         }
@@ -500,6 +508,7 @@ public class OtherOutScanAct extends Activity {
         goods.setPk_invbasdoc(pk_invbasdoc);
         goods.setPk_invmandoc(pk_invmandoc);
         goods.setPk_invmandoc_cost(pk_invmandoc_cost);
+        goods.setProductLot(edPurLot.getText().toString());
         /*********************************************************************/
         //拆包需要的属性
         goods.setBarcode(edBarCode.getText().toString());
@@ -544,6 +553,17 @@ public class OtherOutScanAct extends Activity {
             return false;
         }
 
+        if (vFree5.equals("Y") && TextUtils.isEmpty(edPurLot.getText().toString())) {
+            showToast(activity, "生产批次不可为空");
+            edManual.requestFocus();
+            return false;
+        }
+
+        if (vFree5.equals("N") && !TextUtils.isEmpty(edPurLot.getText().toString())) {
+            showToast(activity, "此物料没有生产批次");
+            edManual.requestFocus();
+            return false;
+        }
 
         if (TextUtils.isEmpty(edBarCode.getText().toString())) {
             showToast(activity, "条码不可为空");
@@ -675,6 +695,7 @@ public class OtherOutScanAct extends Activity {
                     map.put("invspec", tempJso.getString("invspec"));   //规格
                     map.put("oppdimen", tempJso.getString("oppdimen"));   //重量
                     map.put("isfree4", tempJso.getString("isfree4"));   //重量
+                    map.put("isfree5", tempJso.getString("isfree5"));
                     map.put("currentweight", tempJso.getString("currentweight"));
                 }
                 if (map != null) {
@@ -685,6 +706,7 @@ public class OtherOutScanAct extends Activity {
 
                     //海关手册号 有或无的标志位 ，分为 Y 和 N 两种
                     vFree4 = map.get("isfree4").toString();
+                    vFree5 = map.get("isfree5").toString();
                     String cw = map.get("currentweight").toString();
                     if (!cw.equals("null")) {
                         edQty.setText(cw);
@@ -762,6 +784,7 @@ public class OtherOutScanAct extends Activity {
                         edCostObject.setText("");
                         edCostName.setText("");
                         edManual.setText("");
+                        edPurLot.setText("");
                     }
                     break;
                 case R.id.ed_num:
@@ -791,11 +814,11 @@ public class OtherOutScanAct extends Activity {
     /**
      * 回车键的点击事件
      */
-    @NonNull
+
     View.OnKeyListener mOnKeyListener = new View.OnKeyListener() {
 
         @Override
-        public boolean onKey(@NonNull View v, int keyCode, @NonNull KeyEvent event) {
+        public boolean onKey(View v, int keyCode, KeyEvent event) {
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
                 switch (v.getId()) {
                     case R.id.ed_bar_code:
@@ -894,6 +917,13 @@ public class OtherOutScanAct extends Activity {
                         }
                         String invCode = edCostObject.getText().toString();
                         getInvCostObj(invCode);
+                        return true;
+                    case R.id.ed_pur_lot:
+                        if (isAllEdNotNull()) {
+                            addDataToDetailList();
+                            changeAllEdTextToEmpty();
+                            return true;
+                        }
                         return true;
                 }
             }

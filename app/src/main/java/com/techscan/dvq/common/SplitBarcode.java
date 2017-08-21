@@ -92,7 +92,7 @@ public class SplitBarcode {
                 CheckBarCode = CheckBarCode + "|" + cBatch;
                 break;
             case P:
-                if (lsSplitArray.length != 9) {
+                if (lsSplitArray.length != 9 && lsSplitArray.length != 8) {
                     creatorOk = false;
                     return;
                 }
@@ -103,15 +103,22 @@ public class SplitBarcode {
 //                CWFlag = lsSplitArray[6];
                 OnlyFlag = lsSplitArray[6];
                 cSerino = lsSplitArray[7];
-                purductBatch = lsSplitArray[8];
+
+                if (lsSplitArray.length == 8) {
+                    purductBatch = "";
+                }
+                if (lsSplitArray.length == 9) {
+                    purductBatch = lsSplitArray[8];
+                }
                 iNumber = 1;
                 CheckBarCode = CheckBarCode + "|" + cBatch;
                 break;
             case TP:
-                if (lsSplitArray.length != 10) {
+                if (lsSplitArray.length != 10 && lsSplitArray.length != 9) {
                     creatorOk = false;
                     return;
                 }
+
                 cBatch = lsSplitArray[2];
                 Outsourcing = lsSplitArray[3];
                 TaxFlag = lsSplitArray[4];
@@ -120,7 +127,13 @@ public class SplitBarcode {
 //                CWFlag = lsSplitArray[7];
                 OnlyFlag = lsSplitArray[7];
                 cSerino = lsSplitArray[8];
-                purductBatch = lsSplitArray[9];
+
+                if (lsSplitArray.length == 9) {
+                    purductBatch = "";
+                }
+                if (lsSplitArray.length == 10) {
+                    purductBatch = lsSplitArray[9];
+                }
                 CheckBarCode = CheckBarCode + "|" + cBatch;
                 break;
             default:

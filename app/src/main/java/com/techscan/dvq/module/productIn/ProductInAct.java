@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -149,7 +148,7 @@ public class ProductInAct extends Activity {
     @OnClick({R.id.refer_wh, R.id.refer_organization,
             R.id.refer_lei_bie, R.id.btnPurInScan, R.id.btnPurinSave,
             R.id.btnBack, R.id.refer_department, R.id.bill_date})
-    public void onViewClicked(@NonNull View view) {
+    public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.refer_wh:
                 btnWarehouseClick();
@@ -186,7 +185,7 @@ public class ProductInAct extends Activity {
                     bulider.setNegativeButton(R.string.QuXiao, null);
                     bulider.setPositiveButton(R.string.QueRen, new DialogInterface.OnClickListener() {
                         @Override
-                        public void onClick(@NonNull DialogInterface dialog, int which) {
+                        public void onClick(DialogInterface dialog, int which) {
                             ProductInScanAct.ovList.clear();
                             ProductInScanAct.detailList.clear();
                             dialog.dismiss();
@@ -213,7 +212,7 @@ public class ProductInAct extends Activity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @NonNull Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         //仓库的回传数据 <----ListWarehouse.class
         if (requestCode == 97 && resultCode == 13) {
@@ -295,7 +294,7 @@ public class ProductInAct extends Activity {
     @Nullable
     Handler mHandler = new Handler() {
         @Override
-        public void handleMessage(@NonNull Message msg) {
+        public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
                 case HANDER_DEPARTMENT:
@@ -408,7 +407,7 @@ public class ProductInAct extends Activity {
      * @param goodsList
      * @throws JSONException
      */
-    private void saveInfo(@NonNull List<Goods> goodsList) {
+    private void saveInfo(List<Goods> goodsList) {
         final JSONObject table     = new JSONObject();
         JSONObject       tableHead = new JSONObject();
         try {
@@ -625,7 +624,6 @@ public class ProductInAct extends Activity {
     }
 
 
-    @NonNull
     private DatePickerDialog.OnDateSetListener Datelistener = new DatePickerDialog.OnDateSetListener() {
         /**params：view：该事件关联的组件
          * params：myyear：当前选择的年
@@ -663,11 +661,11 @@ public class ProductInAct extends Activity {
     /**
      * 回车键的点击事件
      */
-    @NonNull
+
     View.OnKeyListener mOnKeyListener = new View.OnKeyListener() {
 
         @Override
-        public boolean onKey(@NonNull View v, int keyCode, @NonNull KeyEvent event) {
+        public boolean onKey(View v, int keyCode, KeyEvent event) {
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
                 switch (v.getId()) {
                     case R.id.bill_num:
