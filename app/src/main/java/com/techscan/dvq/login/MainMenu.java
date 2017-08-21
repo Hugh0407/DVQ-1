@@ -23,7 +23,6 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.techscan.dvq.common.Common;
 import com.techscan.dvq.R;
 import com.techscan.dvq.R.id;
 import com.techscan.dvq.Sample_stocking;
@@ -31,7 +30,7 @@ import com.techscan.dvq.SearchmainActivity;
 import com.techscan.dvq.StockBack;
 import com.techscan.dvq.StockTransContent;
 import com.techscan.dvq.StockTransContentIn;
-import com.techscan.dvq.common.Utils;
+import com.techscan.dvq.common.Common;
 import com.techscan.dvq.module.materialOut.MaterialOutAct;
 import com.techscan.dvq.module.otherIn.OtherInAct;
 import com.techscan.dvq.module.otherOut.OtherOutAct;
@@ -367,16 +366,16 @@ public class MainMenu extends Activity {
                 //*********************************************************************
                 // by walter 时间07.11
                 map = new HashMap<String, Object>();
-                map.put("ItemImage", R.drawable.ic_launcher);
-                map.put("ItemText", "采购退库");
+//                map.put("ItemImage", R.drawable.ic_launcher);
+//                map.put("ItemText", "采购退库");
                 lstImageItem.add(map);
                 //*********************************************************************
 
                 //*********************************************************************
                 // by liuya 时间07.06
                 map = new HashMap<String, Object>();
-                map.put("ItemImage", R.drawable.ic_launcher);
-                map.put("ItemText", "材料退库");
+//                map.put("ItemImage", R.drawable.ic_launcher);
+//                map.put("ItemText", "材料退库");
                 lstImageItem.add(map);
                 //*********************************************************************
 
@@ -389,8 +388,8 @@ public class MainMenu extends Activity {
                 //*********************************************************************
                 // by liuya 时间06.27
                 map = new HashMap<String, Object>();
-                map.put("ItemImage", R.drawable.icon_xt_zh);
-                map.put("ItemText", "形态转换");
+//                map.put("ItemImage", R.drawable.icon_xt_zh);
+//                map.put("ItemText", "形态转换");
                 lstImageItem.add(map);
                 //*********************************************************************
 
@@ -508,12 +507,12 @@ public class MainMenu extends Activity {
                         ShowPurIn();
                     } else if (RadioGroupType.getCheckedRadioButtonId() == id.radioButton2) {
                         //采购退库
-                        ShowMyTest();
+//                        ShowMyTest();
 //                        Utils.showToast(MainMenu.this, "采购退库待加");
                     } else if (RadioGroupType.getCheckedRadioButtonId() == id.radioButton3) {
                         //*********************************************************************
                         //形态转换模块  时间06.28  by liuya
-                        ShowStatusChange();
+//                        ShowStatusChange();
                         //*********************************************************************
                     }
                     break;
@@ -537,8 +536,8 @@ public class MainMenu extends Activity {
                         ShowMaterialIn();
                         //*********************************************************************
                     } else if (RadioGroupType.getCheckedRadioButtonId() == id.radioButton2) {
-                        //材料退
-                        Utils.showToast(MainMenu.this, "材料退库待加");
+                        //材料退库
+//                        Utils.showToast(MainMenu.this, "材料退库待加");
                     } else if (RadioGroupType.getCheckedRadioButtonId() == id.radioButton3) {
                         ShowQuery();
                     }

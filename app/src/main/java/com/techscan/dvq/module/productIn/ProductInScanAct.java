@@ -9,8 +9,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -52,58 +50,44 @@ import static com.techscan.dvq.common.Utils.showToast;
 
 public class ProductInScanAct extends Activity {
 
-    @Nullable
     @InjectView(R.id.ed_bar_code)
     EditText mEdBarCode;    //条码
-    @Nullable
     @InjectView(R.id.ed_encoding)
     EditText mEdEncoding;   //编码（Sku）
-    @Nullable
     @InjectView(R.id.ed_type)
     EditText mEdType;   // 型号
-    @Nullable
     @InjectView(R.id.ed_spectype)
     EditText mEdSpectype;   //规格
-    @Nullable
     @InjectView(R.id.ed_lot)
     EditText mEdLot;        //批次
-    @Nullable
     @InjectView(R.id.ed_name)
     EditText mEdName;       //物料名
-    @Nullable
     @InjectView(R.id.ed_unit)
     EditText mEdUnit;
-    @Nullable
     @InjectView(R.id.ed_qty)
     EditText mEdQty;
-    @Nullable
     @InjectView(R.id.btn_overview)
     Button   mBtnOverview;
-    @Nullable
     @InjectView(R.id.btn_detail)
     Button   mBtnDetail;
-    @Nullable
     @InjectView(R.id.btn_back)
     Button   mBtnBack;
-    @Nullable
     @InjectView(R.id.ed_weight)
     EditText mEdWeight;
-    @Nullable
     @InjectView(R.id.ed_manual)
     EditText mEdManual;
-    @Nullable
     @InjectView(R.id.ed_num)
     EditText mEdNum;
+    @InjectView(R.id.ed_pur_lot)    //生产批次
+    EditText edPurLot;
 
-    @NonNull
     String TAG = "MaterialOutScanAct";
-    @NonNull
     public static List<Goods> detailList = new ArrayList<Goods>();
-    @NonNull
     public static List<Goods> ovList     = new ArrayList<Goods>();
-    @Nullable
     Activity mActivity;
     String vFree4 = ""; // 海关手册号
+    String vFree5 = ""; // 生产批次
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,7 +105,7 @@ public class ProductInScanAct extends Activity {
     }
 
     @OnClick({R.id.btn_overview, R.id.btn_detail, R.id.btn_back})
-    public void onViewClicked(@NonNull View view) {
+    public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_overview:
                 MyBaseAdapter ovAdapter = new MyBaseAdapter(ovList);
@@ -158,6 +142,7 @@ public class ProductInScanAct extends Activity {
         mEdLot.setOnKeyListener(mOnKeyListener);
         mEdQty.setOnKeyListener(mOnKeyListener);
         mEdNum.setOnKeyListener(mOnKeyListener);
+        edPurLot.setOnKeyListener(mOnKeyListener);
         mEdManual.setOnKeyListener(mOnKeyListener);
         mEdNum.addTextChangedListener(new CustomTextWatcher(mEdNum));
         mEdBarCode.addTextChangedListener(new CustomTextWatcher(mEdBarCode));
@@ -167,10 +152,10 @@ public class ProductInScanAct extends Activity {
      * 网络请求后的线程通信
      * msg.obj 是从子线程传递过来的数据
      */
-    @NonNull
+
     Handler mHandler = new Handler() {
         @Override
-        public void handleMessage(@NonNull Message msg) {
+        public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
                 case 1:
@@ -180,7 +165,7 @@ public class ProductInScanAct extends Activity {
         }
     };
 
-    private void showDialog(@NonNull final List list, @NonNull final BaseAdapter adapter, @NonNull String title) {
+    private void showDialog(final List list, final BaseAdapter adapter, String title) {
         AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
         builder.setTitle(title);
         if (list.size() > 0) {
@@ -309,6 +294,7 @@ public class ProductInScanAct extends Activity {
                 good.setPk_invmandoc(dtGood.getPk_invmandoc());
                 good.setCostObject(dtGood.getCostObject());
                 good.setManual(dtGood.getManual());
+                good.setProductLot(dtGood.getProductLot());
                 ovList.add(good);
             }
         }
@@ -338,13 +324,14 @@ public class ProductInScanAct extends Activity {
             mEdManual.setText("");
         }
         goods.setManual(mEdManual.getText().toString());
+        goods.setProductLot(edPurLot.getText().toString());
         detailList.add(goods);
         addDataToOvList();
         return true;
     }
 
     /**
-     * 清空所有的Edtext
+     * 清空所有的Edtext mEdBarCode设置的有监听，在监听处全部置空
      */
     private void changeAllEdTextToEmpty() {
         mEdBarCode.setText("");
@@ -368,6 +355,16 @@ public class ProductInScanAct extends Activity {
 
         if (vFree4.equals("N") && !TextUtils.isEmpty(mEdManual.getText().toString())) {
             showToast(mActivity, "此物料没有海关手册");
+            return false;
+        }
+
+        if (vFree5.equals("Y") && TextUtils.isEmpty(edPurLot.getText().toString())) {
+            showToast(mActivity, "生产批次不可为空");
+            return false;
+        }
+
+        if (vFree5.equals("N") && !TextUtils.isEmpty(edPurLot.getText().toString())) {
+            showToast(mActivity, "此物料没有生产批次");
             return false;
         }
 
@@ -415,6 +412,7 @@ public class ProductInScanAct extends Activity {
             showToast(mActivity, "总量不可为空");
             return false;
         }
+
         return true;
     }
 
@@ -442,7 +440,7 @@ public class ProductInScanAct extends Activity {
     String pk_invbasdoc = "";
     String pk_invmandoc = "";
 
-    private void setInvBaseToUI(@Nullable JSONObject json) {
+    private void setInvBaseToUI(JSONObject json) {
         try {
             if (json != null && json.getBoolean("Status")) {
                 Log.d(TAG, "setInvBaseToUI: " + json);
@@ -462,6 +460,7 @@ public class ProductInScanAct extends Activity {
                     map.put("invspec", tempJso.getString("invspec"));   //规格
                     map.put("oppdimen", tempJso.getString("oppdimen"));   //重量
                     map.put("isfree4", tempJso.getString("isfree4"));
+                    map.put("isfree5", tempJso.getString("isfree5"));
                 }
                 if (map != null) {
                     mEdName.setText(map.get("invname").toString());
@@ -469,6 +468,7 @@ public class ProductInScanAct extends Activity {
                     mEdType.setText(map.get("invtype").toString());
                     mEdSpectype.setText(map.get("invspec").toString());
                     vFree4 = map.get("isfree4").toString();
+                    vFree5 = map.get("isfree4").toString();
                 }
 
             }
@@ -512,6 +512,7 @@ public class ProductInScanAct extends Activity {
                         mEdWeight.setText("");
                         mEdSpectype.setText("");
                         mEdManual.setText("");
+                        edPurLot.setText("");
                     }
                     break;
                 case ed_num:
@@ -543,11 +544,11 @@ public class ProductInScanAct extends Activity {
     /**
      * 回车键的点击事件
      */
-    @NonNull
+
     View.OnKeyListener mOnKeyListener = new View.OnKeyListener() {
 
         @Override
-        public boolean onKey(@NonNull View v, int keyCode, @NonNull KeyEvent event) {
+        public boolean onKey(View v, int keyCode, KeyEvent event) {
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
                 switch (v.getId()) {
                     case R.id.ed_bar_code:
@@ -582,6 +583,12 @@ public class ProductInScanAct extends Activity {
                         }
                         return true;
                     case R.id.ed_manual:
+                        if (isAllEdNotNull()) {
+                            addDataToDetailList();
+                            changeAllEdTextToEmpty();
+                        }
+                        return true;
+                    case R.id.ed_pur_lot:
                         if (isAllEdNotNull()) {
                             addDataToDetailList();
                             changeAllEdTextToEmpty();

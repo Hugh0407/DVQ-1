@@ -1,26 +1,24 @@
 package com.techscan.dvq.common;
 
-import android.support.annotation.NonNull;
-
 public class SplitBarcode {
-    @NonNull
-    public String AccID         = "A";
-    public String cInvCode      = "";//物料号
-    public String cBatch        = "";//批次
-    @NonNull
-    public String cInvName      = "";
-    public String cSerino       = "";//序列号
-    @NonNull
-    public String cBatchStatus  = "";
-    @NonNull
-    public String currentBox    = "";
-    @NonNull
-    public String TotalBox      = "";
-    @NonNull
+
+    public String AccID    = "A";
+    public String cInvCode = "";//物料号
+    public String cBatch   = "";//批次
+
+    public String cInvName = "";
+    public String cSerino  = "";//序列号
+
+    public String cBatchStatus = "";
+
+    public String currentBox = "";
+
+    public String TotalBox = "";
+
     public String CheckNo       = "";
     public String FinishBarCode = "";
-    @NonNull
-    public String CheckBarCode  = "";
+
+    public String CheckBarCode = "";
 
     public boolean creatorOk = false;
     public String  Barcode   = ""; //去掉 \n的 条码
@@ -34,8 +32,9 @@ public class SplitBarcode {
     //public String SeriNo;//序列号
     public String CWFlag;//成品财务标志
     public String OnlyFlag;//成品唯一标识
+    public String purductBatch;//成品唯一标识
 
-    public SplitBarcode(@NonNull String sBarcode) {
+    public SplitBarcode(String sBarcode) {
         creatorOk = true;
 
         if (sBarcode.equals("")) {
@@ -67,7 +66,7 @@ public class SplitBarcode {
                 }
                 break;
             case C:
-                if (lsSplitArray.length != 6) {
+                if (lsSplitArray.length != 7) {
                     creatorOk = false;
                     return;
                 }
@@ -75,11 +74,12 @@ public class SplitBarcode {
                 TaxFlag = lsSplitArray[3];
                 dQuantity = Double.parseDouble(lsSplitArray[4]);
                 cSerino = lsSplitArray[5];
+                purductBatch = lsSplitArray[6];
                 iNumber = 1;
                 CheckBarCode = CheckBarCode + "|" + cBatch;
                 break;
             case TC:
-                if (lsSplitArray.length != 7) {
+                if (lsSplitArray.length != 8) {
                     creatorOk = false;
                     return;
                 }
@@ -88,10 +88,11 @@ public class SplitBarcode {
                 dQuantity = Double.parseDouble(lsSplitArray[4]);
                 iNumber = Integer.parseInt(lsSplitArray[5]);
                 cSerino = lsSplitArray[6];
+                purductBatch = lsSplitArray[7];
                 CheckBarCode = CheckBarCode + "|" + cBatch;
                 break;
             case P:
-                if (lsSplitArray.length != 8) {
+                if (lsSplitArray.length != 9) {
                     creatorOk = false;
                     return;
                 }
@@ -102,11 +103,12 @@ public class SplitBarcode {
 //                CWFlag = lsSplitArray[6];
                 OnlyFlag = lsSplitArray[6];
                 cSerino = lsSplitArray[7];
+                purductBatch = lsSplitArray[8];
                 iNumber = 1;
                 CheckBarCode = CheckBarCode + "|" + cBatch;
                 break;
             case TP:
-                if (lsSplitArray.length != 9) {
+                if (lsSplitArray.length != 10) {
                     creatorOk = false;
                     return;
                 }
@@ -118,6 +120,7 @@ public class SplitBarcode {
 //                CWFlag = lsSplitArray[7];
                 OnlyFlag = lsSplitArray[7];
                 cSerino = lsSplitArray[8];
+                purductBatch = lsSplitArray[9];
                 CheckBarCode = CheckBarCode + "|" + cBatch;
                 break;
             default:
@@ -130,7 +133,7 @@ public class SplitBarcode {
     private enum eBarcodeType {
         Y, C, TC, P, TP;
 
-        private static eBarcodeType getBarcodeType(@NonNull String sType) {
+        private static eBarcodeType getBarcodeType(String sType) {
             return valueOf(sType.toUpperCase());
         }
     }

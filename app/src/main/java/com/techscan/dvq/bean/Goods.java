@@ -19,6 +19,7 @@ public class Goods implements Parcelable {
     String  type;        //类型
     String  unit;        //单位
     String  lot;         //批次
+    String  productLot;  //生产批次
     String  spec;        //规格
     float   qty;         //总量 g
     int     num;         //数目
@@ -53,6 +54,7 @@ public class Goods implements Parcelable {
         pk_invmandoc_cost = in.readString();
         costObject = in.readString();
         manual = in.readString();
+        productLot = in.readString();
     }
 
     public static final Creator<Goods> CREATOR = new Creator<Goods>() {
@@ -75,26 +77,34 @@ public class Goods implements Parcelable {
             return false;
         if (getClass() != obj.getClass())
             return false;
+
         Goods other = (Goods) obj;
         if (pk_invbasdoc == null) {
             if (other.pk_invbasdoc != null)
                 return false;
         } else if (!pk_invbasdoc.equals(other.pk_invbasdoc))
             return false;
+
         if (lot == null) {
             if (other.lot != null)
                 return false;
         } else if (!lot.equals(other.lot))
             return false;
+
+        if (productLot == null) {
+            if (other.productLot != null)
+                return false;
+        } else if (!productLot.equals(other.productLot))
+            return false;
+
         return true;
     }
 
     @Override
     public int hashCode() {
-        final int prime  = 31;
-        int       result = 1;
-        result = prime * result + ((lot == null) ? 0 : lot.hashCode());
-        result = prime * result + ((pk_invbasdoc == null) ? 0 : pk_invbasdoc.hashCode());
+        int result = encoding != null ? encoding.hashCode() : 0;
+        result = 31 * result + (lot != null ? lot.hashCode() : 0);
+        result = 31 * result + (productLot != null ? productLot.hashCode() : 0);
         return result;
     }
 
@@ -234,6 +244,14 @@ public class Goods implements Parcelable {
         this.manual = manual;
     }
 
+    public String getProductLot() {
+        return productLot;
+    }
+
+    public void setProductLot(String productLot) {
+        this.productLot = productLot;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -258,5 +276,6 @@ public class Goods implements Parcelable {
         dest.writeString(pk_invmandoc_cost);
         dest.writeString(costObject);
         dest.writeString(manual);
+        dest.writeString(productLot);
     }
 }
