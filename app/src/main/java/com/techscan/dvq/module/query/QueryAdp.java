@@ -10,6 +10,7 @@ import com.techscan.dvq.R;
 import com.techscan.dvq.bean.QryGood;
 import com.techscan.dvq.common.BaseAdp;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -42,7 +43,7 @@ public class QueryAdp extends BaseAdp {
         viewHolder.name.setText(list.get(posi).storname);
         viewHolder.num.setText(list.get(posi).nonhandnum);
         viewHolder.purLot.setText(list.get(posi).purLot);
-        if (list.get(posi).isItSelt){
+        if (list.get(posi).isItSelt) {
             viewHolder.checkBox.setVisibility(View.VISIBLE);
             viewHolder.checkBox.setChecked(true);
         }

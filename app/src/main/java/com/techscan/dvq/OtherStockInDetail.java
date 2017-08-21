@@ -622,11 +622,7 @@ public class OtherStockInDetail extends Activity {
                     }
 
                     //寻找到了对应存货
-                    if (temp.getInt("doneqty") >= temp.getInt("nshouldinnum")) {
-                        isOver = true;
-                    } else {
-                        isOver = false;
-                    }
+                    isOver = temp.getInt("doneqty") >= temp.getInt("nshouldinnum");
 
                     if (isOver == false) {
                         if (ScanSerial(barcode, Free1, temp.getString("crowno"), fbillrowflag, "2") == false)

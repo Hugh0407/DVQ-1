@@ -146,7 +146,7 @@ public class QueryAct extends Activity {
             if (invcode.contains(",")) {
                 invcode = invcode.split(",")[0];
             }
-            getInvBaseInfoByBarcode(invcode, barDecoder.cBatch, MainLogin.objLog.STOrgCode,barDecoder.purductBatch);
+            getInvBaseInfoByBarcode(invcode, barDecoder.cBatch, MainLogin.objLog.STOrgCode, barDecoder.purductBatch);
             return true;
         } else if (barDecoder.BarcodeType.equals("TC")) {    //TC|SKU|LOT|TAX|QTY|NUM|SN
             mEdLot.setText(barDecoder.cBatch);
@@ -157,7 +157,7 @@ public class QueryAct extends Activity {
             if (invcode.contains(",")) {
                 invcode = invcode.split(",")[0];
             }
-            getInvBaseInfoByBarcode(invcode, barDecoder.cBatch, MainLogin.objLog.STOrgCode,barDecoder.purductBatch);
+            getInvBaseInfoByBarcode(invcode, barDecoder.cBatch, MainLogin.objLog.STOrgCode, barDecoder.purductBatch);
             return true;
         } else if (barDecoder.BarcodeType.equals("P")) {// 包码 P|SKU|LOT|WW|TAX|QTY|CW|ONLY|SN    9位
             mEdLot.setText(barDecoder.cBatch);
@@ -166,7 +166,7 @@ public class QueryAct extends Activity {
             if (invcode.contains(",")) {
                 invcode = invcode.split(",")[0];
             }
-            getInvBaseInfoByBarcode(invcode, barDecoder.cBatch, MainLogin.objLog.STOrgCode,barDecoder.purductBatch);
+            getInvBaseInfoByBarcode(invcode, barDecoder.cBatch, MainLogin.objLog.STOrgCode, barDecoder.purductBatch);
             return true;
         } else if (barDecoder.BarcodeType.equals("TP")) {//盘码TP|SKU|LOT|WW|TAX|QTY|NUM|CW|ONLY|SN
             mEdLot.setText(barDecoder.cBatch);
@@ -177,7 +177,7 @@ public class QueryAct extends Activity {
             if (invcode.contains(",")) {
                 invcode = invcode.split(",")[0];
             }
-            getInvBaseInfoByBarcode(invcode, barDecoder.cBatch, MainLogin.objLog.STOrgCode,barDecoder.purductBatch);
+            getInvBaseInfoByBarcode(invcode, barDecoder.cBatch, MainLogin.objLog.STOrgCode, barDecoder.purductBatch);
             return true;
         } else {
             showToast(mActivity, "条码有误,重新输入");
