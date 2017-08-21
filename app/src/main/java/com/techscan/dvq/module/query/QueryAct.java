@@ -77,6 +77,7 @@ public class QueryAct extends Activity {
     ListView lv;
     List<QryGood> list;
     QueryAdp      adp;
+    SplitBarcode  barDecoder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,6 +111,7 @@ public class QueryAct extends Activity {
         list = new ArrayList<QryGood>();
         adp = new QueryAdp(list);
         lv.setAdapter(adp);
+        lv.setDivider(getResources().getDrawable(R.drawable.lv_divider));
     }
 
     @Nullable
@@ -119,13 +121,7 @@ public class QueryAct extends Activity {
             super.handleMessage(msg);
             switch (msg.what) {
                 case 1:
-                    JSONObject json = (JSONObject) msg.obj;
-                    if (null == json) {
-                        showToast(mActivity, "数据访问失败");
-                        return;
-                    }
-                    Log.d("TAG", "'json: " + json.toString());
-                    setInvBaseToUI(json);
+                    setInvBaseToUI((JSONObject) msg.obj);
                     break;
                 default:
                     break;
@@ -142,7 +138,7 @@ public class QueryAct extends Activity {
         mEdBarCode.setSelection(mEdBarCode.length());   //将光标移动到最后的位置
         mEdBarCode.selectAll();
 
-        SplitBarcode barDecoder = new SplitBarcode(Bar);
+        barDecoder = new SplitBarcode(Bar);
         if (barDecoder.BarcodeType.equals("C")) {   //C|SKU|LOT|TAX|QTY|SN
             mEdLot.setText(barDecoder.cBatch);
             mEdTotalNum.setText(String.valueOf(barDecoder.dQuantity));
@@ -150,7 +146,7 @@ public class QueryAct extends Activity {
             if (invcode.contains(",")) {
                 invcode = invcode.split(",")[0];
             }
-            getInvBaseInfoByBarcode(invcode, barDecoder.cBatch, MainLogin.objLog.STOrgCode);
+            getInvBaseInfoByBarcode(invcode, barDecoder.cBatch, MainLogin.objLog.STOrgCode,barDecoder.purductBatch);
             return true;
         } else if (barDecoder.BarcodeType.equals("TC")) {    //TC|SKU|LOT|TAX|QTY|NUM|SN
             mEdLot.setText(barDecoder.cBatch);
@@ -161,7 +157,7 @@ public class QueryAct extends Activity {
             if (invcode.contains(",")) {
                 invcode = invcode.split(",")[0];
             }
-            getInvBaseInfoByBarcode(invcode, barDecoder.cBatch, MainLogin.objLog.STOrgCode);
+            getInvBaseInfoByBarcode(invcode, barDecoder.cBatch, MainLogin.objLog.STOrgCode,barDecoder.purductBatch);
             return true;
         } else if (barDecoder.BarcodeType.equals("P")) {// 包码 P|SKU|LOT|WW|TAX|QTY|CW|ONLY|SN    9位
             mEdLot.setText(barDecoder.cBatch);
@@ -170,7 +166,7 @@ public class QueryAct extends Activity {
             if (invcode.contains(",")) {
                 invcode = invcode.split(",")[0];
             }
-            getInvBaseInfoByBarcode(invcode, barDecoder.cBatch, MainLogin.objLog.STOrgCode);
+            getInvBaseInfoByBarcode(invcode, barDecoder.cBatch, MainLogin.objLog.STOrgCode,barDecoder.purductBatch);
             return true;
         } else if (barDecoder.BarcodeType.equals("TP")) {//盘码TP|SKU|LOT|WW|TAX|QTY|NUM|CW|ONLY|SN
             mEdLot.setText(barDecoder.cBatch);
@@ -181,7 +177,7 @@ public class QueryAct extends Activity {
             if (invcode.contains(",")) {
                 invcode = invcode.split(",")[0];
             }
-            getInvBaseInfoByBarcode(invcode, barDecoder.cBatch, MainLogin.objLog.STOrgCode);
+            getInvBaseInfoByBarcode(invcode, barDecoder.cBatch, MainLogin.objLog.STOrgCode,barDecoder.purductBatch);
             return true;
         } else {
             showToast(mActivity, "条码有误,重新输入");
@@ -210,13 +206,14 @@ public class QueryAct extends Activity {
      *
      * @param invcode 物料编码
      */
-    private void getInvBaseInfoByBarcode(String invcode, String batchcode, String crop) {
+    private void getInvBaseInfoByBarcode(String invcode, String batchcode, String crop, String prdlot) {
         HashMap<String, String> parameter = new HashMap<String, String>();
         parameter.put("FunctionName", "GetInvInfoByBarcode");
         parameter.put("CompanyCode", MainLogin.objLog.STOrgCode);
         parameter.put("Invcode", invcode);
         parameter.put("BatchCode", batchcode);
         parameter.put("Crop", crop);
+        parameter.put("Prdlot", prdlot);
         parameter.put("TableName", "baseInfo");
         Utils.doRequest(parameter, mHandler, 1);
     }
@@ -231,6 +228,10 @@ public class QueryAct extends Activity {
     private void setInvBaseToUI(JSONObject json) {
         Log.d("TAG", "setInvBaseToUI: " + json);
         try {
+            if (null == json) {
+                showToast(mActivity, "数据访问失败");
+                return;
+            }
             if (json.getBoolean("Status")) {
                 JSONArray val = json.getJSONArray("baseInfo");
                 if (val.length() <= 0) {
@@ -244,6 +245,7 @@ public class QueryAct extends Activity {
                 if (!vfree4.equals("null")) {
                     mEdManual.setText(vfree4);
                 }
+
                 QryGood good;
                 list.clear();
                 for (int i = 0; i < val.length(); i++) {
@@ -251,6 +253,15 @@ public class QueryAct extends Activity {
                     good = new QryGood();
                     good.storname = jo.getString("storname");
                     good.nonhandnum = jo.getString("nonhandnum");
+                    String p = jo.getString("vfree5");
+                    if (p.equals("null")) {
+                        good.purLot = "";
+                    } else {
+                        good.purLot = p;
+                    }
+                    if (barDecoder.purductBatch.equals(p)) {
+                        good.isItSelt = true;
+                    }
                     list.add(good);
                 }
                 adp.setList(list);

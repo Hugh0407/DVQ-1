@@ -562,10 +562,6 @@ public class MaterialOutAct extends Activity {
      * @throws JSONException
      */
     private void btnWarehouseClick() {
-        String lgUser      = MainLogin.objLog.LoginUser;
-        String lgPwd       = MainLogin.objLog.Password;
-        String LoginString = MainLogin.objLog.LoginString;
-
         JSONObject para = new JSONObject();
 
         try {

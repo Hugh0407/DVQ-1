@@ -228,7 +228,7 @@ public class OtherInAct extends Activity {
                 btnReferSTOrgList();
                 break;
             case R.id.btn_refer_lei_bie:
-                btnRdclClick("");
+                btnRdclClick();
                 break;
             case R.id.btn_refer_department:
                 btnReferDepartment();
@@ -451,7 +451,7 @@ public class OtherInAct extends Activity {
     }
 
     // 打开收发类别画面
-    private void btnRdclClick(String Code) {
+    private void btnRdclClick() {
         Intent ViewGrid = new Intent(this, VlistRdcl.class);
         ViewGrid.putExtra("FunctionName", "GetRdcl");
         // ViewGrid.putExtra("AccID", "A");
@@ -469,9 +469,6 @@ public class OtherInAct extends Activity {
      * @throws JSONException
      */
     private void btnWarehouseClick() {
-        String lgUser      = MainLogin.objLog.LoginUser;
-        String lgPwd       = MainLogin.objLog.Password;
-        String LoginString = MainLogin.objLog.LoginString;
 
         JSONObject para = new JSONObject();
 
@@ -485,9 +482,7 @@ public class OtherInAct extends Activity {
             if (rev == null) {
                 // 网络通讯错误
                 Toast.makeText(this, "错误！网络通讯错误", Toast.LENGTH_LONG).show();
-                // ADD CAIXY TEST START
                 MainLogin.sp.play(MainLogin.music, 1, 1, 0, 0, 1);
-                // ADD CAIXY TEST END
                 return;
             }
             if (rev.getBoolean("Status")) {

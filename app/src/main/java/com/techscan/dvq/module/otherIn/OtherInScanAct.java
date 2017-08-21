@@ -295,7 +295,7 @@ public class OtherInScanAct extends Activity {
             edQty.setText(formatDecimal(weight * edNum));
             return true;
         } else if (barDecoder.BarcodeType.equals("Y")) {
-//如果是液体的话需要输入液体总量，将数量设置不可编辑
+            //如果是液体的话需要输入液体总量，将数量设置不可编辑
             edNum.setEnabled(false);
             edBatch.setEnabled(true);
             edQty.setEnabled(true);

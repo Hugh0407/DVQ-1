@@ -157,7 +157,7 @@ public class ProductInAct extends Activity {
                 btnReferSTOrgList();
                 break;
             case R.id.refer_lei_bie:
-                btnRdclClick("");
+                btnRdclClick();
                 break;
             case R.id.btnPurInScan:
                 if (checkSaveInfo()) {
@@ -475,7 +475,7 @@ public class ProductInAct extends Activity {
     }
 
     // 打开收发类别画面
-    private void btnRdclClick(String Code) {
+    private void btnRdclClick() {
         Intent ViewGrid = new Intent(this, VlistRdcl.class);
         ViewGrid.putExtra("FunctionName", "GetRdcl");
         // ViewGrid.putExtra("AccID", "A");
@@ -493,9 +493,6 @@ public class ProductInAct extends Activity {
      * @throws JSONException
      */
     private void btnWarehouseClick() {
-        String lgUser      = MainLogin.objLog.LoginUser;
-        String lgPwd       = MainLogin.objLog.Password;
-        String LoginString = MainLogin.objLog.LoginString;
 
         JSONObject para = new JSONObject();
 

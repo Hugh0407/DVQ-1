@@ -7,4 +7,6 @@ package com.techscan.dvq.bean;
 public class QryGood {
     public String storname;
     public String nonhandnum;
+    public String purLot;
+    public boolean isItSelt = false;
 }
