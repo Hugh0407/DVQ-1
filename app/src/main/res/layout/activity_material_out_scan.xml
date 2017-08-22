@@ -233,7 +233,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginRight="4dp"
                     android:gravity="center_vertical"
-                    android:text="名称"/>
+                    android:text="成本规格"/>
 
                 <EditText
                     android:id="@+id/ed_cost_name"
@@ -309,7 +309,7 @@
                     android:background="@drawable/edittext_style"
                     android:ems="10"
                     android:enabled="false"
-                    android:inputType="number"
+                    android:inputType="numberSigned"
                     android:maxLines="1"
                     android:singleLine="true"
                     android:textAllCaps="true"
@@ -374,6 +374,7 @@
                     android:background="@drawable/edittext_style"
                     android:ems="10"
                     android:enabled="false"
+                    android:inputType="numberSigned"
                     android:maxLines="1"
                     android:singleLine="true"
                     android:textAllCaps="true"

@@ -66,7 +66,7 @@ public class SplitBarcode {
                 }
                 break;
             case C:
-                if (lsSplitArray.length != 7) {
+                if (lsSplitArray.length != 6) {
                     creatorOk = false;
                     return;
                 }
@@ -74,12 +74,11 @@ public class SplitBarcode {
                 TaxFlag = lsSplitArray[3];
                 dQuantity = Double.parseDouble(lsSplitArray[4]);
                 cSerino = lsSplitArray[5];
-                purductBatch = lsSplitArray[6];
                 iNumber = 1;
                 CheckBarCode = CheckBarCode + "|" + cBatch;
                 break;
             case TC:
-                if (lsSplitArray.length != 8) {
+                if (lsSplitArray.length != 7) {
                     creatorOk = false;
                     return;
                 }
@@ -88,7 +87,6 @@ public class SplitBarcode {
                 dQuantity = Double.parseDouble(lsSplitArray[4]);
                 iNumber = Integer.parseInt(lsSplitArray[5]);
                 cSerino = lsSplitArray[6];
-                purductBatch = lsSplitArray[7];
                 CheckBarCode = CheckBarCode + "|" + cBatch;
                 break;
             case P:

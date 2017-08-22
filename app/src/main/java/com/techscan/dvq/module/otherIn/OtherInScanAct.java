@@ -381,6 +381,7 @@ public class OtherInScanAct extends Activity {
                 good.setManual(dtGood.getManual());
                 good.setPk_invmandoc_cost(dtGood.getPk_invmandoc_cost());
                 good.setProductLot(dtGood.getProductLot());
+                good.setCostObjName(dtGood.getCostObjName());
                 ovList.add(good);
             }
         }
@@ -404,6 +405,7 @@ public class OtherInScanAct extends Activity {
         goods.setQty(Float.valueOf(edQty.getText().toString()));
         goods.setManual(edManual.getText().toString());
         goods.setCostObject("");    // Ä¬ÈÏÃ»ÓÐ
+        goods.setCostObjName("");
         goods.setPk_invmandoc_cost(pk_invmandoc_cost);
         goods.setPk_invbasdoc(pk_invbasdoc);
         goods.setPk_invmandoc(pk_invmandoc);
@@ -615,10 +617,11 @@ public class OtherInScanAct extends Activity {
                     JSONObject tempJso = val.getJSONObject(i);
                     map = new HashMap<String, Object>();
                     map.put("invname", tempJso.getString("invname"));   //Ïð½ºÌî³äÓÍ
+                    map.put("invspec", tempJso.getString("invspec"));   //Ïð½ºÌî³äÓÍ
                     pk_invmandoc_cost = tempJso.getString("pk_invmandoc");
                 }
                 if (map != null) {
-                    edCostName.setText(map.get("invname").toString());
+                    edCostName.setText(map.get("invspec").toString());
                 }
             }
         } catch (JSONException e) {

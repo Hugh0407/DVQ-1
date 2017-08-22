@@ -73,6 +73,7 @@ public class MyBaseAdapter extends BaseAdapter {
             viewHolder.lot = (TextView) convertView.findViewById(R.id.lot);
             viewHolder.qty = (TextView) convertView.findViewById(R.id.qty);
             viewHolder.spec = (TextView) convertView.findViewById(R.id.spec);
+            viewHolder.costObj = (TextView) convertView.findViewById(R.id.costObj);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -82,6 +83,7 @@ public class MyBaseAdapter extends BaseAdapter {
         viewHolder.type.setText(mList.get(position).getType());
         viewHolder.lot.setText(mList.get(position).getLot());
         viewHolder.spec.setText(mList.get(position).getSpec());
+        viewHolder.costObj.setText(mList.get(position).getCostObjName());
         if (TextUtils.isEmpty(String.valueOf(mList.get(position).getQty()))) {
             viewHolder.qty.setText("0.00");
         } else {
@@ -97,5 +99,6 @@ public class MyBaseAdapter extends BaseAdapter {
         TextView lot;
         TextView qty;
         TextView spec;
+        TextView costObj;
     }
 }

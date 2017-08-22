@@ -30,6 +30,7 @@ public class Goods implements Parcelable {
     String  pk_invmandoc;
     String  pk_invmandoc_cost;
     String  costObject;
+    String  costObjName;
     String  manual;  // ∫£πÿ ÷≤·∫≈
 
     public Goods() {
@@ -55,6 +56,7 @@ public class Goods implements Parcelable {
         costObject = in.readString();
         manual = in.readString();
         productLot = in.readString();
+        costObjName = in.readString();
     }
 
     public static final Creator<Goods> CREATOR = new Creator<Goods>() {
@@ -252,6 +254,14 @@ public class Goods implements Parcelable {
         this.productLot = productLot;
     }
 
+    public String getCostObjName() {
+        return costObjName;
+    }
+
+    public void setCostObjName(String costObjName) {
+        this.costObjName = costObjName;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -277,5 +287,6 @@ public class Goods implements Parcelable {
         dest.writeString(costObject);
         dest.writeString(manual);
         dest.writeString(productLot);
+        dest.writeString(costObjName);
     }
 }

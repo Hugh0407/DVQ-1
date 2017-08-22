@@ -485,6 +485,7 @@ public class OtherOutScanAct extends Activity {
                 good.setPk_invbasdoc(dtGood.getPk_invbasdoc());
                 good.setPk_invmandoc(dtGood.getPk_invmandoc());
                 good.setCostObject(dtGood.getCostObject());
+                good.setCostObjName(dtGood.getCostObjName());
                 good.setManual(dtGood.getManual());
                 good.setPk_invmandoc_cost(dtGood.getPk_invmandoc_cost());
                 good.setProductLot(dtGood.getProductLot());
@@ -504,6 +505,7 @@ public class OtherOutScanAct extends Activity {
         goods.setUnit(edUnit.getText().toString());
         goods.setLot(edLot.getText().toString());
         goods.setCostObject(edCostObject.getText().toString());
+        goods.setCostObjName(edCostName.getText().toString());
         goods.setManual(edManual.getText().toString());
         goods.setPk_invbasdoc(pk_invbasdoc);
         goods.setPk_invmandoc(pk_invmandoc);
@@ -736,10 +738,11 @@ public class OtherOutScanAct extends Activity {
                     JSONObject tempJso = val.getJSONObject(i);
                     map = new HashMap<String, Object>();
                     map.put("invname", tempJso.getString("invname"));   //Ïð½ºÌî³äÓÍ
+                    map.put("invspec", tempJso.getString("invspec"));   //¹æ¸ñ
                     pk_invmandoc_cost = tempJso.getString("pk_invmandoc");
                 }
                 if (map != null) {
-                    edCostName.setText(map.get("invname").toString());
+                    edCostName.setText(map.get("invspec").toString());
                 }
             }
         } catch (JSONException e) {

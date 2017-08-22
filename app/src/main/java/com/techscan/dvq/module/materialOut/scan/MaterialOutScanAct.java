@@ -81,10 +81,10 @@ public class MaterialOutScanAct extends Activity {
     EditText mEdWeight;
     @InjectView(R.id.ed_cost_object)
     EditText mEdCostObject;
-    @InjectView(R.id.ed_manual)
-    EditText mEdManual;
     @InjectView(R.id.ed_cost_name)
     EditText edCostName;
+    @InjectView(R.id.ed_manual)
+    EditText mEdManual;
     @InjectView(R.id.packed)
     TextView packed;
     @InjectView(R.id.switch_m)
@@ -382,6 +382,7 @@ public class MaterialOutScanAct extends Activity {
                 good.setPk_invbasdoc(dtGood.getPk_invbasdoc());
                 good.setPk_invmandoc(dtGood.getPk_invmandoc());
                 good.setCostObject(dtGood.getCostObject());
+                good.setCostObjName(dtGood.getCostObjName());
                 good.setManual(dtGood.getManual());
                 good.setPk_invmandoc_cost(dtGood.getPk_invmandoc_cost());
                 ovList.add(good);
@@ -400,6 +401,7 @@ public class MaterialOutScanAct extends Activity {
         goods.setUnit(mEdUnit.getText().toString());
         goods.setLot(mEdLot.getText().toString());
         goods.setCostObject(mEdCostObject.getText().toString());
+        goods.setCostObjName(edCostName.getText().toString());
         goods.setPk_invbasdoc(pk_invbasdoc);
         goods.setPk_invmandoc(pk_invmandoc);
         goods.setManual(mEdManual.getText().toString());
@@ -615,10 +617,11 @@ public class MaterialOutScanAct extends Activity {
                     JSONObject tempJso = val.getJSONObject(i);
                     map = new HashMap<String, Object>();
                     map.put("invname", tempJso.getString("invname"));   //橡胶填充油
+                    map.put("invspec", tempJso.getString("invspec"));   //规格
                     pk_invmandoc_cost = tempJso.getString("pk_invmandoc");
                 }
                 if (map != null) {
-                    edCostName.setText(map.get("invname").toString());
+                    edCostName.setText(map.get("invspec").toString());
                 }
             }
         } catch (JSONException e) {
@@ -693,7 +696,6 @@ public class MaterialOutScanAct extends Activity {
             mEdCostObject.setText("");
             edCostName.setText("");
             mEdManual.setText("");
-            edCostName.setText("");
         }
     }
 
@@ -762,17 +764,17 @@ public class MaterialOutScanAct extends Activity {
             showToast(activity, "请输入数量");
             return true;
         }
-        if (!isNumber(mEdNum.getText().toString())) {
-            showToast(activity, "数量不正确");
-            return true;
-        }
+//        if (!isNumber(mEdNum.getText().toString())) {
+//            showToast(activity, "数量不正确");
+//            return true;
+//        }
         //包码需要输入 有多少包，并计算出总数量
         float num = Float.valueOf(mEdNum.getText().toString());
-        if (num <= 0) {
-            mEdNum.setText("");
-            showToast(activity, "数量不正确");
-            return true;
-        }
+//        if (num == 0) {
+//            mEdNum.setText("");
+//            showToast(activity, "数量不正确");
+//            return true;
+//        }
 
         float weight = Float.valueOf(mEdWeight.getText().toString());
         mEdQty.setText(String.valueOf(num * weight));
@@ -800,18 +802,18 @@ public class MaterialOutScanAct extends Activity {
             showToast(activity, "请输入数量");
             return true;
         }
-        String qty_s = mEdQty.getText().toString();
-        if (!isNumber(qty_s)) {
-            showToast(activity, "总量不正确");
-            mEdQty.setText("");
-            return true;
-        }
-        float qty_f = Float.valueOf(qty_s);
-        if (qty_f <= 0) {
-            showToast(activity, "总量不正确");
-            mEdQty.setText("");
-            return true;
-        }
+//        String qty_s = mEdQty.getText().toString();
+//        if (!isNumber(qty_s)) {
+//            showToast(activity, "总量不正确");
+//            mEdQty.setText("");
+//            return true;
+//        }
+//        float qty_f = Float.valueOf(qty_s);
+//        if (qty_f <= 0) {
+//            showToast(activity, "总量不正确");
+//            mEdQty.setText("");
+//            return true;
+//        }
 
         if (isAllEdNotNull()) {
             addDataToDetailList();
