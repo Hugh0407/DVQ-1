@@ -100,6 +100,7 @@ public class MainLogin extends Activity {
     int            newVerCode = -1;// ÐÂ°æ±¾ºÅ
     ProgressDialog pd         = null;
 
+
     String months;
     String dayys;
     EditText user = null;
